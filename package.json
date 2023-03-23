@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "database-sempai": "^2.1.5",
+    "koa": "^2.14.1",
+    "koa-bodyparser": "^4.4.0",
+    "koa-router": "^12.0.0"
+  }
+}
