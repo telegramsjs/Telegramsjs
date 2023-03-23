@@ -124,4 +124,4 @@ Detailed documentation for `Telegramjs` is still in progress.
 We welcome your contributions to the development of `Telegramjs`! If you have any ideas or suggestions, please visit the <a href="https://discord.gg/j8G7jhHMbs">Official support server</a> or the <a href="https://t.me/sempaika_telegrams_js">Official Telegram channel</a>.
 
 ## License
-`Telegramsjs` is available under the `MIT` license. For more information, please refer to the <a href="https://github.com/Sempai-07/telegramsjs/LICENSE">LICENSE</a> file.
+`Telegramsjs` is available under the `MIT` license. For more information, please refer to the <a href="https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE">LICENSE</a> file.
