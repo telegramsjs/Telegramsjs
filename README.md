@@ -30,7 +30,7 @@ bot.on('eventName', (arg1, arg2, ...) => {
 ```
 The library provides several events that you can listen to, including:
 
-- `generalMessageCreate`: Fires when a message is created in a chat.
+- `generalMessageCreate`: Fires when a message global (private, supergroup) is created in a chat.
 - `ready`: Fires when the bot is ready to start.
 
 Here's an example of how to listen to the `generalMessageCreate` event:
