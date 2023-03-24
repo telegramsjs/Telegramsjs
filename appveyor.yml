@@ -1,0 +1,14 @@
+image:
+  - Ubuntu
+
+install:
+  - curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  - sudo apt-get install -y nodejs
+  - npm install -g grunt-cli
+  - npm install
+
+build_script:
+  - grunt build
+
+test_script:
+  - grunt test
