@@ -1,6 +1,8 @@
 <div style="text-align: center;">
    <h1>Telegramsjs</h1><br>
-   <image src="./docs/avatar.png">
+   <image src="./docs/avatar.png"><br>
+   
+   [![Discord Server](https://img.shields.io/discord/796504104565211187?color=7289da&logo=discord&logoColor=white)](https://discord.gg/EuSbT5HH8b)  [![Telegram](https://img.shields.io/appveyor/tests/Sempai-07/Telegramsjs/main)](https://t.me/sempaika_telegrams_js) [![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs) [![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
    </div>
 
 ## Introduction
