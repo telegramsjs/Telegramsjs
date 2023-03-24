@@ -1,4 +1,7 @@
-# Telegramsjs library documentation
+<div style="text-align: center;">
+   <h1>Telegramsjs</h1><br>
+   <image src="./docs/avatar.png">
+   </div>
 
 ## Introduction
 `Telegramsjs` is a lightweight `Node.js` library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as `Telegraf.js` or `node-telegram-bot-api`. The library has a syntax that is similar to `Discord.js`. This library provides a way to create Telegram bots with ease and flexibility.
@@ -101,7 +104,7 @@ module.exports = {
 You can set the bot's description and commands using the `setMyDescription` and `setMyCommands` methods respectively.
 
 ```javascript
-bot.on('ready', async () => {
+bot.once('ready', async () => {
   await bot.setMyDescription({
     description: 'My awesome Telegram bot'
   });
