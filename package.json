@@ -1,14 +1,12 @@
 {
+  "name": "telegramsjs",
+  "version": "0.0.3",
+  "main": "./src/index.js",
   "dependencies": {
-    "database-sempai": "^2.1.5",
     "koa": "^2.14.1",
     "koa-bodyparser": "^4.4.0",
     "koa-router": "^12.0.0"
   },
-  "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-nodeunit": "~0.4.1",
-    "grunt-contrib-uglify": "~0.5.0"
-  }
+  "license": "MIT",
+  "files": ["./src", "package.json", "README.md", "LICENSE"]
 }
