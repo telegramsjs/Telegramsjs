@@ -7,6 +7,45 @@ class BaseClient extends Request {
   constructor(token) {
     super(token);
   }
+  
+  async setWebhook(options) {
+    const method = 'setWebhook';
+    const params = {
+      url: options.url,
+      certificate: options.certificate,
+      ip_address: options.ipAddress,
+      max_connections: options.maxConnections,
+      allowed_updates: options.allowedUpdates,
+      drop_pending_updates: options.dropPendingUpdates,
+      secret_token: options.secretToken
+    };
+    const response = await this.request(method, params);
+    if (response?.error_code !== undefined) {
+      throw new TelegramApiError(response.description);
+    }
+    return response;
+  }
+  
+  async deleteWebhook(options) {
+    const method = 'deleteWebhook';
+    const params = {
+      drop_pending_updates: options.dropPendingUpdates
+    };
+    const response = await this.request(method, params);
+    if (!response) {
+      throw new TelegramApiError('Failed to delete webhook');
+    }
+    return response;
+  }
+  
+  async getWebhookInfo() {
+    const method = 'getWebhookInfo';
+    const response = await this.request(method);
+    if (response?.error_code !== undefined) {
+      throw new TelegramApiError(response.description);
+    }
+    return response;
+  }
 
   async sendMessage(options) {
     const method = 'sendMessage';

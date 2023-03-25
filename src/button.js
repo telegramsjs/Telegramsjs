@@ -1,12 +1,11 @@
 /**
- * Класс, представляющий кнопку в Telegram Bot API.
- * 
+ * Class representing a button in Telegram Bot API.
  * @class
- * @param {Object} [options={}] - Настройки кнопки.
- * @param {string} [options.text] - Текст на кнопке.
- * @param {string} [options.action] - Действие кнопки, которое будет передано обработчику событий.
- * @param {string} [options.type='callback_data'] - Тип действия кнопки. По умолчанию используется тип 'callback_data'.
- */
+ * @param {Object} [options={}] - Button settings.
+ * @param {string} [options.text] - Text on the button.
+ * @param {string} [options.action] - Button action to be passed to the event handler.
+ * @param {string} [options.type='callback_data'] - Button action type. The default is 'callback_data'.
+*/
 class Button {
   constructor(options = {}) {
     this.text = options.text;
@@ -15,10 +14,9 @@ class Button {
   }
 
   /**
-   * Устанавливает тип действия кнопки.
-   * 
-   * @param {string} type - Тип действия кнопки.
-   * @returns {Button} Возвращает экземпляр объекта Button для цепочки вызовов.
+   * Sets the button action type.
+   * @param {string} type - Button action type.
+   * @returns {Button} Returns an instance of the Button object for method chaining.
    */
   setType(type) {
     this.type = type;
@@ -26,10 +24,9 @@ class Button {
   }
   
   /**
-   * Устанавливает действие кнопки.
-   * 
-   * @param {string} action - Действие кнопки, которое будет передано обработчику событий.
-   * @returns {Button} Возвращает экземпляр объекта Button для цепочки вызовов.
+   * Sets the button action.
+   * @param {string} action - Button action to be passed to the event handler.
+   * @returns {Button} Returns an instance of the Button object for method chaining.
    */
   setAction(action) {
     this.action = action;
@@ -37,20 +34,18 @@ class Button {
   }
   
   /**
-   * Устанавливает текст на кнопке.
-   * 
-   * @param {string} text - Текст на кнопке.
-   * @returns {Button} Возвращает экземпляр объекта Button для цепочки вызовов.
-   */
+   * Sets the text on the button.
+   * @param {string} text - Text on the button.
+   * @returns {Button} Returns an instance of the Button object for method chaining.
+*/
   setText(text) {
     this.text = text;
     return this;
   }
   
   /**
-   * Возвращает объект кнопки в формате, который ожидает Telegram Bot API.
-   * 
-   * @returns {Object} Возвращает объект кнопки в формате, который ожидает Telegram Bot API.
+   * Returns the button object in the format expected by Telegram Bot API.
+   * @returns {Object} Returns the button object in the format expected by Telegram Bot API.
    */
   toJSON() {
     const button = {
