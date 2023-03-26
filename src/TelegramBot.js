@@ -64,7 +64,7 @@ class TelegramBot extends BaseClient {
       groupBroadcastStart: [],
       groupBroadcastEnd: [],
       groupBroadcastScheduled: [],
-      groupPhotoUpdate: [],
+      groupAvatarUpdate: [],
       groupNameUpdate: [],
       groupPhotoCreate: [],
       groupStickerCreate: [],
@@ -97,7 +97,7 @@ class TelegramBot extends BaseClient {
       channelVideoNoteCreate: [],
       channelAudioCreate: [],
       channelDocumentCreate: [],
-      channelPhotoUpdate: [],
+      channelAvatarUpdate: [],
       channelStickerUpdate: [],
       channelVoiceUpdate: [],
       channelVideoNoteUpdate: [],
@@ -177,7 +177,6 @@ class TelegramBot extends BaseClient {
 
     for (const updates of getUpdates) {
       if (updates.update_id <= this.offset) {
-        console.log(updates);
         this.offset = updates.update_id + 1;
         
         const send = (options) => {
@@ -834,7 +833,7 @@ class TelegramBot extends BaseClient {
             update,
             reply
           };
-          this.emit('channelPhotoUpdate', message);
+          this.emit('channelAvatarUpdate', message);
         }
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.forum_topic_created) {
@@ -951,7 +950,7 @@ class TelegramBot extends BaseClient {
             update,
             reply
           };
-          this.emit('groupPhotoUpdate', message);
+          this.emit('groupAvatarUpdate', message);
         }
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.video_chat_started) {
@@ -1221,7 +1220,7 @@ class TelegramBot extends BaseClient {
           this.emit('privateLocationCreate', message);
         }
         
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.message?.concat) {
+        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.concat) {
           const chat = Object.assign({}, updates.message.chat, { send });
           const message = {
             ...updates.message,
@@ -1233,7 +1232,7 @@ class TelegramBot extends BaseClient {
           this.emit('groupConcatCreate', message);
         }
         
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.message?.poll) {
+        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.poll) {
           const chat = Object.assign({}, updates.message.chat, { send });
           const message = {
             ...updates.message,
@@ -1245,7 +1244,7 @@ class TelegramBot extends BaseClient {
           this.emit('groupPollCreate', message);
         }
         
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.message?.location) {
+        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.location) {
           const chat = Object.assign({}, updates.message.chat, { send });
           const message = {
             ...updates.message,
