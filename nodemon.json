@@ -1,6 +1,0 @@
-{
-  "watch": ["."],
-  "ext": ".ts,.js,.json",
-  "ignore": ["./node_modules", "./database"],
-  "exec": "node index"
-}
