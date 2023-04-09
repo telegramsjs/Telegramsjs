@@ -172,12 +172,14 @@ class TelegramBot extends BaseClient {
   async start() {
   const client = await this.request('getMe');
   this.emit('ready', client);
+  const ms = require('ms');
+  let lastUpdateTimestamp = new Date();
   while (true) {
     const getUpdates = await this.getUpdates();
-
     for (const updates of getUpdates) {
-      if (updates.update_id <= this.offset) {
-        this.offset = updates.update_id + 1;
+      const updateTimestamp = new Date(updates.message.date * 1000);
+      if (updateTimestamp > lastUpdateTimestamp) {
+        lastUpdateTimestamp = updateTimestamp;
         
         const send = (options) => {
           let chatId;
@@ -201,6 +203,7 @@ class TelegramBot extends BaseClient {
             notification: options.notification,
             content: options.content,
             threadId: options.threadId,
+            parseMode: options.parseMode
           });
         };
         
@@ -248,7 +251,7 @@ class TelegramBot extends BaseClient {
 }
 
           
-          return this.editMessage({
+          return this.editMessageText({
             chatId: chatId,
             messageId: messageId,
             text: text,
@@ -282,11 +285,12 @@ class TelegramBot extends BaseClient {
             chatId: chatId,
             messageId: messageId,
             button: options.button,
-            reply_to_message_id: messageId,
+            replyToMessageId: messageId,
             allowReply: options.allowReply,
             notification: options.notification,
             content: options.content,
             threadId: options.threadId,
+            parseMode: options.parseMode
           });
         }
 
@@ -418,7 +422,7 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates.callback_query) {
-          const chat = Object.assign({}, updates.callback_query.chat, { send });
+          const chat = Object.assign({}, updates.callback_query.message.chat, { send });
           const interaction = {
             ...updates.callback_query,
             chat: chat,

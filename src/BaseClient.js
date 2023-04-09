@@ -23,7 +23,16 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
+  }
+  
+  async getMe() {
+    const method = 'getMe';
+    const response = await this.request(method);
+    if (!response) {
+      throw new TelegramApiError(response.description);
+    }
+    return response.result;
   }
   
   async deleteWebhook(options) {
@@ -35,7 +44,7 @@ class BaseClient extends Request {
     if (!response) {
       throw new TelegramApiError('Failed to delete webhook');
     }
-    return response;
+    return response.result;
   }
   
   async getWebhookInfo() {
@@ -44,7 +53,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async sendMessage(options) {
@@ -52,20 +61,19 @@ class BaseClient extends Request {
     const params = {
       chat_id: options.chatId,
       text: options.text,
-      reply_markup: JSON.stringify({
-        inline_keyboard: options.button
-      }),
+      reply_markup: options.replyMarkup,
       allow_sending_without_reply: options.allowReply,
       disable_notification: options.notification,
       protect_content: options.content,
       message_thread_id: options.threadId,
-      reply_to_message_id: options.replyToMessageId
+      reply_to_message_id: options.replyToMessageId,
+      parse_mode: options.parseMode
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
    }
    
    async sendPhoto(options) {
@@ -82,13 +90,13 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
    }
    
    async sendAudio(options) {
@@ -108,13 +116,13 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
    }
    
    async sendDocument(options) {
@@ -132,15 +140,13 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify({
-        inline_keyboard: options.button
-      }),
+      reply_markup: options.replyMarkup,
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendVideo(options) {
@@ -167,7 +173,7 @@ class BaseClient extends Request {
   if (response?.error_code !== undefined) {
     throw new TelegramApiError(response.description);
   }
-   return response;
+   return response.result;
   }
 
 
@@ -188,14 +194,14 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify(options.replyMarkup),
+      reply_markup: options.replyMarkup,
       message_thread_id: options.threadId
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendVoice(options) {
@@ -211,16 +217,14 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify({
-        inline_keyboard: options.button
-      }),
+      reply_markup: options.replyMarkup,
       message_thread_id: options.threadId,
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendVideoNote(options) {
@@ -236,15 +240,13 @@ class BaseClient extends Request {
     message_thread_id: options.threadId,
     reply_to_message_id: options.replyToMessageId,
     allow_sending_without_reply: options.allowReply,
-    reply_markup: JSON.stringify({
-      inline_keyboard: options.button
-    })
+    reply_markup: optiono.replyMarkup
   };
   const response = await this.request(method, params);
   if (response?.error_code !== undefined) {
     throw new TelegramApiError(response.description);
   }
-   return response;
+   return response.result;
   }
 
   async sendMediaGroup(options) {
@@ -271,7 +273,7 @@ class BaseClient extends Request {
   if (response?.error_code !== undefined) {
     throw new TelegramApiError(response.description);
   }
-  return response;
+  return response.result;
  }
 
   async sendLocation(options) {
@@ -289,13 +291,13 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async sendVenue(options) {
@@ -315,13 +317,13 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
    
@@ -339,7 +341,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
    }
    
    async copyMessage(options) {
@@ -356,15 +358,13 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowSendingWithoutReply,
-      reply_markup: JSON.stringify({
-        inline_keyboard: options.button
-      })
+      reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
    }
    
    async sendContact(options) {
@@ -380,15 +380,13 @@ class BaseClient extends Request {
       message_thread_id: options.threadId,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify({
-        inline_keyboard: options.button
-      }),
+      reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendPoll(options) {
@@ -412,15 +410,13 @@ class BaseClient extends Request {
       message_thread_id: options.threadId,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify({
-        inline_keyboard: options.button
-      })
+      reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendDice(options) {
@@ -433,15 +429,13 @@ class BaseClient extends Request {
       message_thread_id: options.threadId,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify({
-        inline_keyboard: options.button
-      })
+      reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendChatAction(options) {
@@ -455,7 +449,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async getUserProfilePhotos(options) {
@@ -469,21 +463,21 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
     throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
-  async getFile(fileId) {
+  async getFile(options) {
     const method = 'getFile';
-    const params = { file_id: fileId };
+    const params = { file_id: options.fileId };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
-  async downloadFile(filePath) {
-    const fileUrl = `https://api.telegram.org/file/bot${this.token}/${filePath}`;
+  async downloadFile(options) {
+    const fileUrl = `https://api.telegram.org/file/bot${this.token}/${options.filePath}`;
     return new Promise((resolve, reject) => {
       https.get(fileUrl, (res) => {
         if (res.statusCode !== 200) {
@@ -509,7 +503,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async unbanChatMember(options) {
@@ -523,7 +517,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
     throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async restrictChatMember(options) {
@@ -539,7 +533,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async promoteChatMember(options) {
@@ -564,7 +558,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setChatAdministratorCustomTitle(options) {
@@ -591,7 +585,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async unbanChatSenderChat(options) {
@@ -604,7 +598,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setChatPermissions(options) {
@@ -618,10 +612,10 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
-  xportChatInviteLink(options) {
+  portChatInviteLink(options) {
     const method = 'exportChatInviteLink';
     const params = {
       chat_id: options.chatId
@@ -673,7 +667,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async declineChatJoinRequest(options) {
@@ -686,7 +680,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   setChatPhoto(options) {
@@ -744,7 +738,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async unpinAllChatMessages(options) {
@@ -756,7 +750,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async leaveChat(options) {
@@ -768,7 +762,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getChat(options) {
@@ -780,7 +774,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getChatAdministrators(options) {
@@ -792,7 +786,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getChatMemberCount(options) {
@@ -804,7 +798,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   getChatMember(options) {
@@ -888,7 +882,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async unpinAllForumTopicMessages(options) {
@@ -901,7 +895,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async editGeneralForumTopic(options) {
@@ -914,7 +908,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async closeGeneralForumTopic(options) {
@@ -926,7 +920,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async reopenGeneralForumTopic(options) {
@@ -938,7 +932,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async hideGeneralForumTopic(options) {
@@ -984,7 +978,7 @@ class BaseClient extends Request {
   async setMyCommands(options) {
     const method = 'setMyCommands';
     const params = {
-      commands: JSON.stringify(options.commands),
+      commands: options.commands,
       scope: options?.scope,
       language_code: options?.languageCode
     };
@@ -1020,7 +1014,7 @@ class BaseClient extends Request {
       console.log(response);
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getMyDescription(options) {
@@ -1032,7 +1026,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async setMyShortDescription(options) {
@@ -1045,7 +1039,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getMyShortDescription(options) {
@@ -1057,20 +1051,20 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setChatMenuButton(options) {
     const method = 'setChatMenuButton';
     const params = {
       chat_id: options.chatId,
-      menu_button: JSON.stringify(options.menuButton)
+      menu_button: options.menuButton
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getChatMenuButton(options) {
@@ -1082,20 +1076,20 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async setMyDefaultAdministratorRights(options) {
     const method = 'setMyDefaultAdministratorRights';
     const params = {
-      rights: JSON.stringify(options.rights),
+      rights: options.rights,
       for_channels: options.forChannels
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getMyDefaultAdministratorRights(options) {
@@ -1107,7 +1101,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async editMessageText(options) {
@@ -1126,7 +1120,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async editMessageCaption(options) {
@@ -1144,7 +1138,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async editMessageMedia(options) {
@@ -1160,7 +1154,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async editMessageLiveLocation(options) {
@@ -1174,13 +1168,13 @@ class BaseClient extends Request {
       horizontal_accuracy: options.horizontalAccuracy,
       heading: options.heading,
       proximity_alert_radius: options.proximityAlertRadius,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async stopMessageLiveLocation(options) {
@@ -1189,13 +1183,13 @@ class BaseClient extends Request {
       chat_id: options.chatId,
       message_id: options.messageId,
       inline_message_id: options.inlineMessageId,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async editMessageReplyMarkup(options) {
@@ -1204,13 +1198,13 @@ class BaseClient extends Request {
       chat_id: options.chatId,
       message_id: options.messageId,
       inline_message_id: options.inlineMessageId,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async stopPoll(options) {
@@ -1218,13 +1212,13 @@ class BaseClient extends Request {
     const params = {
       chat_id: options.chatId,
       message_id: options.messageId,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendSticker(options) {
@@ -1238,13 +1232,13 @@ class BaseClient extends Request {
       protect_content: options.content,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowReply,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getStickerSet(options) {
@@ -1256,7 +1250,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async getCustomEmojiStickers(options) {
@@ -1268,7 +1262,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async uploadStickerFile(options) {
@@ -1282,7 +1276,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async createNewStickerSet(options) {
@@ -1300,7 +1294,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async addStickerToSet(options) {
@@ -1314,7 +1308,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async setStickerPositionInSet(options) {
@@ -1327,7 +1321,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async deleteStickerFromSet(options) {
@@ -1339,46 +1333,46 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setStickerEmoji(options) {
     const method = 'setStickerEmoji';
     const params = {
       sticker: options.sticker,
-      emoji_list: JSON.stringify(options.emojiList)
+      emoji_list: options.emojiList
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setStickerKeywords(options) {
     const method = 'setStickerKeywords';
     const params = {
       sticker: options.sticker,
-      keywords: JSON.stringify(options.keywords)
+      keywords: options.keywords
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setStickerMaskPosition(options) {
     const method = 'setStickerMaskPosition';
     const params = {
       sticker: options.sticker,
-      mask_position: JSON.stringify(options.maskPosition)
+      mask_position: options.maskPosition
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setStickerSetTitle(options) {
@@ -1391,7 +1385,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async setStickerSetThumbnail(options) {
@@ -1405,7 +1399,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async setCustomEmojiStickerSetThumbnail(options) {
@@ -1418,7 +1412,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async deleteStickerSet(options) {
@@ -1430,7 +1424,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async setStickerKeywords(options) {
@@ -1443,7 +1437,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
 
   async setStickerMaskPosition(options) {
@@ -1456,7 +1450,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async answerInlineQuery(options) {
@@ -1474,7 +1468,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async answerInlineQuery(options) {
@@ -1492,20 +1486,20 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async answerWebAppQuery(options) {
     const method = 'answerWebAppQuery';
     const params = {
       web_app_query_id: options.queryId,
-      result: JSON.stringify(options.inlineQueryResult)
+      result: options.inlineQueryResult
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async sendInvoice(options) {
@@ -1518,9 +1512,9 @@ class BaseClient extends Request {
       payload: options.payload,
       provider_token: options.providerToken,
       currency: options.currency,
-      prices: JSON.stringify(options.prices),
+      prices: options.prices,
       max_tip_amount: options.maxTipAmount,
-      suggested_tip_amounts: JSON.stringify(options.suggestedTipAmounts),
+      suggested_tip_amounts: options.suggestedTipAmounts,
       start_parameter: options.startParameter,
       provider_data: options.providerData,
       photo_url: options.photoUrl,
@@ -1538,13 +1532,13 @@ class BaseClient extends Request {
       protect_content: options.protectContent,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowSendingWithoutReply,
-      reply_markup: JSON.stringify(options.replyMarkup),
+      reply_markup: options.replyMarkup,
     };
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async createInvoiceLink(options) {
@@ -1575,7 +1569,7 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
   async answerShippingQuery(options) {
@@ -1618,13 +1612,13 @@ class BaseClient extends Request {
       message_thread_id: options.messageThreadId,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowSendingWithoutReply,
-      reply_markup: JSON.stringify(options.replyMarkup)
+      reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    return response;
+    return response.result;
   }
   
    async deleteMessage(options) {
@@ -1639,7 +1633,7 @@ class BaseClient extends Request {
      if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
      }
-     return response;
+     return response.result;
    }
   
   async createChat(options) {
@@ -1652,17 +1646,15 @@ class BaseClient extends Request {
     if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description)
     }
-    return response;
+    return response.result;
   }
 
   
   async deleteWebhook() {
     const response = await this.request('deleteWebhook', {});
-    console.log(response);
-    return response;
+    return response.result;
   }
 
 }
 
 module.exports = BaseClient;
-
