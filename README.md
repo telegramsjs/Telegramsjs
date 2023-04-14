@@ -60,7 +60,7 @@ bot.commands.set('/help', {
   code: (bot, message) => {
     message.chat.send({
       text: 'Here are some helpful tips...'
-    });
+    }); // or: message.chat.send('Starting...')
   }
 });
 ```
@@ -98,7 +98,7 @@ module.exports = {
   code: (bot, message) => {
     message.chat.send({
       text: `Starting...`
-    })
+    }) // or: message.chat.send('Starting...')
   }
 }
 ```
@@ -112,7 +112,9 @@ bot.once('ready', async () => {
   });
 
   await bot.setMyCommands({
-    commands: bot.commands.toArray()
+    commands: JSON.stringify({
+       inline_keyboard: bot.commands.toArray()
+    })
   });
 });
 ```
