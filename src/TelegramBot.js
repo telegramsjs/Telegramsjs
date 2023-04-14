@@ -177,8 +177,11 @@ class TelegramBot extends BaseClient {
   while (true) {
     const getUpdates = await this.getUpdates();
     for (const updates of getUpdates) {
-      const updateTimestamp = new Date(updates.message.date * 1000);
-      if (updateTimestamp > lastUpdateTimestamp) {
+      const time = updates.message?.date ?? updates.callback_query?.message?.date;
+      const isMessage = !!updates.message;
+      const isCallbackQuery = !!updates.callback_query;
+      const updateTimestamp = new Date(time * 1000);
+      if ((updateTimestamp > lastUpdateTimestamp && isMessage) || isCallbackQuery) {
         lastUpdateTimestamp = updateTimestamp;
         
         const send = (options) => {
@@ -211,18 +214,18 @@ class TelegramBot extends BaseClient {
           let chatId;
           let messageId;
           if (updates?.callback_query) {
-  chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
-} else if (updates?.edited_message) {
-  chatId = options?.chatId || updates?.edited_message?.chat?.id;
-  messageId = options?.messageId || updates?.edited_message?.message_id;
-} else if (updates?.edited_channel_post) {
-  chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.edited_channel_post?.message_id;
-} else {
-  chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
-}
+            chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
+          } else if (updates?.edited_message) {
+            chatId = options?.chatId || updates?.edited_message?.chat?.id;
+            messageId = options?.messageId || updates?.edited_message?.message_id;
+          } else if (updates?.edited_channel_post) {
+            chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.edited_channel_post?.message_id;
+          } else {
+            chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
+          }
 
           
           return this.deleteMessage({
@@ -237,25 +240,25 @@ class TelegramBot extends BaseClient {
           let messageId;
           let text = typeof options === 'object' ? options.text : options
           if (updates?.callback_query) {
-  chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
-} else if (updates?.edited_message) {
-  chatId = options?.chatId || updates?.edited_message?.chat?.id;
-  messageId = options?.messageId || updates?.edited_message?.message_id;
-} else if (updates?.edited_channel_post) {
-  chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.edited_channel_post?.message_id;
-} else {
-  chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
-}
+            chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
+          } else if (updates?.edited_message) {
+            chatId = options?.chatId || updates?.edited_message?.chat?.id;
+            messageId = options?.messageId || updates?.edited_message?.message_id;
+          } else if (updates?.edited_channel_post) {
+            chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.edited_channel_post?.message_id;
+          } else {
+            chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
+          }
 
           
           return this.editMessageText({
             chatId: chatId,
             messageId: messageId,
             text: text,
-            button: options.button,
+            replyMarkup: options.replyMarkup,
             webPage: options.webPage,
             parseMode: options.parseMode
           })
@@ -266,25 +269,25 @@ class TelegramBot extends BaseClient {
           let messageId;
           let text = typeof options === 'object' ? options.text : options
           if (updates?.callback_query) {
-  chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
-} else if (updates?.edited_message) {
-  chatId = options?.chatId || updates?.edited_message?.chat?.id;
-  messageId = options?.messageId || updates?.edited_message?.message_id;
-} else if (updates?.edited_channel_post) {
-  chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.edited_channel_post?.message_id;
-} else {
-  chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
-  messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
-}
+            chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
+          } else if (updates?.edited_message) {
+            chatId = options?.chatId || updates?.edited_message?.chat?.id;
+            messageId = options?.messageId || updates?.edited_message?.message_id;
+          } else if (updates?.edited_channel_post) {
+            chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.edited_channel_post?.message_id;
+          } else {
+            chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
+            messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
+          }
 
           
           return this.sendMessage({
             text: text,
             chatId: chatId,
             messageId: messageId,
-            button: options.button,
+            replyMarkup: options.replyMarkup,
             replyToMessageId: messageId,
             allowReply: options.allowReply,
             notification: options.notification,
