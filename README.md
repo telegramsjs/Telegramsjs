@@ -21,7 +21,11 @@ First, you need to create a new instance of the TelegramBot class by providing y
 const { TelegramBot } = require("telegramsjs");
 
 const bot = new TelegramBot('TELEGRAM_BOT_TOKEN', {
+<<<<<<< HEAD
   intents: [] // not necessary
+=======
+  intents: []
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
 });
 ```
 The intents option is an array of Telegram bot API <a href="https://core.telegram.org/bots/api#getupdates">Update types</a>, that the bot should receive.
@@ -60,7 +64,11 @@ bot.commands.set('/help', {
   code: (bot, message) => {
     message.chat.send({
       text: 'Here are some helpful tips...'
+<<<<<<< HEAD
     }); // or: message.chat.send('Here are some helpful tips...')
+=======
+    }); // or: message.chat.send('Starting...')
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   }
 });
 ```
@@ -113,7 +121,11 @@ bot.once('ready', async () => {
 
   await bot.setMyCommands({
     commands: JSON.stringify({
+<<<<<<< HEAD
        command: bot.commands.toArray()
+=======
+       inline_keyboard: bot.commands.toArray()
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     })
   });
 });
@@ -134,4 +146,8 @@ Detailed documentation for `Telegramsjs` is still in progress.
 We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the <a href="https://discord.gg/j8G7jhHMbs">Official support server</a> or the <a href="https://t.me/sempaika_telegrams_js">Official Telegram channel</a>.
 
 ## License
+<<<<<<< HEAD
 `Telegramsjs` is available under the `MIT` license. For more information, please refer to the <a href="https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE">LICENSE</a> file.
+=======
+`Telegramsjs` is available under the `MIT` license. For more information, please refer to the <a href="https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE">LICENSE</a> file.
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5

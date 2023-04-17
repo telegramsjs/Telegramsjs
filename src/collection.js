@@ -177,6 +177,7 @@ class Collection {
       }
     }
   }
+<<<<<<< HEAD
   
   /**
    * @returns an iterator that contains all the keys of the collection's elements.
@@ -193,6 +194,8 @@ class Collection {
     return this._items.values();
   }
 
+=======
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
 
 /**
  * Returns the key of the first element in the collection that satisfies the provided testing function.
@@ -235,6 +238,7 @@ class Collection {
   entries() {
     return this._items.entries();
   }
+<<<<<<< HEAD
   
   /**
    * @returns - an array that contains all the values of the elements of the collection, grouped by keys 
@@ -290,6 +294,8 @@ class Collection {
     return json;
   }
 
+=======
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
 
 /**
  * Returns a new Iterator object that contains the [key, value] pairs for each element in the collection.

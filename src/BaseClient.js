@@ -4,12 +4,19 @@ const Request = require("./request.js");
 const { TelegramApiError } = require("./errorcollection.js");
 
 class BaseClient extends Request {
+<<<<<<< HEAD
   constructor(token, intents) {
     super(token, intents);
   }
   
   
   
+=======
+  constructor(token) {
+    super(token);
+  }
+  
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   async setWebhook(options) {
     const method = 'setWebhook';
     const params = {
@@ -22,7 +29,11 @@ class BaseClient extends Request {
       secret_token: options.secretToken
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -52,7 +63,11 @@ class BaseClient extends Request {
   async getWebhookInfo() {
     const method = 'getWebhookInfo';
     const response = await this.request(method);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -72,7 +87,11 @@ class BaseClient extends Request {
       parse_mode: options.parseMode
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -95,7 +114,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -121,7 +144,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -145,7 +172,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -172,7 +203,11 @@ class BaseClient extends Request {
     reply_markup: options.replyMarkup
   };
   const response = await this.request(method, params);
+<<<<<<< HEAD
   if (!!response?.error_code) {
+=======
+  if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     throw new TelegramApiError(response.description);
   }
    return response.result;
@@ -200,7 +235,11 @@ class BaseClient extends Request {
       message_thread_id: options.threadId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -223,7 +262,11 @@ class BaseClient extends Request {
       message_thread_id: options.threadId,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -245,7 +288,11 @@ class BaseClient extends Request {
     reply_markup: optiono.replyMarkup
   };
   const response = await this.request(method, params);
+<<<<<<< HEAD
   if (!!response?.error_code) {
+=======
+  if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     throw new TelegramApiError(response.description);
   }
    return response.result;
@@ -272,7 +319,11 @@ class BaseClient extends Request {
     }))
   };
   const response = await this.request(method, params);
+<<<<<<< HEAD
   if (!!response?.error_code) {
+=======
+  if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     throw new TelegramApiError(response.description);
   }
   return response.result;
@@ -296,7 +347,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -322,7 +377,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -340,7 +399,11 @@ class BaseClient extends Request {
       protect_content: options.content
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -363,7 +426,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -385,7 +452,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -415,7 +486,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -434,7 +509,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -448,7 +527,11 @@ class BaseClient extends Request {
       message_thread_id: options.threadId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -462,7 +545,11 @@ class BaseClient extends Request {
       limit: options.limit
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -472,7 +559,11 @@ class BaseClient extends Request {
     const method = 'getFile';
     const params = { file_id: options.fileId };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -502,7 +593,11 @@ class BaseClient extends Request {
       revoke_messages: options.revokeMessages
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -516,7 +611,11 @@ class BaseClient extends Request {
       only_if_banned: options.onlyIfBanned
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -532,7 +631,11 @@ class BaseClient extends Request {
       until_date: options.untilDate
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -557,7 +660,11 @@ class BaseClient extends Request {
       can_manage_topics: options.canManageTopics
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -571,7 +678,11 @@ class BaseClient extends Request {
       custom_title: options.customTitle
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return true;
@@ -584,7 +695,11 @@ class BaseClient extends Request {
       user_id: optiond.senderChatId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -597,7 +712,11 @@ class BaseClient extends Request {
       user_id: options.senderChatId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -611,17 +730,26 @@ class BaseClient extends Request {
       use_independent_chat_permissions: options.independentPermissions
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
   }
   
+<<<<<<< HEAD
   async portChatInviteLink(options) {
+=======
+  portChatInviteLink(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'exportChatInviteLink';
     const params = {
       chat_id: options.chatId
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -630,6 +758,12 @@ class BaseClient extends Request {
   }
 
   async createChatInviteLink(options) {
+=======
+    return this.request(method, params);
+  }
+
+  createChatInviteLink(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'createChatInviteLink';
     const params = {
       chat_id: options.chatId,
@@ -638,6 +772,7 @@ class BaseClient extends Request {
       member_limit: options.memberLimit,
       creates_join_request: options.createsJoinRequest
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -646,6 +781,12 @@ class BaseClient extends Request {
   }
 
   async editChatInviteLink(options) {
+=======
+    return this.request(method, params);
+  }
+
+  editChatInviteLink(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'editChatInviteLink';
     const params = {
       chat_id: options.chatId,
@@ -655,6 +796,7 @@ class BaseClient extends Request {
       member_limit: options.memberLimit,
       creates_join_request: options.createsJoinRequest
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -663,16 +805,26 @@ class BaseClient extends Request {
   }
 
   async revokeChatInviteLink(options) {
+=======
+    return this.request(method, params);
+  }
+
+  revokeChatInviteLink(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'revokeChatInviteLink';
     const params = {
       chat_id: options.chatId,
       invite_link: options.inviteLink
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
     }
     return response.result;
+=======
+    return this.request(method, params);
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   }
   
   async approveChatJoinRequest(options) {
@@ -682,7 +834,11 @@ class BaseClient extends Request {
       user_id: options.userId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -695,18 +851,27 @@ class BaseClient extends Request {
       user_id: options.userId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
   }
   
+<<<<<<< HEAD
   async setChatPhoto(options) {
+=======
+  setChatPhoto(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'setChatPhoto';
     const params = {
       chat_id: options.chatId,
       photo: options.photo
     };
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -715,10 +880,17 @@ class BaseClient extends Request {
   }
   
   async deleteChatPhoto(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  deleteChatPhoto(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'deleteChatPhoto';
     const params = {
       chat_id: options.chatId
     };
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -727,11 +899,18 @@ class BaseClient extends Request {
   }
   
   async setChatTitle(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  setChatTitle(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'setChatTitle';
     const params = {
       chat_id: options.chatId,
       title: options.title
     };
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -740,11 +919,18 @@ class BaseClient extends Request {
   }
   
   async setChatDescription(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  setChatDescription(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'setChatDescription';
     const params = {
       chat_id: options.chatId,
       description: options.description
     };
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -753,17 +939,27 @@ class BaseClient extends Request {
   }
   
   async pinChatMessage(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  pinChatMessage(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'pinChatMessage';
     const params = {
       chat_id: options.chatId,
       message_id: options.messageId,
       disable_notification: options.notification
     };
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
     }
     return response.result;
+=======
+    return this.request(method, params);
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   }
   
   async unpinChatMessage(options) {
@@ -773,7 +969,11 @@ class BaseClient extends Request {
       message_id: options.messageId,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -785,7 +985,11 @@ class BaseClient extends Request {
       chat_id: options.chatId,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -797,7 +1001,11 @@ class BaseClient extends Request {
       chat_id: options.chatId,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -809,7 +1017,11 @@ class BaseClient extends Request {
       chat_id: options.chatId,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -821,7 +1033,11 @@ class BaseClient extends Request {
       chat_id: options.chatId,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -833,18 +1049,27 @@ class BaseClient extends Request {
       chat_id: options.chatId,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
   }
   
+<<<<<<< HEAD
   async getChatMember(options) {
+=======
+  getChatMember(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'getChatMember';
     const params = {
       chat_id: options.chatId,
       user_id: options.userId
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -853,11 +1078,18 @@ class BaseClient extends Request {
   }
   
   async setChatStickerSet(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  setChatStickerSet(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'setChatStickerSet';
     const params = {
       chat_id: options.chatId,
       sticker_set_name: options.stickerSetName
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -866,10 +1098,17 @@ class BaseClient extends Request {
   }
   
   async deleteChatStickerSet(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  deleteChatStickerSet(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'deleteChatStickerSet';
     const params = {
       chat_id: options.chatId
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -887,6 +1126,17 @@ class BaseClient extends Request {
   }
   
   async createForumTopic(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  getForumTopicIconStickers() {
+    const method = 'getForumTopicIconStickers';
+    return this.request(method);
+  }
+  
+  createForumTopic(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'createForumTopic';
     const params = {
       chat_id: options.chatId,
@@ -894,6 +1144,7 @@ class BaseClient extends Request {
       icon_color: options.iconColor,
       icon_custom_emoji_id: options.iconCustomEmojiId
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -902,6 +1153,12 @@ class BaseClient extends Request {
   }
   
   async editForumTopic(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  editForumTopic(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'editForumTopic';
     const params = {
       chat_id: options.chatId,
@@ -909,6 +1166,7 @@ class BaseClient extends Request {
       name: options.name,
       icon_custom_emoji_id: options.iconCustomEmojiId
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -917,11 +1175,18 @@ class BaseClient extends Request {
   }
   
   async closeForumTopic(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  closeForumTopic(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'closeForumTopic';
     const params = {
       chat_id: options.chatId,
       message_thread_id: options.messageThreadId
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
@@ -930,16 +1195,26 @@ class BaseClient extends Request {
   }
   
   async reopenForumTopic(options) {
+=======
+    return this.request(method, params);
+  }
+  
+  reopenForumTopic(options) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
     const method = 'reopenForumTopic';
     const params = {
       chat_id: options.chatId,
       message_thread_id: options.messageThreadId
     }
+<<<<<<< HEAD
     const response = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response.description);
     }
     return response.result;
+=======
+    return this.request(method, params);
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   }
   
   async deleteForumTopic(options) {
@@ -949,7 +1224,11 @@ class BaseClient extends Request {
       message_thread_id: options.messageThreadId
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -962,7 +1241,11 @@ class BaseClient extends Request {
       message_thread_id: options.messageThreadId
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -975,7 +1258,11 @@ class BaseClient extends Request {
       name: options.name
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -987,7 +1274,11 @@ class BaseClient extends Request {
       chat_id: options.chatId
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -999,7 +1290,11 @@ class BaseClient extends Request {
       chat_id: options.chatId
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1011,7 +1306,11 @@ class BaseClient extends Request {
       chat_id: options.chatId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return true;
@@ -1023,7 +1322,11 @@ class BaseClient extends Request {
       chat_id: options.chatId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return true;
@@ -1039,7 +1342,11 @@ class BaseClient extends Request {
       cache_time: options.cacheTime
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return true;
@@ -1080,7 +1387,12 @@ class BaseClient extends Request {
       language_code: options.languageCode
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+      console.log(response);
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1089,10 +1401,17 @@ class BaseClient extends Request {
   async getMyDescription(options) {
     const method = 'getMyDescription';
     const params = {
+<<<<<<< HEAD
       language_code: options?.languageCode
     }
     const response = await this.request(method, params);
     if (!!response?.error_code) {
+=======
+      language_code: options.languageCode
+    }
+    const response = await this.request(method, params);
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1101,11 +1420,19 @@ class BaseClient extends Request {
   async setMyShortDescription(options) {
     const method = 'setMyShortDescription';
     const params = {
+<<<<<<< HEAD
       short_description: options.description,
       language_code: options.languageCode
     }
     const response = await this.request(method, params);
     if (!!response?.error_code) {
+=======
+      short_description: options.shortDescription,
+      language_code: options.languageCode
+    }
+    const response = await this.request(method, params);
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1114,10 +1441,17 @@ class BaseClient extends Request {
   async getMyShortDescription(options) {
     const method = 'getMyShortDescription';
     const params = {
+<<<<<<< HEAD
       language_code: options?.languageCode
     }
     const response = await this.request(method, params);
     if (!!response?.error_code) {
+=======
+      language_code: options.languageCode
+    }
+    const response = await this.request(method, params);
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1130,7 +1464,11 @@ class BaseClient extends Request {
       menu_button: options.menuButton
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1142,7 +1480,11 @@ class BaseClient extends Request {
       chat_id: options.chatId
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1155,7 +1497,11 @@ class BaseClient extends Request {
       for_channels: options.forChannels
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1167,7 +1513,11 @@ class BaseClient extends Request {
       for_channels: options.forChannels
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1186,7 +1536,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1204,7 +1558,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1220,7 +1578,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1240,7 +1602,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1255,7 +1621,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1270,7 +1640,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1284,7 +1658,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1304,7 +1682,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1316,7 +1698,11 @@ class BaseClient extends Request {
       name: options.name
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1328,7 +1714,11 @@ class BaseClient extends Request {
       custom_emoji_ids: options.customEmojiIds
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1342,7 +1732,11 @@ class BaseClient extends Request {
       sticker_format: options.stickerFormat,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1360,7 +1754,11 @@ class BaseClient extends Request {
       needs_repainting: options.needsRepainting,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1374,7 +1772,11 @@ class BaseClient extends Request {
       sticker: JSON.stringify(options.sticker),
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1387,7 +1789,11 @@ class BaseClient extends Request {
       position: options.position,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1399,7 +1805,11 @@ class BaseClient extends Request {
       sticker: options.sticker,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1412,7 +1822,11 @@ class BaseClient extends Request {
       emoji_list: options.emojiList
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1425,7 +1839,11 @@ class BaseClient extends Request {
       keywords: options.keywords
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1438,7 +1856,11 @@ class BaseClient extends Request {
       mask_position: options.maskPosition
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1451,7 +1873,11 @@ class BaseClient extends Request {
       title: options.title
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1465,7 +1891,11 @@ class BaseClient extends Request {
       thumbnail: options.thumbnail
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1478,7 +1908,11 @@ class BaseClient extends Request {
       custom_emoji_id: options.customEmojiId
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1490,7 +1924,11 @@ class BaseClient extends Request {
       name: options.name
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1503,7 +1941,11 @@ class BaseClient extends Request {
       keywords: options.keywords
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1516,7 +1958,11 @@ class BaseClient extends Request {
       mask_position: options.maskPosition
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1534,7 +1980,11 @@ class BaseClient extends Request {
       switch_pm_parameter: options.switchPmParameter
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1552,7 +2002,11 @@ class BaseClient extends Request {
       switch_pm_parameter: options.switchPmParameter
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1565,7 +2019,11 @@ class BaseClient extends Request {
       result: options.inlineQueryResult
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1604,7 +2062,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1635,7 +2097,11 @@ class BaseClient extends Request {
       is_flexible: options.isFlexible,
     };
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1684,7 +2150,11 @@ class BaseClient extends Request {
       reply_markup: options.replyMarkup
     }
     const response = await this.request(method, params);
+<<<<<<< HEAD
     if (!!response?.error_code) {
+=======
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -1699,7 +2169,11 @@ class BaseClient extends Request {
      };
      
      const response = await this.request(method, params);
+<<<<<<< HEAD
      if (!!response?.error_code) {
+=======
+     if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description);
      }
      return response.result;
@@ -1708,11 +2182,19 @@ class BaseClient extends Request {
   async createChat(options) {
     const method = 'createChat';
     const params = {
+<<<<<<< HEAD
       chat_type: options.type,
       title: options.title
     };
     const response = await this.request(method, params);
     if (!!response?.error_code) {
+=======
+      chat_type: options?.type || 'group',
+      title: options?.title || 'Test Group'
+    };
+    const response = await this.request(method, params);
+    if (response?.error_code !== undefined) {
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       throw new TelegramApiError(response.description)
     }
     return response.result;

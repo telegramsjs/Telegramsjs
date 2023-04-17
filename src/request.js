@@ -1,7 +1,11 @@
 const https = require('https');
 const querystring = require('querystring');
+<<<<<<< HEAD
 const { TelegramApiError, TelegramTokenError, IntentsError } = require("./errorcollection.js");
 const { decodeIntents, IntentsBitField } = require("./IntentsBitField.js");
+=======
+const { TelegramApiError, TelegramTokenError } = require("./errorcollection.js");
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
 
 /**
  * Represents a request to the Telegram Bot API.
@@ -14,6 +18,7 @@ class Request {
     this.token = token;
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
     this.offset = 0;
+<<<<<<< HEAD
     if (typeof intents?.bits === 'number')
       this.intents = decodeIntents(intents);
      else if (typeof intents === 'object' && (typeof intents?.[0] === 'string' || typeof intents?.[0]?.[0] === 'string'))
@@ -23,6 +28,9 @@ class Request {
      } else if (typeof intents === 'number') {
        this.intents = decodeIntents(new IntentsBitField(intents))
      }
+=======
+    this.intents = intents
+>>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   }
   /**
    * Gets the updates from the Telegram Bot API.
