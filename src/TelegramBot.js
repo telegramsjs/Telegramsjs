@@ -2,10 +2,7 @@ const https = require('https');
 const querystring = require('querystring');
 const BaseClient = require("./BaseClient.js");
 const { EventError } = require("./errorcollection.js");
-<<<<<<< HEAD
 const ms = require('ms');
-=======
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
 /**
  * A class representing a Telegram Bot client.
  * @extends BaseClient
@@ -85,10 +82,7 @@ class TelegramBot extends BaseClient {
       groupConcatCreate: [],
       groupPollCreate: [],
       groupLocationCreate: [],
-<<<<<<< HEAD
       groupBroadcastInvited: [],
-=======
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       
       channelMessagePinned: [],
       channelMessageCreate: [],
@@ -177,24 +171,13 @@ class TelegramBot extends BaseClient {
     }
   }
   
-<<<<<<< HEAD
   async login() {
   const client = await this.request('getMe');
   this.emit('ready', client.result);
-=======
-  async start() {
-  const client = await this.request('getMe');
-  this.emit('ready', client);
-  const ms = require('ms');
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   let lastUpdateTimestamp = new Date();
   while (true) {
     const getUpdates = await this.getUpdates();
     for (const updates of getUpdates) {
-<<<<<<< HEAD
-      console.log(updates);
-=======
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
       const time = updates.message?.date ?? updates.callback_query?.message?.date;
       const isMessage = !!updates.message;
       const isCallbackQuery = !!updates.callback_query;
@@ -249,11 +232,7 @@ class TelegramBot extends BaseClient {
           return this.deleteMessage({
             chatId: chatId, 
             messageId: messageId,
-<<<<<<< HEAD
-            revoke: options.revoke
-=======
-            revoke: revoke
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+            revoke: options.revoke,
           })
         }
         
@@ -318,7 +297,6 @@ class TelegramBot extends BaseClient {
             parseMode: options.parseMode
           });
         }
-<<<<<<< HEAD
         
         const isCommand = (checkAllEntities = false) => {
           let commandFound = false;
@@ -473,9 +451,6 @@ class TelegramBot extends BaseClient {
           }).catch(err => console.log)
         }
         
-=======
-
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
         if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup') {
           
           const chat = Object.assign({}, updates.message.chat, { send });
@@ -484,7 +459,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -496,9 +470,6 @@ class TelegramBot extends BaseClient {
             isAudio,
             isDocument,
             isPhoto
-=======
-            reply
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           };
           
           this.emit('groupMessageCreate', message);
@@ -512,7 +483,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -524,14 +494,11 @@ class TelegramBot extends BaseClient {
             isAudio,
             isDocument,
             isPhoto
-=======
-            reply
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           };
           
           this.emit('privateMessageUpdate', message);
         }
-<<<<<<< HEAD
+
         
         if (updates?.message?.chat?.type === 'private') {
           
@@ -581,8 +548,8 @@ class TelegramBot extends BaseClient {
           this.emit('groupBroadcastInvited', message);
           
         }
-=======
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
+
 
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups') {
           
@@ -592,7 +559,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -604,9 +570,6 @@ class TelegramBot extends BaseClient {
             isAudio,
             isDocument,
             isPhoto
-=======
-            reply
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           };
           
           this.emit('groupMessageUpdate', message);
@@ -632,7 +595,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -644,9 +606,6 @@ class TelegramBot extends BaseClient {
             isAudio,
             isDocument,
             isPhoto
-=======
-            reply
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           };
 
           this.emit('groupMessagePinned', message);
@@ -660,7 +619,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -672,9 +630,6 @@ class TelegramBot extends BaseClient {
             isAudio,
             isDocument,
             isPhoto
-=======
-            reply
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           };
 
           this.emit('privateMessagePinned', message);
@@ -688,7 +643,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -701,11 +655,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelMessagePinned', message);
         }
         
@@ -723,7 +673,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -736,11 +685,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelMessageUpdate', message);
         }
 
@@ -752,7 +697,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -765,26 +709,18 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelMessageCreate', message);
         }
         
         if (updates.callback_query) {
-<<<<<<< HEAD
           const chat = Object.assign({}, updates.callback_query.chat, { send });
-=======
-          const chat = Object.assign({}, updates.callback_query.message.chat, { send });
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           const interaction = {
             ...updates.callback_query,
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             defer,
             isCommand,
@@ -798,12 +734,8 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
-            this.emit('interactionCreate', interaction);
+
+        this.emit('interactionCreate', interaction);
         }
         
         if (updates?.message?.chat?.type === 'private' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups') {
@@ -814,7 +746,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -826,9 +757,6 @@ class TelegramBot extends BaseClient {
             isAudio,
             isDocument,
             isPhoto
-=======
-            reply
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           };
           this.emit('generalMessageCreate', message);
         }
@@ -841,7 +769,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -854,11 +781,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privatePhotoCreate', message);
         }
         
@@ -870,7 +793,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -882,10 +804,8 @@ class TelegramBot extends BaseClient {
             isAudio,
             isDocument,
             isPhoto
-=======
-            reply
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           };
+          
           this.emit('privateStickerCreate', message);
         }
         
@@ -897,7 +817,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -910,11 +829,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privateVoiceCreate', message);
         }
         
@@ -926,7 +841,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -939,11 +853,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+  
           this.emit('privateVideoNoteCreate', message);
         }
         
@@ -955,7 +865,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -969,10 +878,6 @@ class TelegramBot extends BaseClient {
             isPhoto
           };
           
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           this.emit('privateAudioCreate', message);
         }
         
@@ -984,7 +889,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -997,11 +901,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privateDocumentCreate', message);
         }
         
@@ -1013,7 +913,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1026,11 +925,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privatePhotoUpdate', message);
         }
         
@@ -1042,7 +937,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1055,11 +949,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privateStickerUpdate', message);
         }
         
@@ -1071,7 +961,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1084,11 +973,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privateVoiceUpdate', message);
         }
         
@@ -1100,7 +985,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1113,11 +997,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privateVideoNoteUpdate', message);
         }
         
@@ -1129,7 +1009,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1143,10 +1022,6 @@ class TelegramBot extends BaseClient {
             isPhoto
           };
           
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           this.emit('privateAudioUpdate', message);
         }
         
@@ -1158,7 +1033,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1174,16 +1048,7 @@ class TelegramBot extends BaseClient {
           
           this.emit('privateDocumentUpdate', message);
         }
-        
-=======
-            reply
-          };
-          this.emit('privateDocumentUpdate', message);
-        }
-        
-        /***********/
-        
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.photo) {
           
           const chat = Object.assign({}, updates.message.chat, { send });
@@ -1192,7 +1057,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1205,11 +1069,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupPhotoCreate', message);
         }
         
@@ -1221,7 +1081,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1234,11 +1093,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupStickerCreate', message);
         }
         
@@ -1250,7 +1105,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1263,11 +1117,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupVoiceCreate', message);
         }
         
@@ -1279,7 +1129,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1292,11 +1141,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupVideoNoteCreate', message);
         }
         
@@ -1308,7 +1153,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1321,11 +1165,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupAudioCreate', message);
         }
         
@@ -1337,7 +1177,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1354,15 +1193,7 @@ class TelegramBot extends BaseClient {
           this.emit('groupDocumentCreate', message);
         }
         
-=======
-            reply
-          };
-          this.emit('groupDocumentCreate', message);
-        }
-        
-        /******/
-        
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.photo) {
           
           const chat = Object.assign({}, updates.edited_message.chat, { send });
@@ -1371,7 +1202,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1384,11 +1214,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupPhotoUpdate', message);
         }
         
@@ -1400,7 +1226,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1413,11 +1238,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupStickerUpdate', message);
         }
         
@@ -1429,7 +1250,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1442,11 +1262,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupVoiceUpdate', message);
         }
         
@@ -1458,7 +1274,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1471,11 +1286,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupVideoNoteUpdate', message);
         }
         
@@ -1487,7 +1298,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1500,11 +1310,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupAudioUpdate', message);
         }
         
@@ -1516,7 +1322,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1529,11 +1334,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupDocumentUpdate', message);
         }
         
@@ -1545,7 +1346,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1558,11 +1358,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelPermsUpdate', message);
         }
         
@@ -1574,7 +1370,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1587,11 +1382,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupPermsUpdate', message);
         }
         
@@ -1603,7 +1394,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1616,11 +1406,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupMemberAdd', message);
         }
         
@@ -1632,7 +1418,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1645,11 +1430,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupMemberLeft', message);
         }
         
@@ -1661,7 +1442,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1674,11 +1454,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelNameUpdate', message);
         }
         
@@ -1690,7 +1466,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1703,11 +1478,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelAvatarUpdate', message);
         }
         
@@ -1719,7 +1490,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1732,11 +1502,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupForumCreate', message);
         }
         
@@ -1748,7 +1514,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1761,11 +1526,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupForumMessageCreate', message);
         }
         
@@ -1777,7 +1538,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1790,11 +1550,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupForumClose', message);
         }
         
@@ -1806,7 +1562,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1819,11 +1574,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupForumReopened', message);
         }
         
@@ -1835,7 +1586,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1848,11 +1598,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupBroadcastStart', message);
         }
         
@@ -1864,7 +1610,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1877,11 +1622,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupBroadcastEnd', message);
         }
         
@@ -1893,7 +1634,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1906,11 +1646,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupBroadcastScheduled', message);
         }
         
@@ -1922,7 +1658,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1935,11 +1670,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupNameUpdate', message);
         }
         
@@ -1951,7 +1682,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1964,11 +1694,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupAvatarUpdate', message);
         }
         
@@ -1980,7 +1706,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -1993,11 +1718,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelBroadcastStart', message);
         }
         
@@ -2009,7 +1730,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2022,11 +1742,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelBroadcastEnd', message);
         }
         
@@ -2038,7 +1754,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2052,10 +1767,6 @@ class TelegramBot extends BaseClient {
             isPhoto
           };
           
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           this.emit('channelBroadcastScheduled', message);
         }
         
@@ -2067,7 +1778,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2080,11 +1790,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelPhotoCreate', message);
         }
         
@@ -2096,7 +1802,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2109,11 +1814,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelStickerCreate', message);
         }
         
@@ -2125,7 +1826,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2138,11 +1838,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelVoiceCreate', message);
         }
         
@@ -2154,7 +1850,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2167,11 +1862,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelVideoNoteCreate', message);
         }
         
@@ -2183,7 +1874,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2196,11 +1886,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelAudioCreate', message);
         }
         
@@ -2212,7 +1898,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2225,11 +1910,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelDocumentCreate', message);
         }
         
@@ -2241,7 +1922,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2254,11 +1934,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelPhotoUpdate', message);
         }
         
@@ -2270,7 +1946,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2283,11 +1958,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelStickerUpdate', message);
         }
         
@@ -2299,7 +1970,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2312,11 +1982,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelVoiceUpdate', message);
         }
         
@@ -2328,7 +1994,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2341,11 +2006,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelVideoNoteUpdate', message);
         }
         
@@ -2357,7 +2018,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2370,11 +2030,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelAudioUpdate', message);
         }
         
@@ -2386,7 +2042,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2403,22 +2058,15 @@ class TelegramBot extends BaseClient {
           this.emit('channelDocumentUpdate', message);
         }
         
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.concat) {
-=======
-            reply
-          };
-          this.emit('channelDocumentUpdate', message);
-        }
         
-              if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.concat) {
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+      if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.concat) {
+
           const chat = Object.assign({}, updates.channel_post.chat, { send });
           const message = {
             ...updates.channel_post,
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2431,11 +2079,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelConcatCreate', message);
         }
         
@@ -2446,7 +2090,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2459,11 +2102,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelPollCreate', message);
         }
         
@@ -2474,7 +2113,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2487,11 +2125,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('channelLocationCreate', message);
         }
         
@@ -2502,7 +2136,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2515,11 +2148,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privateConcatCreate', message);
         }
         
@@ -2530,7 +2159,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2544,10 +2172,6 @@ class TelegramBot extends BaseClient {
             isPhoto
           };
           
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           this.emit('privatePollCreate', message);
         }
         
@@ -2558,7 +2182,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2571,11 +2194,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('privateLocationCreate', message);
         }
         
@@ -2586,7 +2205,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2599,11 +2217,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupConcatCreate', message);
         }
         
@@ -2614,7 +2228,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2627,11 +2240,7 @@ class TelegramBot extends BaseClient {
             isDocument,
             isPhoto
           };
-          
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
+
           this.emit('groupPollCreate', message);
         }
         
@@ -2642,7 +2251,6 @@ class TelegramBot extends BaseClient {
             chat: chat,
             deleted,
             update,
-<<<<<<< HEAD
             reply,
             isCommand,
             isLocation,
@@ -2656,10 +2264,6 @@ class TelegramBot extends BaseClient {
             isPhoto
           };
           
-=======
-            reply
-          };
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
           this.emit('groupLocationCreate', message);
         }
       }

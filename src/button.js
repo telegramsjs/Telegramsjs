@@ -44,7 +44,6 @@ class Button {
   }
   
   /**
-<<<<<<< HEAD
    * Creates a new Button object from a button object in the format expected by Telegram Bot API.
    * @param {Object} buttonObj - Button object in the format expected by Telegram Bot API.
    * @returns {Button} Returns an instance of the Button object.
@@ -59,8 +58,6 @@ class Button {
 
   
   /**
-=======
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
    * Returns the button object in the format expected by Telegram Bot API.
    * @returns {Object} Returns the button object in the format expected by Telegram Bot API.
    */
@@ -71,8 +68,7 @@ class Button {
     button[this.type] = this.action;
     return button;
   }
-<<<<<<< HEAD
-  
+
   /**
    * Returns the text representation of the button object in the format expected by Telegram Bot API.
    * @returns {string} Returns the text representation of the button object in the format expected by Telegram Bot API.
@@ -80,8 +76,6 @@ class Button {
    toString() {
      return JSON.stringify(this.toJSON());
    }
-=======
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
 }
 
 module.exports = Button;

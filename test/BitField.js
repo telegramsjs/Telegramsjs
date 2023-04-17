@@ -1,5 +1,6 @@
 const { BotIntents, IntentsBitField, TelegramBot, IntentBits, TelegramIntentBits, decodeIntents, Button } = require('../src/index.js');
-
+const all = require("../src/index.js");
+console.log(all);
 const intents = new IntentsBitField()
   .add(IntentBits.Message, IntentBits.EditedMessage, IntentBits.EditedChannelPost, IntentBits.ChannelPost, IntentBits.InlineQuery, IntentBits.ChosenInlineResult, IntentBits.CallbackQuery, IntentBits.ShippingQuery, IntentBits.PreCheckoutQuery, IntentBits.Poll, IntentBits.PollAnswer, IntentBits.MyChatMember, IntentBits.ChatMember);
 

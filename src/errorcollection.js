@@ -1,10 +1,6 @@
 class TelegramApiError extends Error {
   constructor(error) {
-<<<<<<< HEAD
     super(error.replace('Bad Request: ', ''));
-=======
-    super(error);
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
   }
 }
 
@@ -20,7 +16,6 @@ class TelegramTokenError extends Error {
   }
 }
 
-<<<<<<< HEAD
 class BitFieldError extends Error {
   constructor(error) {
     super(error);
@@ -39,10 +34,4 @@ module.exports = {
   TelegramTokenError,
   IntentsError,
   BitFieldError
-=======
-module.exports = {
-  TelegramApiError,
-  EventError,
-  TelegramTokenError
->>>>>>> fef04d59807cc35e4e1420d8053e5a30dd45e1b5
 }
