@@ -10,7 +10,9 @@ module.exports = {
       commands: []
     }).then(msg => {
       bot.setMyCommands({
-        commands: JSON.stringify(bot.commands.toArray())
+        commands: JSON.stringify({
+          inline_keyboard: bot.commands.toArray()
+        })
       });
     });
     console.log("Bot starting");
