@@ -12,7 +12,7 @@ class BaseClient extends Request {
   async getMe() {
     const method = 'getMe';
     const response = await this.request(method);
-    if (!!response) {
+    if (!response) {
       throw new TelegramApiError(response.description);
     }
     return response.result;
@@ -56,9 +56,6 @@ class BaseClient extends Request {
     const response = await this.request(method, params);
 
     if (!!response?.error_code) {
-
-    
-
       throw new TelegramApiError(response.description);
     }
     return response.result;

@@ -1,6 +1,6 @@
 <div style="text-align: center;">
    <h1>Telegramsjs</h1><br>
-   <image src="./docs/avatar.png"><br>
+   <image src="https://raw.githubusercontent.com/Sempai-07/Telegramsjs/main/docs/avatar.png"><br>
    
    [![Discord Server](https://img.shields.io/discord/796504104565211187?color=7289da&logo=discord&logoColor=white)](https://discord.gg/EuSbT5HH8b)  [![Telegram](https://img.shields.io/appveyor/tests/Sempai-07/Telegramsjs/main)](https://t.me/sempaika_telegrams_js) [![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs) [![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
    </div>
@@ -132,6 +132,9 @@ Detailed documentation for `Telegramsjs` is still in progress.
 
 ## Contributions
 We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the <a href="https://discord.gg/j8G7jhHMbs">Official support server</a> or the <a href="https://t.me/sempaika_telegrams_js">Official Telegram channel</a>.
+
+## Example 
+To see the correct use of the library, see the page on github
 
 ## License
 `Telegramsjs` is available under the `MIT` license. For more information, please refer to the <a href="https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE">LICENSE</a> file.

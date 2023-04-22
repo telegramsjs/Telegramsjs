@@ -1,6 +1,6 @@
 class TelegramApiError extends Error {
   constructor(error) {
-    super(error.replace('Bad Request: ', ''));
+    super(error?.replace("Bad Request: ", "")?.replace("can't parse entities:", ""));
   }
 }
 

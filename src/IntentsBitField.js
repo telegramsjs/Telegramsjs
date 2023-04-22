@@ -84,7 +84,6 @@ class IntentsBitField {
 }
 
 function decodeIntents(intentsBitField) {
-  console.log(intentsBitField);
   const botIntents = [];
   for (const [flag, bit] of Object.entries(IntentBits)) {
     if (intentsBitField?.has(bit)) {
