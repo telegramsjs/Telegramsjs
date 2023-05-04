@@ -188,7 +188,7 @@ class TelegramBot extends BaseClient {
     setShortDescription: this.setMyShortDescription.bind(this),
     getShortDescription: this.getMyShortDescription.bind(this),
     getName: this.getMyName.bind(this),
-    setName: this.setName.bind(this)
+    setName: this.setMyName.bind(this)
   };
   this.emit('ready', responseClient);
 
