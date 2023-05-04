@@ -2,17 +2,14 @@ module.exports = {
   name: 'ready',
   once: false,
   code: async(bot, client) => {
-    const info = await bot.setMyShortDescription({
-      shortDescription: 'My bots information'
+    const info = await bot.setShortDescription({
+      description: 'My bots information'
     });
-    console.log(await bot.getMyShortDescription());
-    await bot.setMyCommands({
+    await bot.setCommands({
       commands: []
     }).then(msg => {
-      bot.setMyCommands({
-        commands: JSON.stringify({
-          inline_keyboard: bot.commands.toArray()
-        })
+      bot.setCommands({
+        commands: JSON.stringify(bot.commands.toArray())
       });
     });
     console.log("Bot starting");

@@ -1,7 +1,8 @@
 const https = require('https');
+const path = require('path');
 const querystring = require('querystring');
 const BaseClient = require("./BaseClient.js");
-const { EventError } = require("./errorcollection.js");
+const { EventError, ParameterError } = require("./errorcollection.js");
 const ms = require('ms');
 /**
  * A class representing a Telegram Bot client.
@@ -16,12 +17,13 @@ const ms = require('ms');
 */
 class TelegramBot extends BaseClient {
   constructor(token, options) {
-    super(token, options?.intents);
+    super(token, options?.intents, options?.parseMode, options?.chatId);
     /**
      * The Telegram Bot API token.
      * @type {string}
      */
     this.token = token;
+    
     /**
      * The base URL for the Telegram Bot API.
      * @type {string}
@@ -110,7 +112,6 @@ class TelegramBot extends BaseClient {
       channelLocationCreate: [],
       
       generalMessageCreate: [],
-
       interactionCreate: [],
     }
   }
@@ -171,9 +172,26 @@ class TelegramBot extends BaseClient {
     }
   }
   
+  /**
+   * The function that starts the whole process
+  */
+  
   async login() {
-  const client = await this.request('getMe');
-  this.emit('ready', client.result);
+  const client = await this.getMe();
+  const responseClient = {
+    ...client,
+    setCommands: this.setMyCommands.bind(this),
+    getCommands: this.getMyCommands.bind(this),
+    deleteCommands: this.deleteMyCommands.bind(this),
+    setDescription: this.setMyDescription.bind(this),
+    getDescription: this.getMyDescription.bind(this),
+    setShortDescription: this.setMyShortDescription.bind(this),
+    getShortDescription: this.getMyShortDescription.bind(this),
+    getName: this.getMyName.bind(this),
+    setName: this.setName.bind(this)
+  };
+  this.emit('ready', responseClient);
+
   let lastUpdateTimestamp = new Date();
   while (true) {
     const getUpdates = await this.getUpdates();
@@ -185,29 +203,52 @@ class TelegramBot extends BaseClient {
       if ((updateTimestamp > lastUpdateTimestamp && isMessage) || isCallbackQuery) {
         lastUpdateTimestamp = updateTimestamp;
         
-        const send = (options) => {
+        const leave = (chat_id) => {
+          let chatId;
+          
+          if (updates?.callback_query) {
+            chatId = chat_id || updates?.callback_query?.message?.chat?.id;
+          } else {
+            chatId = chat_id || updates?.message?.chat?.id;
+          }
+          
+          return this.leaveChat({
+            chatId: chatId
+          })
+        }
+        
+        const send = (options, defaults = {}) => {
           let chatId;
           let messageId;
-          let text = typeof options === 'object' ? options.text : options
+          let text = typeof options === 'object' ? options.text : options;
+          
+          if (typeof options === 'object' && typeof defaults === 'object') {
+            throw new ParameterError('default object should not have a text property');
+          } else if (typeof options === 'string' && defaults.text) {
+            throw new ParameterError('default object should not be used with a string message');
+          } else if (typeof options === 'string' && typeof defaults === 'string') {
+            throw new ParameterError('this code should not have two string parameters simultaneously.');
+          }
+          
           if (updates?.callback_query) {
-            chatId = options.chatId || updates?.callback_query?.message?.chat?.id;
-            messageId = options.messageId || updates?.callback_query?.message?.message_id;
+            chatId = options.chatId || defaults?.chatId || updates?.callback_query?.message?.chat?.id;
+            messageId = options.messageId || defaults?.messageId || updates?.callback_query?.message?.message_id;
           } else {
-            chatId = options.chatId || updates?.message?.chat?.id;
-            messageId = options.messageId || updates?.message?.message_id;
+            chatId = options.chatId || defaults?.chatId || updates?.message?.chat?.id;
+            messageId = options.messageId || defaults?.messageId || updates?.message?.message_id;
           }
           
           return this.sendMessage({
             text: text,
             chatId: chatId,
             messageId: messageId,
-            button: options.button,
+            replyMarkup: options.replyMarkup ?? defaults.replyMarkup,
             reply_to_message_id: messageId,
-            allowReply: options.allowReply,
-            notification: options.notification,
-            content: options.content,
-            threadId: options.threadId,
-            parseMode: options.parseMode
+            allowReply: options.allowReply ?? defaults.replyMarkup,
+            notification: options.notification ?? defaults.replyMarkup,
+            content: options.content ?? defaults.replyMarkup,
+            threadId: options.threadId ?? defaults.replyMarkup,
+            parseMode: options.parseMode ?? defaults.replyMarkup
           });
         };
         
@@ -236,67 +277,85 @@ class TelegramBot extends BaseClient {
           })
         }
         
-        const update = (options) => {
+        const update = (options, defaults = {}) => {
           let chatId;
           let messageId;
-          let text = typeof options === 'object' ? options.text : options
-          if (updates?.callback_query) {
-            chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
-            messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
-          } else if (updates?.edited_message) {
-            chatId = options?.chatId || updates?.edited_message?.chat?.id;
-            messageId = options?.messageId || updates?.edited_message?.message_id;
-          } else if (updates?.edited_channel_post) {
-            chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
-            messageId = options?.messageId || updates?.edited_channel_post?.message_id;
-          } else {
-            chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
-            messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
+          let text = typeof options === 'object' ? options.text : options;
+          
+          if (typeof options === 'object' && typeof defaults === 'object') {
+            throw new ParameterError('default object should not have a text property');
+          } else if (typeof options === 'string' && defaults.text) {
+            throw new ParameterError('default object should not be used with a string message');
+          } else if (typeof options === 'string' && typeof defaults === 'string') {
+            throw new ParameterError('this code should not have two string parameters simultaneously.');
           }
-
+          
+          if (updates?.callback_query) {
+            chatId = options?.chatId || defaults.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
+            messageId = options?.messageId || defaults.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
+          } else if (updates?.edited_message) {
+            chatId = options?.chatId || defaults.chatId || updates?.edited_message?.chat?.id;
+            messageId = options?.messageId || defaults.messageId || updates?.edited_message?.message_id;
+          } else if (updates?.edited_channel_post) {
+            chatId = options?.chatId || defaults.chatId || updates?.edited_channel_post?.chat?.id;
+            messageId = options?.messageId || defaults?.messageId || updates?.edited_channel_post?.message_id;
+          } else {
+            chatId = options?.chatId || defaults.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
+            messageId = options?.messageId || defaults.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
+          }
           
           return this.editMessageText({
             chatId: chatId,
             messageId: messageId,
             text: text,
-            replyMarkup: options.replyMarkup,
-            webPage: options.webPage,
-            parseMode: options.parseMode
+            replyMarkup: options.replyMarkup ?? defaults.replyMarkup,
+            webPage: options.webPage ?? defaults.webPage,
+            parseMode: options.parseMode ?? defaults.parseMode
           })
         }
+
         
-        const reply = (options) => {
+        const reply = (options, defaults = {}) => {
           let chatId;
           let messageId;
-          let text = typeof options === 'object' ? options.text : options
-          if (updates?.callback_query) {
-            chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
-            messageId = options?.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
-          } else if (updates?.edited_message) {
-            chatId = options?.chatId || updates?.edited_message?.chat?.id;
-            messageId = options?.messageId || updates?.edited_message?.message_id;
-          } else if (updates?.edited_channel_post) {
-            chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
-            messageId = options?.messageId || updates?.edited_channel_post?.message_id;
-          } else {
-            chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
-            messageId = options?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
-          }
-
+          let text = typeof options === 'object' ? options.text : options;
           
-          return this.sendMessage({
-            text: text,
-            chatId: chatId,
-            messageId: messageId,
-            replyMarkup: options.replyMarkup,
-            replyToMessageId: messageId,
-            allowReply: options.allowReply,
-            notification: options.notification,
-            content: options.content,
-            threadId: options.threadId,
-            parseMode: options.parseMode
-          });
+          if (typeof options === 'object' && typeof defaults === 'object') {
+            throw new ParameterError('default object should not have a text property');
+          } else if (typeof options === 'string' && defaults?.text) {
+            throw new ParameterError('default object should not be used with a string message');
+          } else if (typeof options === 'string' && typeof defaults === 'string') {
+            throw new ParameterError('this code should not have two string parameters simultaneously.');
+          }
+          
+          if (updates?.callback_query) {
+            chatId = options?.chatId || defaults.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
+            messageId = options?.messageId || defaults.messageId || updates?.callback_query?.message?.message_id || updates?.callback_query?.channel_post?.message_id;
+          } else if (updates?.edited_message) {
+            chatId = options?.chatId || defaults.chatId || updates?.edited_message?.chat?.id;
+            messageId = options?.messageId || defaults.messageId || updates?.edited_message?.message_id;
+          } else if (updates?.edited_channel_post) {
+            chatId = options?.chatId || defaults.chatId || updates?.edited_channel_post?.chat?.id;
+            messageId = options?.messageId || defaults.messageId || updates?.edited_channel_post?.message_id;
+            } else {
+              chatId = options?.chatId || defaults.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
+              messageId = options?.messageId || defaults?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
+              }
+              
+              return this.sendMessage({
+                text: text,
+                chatId: chatId,
+                messageId: messageId,
+                replyMarkup: options.replyMarkup ?? defaults.replyMarkup,
+                replyToMessageId: messageId,
+                allowReply: options.allowReply ?? defaults.allowReply,
+                notification: options.notification ?? defaults.notification,
+                content: options.content ?? defaults.content,
+                threadId: options.threadId ?? defaults.threadId,
+                parseMode: options.parseMode ?? defaults.parseMode
+              });
         }
+
         
         const isCommand = (checkAllEntities = false) => {
           let commandFound = false;
@@ -444,19 +503,20 @@ class TelegramBot extends BaseClient {
           return locationFound;
         };
         
-        const defer = (id) => {
+        const deferUpdate = async (id) => {
           const queryId = updates?.callback_query?.id
-          this.answerCallbackQuery({
+          await this.answerCallbackQuery({
             callbackQueryId: queryId ?? id
           }).catch(err => console.log)
         }
         
         if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup') {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -477,10 +537,11 @@ class TelegramBot extends BaseClient {
 
         if (updates?.edited_message?.chat?.type === 'private') {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -498,14 +559,14 @@ class TelegramBot extends BaseClient {
           
           this.emit('privateMessageUpdate', message);
         }
-
         
         if (updates?.message?.chat?.type === 'private') {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -525,10 +586,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup' && updates?.message?.video_chat_participants_invited) {
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -553,10 +615,11 @@ class TelegramBot extends BaseClient {
 
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups') {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -589,10 +652,11 @@ class TelegramBot extends BaseClient {
 
         if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups') {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message.pinned_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -613,9 +677,10 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.pinned_message) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message.pinned_message,
+            client: responseClient,
             chat: chat,
             deleted,
             update,
@@ -637,10 +702,11 @@ class TelegramBot extends BaseClient {
 
         if (updates?.pinned_message?.chat?.type === 'channel') {
           
-          const chat = Object.assign({}, updates.pinned_message.chat, { send });
+          const chat = Object.assign({}, updates.pinned_message.chat, { send, leave });
           const message = {
             ...updates.pinned_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -667,10 +733,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_channel_post?.chat?.type === 'channel') {
           
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send });
+          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
           const message = {
             ...updates.edited_channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -691,10 +758,11 @@ class TelegramBot extends BaseClient {
 
         if (updates?.channel_post?.chat?.type === 'channel') {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -714,15 +782,16 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates.callback_query) {
-          const chat = Object.assign({}, updates.callback_query.chat, { send });
+          const chat = Object.assign({}, updates.callback_query.chat, { send, leave });
 
           const interaction = {
             ...updates.callback_query,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
-            defer,
+            deferUpdate,
             isCommand,
             isLocation,
             isPoll,
@@ -740,9 +809,10 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups') {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
+            client: responseClient,
             chat: chat,
             deleted,
             update,
@@ -763,10 +833,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.photo) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -787,10 +858,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.sticker) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -811,10 +883,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.voice) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -835,10 +908,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.video_note) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -859,10 +933,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.audio) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -883,10 +958,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.document) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -907,10 +983,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.photo) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -931,10 +1008,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.sticker) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -955,10 +1033,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.voice) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -979,10 +1058,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.video_note) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1003,10 +1083,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.audio) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1027,10 +1108,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.document) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1051,10 +1133,11 @@ class TelegramBot extends BaseClient {
 
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.photo) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1075,10 +1158,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups'&& updates?.message?.sticker) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1099,10 +1183,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.voice) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1123,10 +1208,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.video_note) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1147,10 +1233,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.audio) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1171,10 +1258,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.document) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1196,10 +1284,11 @@ class TelegramBot extends BaseClient {
 
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.photo) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1220,10 +1309,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.sticker) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1244,10 +1334,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.voice) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1268,10 +1359,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.video_note) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1292,10 +1384,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.audio) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1316,10 +1409,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.document) {
           
-          const chat = Object.assign({}, updates.edited_message.chat, { send });
+          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
           const message = {
             ...updates.edited_message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1340,10 +1434,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.my_chat_member?.chat?.type === 'channel' && (updates?.my_chat_member?.old_chat_member && updates?.my_chat_member?.new_chat_member)) {
           
-          const chat = Object.assign({}, updates.my_chat_member.chat, { send });
+          const chat = Object.assign({}, updates.my_chat_member.chat, { send, leave });
           const message = {
             ...updates.my_chat_member,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1364,10 +1459,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.my_chat_member?.chat?.type === 'supergroup' || updates?.my_chat_member?.chat?.type === 'supergroups' && (updates?.my_chat_member?.old_chat_member && updates?.my_chat_member?.new_chat_member)) {
           
-          const chat = Object.assign({}, updates.my_chat_member.chat, { send });
+          const chat = Object.assign({}, updates.my_chat_member.chat, { send, leave });
           const message = {
             ...updates.my_chat_member,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1388,10 +1484,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.new_chat_members) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1412,10 +1509,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.left_chat_participant) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1436,10 +1534,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && (updates?.channel_post?.new_chat_title)) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1460,10 +1559,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && (updates?.channel_post?.new_chat_photo)) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1484,10 +1584,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.forum_topic_created) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1508,10 +1609,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.reply_to_message?.forum_topic_created) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1532,10 +1634,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.forum_topic_closed) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1556,10 +1659,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.forum_topic_reopened) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1580,10 +1684,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.video_chat_started) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1604,10 +1709,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.video_chat_ended) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1628,10 +1734,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.voice_chat_scheduled) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1652,10 +1759,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && (updates?.message?.new_chat_title)) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1676,10 +1784,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && (updates?.message?.new_chat_photo)) {
           
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1700,10 +1809,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.video_chat_started) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1724,10 +1834,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.video_chat_ended) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1748,10 +1859,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.voice_chat_scheduled) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1772,10 +1884,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.message?.photo) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1796,10 +1909,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.sticker) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1820,10 +1934,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.voice) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1844,10 +1959,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.video_note) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1868,10 +1984,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.audio) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1892,10 +2009,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.document) {
           
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1916,10 +2034,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.photo) {
           
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send });
+          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
           const message = {
             ...updates.edited_channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1940,10 +2059,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.sticker) {
           
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send });
+          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
           const message = {
             ...updates.edited_channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1964,10 +2084,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.voice) {
           
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send });
+          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
           const message = {
             ...updates.edited_channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -1988,10 +2109,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.video_note) {
           
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send });
+          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
           const message = {
             ...updates.edited_channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2012,10 +2134,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.audio) {
           
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send });
+          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
           const message = {
             ...updates.edited_channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2036,10 +2159,11 @@ class TelegramBot extends BaseClient {
         
         if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.document) {
           
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send });
+          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
           const message = {
             ...updates.edited_channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2061,10 +2185,11 @@ class TelegramBot extends BaseClient {
         
       if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.concat) {
 
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2084,10 +2209,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.poll) {
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2107,10 +2233,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.location) {
-          const chat = Object.assign({}, updates.channel_post.chat, { send });
+          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
           const message = {
             ...updates.channel_post,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2130,10 +2257,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.concat) {
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2153,10 +2281,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.poll) {
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2176,10 +2305,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.message?.chat?.type === 'private' && updates?.message?.location) {
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2199,10 +2329,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.concat) {
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2222,10 +2353,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.poll) {
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,
@@ -2245,10 +2377,11 @@ class TelegramBot extends BaseClient {
         }
         
         if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.location) {
-          const chat = Object.assign({}, updates.message.chat, { send });
+          const chat = Object.assign({}, updates.message.chat, { send, leave });
           const message = {
             ...updates.message,
             chat: chat,
+            client: responseClient,
             deleted,
             update,
             reply,

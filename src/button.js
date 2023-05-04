@@ -10,7 +10,7 @@ class Button {
   constructor(options = {}) {
     this.text = options.text;
     this.action = options.action;
-    this.type = options.type || 'callback_data';
+    this.type = options.type ?? 'callback_data';
   }
 
   /**

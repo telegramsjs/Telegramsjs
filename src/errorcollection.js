@@ -1,6 +1,6 @@
 class TelegramApiError extends Error {
   constructor(error) {
-    super(error?.replace("Bad Request: ", "")?.replace("can't parse entities:", ""));
+    super(error?.replace("Bad Request: ", "")?.replace("can't parse entities:", "")?.replace("Conflict: ", "")?.replace("can't parse BotCommand: ", ""));
   }
 }
 
@@ -28,10 +28,17 @@ class IntentsError extends Error {
   }
 }
 
+class ParameterError extends Error {
+  constructor(error) {
+    super(error);
+  }
+}
+
 module.exports = {
   TelegramApiError,
   EventError,
   TelegramTokenError,
   IntentsError,
-  BitFieldError
+  BitFieldError,
+  ParameterError
 }
