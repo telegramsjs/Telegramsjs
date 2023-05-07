@@ -5,8 +5,8 @@ const { TelegramApiError } = require("./errorcollection.js");
 
 class BaseClient extends Request {
 
-  constructor(token, intents, parseMode, chatId, offsetLocal) {
-    super(token, intents, offsetLocal);
+  constructor(token, intents, parseMode, chatId) {
+    super(token, intents);
     this.parseMode = parseMode;
     this.chatId = chatId;
   }
@@ -726,7 +726,7 @@ class BaseClient extends Request {
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       question: options.question,
-      options: JSON.stringify(options.options),
+      options: options.options,
       is_anonymous: options.isAnonymous,
       type: options.type,
       allows_multiple_answers: options.allowsMultipleAnswers,
@@ -953,7 +953,7 @@ class BaseClient extends Request {
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.userId,
-      permissions: JSON.stringify(options.permissions),
+      permissions: options.permissions,
       use_independent_chat_permissions: options.useIndependentChatPermissions,
       until_date: options.untilDate
     };

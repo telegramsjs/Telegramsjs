@@ -103,6 +103,16 @@ class Request extends EventEmitter {
     const uptime = Date.now() - this.startTime
     return +uptime;
   }
+  
+  get ping() {
+    return (async () => {
+      const startTime = Date.now();
+      const response = await this.request('getMe', {});
+      const endTime = Date.now();
+      const latency = endTime - startTime;
+      return latency;
+    })();
+  }
 
 }
 

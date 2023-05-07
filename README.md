@@ -2,19 +2,21 @@
    <h1>Telegramsjs</h1><br>
    <image src="https://raw.githubusercontent.com/Sempai-07/Telegramsjs/main/docs/avatar.png"><br>
    
-   [![Discord Server](https://img.shields.io/discord/796504104565211187?color=7289da&logo=discord&logoColor=white)](https://discord.gg/EuSbT5HH8b)  [![Telegram](https://img.shields.io/appveyor/tests/Sempai-07/Telegramsjs/main)](https://t.me/sempaika_telegrams_js) [![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs) [![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
+   [![Bot API](https://img.shields.io/badge/Bot%20API-v.6.7-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
+   [![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
+   [![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
    </div>
 
-## Introduction
+## ⚙️ Introduction
 `Telegramsjs` is a lightweight `Node.js` library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as `Telegraf.js` or `node-telegram-bot-api`. The library has a syntax that is similar to `Discord.js`. This library provides a way to create Telegram bots with ease and flexibility.
 
-## Installation
+## ⚒️ Installation
 You can install the telegramsjs library using npm:
 ```
 npm install telegramsjs
 ```
 
-## Usage
+## 📙 Usage
 First, you need to create a new instance of the TelegramBot class by providing your Telegram bot token:
 
 ```javascript
@@ -119,17 +121,17 @@ bot.once('ready', async (client) => {
 
 The `bot.setMyDescription` and `client.setDescription` method sets the bot's description, while the `bot.setMyCommands` and `client.setCommands` method sets the bot's commands.
 
-## Conclusion
+## 🎃 Conclusion
 `Telegramsjs` provides a simple and flexible way to create Telegram bots using Node.js. With its easy-to-use syntax and event-driven architecture, it is a great choice for developers who want to build bots quickly and efficiently.
 
-## Documentation
+## 📖 Documentation
 <a href="https://github.com/Sempai-07/Telegramsjs/tree/main/docs">Telegramsjs</a>
 
-## Contributions
+## 🎒 Contributions
 We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the <a href="https://discord.gg/j8G7jhHMbs">Official support server</a> or the <a href="https://t.me/sempaika_telegrams_js">Official Telegram channel</a>.
 
-## Example 
+## 📒 Example 
 To see the correct use of the library, see the page on github 
 
-## License
+## 🧾 License
 `Telegramsjs` is available under the `MIT` license. For more information, please refer to the <a href="https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE">LICENSE</a> file.

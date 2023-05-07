@@ -29,149 +29,8 @@ class TelegramBot extends BaseClient {
      * @type {string}
      */
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
-    /**
-     * Event listeners for the client.
-     * @type {Object<string, Array<Function>>}
-     */
-    this.listeners = {
-      ready: [],
-      privateMessageCreate: [],
-      privateMessageUpdate: [],
-      privateMessagePinned: [],
-      privatePhotoCreate: [],
-      privateStickerCreate: [],
-      privateVoiceCreate: [],
-      privateVideoNoteCreate: [],
-      privateAudioCreate: [],
-      privateDocumentCreate: [],
-      privatePhotoUpdate: [],
-      privateStickerUpdate: [],
-      privateVoiceUpdate: [],
-      privateVideoNoteUpdate: [],
-      privateAudioUpdate: [],
-      privateDocumentUpdate: [],
-      privateConcatCreate: [],
-      privatePollCreate: [],
-      privateLocationCreate: [],
-      
-      groupMessagePinned: [],
-      groupMessageUpdate: [],
-      groupMessageCreate: [],
-      groupPermsUpdate: [],
-      groupMemberAdd: [],
-      groupMemberLeft: [],
-      groupForumCreate: [],
-      groupForumMessageCreate: [],
-      groupForumReopened: [],
-      groupForumClose: [],
-      groupBroadcastStart: [],
-      groupBroadcastEnd: [],
-      groupBroadcastScheduled: [],
-      groupAvatarUpdate: [],
-      groupNameUpdate: [],
-      groupPhotoCreate: [],
-      groupStickerCreate: [],
-      groupVoiceCreate: [],
-      groupVideoNoteCreate: [],
-      groupAudioCreate: [],
-      groupDocumentCreate: [],
-      groupPhotoUpdate: [],
-      groupStickerUpdate: [],
-      groupVoiceUpdate: [],
-      groupVideoNoteUpdate: [],
-      groupAudioUpdate: [],
-      groupDocumentUpdate: [],
-      groupConcatCreate: [],
-      groupPollCreate: [],
-      groupLocationCreate: [],
-      groupBroadcastInvited: [],
-      
-      channelMessagePinned: [],
-      channelMessageCreate: [],
-      channelMessageUpdate: [],
-      channelPermsUpdate: [],
-      channelNameUpdate: [],
-      channelPhotoUpdate: [],
-      channelBroadcastStart: [],
-      channelBroadcastEnd: [],
-      channelBroadcastScheduled: [],
-      channelPhotoCreate: [],
-      channelStickerCreate: [],
-      channelVoiceCreate: [],
-      channelVideoNoteCreate: [],
-      channelAudioCreate: [],
-      channelDocumentCreate: [],
-      channelAvatarUpdate: [],
-      channelStickerUpdate: [],
-      channelVoiceUpdate: [],
-      channelVideoNoteUpdate: [],
-      channelAudioUpdate: [],
-      channelDocumentUpdate: [],
-      channelConcatCreate: [],
-      channelPollCreate: [],
-      channelLocationCreate: [],
-      
-      generalMessageCreate: [],
-      interactionCreate: [],
-    }
-  }
-  
-  /**
-   * Adds a listener for the specified event.
-   * @param {string} event - The name of the event.
-   * @param {Function} listener - The listener function.
-   * @throws {EventError} If the specified event is not supported.
-   */
-  on(event, listener) {
-    if (!this.listeners[event]) {
-      throw new EventError(`event "${event}" is not supported`);
-    }
-    this.listeners[event].push({
-      listener,
-      once: false
-    });
-  }
-  
-  /**
-   * Adds a one-time listener for the specified event.
-   * @param {string} event - The name of the event.
-   * @param {Function} listener - The listener function.
-   * @throws {EventError} If the specified event is not supported.
-   */
-  once(event, listener) {
-    if (!this.listeners[event]) {
-      throw new EventError(`event "${event}" is not supported`);
-    }
-    this.listeners[event].push({
-      listener,
-      once: false
-    });
   }
 
-  emit(event, ...args) {
-    if (!this.listeners[event]) {
-      throw new EventError(`event "${event}" is not supported`);
-    }
-    for (let i = 0; i < this.listeners[event].length; i++) {
-      const { listener, once } = this.listeners[event][i];
-      listener(...args);
-      if (once) {
-        this.listeners[event].splice(i, 1);
-        i--;
-      }
-    }
-  }
-  /**
-   * Removes the specified listener for the specified event.
-   * @param {string} eventName - The name of the event.
-   * @param {Function} listener - The listener function to remove.
-   */
-  off(eventName, listener) {
-    if (this.events[eventName]) {
-      this.events[eventName] = this.events[eventName].filter(l => l !== listener);
-    }
-  }
-  
   /**
    * The function that starts the whole process
   */
@@ -188,7 +47,8 @@ class TelegramBot extends BaseClient {
     setShortDescription: this.setMyShortDescription.bind(this),
     getShortDescription: this.getMyShortDescription.bind(this),
     getName: this.getMyName.bind(this),
-    setName: this.setMyName.bind(this)
+    setName: this.setMyName.bind(this),
+    ...this
   };
   this.emit('ready', responseClient);
 

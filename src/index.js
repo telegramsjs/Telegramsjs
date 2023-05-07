@@ -4,6 +4,7 @@ exports.Button = require("./button.js");
 //exports.Input = require("./Input.js");
 
 exports.Events = require("./events.js");
+exports.ChatRight = require("./chatright.js");
 exports.IntentsBitField = require("./IntentsBitField.js"). IntentsBitField;
 exports.IntentBits = require("./IntentsBitField.js").IntentBits;
 exports.TelegramIntentBits = require("./IntentsBitField.js").TelegramIntentBits;
