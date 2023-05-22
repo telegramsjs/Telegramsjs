@@ -6,13 +6,15 @@ const { EventEmitter } = require('events');
 const { decodeIntents, IntentsBitField } = require("./IntentsBitField.js");
 const { LocalSession } = require("./LocalSession");
 const lastTimeMap = new LocalSession();
-/**
- * Represents a request to the Telegram Bot API.
- * @class
- * @param {string} token - The API token for the bot.
- * @param {Array.<string>} intents - The types of updates the bot is interested in.
- */
+
 class Request extends EventEmitter {
+  /**
+   * Constructs a new Request object.
+   * @param {string} [token] - The API token for the bot.
+   * @param {string | array | number} [intents] - The types of updates the bot is interested in.
+   * @param {string} [queryString] - The type of query string to use for requests.
+   * @param {string | boolean | object} [offSetType] - The type of offset to use for updates.
+   */
   constructor(token, intents, queryString, offSetType) {
     super();
     this.token = token;
@@ -47,7 +49,7 @@ class Request extends EventEmitter {
   /**
    * Gets the updates from the Telegram Bot API.
    * @async
-   * @returns {Promise.<Array.<Object>>} An array of updates.
+   * @returns {Promise.<Array.<object>>} An array of updates.
    * @throws {TelegramTokenError} When the token is invalid.
    * @throws {TelegramApiError} When an error occurs with the Telegram Bot API.
    */
@@ -76,7 +78,7 @@ class Request extends EventEmitter {
    * @async
    * @param {string} method - The API method to call.
    * @param {Object} params - The parameters to include in the API call.
-   * @returns {Promise.<Object>} The response from the API call.
+   * @returns {Promise.<object>} The response from the API call.
    */
   async request(method, params) {
     const url = `${this.baseUrl}/${method}`;

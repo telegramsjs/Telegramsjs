@@ -19,7 +19,7 @@ class Keyboard {
 
   /**
    * Returns the keyboard object in the format expected by Telegram Bot API.
-   * @returns {Object} Returns the keyboard object in the format expected by Telegram Bot API.
+   * @returns {object} Returns the keyboard object in the format expected by Telegram Bot API.
    */
   toJSON() {
     const keyboard = JSON.stringify({

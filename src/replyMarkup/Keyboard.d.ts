@@ -22,9 +22,9 @@ declare class Keyboard {
     selective: boolean;
     /**
      * Returns the keyboard object in the format expected by Telegram Bot API.
-     * @returns {Object} Returns the keyboard object in the format expected by Telegram Bot API.
+     * @returns {object} Returns the keyboard object in the format expected by Telegram Bot API.
      */
-    toJSON(): any;
+    toJSON(): object;
     /**
      * Sets the inline option of the keyboard.
      * @param {boolean} inline - Whether the keyboard should be displayed inline with the message.

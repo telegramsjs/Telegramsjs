@@ -13,7 +13,7 @@ class TelegramBot extends BaseClient {
    * Creates a new TelegramBot client.
    * @param {string} token - The Telegram Bot API token.
    * @param {Object} [options] - The client options.
-   * @param {Object} [options.intents] - The client intents.
+   * @param {string | array | number} [options.intents] - The client intents.
    * @param {string} [options.parseMode] - The parse mode for message formatting.
    * @param {string | number} [options.chatId] - The default chat ID for sending messages.
    * @param {string} [options.queryString] - The default query string for API requests.

@@ -86,23 +86,21 @@ class Markup {
 
   /**
    * Creates a new Button object from a button object in the format expected by Telegram Bot API.
-   * @param {Object} buttonObj - Button object in the format expected by Telegram Bot API.
+   * @param {object} buttonObj - Button object in the format expected by Telegram Bot API.
    * @returns {Markup} Returns an instance of the Markup object.
    */
   static fromJSON(buttonObj) {
     const button = new Markup()
       .setText(buttonObj.text)
       .setAction(buttonObj.action)
-      .
-
-setType(buttonObj.type);
+      .setType(buttonObj.type);
     return button;
   }
 
   /**
    * Returns the inline keyboard object in the format expected by Telegram Bot API.
    * @param {Array} buttons - A 2-dimensional array of Markup objects representing the buttons on the keyboard.
-   * @returns {Object} Returns the inline keyboard object in the format expected by Telegram Bot API.
+   * @returns {object} Returns the inline keyboard object in the format expected by Telegram Bot API.
    */
   static inlineKeyboard(buttons) {
     const inlineKeyboard = buttons.map((row) => {
@@ -137,7 +135,7 @@ setType(buttonObj.type);
 
   /**
    * Returns the button object in the format expected by Telegram Bot API.
-   * @returns {Object} Returns the button object in the format expected by Telegram Bot API.
+   * @returns {object} Returns the button object in the format expected by Telegram Bot API.
    */
   toJSON() {
     const button = {

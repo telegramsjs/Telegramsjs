@@ -4,6 +4,15 @@ const Request = require("./request.js");
 const { TelegramApiError } = require("./errorcollection.js");
 
 class BaseClient extends Request {
+  /**
+   * Creat method Telegram Api
+  * @param {string} token - The Telegram Bot API token.
+   * @param {string | array | number} [intents] - The client intents.
+   * @param {string} [parseMode] - The parse mode for message formatting.
+   * @param {string | number} [chatId] - The default chat ID for sending messages.
+   * @param {string} [queryString] - The default query string for API requests.
+   * @param {string | object} [offSetType] - The type of offset to use for updates.
+   */
   constructor(token, intents, parseMode, chatId, queryString, offSetType) {
     super(token, intents, queryString, offSetType);
     this.parseMode = parseMode;
@@ -16,7 +25,7 @@ class BaseClient extends Request {
   *
   * @async
   
-  * @returns {Promise<Object>} Returns a Promise that resolves with an Object containing information about the bot.
+  * @returns {Promise<object>} Returns a Promise that resolves with an object containing information about the bot.
   * @throws {TelegramApiError} Throws an error if the response is empty or if there is an error returned by the Telegram API.
   */
   async getMe() {
@@ -31,9 +40,9 @@ class BaseClient extends Request {
   /**
  * Delete the webhook.
  * @async
- * @param {Object} options - Options to configure the webhook deletion.
+ * @param {object} options - Options to configure the webhook deletion.
  * @param {boolean} options.dropPendingUpdates - Pass true to drop pending updates while deleting the webhook.
- * @returns {Promise<Object>} - Returns the response object containing the result of the deletion request.
+ * @returns {Promise<object>} - Returns the response object containing the result of the deletion request.
  * @throws {TelegramApiError} - Throws an error if the webhook deletion fails.
  */
   async deleteWebhook(options) {
@@ -52,7 +61,7 @@ class BaseClient extends Request {
  * Get current webhook status.
  * @async
  
- * @returns {Promise<Object>} An object representing the current webhook status.
+ * @returns {Promise<object>} An object representing the current webhook status.
  * @throws {TelegramApiError} If an error occurs while fetching the webhook status.
  */
   async getWebhookInfo() {
@@ -68,17 +77,17 @@ class BaseClient extends Request {
   /**
    * Send a message to a chat.
    * @async
-   * @param {Object} options - Object containing options for the message
+   * @param {object} options - object containing options for the message
    * @param {number|string} [options.chatId=this.chatId] - Unique identifier for the target chat or username of the target channel
    * @param {string} options.text - Text of the message to be sent.
-   * @param {Object} [options.replyMarkup] - Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
+   * @param {object | string} [options.replyMarkup] - Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
    * @param {boolean} [options.allowReply] - Pass `true` if the message should be sent even if the specified replied-to message is not found
    * @param {boolean} [options.notification] - Sends the message silently. Users will receive a notification with no sound.
    * @param {boolean} [options.content] - Pass `true` if the message should be encrypted.
    * @param {number} [options.threadId] - Unique identifier for the target message thread.
    * @param {number} [options.replyToMessageId] - If the message is a reply, the ID of the original message.
    * @param {string} [options.parseMode=this.parseMode] - Send `'Markdown'` or `'HTML'` if you want Telegram apps to show bold, italic, fixed-width text, or inline URLs in your bot's message.
-   * @returns {Object} Returns the sent message.
+   * @returns {object} Returns the sent message.
    * @throws {TelegramApiError} Throws an error if there is a problem with the Telegram API request.
    */
    async sendMessage(options) {
@@ -104,20 +113,20 @@ class BaseClient extends Request {
    /**
  * Sends a photo to the chat.
  * @async
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {number} options.chatId - The ID of the chat where the photo will be sent.
  * @param {number} options.threadId - The ID of the thread message.
  * @param {any} options.photo - The photo to be sent. Can be a string URL or Buffer.
  * @param {string} options.caption - The photo caption.
  * @param {string} options.parseMode - The parse mode of the caption. Can be "MarkdownV2" or "HTML".
- * @param {Array<Object>} options.captionEntities - The special entities of the caption.
+ * @param {Array<object>} options.captionEntities - The special entities of the caption.
  * @param {boolean} options.hasSpoiler - If the photo should be marked as a spoiler.
  * @param {boolean} options.notification - If notifications should be disabled for the message.
  * @param {boolean} options.content - If the message should be protected by the "new forwarded messages privacy mode".
  * @param {number} options.replyToMessageId - The ID of the message being replied to.
  * @param {boolean} options.allowReply - If the message can be sent without a reply to another message.
- * @param {Object} options.replyMarkup - The reply markup object.
- * @returns {Promise<Object>} - The sent photo object.
+ * @param {object} options.replyMarkup - The reply markup object.
+ * @returns {Promise<object>} - The sent photo object.
  * @throws {TelegramApiError} - If an error occurs while sending the photo.
  */
    async sendPhoto(options) {
@@ -148,7 +157,7 @@ class BaseClient extends Request {
     * Sends an audio message to the chat.
     * @async
     
-    * @param {Object} options - The options to configure the audio message.
+    * @param {object} options - The options to configure the audio message.
     * @param {string} [options.chatId=this.chatId] - The chat ID of the recipient.
     * @param {string} [options.threadId] - The message thread ID.
     * @param {any} options.audio - The audio file to send.
@@ -163,9 +172,9 @@ class BaseClient extends Request {
     * @param {boolean} [options.content=false] - If true, protects the audio file from unauthorized access.
     * @param {number} [options.replyToMessageId] - The ID of the message to reply to.
     * @param {boolean} [options.allowReply=false] - If true, allows the message to be sent without replying to a message.
-    * @param {Object} [options.replyMarkup] - The reply markup of the message.
+    * @param {object | string} [options.replyMarkup] - The reply markup of the message.
     * @throws {TelegramApiError} If there is an error sending the message.
-    * @returns {Promise<Object>} The sent audio message object.
+    * @returns {Promise<object>} The sent audio message object.
     */
    async sendAudio(options) {
     const method = 'sendAudio';
@@ -210,7 +219,7 @@ class BaseClient extends Request {
     * @param {boolean} [options.content] - If the document should be protected by a password.
     * @param {number} [options.replyToMessageId] - Identifier of the message being replied to.
     * @param {boolean} [options.allowReply] - Pass true to enable sending the message without a reply.
-    * @param {object} [options.replyMarkup] - InlineKeyboardMarkup or ReplyKeyboardMarkup for the sent message.
+    * @param {object | string} [options.replyMarkup] - InlineKeyboardMarkup or ReplyKeyboardMarkup for the sent message.
     * @throws {TelegramApiError} When the request to the Telegram API fails.
     * @returns {Promise<object>} The sent message object.
     */
@@ -243,7 +252,7 @@ class BaseClient extends Request {
    * Sends a video message to a chat.
    * @async
    
-   * @param {Object} options - Options for the video message.
+   * @param {object} options - Options for the video message.
    * @param {string|number} options.chatId - Unique identifier for the target chat or username of the target channel.
    * @param {any} options.video - Video to send. Can be a string path or a stream.
    * @param {number} [options.duration] - Duration of the video in seconds.
@@ -259,8 +268,8 @@ class BaseClient extends Request {
    * @param {boolean} [options.content] - Pass true, if the video should be encrypted.
    * @param {number} [options.replyToMessageId] - The ID of the message to reply to.
    * @param {boolean} [options.allowReply] - Pass true, if the message should be sent even if the specified replied-to message is not found.
-   * @param {Object} [options.replyMarkup] - Additional interface options for the message.
-   * @returns {Promise<Object>} Returns a Promise that resolves to the sent video message object on success.
+   * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
+   * @returns {Promise<object>} Returns a Promise that resolves to the sent video message object on success.
    * @throws {TelegramApiError} Throws an error if the API response returns an error code.
    */
   async sendVideo(options) {
@@ -310,7 +319,7 @@ class BaseClient extends Request {
    * @param {boolean} [options.content] - Whether the message content should be protected.
    * @param {number} [options.replyToMessageId] - The message id to reply to.
    * @param {boolean} [options.allowReply] - Whether the message can be sent without a reply.
-   * @param {object} [options.replyMarkup] - The reply markup for the message.
+   * @param {object | string} [options.replyMarkup] - The reply markup for the message.
    * @param {string} [options.threadId] - The id of the message thread to send the animation to.
    * @returns {Promise<object>} - The response object from the Telegram API.
    * @throws {TelegramApiError} - If there was an error while sending the animation message.
@@ -346,7 +355,7 @@ class BaseClient extends Request {
   /**
    * Sends a voice message to the specified chat.
    * @async
-   * @param {Object} options - Options for sending the voice message.
+   * @param {object} options - Options for sending the voice message.
    * @param {string} options.voice - The voice file to send.
    * @param {string|number} [options.chatId] - The chat ID to send the voice message to. Defaults to the chat ID of the current context if not provided.
    * @param {string} [options.caption] - Caption for the voice message, 0-1024 characters.
@@ -357,9 +366,9 @@ class BaseClient extends Request {
    * @param {boolean} [options.content] - Pass true if the uploaded voice message is a file protected with a password.
    * @param {number} [options.replyToMessageId] - The message ID to reply to.
    * @param {boolean} [options.allowReply] - Pass true if sending the message without reply is allowed.
-   * @param {Object} [options.replyMarkup] - InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply. Additional interface options for the message.
+   * @param {object | string} [options.replyMarkup] - InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply. Additional interface options for the message.
    * @param {string} [options.threadId] - Unique identifier for the target chat thread.
-   * @returns {Promise<Object>} On success, the sent Message is returned.
+   * @returns {Promise<object>} On success, the sent Message is returned.
    * @throws {TelegramApiError} If an error occurs while sending the voice message.
    */
   async sendVoice(options) {
@@ -389,20 +398,20 @@ class BaseClient extends Request {
   /**
    * Sends a video note message to a chat.
    * @async
-   * @param {Object} options - The options object.
+   * @param {object} options - The options object.
    * @param {string|number} options.chatId - The chat ID to send the message to.
    * @param {string} options.videoNote - The video note file to send. Pass a file ID or a URL to the video note file.
    * @param {number} [options.duration] - Duration of the video note in seconds.
    * @param {number} [options.length] - File size of the video note.
-   * @param {Object} [options.thumbnail] - Optional thumbnail (image file to use as the thumbnail) for the video note.
+   * @param {object} [options.thumbnail] - Optional thumbnail (image file to use as the thumbnail) for the video note.
    * @param {boolean} [options.notification] - Sends the message silently if true, otherwise with sound (default).
    * @param {boolean} [options.content] - True, if the video note should be protected by a password.
    * @param {number} [options.threadId] - Message thread ID.
    * @param {number} [options.replyToMessageId] - ID of the original message when sending a reply.
    * @param {boolean} [options.allowReply] - Pass true, if the message should be sent even without a reply message.
-   * @param {Object} [options.replyMarkup] - Additional interface options (JSON-serialized object).
+   * @param {object | string} [options.replyMarkup] - Additional interface options (JSON-serialized object).
    * @throws {TelegramApiError} Throws an error if the response contains an error_code property.
-  * @returns {Promise<Object>} Returns a Promise that resolves to the sent message object.
+  * @returns {Promise<object>} Returns a Promise that resolves to the sent message object.
   */
   async sendVideoNote(options) {
   const method = 'sendVideoNote';
@@ -482,7 +491,7 @@ class BaseClient extends Request {
  *
  * @async
   sendLocation
- * @param {Object} options - An object containing the options for sending the location message.
+ * @param {object} options - An object containing the options for sending the location message.
  * @param {number} options.latitude - The latitude of the location.
  * @param {number} options.longitude - The longitude of the location.
  * @param {number} [options.accuracy] - The horizontal accuracy of the location.
@@ -494,8 +503,8 @@ class BaseClient extends Request {
  * @param {number} [options.threadId] - The ID of the message thread.
  * @param {number} [options.replyToMessageId] - The ID of the message to which this message is a reply.
  * @param {boolean} [options.allowReply=true] - Pass true if the message should be sent even if the specified reply_to_message_id is not found.
- * @param {Object} [options.replyMarkup] - A JSON-serialized object for an inline keyboard or custom reply keyboard.
- * @returns {Object} The sent location message object.
+ * @param {object | string} [options.replyMarkup] - A JSON-serialized object for an inline keyboard or custom reply keyboard.
+ * @returns {object} The sent location message object.
  * @throws {TelegramApiError} If the Telegram API returns an error.
  */
   async sendLocation(options) {
@@ -526,7 +535,7 @@ class BaseClient extends Request {
   /**
  * Sends a venue message to the chat.
  * @async
- * @param {Object} options - The options to send the message.
+ * @param {object} options - The options to send the message.
  * @param {string} [options.chatId] - The chat id where to send the message.
  * @param {number} [options.threadId] - Unique identifier for the target chat thread.
  * @param {number} options.latitude - Latitude of the venue.
@@ -541,8 +550,8 @@ class BaseClient extends Request {
  * @param {boolean} [options.content] - For messages forwarded from channels, sets the channel as protected.
  * @param {number} [options.replyToMessageId] - Id of the message to reply to.
  * @param {boolean} [options.allowReply] - Pass True, if the message should be sent even if the specified replied-to message is not found.
- * @param {Object} [options.replyMarkup] - Additional interface options. An object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.
- * @returns {Promise<Object>} On success, the sent Message is returned.
+ * @param {object | string} [options.replyMarkup] - Additional interface options. An object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.
+ * @returns {Promise<object>} On success, the sent Message is returned.
  * @throws {TelegramApiError} When there's an error sending the message.
  */
   async sendVenue(options) {
@@ -576,7 +585,7 @@ class BaseClient extends Request {
  * Forward a message to a chat.
  *
  * @async
- * @param {Object} options - The options to use for forwarding the message.
+ * @param {object} options - The options to use for forwarding the message.
  * @param {number} options.chatId - The chat ID of the recipient chat. Required if `this.chatId` is not set.
  * @param {number} options.fromChatId - The chat ID of the chat where the message to forward is located.
  * @param {number} options.messageId - The message ID of the message to forward.
@@ -584,7 +593,7 @@ class BaseClient extends Request {
  * @param {boolean} options.notification - Pass `true` to disable notification for the message. Optional.
  * @param {boolean} options.content - Pass `true` to protect forwarded message from being copied. Optional.
  * @throws {TelegramApiError} If an error occurs while forwarding the message.
- * @returns {Object} The forwarded message object.
+ * @returns {object} The forwarded message object.
  */
    async forwardMessage(options) {
     const method = 'forwardMessage';
@@ -609,21 +618,21 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - The options for copying the message.
+ * @param {object} options - The options for copying the message.
  * @param {string} options.fromChatId - The chat ID of the chat where the original message is located.
  * @param {string} options.messageId - The message ID of the message to copy.
  * @param {string} [options.threadId] - The message thread ID.
  * @param {string} [options.chatId=this.chatId] - The chat ID of the chat where the message will be copied to. If not provided, uses the chat ID set in the constructor.
  * @param {string} [options.caption] - The caption of the message to be copied.
  * @param {string} [options.parseMode=this.parseMode] - The parsing mode of the message caption. If not provided, uses the parse mode set in the constructor.
- * @param {Object[]} [options.captionEntities] - The entities in the message caption.
+ * @param {object[]} [options.captionEntities] - The entities in the message caption.
  * @param {boolean} [options.notification] - Sends the message silently. Users will receive a notification with no sound.
  * @param {boolean} [options.content] - Pass true to protect the content of the message from being forwarded without permission.
  * @param {string} [options.replyToMessageId] - The message ID being replied to.
  * @param {boolean} [options.allowSendingWithoutReply] - Pass true to allow sending the message without a reply.
- * @param {Object} [options.replyMarkup] - The inline keyboard markup for the message.
+ * @param {object | string} [options.replyMarkup] - The inline keyboard markup for the message.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Object} Returns the copied message object.
+ * @returns {object} Returns the copied message object.
  */
    async copyMessage(options) {
     const method = 'copyMessage';
@@ -664,7 +673,7 @@ class BaseClient extends Request {
  * @param {number} [options.threadId] - Thread ID for the message.
  * @param {number} [options.replyToMessageId] - ID of the message being replied to.
  * @param {boolean} [options.allowReply=true] - Allows sending the message without a reply if true.
- * @param {object} [options.replyMarkup] - Additional options for reply markup.
+ * @param {object | string} [options.replyMarkup] - Additional options for reply markup.
  * @returns {object} - Result of the sent contact message.
  * @throws {TelegramApiError} - Throws an error if the API request fails.
  */
@@ -695,7 +704,7 @@ class BaseClient extends Request {
  * Sends a poll to the chat with the given options.
  *
  * @async
- * @param {Object} options - An object containing the poll options.
+ * @param {object} options - An object containing the poll options.
  * @param {number} [options.chatId] - The ID of the chat to send the poll to.
  * @param {string} options.question - The question of the poll.
  * @param {string[]} options.options - An array of strings representing the answer options for the poll.
@@ -705,7 +714,7 @@ class BaseClient extends Request {
  * @param {number} options.correctOptionId - The correct answer option ID for the quiz type poll.
  * @param {string} options.explanation - The explanation for the correct answer option in the quiz type poll.
  * @param {string} options.explanationParseMode - The parse mode for the explanation message.
- * @param {Object[]} options.explanationEntities - An array of message entities in the explanation message.
+ * @param {object[]} options.explanationEntities - An array of message entities in the explanation message.
  * @param {number} options.openPeriod - The amount of time in seconds the poll will be open for.
  * @param {number} options.closeDate - The date when the poll will be automatically closed.
  * @param {boolean} options.isClosed - Whether the poll is closed or not.
@@ -714,9 +723,9 @@ class BaseClient extends Request {
  * @param {number} options.threadId - The message thread ID.
  * @param {number} options.replyToMessageId - The ID of the message being replied to.
  * @param {boolean} options.allowReply - Whether to allow sending the poll without replying to a message or not.
- * @param {Object} options.replyMarkup - The reply markup for the message.
+ * @param {object} options.replyMarkup - The reply markup for the message.
  * @throws {TelegramApiError} If an error occurs while sending the poll.
- * @returns {Promise<Object>} The response from the Telegram API.
+ * @returns {Promise<object>} The response from the Telegram API.
  */
   async sendPoll(options) {
     const method = 'sendPoll';
@@ -753,7 +762,7 @@ class BaseClient extends Request {
  * Sends a dice animation to the chat.
  *
  * @async
- * @param {Object} options - The options for the dice animation.
+ * @param {object} options - The options for the dice animation.
  * @param {number} [options.chatId] - The ID of the chat where to send the message.
  * @param {string} options.emoji - The emoji to use for the dice animation.
  * @param {boolean} [options.notification=false] - Sends the message silently. Users will receive a notification with no sound.
@@ -761,8 +770,8 @@ class BaseClient extends Request {
  * @param {number} [options.threadId] - Unique identifier for the target chat or username of the target channel (in the format @channelusername) of the thread to send a reply to.
  * @param {number} [options.replyToMessageId] - The ID of the message to reply to.
  * @param {boolean} [options.allowReply=false] - Pass True, if the message should be sent even if the specified replied-to message is not found.
- * @param {Object} [options.replyMarkup] - Additional interface options for sending the message.
- * @returns {Promise<Object>} Returns a Promise that resolves to the sent message object on success.
+ * @param {object | string} [options.replyMarkup] - Additional interface options for sending the message.
+ * @returns {Promise<object>} Returns a Promise that resolves to the sent message object on success.
  * @throws {TelegramApiError} Throws an error when there is an error in the request.
  */
   async sendDice(options) {
@@ -788,12 +797,12 @@ class BaseClient extends Request {
   /**
  * Sends a chat action to indicate the bot is performing an action (typing, uploading a photo etc.) to the user.
  * @async
- * @param {Object} options - The options object for sending the chat action.
+ * @param {object} options - The options object for sending the chat action.
  * @param {string} options.chatId - The chat ID to send the chat action to. If `this.chatId` is set, it will be used by default.
  * @param {string} options.action - The type of action to send to the user (typing, upload_photo, record_video, upload_video, record_audio, upload_audio, upload_document, find_location, record_video_note, upload_video_note).
  * @param {string} options.threadId - Unique identifier for the target chat message thread.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error code.
- * @returns {Object} The response object from the Telegram API containing information about the sent chat action.
+ * @returns {object} The response object from the Telegram API containing information about the sent chat action.
  */
   async sendChatAction(options) {
     const method = 'sendChatAction';
@@ -815,12 +824,12 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {number} options.userId - Unique identifier of the target user.
  * @param {number} [options.offset] - Sequential number of the first photo to be returned. By default, all photos are returned.
  * @param {number} [options.limit] - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Promise<Object>} On success, an object containing the user profile photos is returned.
+ * @returns {Promise<object>} On success, an object containing the user profile photos is returned.
  */
   async getUserProfilePhotos(options) {
     const method = 'getUserProfilePhotos';
@@ -843,7 +852,7 @@ class BaseClient extends Request {
  * @async
  * @param {string} fileId - ID of the file to fetch information for
  * @throws {TelegramApiError} If the Telegram API returns an error
- * @returns {Object} An object containing information about the file
+ * @returns {object} An object containing information about the file
  */
   async getFile(fileId) {
     const method = 'getFile';
@@ -881,12 +890,12 @@ class BaseClient extends Request {
   /**
  * Ban a chat member in the Telegram chat.
  * @async
- * @param {Object} options - The options for banning a chat member.
+ * @param {object} options - The options for banning a chat member.
  * @param {string} options.chatId - The ID of the chat where the user is to be banned.
  * @param {number} options.userId - The ID of the user to be banned.
  * @param {number} options.untilDate - Date when the user will be unbanned, unix time.
  * @param {boolean} options.revokeMessages - Pass True to delete all messages from the chat for the user that is being removed.
- * @returns {Promise<Object>} - On success, returns True.
+ * @returns {Promise<object>} - On success, returns True.
  * @throws {TelegramApiError} - If an error occurs while executing the request.
  */
   async banChatMember(options) {
@@ -909,11 +918,11 @@ class BaseClient extends Request {
  * Unban a previously banned chat member in a Telegram chat.
  * @async
  
- * @param {Object} options - Options for unbanning a chat member.
+ * @param {object} options - Options for unbanning a chat member.
  * @param {string|number} options.userId - Unique identifier of the chat member to unban.
  * @param {string|number} [options.chatId] - Unique identifier of the target chat. If not specified, defaults to the chat associated with the bot instance.
  * @param {boolean} [options.onlyIfBanned=false] - If `true`, only unban the chat member if they are currently banned. Otherwise, unban the chat member regardless of their current ban status.
- * @returns {Promise<Object>} - Promise which resolves to the result of the Telegram API request.
+ * @returns {Promise<object>} - Promise which resolves to the result of the Telegram API request.
  * @throws {TelegramApiError} - If the request to the Telegram API fails or returns an error.
  */
   async unbanChatMember(options) {
@@ -935,12 +944,12 @@ class BaseClient extends Request {
  * Restricts a chat member's permissions.
  * @async
   restrictChatMember
- * @param {Object} options - The options to restrict the chat member.
+ * @param {object} options - The options to restrict the chat member.
  * @param {number} options.userId - The ID of the chat member to restrict.
- * @param {Object} options.permissions - The new permissions to restrict the chat member to.
+ * @param {object} options.permissions - The new permissions to restrict the chat member to.
  * @param {boolean} options.useIndependentChatPermissions - Pass true to use the chat member's own permissions instead of the default permissions.
  * @param {number} options.untilDate - The date when the restrictions will be lifted.
- * @returns {Promise<Object>} The updated ChatMember object.
+ * @returns {Promise<object>} The updated ChatMember object.
  * @throws {TelegramApiError} Throws an error if the API response contains an error.
  */
   async restrictChatMember(options) {
@@ -964,7 +973,7 @@ class BaseClient extends Request {
   /**
  * Promotes a user in a chat with additional privileges.
  * @async
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {number} options.userId - The ID of the user to promote.
  * @param {number} [options.chatId=this.chatId] - The ID of the chat where the user will be promoted. Defaults to the chat ID set in the instance.
  * @param {boolean} [options.isAnonymous] - Pass true to promote the user anonymously.
@@ -980,7 +989,7 @@ class BaseClient extends Request {
  * @param {boolean} [options.canPinMessages] - Pass true to allow the user to pin messages in the chat.
  * @param {boolean} [options.canManageTopics] - Pass true to allow the user to manage chat topics.
  * @throws {TelegramApiError} Throws an error with the Telegram API description if the response contains an error.
- * @returns {Promise<Object>} Returns a Promise that resolves to the promoted user object on success.
+ * @returns {Promise<object>} Returns a Promise that resolves to the promoted user object on success.
  */
   async promoteChatMember(options) {
     const method = 'promoteChatMember';
@@ -1012,7 +1021,7 @@ class BaseClient extends Request {
  * Sets a custom title for a chat administrator.
  * @async
  
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {number} options.userId - The user ID of the administrator.
  * @param {number} [options.chatId] - The ID of the chat where the administrator's custom title should be set. If not provided, uses the current chat ID from the instance.
  * @param {string} options.customTitle - The custom title to set for the administrator.
@@ -1038,11 +1047,11 @@ class BaseClient extends Request {
  * Ban a user from sending messages in a chat.
  * @async
  
- * @param {Object} options - The options to use for banning the user.
+ * @param {object} options - The options to use for banning the user.
  * @param {string} options.chatId - The ID of the chat where the user is banned.
  * @param {number} options.senderChatId - The ID of the user to be banned.
  * @throws {TelegramApiError} If an error occurs while banning the user.
- * @returns {Promise<Object>} The result of the request.
+ * @returns {Promise<object>} The result of the request.
  */
   async banChatSenderChat(options) {
     const method = 'banChatMember';
@@ -1087,12 +1096,12 @@ class BaseClient extends Request {
  * Sets chat permissions for a given chat.
  * @async
  
- * @param {Object} options - The options for setting chat permissions.
+ * @param {object} options - The options for setting chat permissions.
  * @param {string} [options.chatId=this.chatId] - The ID of the chat to set permissions for. If not provided, defaults to the chat ID saved in the instance.
- * @param {Object} options.permissions - The chat permissions to set. This should be an object containing key-value pairs where the keys are the names of the permissions and the values are booleans indicating whether the permission should be allowed or not.
+ * @param {object} options.permissions - The chat permissions to set. This should be an object containing key-value pairs where the keys are the names of the permissions and the values are booleans indicating whether the permission should be allowed or not.
  * @param {boolean} [options.independentPermissions=false] - Whether to use independent chat permissions or not.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Promise<Object>} Returns a promise which resolves to the result of the API request.
+ * @returns {Promise<object>} Returns a promise which resolves to the result of the API request.
  */
   async setChatPermissions(options) {
     const method = 'setChatPermissions';
@@ -1132,13 +1141,13 @@ class BaseClient extends Request {
   /**
  * Creates a new chat invite link with the specified options.
  * @async
- * @param {Object} options - The options for the chat invite link.
+ * @param {object} options - The options for the chat invite link.
  * @param {string} [options.chatId] - The ID of the chat where the invite link will be created. If not provided, the ID of the current chat will be used.
  * @param {string} [options.name] - The name of the chat that will be shown in the invite link preview. If not provided, the chat name will be used.
  * @param {Date} [options.expireDate] - The date and time when the invite link will expire.
  * @param {number} [options.memberLimit] - The maximum number of members that can join the chat using the invite link. If not provided, there will be no limit.
  * @param {boolean} [options.createsJoinRequest] - Determines whether the invite link creates a join request instead of adding the user directly to the chat. Defaults to false.
- * @returns {Promise<Object>} - The created chat invite link object.
+ * @returns {Promise<object>} - The created chat invite link object.
  * @throws {TelegramApiError} - If the API response contains an error.
  */
   async createChatInviteLink(options) {
@@ -1161,7 +1170,7 @@ class BaseClient extends Request {
   /**
  * Edits the specified chat invite link. Returns the edited invite link as a ChatInviteLink object.
  * @async
- * @param {Object} options - Options for editing the chat invite link.
+ * @param {object} options - Options for editing the chat invite link.
  * @param {number} [options.chatId] - Unique identifier of the target chat.
  * @param {string} options.inviteLink - The invite link to edit.
  * @param {string} [options.name] - New name for the invite link, 1-64 characters.
@@ -1193,12 +1202,12 @@ class BaseClient extends Request {
  * Revoke a chat invite link.
  *
  * @async
- * @param {Object} options - The options to use for the API call.
+ * @param {object} options - The options to use for the API call.
  * @param {string} options.inviteLink - The invite link to revoke.
  * @param {number} [options.chatId] - The ID of the chat where the invite link was generated.
  * If not provided, the ID of the current chat instance will be used.
  * @throws {TelegramApiError} If the API call fails, an error with the description of the problem.
- * @returns {Object} The API response object.
+ * @returns {object} The API response object.
  */
   async revokeChatInviteLink(options) {
     const method = 'revokeChatInviteLink';
@@ -1218,11 +1227,11 @@ class BaseClient extends Request {
  * Approve a join request to a chat.
  * @async
  
- * @param {Object} options - The options to approve the chat join request.
+ * @param {object} options - The options to approve the chat join request.
  * @param {number} options.userId - The user ID for the join request.
  * @param {number} [options.chatId] - The chat ID for the join request. If not provided, it will use the chatId property of the bot instance.
  * @throws {TelegramApiError} If the response contains an error code.
- * @returns {Object} The result of the approveChatJoinRequest method.
+ * @returns {object} The result of the approveChatJoinRequest method.
  */
   async approveChatJoinRequest(options) {
     const method = 'approveChatJoinRequest';
@@ -1243,11 +1252,11 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - Options object.
+ * @param {object} options - Options object.
  * @param {number} options.userId - The user id of the user who sent the join request.
  * @param {number} [options.chatId] - The chat id where the join request was sent. Required if `chatId` was not specified during instance creation.
  * @throws {TelegramApiError} Throws an error if the Telegram API responds with an error.
- * @returns {Promise<Object>} Returns a Promise that resolves to the API response on success.
+ * @returns {Promise<object>} Returns a Promise that resolves to the API response on success.
  */
   async declineChatJoinRequest(options) {
     const method = 'declineChatJoinRequest';
@@ -1311,10 +1320,10 @@ class BaseClient extends Request {
  * Set a new chat title for a given chat ID.
  * @async
  
- * @param {Object} options - The options to set a new chat title.
+ * @param {object} options - The options to set a new chat title.
  * @param {string} options.chatId - Unique identifier for the target chat or username of the target channel.
  * @param {string} options.title - New chat title, 1-255 characters.
- * @returns {Promise<Object>} On success, the updated chat object is returned.
+ * @returns {Promise<object>} On success, the updated chat object is returned.
  * @throws {TelegramApiError} If the request to set a new chat title fails, this error is thrown.
  */
   async setChatTitle(options) {
@@ -1335,11 +1344,11 @@ class BaseClient extends Request {
  * Sets the description of a chat.
  * @async
  
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {number} options.chatId - The chat ID to set the description for.
  * @param {string} options.description - The new description for the chat.
  * @throws {TelegramApiError} Throws an error if the request to the Telegram API fails or if the response contains an error.
- * @returns {Promise<Object>} Returns a promise that resolves to the response from the Telegram API.
+ * @returns {Promise<object>} Returns a promise that resolves to the response from the Telegram API.
  */
   async setChatDescription(options) {
     const method = 'setChatDescription';
@@ -1359,12 +1368,12 @@ class BaseClient extends Request {
  * Pins a message in a chat.
  * @async
  
- * @param {Object} options - The options to pin the message.
+ * @param {object} options - The options to pin the message.
  * @param {number} options.messageId - The ID of the message to pin.
  * @param {number} [options.chatId] - The ID of the chat where the message is located. Uses the chatId property of the instance if not provided.
  * @param {boolean} [options.notification] - Pass true to disable notifications for the message. Defaults to false.
  * @throws {TelegramApiError} If an error occurs while attempting to pin the message.
- * @returns {Promise<Object>} On success, the method returns True.
+ * @returns {Promise<object>} On success, the method returns True.
  */
   async pinChatMessage(options) {
     const method = 'pinChatMessage';
@@ -1384,11 +1393,11 @@ class BaseClient extends Request {
   /**
  * Unpins a message in a chat.
  * @async
- * @param {Object} options - The options for unpinning a message in a chat.
+ * @param {object} options - The options for unpinning a message in a chat.
  * @param {number} options.messageId - The ID of the message to unpin.
  * @param {number} [options.chatId] - The ID of the chat where the message to unpin is located. If not specified, the chat ID of the instance is used.
  * @throws {TelegramApiError} Throws an error if the API returns an error response.
- * @returns {Promise<Object>} Returns a Promise that resolves to the result of the API call.
+ * @returns {Promise<object>} Returns a Promise that resolves to the result of the API call.
  */
   async unpinChatMessage(options) {
     const method = 'unpinChatMessage';
@@ -1410,7 +1419,7 @@ class BaseClient extends Request {
  * @async
  * @param {number} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
  * @throws {TelegramApiError} When the API call fails.
- * @returns {Promise<Object>} On success, the sent [Message](https://core.telegram.org/bots/api#message) is returned.
+ * @returns {Promise<object>} On success, the sent [Message](https://core.telegram.org/bots/api#message) is returned.
  */
   async unpinAllChatMessages(chatId) {
     const method = 'unpinAllChatMessages';
@@ -1430,7 +1439,7 @@ class BaseClient extends Request {
  * @async
  * @param {number} chatId - The chat ID of the chat to leave.
  * @throws {TelegramApiError} When the response contains an error.
- * @returns {Promise<Object>} On success, the method returns True.
+ * @returns {Promise<object>} On success, the method returns True.
  */
 
   async leaveChat(chatId) {
@@ -1452,7 +1461,7 @@ class BaseClient extends Request {
    * @async
    * @param {string} chatId - The ID of the chat to get information about.
    * @throws {TelegramApiError} Throws an error if the response contains an error code.
-   * @returns {Promise<Object>} Returns an object containing information about the chat.
+   * @returns {Promise<object>} Returns an object containing information about the chat.
    */
 
   async getChat(chatId) {
@@ -1511,11 +1520,11 @@ class BaseClient extends Request {
    * Returns information about a member of a chat.
    *
    * @async
-   * @param {Object} options - An object containing chatId and userId.
+   * @param {object} options - An object containing chatId and userId.
    * @param {number|string} options.chatId - Unique identifier for the target chat or username of the target channel.
    * @param {number} options.userId - Unique identifier of the target user.
    * @throws {TelegramApiError} If the request to the Telegram API fails or if there is an error code in the response.
-   * @returns {Promise<Object>} On success, an object containing information about the member.
+   * @returns {Promise<object>} On success, an object containing information about the member.
    */
   async getChatMember(options) {
     const method = 'getChatMember';
@@ -1537,7 +1546,7 @@ class BaseClient extends Request {
    * Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method.
    * Returns True on success.
    *
-   * @param {Object} options - An object containing options to pass.
+   * @param {object} options - An object containing options to pass.
    * @param {number} options.chatId - Unique identifier for the target chat or username of the target channel.
    * @param {string} options.stickerSetName - Name of the sticker set to be set as the group's sticker set.
    * @return {Promise<boolean>} Returns True on success.
@@ -1563,7 +1572,7 @@ class BaseClient extends Request {
  * @async
  * @param {number} chatId - Unique identifier for the target chat or username of the target channel.
  * @throws {TelegramApiError} If an error occurs while deleting the chat's sticker set.
- * @returns {Object} On success, the deleted chat's sticker set is returned.
+ * @returns {object} On success, the deleted chat's sticker set is returned.
  */
   async deleteChatStickerSet(chatId) {
     const method = 'deleteChatStickerSet';
@@ -1581,7 +1590,7 @@ class BaseClient extends Request {
   /**
  * Get a list of stickers corresponding to a forum topic icon
  * @async
- * @returns {Promise<Object[]>} An array of sticker objects for the corresponding forum topic icon
+ * @returns {Promise<object[]>} An array of sticker objects for the corresponding forum topic icon
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error response
  */
   async getForumTopicIconStickers() {
@@ -1596,12 +1605,12 @@ class BaseClient extends Request {
   /**
  * Creates a forum topic with the specified options.
  * @async
- * @param {Object} options - The options to use when creating the forum topic.
+ * @param {object} options - The options to use when creating the forum topic.
  * @param {number} [options.chatId] - The chat ID to use for the forum topic. If not provided, `this.chatId` is used instead.
  * @param {string} options.name - The name of the forum topic.
  * @param {string} options.iconColor - The icon color of the forum topic.
  * @param {string} options.iconCustomEmojiId - The ID of the custom emoji to use as the icon of the forum topic.
- * @returns {Promise<Object>} - The response from the Telegram API.
+ * @returns {Promise<object>} - The response from the Telegram API.
  * @throws {TelegramApiError} - If there was an error creating the forum topic.
  */
   async createForumTopic(options) {
@@ -1624,13 +1633,13 @@ class BaseClient extends Request {
  * Edits a forum topic.
  * @async
  
- * @param {Object} options - The options for editing the forum topic.
+ * @param {object} options - The options for editing the forum topic.
  * @param {number} options.chatId - The ID of the chat where the forum topic is located.
  * @param {number} options.messageThreadId - The ID of the forum topic to edit.
  * @param {string} options.name - The new name for the forum topic.
  * @param {string} options.iconCustomEmojiId - The ID of the custom emoji to use as the new icon for the forum topic.
  * @throws {TelegramApiError} If the API response contains an error code.
- * @returns {Promise<Object>} The edited forum topic object.
+ * @returns {Promise<object>} The edited forum topic object.
  */
   async editForumTopic(options) {
     const method = 'editForumTopic';
@@ -1652,11 +1661,11 @@ class BaseClient extends Request {
   * Closes a forum topic in the specified chat.
   * @async
   
-  * @param {Object} options - The options to be passed to the function.
+  * @param {object} options - The options to be passed to the function.
   * @param {number} options.chatId - The chat ID.
   * @param {number} options.messageThreadId - The ID of the message thread to close.
   * @throws {TelegramApiError} If the Telegram API returns an error.
-  * @returns {Object} Returns a Promise that resolves to the result of the API call.
+  * @returns {object} Returns a Promise that resolves to the result of the API call.
   */
   async closeForumTopic(options) {
     const method = 'closeForumTopic';
@@ -1724,11 +1733,11 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - The options for unpinning messages.
+ * @param {object} options - The options for unpinning messages.
  * @param {number} options.chatId - The ID of the chat where the messages are located.
  * @param {number} options.messageThreadId - The ID of the message thread where the messages are located.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Promise<Object>} Returns a Promise that resolves to the API response object.
+ * @returns {Promise<object>} Returns a Promise that resolves to the API response object.
  */
   async unpinAllForumTopicMessages(options) {
     const method = 'unpinAllForumTopicMessages';
@@ -1748,10 +1757,10 @@ class BaseClient extends Request {
  * Edit a general forum topic.
  *
  * @async
- * @param {Object} options - The options to edit the forum topic.
+ * @param {object} options - The options to edit the forum topic.
  * @param {number} options.chatId - The chat id of the forum topic.
  * @param {string} options.name - The new name of the forum topic.
- * @returns {Promise<Object>} Returns a Promise that resolves to the edited forum topic object on success.
+ * @returns {Promise<object>} Returns a Promise that resolves to the edited forum topic object on success.
  * @throws {TelegramApiError} Throws an error if the API call fails.
  */
   async editGeneralForumTopic(options) {
@@ -1773,7 +1782,7 @@ class BaseClient extends Request {
  * @async
  * @param {number} chatId - The ID of the chat where the forum topic is located.
  * @throws {TelegramApiError} If an error occurs while closing the forum topic.
- * @returns {Object} The result of the API call to the Telegram server.
+ * @returns {object} The result of the API call to the Telegram server.
  */
   async closeGeneralForumTopic(chatId) {
     const method = 'closeGeneralForumTopic';
@@ -1793,7 +1802,7 @@ class BaseClient extends Request {
    * @async
    * @param {string} chatId - The chat ID of the chat where the topic is located. Optional if chat ID is set in the TelegramBot constructor.
    * @throws {TelegramApiError} Throws an error if the response from the Telegram API contains an error code.
-   * @returns {Promise<Object>} Returns a Promise that resolves to the result of the Telegram API response.
+   * @returns {Promise<object>} Returns a Promise that resolves to the result of the Telegram API response.
    */
   async reopenGeneralForumTopic(chatId) {
     const method = 'reopenGeneralForumTopic';
@@ -1853,7 +1862,7 @@ class BaseClient extends Request {
  * Sends an answer to a callback query sent from an inline keyboard or an inline button.
  * @async
  
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {string} options.callbackQueryId - The unique identifier of the callback query to be answered.
  * @param {string} [options.text] - Text of the notification to be sent, 0-200 characters.
  * @param {boolean} [options.showAlert] - If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
@@ -1883,11 +1892,11 @@ class BaseClient extends Request {
  * Sets the list of commands supported by your bot.
  * @async
  
- * @param {Object} options - Options object.
- * @param {Array<Object>} options.commands - A list of bot commands.
+ * @param {object} options - Options object.
+ * @param {Array<object>} options.commands - A list of bot commands.
  * @param {String} [options.scope] - A string representing the bot command scope.
  * @param {String} [options.languageCode] - A string representing the language code for the commands.
- * @returns {Promise<Object>} Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
+ * @returns {Promise<object>} Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
  * @throws {TelegramApiError} Throws a TelegramApiError if the API response contains an error code.
  */
   async setMyCommands(options) {
@@ -1909,7 +1918,7 @@ class BaseClient extends Request {
    * Use this method to delete the list of the bot's commands for the given scope and user language. 
    * Returns True on success.
    * 
-   * @param {Object} options - Optional parameters for deleting bot commands.
+   * @param {object} options - Optional parameters for deleting bot commands.
    * @param {string} options.scope - A string, which represent the scope of users. Pass "all_private_chats" to delete commands
    * in all private chats and groups, or "all_public_chats" to delete commands in all chats.
    * @param {string} options.languageCode - A string, which represent the user language for which the commands are relevant.
@@ -1939,7 +1948,7 @@ class BaseClient extends Request {
  * @param {object} options - Additional options for the request.
  * @param {string} [options.scope] - A JSON-serialized object, describing scope of users. 
  * @param {string} [options.languageCode] - A two-letter ISO 639-1 language code or an empty string.
- * @returns {Promise<Object[]>} Returns an array of BotCommand on success.
+ * @returns {Promise<object[]>} Returns an array of BotCommand on success.
  * @throws {TelegramApiError} Throws an error if there is a problem with the request.
  */
   async getMyCommands(options) {
@@ -2049,10 +2058,10 @@ class BaseClient extends Request {
    * Sets the bot's short description for the profile.
    * @async
    
-   * @param {Object} options - Options for setting the short description.
+   * @param {object} options - Options for setting the short description.
    * @param {string} options.description - The new short description for the bot.
    * @param {string} options.languageCode - The language code of the new short description.
-   * @returns {Promise<Object>} - On success, the method returns the bot's updated profile.
+   * @returns {Promise<object>} - On success, the method returns the bot's updated profile.
    * @throws {TelegramApiError} - If the request was unsuccessful, a TelegramApiError will be thrown with the description of the error.
    */
   async setMyShortDescription(options) {
@@ -2074,7 +2083,7 @@ class BaseClient extends Request {
  * @async
  * @param {string} languageCode - Optional language code to get the short description in a specific language.
  * @throws {TelegramApiError} When the Telegram API returns an error.
- * @returns {Promise<Object>} Object with the bot's short description.
+ * @returns {Promise<object>} object with the bot's short description.
  */
   async getMyShortDescription(languageCode) {
     const method = 'getMyShortDescription';
@@ -2093,11 +2102,11 @@ class BaseClient extends Request {
  * Sets the menu button for a specific chat.
  * @async
  
- * @param {Object} options - Options for setting the menu button.
+ * @param {object} options - Options for setting the menu button.
  * @param {number} options.chatId - The ID of the chat where the menu button will be set. If `chatId` is not provided, the instance's `chatId` property will be used.
- * @param {Object} options.menuButton - The menu button object to be set. This object should conform to the Telegram Bot API's `InlineKeyboardButton` type.
+ * @param {object} options.menuButton - The menu button object to be set. This object should conform to the Telegram Bot API's `InlineKeyboardButton` type.
  * @throws {TelegramApiError} If there is an error in the Telegram API response.
- * @returns {Object} The result object from the Telegram API response.
+ * @returns {object} The result object from the Telegram API response.
  */
   async setChatMenuButton(options) {
     const method = 'setChatMenuButton';
@@ -2118,7 +2127,7 @@ class BaseClient extends Request {
  * @async
  * @param {number | string} [chatId] - The chat ID of the chat to get the menu button for.
  * @throws {TelegramApiError} Throws an error if the API response contains an error_code.
- * @returns {Object} Returns the menu button of the chat.
+ * @returns {object} Returns the menu button of the chat.
  */
   async getChatMenuButton(chatId) {
     const method = 'getChatMenuButton';
@@ -2137,10 +2146,10 @@ class BaseClient extends Request {
  * Set default administrator rights for the bot in a chat.
  * @async
  
- * @param {Object} options - The options object.
- * @param {Object} options.rights - New administrator rights of the bot.
+ * @param {object} options - The options object.
+ * @param {object} options.rights - New administrator rights of the bot.
  * @param {boolean} options.forChannels - Pass true if the default rights should be set for all groups and channels.
- * @returns {Promise<Object>} Returns a Promise that resolves to the updated rights for the bot.
+ * @returns {Promise<object>} Returns a Promise that resolves to the updated rights for the bot.
  * @throws {TelegramApiError} Throws an error if the response contains an error_code.
  */
   async setMyDefaultAdministratorRights(options) {
@@ -2163,7 +2172,7 @@ class BaseClient extends Request {
  * @async
  * @param {boolean} forChannels - Pass `true` to return the default admin rights for all channels the bot is an administrator in.
  * @throws {TelegramApiError} Throws an error if the response contains an error_code.
- * @returns {Promise<Object>} Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
+ * @returns {Promise<object>} Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
  */
   async getMyDefaultAdministratorRights(forChannels) {
     const method = 'getMyDefaultAdministratorRights';
@@ -2182,16 +2191,16 @@ class BaseClient extends Request {
  * Edits the text of a message sent by the bot or via inline mode.
  * @async
  
- * @param {Object} options - Options for editing the message text.
+ * @param {object} options - Options for editing the message text.
  * @param {string} [options.chatId] - Unique identifier for the target chat or username of the target channel.
  * @param {number} options.messageId - Identifier of the message to edit.
  * @param {string} options.inlineMessageId - Identifier of the inline message to edit.
  * @param {string} options.text - New text of the message.
  * @param {string} [options.parseMode] - Format of the new message text.
- * @param {Array<Object>} [options.entities] - List of special entities that appear in message text.
+ * @param {Array<object>} [options.entities] - List of special entities that appear in message text.
  * @param {boolean} [options.disableWebPagePreview] - Disables link previews for links in the message.
- * @param {Object} [options.replyMarkup] - Additional interface options for the message.
- * @returns {Object} Response object with edited message.
+ * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
+ * @returns {object} Response object with edited message.
  * @throws {TelegramApiError} If the request was unsuccessful.
  */
   async editMessageText(options) {
@@ -2217,14 +2226,14 @@ class BaseClient extends Request {
   /**
  * Edits the caption of a message.
  * @async
- * @param {Object} options - The options for editing the caption.
+ * @param {object} options - The options for editing the caption.
  * @param {number} options.messageId - The message ID of the message to edit.
  * @param {string} [options.inlineMessageId] - Required if the message is an inline message. The inline message ID.
  * @param {string} [options.caption] - The new caption of the message.
  * @param {string} [options.parseMode] - The parsing mode of the new caption.
  * @param {Array} [options.captionEntities] - List of special entities that appear in the caption, which can be specified instead of parse_mode.
- * @param {Object} [options.replyMarkup] - The reply markup of the message.
- * @returns {Promise<Object>} The edited message object.
+ * @param {object | string} [options.replyMarkup] - The reply markup of the message.
+ * @returns {Promise<object>} The edited message object.
  * @throws {TelegramApiError} If there is an error editing the message caption.
  */
   async editMessageCaption(options) {
@@ -2249,12 +2258,12 @@ class BaseClient extends Request {
   /**
  * Edits the media of an existing message sent by the bot or via inline mode.
  * @async
- * @param {Object} options - The options for editing the message media.
+ * @param {object} options - The options for editing the message media.
  * @param {number} options.messageId - The message ID of the message to edit.
  * @param {string} [options.inlineMessageId] - The inline message ID of the message to edit (if in inline mode).
  * @param {any} options.media - The new media for the message.
  * @param {any} [options.replyMarkup] - The new reply markup for the message (if any).
- * @returns {Promise<Object>} The edited message object.
+ * @returns {Promise<object>} The edited message object.
  * @throws {TelegramApiError} If there is an error editing the message.
  */
   async editMessageMedia(options) {
@@ -2287,7 +2296,7 @@ class BaseClient extends Request {
  * @param {number} [options.horizontalAccuracy] - The radius of uncertainty for the location, measured in meters; 0-1500.
  * @param {number} [options.heading] - Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
  * @param {number} [options.proximityAlertRadius] - Maximum distance for proximity alerts about approaching another chat member, in meters.
- * @param {object} [options.replyMarkup] - Additional interface options. An object of the `InlineKeyboardMarkup` type.
+ * @param {object | string} [options.replyMarkup] - Additional interface options. An object of the `InlineKeyboardMarkup` type.
  * @throws {TelegramApiError} When an error occurs while editing the message.
  * @returns {Promise<object>} On success, returns the edited message as a `Message` object.
  */
@@ -2317,12 +2326,12 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - Options for stopping live location.
+ * @param {object} options - Options for stopping live location.
  * @param {string|null} [options.chatId=this.chatId] - Unique identifier for the target chat or username of the target channel.
  * @param {number} options.messageId - Identifier of the sent message.
  * @param {string|null} options.inlineMessageId - Identifier of the inline message.
- * @param {Object|null} options.replyMarkup - A reply markup object.
- * @returns {Promise<Object>} Returns a Promise that resolves to the stopped live location message object.
+ * @param {object|null} options.replyMarkup - A reply markup object.
+ * @returns {Promise<object>} Returns a Promise that resolves to the stopped live location message object.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
  */
   async stopMessageLiveLocation(options) {
@@ -2345,13 +2354,13 @@ class BaseClient extends Request {
  * Edits the reply markup of a message sent by the bot or via inline mode.
  * @async
  
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {string} [options.chatId] - Required if `inlineMessageId` is not specified. The unique identifier of the target chat.
  * @param {number} [options.messageId] - Required if `inlineMessageId` is not specified. Identifier of the message to edit.
  * @param {string} [options.inlineMessageId] - Required if `chatId` and `messageId` are not specified. Identifier of the inline message.
- * @param {Object} options.replyMarkup - A new reply markup for the message.
+ * @param {object} options.replyMarkup - A new reply markup for the message.
  * @throws {TelegramApiError} If an error occurs while editing the message, an error object will be thrown.
- * @returns {Object} On success, the edited Message is returned.
+ * @returns {object} On success, the edited Message is returned.
  */
   async editMessageReplyMarkup(options) {
     const method = 'editMessageReplyMarkup';
@@ -2373,12 +2382,12 @@ class BaseClient extends Request {
  * Stops a poll in a chat.
  *
  * @async
- * @param {Object} options - The options to use for stopping the poll.
+ * @param {object} options - The options to use for stopping the poll.
  * @param {number} options.messageId - Identifier of the original message with the poll.
- * @param {Object} [options.replyMarkup] - A JSON-serialized object for a new message inline keyboard.
+ * @param {object | string} [options.replyMarkup] - A JSON-serialized object for a new message inline keyboard.
  * @param {number} [options.chatId] - Unique identifier for the target chat or username of the target channel.
  * @throws {TelegramApiError} If an error occurs while stopping the poll.
- * @returns {Promise<Object>} On success, the stopped poll is returned.
+ * @returns {Promise<object>} On success, the stopped poll is returned.
  */
   async stopPoll(options) {
     const method = 'stopPoll';
@@ -2398,7 +2407,7 @@ class BaseClient extends Request {
   /**
  * Sends a sticker message.
  * @async
- * @param {Object} options - The options for sending the sticker message.
+ * @param {object} options - The options for sending the sticker message.
  * @param {string|number} [options.chatId] - The ID of the chat where the message will be sent. Required if `this.chatId` is not set.
  * @param {string} options.sticker - The sticker file ID or URL.
  * @param {string} [options.emoji] - The emoji corresponding to the sticker.
@@ -2406,10 +2415,10 @@ class BaseClient extends Request {
  * @param {boolean} [options.content] - Pass true to send the sticker as a protected content message. False by default.
  * @param {string|number} [options.replyToMessageId] - The ID of the message to reply to.
  * @param {boolean} [options.allowReply] - Pass true to allow sending the message without a reply message. False by default.
- * @param {Object} [options.replyMarkup] - Additional interface options for the message.
+ * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
  * @param {string|number} [options.threadId] - The ID of the thread where the message will be sent.
  * @throws {TelegramApiError} Throws an error if the request to the Telegram API fails.
- * @returns {Promise<Object>} Returns a Promise that resolves to the sent message object on success.
+ * @returns {Promise<object>} Returns a Promise that resolves to the sent message object on success.
  */
   async sendSticker(options) {
     const method = 'sendSticker';
@@ -2437,7 +2446,7 @@ class BaseClient extends Request {
  *
  * @async
  * @param {string} name - Name of the sticker set.
- * @returns {Promise<Object>} A Promise that returns an Object representing the sticker set on success.
+ * @returns {Promise<object>} A Promise that returns an object representing the sticker set on success.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
  */
   async getStickerSet(name) {
@@ -2458,7 +2467,7 @@ class BaseClient extends Request {
  * @async
  * @param {string[]} customEmojiIds - An array of custom emoji ids to get related sticker sets
  * @throws {TelegramApiError} Throws an error if the API response contains an error code
- * @returns {Object} Returns an object representing the list of sticker sets containing custom emojis
+ * @returns {object} Returns an object representing the list of sticker sets containing custom emojis
  */
   async getCustomEmojiStickers(customEmojiIds) {
     const method = 'getCustomEmojiStickers';
@@ -2477,12 +2486,12 @@ class BaseClient extends Request {
  * Uploads a PNG image to create a new sticker file. The file must be less than 512 KB in size.
  *
  * @async
- * @param {Object} options - An object containing the following parameters:
+ * @param {object} options - An object containing the following parameters:
  * @param {Number} options.userId - Unique identifier for the target user or bot.
  * @param {any} options.sticker - The PNG image data to be uploaded.
  * @param {String} options.stickerFormat - The file extension for the sticker (e.g. 'png').
  * @throws {TelegramApiError} If there is an error during the API request.
- * @returns {Object} The uploaded sticker file's information.
+ * @returns {object} The uploaded sticker file's information.
  */
   async uploadStickerFile(options) {
     const method = 'uploadStickerFile';
@@ -2503,18 +2512,18 @@ class BaseClient extends Request {
  * Creates a new sticker set with the specified options.
  *
  * @async
- * @param {Object} options - The options object containing the following properties:
+ * @param {object} options - The options object containing the following properties:
  * @param {number} options.userId - The ID of the user who will create the sticker set.
  * @param {string} options.name - The unique name of the sticker set, 1-64 characters.
  * @param {string} options.title - The title of the sticker set, 1-64 characters.
- * @param {Array<Object>} options.stickers - An array of sticker objects containing the following properties:
+ * @param {Array<object>} options.stickers - An array of sticker objects containing the following properties:
  *   - {string} emoji - Emoji corresponding to the sticker.
  *   - {string} file - File path or URL of the sticker image.
  * @param {string} options.stickerFormat - The format of the stickers. Supported formats: "png", "webp", "tgs".
  * @param {string} options.stickerType - The type of the stickers. Supported types: "static" for static stickers, "animated" for animated stickers.
  * @param {boolean} options.needsRepainting - Whether the sticker set needs to be repainted. Defaults to false.
  * @throws {TelegramApiError} If there is an error creating the sticker set.
- * @returns {Object} The created sticker set object.
+ * @returns {object} The created sticker set object.
  */
   async createNewStickerSet(options) {
     const method = 'createNewStickerSet';
@@ -2540,18 +2549,18 @@ class BaseClient extends Request {
    *
    * @async
    
-   * @param {Object} options - The options to add a sticker to a set.
+   * @param {object} options - The options to add a sticker to a set.
    * @param {number} options.userId - The user id of the sticker set owner.
    * @param {string} options.name - The name of the sticker set.
-   * @param {Object} options.sticker - The sticker to add to the set.
+   * @param {object} options.sticker - The sticker to add to the set.
    * @param {string} options.sticker.fileId - The file id of the sticker.
    * @param {string} options.sticker.emoji - The emoji associated with the sticker.
-   * @param {Object} [options.sticker.maskPosition] - The position where the mask should be placed on faces.
+   * @param {object} [options.sticker.maskPosition] - The position where the mask should be placed on faces.
    * @param {string} options.sticker.maskPosition.point - The part of the face where the mask should be placed.
    * @param {number} options.sticker.maskPosition.xShift - The horizontal shift in pixels.
    * @param {number} options.sticker.maskPosition.yShift - The vertical shift in pixels.
    * @param {number} options.sticker.maskPosition.scale - The scale of the mask.
-   * @returns {Object} On success, the added Sticker object is returned.
+   * @returns {object} On success, the added Sticker object is returned.
    * @throws {TelegramApiError} If an error occurs while adding the sticker.
    */
   async addStickerToSet(options) {
@@ -2573,7 +2582,7 @@ class BaseClient extends Request {
  * Set the position of a sticker in its set. Returns True on success.
  * @async
  
- * @param {Object} options - Options for setting the sticker position.
+ * @param {object} options - Options for setting the sticker position.
  * @param {string} options.sticker - File identifier of the sticker.
  * @param {number} options.position - New position of the sticker in the set (zero-based).
  * @throws {TelegramApiError} If an error occurs while setting the sticker position.
@@ -2620,7 +2629,7 @@ class BaseClient extends Request {
  * @param {string} options.sticker - The file identifier of the sticker.
  * @param {Array<string>} options.emojiList - List of emojis corresponding to the sticker.
  * @throws {TelegramApiError} If there is an error returned from the Telegram API.
- * @returns {Object} On success, the updated sticker object is returned.
+ * @returns {object} On success, the updated sticker object is returned.
  */
   async setStickerEmoji(options) {
     const method = 'setStickerEmoji';
@@ -2641,11 +2650,11 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - Options for setting sticker keywords.
+ * @param {object} options - Options for setting sticker keywords.
  * @param {string} options.sticker - File identifier of the sticker.
  * @param {string[]} options.keywords - An array of strings describing the sticker.
  * @throws {TelegramApiError} If an error occurs while setting sticker keywords.
- * @returns {Object} Result of the API call.
+ * @returns {object} Result of the API call.
  */
   async setStickerKeywords(options) {
     const method = 'setStickerKeywords';
@@ -2664,13 +2673,13 @@ class BaseClient extends Request {
   /**
  * Sets the position of a sticker in the mask position for subsequent operation mask() calls.
  * @async
- * @param {Object} options - The options to set the sticker mask position.
+ * @param {object} options - The options to set the sticker mask position.
  * @param {string} options.sticker - File identifier of the sticker.
- * @param {Object} options.maskPosition - New mask position for the sticker.
+ * @param {object} options.maskPosition - New mask position for the sticker.
  * @param {number} options.maskPosition.point_x - The x position where the mask should be placed on the sticker.
  * @param {number} options.maskPosition.point_y - The y position where the mask should be placed on the sticker.
  * @param {number} options.maskPosition.scale - The scale of the mask, should be between 0 and 1.
- * @returns {Promise<Object>} On success, the edited sticker is returned.
+ * @returns {Promise<object>} On success, the edited sticker is returned.
  * @throws {TelegramApiError} If an error occurs while setting the sticker mask position.
  */
   async setStickerMaskPosition(options) {
@@ -2692,11 +2701,11 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - Options for setting the sticker set title.
+ * @param {object} options - Options for setting the sticker set title.
  * @param {string} options.name - Name of the sticker set.
  * @param {string} options.title - New title for the sticker set.
  * @throws {TelegramApiError} If the API call returns an error.
- * @returns {Promise<Object>} On success, the updated sticker set is returned.
+ * @returns {Promise<object>} On success, the updated sticker set is returned.
  */
   async setStickerSetTitle(options) {
     const method = 'setStickerSetTitle';
@@ -2715,11 +2724,11 @@ class BaseClient extends Request {
   /**
    * Set the thumbnail of a sticker set.
    * @async
-   * @param {Object} options - Options object.
+   * @param {object} options - Options object.
    * @param {string} options.name - Name of the sticker set.
    * @param {number} options.userId - Unique identifier of the target user.
    * @param {any} options.thumbnail - New PNG image of the sticker set as a stream or a string URL-encoded file URL.
-   * @returns {Promise<Object>} On success, the updated sticker set is returned.
+   * @returns {Promise<object>} On success, the updated sticker set is returned.
    * @throws {TelegramApiError} If an error occurs while executing the method, an error with a description is thrown.
    */
   async setStickerSetThumbnail(options) {
@@ -2742,11 +2751,11 @@ class BaseClient extends Request {
  *
  * @async
  
- * @param {Object} options - The options to set the custom emoji sticker set thumbnail.
+ * @param {object} options - The options to set the custom emoji sticker set thumbnail.
  * @param {string} options.name - The name of the sticker set.
  * @param {string} options.customEmojiId - The ID of the custom emoji.
  * @throws {TelegramApiError} When the Telegram API returns an error.
- * @returns {Promise<Object>} The response from the Telegram API containing the result.
+ * @returns {Promise<object>} The response from the Telegram API containing the result.
  */
   async setCustomEmojiStickerSetThumbnail(options) {
     const method = 'setCustomEmojiStickerSetThumbnail';
@@ -2765,9 +2774,9 @@ class BaseClient extends Request {
   /**
    * Use this method to delete a sticker set. Use the bot's username and the name of the sticker set.
    * @async
-   * @param {string} name - Object containing the following required parameters
+   * @param {string} name - object containing the following required parameters
    * @throws {TelegramApiError} When the request to the Telegram API fails or when the response contains an error.
-   * @returns {Promise<Object>} On success, returns True.
+   * @returns {Promise<object>} On success, returns True.
    */
   async deleteStickerSet(name) {
     const method = 'deleteStickerSet';
@@ -2785,10 +2794,10 @@ class BaseClient extends Request {
   /**
  * Sets the keywords for a sticker.
  * @async
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {string} options.sticker - The file identifier of the sticker.
  * @param {string[]} options.keywords - New list of keywords for the sticker.
- * @returns {Promise<Object>} - On success, the updated Sticker object is returned.
+ * @returns {Promise<object>} - On success, the updated Sticker object is returned.
  * @throws {TelegramApiError} - If an error occurs while setting the sticker keywords.
  */
   async setStickerKeywords(options) {
@@ -2809,13 +2818,13 @@ class BaseClient extends Request {
  * Set the position of a sticker in a mask. 
  * 
  * @async
- * @param {Object} options - The options for setting the sticker mask position
+ * @param {object} options - The options for setting the sticker mask position
  * @param {string} options.sticker - File identifier of the sticker
- * @param {Object} options.maskPosition - Position where the mask should be placed on the sticker
+ * @param {object} options.maskPosition - Position where the mask should be placed on the sticker
  * @param {number} options.maskPosition.point_x - The x position where the mask should be placed on the sticker, from 0 to 100.
  * @param {number} options.maskPosition.point_y - The y position where the mask should be placed on the sticker, from 0 to 100.
  * @param {number} options.maskPosition.scale - The scale of the mask, from 0 to 100.
- * @returns {Promise<Object>} On success, the returned Promise will resolve with the updated Sticker object.
+ * @returns {Promise<object>} On success, the returned Promise will resolve with the updated Sticker object.
  * @throws {TelegramApiError} If an error occurs while setting the sticker mask position.
  */
   async setStickerMaskPosition(options) {
@@ -2835,15 +2844,15 @@ class BaseClient extends Request {
   /**
  * Answer an inline query.
  * @async
- * @param {Object} options - The options for answering the inline query.
+ * @param {object} options - The options for answering the inline query.
  * @param {string} options.inlineQueryId - Identifier of the inline query.
- * @param {Array<Object>} options.results - An array of results for the inline query.
+ * @param {Array<object>} options.results - An array of results for the inline query.
  * @param {number} [options.cacheTime=300] - The maximum amount of time in seconds that the result of the inline query may be cached.
  * @param {boolean} [options.isPersonal=false] - Pass `true`, if the results of the inline query should be kept on the server side.
  * @param {string} [options.nextOffset=''] - The offset that a client should send in the next query with the same text to receive more results.
  * @param {string} [options.switchPmText] - If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter.
  * @param {string} [options.switchPmParameter] - The parameter for the start message sent to the bot when user presses the switch button.
- * @returns {Promise<Object>} - A Promise that resolves to the result of the request.
+ * @returns {Promise<object>} - A Promise that resolves to the result of the request.
  * @throws {TelegramApiError} - If the Telegram API returns an error.
  */
   async answerInlineQuery(options) {
@@ -2870,10 +2879,10 @@ class BaseClient extends Request {
    * Use this method to answer a callback query sent from a web app.
    * @async
    
-   * @param {Object} options - An object containing the parameters for the method.
+   * @param {object} options - An object containing the parameters for the method.
    * @param {string} options.queryId - Unique identifier for the query to be answered.
    * @param {any} options.inlineQueryResult - An array of results for the inline query.
-   * @returns {Promise<Object>} On success, the method returns the updated message object.
+   * @returns {Promise<object>} On success, the method returns the updated message object.
    * @throws {TelegramApiError} On error, an error object with an error code and description.
    */
   async answerWebAppQuery(options) {
@@ -2894,7 +2903,7 @@ class BaseClient extends Request {
  * Sends an invoice to the specified chat.
  * @async
   sendInvoice
- * @param {Object} options - Options for sending the invoice.
+ * @param {object} options - Options for sending the invoice.
  * @param {number} options.chatId - Unique identifier for the target chat.
  * @param {number} options.messageThreadId - Identifier of the message thread.
  * @param {string} options.title - Product name for the invoice.
@@ -2922,8 +2931,8 @@ class BaseClient extends Request {
  * @param {boolean} options.protectContent - Pass true if the invoice message content should be encrypted.
  * @param {number} options.replyToMessageId - Identifier of the message to reply to.
  * @param {boolean} options.allowSendingWithoutReply - Pass true if the message can be sent without a reply.
- * @param {Object} options.replyMarkup - Inline keyboard markup object.
- * @returns {Object} Result object containing information about the sent invoice.
+ * @param {object} options.replyMarkup - Inline keyboard markup object.
+ * @returns {object} Result object containing information about the sent invoice.
  * @throws {TelegramApiError} If there was an error sending the invoice.
  */
   async sendInvoice(options) {
@@ -2970,13 +2979,13 @@ class BaseClient extends Request {
  * Creates a payment invoice link for a Telegram bot user.
  * @async
  
- * @param {Object} options - The options for creating the payment link.
+ * @param {object} options - The options for creating the payment link.
  * @param {string} options.title - The title of the product or service being purchased.
  * @param {string} options.description - The description of the product or service being purchased.
  * @param {string} options.payload - A developer-defined payload, which will be included in the payment notification.
  * @param {string} options.providerToken - The authentication token provided by the payment provider.
  * @param {string} options.currency - The currency of the payment, in ISO 4217 format.
- * @param {Array<Object>} options.prices - An array of price components for the product or service being purchased.
+ * @param {Array<object>} options.prices - An array of price components for the product or service being purchased.
  * @param {number} options.maxTipAmount - The maximum tip amount allowed for the payment.
  * @param {Array<number>} options.suggestedTipAmounts - An array of suggested tip amounts for the payment.
  * @param {string} options.providerData - Additional data to pass to the payment provider, in JSON format.
@@ -2992,7 +3001,7 @@ class BaseClient extends Request {
  * @param {boolean} options.sendEmailToProvider - Whether to send the user's email address to the payment provider.
  * @param {boolean} options.isFlexible - Whether the final payment amount can be changed by the user.
  * @throws {TelegramApiError} If there was an error creating the invoice link.
- * @returns {Object} The response object, which contains the URL of the payment invoice link.
+ * @returns {object} The response object, which contains the URL of the payment invoice link.
  */
   async createInvoiceLink(options) {
     const method = 'createInvoiceLink';
@@ -3029,13 +3038,13 @@ class BaseClient extends Request {
   /**
  * Sends a shipping query answer to the user.
  * @async
- * @param {Object} options - The options object.
+ * @param {object} options - The options object.
  * @param {string} options.queryId - The ID of the shipping query.
  * @param {boolean} options.isDeliveryPossible - Specify true if delivery to the specified address is possible.
  * @param {Array} [options.shippingOptions] - List of available shipping options.
  * @param {string} [options.errorMessage] - Error message to display to the user if delivery to the specified address is not possible.
  * @throws {TelegramApiError} Throws an error if the response contains an error code.
- * @returns {Promise<Object>} Returns a Promise that resolves to the result object upon successful execution of the method.
+ * @returns {Promise<object>} Returns a Promise that resolves to the result object upon successful execution of the method.
  */
   async answerShippingQuery(options) {
     const method = 'answerShippingQuery';
@@ -3056,7 +3065,7 @@ class BaseClient extends Request {
   /**
    * Use this method to respond to such pre-checkout queries. On success, True is returned.
    *
-   * @param {Object} options - An object containing the response parameters.
+   * @param {object} options - An object containing the response parameters.
    * @param {string} options.preCheckoutQueryId - Unique identifier for the query to be answered.
    * @param {boolean} options.ok - Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. 
    * Specify False if there are any problems.
@@ -3083,15 +3092,15 @@ class BaseClient extends Request {
    * Set errors in user Passport and revoke the verification of the data.
    * 
    * @async
-   * @param {Object} options - The options to pass.
+   * @param {object} options - The options to pass.
    * @param {number} options.userId - Required. Unique identifier of the target user.
-   * @param {Array<Object>} options.errors - Required. An array describing the errors.
+   * @param {Array<object>} options.errors - Required. An array describing the errors.
    * @param {string} options.errors.source - Required. The section of the user's Telegram Passport which has the error, one of "utility_bill", "bank_statement", "rental_agreement", "passport_registration", "temporary_registration".
    * @param {string} options.errors.type - Required. Type of element of the Telegram Passport which has the error, one of "personal_details", "passport", "driver_license", "identity_card", "internal_passport", "address", "utility_bill", "bank_statement", "rental_agreement", "passport_registration", "temporary_registration".
    * @param {string} options.errors.message - Required. Error message.
    * 
    * @throws {TelegramApiError} If the response from the API contains an error code.
-   * @returns {Promise<Object>} On success, returns an object with the success status.
+   * @returns {Promise<object>} On success, returns an object with the success status.
    */
   async setPassportDataErrors(options) {
     const method = 'setPassportDataErrors';
@@ -3110,7 +3119,7 @@ class BaseClient extends Request {
   /**
  * Sends a game to the chat.
  * @async
- * @param {Object} options - Options for sending the game.
+ * @param {object} options - Options for sending the game.
  * @param {number} options.chatId - ID of the chat where the game should be sent.
  * @param {string} options.gameShortName - Short name of the game to be sent.
  * @param {boolean} [options.disableNotification=false] - Pass true to disable notification for the message.
@@ -3118,8 +3127,8 @@ class BaseClient extends Request {
  * @param {number} [options.messageThreadId] - Identifier of the message thread.
  * @param {number} [options.replyToMessageId] - Identifier of the message to reply to.
  * @param {boolean} [options.allowSendingWithoutReply=false] - Pass true to allow sending the message without a reply.
- * @param {Object} [options.replyMarkup] - Additional interface options for the message.
- * @returns {Promise<Object>} A Promise that resolves to the sent game object on success.
+ * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
+ * @returns {Promise<object>} A Promise that resolves to the sent game object on success.
  * @throws {TelegramApiError} If an error occurs while sending the game.
  */
   async sendGame(options) {
@@ -3146,11 +3155,11 @@ class BaseClient extends Request {
    * Delete a message on Telegram.
    *
    * @async
-   * @param {Object} options - Options object.
+   * @param {object} options - Options object.
    * @param {number} options.chatId - Chat ID where the message to be deleted is located.
    * @param {number} options.messageId - Message ID to be deleted.
    * @param {boolean} options.revoke - Pass true to delete the message for all chat members. Only used for channels.
-   * @return {Object} Returns a Promise which will resolve to a message object if the message was deleted successfully.
+   * @return {object} Returns a Promise which will resolve to a message object if the message was deleted successfully.
    * @throws {TelegramApiError} Throws an error if the API response contains an error_code.
    */
    async deleteMessage(options) {
@@ -3173,10 +3182,10 @@ class BaseClient extends Request {
   * Creates a new chat with the specified options.
   * @async
    createChat
-  * @param {Object} options - The options for creating the chat.
+  * @param {object} options - The options for creating the chat.
   * @param {string} options.type - The type of the chat to create ('private', 'group', or 'supergroup').
   * @param {string} options.title - The title of the chat.
-  * @returns {Promise<Object>} - Returns a Promise that resolves to an object representing the created chat.
+  * @returns {Promise<object>} - Returns a Promise that resolves to an object representing the created chat.
   * @throws {TelegramApiError} - Throws an error if the Telegram API returns an error.
   */
   async createChat(options) {

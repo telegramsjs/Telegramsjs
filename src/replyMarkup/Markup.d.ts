@@ -12,16 +12,16 @@ declare class Markup {
     static setRemove(remove?: boolean): string;
     /**
      * Creates a new Button object from a button object in the format expected by Telegram Bot API.
-     * @param {Object} buttonObj - Button object in the format expected by Telegram Bot API.
+     * @param {object} buttonObj - Button object in the format expected by Telegram Bot API.
      * @returns {Markup} Returns an instance of the Markup object.
      */
-    static fromJSON(buttonObj: any): Markup;
+    static fromJSON(buttonObj: object): Markup;
     /**
      * Returns the inline keyboard object in the format expected by Telegram Bot API.
      * @param {Array} buttons - A 2-dimensional array of Markup objects representing the buttons on the keyboard.
-     * @returns {Object} Returns the inline keyboard object in the format expected by Telegram Bot API.
+     * @returns {object} Returns the inline keyboard object in the format expected by Telegram Bot API.
      */
-    static inlineKeyboard(buttons: any[]): any;
+    static inlineKeyboard(buttons: any[]): object;
     /**
      * Generates a JSON string representing a reply markup object with an inline keyboard.
      * @param {Array} arrayMarkup - An array containing elements of the markup.
@@ -85,9 +85,9 @@ declare class Markup {
     setForceReply(forceReply: boolean): Markup;
     /**
      * Returns the button object in the format expected by Telegram Bot API.
-     * @returns {Object} Returns the button object in the format expected by Telegram Bot API.
+     * @returns {object} Returns the button object in the format expected by Telegram Bot API.
      */
-    toJSON(): any;
+    toJSON(): object;
     /**
      * Returns the text representation of the button object in the format expected by Telegram Bot API.
      * @returns {string} Returns the text representation of the button object in the format expected by Telegram Bot API.
