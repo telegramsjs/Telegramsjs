@@ -5,6 +5,8 @@ button.setText('Press me!');
 button.setAction('button_pressed');
 button.setType('callback_data');
 
+console.log(Button.inlineKeyboard([[button]]));
+
 console.log(button.toJSON()); // { text: 'Press me!', callback_data: 'button_pressed' }
 console.log(button.toString()); // '{"text":"Press me!","callback_data":"button_pressed"}'
 

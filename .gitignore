@@ -19,3 +19,9 @@ test/Input.js
 test/offset.js
 events/
 docs.md
+test.collection.js
+test.formatters.js
+test.telegram.js
+d.ts
+d.js
+test.util.js

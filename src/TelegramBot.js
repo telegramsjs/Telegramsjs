@@ -7,37 +7,80 @@ const ms = require('ms');
 /**
  * A class representing a Telegram Bot client.
  * @extends BaseClient
- * /
- * class TelegramBot extends BaseClient {
-/*
- * Creates a new TelegramBot client.
- * @param {string} token - The Telegram Bot API token.
- * @param {Object} [options] - The client options.
- * @param {Object} [options.intents] - The client intents.
-*/
+ */
 class TelegramBot extends BaseClient {
-  constructor(token, options) {
-    super(token, options?.intents, options?.parseMode, options?.chatId);
+  /**
+   * Creates a new TelegramBot client.
+   * @param {string} token - The Telegram Bot API token.
+   * @param {Object} [options] - The client options.
+   * @param {Object} [options.intents] - The client intents.
+   * @param {string} [options.parseMode] - The parse mode for message formatting.
+   * @param {string | number} [options.chatId] - The default chat ID for sending messages.
+   * @param {string} [options.queryString] - The default query string for API requests.
+   * @param {string | object} [options.offSetType] - The type of offset to use for updates.
+   */
+  constructor(token, options = {}) {
+    super(
+      token,
+      options.intents,
+      options.parseMode,
+      options.chatId,
+      options.queryString,
+      options.offSetType
+    );
     /**
      * The Telegram Bot API token.
      * @type {string}
      */
     this.token = token;
-    
     /**
      * The base URL for the Telegram Bot API.
      * @type {string}
      */
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
   }
+  
+  /**
+   * Registers a listener for the specified event.
+   * @param {string} eventName - The name of the event.
+   * @param {Function} listener - The listener function.
+   */
+  /**
+   * on(eventName, listener) {
+   * return this.on(eventName, listener);
+   * }
+   */
+  
 
   /**
+   * Removes the specified listener for the given event.
+   * @param {string} eventName - The name of the event.
+   * @param {Function} listener - The listener function to remove.
+   */
+  /**
+   * off(eventName, listener) {
+   * return this.off(eventName, listener);
+   * }
+   */ 
+   
+  /**
+   * Registers a one-time listener for the specified event.
+   * The listener is automatically removed after it's invoked.
+   * @param {string} eventName - The name of the event.
+   * @param {Function} listener - The listener function.
+   */
+   /**
+    * once(eventName, listener) {
+    * return this.once(eventName, listener);
+    * }
+    */
+    /**
    * The function that starts the whole process
   */
-  
   async login() {
   const client = await this.getMe();
-  const responseClient = {
+  
+  const responseClient = await {
     ...client,
     setCommands: this.setMyCommands.bind(this),
     getCommands: this.getMyCommands.bind(this),
@@ -48,21 +91,16 @@ class TelegramBot extends BaseClient {
     getShortDescription: this.getMyShortDescription.bind(this),
     getName: this.getMyName.bind(this),
     setName: this.setMyName.bind(this),
-    ...this
   };
-  this.emit('ready', responseClient);
-
+  
   let lastUpdateTimestamp = new Date();
+  this.emit('ready', responseClient);
   while (true) {
     const getUpdates = await this.getUpdates();
     for (const updates of getUpdates) {
-      const time = updates.message?.date ?? updates.callback_query?.message?.date;
-      const isMessage = !!updates.message;
-      const isCallbackQuery = !!updates.callback_query;
-      const updateTimestamp = new Date(time * 1000);
-      if ((updateTimestamp > lastUpdateTimestamp && isMessage) || isCallbackQuery) {
-        lastUpdateTimestamp = updateTimestamp;
-        
+      const responseLastTime = this.lastTimeMap?.get('lastTime');
+      const readyLastTime = this.lastTimeMap?.get('readyLast');
+      if (responseLastTime) {
         const leave = (chat_id) => {
           let chatId;
           
@@ -200,7 +238,7 @@ class TelegramBot extends BaseClient {
             } else {
               chatId = options?.chatId || defaults.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
               messageId = options?.messageId || defaults?.messageId || updates?.message?.message_id || updates?.channel_post?.message_id;
-              }
+            }
               
               return this.sendMessage({
                 text: text,
@@ -214,6 +252,24 @@ class TelegramBot extends BaseClient {
                 threadId: options.threadId ?? defaults.threadId,
                 parseMode: options.parseMode ?? defaults.parseMode
               });
+        }
+        
+        const typing = (typing, options) => {
+          let chatId;
+          if (updates?.callback_query) {
+            chatId = options?.chatId || updates?.callback_query?.message?.chat?.id || updates?.callback_query?.channel_post?.chat?.id;
+          } else if (updates?.edited_message) {
+            chatId = options?.chatId || updates?.edited_message?.chat?.id;
+          } else if (updates?.edited_channel_post) {
+            chatId = options?.chatId || updates?.edited_channel_post?.chat?.id;
+            } else {
+              chatId = options?.chatId || updates?.message?.chat?.id || updates?.channel_post?.chat?.id;
+            }
+            
+            return this.sendChatAction({
+              chatId,
+              action: typing ? options.typing : 'typing'
+            });
         }
 
         
@@ -368,1897 +424,100 @@ class TelegramBot extends BaseClient {
           await this.answerCallbackQuery({
             callbackQueryId: queryId ?? id
           }).catch(err => console.log)
-        }
-        
-        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup') {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('groupMessageCreate', message);
-        }
-
-        if (updates?.edited_message?.chat?.type === 'private') {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('privateMessageUpdate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private') {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('privateMessageCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup' && updates?.message?.video_chat_participants_invited) {
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isPhoto,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('groupBroadcastInvited', message);
-          
-        }
-
-
-
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups') {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('groupMessageUpdate', message);
-        }
-
-        /*if (updates?.delete_message?.chat?.type === 'private') {
-          
-          const message = Object.assign({}, updates.delete_message, { send, deleted, update, reply });
-          this.emit('privateMessageDelete', message);
-        }*/
-
-        /*if (updates?.delete_message?.chat?.type === 'group' || updates?.delete_message?.chat?.type === 'supergroup') {
-          
-          const message = Object.assign({}, updates.delete_message, { send, deleted, update, reply });
-          this.emit('groupMessageDelete', message);
-        }*/
-
-        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups') {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message.pinned_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupMessagePinned', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.pinned_message) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message.pinned_message,
-            client: responseClient,
-            chat: chat,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateMessagePinned', message);
-        }
-
-        if (updates?.pinned_message?.chat?.type === 'channel') {
-          
-          const chat = Object.assign({}, updates.pinned_message.chat, { send, leave });
-          const message = {
-            ...updates.pinned_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelMessagePinned', message);
-        }
-        
-        /*if (updates?.delete_chat_message?.chat?.type === 'channel') {
-          
-          const message = Object.assign({}, updates.delete_chat_message, { send, deleted, update, reply });
-          this.emit('channelMessageDelete', message);
-        }*/
-        
-        if (updates?.edited_channel_post?.chat?.type === 'channel') {
-          
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
-          const message = {
-            ...updates.edited_channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelMessageUpdate', message);
-        }
-
-        if (updates?.channel_post?.chat?.type === 'channel') {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelMessageCreate', message);
-        }
-        
-        if (updates.callback_query) {
-          const chat = Object.assign({}, updates.callback_query.chat, { send, leave });
-
-          const interaction = {
-            ...updates.callback_query,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            deferUpdate,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-        this.emit('interactionCreate', interaction);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups') {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            client: responseClient,
-            chat: chat,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          this.emit('generalMessageCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.photo) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privatePhotoCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.sticker) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('privateStickerCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.voice) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateVoiceCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.video_note) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-  
-          this.emit('privateVideoNoteCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.audio) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('privateAudioCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.document) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateDocumentCreate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.photo) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privatePhotoUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.sticker) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateStickerUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.voice) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateVoiceUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.video_note) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateVideoNoteUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.audio) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('privateAudioUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'private' && updates?.edited_message?.document) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('privateDocumentUpdate', message);
-        }
-
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.photo) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupPhotoCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups'&& updates?.message?.sticker) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupStickerCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.voice) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupVoiceCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.video_note) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupVideoNoteCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.audio) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupAudioCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.document) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('groupDocumentCreate', message);
-        }
-        
-
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.photo) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupPhotoUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.sticker) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupStickerUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.voice) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupVoiceUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.video_note) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupVideoNoteUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.audio) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupAudioUpdate', message);
-        }
-        
-        if (updates?.edited_message?.chat?.type === 'group' || updates?.edited_message?.chat?.type === 'supergroup'|| updates?.edited_message?.chat?.type === 'supergroups' && updates?.edited_message?.document) {
-          
-          const chat = Object.assign({}, updates.edited_message.chat, { send, leave });
-          const message = {
-            ...updates.edited_message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupDocumentUpdate', message);
-        }
-        
-        if (updates?.my_chat_member?.chat?.type === 'channel' && (updates?.my_chat_member?.old_chat_member && updates?.my_chat_member?.new_chat_member)) {
-          
-          const chat = Object.assign({}, updates.my_chat_member.chat, { send, leave });
-          const message = {
-            ...updates.my_chat_member,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelPermsUpdate', message);
-        }
-        
-        if (updates?.my_chat_member?.chat?.type === 'supergroup' || updates?.my_chat_member?.chat?.type === 'supergroups' && (updates?.my_chat_member?.old_chat_member && updates?.my_chat_member?.new_chat_member)) {
-          
-          const chat = Object.assign({}, updates.my_chat_member.chat, { send, leave });
-          const message = {
-            ...updates.my_chat_member,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupPermsUpdate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.new_chat_members) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupMemberAdd', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.left_chat_participant) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupMemberLeft', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && (updates?.channel_post?.new_chat_title)) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelNameUpdate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && (updates?.channel_post?.new_chat_photo)) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelAvatarUpdate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.forum_topic_created) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupForumCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.reply_to_message?.forum_topic_created) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupForumMessageCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.forum_topic_closed) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupForumClose', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.forum_topic_reopened) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupForumReopened', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.video_chat_started) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupBroadcastStart', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.video_chat_ended) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupBroadcastEnd', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && updates?.message?.voice_chat_scheduled) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupBroadcastScheduled', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && (updates?.message?.new_chat_title)) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupNameUpdate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'supergroup' || updates?.message?.chat?.type === 'supergroups' && (updates?.message?.new_chat_photo)) {
-          
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupAvatarUpdate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.video_chat_started) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelBroadcastStart', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.video_chat_ended) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelBroadcastEnd', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.voice_chat_scheduled) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('channelBroadcastScheduled', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.message?.photo) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelPhotoCreate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.sticker) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelStickerCreate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.voice) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelVoiceCreate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.video_note) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelVideoNoteCreate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.audio) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelAudioCreate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.document) {
-          
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelDocumentCreate', message);
-        }
-        
-        if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.photo) {
-          
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
-          const message = {
-            ...updates.edited_channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelPhotoUpdate', message);
-        }
-        
-        if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.sticker) {
-          
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
-          const message = {
-            ...updates.edited_channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelStickerUpdate', message);
-        }
-        
-        if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.voice) {
-          
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
-          const message = {
-            ...updates.edited_channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelVoiceUpdate', message);
-        }
-        
-        if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.video_note) {
-          
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
-          const message = {
-            ...updates.edited_channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelVideoNoteUpdate', message);
-        }
-        
-        if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.audio) {
-          
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
-          const message = {
-            ...updates.edited_channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelAudioUpdate', message);
-        }
-        
-        if (updates?.edited_channel_post?.chat?.type === 'channel' && updates?.edited_channel_post?.document) {
-          
-          const chat = Object.assign({}, updates.edited_channel_post.chat, { send, leave });
-          const message = {
-            ...updates.edited_channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('channelDocumentUpdate', message);
-        }
-        
-        
-      if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.concat) {
-
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelConcatCreate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.poll) {
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelPollCreate', message);
-        }
-        
-        if (updates?.channel_post?.chat?.type === 'channel' && updates?.channel_post?.location) {
-          const chat = Object.assign({}, updates.channel_post.chat, { send, leave });
-          const message = {
-            ...updates.channel_post,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('channelLocationCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.concat) {
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateConcatCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.poll) {
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('privatePollCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'private' && updates?.message?.location) {
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('privateLocationCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.concat) {
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupConcatCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.poll) {
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-
-          this.emit('groupPollCreate', message);
-        }
-        
-        if (updates?.message?.chat?.type === 'group' || updates?.message?.chat?.type === 'supergroup'|| updates?.message?.chat?.type === 'supergroups' && updates?.message?.location) {
-          const chat = Object.assign({}, updates.message.chat, { send, leave });
-          const message = {
-            ...updates.message,
-            chat: chat,
-            client: responseClient,
-            deleted,
-            update,
-            reply,
-            isCommand,
-            isLocation,
-            isPoll,
-            isContact,
-            isSticker,
-            isVoice,
-            isVideoNote,
-            isAudio,
-            isDocument,
-            isPhoto
-          };
-          
-          this.emit('groupLocationCreate', message);
-        }
+        };
+        
+        const processUpdate = (updates) => {
+          const messageTypeMap = {
+            message: {
+              event: 'message',
+              textEvent: 'text'
+              },
+              edited_message: {
+                event: 'edited_message',
+                textEvent: 'edited_message_text',
+                captionEvent: 'edited_message_caption',
+              },
+              channel_post: {
+                event: 'channel_post'
+                },
+                edited_channel_post: {
+                  event: 'edited_channel_post',
+                  textEvent: 'edited_channel_post_text',
+                  captionEvent: 'edited_channel_post_caption',
+                  },
+                  inline_query: {
+                    event: 'inline_query',
+                  },
+                  chosen_inline_result: {
+                    event: 'chosen_inline_result',
+                  },
+                  callback_query: {
+                    event: 'callback_query',
+                  },
+                  shipping_query: {
+                    event: 'shipping_query',
+                  },
+                  pre_checkout_query: {
+                    event: 'pre_checkout_query',
+                  },
+                  poll: {
+                    event: 'poll',
+                  },
+                  poll_answer: {
+                    event: 'poll_answer'
+                  },
+                  chat_member: {
+                    event: 'chat_member',
+                  },
+                  my_chat_member: {
+                    event: 'my_chat_member',
+                  },
+                  chat_join_request: {
+                    event: 'chat_join_request',
+                  },
+          };
+          
+          for (const [type, options] of Object.entries(messageTypeMap)) {
+            const updateProperty = updates[type];
+            if (updateProperty) {
+              const chat = Object.assign({}, updateProperty.chat, { send, leave, typing });
+              const message = {
+                ...updateProperty,
+                chat,
+                client: responseClient,
+                deleted,
+                update,
+                reply,
+                isCommand,
+                isLocation,
+                isPoll,
+                isContact,
+                isSticker,
+                isVoice,
+                isVideoNote,
+                isAudio,
+                isDocument,
+                isPhoto,
+                update,
+                deleted,
+                deferUpdate: type === 'callback_query' ? deferUpdate : null
+              };
+              this.emit(options.event, message);
+              if (options.textEvent && updateProperty.text) {
+                this.emit(options.textEvent, message);
+              }
+              if (options.captionEvent && updateProperty.caption) {
+                this.emit(options.captionEvent, message);
+              }
+              if (type === 'message' && updateProperty.reply_to_message) {
+                this.emit('reply_message', message);
+              }
+              break;
+            }
+          }
+        }
+
+        processUpdate(updates);
       }
     }
   }

@@ -20,41 +20,62 @@ npm install telegramsjs
 First, you need to create a new instance of the TelegramBot class by providing your Telegram bot token:
 
 ```javascript
-const { TelegramBot } = require("telegramsjs");
+const { TelegramBot, IntentsBitField, IntentBits, Events } = require("telegramsjs");
+const intents = new IntentsBitField()
+  .add(
+  IntentBits.Message,
+  IntentBits.EditedMessage,
+  IntentBits.EditedChannelPost,
+  IntentBits.ChannelPost,
+  IntentBits.InlineQuery,
+  IntentBits.ChosenInlineResult,
+  IntentBits.CallbackQuery,
+  IntentBits.ShippingQuery,
+  IntentBits.PreCheckoutQuery,
+  IntentBits.Poll,
+  IntentBits.PollAnswer, 
+  IntentBits.MyChatMember, 
+  IntentBits.ChatMember
+  );
 
 const bot = new TelegramBot('TELEGRAM_BOT_TOKEN', {
-  intents: [] // not necessary
+  intents: intents.toArray()
 });
 ```
-The intents option is an array of Telegram bot API <a href="https://core.telegram.org/bots/api#getupdates">Update types</a>, that the bot should receive.
 
-After creating the bot instance, you can listen to events using the on method. The on method takes two arguments: the event name and the callback function.
+The intents option is an array of Telegram bot API [Update types](https://core.telegram.org/bots/api#getupdates), that the bot should receive.
+
+After creating the bot instance, you can listen to events using the `on` method. The `on` method takes two arguments: the event name and the callback function.
 
 ```javascript
 bot.on('eventName', (arg1, arg2, ...) => {
   // your code here
 });
 ```
+
 The library provides several events that you can listen to, including:
 
-- `generalMessageCreate`: Fires when a message global (private, supergroup) is created in a chat.
 - `ready`: Fires when the bot is ready to start.
+- `message`: Fires when a new message is received.
+- `callback_query`: Fires when a callback query is received.
 
-Here's an example of how to listen to the `generalMessageCreate` event:
+Here's an example of how to listen to the `message` event:
 
 ```javascript
-bot.on('generalMessageCreate', async (message) => {
+bot.on('message', (message) => {
   // your code here
 });
 ```
 
-To handle commands, you can use the commands property, which is a Collection object that stores the commands and their corresponding code.
+To handle commands, you can use the `commands` property, which is a Collection object that stores the commands and their corresponding code.
 
 ```javascript
+const { Collection } = require("telegramsjs");
+
 bot.commands = new Collection();
 ```
 
-You can add commands to the commands collection using the set method.
+You can add commands to the `commands` collection using the `set` method.
 
 ```javascript
 bot.commands.set('/help', {
@@ -62,16 +83,20 @@ bot.commands.set('/help', {
   code: (bot, message) => {
     message.chat.send({
       text: 'Here are some helpful tips...'
-    }); // or: message.chat.send('Here are some helpful tips...')
+    });
   }
 });
 ```
-The code property is a callback function that is called when the command is executed.
+
+The `code` property is a callback function that is called when the command is executed.
 
 To handle multiple commands, you can create a separate file for each command and load them using a loader function.
 
 ```javascript
-async function loaderTextCmd(dir) {
+async function loadCommands(dir) {
+  const fs = require('fs');
+  const path = require('path');
+
   const readDirRecursive = async (directory) => {
     const files = await fs.readdirSync(directory);
     for (const file of files) {
@@ -84,28 +109,30 @@ async function loaderTextCmd(dir) {
       }
     }
   }
+  
   await readDirRecursive(path.join(process.cwd(), dir));
 }
 
-loaderTextCmd('./commands/');
+loadCommands('./commands/');
 ```
-The loader function reads all the files in the `./commands/` directory and adds each command to the commands collection.
 
-Now we create any file with the `.js` extension, and write there:
+The loader function reads all the files in the `./commands/` directory and adds each command to the `commands` collection.
 
-```js
+Now you can create a file with the `.js` extension for each command:
+
+```javascript
 module.exports = {
   command: '/start',
-  description: 'Startin command',
+  description: 'Start command',
   code: (bot, message) => {
     message.chat.send({
-      text: `Starting...`
-    }) // or: message.chat.send('Starting...')
+      text: 'Starting...'
+    });
   }
-}
+};
 ```
 
-You can set the bot's description and commands using the `setMyDescription` and `setMyCommands` methods respectively.
+You can set the bot's description and commands using the `setMyDescription` and `setCommands` methods respectively.
 
 ```javascript
 bot.once('ready', async (client) => {
@@ -119,19 +146,19 @@ bot.once('ready', async (client) => {
 });
 ```
 
-The `bot.setMyDescription` and `client.setDescription` method sets the bot's description, while the `bot.setMyCommands` and `client.setCommands` method sets the bot's commands.
+The `setMyDescription` and `setDescription` methods set the bot's description, while the `setMyCommands` and `setCommands` methods set the bot's commands.
 
 ## 🎃 Conclusion
 `Telegramsjs` provides a simple and flexible way to create Telegram bots using Node.js. With its easy-to-use syntax and event-driven architecture, it is a great choice for developers who want to build bots quickly and efficiently.
 
 ## 📖 Documentation
-<a href="https://github.com/Sempai-07/Telegramsjs/tree/main/docs">Telegramsjs</a>
+[Telegramsjs Documentation](https://github.com/Sempai-07/Telegramsjs/tree/main/docs)
 
 ## 🎒 Contributions
-We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the <a href="https://discord.gg/j8G7jhHMbs">Official support server</a> or the <a href="https://t.me/sempaika_telegrams_js">Official Telegram channel</a>.
+We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the [Official support server](https://discord.gg/j8G7jhHMbs) or the [Official Telegram channel](https://t.me/sempaika_telegrams_js).
 
 ## 📒 Example 
-To see the correct use of the library, see the page on github 
+To see the correct use of the library, see the page on GitHub.
 
 ## 🧾 License
-`Telegramsjs` is available under the `MIT` license. For more information, please refer to the <a href="https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE">LICENSE</a> file.
+`Telegramsjs` is available under the `MIT` license. For more information, please refer to the [LICENSE](https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE) file.

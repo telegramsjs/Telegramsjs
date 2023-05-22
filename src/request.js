@@ -1,10 +1,11 @@
+const ms = require('ms');
 const https = require('https');
 const querystring = require('querystring');
 const { TelegramApiError, TelegramTokenError, IntentsError } = require("./errorcollection.js");
-const { EventEmitter } = require('events')
-const ms = require('ms');
+const { EventEmitter } = require('events');
 const { decodeIntents, IntentsBitField } = require("./IntentsBitField.js");
-
+const { LocalSession } = require("./LocalSession");
+const lastTimeMap = new LocalSession();
 /**
  * Represents a request to the Telegram Bot API.
  * @class
@@ -12,12 +13,27 @@ const { decodeIntents, IntentsBitField } = require("./IntentsBitField.js");
  * @param {Array.<string>} intents - The types of updates the bot is interested in.
  */
 class Request extends EventEmitter {
-  constructor(token, intents) {
+  constructor(token, intents, queryString, offSetType) {
     super();
     this.token = token;
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
-    this.startTime = Date.now();
     this.offset = 0;
+    this.queryString = queryString ?? 'application/x-www-form-urlencoded';
+    this.offSetType = offSetType ?? 'default';
+    if (this.offSetType == 'default')
+    this.lastTimeMap = lastTimeMap;
+    else if (this.offSetType instanceof Map)
+    this.lastTimeMap = this.offSetType;
+    else if (this.offSetType === false) {
+      lastTimeMap.set('lastTime', true);
+      this.lastTimeMap = lastTimeMap;
+    }
+    else
+    throw new Error('This class must inherit Map');
+    
+    setTimeout(function() {
+      lastTimeMap.set('lastTime', true);
+     }, 3000);
     if (typeof intents?.bits === 'number')
       this.intents = decodeIntents(intents);
      else if (typeof intents === 'object' && (typeof intents?.[0] === 'string' || typeof intents?.[0]?.[0] === 'string'))
@@ -37,7 +53,8 @@ class Request extends EventEmitter {
    */
   
   async getUpdates() {
-    const params = {
+    this.startTime = await Date.now();
+    const params = await {
       offset: this.offset,
       allowed_updates: this.intents
     };
@@ -69,7 +86,7 @@ class Request extends EventEmitter {
       const options = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': this.queryString,
           'Content-Length': data.length
         }
       };
