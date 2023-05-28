@@ -4,9 +4,12 @@ const querystring = require('querystring');
 const { TelegramApiError, TelegramTokenError, IntentsError } = require("./errorcollection.js");
 const { EventEmitter } = require('events');
 const { decodeIntents, IntentsBitField } = require("./IntentsBitField.js");
-const { LocalSession } = require("./LocalSession");
-const lastTimeMap = new LocalSession();
-
+const CashSession = require("./session/CashSession.js");
+const lastTimeMap = new CashSession();
+/**
+ * Represents a request object for making requests to the Telegram Bot API.
+ * @extends EventEmitter
+ */
 class Request extends EventEmitter {
   /**
    * Constructs a new Request object.
@@ -21,31 +24,37 @@ class Request extends EventEmitter {
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
     this.offset = 0;
     this.queryString = queryString ?? 'application/x-www-form-urlencoded';
-    this.offSetType = offSetType ?? 'default';
-    if (this.offSetType == 'default')
-    this.lastTimeMap = lastTimeMap;
+    this.offSetType = offSetType ?? 'time';
+    if (this.offSetType == 'time') {
+      this.lastTimeMap = lastTimeMap;
+    }
     else if (this.offSetType instanceof Map)
-    this.lastTimeMap = this.offSetType;
+      this.lastTimeMap = this.offSetType;
     else if (this.offSetType === false) {
       lastTimeMap.set('lastTime', true);
       this.lastTimeMap = lastTimeMap;
     }
-    else
-    throw new Error('This class must inherit Map');
-    
+    else if (this.offSetType === 'auto') {
+      lastTimeMap.set('lastTime', 'auto')
+      this.lastTimeMap = lastTimeMap;
+    }
+      
+    if ((this.offSetType === false || this.offSetType === 'time'))
     setTimeout(function() {
       lastTimeMap.set('lastTime', true);
-     }, 3000);
+    }, 3000);
+
     if (typeof intents?.bits === 'number')
       this.intents = decodeIntents(intents);
-     else if (typeof intents === 'object' && (typeof intents?.[0] === 'string' || typeof intents?.[0]?.[0] === 'string'))
-     this.intents = intents;
-     else if (typeof intents === 'object') {
-       this.intents = decodeIntents(new IntentsBitField(intents?.[0]))
-     } else if (typeof intents === 'number') {
-       this.intents = decodeIntents(new IntentsBitField(intents))
-     }
+    else if (typeof intents === 'object' && (typeof intents?.[0] === 'string' || typeof intents?.[0]?.[0] === 'string'))
+      this.intents = intents;
+    else if (typeof intents === 'object') {
+      this.intents = decodeIntents(new IntentsBitField(intents?.[0]));
+    } else if (typeof intents === 'number') {
+      this.intents = decodeIntents(new IntentsBitField(intents));
+    }
   }
+
   /**
    * Gets the updates from the Telegram Bot API.
    * @async
@@ -53,7 +62,6 @@ class Request extends EventEmitter {
    * @throws {TelegramTokenError} When the token is invalid.
    * @throws {TelegramApiError} When an error occurs with the Telegram Bot API.
    */
-  
   async getUpdates() {
     this.startTime = await Date.now();
     const params = await {
@@ -63,16 +71,19 @@ class Request extends EventEmitter {
     const response = await this.request('getUpdates', params);
     const updates = response.result;
     if (Array.isArray(updates) && updates.length > 0) {
+      this.update_id = updates[0].update_id + 1;
+      this.last_object = updates[0];
       this.offset = updates[updates.length - 1].update_id + 1;
     }
     if (response?.error_code === 401) {
-      throw new TelegramTokenError('Invalid token of telegrams bot')
+      throw new TelegramTokenError('Invalid token of telegrams bot');
     } else if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
-    
+
     return updates ?? [];
   }
+
   /**
    * Makes a request to the Telegram Bot API.
    * @async
@@ -117,12 +128,21 @@ class Request extends EventEmitter {
       req.end();
     });
   }
-  
+
+  /**
+   * Gets the uptime of the bot.
+   * @returns {number} The uptime in milliseconds.
+   */
   get uptime() {
-    const uptime = Date.now() - this.startTime
+    const uptime = Date.now() - this.startTime;
     return +uptime;
   }
-  
+
+  /**
+   * Gets the ping latency of the bot.
+   * @async
+   * @returns {Promise.<number>} The ping latency in milliseconds.
+   */
   get ping() {
     return (async () => {
       const startTime = Date.now();
@@ -133,6 +153,21 @@ class Request extends EventEmitter {
     })();
   }
 
+  /**
+   * Gets the last update ID received.
+   * @returns {number|null} The last update ID, or null if not available.
+   */
+  get updateId() {
+    return this.update_id ?? null;
+  }
+
+  /**
+   * Gets the last object received.
+   * @returns {object} The last received object.
+   */
+  get lastObject() {
+    return this.last_object;
+  }
 }
 
 module.exports = Request;

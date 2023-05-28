@@ -34,4 +34,6 @@ declare class Request {
     request(method: string, params: any): Promise<object>;
     get uptime(): number;
     get ping(): Promise<number>;
+    get updateId(): number;
+    get lastObject(): object;
 }

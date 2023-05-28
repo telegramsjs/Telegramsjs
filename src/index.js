@@ -1,5 +1,9 @@
 exports.TelegramBot = require("./TelegramBot");
 exports.BaseClient = require("./BaseClient");
+exports.SimpleStorage = require("./session/SimpleStorage");
+exports.CashSession = require("./session/CashSession.js");
+exports.SessionTypes = require("./session/SessionTypes");
+console.log(exports);
 exports.Request = require("./request");
 exports.Collection = require('@telegram.ts/collection');
 exports.Markup = require("./replyMarkup/Markup");

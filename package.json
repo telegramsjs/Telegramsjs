@@ -1,7 +1,7 @@
 {
   "name": "telegramsjs",
   "description": "Telegramsjs is a lightweight Node.js library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as Telegraf.js or node-telegram-bot-api. The library has a syntax that is similar to Discord.js. This library provides a way to create Telegram bots with ease and flexibility.",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "main": "./src/index.js",
   "types": [
     "src/constanta/ChatActionType.d.ts",
@@ -23,7 +23,10 @@
     "src/LocalSession.d.ts",
     "src/request.d.ts",
     "src/TelegramBot.d.ts",
-    "src/Util.d.ts"
+    "src/Util.d.ts",
+    "src/session/CashSession.d.ts",
+    "src/session/SessionTypes.d.ts",
+    "src/session/SimpleStorage.d.ts"
   ],
   "license": "MIT",
   "files": [
@@ -34,6 +37,23 @@
     "README.md",
     "LICENSE"
   ],
+  "exports": {
+    ".": [
+      {
+        "default": "./src/index.js",
+        "types": "./src/index.d.ts"
+      },
+      "./src/index.js"
+    ],
+    "./session": [
+      {
+        "default": "./src/session/index.js",
+        "types": "./src/session/index.d.ts"
+      },
+      "./src/session/index.js"
+    ],
+    "./package.json": "./package.json"
+  },
   "keywords": [
     "javascript",
     "telegram",
@@ -43,8 +63,9 @@
     "ts"
   ],
   "dependencies": {
-    "@telegram.ts/collection": "^0.3.2",
-    "@telegram.ts/formatters": "^0.3.0",
+    "@telegram.ts/collection": "^0.4.0",
+    "@telegram.ts/documentation": "^0.1.0",
+    "@telegram.ts/formatters": "^0.3.5",
     "ms": "^2.1.3"
   },
   "repository": {

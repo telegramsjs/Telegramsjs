@@ -87,11 +87,41 @@ class ParameterError extends Error {
   }
 }
 
+/**
+ * Custom error class for a collection of errors
+ * @extends Error
+ */
+class ErrorTable extends Error {
+  /**
+   * Creates a new instance of the ErrorTable class
+   * @param {string} error - The error message
+   */
+  constructor(error) {
+    super(error);
+  }
+}
+
+/**
+ * Custom error class for a collection of errors
+ * @extends Error
+ */
+class ErrorExtension extends Error {
+  /**
+   * Creates a new instance of the ErrorExtension class
+   * @param {string} error - The error message
+   */
+  constructor(error) {
+    super(error);
+  }
+}
+
 module.exports = {
   TelegramApiError,
   EventError,
   TelegramTokenError,
   IntentsError,
   BitFieldError,
-  ParameterError
+  ParameterError,
+  ErrorTable,
+  ErrorExtension
 }

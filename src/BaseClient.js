@@ -114,18 +114,18 @@ class BaseClient extends Request {
  * Sends a photo to the chat.
  * @async
  * @param {object} options - The options object.
- * @param {number} options.chatId - The ID of the chat where the photo will be sent.
- * @param {number} options.threadId - The ID of the thread message.
+ * @param {number} options.chatId=this.chatId - The ID of the chat where the photo will be sent.
+ * @param {number} [options.threadId] - The ID of the thread message.
  * @param {any} options.photo - The photo to be sent. Can be a string URL or Buffer.
  * @param {string} options.caption - The photo caption.
- * @param {string} options.parseMode - The parse mode of the caption. Can be "MarkdownV2" or "HTML".
+ * @param {string} [options.parseMode] - The parse mode of the caption. Can be "MarkdownV2" or "HTML".
  * @param {Array<object>} options.captionEntities - The special entities of the caption.
- * @param {boolean} options.hasSpoiler - If the photo should be marked as a spoiler.
- * @param {boolean} options.notification - If notifications should be disabled for the message.
- * @param {boolean} options.content - If the message should be protected by the "new forwarded messages privacy mode".
- * @param {number} options.replyToMessageId - The ID of the message being replied to.
- * @param {boolean} options.allowReply - If the message can be sent without a reply to another message.
- * @param {object} options.replyMarkup - The reply markup object.
+ * @param {boolean} [options.hasSpoiler] - If the photo should be marked as a spoiler.
+ * @param {boolean} [options.notification] - If notifications should be disabled for the message.
+ * @param {boolean} [options.content] - If the message should be protected by the "new forwarded messages privacy mode".
+ * @param {number} [options.replyToMessageId] - The ID of the message being replied to.
+ * @param {boolean} [options.allowReply] - If the message can be sent without a reply to another message.
+ * @param {object} [options.replyMarkup] - The reply markup object.
  * @returns {Promise<object>} - The sent photo object.
  * @throws {TelegramApiError} - If an error occurs while sending the photo.
  */
@@ -440,7 +440,7 @@ class BaseClient extends Request {
  * Sends a media group to the specified chat.
  * @async
  * @param {object} options - An object containing the options for the media group.
- * @param {number} options.chatId - The ID of the chat to send the media group to.
+ * @param {number} options.chatId=this.chatId - The ID of the chat to send the media group to.
  * @param {boolean} [options.notification=false] - Pass true to disable notification for the message.
  * @param {boolean} [options.content=false] - Pass true to protect the content of the media group from being forwarded.
  * @param {number} [options.threadId] - Send message as a reply to a message thread.
@@ -586,7 +586,7 @@ class BaseClient extends Request {
  *
  * @async
  * @param {object} options - The options to use for forwarding the message.
- * @param {number} options.chatId - The chat ID of the recipient chat. Required if `this.chatId` is not set.
+ * @param {number} options.chatId=this.chatId - The chat ID of the recipient chat. Required if `this.chatId` is not set.
  * @param {number} options.fromChatId - The chat ID of the chat where the message to forward is located.
  * @param {number} options.messageId - The message ID of the message to forward.
  * @param {number} options.threadId - The ID of the message thread. Optional.
@@ -663,7 +663,7 @@ class BaseClient extends Request {
  *
  * @async
  * @param {object} options - Options for sending the contact.
- * @param {number} options.chatId - ID of the chat where the contact should be sent.
+ * @param {number} options.chatId=this.chatId - ID of the chat where the contact should be sent.
  * @param {string} options.phoneNumber - Phone number of the contact.
  * @param {string} options.firstName - First name of the contact.
  * @param {string} [options.lastName] - Last name of the contact.
@@ -798,7 +798,7 @@ class BaseClient extends Request {
  * Sends a chat action to indicate the bot is performing an action (typing, uploading a photo etc.) to the user.
  * @async
  * @param {object} options - The options object for sending the chat action.
- * @param {string} options.chatId - The chat ID to send the chat action to. If `this.chatId` is set, it will be used by default.
+ * @param {string} [options.chatId=this.chatId] - The chat ID to send the chat action to. If `this.chatId` is set, it will be used by default.
  * @param {string} options.action - The type of action to send to the user (typing, upload_photo, record_video, upload_video, record_audio, upload_audio, upload_document, find_location, record_video_note, upload_video_note).
  * @param {string} options.threadId - Unique identifier for the target chat message thread.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error code.
@@ -891,7 +891,7 @@ class BaseClient extends Request {
  * Ban a chat member in the Telegram chat.
  * @async
  * @param {object} options - The options for banning a chat member.
- * @param {string} options.chatId - The ID of the chat where the user is to be banned.
+ * @param {string} [options.chatId=this.chatId] - The ID of the chat where the user is to be banned.
  * @param {number} options.userId - The ID of the user to be banned.
  * @param {number} options.untilDate - Date when the user will be unbanned, unix time.
  * @param {boolean} options.revokeMessages - Pass True to delete all messages from the chat for the user that is being removed.
@@ -947,8 +947,8 @@ class BaseClient extends Request {
  * @param {object} options - The options to restrict the chat member.
  * @param {number} options.userId - The ID of the chat member to restrict.
  * @param {object} options.permissions - The new permissions to restrict the chat member to.
- * @param {boolean} options.useIndependentChatPermissions - Pass true to use the chat member's own permissions instead of the default permissions.
- * @param {number} options.untilDate - The date when the restrictions will be lifted.
+ * @param {boolean} [options.useIndependentChatPermissions] - Pass true to use the chat member's own permissions instead of the default permissions.
+ * @param {number} [options.untilDate] - The date when the restrictions will be lifted.
  * @returns {Promise<object>} The updated ChatMember object.
  * @throws {TelegramApiError} Throws an error if the API response contains an error.
  */
@@ -1048,7 +1048,7 @@ class BaseClient extends Request {
  * @async
  
  * @param {object} options - The options to use for banning the user.
- * @param {string} options.chatId - The ID of the chat where the user is banned.
+ * @param {string} [options.chatId=this.chatId] - The ID of the chat where the user is banned.
  * @param {number} options.senderChatId - The ID of the user to be banned.
  * @throws {TelegramApiError} If an error occurs while banning the user.
  * @returns {Promise<object>} The result of the request.
@@ -1277,7 +1277,7 @@ class BaseClient extends Request {
  * @async
  
  * @param {object} options - Options for setting the chat photo.
- * @param {number} options.chatId - Required if `this.chatId` is not set. Unique identifier for the target chat.
+ * @param {number} options.chatId=this.chatId - Required if `this.chatId` is not set. Unique identifier for the target chat.
  * @param {string} options.photo - The photo to set as the chat's new profile photo.
  * @throws {TelegramApiError} If the request to the Telegram API fails or if the response contains an error code.
  * @returns {Promise<object>} On success, the method returns True.
@@ -1299,7 +1299,7 @@ class BaseClient extends Request {
   /**
    * Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns True on success.
    * @param {string} options - Optional parameters.
-   * @param {number} chatId - Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
+   * @param {number} chatId=this.chatId - Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
    * @throws {TelegramApiError} If an error is encountered while processing the request.
    * @returns {Promise<boolean>} On success, returns True.
    */ 
@@ -1321,7 +1321,7 @@ class BaseClient extends Request {
  * @async
  
  * @param {object} options - The options to set a new chat title.
- * @param {string} options.chatId - Unique identifier for the target chat or username of the target channel.
+ * @param {string} [options.chatId=this.chatId] - Unique identifier for the target chat or username of the target channel.
  * @param {string} options.title - New chat title, 1-255 characters.
  * @returns {Promise<object>} On success, the updated chat object is returned.
  * @throws {TelegramApiError} If the request to set a new chat title fails, this error is thrown.
@@ -1345,7 +1345,7 @@ class BaseClient extends Request {
  * @async
  
  * @param {object} options - The options object.
- * @param {number} options.chatId - The chat ID to set the description for.
+ * @param {number} options.chatId=this.chatId - The chat ID to set the description for.
  * @param {string} options.description - The new description for the chat.
  * @throws {TelegramApiError} Throws an error if the request to the Telegram API fails or if the response contains an error.
  * @returns {Promise<object>} Returns a promise that resolves to the response from the Telegram API.
@@ -1417,7 +1417,7 @@ class BaseClient extends Request {
  * Unpins all chat messages in the specified chat. 
  * 
  * @async
- * @param {number} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+ * @param {number} chatId=this.chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
  * @throws {TelegramApiError} When the API call fails.
  * @returns {Promise<object>} On success, the sent [Message](https://core.telegram.org/bots/api#message) is returned.
  */
@@ -1437,7 +1437,7 @@ class BaseClient extends Request {
  * Leave a chat.
  *
  * @async
- * @param {number} chatId - The chat ID of the chat to leave.
+ * @param {number} chatId=this.chatId - The chat ID of the chat to leave.
  * @throws {TelegramApiError} When the response contains an error.
  * @returns {Promise<object>} On success, the method returns True.
  */
@@ -1499,7 +1499,7 @@ class BaseClient extends Request {
   /**
   * Retrieves the current number of members in a chat.
   * @async
-  * @param {number} chatId - The identifier of the chat. If not provided, the chatId property of the TelegramBot instance will be used.
+  * @param {number} chatId=this.chatId - The identifier of the chat. If not provided, the chatId property of the TelegramBot instance will be used.
   * @returns {Promise<number>} The number of members in the chat.
   * @throws {TelegramApiError} If there is an error while calling the Telegram API.
   */
@@ -1547,7 +1547,7 @@ class BaseClient extends Request {
    * Returns True on success.
    *
    * @param {object} options - An object containing options to pass.
-   * @param {number} options.chatId - Unique identifier for the target chat or username of the target channel.
+   * @param {number} options.chatId=this.chatId - Unique identifier for the target chat or username of the target channel.
    * @param {string} options.stickerSetName - Name of the sticker set to be set as the group's sticker set.
    * @return {Promise<boolean>} Returns True on success.
    * @throws {TelegramApiError} When the response contains an error.
@@ -1570,7 +1570,7 @@ class BaseClient extends Request {
  * Deletes a chat's sticker set.
  *
  * @async
- * @param {number} chatId - Unique identifier for the target chat or username of the target channel.
+ * @param {number} chatId=this.chatId - Unique identifier for the target chat or username of the target channel.
  * @throws {TelegramApiError} If an error occurs while deleting the chat's sticker set.
  * @returns {object} On success, the deleted chat's sticker set is returned.
  */
@@ -1634,7 +1634,7 @@ class BaseClient extends Request {
  * @async
  
  * @param {object} options - The options for editing the forum topic.
- * @param {number} options.chatId - The ID of the chat where the forum topic is located.
+ * @param {number} options.chatId=this.chatId - The ID of the chat where the forum topic is located.
  * @param {number} options.messageThreadId - The ID of the forum topic to edit.
  * @param {string} options.name - The new name for the forum topic.
  * @param {string} options.iconCustomEmojiId - The ID of the custom emoji to use as the new icon for the forum topic.
@@ -1662,7 +1662,7 @@ class BaseClient extends Request {
   * @async
   
   * @param {object} options - The options to be passed to the function.
-  * @param {number} options.chatId - The chat ID.
+  * @param {number} options.chatId=this.chatId - The chat ID.
   * @param {number} options.messageThreadId - The ID of the message thread to close.
   * @throws {TelegramApiError} If the Telegram API returns an error.
   * @returns {object} Returns a Promise that resolves to the result of the API call.
@@ -1734,7 +1734,7 @@ class BaseClient extends Request {
  * @async
  
  * @param {object} options - The options for unpinning messages.
- * @param {number} options.chatId - The ID of the chat where the messages are located.
+ * @param {number} options.chatId=this.chatId - The ID of the chat where the messages are located.
  * @param {number} options.messageThreadId - The ID of the message thread where the messages are located.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
  * @returns {Promise<object>} Returns a Promise that resolves to the API response object.
@@ -1758,7 +1758,7 @@ class BaseClient extends Request {
  *
  * @async
  * @param {object} options - The options to edit the forum topic.
- * @param {number} options.chatId - The chat id of the forum topic.
+ * @param {number} options.chatId=this.chatId - The chat id of the forum topic.
  * @param {string} options.name - The new name of the forum topic.
  * @returns {Promise<object>} Returns a Promise that resolves to the edited forum topic object on success.
  * @throws {TelegramApiError} Throws an error if the API call fails.
@@ -1780,7 +1780,7 @@ class BaseClient extends Request {
   /**
  * Closes a general forum topic in a Telegram chat.
  * @async
- * @param {number} chatId - The ID of the chat where the forum topic is located.
+ * @param {number} chatId=this.chatId - The ID of the chat where the forum topic is located.
  * @throws {TelegramApiError} If an error occurs while closing the forum topic.
  * @returns {object} The result of the API call to the Telegram server.
  */
@@ -2103,7 +2103,7 @@ class BaseClient extends Request {
  * @async
  
  * @param {object} options - Options for setting the menu button.
- * @param {number} options.chatId - The ID of the chat where the menu button will be set. If `chatId` is not provided, the instance's `chatId` property will be used.
+ * @param {number} options.chatId=this.chatId - The ID of the chat where the menu button will be set. If `chatId` is not provided, the instance's `chatId` property will be used.
  * @param {object} options.menuButton - The menu button object to be set. This object should conform to the Telegram Bot API's `InlineKeyboardButton` type.
  * @throws {TelegramApiError} If there is an error in the Telegram API response.
  * @returns {object} The result object from the Telegram API response.
@@ -2904,7 +2904,7 @@ class BaseClient extends Request {
  * @async
   sendInvoice
  * @param {object} options - Options for sending the invoice.
- * @param {number} options.chatId - Unique identifier for the target chat.
+ * @param {number} options.chatId=this.chatId - Unique identifier for the target chat.
  * @param {number} options.messageThreadId - Identifier of the message thread.
  * @param {string} options.title - Product name for the invoice.
  * @param {string} options.description - Product description for the invoice.
@@ -3120,7 +3120,7 @@ class BaseClient extends Request {
  * Sends a game to the chat.
  * @async
  * @param {object} options - Options for sending the game.
- * @param {number} options.chatId - ID of the chat where the game should be sent.
+ * @param {number} options.chatId=this.chatId - ID of the chat where the game should be sent.
  * @param {string} options.gameShortName - Short name of the game to be sent.
  * @param {boolean} [options.disableNotification=false] - Pass true to disable notification for the message.
  * @param {boolean} [options.protectContent=false] - Pass true to protect the content of the message from screenshots.
@@ -3156,7 +3156,7 @@ class BaseClient extends Request {
    *
    * @async
    * @param {object} options - Options object.
-   * @param {number} options.chatId - Chat ID where the message to be deleted is located.
+   * @param {number} options.chatId=this.chatId - Chat ID where the message to be deleted is located.
    * @param {number} options.messageId - Message ID to be deleted.
    * @param {boolean} options.revoke - Pass true to delete the message for all chat members. Only used for channels.
    * @return {object} Returns a Promise which will resolve to a message object if the message was deleted successfully.

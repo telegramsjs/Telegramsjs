@@ -90,7 +90,7 @@ class TelegramBot extends BaseClient {
     setShortDescription: this.setMyShortDescription.bind(this),
     getShortDescription: this.getMyShortDescription.bind(this),
     getName: this.getMyName.bind(this),
-    setName: this.setMyName.bind(this),
+    setName: this.setMyName.bind(this)
   };
   
   let lastUpdateTimestamp = new Date();
@@ -98,8 +98,13 @@ class TelegramBot extends BaseClient {
   while (true) {
     const getUpdates = await this.getUpdates();
     for (const updates of getUpdates) {
-      const responseLastTime = this.lastTimeMap?.get('lastTime');
-      const readyLastTime = this.lastTimeMap?.get('readyLast');
+      console.log(this.lastTimeMap);
+      let responseLastTime = this.lastTimeMap?.get('lastTime');
+      console.log(responseLastTime);
+      if (responseLastTime === 'auto')
+        responseLastTime = true
+        
+      console.log(responseLastTime);
       if (responseLastTime) {
         const leave = (chat_id) => {
           let chatId;
@@ -150,7 +155,7 @@ class TelegramBot extends BaseClient {
           });
         };
         
-        const deleted = (options) => {
+        const remove = (options) => {
           let chatId;
           let messageId;
           if (updates?.callback_query) {
@@ -171,7 +176,7 @@ class TelegramBot extends BaseClient {
           return this.deleteMessage({
             chatId: chatId, 
             messageId: messageId,
-            revoke: options.revoke,
+            revoke: options?.revoke,
           })
         }
         
@@ -273,151 +278,41 @@ class TelegramBot extends BaseClient {
         }
 
         
-        const isCommand = (checkAllEntities = false) => {
-          let commandFound = false;
-          const allEntities = [
-            updates.message?.entities, updates.edited_message?.entities, updates.pinned_message?.entities, updates.channel_post?.entities, updates.channel_post?.pinned_message?.entities, updates.pinned_message?.entities, updates.message?.caption_entities, updates.pinned_message?.caption_entities, updates.channel_post?.pinned_message?.caption_entities, updates.edited_channel_post?.caption_entities].filter(Boolean);
+        const checkEntities = (...entityTypes) => {
+          const allEntities = entityTypes.flatMap((entityType) => [
+            updates.message?.[entityType],
+            updates.edited_message?.[entityType],
+            updates.channel_post?.[entityType],
+            updates.channel_post?.pinned_message?.[entityType],
+            updates.pinned_message?.[entityType],
+            updates.edited_channel_post?.[entityType]
+            ]);
             
-            if (checkAllEntities) {
-              for (const entities of allEntities) {
-                for (const entity of entities) {
-                  if (entity.type === 'bot_command') {
-                    commandFound = true;
-                    break;
-                  }
-                }
-                if (commandFound) {
-                  break;
-                }
-              }
-            } else {
-              const firstEntities = allEntities[0];
-              if (firstEntities) {
-                const firstEntity = firstEntities[0];
-                if (firstEntity) {
-                  commandFound = firstEntity.type === 'bot_command';
-                }
-              }
-            }
-            return commandFound;
+            return allEntities.some((entities) => entities && entities.length > 0);
         };
         
-        const isPhoto = () => {
-          let photoFound = false;
-          const allEntities = [updates.message?.photo, updates.edited_message?.photo, updates.channel_post?.photo, updates.pinned_message?.photo, updates.channel_post?.pinned_message?.photo, updates.edited_channel_post?.photo].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              photoFound = true;
-              break;
-            }
+        const isCommand = (checkAllEntities = false) => {
+          if (checkAllEntities) {
+            return checkEntities('entities', 'caption_entities', 'text_entities').some((entities) =>
+            entities.some((entity) => entity.type === 'bot_command')
+            );
+          } else {
+            return checkEntities('entities', 'caption_entities', 'text_entities').some(
+              (entities) => entities && entities[0] && entities[0].type === 'bot_command'
+              );
           }
-          return photoFound;
         };
         
-        const isDocument = () => {
-          let documentFound = false;
-          const allEntities = [updates.message?.document, updates.edited_message?.document, updates.channel_post?.document, updates.pinned_message?.document, updates.channel_post?.pinned_message?.document, updates.edited_channel_post?.document].filter(Boolean);
+        const isPhoto = () => checkEntities('photo');
+        const isDocument = () => checkEntities('document');
+        const isAudio = () => checkEntities('audio');
+        const isVideoNote = () => checkEntities('video_note');
+        const isVoice = () => checkEntities('voice');
+        const isSticker = () => checkEntities('sticker');
+        const isContact = () => checkEntities('contact');
+        const isPoll = () => checkEntities('poll');
+        const isLocation = () => checkEntities('location');
 
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              documentFound = true;
-              break;
-            }
-          }
-          return documentFound;
-        };
-        
-        const isAudio = () => {
-          let audioFound = false;
-          const allEntities = [updates.message?.audio, updates.edited_message?.audio, updates.channel_post?.audio, updates.pinned_message?.audio, updates.channel_post?.pinned_message?.audio, updates.edited_channel_post?.audio].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              audioFound = true;
-              break;
-            }
-          }
-          return audioFound;
-        };
-        
-        const isVideoNote = () => {
-          let videoNoteFound = false;
-          const allEntities = [updates.message?.video_note, updates.edited_message?.video_note, updates.channel_post?.video_note, updates.pinned_message?.video_note, updates.channel_post?.pinned_message?.video_note, updates.edited_channel_post?.video_note].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              videoNoteFound = true;
-              break;
-            }
-          }
-          return videoNoteFound;
-        };
-        
-        const isVoice = () => {
-          let voiceFound = false;
-          const allEntities = [updates.message?.voice, updates.edited_message?.voice, updates.channel_post?.voice, updates.pinned_message?.voice, updates.channel_post?.pinned_message?.voice, updates.edited_channel_post?.voice].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              voiceFound = true;
-              break;
-            }
-          }
-          return voiceFound;
-        };
-        
-        const isSticker = () => {
-          let stickerFound = false;
-          const allEntities = [updates.message?.sticker, updates.edited_message?.sticker, updates.channel_post?.sticker, updates.pinned_message?.sticker, updates.channel_post?.pinned_message?.sticker, updates.edited_channel_post?.sticker].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              stickerFound = true;
-              break;
-            }
-          }
-          return stickerFound;
-        };
-        
-        const isContact = () => {
-          let contactFound = false;
-          const allEntities = [updates.message?.contact, updates.edited_message?.contact, updates.channel_post?.contact, updates.pinned_message?.contact, updates.channel_post?.pinned_message?.contact, updates.edited_channel_post?.contact].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              contactFound = true;
-              break;
-            }
-          }
-          return contactFound;
-        };
-        
-        const isPoll = () => {
-          let pollFound = false;
-          const allEntities = [updates.message?.poll, updates.edited_message?.poll, updates.channel_post?.poll, updates.pinned_message?.poll, updates.channel_post?.pinned_message?.poll, updates.edited_channel_post?.poll].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              pollFound = true;
-              break;
-            }
-          }
-          return pollFound;
-        };
-        
-        const isLocation = () => {
-          let locationFound = false;
-          const allEntities = [updates.message?.location, updates.edited_message?.location, updates.channel_post?.location, updates.pinned_message?.location, updates.channel_post?.pinned_message?.location, updates.edited_channel_post?.location].filter(Boolean);
-
-          for (const entities of allEntities) {
-            if (entities.length > 0) {
-              locationFound = true;
-              break;
-            }
-          }
-          return locationFound;
-        };
         
         const deferUpdate = async (id) => {
           const queryId = updates?.callback_query?.id
@@ -481,11 +376,12 @@ class TelegramBot extends BaseClient {
             const updateProperty = updates[type];
             if (updateProperty) {
               const chat = Object.assign({}, updateProperty.chat, { send, leave, typing });
+              //const client = Object.assign({}, responseClient ,{session: this.offset});
               const message = {
                 ...updateProperty,
                 chat,
                 client: responseClient,
-                deleted,
+                remove,
                 update,
                 reply,
                 isCommand,
@@ -499,7 +395,6 @@ class TelegramBot extends BaseClient {
                 isDocument,
                 isPhoto,
                 update,
-                deleted,
                 deferUpdate: type === 'callback_query' ? deferUpdate : null
               };
               this.emit(options.event, message);
