@@ -1,3 +1,4 @@
 import { SessionTypes } from "./SessionTypes.js";
 import { SimpleStorage } from "./SimpleStorage.js";
-export { SessionTypes, SimpleStorage };
+import { CashSession } from "CashSession.js";
+export { SessionTypes, SimpleStorage, CashSession };
