@@ -4,1022 +4,396 @@
 
 *   [constructor][1]
     *   [Parameters][2]
-*   [constructor][3]
-    *   [Parameters][4]
-*   [getMe][5]
-*   [getMe][6]
-*   [deleteWebhook][7]
-    *   [Parameters][8]
-*   [deleteWebhook][9]
-*   [deleteWebhook][10]
+*   [getMe][3]
+*   [deleteWebhook][4]
+    *   [Parameters][5]
+*   [deleteWebhook][6]
+*   [getWebhookInfo][7]
+*   [sendMessage][8]
+    *   [Parameters][9]
+*   [sendPhoto][10]
     *   [Parameters][11]
-*   [deleteWebhook][12]
-*   [getWebhookInfo][13]
-*   [getWebhookInfo][14]
-*   [sendMessage][15]
-    *   [Parameters][16]
-*   [sendMessage][17]
-    *   [Parameters][18]
-*   [sendPhoto][19]
-    *   [Parameters][20]
-*   [sendPhoto][21]
-    *   [Parameters][22]
-*   [sendAudio][23]
-    *   [Parameters][24]
-*   [sendAudio][25]
-    *   [Parameters][26]
-*   [sendDocument][27]
-    *   [Parameters][28]
-*   [sendDocument][29]
-    *   [Parameters][30]
-*   [sendVideo][31]
-    *   [Parameters][32]
-*   [sendVideo][33]
-    *   [Parameters][34]
-*   [sendAnimation][35]
-    *   [Parameters][36]
-*   [sendAnimation][37]
-    *   [Parameters][38]
-*   [sendVoice][39]
-    *   [Parameters][40]
-*   [sendVoice][41]
-    *   [Parameters][42]
-*   [sendVideoNote][43]
-    *   [Parameters][44]
-*   [sendVideoNote][45]
-    *   [Parameters][46]
-*   [sendMediaGroup][47]
-    *   [Parameters][48]
-*   [sendMediaGroup][49]
-    *   [Parameters][50]
-*   [sendLocation][51]
-    *   [Parameters][52]
-*   [sendLocation][53]
-    *   [Parameters][54]
-*   [sendVenue][55]
-    *   [Parameters][56]
-*   [sendVenue][57]
-    *   [Parameters][58]
-*   [forwardMessage][59]
-    *   [Parameters][60]
-*   [forwardMessage][61]
-    *   [Parameters][62]
-*   [copyMessage][63]
-    *   [Parameters][64]
-*   [copyMessage][65]
-    *   [Parameters][66]
-*   [sendContact][67]
-    *   [Parameters][68]
-*   [sendContact][69]
-    *   [Parameters][70]
-*   [sendPoll][71]
-    *   [Parameters][72]
-*   [sendPoll][73]
-    *   [Parameters][74]
-*   [sendDice][75]
-    *   [Parameters][76]
-*   [sendDice][77]
-    *   [Parameters][78]
-*   [sendChatAction][79]
-    *   [Parameters][80]
-*   [sendChatAction][81]
-    *   [Parameters][82]
-*   [getUserProfilePhotos][83]
-    *   [Parameters][84]
-*   [getUserProfilePhotos][85]
-    *   [Parameters][86]
-*   [getFile][87]
-    *   [Parameters][88]
-*   [getFile][89]
-    *   [Parameters][90]
-*   [downloadFile][91]
-    *   [Parameters][92]
-*   [downloadFile][93]
-    *   [Parameters][94]
-*   [banChatMember][95]
-    *   [Parameters][96]
-*   [banChatMember][97]
-    *   [Parameters][98]
-*   [unbanChatMember][99]
-    *   [Parameters][100]
-*   [unbanChatMember][101]
-    *   [Parameters][102]
-*   [restrictChatMember][103]
-    *   [Parameters][104]
-*   [restrictChatMember][105]
+*   [sendAudio][12]
+    *   [Parameters][13]
+*   [sendDocument][14]
+    *   [Parameters][15]
+*   [sendVideo][16]
+    *   [Parameters][17]
+*   [sendAnimation][18]
+    *   [Parameters][19]
+*   [sendVoice][20]
+    *   [Parameters][21]
+*   [sendVideoNote][22]
+    *   [Parameters][23]
+*   [sendMediaGroup][24]
+    *   [Parameters][25]
+*   [sendLocation][26]
+    *   [Parameters][27]
+*   [sendVenue][28]
+    *   [Parameters][29]
+*   [forwardMessage][30]
+    *   [Parameters][31]
+*   [copyMessage][32]
+    *   [Parameters][33]
+*   [sendContact][34]
+    *   [Parameters][35]
+*   [sendPoll][36]
+    *   [Parameters][37]
+*   [sendDice][38]
+    *   [Parameters][39]
+*   [sendChatAction][40]
+    *   [Parameters][41]
+*   [getUserProfilePhotos][42]
+    *   [Parameters][43]
+*   [getFile][44]
+    *   [Parameters][45]
+*   [downloadFile][46]
+    *   [Parameters][47]
+*   [banChatMember][48]
+    *   [Parameters][49]
+*   [unbanChatMember][50]
+    *   [Parameters][51]
+*   [restrictChatMember][52]
+    *   [Parameters][53]
+*   [promoteChatMember][54]
+    *   [Parameters][55]
+*   [setChatAdministratorCustomTitle][56]
+    *   [Parameters][57]
+*   [banChatSenderChat][58]
+    *   [Parameters][59]
+*   [unbanChatSenderChat][60]
+    *   [Parameters][61]
+*   [setChatPermissions][62]
+    *   [Parameters][63]
+*   [portChatInviteLink][64]
+    *   [Parameters][65]
+*   [createChatInviteLink][66]
+    *   [Parameters][67]
+*   [editChatInviteLink][68]
+    *   [Parameters][69]
+*   [revokeChatInviteLink][70]
+    *   [Parameters][71]
+*   [approveChatJoinRequest][72]
+    *   [Parameters][73]
+*   [declineChatJoinRequest][74]
+    *   [Parameters][75]
+*   [setChatPhoto][76]
+    *   [Parameters][77]
+*   [deleteChatPhoto][78]
+    *   [Parameters][79]
+*   [setChatTitle][80]
+    *   [Parameters][81]
+*   [setChatDescription][82]
+    *   [Parameters][83]
+*   [pinChatMessage][84]
+    *   [Parameters][85]
+*   [unpinChatMessage][86]
+    *   [Parameters][87]
+*   [unpinAllChatMessages][88]
+    *   [Parameters][89]
+*   [leaveChat][90]
+    *   [Parameters][91]
+*   [getChat][92]
+    *   [Parameters][93]
+*   [getChatAdministrators][94]
+    *   [Parameters][95]
+*   [getChatMemberCount][96]
+    *   [Parameters][97]
+*   [getChatMember][98]
+    *   [Parameters][99]
+*   [setChatStickerSet][100]
+    *   [Parameters][101]
+*   [deleteChatStickerSet][102]
+    *   [Parameters][103]
+*   [getForumTopicIconStickers][104]
+*   [createForumTopic][105]
     *   [Parameters][106]
-*   [promoteChatMember][107]
+*   [editForumTopic][107]
     *   [Parameters][108]
-*   [promoteChatMember][109]
+*   [closeForumTopic][109]
     *   [Parameters][110]
-*   [setChatAdministratorCustomTitle][111]
+*   [reopenForumTopic][111]
     *   [Parameters][112]
-*   [setChatAdministratorCustomTitle][113]
+*   [deleteForumTopic][113]
     *   [Parameters][114]
-*   [banChatSenderChat][115]
+*   [unpinAllForumTopicMessages][115]
     *   [Parameters][116]
-*   [banChatSenderChat][117]
+*   [editGeneralForumTopic][117]
     *   [Parameters][118]
-*   [unbanChatSenderChat][119]
+*   [closeGeneralForumTopic][119]
     *   [Parameters][120]
-*   [unbanChatSenderChat][121]
+*   [reopenGeneralForumTopic][121]
     *   [Parameters][122]
-*   [setChatPermissions][123]
+*   [hideGeneralForumTopic][123]
     *   [Parameters][124]
-*   [setChatPermissions][125]
+*   [unhideGeneralForumTopic][125]
     *   [Parameters][126]
-*   [portChatInviteLink][127]
+*   [answerCallbackQuery][127]
     *   [Parameters][128]
-*   [portChatInviteLink][129]
+*   [setMyCommands][129]
     *   [Parameters][130]
-*   [createChatInviteLink][131]
+*   [deleteMyCommands][131]
     *   [Parameters][132]
-*   [createChatInviteLink][133]
+*   [getMyCommands][133]
     *   [Parameters][134]
-*   [editChatInviteLink][135]
+*   [setMyName][135]
     *   [Parameters][136]
-*   [editChatInviteLink][137]
+*   [getMyName][137]
     *   [Parameters][138]
-*   [revokeChatInviteLink][139]
+*   [setMyDescription][139]
     *   [Parameters][140]
-*   [revokeChatInviteLink][141]
+*   [getMyDescription][141]
     *   [Parameters][142]
-*   [approveChatJoinRequest][143]
+*   [setMyShortDescription][143]
     *   [Parameters][144]
-*   [approveChatJoinRequest][145]
+*   [getMyShortDescription][145]
     *   [Parameters][146]
-*   [declineChatJoinRequest][147]
+*   [setChatMenuButton][147]
     *   [Parameters][148]
-*   [declineChatJoinRequest][149]
+*   [getChatMenuButton][149]
     *   [Parameters][150]
-*   [setChatPhoto][151]
+*   [setMyDefaultAdministratorRights][151]
     *   [Parameters][152]
-*   [setChatPhoto][153]
+*   [getMyDefaultAdministratorRights][153]
     *   [Parameters][154]
-*   [deleteChatPhoto][155]
+*   [editMessageText][155]
     *   [Parameters][156]
-*   [deleteChatPhoto][157]
+*   [editMessageCaption][157]
     *   [Parameters][158]
-*   [setChatTitle][159]
+*   [editMessageMedia][159]
     *   [Parameters][160]
-*   [setChatTitle][161]
+*   [editMessageLiveLocation][161]
     *   [Parameters][162]
-*   [setChatDescription][163]
+*   [stopMessageLiveLocation][163]
     *   [Parameters][164]
-*   [setChatDescription][165]
+*   [editMessageReplyMarkup][165]
     *   [Parameters][166]
-*   [pinChatMessage][167]
+*   [stopPoll][167]
     *   [Parameters][168]
-*   [pinChatMessage][169]
+*   [sendSticker][169]
     *   [Parameters][170]
-*   [unpinChatMessage][171]
+*   [getStickerSet][171]
     *   [Parameters][172]
-*   [unpinChatMessage][173]
+*   [getCustomEmojiStickers][173]
     *   [Parameters][174]
-*   [unpinAllChatMessages][175]
+*   [uploadStickerFile][175]
     *   [Parameters][176]
-*   [unpinAllChatMessages][177]
+*   [createNewStickerSet][177]
     *   [Parameters][178]
-*   [leaveChat][179]
+*   [addStickerToSet][179]
     *   [Parameters][180]
-*   [leaveChat][181]
+*   [setStickerPositionInSet][181]
     *   [Parameters][182]
-*   [getChat][183]
+*   [deleteStickerFromSet][183]
     *   [Parameters][184]
-*   [getChat][185]
+*   [setStickerEmoji][185]
     *   [Parameters][186]
-*   [getChatAdministrators][187]
+*   [setStickerKeywords][187]
     *   [Parameters][188]
-*   [getChatAdministrators][189]
+*   [setStickerKeywords][189]
     *   [Parameters][190]
-*   [getChatMemberCount][191]
+*   [setStickerMaskPosition][191]
     *   [Parameters][192]
-*   [getChatMemberCount][193]
+*   [setStickerMaskPosition][193]
     *   [Parameters][194]
-*   [getChatMember][195]
+*   [setStickerSetTitle][195]
     *   [Parameters][196]
-*   [getChatMember][197]
+*   [setStickerSetThumbnail][197]
     *   [Parameters][198]
-*   [setChatStickerSet][199]
+*   [setCustomEmojiStickerSetThumbnail][199]
     *   [Parameters][200]
-*   [setChatStickerSet][201]
+*   [deleteStickerSet][201]
     *   [Parameters][202]
-*   [deleteChatStickerSet][203]
+*   [answerInlineQuery][203]
     *   [Parameters][204]
-*   [deleteChatStickerSet][205]
+*   [answerWebAppQuery][205]
     *   [Parameters][206]
-*   [getForumTopicIconStickers][207]
-*   [getForumTopicIconStickers][208]
-*   [createForumTopic][209]
+*   [sendInvoice][207]
+    *   [Parameters][208]
+*   [createInvoiceLink][209]
     *   [Parameters][210]
-*   [createForumTopic][211]
+*   [answerShippingQuery][211]
     *   [Parameters][212]
-*   [editForumTopic][213]
+*   [answerPreCheckoutQuery][213]
     *   [Parameters][214]
-*   [editForumTopic][215]
+*   [setPassportDataErrors][215]
     *   [Parameters][216]
-*   [closeForumTopic][217]
+*   [sendGame][217]
     *   [Parameters][218]
-*   [closeForumTopic][219]
+*   [deleteMessage][219]
     *   [Parameters][220]
-*   [reopenForumTopic][221]
+*   [createChat][221]
     *   [Parameters][222]
-*   [reopenForumTopic][223]
+*   [TelegramApiError][223]
     *   [Parameters][224]
-*   [deleteForumTopic][225]
+*   [EventError][225]
     *   [Parameters][226]
-*   [deleteForumTopic][227]
+*   [TelegramTokenError][227]
     *   [Parameters][228]
-*   [unpinAllForumTopicMessages][229]
+*   [BitFieldError][229]
     *   [Parameters][230]
-*   [unpinAllForumTopicMessages][231]
+*   [IntentsError][231]
     *   [Parameters][232]
-*   [editGeneralForumTopic][233]
+*   [ParameterError][233]
     *   [Parameters][234]
-*   [editGeneralForumTopic][235]
+*   [ErrorTable][235]
     *   [Parameters][236]
-*   [closeGeneralForumTopic][237]
+*   [ErrorExtension][237]
     *   [Parameters][238]
-*   [closeGeneralForumTopic][239]
+*   [get][239]
     *   [Parameters][240]
-*   [reopenGeneralForumTopic][241]
+*   [set][241]
     *   [Parameters][242]
-*   [reopenGeneralForumTopic][243]
+*   [SimpleStorage][243]
     *   [Parameters][244]
-*   [hideGeneralForumTopic][245]
-    *   [Parameters][246]
-*   [hideGeneralForumTopic][247]
-    *   [Parameters][248]
-*   [unhideGeneralForumTopic][249]
-    *   [Parameters][250]
-*   [unhideGeneralForumTopic][251]
-    *   [Parameters][252]
-*   [answerCallbackQuery][253]
-    *   [Parameters][254]
-*   [answerCallbackQuery][255]
-    *   [Parameters][256]
-*   [setMyCommands][257]
-    *   [Parameters][258]
-*   [setMyCommands][259]
-    *   [Parameters][260]
-*   [deleteMyCommands][261]
+    *   [get][245]
+        *   [Parameters][246]
+    *   [set][247]
+        *   [Parameters][248]
+    *   [delete][249]
+        *   [Parameters][250]
+    *   [has][251]
+        *   [Parameters][252]
+    *   [filter][253]
+        *   [Parameters][254]
+    *   [all][255]
+        *   [Parameters][256]
+*   [SessionTypes][257]
+    *   [SimpleSession][258]
+    *   [AutoSession][259]
+    *   [TimeSession][260]
+*   [Markup][261]
     *   [Parameters][262]
-*   [deleteMyCommands][263]
-    *   [Parameters][264]
-*   [getMyCommands][265]
-    *   [Parameters][266]
-*   [getMyCommands][267]
-    *   [Parameters][268]
-*   [setMyName][269]
-    *   [Parameters][270]
-*   [setMyName][271]
-    *   [Parameters][272]
-*   [getMyName][273]
-    *   [Parameters][274]
-*   [getMyName][275]
-    *   [Parameters][276]
-*   [setMyDescription][277]
-    *   [Parameters][278]
-*   [setMyDescription][279]
-    *   [Parameters][280]
-*   [getMyDescription][281]
-    *   [Parameters][282]
-*   [getMyDescription][283]
+    *   [setType][263]
+        *   [Parameters][264]
+    *   [setAction][265]
+        *   [Parameters][266]
+    *   [setText][267]
+        *   [Parameters][268]
+    *   [setWebApp][269]
+        *   [Parameters][270]
+    *   [setForceReply][271]
+        *   [Parameters][272]
+    *   [toJSON][273]
+    *   [toString][274]
+    *   [setRemove][275]
+        *   [Parameters][276]
+    *   [fromJSON][277]
+        *   [Parameters][278]
+    *   [inlineKeyboard][279]
+        *   [Parameters][280]
+    *   [addMarkupArray][281]
+        *   [Parameters][282]
+*   [constructor][283]
     *   [Parameters][284]
-*   [setMyShortDescription][285]
-    *   [Parameters][286]
-*   [setMyShortDescription][287]
-    *   [Parameters][288]
-*   [getMyShortDescription][289]
-    *   [Parameters][290]
-*   [getMyShortDescription][291]
-    *   [Parameters][292]
-*   [setChatMenuButton][293]
-    *   [Parameters][294]
-*   [setChatMenuButton][295]
-    *   [Parameters][296]
-*   [getChatMenuButton][297]
-    *   [Parameters][298]
-*   [getChatMenuButton][299]
-    *   [Parameters][300]
-*   [setMyDefaultAdministratorRights][301]
-    *   [Parameters][302]
-*   [setMyDefaultAdministratorRights][303]
-    *   [Parameters][304]
-*   [getMyDefaultAdministratorRights][305]
-    *   [Parameters][306]
-*   [getMyDefaultAdministratorRights][307]
-    *   [Parameters][308]
-*   [editMessageText][309]
-    *   [Parameters][310]
-*   [editMessageText][311]
-    *   [Parameters][312]
-*   [editMessageCaption][313]
-    *   [Parameters][314]
-*   [editMessageCaption][315]
-    *   [Parameters][316]
-*   [editMessageMedia][317]
-    *   [Parameters][318]
-*   [editMessageMedia][319]
-    *   [Parameters][320]
-*   [editMessageLiveLocation][321]
-    *   [Parameters][322]
-*   [editMessageLiveLocation][323]
-    *   [Parameters][324]
-*   [stopMessageLiveLocation][325]
-    *   [Parameters][326]
-*   [stopMessageLiveLocation][327]
-    *   [Parameters][328]
-*   [editMessageReplyMarkup][329]
-    *   [Parameters][330]
-*   [editMessageReplyMarkup][331]
-    *   [Parameters][332]
-*   [stopPoll][333]
-    *   [Parameters][334]
-*   [stopPoll][335]
-    *   [Parameters][336]
-*   [sendSticker][337]
-    *   [Parameters][338]
-*   [sendSticker][339]
-    *   [Parameters][340]
-*   [getStickerSet][341]
-    *   [Parameters][342]
-*   [getStickerSet][343]
+*   [toJSON][285]
+*   [setInline][286]
+    *   [Parameters][287]
+*   [setResize][288]
+    *   [Parameters][289]
+*   [setOneTime][290]
+    *   [Parameters][291]
+*   [setSelective][292]
+    *   [Parameters][293]
+*   [addKeyboard][294]
+    *   [Parameters][295]
+*   [Events][296]
+    *   [Properties][297]
+*   [ChatActionType][298]
+    *   [Properties][299]
+*   [EntityType][300]
+    *   [Properties][301]
+*   [ChatPermission][302]
+    *   [Properties][303]
+*   [GroupPermission][304]
+    *   [Properties][305]
+*   [GroupStatus][306]
+    *   [Administrator][307]
+    *   [Left][308]
+    *   [Member][309]
+    *   [Creator][310]
+*   [DocumentTypes][311]
+    *   [Properties][312]
+*   [IntentBits][313]
+    *   [Properties][314]
+*   [TelegramIntentBits][315]
+    *   [Properties][316]
+*   [IntentsBitField][317]
+    *   [add][318]
+        *   [Parameters][319]
+    *   [remove][320]
+        *   [Parameters][321]
+    *   [serialize][322]
+*   [toArray][323]
+*   [has][324]
+    *   [Parameters][325]
+*   [decodeIntents][326]
+    *   [Parameters][327]
+*   [MessageCollector][328]
+    *   [Parameters][329]
+    *   [handleMessage][330]
+        *   [Parameters][331]
+    *   [collected][332]
+    *   [stop][333]
+*   [Request][334]
+    *   [Parameters][335]
+    *   [getUpdates][336]
+    *   [request][337]
+        *   [Parameters][338]
+    *   [uptime][339]
+    *   [ping][340]
+    *   [updateId][341]
+    *   [lastObject][342]
+*   [TelegramBot][343]
     *   [Parameters][344]
-*   [getCustomEmojiStickers][345]
-    *   [Parameters][346]
-*   [getCustomEmojiStickers][347]
-    *   [Parameters][348]
-*   [uploadStickerFile][349]
-    *   [Parameters][350]
-*   [uploadStickerFile][351]
-    *   [Parameters][352]
-*   [createNewStickerSet][353]
-    *   [Parameters][354]
-*   [createNewStickerSet][355]
-    *   [Parameters][356]
-*   [addStickerToSet][357]
+    *   [token][345]
+    *   [baseUrl][346]
+    *   [login][347]
+        *   [Parameters][348]
+    *   [login][349]
+    *   [login][350]
+        *   [Parameters][351]
+    *   [login][352]
+    *   [login][353]
+        *   [Parameters][354]
+    *   [login][355]
+    *   [login][356]
+*   [checkMessageLinks][357]
     *   [Parameters][358]
-*   [addStickerToSet][359]
+*   [extractUserMentions][359]
     *   [Parameters][360]
-*   [setStickerPositionInSet][361]
+*   [extractHashtags][361]
     *   [Parameters][362]
-*   [setStickerPositionInSet][363]
+*   [checkLocation][363]
     *   [Parameters][364]
-*   [deleteStickerFromSet][365]
+*   [checkUserMentions][365]
     *   [Parameters][366]
-*   [deleteStickerFromSet][367]
+*   [checkHashtags][367]
     *   [Parameters][368]
-*   [setStickerEmoji][369]
+*   [checkPhoneNumber][369]
     *   [Parameters][370]
-*   [setStickerEmoji][371]
+*   [extractUserIdFromLink][371]
     *   [Parameters][372]
-*   [setStickerKeywords][373]
+*   [checkGroupOrChannel][373]
     *   [Parameters][374]
-*   [setStickerKeywords][375]
+*   [checkEmoji][375]
     *   [Parameters][376]
-*   [setStickerKeywords][377]
+*   [checkSticker][377]
     *   [Parameters][378]
-*   [setStickerKeywords][379]
+*   [extractUsernameFromLink][379]
     *   [Parameters][380]
-*   [setStickerMaskPosition][381]
+*   [checkBot][381]
     *   [Parameters][382]
-*   [setStickerMaskPosition][383]
+*   [checkChannel][383]
     *   [Parameters][384]
-*   [setStickerMaskPosition][385]
+*   [checkLink][385]
     *   [Parameters][386]
-*   [setStickerMaskPosition][387]
+*   [checkGroup][387]
     *   [Parameters][388]
-*   [setStickerSetTitle][389]
+*   [checkUsername][389]
     *   [Parameters][390]
-*   [setStickerSetTitle][391]
+*   [extractUsername][391]
     *   [Parameters][392]
-*   [setStickerSetThumbnail][393]
-    *   [Parameters][394]
-*   [setStickerSetThumbnail][395]
-    *   [Parameters][396]
-*   [setCustomEmojiStickerSetThumbnail][397]
-    *   [Parameters][398]
-*   [setCustomEmojiStickerSetThumbnail][399]
-    *   [Parameters][400]
-*   [deleteStickerSet][401]
-    *   [Parameters][402]
-*   [deleteStickerSet][403]
-    *   [Parameters][404]
-*   [answerInlineQuery][405]
-    *   [Parameters][406]
-*   [answerInlineQuery][407]
-    *   [Parameters][408]
-*   [answerWebAppQuery][409]
-    *   [Parameters][410]
-*   [answerWebAppQuery][411]
-    *   [Parameters][412]
-*   [sendInvoice][413]
-    *   [Parameters][414]
-*   [sendInvoice][415]
-    *   [Parameters][416]
-*   [createInvoiceLink][417]
-    *   [Parameters][418]
-*   [createInvoiceLink][419]
-    *   [Parameters][420]
-*   [answerShippingQuery][421]
-    *   [Parameters][422]
-*   [answerShippingQuery][423]
-    *   [Parameters][424]
-*   [answerPreCheckoutQuery][425]
-    *   [Parameters][426]
-*   [answerPreCheckoutQuery][427]
-    *   [Parameters][428]
-*   [setPassportDataErrors][429]
-    *   [Parameters][430]
-*   [setPassportDataErrors][431]
-    *   [Parameters][432]
-*   [sendGame][433]
-    *   [Parameters][434]
-*   [sendGame][435]
-    *   [Parameters][436]
-*   [deleteMessage][437]
-    *   [Parameters][438]
-*   [deleteMessage][439]
-    *   [Parameters][440]
-*   [createChat][441]
-    *   [Parameters][442]
-*   [createChat][443]
-    *   [Parameters][444]
-*   [ChatActionType][445]
-    *   [Properties][446]
-    *   [Typing][447]
-    *   [UploadPhoto][448]
-    *   [RecordVideo][449]
-    *   [UploadVideo][450]
-    *   [RecordVoice][451]
-    *   [UploadVoice][452]
-    *   [UploadDocument][453]
-    *   [ChooseSticker][454]
-    *   [FindLocation][455]
-    *   [RecordVideoNote][456]
-    *   [UploadVideoNote][457]
-*   [ChatActionType][458]
-    *   [Properties][459]
-    *   [Typing][460]
-    *   [UploadPhoto][461]
-    *   [RecordVideo][462]
-    *   [UploadVideo][463]
-    *   [RecordVoice][464]
-    *   [UploadVoice][465]
-    *   [UploadDocument][466]
-    *   [ChooseSticker][467]
-    *   [FindLocation][468]
-    *   [RecordVideoNote][469]
-    *   [UploadVideoNote][470]
-*   [ChatPermission][471]
-    *   [Properties][472]
-    *   [CanSendOtherMessages][473]
-    *   [CanAddWebPagePreviews][474]
-    *   [CanSendMessages][475]
-    *   [CanSendAudios][476]
-    *   [CanSendDocuments][477]
-    *   [CanSendPhotos][478]
-    *   [CanSendVideos][479]
-    *   [CanSendVideoNotes][480]
-    *   [CanSendVoiceNotes][481]
-    *   [CanSendPolls][482]
-*   [ChatPermission][483]
-    *   [Properties][484]
-    *   [CanSendOtherMessages][485]
-    *   [CanAddWebPagePreviews][486]
-    *   [CanSendMessages][487]
-    *   [CanSendAudios][488]
-    *   [CanSendDocuments][489]
-    *   [CanSendPhotos][490]
-    *   [CanSendVideos][491]
-    *   [CanSendVideoNotes][492]
-    *   [CanSendVoiceNotes][493]
-    *   [CanSendPolls][494]
-*   [DocumentTypes][495]
-*   [DocumentTypes][496]
-    *   [Properties][497]
-*   [EntityType][498]
-*   [EntityType][499]
-    *   [Properties][500]
-*   [Events][501]
-    *   [Properties][502]
-    *   [Message][503]
-    *   [EditedMessage][504]
-    *   [ChannelPost][505]
-    *   [EditedChannelPost][506]
-    *   [InlineQuery][507]
-    *   [ChosenInlineResult][508]
-    *   [CallbackQuery][509]
-    *   [ShippingQuery][510]
-    *   [PreCheckoutQuery][511]
-    *   [Poll][512]
-    *   [PollAnswer][513]
-    *   [ChatMember][514]
-    *   [MyChatMember][515]
-    *   [ChatJoinRequest][516]
-    *   [ReplyMessage][517]
-*   [Events][518]
-    *   [Properties][519]
-    *   [Message][520]
-    *   [EditedMessage][521]
-    *   [ChannelPost][522]
-    *   [EditedChannelPost][523]
-    *   [InlineQuery][524]
-    *   [ChosenInlineResult][525]
-    *   [CallbackQuery][526]
-    *   [ShippingQuery][527]
-    *   [PreCheckoutQuery][528]
-    *   [Poll][529]
-    *   [PollAnswer][530]
-    *   [ChatMember][531]
-    *   [MyChatMember][532]
-    *   [ChatJoinRequest][533]
-    *   [ReplyMessage][534]
-*   [GroupPermission][535]
-    *   [Properties][536]
-    *   [CanManageChat][537]
-    *   [CanChangeInfo][538]
-    *   [CanDeleteMessages][539]
-    *   [CanInviteUsers][540]
-    *   [CanRestrictMembers][541]
-    *   [CanPinMessages][542]
-    *   [CanManageTopics][543]
-    *   [CanPromoteMembers][544]
-    *   [CanManageVideoChats][545]
-    *   [CanManageVoiceChats][546]
-*   [GroupPermission][547]
-    *   [Properties][548]
-    *   [CanManageChat][549]
-    *   [CanChangeInfo][550]
-    *   [CanDeleteMessages][551]
-    *   [CanInviteUsers][552]
-    *   [CanRestrictMembers][553]
-    *   [CanPinMessages][554]
-    *   [CanManageTopics][555]
-    *   [CanPromoteMembers][556]
-    *   [CanManageVideoChats][557]
-    *   [CanManageVoiceChats][558]
-*   [GroupStatus][559]
-    *   [Administrator][560]
-    *   [Left][561]
-    *   [Member][562]
-    *   [Creator][563]
-*   [GroupStatus][564]
-    *   [Administrator][565]
-    *   [Left][566]
-    *   [Member][567]
-    *   [Creator][568]
-*   [IntentBits][569]
-    *   [Properties][570]
-    *   [Message][571]
-    *   [EditedMessage][572]
-    *   [ChannelPost][573]
-    *   [EditedChannelPost][574]
-    *   [InlineQuery][575]
-    *   [ChosenInlineResult][576]
-    *   [CallbackQuery][577]
-    *   [ShippingQuery][578]
-    *   [PreCheckoutQuery][579]
-    *   [Poll][580]
-    *   [PollAnswer][581]
-    *   [MyChatMember][582]
-    *   [ChatMember][583]
-    *   [ChatJoinRequest][584]
-*   [TelegramIntentBits][585]
-    *   [Properties][586]
-    *   [Message][587]
-    *   [EditedMessage][588]
-    *   [ChannelPost][589]
-    *   [EditedChannelPost][590]
-    *   [InlineQuery][591]
-    *   [ChosenInlineResult][592]
-    *   [CallbackQuery][593]
-    *   [ShippingQuery][594]
-    *   [PreCheckoutQuery][595]
-    *   [Poll][596]
-    *   [PollAnswer][597]
-    *   [MyChatMember][598]
-    *   [ChatMember][599]
-    *   [ChatJoinRequest][600]
-*   [TelegramApiError][601]
-    *   [constructor][602]
-        *   [Parameters][603]
-*   [TelegramApiError][604]
-    *   [Parameters][605]
-    *   [constructor][606]
-        *   [Parameters][607]
-*   [EventError][608]
-    *   [constructor][609]
-        *   [Parameters][610]
-*   [EventError][611]
-    *   [Parameters][612]
-    *   [constructor][613]
-        *   [Parameters][614]
-*   [TelegramTokenError][615]
-    *   [constructor][616]
-        *   [Parameters][617]
-*   [TelegramTokenError][618]
-    *   [Parameters][619]
-    *   [constructor][620]
-        *   [Parameters][621]
-*   [IntentsError][622]
-    *   [constructor][623]
-        *   [Parameters][624]
-*   [IntentsError][625]
-    *   [Parameters][626]
-    *   [constructor][627]
-        *   [Parameters][628]
-*   [BitFieldError][629]
-    *   [constructor][630]
-        *   [Parameters][631]
-*   [BitFieldError][632]
-    *   [Parameters][633]
-    *   [constructor][634]
-        *   [Parameters][635]
-*   [ParameterError][636]
-    *   [constructor][637]
-        *   [Parameters][638]
-*   [ParameterError][639]
-    *   [Parameters][640]
-    *   [constructor][641]
-        *   [Parameters][642]
-*   [ErrorTable][643]
-    *   [constructor][644]
-        *   [Parameters][645]
-*   [ErrorTable][646]
-    *   [Parameters][647]
-    *   [constructor][648]
-        *   [Parameters][649]
-*   [ErrorExtension][650]
-    *   [constructor][651]
-        *   [Parameters][652]
-*   [ErrorExtension][653]
-    *   [Parameters][654]
-    *   [constructor][655]
-        *   [Parameters][656]
-*   [IntentsBitField][657]
-    *   [add][658]
-        *   [Parameters][659]
-    *   [add][660]
-        *   [Parameters][661]
-    *   [remove][662]
-        *   [Parameters][663]
-    *   [remove][664]
-        *   [Parameters][665]
-    *   [serialize][666]
-    *   [serialize][667]
-*   [IntentsBitField][668]
-    *   [add][669]
-        *   [Parameters][670]
-    *   [add][671]
-        *   [Parameters][672]
-    *   [remove][673]
-        *   [Parameters][674]
-    *   [remove][675]
-        *   [Parameters][676]
-    *   [serialize][677]
-    *   [serialize][678]
-*   [toArray][679]
-*   [toArray][680]
-*   [has][681]
-    *   [Parameters][682]
-*   [has][683]
-    *   [Parameters][684]
-*   [decodeIntents][685]
-    *   [Parameters][686]
-*   [decodeIntents][687]
-    *   [Parameters][688]
-*   [MessageCollector][689]
-    *   [constructor][690]
-        *   [Parameters][691]
-    *   [handleMessage][692]
-        *   [Parameters][693]
-    *   [handleMessage][694]
-        *   [Parameters][695]
-    *   [collected][696]
-    *   [collected][697]
-    *   [stop][698]
-    *   [stop][699]
-*   [MessageCollector][700]
-    *   [Parameters][701]
-    *   [constructor][702]
-        *   [Parameters][703]
-    *   [handleMessage][704]
-        *   [Parameters][705]
-    *   [handleMessage][706]
-        *   [Parameters][707]
-    *   [collected][708]
-    *   [collected][709]
-    *   [stop][710]
-    *   [stop][711]
-*   [constructor][712]
-    *   [Parameters][713]
-*   [constructor][714]
-    *   [Parameters][715]
-*   [toJSON][716]
-*   [toJSON][717]
-*   [setInline][718]
-    *   [Parameters][719]
-*   [setInline][720]
-    *   [Parameters][721]
-*   [setResize][722]
-    *   [Parameters][723]
-*   [setResize][724]
-    *   [Parameters][725]
-*   [setOneTime][726]
-    *   [Parameters][727]
-*   [setOneTime][728]
-    *   [Parameters][729]
-*   [setSelective][730]
-    *   [Parameters][731]
-*   [setSelective][732]
-    *   [Parameters][733]
-*   [addKeyboard][734]
-    *   [Parameters][735]
-*   [addKeyboard][736]
-    *   [Parameters][737]
-*   [Markup][738]
-    *   [constructor][739]
-        *   [Parameters][740]
-    *   [setType][741]
-        *   [Parameters][742]
-    *   [setType][743]
-        *   [Parameters][744]
-    *   [setAction][745]
-        *   [Parameters][746]
-    *   [setAction][747]
-        *   [Parameters][748]
-    *   [setText][749]
-        *   [Parameters][750]
-    *   [setText][751]
-        *   [Parameters][752]
-    *   [setWebApp][753]
-        *   [Parameters][754]
-    *   [setWebApp][755]
-        *   [Parameters][756]
-    *   [setForceReply][757]
-        *   [Parameters][758]
-    *   [setForceReply][759]
-        *   [Parameters][760]
-    *   [toJSON][761]
-    *   [toJSON][762]
-    *   [toString][763]
-    *   [toString][764]
-    *   [setRemove][765]
-        *   [Parameters][766]
-    *   [setRemove][767]
-        *   [Parameters][768]
-    *   [fromJSON][769]
-        *   [Parameters][770]
-    *   [fromJSON][771]
-        *   [Parameters][772]
-    *   [inlineKeyboard][773]
-        *   [Parameters][774]
-    *   [inlineKeyboard][775]
-        *   [Parameters][776]
-    *   [addMarkupArray][777]
-        *   [Parameters][778]
-    *   [addMarkupArray][779]
-        *   [Parameters][780]
-*   [Markup][781]
-    *   [Parameters][782]
-    *   [constructor][783]
-        *   [Parameters][784]
-    *   [setType][785]
-        *   [Parameters][786]
-    *   [setType][787]
-        *   [Parameters][788]
-    *   [setAction][789]
-        *   [Parameters][790]
-    *   [setAction][791]
-        *   [Parameters][792]
-    *   [setText][793]
-        *   [Parameters][794]
-    *   [setText][795]
-        *   [Parameters][796]
-    *   [setWebApp][797]
-        *   [Parameters][798]
-    *   [setWebApp][799]
-        *   [Parameters][800]
-    *   [setForceReply][801]
-        *   [Parameters][802]
-    *   [setForceReply][803]
-        *   [Parameters][804]
-    *   [toJSON][805]
-    *   [toJSON][806]
-    *   [toString][807]
-    *   [toString][808]
-    *   [setRemove][809]
-        *   [Parameters][810]
-    *   [setRemove][811]
-        *   [Parameters][812]
-    *   [fromJSON][813]
-        *   [Parameters][814]
-    *   [fromJSON][815]
-        *   [Parameters][816]
-    *   [inlineKeyboard][817]
-        *   [Parameters][818]
-    *   [inlineKeyboard][819]
-        *   [Parameters][820]
-    *   [addMarkupArray][821]
-        *   [Parameters][822]
-    *   [addMarkupArray][823]
-        *   [Parameters][824]
-*   [Request][825]
-    *   [Parameters][826]
-    *   [constructor][827]
-        *   [Parameters][828]
-    *   [getUpdates][829]
-    *   [getUpdates][830]
-    *   [request][831]
-        *   [Parameters][832]
-    *   [request][833]
-        *   [Parameters][834]
-    *   [uptime][835]
-    *   [ping][836]
-    *   [updateId][837]
-    *   [lastObject][838]
-*   [SessionTypes][839]
-    *   [SimpleSession][840]
-    *   [AutoSession][841]
-    *   [TimeSession][842]
-*   [SimpleStorage][843]
-    *   [constructor][844]
-        *   [Parameters][845]
-    *   [get][846]
-        *   [Parameters][847]
-    *   [get][848]
-        *   [Parameters][849]
-    *   [set][850]
-        *   [Parameters][851]
-    *   [set][852]
-        *   [Parameters][853]
-    *   [delete][854]
-        *   [Parameters][855]
-    *   [delete][856]
-        *   [Parameters][857]
-    *   [has][858]
-        *   [Parameters][859]
-    *   [has][860]
-        *   [Parameters][861]
-    *   [filter][862]
-        *   [Parameters][863]
-    *   [filter][864]
-        *   [Parameters][865]
-    *   [all][866]
-        *   [Parameters][867]
-    *   [all][868]
-        *   [Parameters][869]
-*   [SimpleStorage][870]
-    *   [Parameters][871]
-    *   [constructor][872]
-        *   [Parameters][873]
-    *   [get][874]
-        *   [Parameters][875]
-    *   [get][876]
-        *   [Parameters][877]
-    *   [set][878]
-        *   [Parameters][879]
-    *   [set][880]
-        *   [Parameters][881]
-    *   [delete][882]
-        *   [Parameters][883]
-    *   [delete][884]
-        *   [Parameters][885]
-    *   [has][886]
-        *   [Parameters][887]
-    *   [has][888]
-        *   [Parameters][889]
-    *   [filter][890]
-        *   [Parameters][891]
-    *   [filter][892]
-        *   [Parameters][893]
-    *   [all][894]
-        *   [Parameters][895]
-    *   [all][896]
-        *   [Parameters][897]
-*   [get][898]
-    *   [Parameters][899]
-*   [set][900]
-    *   [Parameters][901]
-*   [TelegramBot][902]
-    *   [constructor][903]
-        *   [Parameters][904]
-    *   [on][905]
-        *   [Parameters][906]
-    *   [off][907]
-        *   [Parameters][908]
-    *   [once][909]
-        *   [Parameters][910]
-    *   [login][911]
-    *   [login][912]
-        *   [Parameters][913]
-    *   [login][914]
-    *   [login][915]
-        *   [Parameters][916]
-    *   [login][917]
-    *   [login][918]
-        *   [Parameters][919]
-    *   [login][920]
-    *   [login][921]
-    *   [token][922]
-    *   [baseUrl][923]
-*   [TelegramBot][924]
-    *   [Parameters][925]
-    *   [constructor][926]
-        *   [Parameters][927]
-    *   [on][928]
-        *   [Parameters][929]
-    *   [off][930]
-        *   [Parameters][931]
-    *   [once][932]
-        *   [Parameters][933]
-    *   [login][934]
-    *   [login][935]
-        *   [Parameters][936]
-    *   [login][937]
-    *   [login][938]
-        *   [Parameters][939]
-    *   [login][940]
-    *   [login][941]
-        *   [Parameters][942]
-    *   [login][943]
-    *   [login][944]
-    *   [token][945]
-    *   [baseUrl][946]
-*   [checkMessageLinks][947]
-    *   [Parameters][948]
-*   [checkMessageLinks][949]
-    *   [Parameters][950]
-*   [extractUserMentions][951]
-    *   [Parameters][952]
-*   [extractUserMentions][953]
-    *   [Parameters][954]
-*   [extractHashtags][955]
-    *   [Parameters][956]
-*   [extractHashtags][957]
-    *   [Parameters][958]
-*   [checkLocation][959]
-    *   [Parameters][960]
-*   [checkLocation][961]
-    *   [Parameters][962]
-*   [checkUserMentions][963]
-    *   [Parameters][964]
-*   [checkUserMentions][965]
-    *   [Parameters][966]
-*   [checkHashtags][967]
-    *   [Parameters][968]
-*   [checkHashtags][969]
-    *   [Parameters][970]
-*   [checkPhoneNumber][971]
-    *   [Parameters][972]
-*   [checkPhoneNumber][973]
-    *   [Parameters][974]
-*   [extractUserIdFromLink][975]
-    *   [Parameters][976]
-*   [extractUserIdFromLink][977]
-    *   [Parameters][978]
-*   [checkGroupOrChannel][979]
-    *   [Parameters][980]
-*   [checkGroupOrChannel][981]
-    *   [Parameters][982]
-*   [checkEmoji][983]
-    *   [Parameters][984]
-*   [checkEmoji][985]
-    *   [Parameters][986]
-*   [checkSticker][987]
-    *   [Parameters][988]
-*   [checkSticker][989]
-    *   [Parameters][990]
-*   [extractUsernameFromLink][991]
-    *   [Parameters][992]
-*   [extractUsernameFromLink][993]
-    *   [Parameters][994]
-*   [checkBot][995]
-    *   [Parameters][996]
-*   [checkBot][997]
-    *   [Parameters][998]
-*   [checkChannel][999]
-    *   [Parameters][1000]
-*   [checkChannel][1001]
-    *   [Parameters][1002]
-*   [checkLink][1003]
-    *   [Parameters][1004]
-*   [checkLink][1005]
-    *   [Parameters][1006]
-*   [checkGroup][1007]
-    *   [Parameters][1008]
-*   [checkGroup][1009]
-    *   [Parameters][1010]
-*   [checkUsername][1011]
-    *   [Parameters][1012]
-*   [checkUsername][1013]
-    *   [Parameters][1014]
-*   [extractUsername][1015]
-    *   [Parameters][1016]
-*   [extractUsername][1017]
-    *   [Parameters][1018]
 
 ## constructor
 
@@ -1027,41 +401,20 @@ Creat method Telegram Api
 
 ### Parameters
 
-*   `token` **[string][1019]** The Telegram Bot API token.
-*   `intents` **([string][1019] | [array][1020] | [number][1021])?** The client intents.
-*   `parseMode` **[string][1019]?** The parse mode for message formatting.
-*   `chatId` **([string][1019] | [number][1021])?** The default chat ID for sending messages.
-*   `queryString` **[string][1019]?** The default query string for API requests.
-*   `offSetType` **([string][1019] | [object][1022])?** The type of offset to use for updates.
-
-## constructor
-
-Creat method Telegram Api
-
-### Parameters
-
-*   `token` **[string][1019]** The Telegram Bot API token.
-*   `intents` **([string][1019] | [array][1020] | [number][1021])?** The client intents.
-*   `parseMode` **[string][1019]?** The parse mode for message formatting.
-*   `chatId` **([string][1019] | [number][1021])?** The default chat ID for sending messages.
-*   `queryString` **[string][1019]?** The default query string for API requests.
-*   `offSetType` **([string][1019] | [object][1022])?** The type of offset to use for updates.
+*   `token` **[string][393]** The Telegram Bot API token.
+*   `intents` **([string][393] | [array][394] | [number][395])?** The client intents.
+*   `parseMode` **[string][393]?** The parse mode for message formatting.
+*   `chatId` **([string][393] | [number][395])?** The default chat ID for sending messages.
+*   `queryString` **[string][393]?** The default query string for API requests.
+*   `offSetType` **([string][393] | [object][396])?** The type of offset to use for updates.
 
 ## getMe
 
 Get information about the bot itself.
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response is empty or if there is an error returned by the Telegram API.
+*   Throws **[TelegramApiError][223]** Throws an error if the response is empty or if there is an error returned by the Telegram API.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves with an object containing information about the bot.
-
-## getMe
-
-Get information about the bot itself.
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response is empty or if there is an error returned by the Telegram API.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves with an object containing information about the bot.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves with an object containing information about the bot.
 
 ## deleteWebhook
 
@@ -1069,63 +422,31 @@ Delete the webhook.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options to configure the webhook deletion.
+*   `options` **[object][396]** Options to configure the webhook deletion.
 
-    *   `options.dropPendingUpdates` **[boolean][1024]** Pass true to drop pending updates while deleting the webhook.
+    *   `options.dropPendingUpdates` **[boolean][398]** Pass true to drop pending updates while deleting the webhook.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the webhook deletion fails.
+*   Throws **[TelegramApiError][223]** Throws an error if the webhook deletion fails.
 
-Returns **[Promise][1023]<[object][1022]>** Returns the response object containing the result of the deletion request.
+Returns **[Promise][397]<[object][396]>** Returns the response object containing the result of the deletion request.
 
 ## deleteWebhook
 
 Delete the currently set webhook.
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns a response indicating failure.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns a response indicating failure.
 
-Returns **[Promise][1023]<[boolean][1024]>** Returns a Promise that resolves with a boolean indicating whether the operation was successful.
-
-## deleteWebhook
-
-Delete the webhook.
-
-### Parameters
-
-*   `options` **[object][1022]** Options to configure the webhook deletion.
-
-    *   `options.dropPendingUpdates` **[boolean][1024]** Pass true to drop pending updates while deleting the webhook.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the webhook deletion fails.
-
-Returns **[Promise][1023]<[object][1022]>** Returns the response object containing the result of the deletion request.
-
-## deleteWebhook
-
-Delete the currently set webhook.
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns a response indicating failure.
-
-Returns **[Promise][1023]<[boolean][1024]>** Returns a Promise that resolves with a boolean indicating whether the operation was successful.
+Returns **[Promise][397]<[boolean][398]>** Returns a Promise that resolves with a boolean indicating whether the operation was successful.
 
 ## getWebhookInfo
 
 Get current webhook status.
 
-*   Throws **[TelegramApiError][601]** If an error occurs while fetching the webhook status.
+*   Throws **[TelegramApiError][223]** If an error occurs while fetching the webhook status.
 
-Returns **[Promise][1023]<[object][1022]>** An object representing the current webhook status.
-
-## getWebhookInfo
-
-Get current webhook status.
-
-*   Throws **[TelegramApiError][601]** If an error occurs while fetching the webhook status.
-
-Returns **[Promise][1023]<[object][1022]>** An object representing the current webhook status.
+Returns **[Promise][397]<[object][396]>** An object representing the current webhook status.
 
 ## sendMessage
 
@@ -1133,47 +454,23 @@ Send a message to a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** object containing options for the message
+*   `options` **[object][396]** object containing options for the message
 
-    *   `options.chatId` **([number][1021] | [string][1019])** Unique identifier for the target chat or username of the target channel (optional, default `this.chatId`)
-    *   `options.text` **[string][1019]** Text of the message to be sent.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
-    *   `options.allowReply` **[boolean][1024]?** Pass `true` if the message should be sent even if the specified replied-to message is not found
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass `true` if the message should be encrypted.
-    *   `options.threadId` **[number][1021]?** Unique identifier for the target message thread.
-    *   `options.replyToMessageId` **[number][1021]?** If the message is a reply, the ID of the original message.
-    *   `options.parseMode` **[string][1019]** Send `'Markdown'` or `'HTML'` if you want Telegram apps to show bold, italic, fixed-width text, or inline URLs in your bot's message. (optional, default `this.parseMode`)
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if there is a problem with the Telegram API request.
-
-Returns **[object][1022]** Returns the sent message.
-
-## sendMessage
-
-Send a message to a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** object containing options for the message
-
-    *   `options.chatId` **([number][1021] | [string][1019])** Unique identifier for the target chat or username of the target channel (optional, default `this.chatId`)
-    *   `options.text` **[string][1019]** Text of the message to be sent.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
-    *   `options.allowReply` **[boolean][1024]?** Pass `true` if the message should be sent even if the specified replied-to message is not found
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass `true` if the message should be encrypted.
-    *   `options.threadId` **[number][1021]?** Unique identifier for the target message thread.
-    *   `options.replyToMessageId` **[number][1021]?** If the message is a reply, the ID of the original message.
-    *   `options.parseMode` **[string][1019]** Send `'Markdown'` or `'HTML'` if you want Telegram apps to show bold, italic, fixed-width text, or inline URLs in your bot's message. (optional, default `this.parseMode`)
+    *   `options.chatId` **([number][395] | [string][393])** Unique identifier for the target chat or username of the target channel (optional, default `this.chatId`)
+    *   `options.text` **[string][393]** Text of the message to be sent.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
+    *   `options.allowReply` **[boolean][398]?** Pass `true` if the message should be sent even if the specified replied-to message is not found
+    *   `options.notification` **[boolean][398]?** Sends the message silently. Users will receive a notification with no sound.
+    *   `options.content` **[boolean][398]?** Pass `true` if the message should be encrypted.
+    *   `options.threadId` **[number][395]?** Unique identifier for the target message thread.
+    *   `options.replyToMessageId` **[number][395]?** If the message is a reply, the ID of the original message.
+    *   `options.parseMode` **[string][393]** Send `'Markdown'` or `'HTML'` if you want Telegram apps to show bold, italic, fixed-width text, or inline URLs in your bot's message. (optional, default `this.parseMode`)
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if there is a problem with the Telegram API request.
+*   Throws **[TelegramApiError][223]** Throws an error if there is a problem with the Telegram API request.
 
-Returns **[object][1022]** Returns the sent message.
+Returns **[object][396]** Returns the sent message.
 
 ## sendPhoto
 
@@ -1181,53 +478,26 @@ Sends a photo to the chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the photo will be sent.
-    *   `options.threadId` **[number][1021]?** The ID of the thread message.
+    *   `options.chatId` **[number][395]** =this.chatId - The ID of the chat where the photo will be sent.
+    *   `options.threadId` **[number][395]?** The ID of the thread message.
     *   `options.photo` **any** The photo to be sent. Can be a string URL or Buffer.
-    *   `options.caption` **[string][1019]** The photo caption.
-    *   `options.parseMode` **[string][1019]?** The parse mode of the caption. Can be "MarkdownV2" or "HTML".
-    *   `options.captionEntities` **[Array][1020]<[object][1022]>** The special entities of the caption.
-    *   `options.hasSpoiler` **[boolean][1024]?** If the photo should be marked as a spoiler.
-    *   `options.notification` **[boolean][1024]?** If notifications should be disabled for the message.
-    *   `options.content` **[boolean][1024]?** If the message should be protected by the "new forwarded messages privacy mode".
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]?** If the message can be sent without a reply to another message.
-    *   `options.replyMarkup` **[object][1022]?** The reply markup object.
+    *   `options.caption` **[string][393]** The photo caption.
+    *   `options.parseMode` **[string][393]?** The parse mode of the caption. Can be "MarkdownV2" or "HTML".
+    *   `options.captionEntities` **[Array][394]<[object][396]>** The special entities of the caption.
+    *   `options.hasSpoiler` **[boolean][398]?** If the photo should be marked as a spoiler.
+    *   `options.notification` **[boolean][398]?** If notifications should be disabled for the message.
+    *   `options.content` **[boolean][398]?** If the message should be protected by the "new forwarded messages privacy mode".
+    *   `options.replyToMessageId` **[number][395]?** The ID of the message being replied to.
+    *   `options.allowReply` **[boolean][398]?** If the message can be sent without a reply to another message.
+    *   `options.replyMarkup` **[object][396]?** The reply markup object.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the photo.
+*   Throws **[TelegramApiError][223]** If an error occurs while sending the photo.
 
-Returns **[Promise][1023]<[object][1022]>** The sent photo object.
-
-## sendPhoto
-
-Sends a photo to the chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the photo will be sent.
-    *   `options.threadId` **[number][1021]?** The ID of the thread message.
-    *   `options.photo` **any** The photo to be sent. Can be a string URL or Buffer.
-    *   `options.caption` **[string][1019]** The photo caption.
-    *   `options.parseMode` **[string][1019]?** The parse mode of the caption. Can be "MarkdownV2" or "HTML".
-    *   `options.captionEntities` **[Array][1020]<[object][1022]>** The special entities of the caption.
-    *   `options.hasSpoiler` **[boolean][1024]?** If the photo should be marked as a spoiler.
-    *   `options.notification` **[boolean][1024]?** If notifications should be disabled for the message.
-    *   `options.content` **[boolean][1024]?** If the message should be protected by the "new forwarded messages privacy mode".
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]?** If the message can be sent without a reply to another message.
-    *   `options.replyMarkup` **[object][1022]?** The reply markup object.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the photo.
-
-Returns **[Promise][1023]<[object][1022]>** The sent photo object.
+Returns **[Promise][397]<[object][396]>** The sent photo object.
 
 ## sendAudio
 
@@ -1235,59 +505,29 @@ Sends an audio message to the chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to configure the audio message.
+*   `options` **[object][396]** The options to configure the audio message.
 
-    *   `options.chatId` **[string][1019]** The chat ID of the recipient. (optional, default `this.chatId`)
-    *   `options.threadId` **[string][1019]?** The message thread ID.
+    *   `options.chatId` **[string][393]** The chat ID of the recipient. (optional, default `this.chatId`)
+    *   `options.threadId` **[string][393]?** The message thread ID.
     *   `options.audio` **any** The audio file to send.
-    *   `options.caption` **[string][1019]?** The caption of the audio message.
-    *   `options.parseMode` **[string][1019]** The parsing mode of the caption (optional, default `this.parseMode`)
-    *   `options.captionEntities` **[Array][1020]?** The special entities in the caption.
-    *   `options.duration` **[number][1021]?** The duration of the audio message.
-    *   `options.performer` **[string][1019]?** The performer of the audio file.
-    *   `options.title` **[string][1019]?** The title of the audio file.
+    *   `options.caption` **[string][393]?** The caption of the audio message.
+    *   `options.parseMode` **[string][393]** The parsing mode of the caption (optional, default `this.parseMode`)
+    *   `options.captionEntities` **[Array][394]?** The special entities in the caption.
+    *   `options.duration` **[number][395]?** The duration of the audio message.
+    *   `options.performer` **[string][393]?** The performer of the audio file.
+    *   `options.title` **[string][393]?** The title of the audio file.
     *   `options.thumbnail` **any?** The thumbnail of the audio message.
-    *   `options.notification` **[boolean][1024]** If true, sends the message silently. (optional, default `true`)
-    *   `options.content` **[boolean][1024]** If true, protects the audio file from unauthorized access. (optional, default `false`)
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]** If true, allows the message to be sent without replying to a message. (optional, default `false`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The reply markup of the message.
+    *   `options.notification` **[boolean][398]** If true, sends the message silently. (optional, default `true`)
+    *   `options.content` **[boolean][398]** If true, protects the audio file from unauthorized access. (optional, default `false`)
+    *   `options.replyToMessageId` **[number][395]?** The ID of the message to reply to.
+    *   `options.allowReply` **[boolean][398]** If true, allows the message to be sent without replying to a message. (optional, default `false`)
+    *   `options.replyMarkup` **([object][396] | [string][393])?** The reply markup of the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error sending the message.
+*   Throws **[TelegramApiError][223]** If there is an error sending the message.
 
-Returns **[Promise][1023]<[object][1022]>** The sent audio message object.
-
-## sendAudio
-
-Sends an audio message to the chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to configure the audio message.
-
-    *   `options.chatId` **[string][1019]** The chat ID of the recipient. (optional, default `this.chatId`)
-    *   `options.threadId` **[string][1019]?** The message thread ID.
-    *   `options.audio` **any** The audio file to send.
-    *   `options.caption` **[string][1019]?** The caption of the audio message.
-    *   `options.parseMode` **[string][1019]** The parsing mode of the caption (optional, default `this.parseMode`)
-    *   `options.captionEntities` **[Array][1020]?** The special entities in the caption.
-    *   `options.duration` **[number][1021]?** The duration of the audio message.
-    *   `options.performer` **[string][1019]?** The performer of the audio file.
-    *   `options.title` **[string][1019]?** The title of the audio file.
-    *   `options.thumbnail` **any?** The thumbnail of the audio message.
-    *   `options.notification` **[boolean][1024]** If true, sends the message silently. (optional, default `true`)
-    *   `options.content` **[boolean][1024]** If true, protects the audio file from unauthorized access. (optional, default `false`)
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]** If true, allows the message to be sent without replying to a message. (optional, default `false`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The reply markup of the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error sending the message.
-
-Returns **[Promise][1023]<[object][1022]>** The sent audio message object.
+Returns **[Promise][397]<[object][396]>** The sent audio message object.
 
 ## sendDocument
 
@@ -1295,55 +535,27 @@ Sends a document to the chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for sending the document.
+*   `options` **[object][396]** Options for sending the document.
 
-    *   `options.chatId` **[number][1021]?** Unique identifier for the target chat or username of the target channel.
-    *   `options.threadId` **[number][1021]?** Identifier of the message thread.
+    *   `options.chatId` **[number][395]?** Unique identifier for the target chat or username of the target channel.
+    *   `options.threadId` **[number][395]?** Identifier of the message thread.
     *   `options.document` **any** File path or Stream for the document to send.
     *   `options.thumbnail` **any?** File path or Stream for the document's thumbnail.
-    *   `options.caption` **[string][1019]?** Caption for the document.
-    *   `options.parseMode` **[string][1019]?** The mode for parsing entities in the document caption. One of "Markdown" or "HTML".
-    *   `options.captionEntities` **[Array][1020]?** List of special entities to highlight in the document caption.
-    *   `options.disableContentTypeDetection` **[boolean][1024]?** Disables automatic content type detection for uploaded files.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently if true.
-    *   `options.content` **[boolean][1024]?** If the document should be protected by a password.
-    *   `options.replyToMessageId` **[number][1021]?** Identifier of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true to enable sending the message without a reply.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** InlineKeyboardMarkup or ReplyKeyboardMarkup for the sent message.
+    *   `options.caption` **[string][393]?** Caption for the document.
+    *   `options.parseMode` **[string][393]?** The mode for parsing entities in the document caption. One of "Markdown" or "HTML".
+    *   `options.captionEntities` **[Array][394]?** List of special entities to highlight in the document caption.
+    *   `options.disableContentTypeDetection` **[boolean][398]?** Disables automatic content type detection for uploaded files.
+    *   `options.notification` **[boolean][398]?** Sends the message silently if true.
+    *   `options.content` **[boolean][398]?** If the document should be protected by a password.
+    *   `options.replyToMessageId` **[number][395]?** Identifier of the message being replied to.
+    *   `options.allowReply` **[boolean][398]?** Pass true to enable sending the message without a reply.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** InlineKeyboardMarkup or ReplyKeyboardMarkup for the sent message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When the request to the Telegram API fails.
+*   Throws **[TelegramApiError][223]** When the request to the Telegram API fails.
 
-Returns **[Promise][1023]<[object][1022]>** The sent message object.
-
-## sendDocument
-
-Sends a document to the chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for sending the document.
-
-    *   `options.chatId` **[number][1021]?** Unique identifier for the target chat or username of the target channel.
-    *   `options.threadId` **[number][1021]?** Identifier of the message thread.
-    *   `options.document` **any** File path or Stream for the document to send.
-    *   `options.thumbnail` **any?** File path or Stream for the document's thumbnail.
-    *   `options.caption` **[string][1019]?** Caption for the document.
-    *   `options.parseMode` **[string][1019]?** The mode for parsing entities in the document caption. One of "Markdown" or "HTML".
-    *   `options.captionEntities` **[Array][1020]?** List of special entities to highlight in the document caption.
-    *   `options.disableContentTypeDetection` **[boolean][1024]?** Disables automatic content type detection for uploaded files.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently if true.
-    *   `options.content` **[boolean][1024]?** If the document should be protected by a password.
-    *   `options.replyToMessageId` **[number][1021]?** Identifier of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true to enable sending the message without a reply.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** InlineKeyboardMarkup or ReplyKeyboardMarkup for the sent message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When the request to the Telegram API fails.
-
-Returns **[Promise][1023]<[object][1022]>** The sent message object.
+Returns **[Promise][397]<[object][396]>** The sent message object.
 
 ## sendVideo
 
@@ -1351,61 +563,30 @@ Sends a video message to a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for the video message.
+*   `options` **[object][396]** Options for the video message.
 
-    *   `options.chatId` **([string][1019] | [number][1021])** Unique identifier for the target chat or username of the target channel.
+    *   `options.chatId` **([string][393] | [number][395])** Unique identifier for the target chat or username of the target channel.
     *   `options.video` **any** Video to send. Can be a string path or a stream.
-    *   `options.duration` **[number][1021]?** Duration of the video in seconds.
-    *   `options.width` **[number][1021]?** Width of the video.
-    *   `options.height` **[number][1021]?** Height of the video.
-    *   `options.thumbnail` **[string][1019]?** Thumbnail of the video. Can be a string path or a stream.
-    *   `options.caption` **[string][1019]?** Caption for the video.
-    *   `options.parseMode` **[string][1019]?** Mode for parsing entities in the video caption.
-    *   `options.captionEntities` **[Array][1020]?** List of special entities that appear in the video caption.
-    *   `options.hasSpoiler` **[boolean][1024]?** Pass true, if a spoiler for the media message is needed.
-    *   `options.supportsStreaming` **[boolean][1024]?** Pass true, if the uploaded video is suitable for streaming.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass true, if the video should be encrypted.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true, if the message should be sent even if the specified replied-to message is not found.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
+    *   `options.duration` **[number][395]?** Duration of the video in seconds.
+    *   `options.width` **[number][395]?** Width of the video.
+    *   `options.height` **[number][395]?** Height of the video.
+    *   `options.thumbnail` **[string][393]?** Thumbnail of the video. Can be a string path or a stream.
+    *   `options.caption` **[string][393]?** Caption for the video.
+    *   `options.parseMode` **[string][393]?** Mode for parsing entities in the video caption.
+    *   `options.captionEntities` **[Array][394]?** List of special entities that appear in the video caption.
+    *   `options.hasSpoiler` **[boolean][398]?** Pass true, if a spoiler for the media message is needed.
+    *   `options.supportsStreaming` **[boolean][398]?** Pass true, if the uploaded video is suitable for streaming.
+    *   `options.notification` **[boolean][398]?** Sends the message silently. Users will receive a notification with no sound.
+    *   `options.content` **[boolean][398]?** Pass true, if the video should be encrypted.
+    *   `options.replyToMessageId` **[number][395]?** The ID of the message to reply to.
+    *   `options.allowReply` **[boolean][398]?** Pass true, if the message should be sent even if the specified replied-to message is not found.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options for the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API response returns an error code.
+*   Throws **[TelegramApiError][223]** Throws an error if the API response returns an error code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent video message object on success.
-
-## sendVideo
-
-Sends a video message to a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for the video message.
-
-    *   `options.chatId` **([string][1019] | [number][1021])** Unique identifier for the target chat or username of the target channel.
-    *   `options.video` **any** Video to send. Can be a string path or a stream.
-    *   `options.duration` **[number][1021]?** Duration of the video in seconds.
-    *   `options.width` **[number][1021]?** Width of the video.
-    *   `options.height` **[number][1021]?** Height of the video.
-    *   `options.thumbnail` **[string][1019]?** Thumbnail of the video. Can be a string path or a stream.
-    *   `options.caption` **[string][1019]?** Caption for the video.
-    *   `options.parseMode` **[string][1019]?** Mode for parsing entities in the video caption.
-    *   `options.captionEntities` **[Array][1020]?** List of special entities that appear in the video caption.
-    *   `options.hasSpoiler` **[boolean][1024]?** Pass true, if a spoiler for the media message is needed.
-    *   `options.supportsStreaming` **[boolean][1024]?** Pass true, if the uploaded video is suitable for streaming.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass true, if the video should be encrypted.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true, if the message should be sent even if the specified replied-to message is not found.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API response returns an error code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent video message object on success.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the sent video message object on success.
 
 ## sendAnimation
 
@@ -1413,61 +594,30 @@ Sends an animation message to a specified chat or channel.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for sending the animation message.
+*   `options` **[object][396]** The options for sending the animation message.
 
-    *   `options.chatId` **[string][1019]?** The chat or channel id to send the animation message to.
-    *   `options.animation` **[string][1019]** The animation to be sent.
-    *   `options.duration` **[number][1021]?** The duration of the animation.
-    *   `options.width` **[number][1021]?** The width of the animation.
-    *   `options.height` **[number][1021]?** The height of the animation.
-    *   `options.thumbnail` **[string][1019]?** The thumbnail of the animation.
-    *   `options.caption` **[string][1019]?** The caption of the animation.
-    *   `options.parseMode` **[string][1019]?** The parse mode of the animation.
-    *   `options.captionEntities` **[Array][1020]?** The caption entities of the animation.
-    *   `options.hasSpoiler` **[boolean][1024]?** Whether the animation has a spoiler.
-    *   `options.notification` **[boolean][1024]?** Whether the notification for the message should be disabled.
-    *   `options.content` **[boolean][1024]?** Whether the message content should be protected.
-    *   `options.replyToMessageId` **[number][1021]?** The message id to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Whether the message can be sent without a reply.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The reply markup for the message.
-    *   `options.threadId` **[string][1019]?** The id of the message thread to send the animation to.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there was an error while sending the animation message.
-
-Returns **[Promise][1023]<[object][1022]>** The response object from the Telegram API.
-
-## sendAnimation
-
-Sends an animation message to a specified chat or channel.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for sending the animation message.
-
-    *   `options.chatId` **[string][1019]?** The chat or channel id to send the animation message to.
-    *   `options.animation` **[string][1019]** The animation to be sent.
-    *   `options.duration` **[number][1021]?** The duration of the animation.
-    *   `options.width` **[number][1021]?** The width of the animation.
-    *   `options.height` **[number][1021]?** The height of the animation.
-    *   `options.thumbnail` **[string][1019]?** The thumbnail of the animation.
-    *   `options.caption` **[string][1019]?** The caption of the animation.
-    *   `options.parseMode` **[string][1019]?** The parse mode of the animation.
-    *   `options.captionEntities` **[Array][1020]?** The caption entities of the animation.
-    *   `options.hasSpoiler` **[boolean][1024]?** Whether the animation has a spoiler.
-    *   `options.notification` **[boolean][1024]?** Whether the notification for the message should be disabled.
-    *   `options.content` **[boolean][1024]?** Whether the message content should be protected.
-    *   `options.replyToMessageId` **[number][1021]?** The message id to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Whether the message can be sent without a reply.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The reply markup for the message.
-    *   `options.threadId` **[string][1019]?** The id of the message thread to send the animation to.
+    *   `options.chatId` **[string][393]?** The chat or channel id to send the animation message to.
+    *   `options.animation` **[string][393]** The animation to be sent.
+    *   `options.duration` **[number][395]?** The duration of the animation.
+    *   `options.width` **[number][395]?** The width of the animation.
+    *   `options.height` **[number][395]?** The height of the animation.
+    *   `options.thumbnail` **[string][393]?** The thumbnail of the animation.
+    *   `options.caption` **[string][393]?** The caption of the animation.
+    *   `options.parseMode` **[string][393]?** The parse mode of the animation.
+    *   `options.captionEntities` **[Array][394]?** The caption entities of the animation.
+    *   `options.hasSpoiler` **[boolean][398]?** Whether the animation has a spoiler.
+    *   `options.notification` **[boolean][398]?** Whether the notification for the message should be disabled.
+    *   `options.content` **[boolean][398]?** Whether the message content should be protected.
+    *   `options.replyToMessageId` **[number][395]?** The message id to reply to.
+    *   `options.allowReply` **[boolean][398]?** Whether the message can be sent without a reply.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** The reply markup for the message.
+    *   `options.threadId` **[string][393]?** The id of the message thread to send the animation to.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there was an error while sending the animation message.
+*   Throws **[TelegramApiError][223]** If there was an error while sending the animation message.
 
-Returns **[Promise][1023]<[object][1022]>** The response object from the Telegram API.
+Returns **[Promise][397]<[object][396]>** The response object from the Telegram API.
 
 ## sendVoice
 
@@ -1475,53 +625,26 @@ Sends a voice message to the specified chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for sending the voice message.
+*   `options` **[object][396]** Options for sending the voice message.
 
-    *   `options.voice` **[string][1019]** The voice file to send.
-    *   `options.chatId` **([string][1019] | [number][1021])?** The chat ID to send the voice message to. Defaults to the chat ID of the current context if not provided.
-    *   `options.caption` **[string][1019]?** Caption for the voice message, 0-1024 characters.
-    *   `options.parseMode` **[string][1019]?** The parse mode of the message caption. Defaults to the parse mode of the current context if not provided.
-    *   `options.captionEntities` **[Array][1020]?** Additional entities to specify for message caption.
-    *   `options.duration` **[number][1021]?** Duration of the voice message in seconds.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass true if the uploaded voice message is a file protected with a password.
-    *   `options.replyToMessageId` **[number][1021]?** The message ID to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true if sending the message without reply is allowed.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply. Additional interface options for the message.
-    *   `options.threadId` **[string][1019]?** Unique identifier for the target chat thread.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the voice message.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the sent Message is returned.
-
-## sendVoice
-
-Sends a voice message to the specified chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for sending the voice message.
-
-    *   `options.voice` **[string][1019]** The voice file to send.
-    *   `options.chatId` **([string][1019] | [number][1021])?** The chat ID to send the voice message to. Defaults to the chat ID of the current context if not provided.
-    *   `options.caption` **[string][1019]?** Caption for the voice message, 0-1024 characters.
-    *   `options.parseMode` **[string][1019]?** The parse mode of the message caption. Defaults to the parse mode of the current context if not provided.
-    *   `options.captionEntities` **[Array][1020]?** Additional entities to specify for message caption.
-    *   `options.duration` **[number][1021]?** Duration of the voice message in seconds.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass true if the uploaded voice message is a file protected with a password.
-    *   `options.replyToMessageId` **[number][1021]?** The message ID to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true if sending the message without reply is allowed.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply. Additional interface options for the message.
-    *   `options.threadId` **[string][1019]?** Unique identifier for the target chat thread.
+    *   `options.voice` **[string][393]** The voice file to send.
+    *   `options.chatId` **([string][393] | [number][395])?** The chat ID to send the voice message to. Defaults to the chat ID of the current context if not provided.
+    *   `options.caption` **[string][393]?** Caption for the voice message, 0-1024 characters.
+    *   `options.parseMode` **[string][393]?** The parse mode of the message caption. Defaults to the parse mode of the current context if not provided.
+    *   `options.captionEntities` **[Array][394]?** Additional entities to specify for message caption.
+    *   `options.duration` **[number][395]?** Duration of the voice message in seconds.
+    *   `options.notification` **[boolean][398]?** Sends the message silently. Users will receive a notification with no sound.
+    *   `options.content` **[boolean][398]?** Pass true if the uploaded voice message is a file protected with a password.
+    *   `options.replyToMessageId` **[number][395]?** The message ID to reply to.
+    *   `options.allowReply` **[boolean][398]?** Pass true if sending the message without reply is allowed.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply. Additional interface options for the message.
+    *   `options.threadId` **[string][393]?** Unique identifier for the target chat thread.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the voice message.
+*   Throws **[TelegramApiError][223]** If an error occurs while sending the voice message.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the sent Message is returned.
+Returns **[Promise][397]<[object][396]>** On success, the sent Message is returned.
 
 ## sendVideoNote
 
@@ -1529,51 +652,25 @@ Sends a video note message to a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.chatId` **([string][1019] | [number][1021])** The chat ID to send the message to.
-    *   `options.videoNote` **[string][1019]** The video note file to send. Pass a file ID or a URL to the video note file.
-    *   `options.duration` **[number][1021]?** Duration of the video note in seconds.
-    *   `options.length` **[number][1021]?** File size of the video note.
-    *   `options.thumbnail` **[object][1022]?** Optional thumbnail (image file to use as the thumbnail) for the video note.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently if true, otherwise with sound (default).
-    *   `options.content` **[boolean][1024]?** True, if the video note should be protected by a password.
-    *   `options.threadId` **[number][1021]?** Message thread ID.
-    *   `options.replyToMessageId` **[number][1021]?** ID of the original message when sending a reply.
-    *   `options.allowReply` **[boolean][1024]?** Pass true, if the message should be sent even without a reply message.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options (JSON-serialized object).
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code property.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent message object.
-
-## sendVideoNote
-
-Sends a video note message to a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.chatId` **([string][1019] | [number][1021])** The chat ID to send the message to.
-    *   `options.videoNote` **[string][1019]** The video note file to send. Pass a file ID or a URL to the video note file.
-    *   `options.duration` **[number][1021]?** Duration of the video note in seconds.
-    *   `options.length` **[number][1021]?** File size of the video note.
-    *   `options.thumbnail` **[object][1022]?** Optional thumbnail (image file to use as the thumbnail) for the video note.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently if true, otherwise with sound (default).
-    *   `options.content` **[boolean][1024]?** True, if the video note should be protected by a password.
-    *   `options.threadId` **[number][1021]?** Message thread ID.
-    *   `options.replyToMessageId` **[number][1021]?** ID of the original message when sending a reply.
-    *   `options.allowReply` **[boolean][1024]?** Pass true, if the message should be sent even without a reply message.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options (JSON-serialized object).
+    *   `options.chatId` **([string][393] | [number][395])** The chat ID to send the message to.
+    *   `options.videoNote` **[string][393]** The video note file to send. Pass a file ID or a URL to the video note file.
+    *   `options.duration` **[number][395]?** Duration of the video note in seconds.
+    *   `options.length` **[number][395]?** File size of the video note.
+    *   `options.thumbnail` **[object][396]?** Optional thumbnail (image file to use as the thumbnail) for the video note.
+    *   `options.notification` **[boolean][398]?** Sends the message silently if true, otherwise with sound (default).
+    *   `options.content` **[boolean][398]?** True, if the video note should be protected by a password.
+    *   `options.threadId` **[number][395]?** Message thread ID.
+    *   `options.replyToMessageId` **[number][395]?** ID of the original message when sending a reply.
+    *   `options.allowReply` **[boolean][398]?** Pass true, if the message should be sent even without a reply message.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options (JSON-serialized object).
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code property.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error\_code property.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent message object.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the sent message object.
 
 ## sendMediaGroup
 
@@ -1581,59 +678,29 @@ Sends a media group to the specified chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the options for the media group.
+*   `options` **[object][396]** An object containing the options for the media group.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat to send the media group to.
-    *   `options.notification` **[boolean][1024]** Pass true to disable notification for the message. (optional, default `false`)
-    *   `options.content` **[boolean][1024]** Pass true to protect the content of the media group from being forwarded. (optional, default `false`)
-    *   `options.threadId` **[number][1021]?** Send message as a reply to a message thread.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]** Pass true to allow sending the media group without replying to a message. (optional, default `false`)
-    *   `options.media` **[Array][1020]<[object][1022]>** An array of media objects to be sent in the media group.
-    *   `options.media` **[string][1019]** \[].type - Type of the media (photo, video, etc.).
-    *   `options.media` **([string][1019] | ReadableStream)** \[].media - The media to send (as a string or ReadableStream).
-*   `string` **[string][1019]** \[].caption] - Caption of the media (0-1024 characters).
-*   `string` **[string][1019]** \[].parseMode] - The parse mode of the caption (Markdown, HTML).
-*   `number` **[number][1021]** \[].width] - The width of the media (for videos and photos).
-*   `number` **[number][1021]** \[].height] - The height of the media (for videos and photos).
-*   `number` **[number][1021]** \[].duration] - Duration of the video/audio (in seconds).
-*   `boolean` **[boolean][1024]** \[].supportsStreaming] - Pass true if the uploaded video supports streaming.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent media group object on success.
-
-## sendMediaGroup
-
-Sends a media group to the specified chat.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the options for the media group.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat to send the media group to.
-    *   `options.notification` **[boolean][1024]** Pass true to disable notification for the message. (optional, default `false`)
-    *   `options.content` **[boolean][1024]** Pass true to protect the content of the media group from being forwarded. (optional, default `false`)
-    *   `options.threadId` **[number][1021]?** Send message as a reply to a message thread.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]** Pass true to allow sending the media group without replying to a message. (optional, default `false`)
-    *   `options.media` **[Array][1020]<[object][1022]>** An array of media objects to be sent in the media group.
-    *   `options.media` **[string][1019]** \[].type - Type of the media (photo, video, etc.).
-    *   `options.media` **([string][1019] | ReadableStream)** \[].media - The media to send (as a string or ReadableStream).
-*   `string` **[string][1019]** \[].caption] - Caption of the media (0-1024 characters).
-*   `string` **[string][1019]** \[].parseMode] - The parse mode of the caption (Markdown, HTML).
-*   `number` **[number][1021]** \[].width] - The width of the media (for videos and photos).
-*   `number` **[number][1021]** \[].height] - The height of the media (for videos and photos).
-*   `number` **[number][1021]** \[].duration] - Duration of the video/audio (in seconds).
-*   `boolean` **[boolean][1024]** \[].supportsStreaming] - Pass true if the uploaded video supports streaming.
+    *   `options.chatId` **[number][395]** =this.chatId - The ID of the chat to send the media group to.
+    *   `options.notification` **[boolean][398]** Pass true to disable notification for the message. (optional, default `false`)
+    *   `options.content` **[boolean][398]** Pass true to protect the content of the media group from being forwarded. (optional, default `false`)
+    *   `options.threadId` **[number][395]?** Send message as a reply to a message thread.
+    *   `options.replyToMessageId` **[number][395]?** The ID of the message being replied to.
+    *   `options.allowReply` **[boolean][398]** Pass true to allow sending the media group without replying to a message. (optional, default `false`)
+    *   `options.media` **[Array][394]<[object][396]>** An array of media objects to be sent in the media group.
+    *   `options.media` **[string][393]** \[].type - Type of the media (photo, video, etc.).
+    *   `options.media` **([string][393] | ReadableStream)** \[].media - The media to send (as a string or ReadableStream).
+*   `string` **[string][393]** \[].caption] - Caption of the media (0-1024 characters).
+*   `string` **[string][393]** \[].parseMode] - The parse mode of the caption (Markdown, HTML).
+*   `number` **[number][395]** \[].width] - The width of the media (for videos and photos).
+*   `number` **[number][395]** \[].height] - The height of the media (for videos and photos).
+*   `number` **[number][395]** \[].duration] - Duration of the video/audio (in seconds).
+*   `boolean` **[boolean][398]** \[].supportsStreaming] - Pass true if the uploaded video supports streaming.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent media group object on success.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the sent media group object on success.
 
 ## sendLocation
 
@@ -1641,53 +708,26 @@ Sends a location message to a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the options for sending the location message.
+*   `options` **[object][396]** An object containing the options for sending the location message.
 
-    *   `options.latitude` **[number][1021]** The latitude of the location.
-    *   `options.longitude` **[number][1021]** The longitude of the location.
-    *   `options.accuracy` **[number][1021]?** The horizontal accuracy of the location.
-    *   `options.livePeriod` **[number][1021]?** The duration in seconds for which the location will be updated.
-    *   `options.heading` **[number][1021]?** The direction in which the user is moving, in degrees. Must be between 1 and 360.
-    *   `options.proximityRadius` **[number][1021]?** The radius of the proximity alert for the location, in meters.
-    *   `options.notification` **[boolean][1024]** Sends the message silently. Users will receive a notification with no sound. (optional, default `true`)
-    *   `options.content` **[boolean][1024]** Passes the message content through the Telegram content provider. (optional, default `false`)
-    *   `options.threadId` **[number][1021]?** The ID of the message thread.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to which this message is a reply.
-    *   `options.allowReply` **[boolean][1024]** Pass true if the message should be sent even if the specified reply\_to\_message\_id is not found. (optional, default `true`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** A JSON-serialized object for an inline keyboard or custom reply keyboard.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error.
-
-Returns **[object][1022]** The sent location message object.
-
-## sendLocation
-
-Sends a location message to a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the options for sending the location message.
-
-    *   `options.latitude` **[number][1021]** The latitude of the location.
-    *   `options.longitude` **[number][1021]** The longitude of the location.
-    *   `options.accuracy` **[number][1021]?** The horizontal accuracy of the location.
-    *   `options.livePeriod` **[number][1021]?** The duration in seconds for which the location will be updated.
-    *   `options.heading` **[number][1021]?** The direction in which the user is moving, in degrees. Must be between 1 and 360.
-    *   `options.proximityRadius` **[number][1021]?** The radius of the proximity alert for the location, in meters.
-    *   `options.notification` **[boolean][1024]** Sends the message silently. Users will receive a notification with no sound. (optional, default `true`)
-    *   `options.content` **[boolean][1024]** Passes the message content through the Telegram content provider. (optional, default `false`)
-    *   `options.threadId` **[number][1021]?** The ID of the message thread.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to which this message is a reply.
-    *   `options.allowReply` **[boolean][1024]** Pass true if the message should be sent even if the specified reply\_to\_message\_id is not found. (optional, default `true`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** A JSON-serialized object for an inline keyboard or custom reply keyboard.
+    *   `options.latitude` **[number][395]** The latitude of the location.
+    *   `options.longitude` **[number][395]** The longitude of the location.
+    *   `options.accuracy` **[number][395]?** The horizontal accuracy of the location.
+    *   `options.livePeriod` **[number][395]?** The duration in seconds for which the location will be updated.
+    *   `options.heading` **[number][395]?** The direction in which the user is moving, in degrees. Must be between 1 and 360.
+    *   `options.proximityRadius` **[number][395]?** The radius of the proximity alert for the location, in meters.
+    *   `options.notification` **[boolean][398]** Sends the message silently. Users will receive a notification with no sound. (optional, default `true`)
+    *   `options.content` **[boolean][398]** Passes the message content through the Telegram content provider. (optional, default `false`)
+    *   `options.threadId` **[number][395]?** The ID of the message thread.
+    *   `options.replyToMessageId` **[number][395]?** The ID of the message to which this message is a reply.
+    *   `options.allowReply` **[boolean][398]** Pass true if the message should be sent even if the specified reply\_to\_message\_id is not found. (optional, default `true`)
+    *   `options.replyMarkup` **([object][396] | [string][393])?** A JSON-serialized object for an inline keyboard or custom reply keyboard.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** If the Telegram API returns an error.
 
-Returns **[object][1022]** The sent location message object.
+Returns **[object][396]** The sent location message object.
 
 ## sendVenue
 
@@ -1695,59 +735,29 @@ Sends a venue message to the chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to send the message.
+*   `options` **[object][396]** The options to send the message.
 
-    *   `options.chatId` **[string][1019]?** The chat id where to send the message.
-    *   `options.threadId` **[number][1021]?** Unique identifier for the target chat thread.
-    *   `options.latitude` **[number][1021]** Latitude of the venue.
-    *   `options.longitude` **[number][1021]** Longitude of the venue.
-    *   `options.title` **[string][1019]** Name of the venue.
-    *   `options.address` **[string][1019]** Address of the venue.
-    *   `options.foursquareId` **[string][1019]?** Foursquare identifier of the venue.
-    *   `options.foursquareType` **[string][1019]?** Foursquare type of the venue, if known.
-    *   `options.googlePlaceId` **[string][1019]?** Google Places identifier of the venue.
-    *   `options.googlePlaceType` **[string][1019]?** Google Places type of the venue, if known.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently.
-    *   `options.content` **[boolean][1024]?** For messages forwarded from channels, sets the channel as protected.
-    *   `options.replyToMessageId` **[number][1021]?** Id of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass True, if the message should be sent even if the specified replied-to message is not found.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options. An object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When there's an error sending the message.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the sent Message is returned.
-
-## sendVenue
-
-Sends a venue message to the chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to send the message.
-
-    *   `options.chatId` **[string][1019]?** The chat id where to send the message.
-    *   `options.threadId` **[number][1021]?** Unique identifier for the target chat thread.
-    *   `options.latitude` **[number][1021]** Latitude of the venue.
-    *   `options.longitude` **[number][1021]** Longitude of the venue.
-    *   `options.title` **[string][1019]** Name of the venue.
-    *   `options.address` **[string][1019]** Address of the venue.
-    *   `options.foursquareId` **[string][1019]?** Foursquare identifier of the venue.
-    *   `options.foursquareType` **[string][1019]?** Foursquare type of the venue, if known.
-    *   `options.googlePlaceId` **[string][1019]?** Google Places identifier of the venue.
-    *   `options.googlePlaceType` **[string][1019]?** Google Places type of the venue, if known.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently.
-    *   `options.content` **[boolean][1024]?** For messages forwarded from channels, sets the channel as protected.
-    *   `options.replyToMessageId` **[number][1021]?** Id of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass True, if the message should be sent even if the specified replied-to message is not found.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options. An object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.
+    *   `options.chatId` **[string][393]?** The chat id where to send the message.
+    *   `options.threadId` **[number][395]?** Unique identifier for the target chat thread.
+    *   `options.latitude` **[number][395]** Latitude of the venue.
+    *   `options.longitude` **[number][395]** Longitude of the venue.
+    *   `options.title` **[string][393]** Name of the venue.
+    *   `options.address` **[string][393]** Address of the venue.
+    *   `options.foursquareId` **[string][393]?** Foursquare identifier of the venue.
+    *   `options.foursquareType` **[string][393]?** Foursquare type of the venue, if known.
+    *   `options.googlePlaceId` **[string][393]?** Google Places identifier of the venue.
+    *   `options.googlePlaceType` **[string][393]?** Google Places type of the venue, if known.
+    *   `options.notification` **[boolean][398]?** Sends the message silently.
+    *   `options.content` **[boolean][398]?** For messages forwarded from channels, sets the channel as protected.
+    *   `options.replyToMessageId` **[number][395]?** Id of the message to reply to.
+    *   `options.allowReply` **[boolean][398]?** Pass True, if the message should be sent even if the specified replied-to message is not found.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options. An object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When there's an error sending the message.
+*   Throws **[TelegramApiError][223]** When there's an error sending the message.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the sent Message is returned.
+Returns **[Promise][397]<[object][396]>** On success, the sent Message is returned.
 
 ## forwardMessage
 
@@ -1755,41 +765,20 @@ Forward a message to a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to use for forwarding the message.
+*   `options` **[object][396]** The options to use for forwarding the message.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat ID of the recipient chat. Required if `this.chatId` is not set.
-    *   `options.fromChatId` **[number][1021]** The chat ID of the chat where the message to forward is located.
-    *   `options.messageId` **[number][1021]** The message ID of the message to forward.
-    *   `options.threadId` **[number][1021]** The ID of the message thread. Optional.
-    *   `options.notification` **[boolean][1024]** Pass `true` to disable notification for the message. Optional.
-    *   `options.content` **[boolean][1024]** Pass `true` to protect forwarded message from being copied. Optional.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while forwarding the message.
-
-Returns **[object][1022]** The forwarded message object.
-
-## forwardMessage
-
-Forward a message to a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to use for forwarding the message.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat ID of the recipient chat. Required if `this.chatId` is not set.
-    *   `options.fromChatId` **[number][1021]** The chat ID of the chat where the message to forward is located.
-    *   `options.messageId` **[number][1021]** The message ID of the message to forward.
-    *   `options.threadId` **[number][1021]** The ID of the message thread. Optional.
-    *   `options.notification` **[boolean][1024]** Pass `true` to disable notification for the message. Optional.
-    *   `options.content` **[boolean][1024]** Pass `true` to protect forwarded message from being copied. Optional.
+    *   `options.chatId` **[number][395]** =this.chatId - The chat ID of the recipient chat. Required if `this.chatId` is not set.
+    *   `options.fromChatId` **[number][395]** The chat ID of the chat where the message to forward is located.
+    *   `options.messageId` **[number][395]** The message ID of the message to forward.
+    *   `options.threadId` **[number][395]** The ID of the message thread. Optional.
+    *   `options.notification` **[boolean][398]** Pass `true` to disable notification for the message. Optional.
+    *   `options.content` **[boolean][398]** Pass `true` to protect forwarded message from being copied. Optional.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while forwarding the message.
+*   Throws **[TelegramApiError][223]** If an error occurs while forwarding the message.
 
-Returns **[object][1022]** The forwarded message object.
+Returns **[object][396]** The forwarded message object.
 
 ## copyMessage
 
@@ -1797,53 +786,26 @@ Copy a message from one chat to another.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for copying the message.
+*   `options` **[object][396]** The options for copying the message.
 
-    *   `options.fromChatId` **[string][1019]** The chat ID of the chat where the original message is located.
-    *   `options.messageId` **[string][1019]** The message ID of the message to copy.
-    *   `options.threadId` **[string][1019]?** The message thread ID.
-    *   `options.chatId` **[string][1019]** The chat ID of the chat where the message will be copied to. If not provided, uses the chat ID set in the constructor. (optional, default `this.chatId`)
-    *   `options.caption` **[string][1019]?** The caption of the message to be copied.
-    *   `options.parseMode` **[string][1019]** The parsing mode of the message caption. If not provided, uses the parse mode set in the constructor. (optional, default `this.parseMode`)
-    *   `options.captionEntities` **[Array][1020]<[object][1022]>?** The entities in the message caption.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass true to protect the content of the message from being forwarded without permission.
-    *   `options.replyToMessageId` **[string][1019]?** The message ID being replied to.
-    *   `options.allowSendingWithoutReply` **[boolean][1024]?** Pass true to allow sending the message without a reply.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The inline keyboard markup for the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
-
-Returns **[object][1022]** Returns the copied message object.
-
-## copyMessage
-
-Copy a message from one chat to another.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for copying the message.
-
-    *   `options.fromChatId` **[string][1019]** The chat ID of the chat where the original message is located.
-    *   `options.messageId` **[string][1019]** The message ID of the message to copy.
-    *   `options.threadId` **[string][1019]?** The message thread ID.
-    *   `options.chatId` **[string][1019]** The chat ID of the chat where the message will be copied to. If not provided, uses the chat ID set in the constructor. (optional, default `this.chatId`)
-    *   `options.caption` **[string][1019]?** The caption of the message to be copied.
-    *   `options.parseMode` **[string][1019]** The parsing mode of the message caption. If not provided, uses the parse mode set in the constructor. (optional, default `this.parseMode`)
-    *   `options.captionEntities` **[Array][1020]<[object][1022]>?** The entities in the message caption.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently. Users will receive a notification with no sound.
-    *   `options.content` **[boolean][1024]?** Pass true to protect the content of the message from being forwarded without permission.
-    *   `options.replyToMessageId` **[string][1019]?** The message ID being replied to.
-    *   `options.allowSendingWithoutReply` **[boolean][1024]?** Pass true to allow sending the message without a reply.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The inline keyboard markup for the message.
+    *   `options.fromChatId` **[string][393]** The chat ID of the chat where the original message is located.
+    *   `options.messageId` **[string][393]** The message ID of the message to copy.
+    *   `options.threadId` **[string][393]?** The message thread ID.
+    *   `options.chatId` **[string][393]** The chat ID of the chat where the message will be copied to. If not provided, uses the chat ID set in the constructor. (optional, default `this.chatId`)
+    *   `options.caption` **[string][393]?** The caption of the message to be copied.
+    *   `options.parseMode` **[string][393]** The parsing mode of the message caption. If not provided, uses the parse mode set in the constructor. (optional, default `this.parseMode`)
+    *   `options.captionEntities` **[Array][394]<[object][396]>?** The entities in the message caption.
+    *   `options.notification` **[boolean][398]?** Sends the message silently. Users will receive a notification with no sound.
+    *   `options.content` **[boolean][398]?** Pass true to protect the content of the message from being forwarded without permission.
+    *   `options.replyToMessageId` **[string][393]?** The message ID being replied to.
+    *   `options.allowSendingWithoutReply` **[boolean][398]?** Pass true to allow sending the message without a reply.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** The inline keyboard markup for the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error.
 
-Returns **[object][1022]** Returns the copied message object.
+Returns **[object][396]** Returns the copied message object.
 
 ## sendContact
 
@@ -1851,51 +813,25 @@ Sends a contact to the chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for sending the contact.
+*   `options` **[object][396]** Options for sending the contact.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - ID of the chat where the contact should be sent.
-    *   `options.phoneNumber` **[string][1019]** Phone number of the contact.
-    *   `options.firstName` **[string][1019]** First name of the contact.
-    *   `options.lastName` **[string][1019]?** Last name of the contact.
-    *   `options.vcard` **[string][1019]?** Additional vCard data about the contact.
-    *   `options.notification` **[boolean][1024]** Sends the message silently if true. (optional, default `true`)
-    *   `options.content` **[boolean][1024]** Protects the contact's content if true. (optional, default `true`)
-    *   `options.threadId` **[number][1021]?** Thread ID for the message.
-    *   `options.replyToMessageId` **[number][1021]?** ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]** Allows sending the message without a reply if true. (optional, default `true`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional options for reply markup.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API request fails.
-
-Returns **[object][1022]** Result of the sent contact message.
-
-## sendContact
-
-Sends a contact to the chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for sending the contact.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - ID of the chat where the contact should be sent.
-    *   `options.phoneNumber` **[string][1019]** Phone number of the contact.
-    *   `options.firstName` **[string][1019]** First name of the contact.
-    *   `options.lastName` **[string][1019]?** Last name of the contact.
-    *   `options.vcard` **[string][1019]?** Additional vCard data about the contact.
-    *   `options.notification` **[boolean][1024]** Sends the message silently if true. (optional, default `true`)
-    *   `options.content` **[boolean][1024]** Protects the contact's content if true. (optional, default `true`)
-    *   `options.threadId` **[number][1021]?** Thread ID for the message.
-    *   `options.replyToMessageId` **[number][1021]?** ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]** Allows sending the message without a reply if true. (optional, default `true`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional options for reply markup.
+    *   `options.chatId` **[number][395]** =this.chatId - ID of the chat where the contact should be sent.
+    *   `options.phoneNumber` **[string][393]** Phone number of the contact.
+    *   `options.firstName` **[string][393]** First name of the contact.
+    *   `options.lastName` **[string][393]?** Last name of the contact.
+    *   `options.vcard` **[string][393]?** Additional vCard data about the contact.
+    *   `options.notification` **[boolean][398]** Sends the message silently if true. (optional, default `true`)
+    *   `options.content` **[boolean][398]** Protects the contact's content if true. (optional, default `true`)
+    *   `options.threadId` **[number][395]?** Thread ID for the message.
+    *   `options.replyToMessageId` **[number][395]?** ID of the message being replied to.
+    *   `options.allowReply` **[boolean][398]** Allows sending the message without a reply if true. (optional, default `true`)
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional options for reply markup.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API request fails.
+*   Throws **[TelegramApiError][223]** Throws an error if the API request fails.
 
-Returns **[object][1022]** Result of the sent contact message.
+Returns **[object][396]** Result of the sent contact message.
 
 ## sendPoll
 
@@ -1903,67 +839,33 @@ Sends a poll to the chat with the given options.
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the poll options.
+*   `options` **[object][396]** An object containing the poll options.
 
-    *   `options.chatId` **[number][1021]?** The ID of the chat to send the poll to.
-    *   `options.question` **[string][1019]** The question of the poll.
-    *   `options.options` **[Array][1020]<[string][1019]>** An array of strings representing the answer options for the poll.
-    *   `options.isAnonymous` **[boolean][1024]** Whether the poll is anonymous or not.
-    *   `options.type` **[string][1019]** The type of the poll. Can be "quiz" or "regular".
-    *   `options.allowsMultipleAnswers` **[boolean][1024]** Whether the poll allows multiple answers or not.
-    *   `options.correctOptionId` **[number][1021]** The correct answer option ID for the quiz type poll.
-    *   `options.explanation` **[string][1019]** The explanation for the correct answer option in the quiz type poll.
-    *   `options.explanationParseMode` **[string][1019]** The parse mode for the explanation message.
-    *   `options.explanationEntities` **[Array][1020]<[object][1022]>** An array of message entities in the explanation message.
-    *   `options.openPeriod` **[number][1021]** The amount of time in seconds the poll will be open for.
-    *   `options.closeDate` **[number][1021]** The date when the poll will be automatically closed.
-    *   `options.isClosed` **[boolean][1024]** Whether the poll is closed or not.
-    *   `options.notification` **[boolean][1024]** Whether to disable notifications for the message or not.
-    *   `options.content` **[boolean][1024]** Whether to protect the poll content from being copied or not.
-    *   `options.threadId` **[number][1021]** The message thread ID.
-    *   `options.replyToMessageId` **[number][1021]** The ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]** Whether to allow sending the poll without replying to a message or not.
-    *   `options.replyMarkup` **[object][1022]** The reply markup for the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the poll.
-
-Returns **[Promise][1023]<[object][1022]>** The response from the Telegram API.
-
-## sendPoll
-
-Sends a poll to the chat with the given options.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the poll options.
-
-    *   `options.chatId` **[number][1021]?** The ID of the chat to send the poll to.
-    *   `options.question` **[string][1019]** The question of the poll.
-    *   `options.options` **[Array][1020]<[string][1019]>** An array of strings representing the answer options for the poll.
-    *   `options.isAnonymous` **[boolean][1024]** Whether the poll is anonymous or not.
-    *   `options.type` **[string][1019]** The type of the poll. Can be "quiz" or "regular".
-    *   `options.allowsMultipleAnswers` **[boolean][1024]** Whether the poll allows multiple answers or not.
-    *   `options.correctOptionId` **[number][1021]** The correct answer option ID for the quiz type poll.
-    *   `options.explanation` **[string][1019]** The explanation for the correct answer option in the quiz type poll.
-    *   `options.explanationParseMode` **[string][1019]** The parse mode for the explanation message.
-    *   `options.explanationEntities` **[Array][1020]<[object][1022]>** An array of message entities in the explanation message.
-    *   `options.openPeriod` **[number][1021]** The amount of time in seconds the poll will be open for.
-    *   `options.closeDate` **[number][1021]** The date when the poll will be automatically closed.
-    *   `options.isClosed` **[boolean][1024]** Whether the poll is closed or not.
-    *   `options.notification` **[boolean][1024]** Whether to disable notifications for the message or not.
-    *   `options.content` **[boolean][1024]** Whether to protect the poll content from being copied or not.
-    *   `options.threadId` **[number][1021]** The message thread ID.
-    *   `options.replyToMessageId` **[number][1021]** The ID of the message being replied to.
-    *   `options.allowReply` **[boolean][1024]** Whether to allow sending the poll without replying to a message or not.
-    *   `options.replyMarkup` **[object][1022]** The reply markup for the message.
+    *   `options.chatId` **[number][395]?** The ID of the chat to send the poll to.
+    *   `options.question` **[string][393]** The question of the poll.
+    *   `options.options` **[Array][394]<[string][393]>** An array of strings representing the answer options for the poll.
+    *   `options.isAnonymous` **[boolean][398]** Whether the poll is anonymous or not.
+    *   `options.type` **[string][393]** The type of the poll. Can be "quiz" or "regular".
+    *   `options.allowsMultipleAnswers` **[boolean][398]** Whether the poll allows multiple answers or not.
+    *   `options.correctOptionId` **[number][395]** The correct answer option ID for the quiz type poll.
+    *   `options.explanation` **[string][393]** The explanation for the correct answer option in the quiz type poll.
+    *   `options.explanationParseMode` **[string][393]** The parse mode for the explanation message.
+    *   `options.explanationEntities` **[Array][394]<[object][396]>** An array of message entities in the explanation message.
+    *   `options.openPeriod` **[number][395]** The amount of time in seconds the poll will be open for.
+    *   `options.closeDate` **[number][395]** The date when the poll will be automatically closed.
+    *   `options.isClosed` **[boolean][398]** Whether the poll is closed or not.
+    *   `options.notification` **[boolean][398]** Whether to disable notifications for the message or not.
+    *   `options.content` **[boolean][398]** Whether to protect the poll content from being copied or not.
+    *   `options.threadId` **[number][395]** The message thread ID.
+    *   `options.replyToMessageId` **[number][395]** The ID of the message being replied to.
+    *   `options.allowReply` **[boolean][398]** Whether to allow sending the poll without replying to a message or not.
+    *   `options.replyMarkup` **[object][396]** The reply markup for the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the poll.
+*   Throws **[TelegramApiError][223]** If an error occurs while sending the poll.
 
-Returns **[Promise][1023]<[object][1022]>** The response from the Telegram API.
+Returns **[Promise][397]<[object][396]>** The response from the Telegram API.
 
 ## sendDice
 
@@ -1971,45 +873,22 @@ Sends a dice animation to the chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for the dice animation.
+*   `options` **[object][396]** The options for the dice animation.
 
-    *   `options.chatId` **[number][1021]?** The ID of the chat where to send the message.
-    *   `options.emoji` **[string][1019]** The emoji to use for the dice animation.
-    *   `options.notification` **[boolean][1024]** Sends the message silently. Users will receive a notification with no sound. (optional, default `false`)
-    *   `options.content` **[boolean][1024]** Pass True, if the message contains a game. (optional, default `false`)
-    *   `options.threadId` **[number][1021]?** Unique identifier for the target chat or username of the target channel (in the format @channelusername) of the thread to send a reply to.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]** Pass True, if the message should be sent even if the specified replied-to message is not found. (optional, default `false`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for sending the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error when there is an error in the request.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent message object on success.
-
-## sendDice
-
-Sends a dice animation to the chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for the dice animation.
-
-    *   `options.chatId` **[number][1021]?** The ID of the chat where to send the message.
-    *   `options.emoji` **[string][1019]** The emoji to use for the dice animation.
-    *   `options.notification` **[boolean][1024]** Sends the message silently. Users will receive a notification with no sound. (optional, default `false`)
-    *   `options.content` **[boolean][1024]** Pass True, if the message contains a game. (optional, default `false`)
-    *   `options.threadId` **[number][1021]?** Unique identifier for the target chat or username of the target channel (in the format @channelusername) of the thread to send a reply to.
-    *   `options.replyToMessageId` **[number][1021]?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]** Pass True, if the message should be sent even if the specified replied-to message is not found. (optional, default `false`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for sending the message.
+    *   `options.chatId` **[number][395]?** The ID of the chat where to send the message.
+    *   `options.emoji` **[string][393]** The emoji to use for the dice animation.
+    *   `options.notification` **[boolean][398]** Sends the message silently. Users will receive a notification with no sound. (optional, default `false`)
+    *   `options.content` **[boolean][398]** Pass True, if the message contains a game. (optional, default `false`)
+    *   `options.threadId` **[number][395]?** Unique identifier for the target chat or username of the target channel (in the format @channelusername) of the thread to send a reply to.
+    *   `options.replyToMessageId` **[number][395]?** The ID of the message to reply to.
+    *   `options.allowReply` **[boolean][398]** Pass True, if the message should be sent even if the specified replied-to message is not found. (optional, default `false`)
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options for sending the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error when there is an error in the request.
+*   Throws **[TelegramApiError][223]** Throws an error when there is an error in the request.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent message object on success.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the sent message object on success.
 
 ## sendChatAction
 
@@ -2017,35 +896,17 @@ Sends a chat action to indicate the bot is performing an action (typing, uploadi
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object for sending the chat action.
+*   `options` **[object][396]** The options object for sending the chat action.
 
-    *   `options.chatId` **[string][1019]** The chat ID to send the chat action to. If `this.chatId` is set, it will be used by default. (optional, default `this.chatId`)
-    *   `options.action` **[string][1019]** The type of action to send to the user (typing, upload\_photo, record\_video, upload\_video, record\_audio, upload\_audio, upload\_document, find\_location, record\_video\_note, upload\_video\_note).
-    *   `options.threadId` **[string][1019]** Unique identifier for the target chat message thread.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error code.
-
-Returns **[object][1022]** The response object from the Telegram API containing information about the sent chat action.
-
-## sendChatAction
-
-Sends a chat action to indicate the bot is performing an action (typing, uploading a photo etc.) to the user.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object for sending the chat action.
-
-    *   `options.chatId` **[string][1019]** The chat ID to send the chat action to. If `this.chatId` is set, it will be used by default. (optional, default `this.chatId`)
-    *   `options.action` **[string][1019]** The type of action to send to the user (typing, upload\_photo, record\_video, upload\_video, record\_audio, upload\_audio, upload\_document, find\_location, record\_video\_note, upload\_video\_note).
-    *   `options.threadId` **[string][1019]** Unique identifier for the target chat message thread.
+    *   `options.chatId` **[string][393]** The chat ID to send the chat action to. If `this.chatId` is set, it will be used by default. (optional, default `this.chatId`)
+    *   `options.action` **[string][393]** The type of action to send to the user (typing, upload\_photo, record\_video, upload\_video, record\_audio, upload\_audio, upload\_document, find\_location, record\_video\_note, upload\_video\_note).
+    *   `options.threadId` **[string][393]** Unique identifier for the target chat message thread.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error code.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error code.
 
-Returns **[object][1022]** The response object from the Telegram API containing information about the sent chat action.
+Returns **[object][396]** The response object from the Telegram API containing information about the sent chat action.
 
 ## getUserProfilePhotos
 
@@ -2053,35 +914,17 @@ Returns user profile photos.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.userId` **[number][1021]** Unique identifier of the target user.
-    *   `options.offset` **[number][1021]?** Sequential number of the first photo to be returned. By default, all photos are returned.
-    *   `options.limit` **[number][1021]?** Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** On success, an object containing the user profile photos is returned.
-
-## getUserProfilePhotos
-
-Returns user profile photos.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.userId` **[number][1021]** Unique identifier of the target user.
-    *   `options.offset` **[number][1021]?** Sequential number of the first photo to be returned. By default, all photos are returned.
-    *   `options.limit` **[number][1021]?** Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+    *   `options.userId` **[number][395]** Unique identifier of the target user.
+    *   `options.offset` **[number][395]?** Sequential number of the first photo to be returned. By default, all photos are returned.
+    *   `options.limit` **[number][395]?** Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** On success, an object containing the user profile photos is returned.
+Returns **[Promise][397]<[object][396]>** On success, an object containing the user profile photos is returned.
 
 ## getFile
 
@@ -2089,27 +932,13 @@ Get information about a file on the Telegram server
 
 ### Parameters
 
-*   `fileId` **[string][1019]** ID of the file to fetch information for
+*   `fileId` **[string][393]** ID of the file to fetch information for
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error
+*   Throws **[TelegramApiError][223]** If the Telegram API returns an error
 
-Returns **[object][1022]** An object containing information about the file
-
-## getFile
-
-Get information about a file on the Telegram server
-
-### Parameters
-
-*   `fileId` **[string][1019]** ID of the file to fetch information for
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error
-
-Returns **[object][1022]** An object containing information about the file
+Returns **[object][396]** An object containing information about the file
 
 ## downloadFile
 
@@ -2117,27 +946,13 @@ Downloads a file from the Telegram servers.
 
 ### Parameters
 
-*   `filePath` **[string][1019]** The path of the file to download.
+*   `filePath` **[string][393]** The path of the file to download.
 
 <!---->
 
-*   Throws **[Error][1025]** If the HTTP response status code is not 200.
+*   Throws **[Error][399]** If the HTTP response status code is not 200.
 
-Returns **[Promise][1023]\<any>** A Promise that resolves with the downloaded file as a Buffer, or rejects with an error.
-
-## downloadFile
-
-Downloads a file from the Telegram servers.
-
-### Parameters
-
-*   `filePath` **[string][1019]** The path of the file to download.
-
-<!---->
-
-*   Throws **[Error][1025]** If the HTTP response status code is not 200.
-
-Returns **[Promise][1023]\<any>** A Promise that resolves with the downloaded file as a Buffer, or rejects with an error.
+Returns **[Promise][397]\<any>** A Promise that resolves with the downloaded file as a Buffer, or rejects with an error.
 
 ## banChatMember
 
@@ -2145,37 +960,18 @@ Ban a chat member in the Telegram chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for banning a chat member.
+*   `options` **[object][396]** The options for banning a chat member.
 
-    *   `options.chatId` **[string][1019]** The ID of the chat where the user is to be banned. (optional, default `this.chatId`)
-    *   `options.userId` **[number][1021]** The ID of the user to be banned.
-    *   `options.untilDate` **[number][1021]** Date when the user will be unbanned, unix time.
-    *   `options.revokeMessages` **[boolean][1024]** Pass True to delete all messages from the chat for the user that is being removed.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while executing the request.
-
-Returns **[Promise][1023]<[object][1022]>** On success, returns True.
-
-## banChatMember
-
-Ban a chat member in the Telegram chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for banning a chat member.
-
-    *   `options.chatId` **[string][1019]** The ID of the chat where the user is to be banned. (optional, default `this.chatId`)
-    *   `options.userId` **[number][1021]** The ID of the user to be banned.
-    *   `options.untilDate` **[number][1021]** Date when the user will be unbanned, unix time.
-    *   `options.revokeMessages` **[boolean][1024]** Pass True to delete all messages from the chat for the user that is being removed.
+    *   `options.chatId` **[string][393]** The ID of the chat where the user is to be banned. (optional, default `this.chatId`)
+    *   `options.userId` **[number][395]** The ID of the user to be banned.
+    *   `options.untilDate` **[number][395]** Date when the user will be unbanned, unix time.
+    *   `options.revokeMessages` **[boolean][398]** Pass True to delete all messages from the chat for the user that is being removed.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while executing the request.
+*   Throws **[TelegramApiError][223]** If an error occurs while executing the request.
 
-Returns **[Promise][1023]<[object][1022]>** On success, returns True.
+Returns **[Promise][397]<[object][396]>** On success, returns True.
 
 ## unbanChatMember
 
@@ -2183,35 +979,17 @@ Unban a previously banned chat member in a Telegram chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for unbanning a chat member.
+*   `options` **[object][396]** Options for unbanning a chat member.
 
-    *   `options.userId` **([string][1019] | [number][1021])** Unique identifier of the chat member to unban.
-    *   `options.chatId` **([string][1019] | [number][1021])?** Unique identifier of the target chat. If not specified, defaults to the chat associated with the bot instance.
-    *   `options.onlyIfBanned` **[boolean][1024]** If `true`, only unban the chat member if they are currently banned. Otherwise, unban the chat member regardless of their current ban status. (optional, default `false`)
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** Promise which resolves to the result of the Telegram API request.
-
-## unbanChatMember
-
-Unban a previously banned chat member in a Telegram chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for unbanning a chat member.
-
-    *   `options.userId` **([string][1019] | [number][1021])** Unique identifier of the chat member to unban.
-    *   `options.chatId` **([string][1019] | [number][1021])?** Unique identifier of the target chat. If not specified, defaults to the chat associated with the bot instance.
-    *   `options.onlyIfBanned` **[boolean][1024]** If `true`, only unban the chat member if they are currently banned. Otherwise, unban the chat member regardless of their current ban status. (optional, default `false`)
+    *   `options.userId` **([string][393] | [number][395])** Unique identifier of the chat member to unban.
+    *   `options.chatId` **([string][393] | [number][395])?** Unique identifier of the target chat. If not specified, defaults to the chat associated with the bot instance.
+    *   `options.onlyIfBanned` **[boolean][398]** If `true`, only unban the chat member if they are currently banned. Otherwise, unban the chat member regardless of their current ban status. (optional, default `false`)
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or returns an error.
+*   Throws **[TelegramApiError][223]** If the request to the Telegram API fails or returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** Promise which resolves to the result of the Telegram API request.
+Returns **[Promise][397]<[object][396]>** Promise which resolves to the result of the Telegram API request.
 
 ## restrictChatMember
 
@@ -2219,37 +997,18 @@ Restricts a chat member's permissions.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to restrict the chat member.
+*   `options` **[object][396]** The options to restrict the chat member.
 
-    *   `options.userId` **[number][1021]** The ID of the chat member to restrict.
-    *   `options.permissions` **[object][1022]** The new permissions to restrict the chat member to.
-    *   `options.useIndependentChatPermissions` **[boolean][1024]?** Pass true to use the chat member's own permissions instead of the default permissions.
-    *   `options.untilDate` **[number][1021]?** The date when the restrictions will be lifted.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error.
-
-Returns **[Promise][1023]<[object][1022]>** The updated ChatMember object.
-
-## restrictChatMember
-
-Restricts a chat member's permissions.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to restrict the chat member.
-
-    *   `options.userId` **[number][1021]** The ID of the chat member to restrict.
-    *   `options.permissions` **[object][1022]** The new permissions to restrict the chat member to.
-    *   `options.useIndependentChatPermissions` **[boolean][1024]?** Pass true to use the chat member's own permissions instead of the default permissions.
-    *   `options.untilDate` **[number][1021]?** The date when the restrictions will be lifted.
+    *   `options.userId` **[number][395]** The ID of the chat member to restrict.
+    *   `options.permissions` **[object][396]** The new permissions to restrict the chat member to.
+    *   `options.useIndependentChatPermissions` **[boolean][398]?** Pass true to use the chat member's own permissions instead of the default permissions.
+    *   `options.untilDate` **[number][395]?** The date when the restrictions will be lifted.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the API response contains an error.
 
-Returns **[Promise][1023]<[object][1022]>** The updated ChatMember object.
+Returns **[Promise][397]<[object][396]>** The updated ChatMember object.
 
 ## promoteChatMember
 
@@ -2257,57 +1016,28 @@ Promotes a user in a chat with additional privileges.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.userId` **[number][1021]** The ID of the user to promote.
-    *   `options.chatId` **[number][1021]** The ID of the chat where the user will be promoted. Defaults to the chat ID set in the instance. (optional, default `this.chatId`)
-    *   `options.isAnonymous` **[boolean][1024]?** Pass true to promote the user anonymously.
-    *   `options.canManageChat` **[boolean][1024]?** Pass true to allow the user to manage the chat.
-    *   `options.canPostMessages` **[boolean][1024]?** Pass true to allow the user to post messages in the chat.
-    *   `options.canEditMessages` **[boolean][1024]?** Pass true to allow the user to edit messages of other users.
-    *   `options.canDeleteMessages` **[boolean][1024]?** Pass true to allow the user to delete messages of other users.
-    *   `options.canManageVideoChats` **[boolean][1024]?** Pass true to allow the user to manage voice chats.
-    *   `options.canRestrictMembers` **[boolean][1024]?** Pass true to allow the user to restrict members in the chat.
-    *   `options.canPromoteMembers` **[boolean][1024]?** Pass true to allow the user to promote other members in the chat.
-    *   `options.canChangeInfo` **[boolean][1024]?** Pass true to allow the user to change the chat's title, photo, and other settings.
-    *   `options.canInviteUsers` **[boolean][1024]?** Pass true to allow the user to invite new users to the chat.
-    *   `options.canPinMessages` **[boolean][1024]?** Pass true to allow the user to pin messages in the chat.
-    *   `options.canManageTopics` **[boolean][1024]?** Pass true to allow the user to manage chat topics.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error with the Telegram API description if the response contains an error.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the promoted user object on success.
-
-## promoteChatMember
-
-Promotes a user in a chat with additional privileges.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.userId` **[number][1021]** The ID of the user to promote.
-    *   `options.chatId` **[number][1021]** The ID of the chat where the user will be promoted. Defaults to the chat ID set in the instance. (optional, default `this.chatId`)
-    *   `options.isAnonymous` **[boolean][1024]?** Pass true to promote the user anonymously.
-    *   `options.canManageChat` **[boolean][1024]?** Pass true to allow the user to manage the chat.
-    *   `options.canPostMessages` **[boolean][1024]?** Pass true to allow the user to post messages in the chat.
-    *   `options.canEditMessages` **[boolean][1024]?** Pass true to allow the user to edit messages of other users.
-    *   `options.canDeleteMessages` **[boolean][1024]?** Pass true to allow the user to delete messages of other users.
-    *   `options.canManageVideoChats` **[boolean][1024]?** Pass true to allow the user to manage voice chats.
-    *   `options.canRestrictMembers` **[boolean][1024]?** Pass true to allow the user to restrict members in the chat.
-    *   `options.canPromoteMembers` **[boolean][1024]?** Pass true to allow the user to promote other members in the chat.
-    *   `options.canChangeInfo` **[boolean][1024]?** Pass true to allow the user to change the chat's title, photo, and other settings.
-    *   `options.canInviteUsers` **[boolean][1024]?** Pass true to allow the user to invite new users to the chat.
-    *   `options.canPinMessages` **[boolean][1024]?** Pass true to allow the user to pin messages in the chat.
-    *   `options.canManageTopics` **[boolean][1024]?** Pass true to allow the user to manage chat topics.
+    *   `options.userId` **[number][395]** The ID of the user to promote.
+    *   `options.chatId` **[number][395]** The ID of the chat where the user will be promoted. Defaults to the chat ID set in the instance. (optional, default `this.chatId`)
+    *   `options.isAnonymous` **[boolean][398]?** Pass true to promote the user anonymously.
+    *   `options.canManageChat` **[boolean][398]?** Pass true to allow the user to manage the chat.
+    *   `options.canPostMessages` **[boolean][398]?** Pass true to allow the user to post messages in the chat.
+    *   `options.canEditMessages` **[boolean][398]?** Pass true to allow the user to edit messages of other users.
+    *   `options.canDeleteMessages` **[boolean][398]?** Pass true to allow the user to delete messages of other users.
+    *   `options.canManageVideoChats` **[boolean][398]?** Pass true to allow the user to manage voice chats.
+    *   `options.canRestrictMembers` **[boolean][398]?** Pass true to allow the user to restrict members in the chat.
+    *   `options.canPromoteMembers` **[boolean][398]?** Pass true to allow the user to promote other members in the chat.
+    *   `options.canChangeInfo` **[boolean][398]?** Pass true to allow the user to change the chat's title, photo, and other settings.
+    *   `options.canInviteUsers` **[boolean][398]?** Pass true to allow the user to invite new users to the chat.
+    *   `options.canPinMessages` **[boolean][398]?** Pass true to allow the user to pin messages in the chat.
+    *   `options.canManageTopics` **[boolean][398]?** Pass true to allow the user to manage chat topics.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error with the Telegram API description if the response contains an error.
+*   Throws **[TelegramApiError][223]** Throws an error with the Telegram API description if the response contains an error.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the promoted user object on success.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the promoted user object on success.
 
 ## setChatAdministratorCustomTitle
 
@@ -2315,35 +1045,17 @@ Sets a custom title for a chat administrator.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.userId` **[number][1021]** The user ID of the administrator.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the administrator's custom title should be set. If not provided, uses the current chat ID from the instance.
-    *   `options.customTitle` **[string][1019]** The custom title to set for the administrator.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the custom title.
-
-Returns **[Promise][1023]<[boolean][1024]>** A promise that resolves with `true` if the custom title was set successfully.
-
-## setChatAdministratorCustomTitle
-
-Sets a custom title for a chat administrator.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.userId` **[number][1021]** The user ID of the administrator.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the administrator's custom title should be set. If not provided, uses the current chat ID from the instance.
-    *   `options.customTitle` **[string][1019]** The custom title to set for the administrator.
+    *   `options.userId` **[number][395]** The user ID of the administrator.
+    *   `options.chatId` **[number][395]?** The ID of the chat where the administrator's custom title should be set. If not provided, uses the current chat ID from the instance.
+    *   `options.customTitle` **[string][393]** The custom title to set for the administrator.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the custom title.
+*   Throws **[TelegramApiError][223]** If an error occurs while setting the custom title.
 
-Returns **[Promise][1023]<[boolean][1024]>** A promise that resolves with `true` if the custom title was set successfully.
+Returns **[Promise][397]<[boolean][398]>** A promise that resolves with `true` if the custom title was set successfully.
 
 ## banChatSenderChat
 
@@ -2351,33 +1063,16 @@ Ban a user from sending messages in a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to use for banning the user.
+*   `options` **[object][396]** The options to use for banning the user.
 
-    *   `options.chatId` **[string][1019]** The ID of the chat where the user is banned. (optional, default `this.chatId`)
-    *   `options.senderChatId` **[number][1021]** The ID of the user to be banned.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while banning the user.
-
-Returns **[Promise][1023]<[object][1022]>** The result of the request.
-
-## banChatSenderChat
-
-Ban a user from sending messages in a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to use for banning the user.
-
-    *   `options.chatId` **[string][1019]** The ID of the chat where the user is banned. (optional, default `this.chatId`)
-    *   `options.senderChatId` **[number][1021]** The ID of the user to be banned.
+    *   `options.chatId` **[string][393]** The ID of the chat where the user is banned. (optional, default `this.chatId`)
+    *   `options.senderChatId` **[number][395]** The ID of the user to be banned.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while banning the user.
+*   Throws **[TelegramApiError][223]** If an error occurs while banning the user.
 
-Returns **[Promise][1023]<[object][1022]>** The result of the request.
+Returns **[Promise][397]<[object][396]>** The result of the request.
 
 ## unbanChatSenderChat
 
@@ -2385,33 +1080,16 @@ Unban a previously kicked chat member from the chat and remove any previous ban 
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for unbanning a chat member.
+*   `options` **[object][396]** Options for unbanning a chat member.
 
-    *   `options.senderChatId` **[number][1021]** Unique identifier of the target user.
-    *   `options.chatId` **[number][1021]?** Unique identifier of the target chat, required if `chatId` is not defined in class instance.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When an error occurs while unbanning the chat member.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the returned object will contain the `ok` field set to `true`.
-
-## unbanChatSenderChat
-
-Unban a previously kicked chat member from the chat and remove any previous ban on their username.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for unbanning a chat member.
-
-    *   `options.senderChatId` **[number][1021]** Unique identifier of the target user.
-    *   `options.chatId` **[number][1021]?** Unique identifier of the target chat, required if `chatId` is not defined in class instance.
+    *   `options.senderChatId` **[number][395]** Unique identifier of the target user.
+    *   `options.chatId` **[number][395]?** Unique identifier of the target chat, required if `chatId` is not defined in class instance.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When an error occurs while unbanning the chat member.
+*   Throws **[TelegramApiError][223]** When an error occurs while unbanning the chat member.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the returned object will contain the `ok` field set to `true`.
+Returns **[Promise][397]<[object][396]>** On success, the returned object will contain the `ok` field set to `true`.
 
 ## setChatPermissions
 
@@ -2419,35 +1097,17 @@ Sets chat permissions for a given chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for setting chat permissions.
+*   `options` **[object][396]** The options for setting chat permissions.
 
-    *   `options.chatId` **[string][1019]** The ID of the chat to set permissions for. If not provided, defaults to the chat ID saved in the instance. (optional, default `this.chatId`)
-    *   `options.permissions` **[object][1022]** The chat permissions to set. This should be an object containing key-value pairs where the keys are the names of the permissions and the values are booleans indicating whether the permission should be allowed or not.
-    *   `options.independentPermissions` **[boolean][1024]** Whether to use independent chat permissions or not. (optional, default `false`)
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a promise which resolves to the result of the API request.
-
-## setChatPermissions
-
-Sets chat permissions for a given chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for setting chat permissions.
-
-    *   `options.chatId` **[string][1019]** The ID of the chat to set permissions for. If not provided, defaults to the chat ID saved in the instance. (optional, default `this.chatId`)
-    *   `options.permissions` **[object][1022]** The chat permissions to set. This should be an object containing key-value pairs where the keys are the names of the permissions and the values are booleans indicating whether the permission should be allowed or not.
-    *   `options.independentPermissions` **[boolean][1024]** Whether to use independent chat permissions or not. (optional, default `false`)
+    *   `options.chatId` **[string][393]** The ID of the chat to set permissions for. If not provided, defaults to the chat ID saved in the instance. (optional, default `this.chatId`)
+    *   `options.permissions` **[object][396]** The chat permissions to set. This should be an object containing key-value pairs where the keys are the names of the permissions and the values are booleans indicating whether the permission should be allowed or not.
+    *   `options.independentPermissions` **[boolean][398]** Whether to use independent chat permissions or not. (optional, default `false`)
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a promise which resolves to the result of the API request.
+Returns **[Promise][397]<[object][396]>** Returns a promise which resolves to the result of the API request.
 
 ## portChatInviteLink
 
@@ -2455,27 +1115,13 @@ Exports the invite link to a chat. If `chatId` is not defined on the instance, i
 
 ### Parameters
 
-*   `chatId` **[string][1019]** Unique identifier for the target chat.
+*   `chatId` **[string][393]** Unique identifier for the target chat.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while exporting the chat invite link.
+*   Throws **[TelegramApiError][223]** If an error occurs while exporting the chat invite link.
 
-Returns **[Promise][1023]<[string][1019]>** The invite link for the chat.
-
-## portChatInviteLink
-
-Exports the invite link to a chat. If `chatId` is not defined on the instance, it should be provided in `options`.
-
-### Parameters
-
-*   `chatId` **[string][1019]** Unique identifier for the target chat.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while exporting the chat invite link.
-
-Returns **[Promise][1023]<[string][1019]>** The invite link for the chat.
+Returns **[Promise][397]<[string][393]>** The invite link for the chat.
 
 ## createChatInviteLink
 
@@ -2483,39 +1129,19 @@ Creates a new chat invite link with the specified options.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for the chat invite link.
+*   `options` **[object][396]** The options for the chat invite link.
 
-    *   `options.chatId` **[string][1019]?** The ID of the chat where the invite link will be created. If not provided, the ID of the current chat will be used.
-    *   `options.name` **[string][1019]?** The name of the chat that will be shown in the invite link preview. If not provided, the chat name will be used.
-    *   `options.expireDate` **[Date][1026]?** The date and time when the invite link will expire.
-    *   `options.memberLimit` **[number][1021]?** The maximum number of members that can join the chat using the invite link. If not provided, there will be no limit.
-    *   `options.createsJoinRequest` **[boolean][1024]?** Determines whether the invite link creates a join request instead of adding the user directly to the chat. Defaults to false.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the API response contains an error.
-
-Returns **[Promise][1023]<[object][1022]>** The created chat invite link object.
-
-## createChatInviteLink
-
-Creates a new chat invite link with the specified options.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for the chat invite link.
-
-    *   `options.chatId` **[string][1019]?** The ID of the chat where the invite link will be created. If not provided, the ID of the current chat will be used.
-    *   `options.name` **[string][1019]?** The name of the chat that will be shown in the invite link preview. If not provided, the chat name will be used.
-    *   `options.expireDate` **[Date][1026]?** The date and time when the invite link will expire.
-    *   `options.memberLimit` **[number][1021]?** The maximum number of members that can join the chat using the invite link. If not provided, there will be no limit.
-    *   `options.createsJoinRequest` **[boolean][1024]?** Determines whether the invite link creates a join request instead of adding the user directly to the chat. Defaults to false.
+    *   `options.chatId` **[string][393]?** The ID of the chat where the invite link will be created. If not provided, the ID of the current chat will be used.
+    *   `options.name` **[string][393]?** The name of the chat that will be shown in the invite link preview. If not provided, the chat name will be used.
+    *   `options.expireDate` **[Date][400]?** The date and time when the invite link will expire.
+    *   `options.memberLimit` **[number][395]?** The maximum number of members that can join the chat using the invite link. If not provided, there will be no limit.
+    *   `options.createsJoinRequest` **[boolean][398]?** Determines whether the invite link creates a join request instead of adding the user directly to the chat. Defaults to false.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the API response contains an error.
+*   Throws **[TelegramApiError][223]** If the API response contains an error.
 
-Returns **[Promise][1023]<[object][1022]>** The created chat invite link object.
+Returns **[Promise][397]<[object][396]>** The created chat invite link object.
 
 ## editChatInviteLink
 
@@ -2523,41 +1149,20 @@ Edits the specified chat invite link. Returns the edited invite link as a ChatIn
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for editing the chat invite link.
+*   `options` **[object][396]** Options for editing the chat invite link.
 
-    *   `options.chatId` **[number][1021]?** Unique identifier of the target chat.
-    *   `options.inviteLink` **[string][1019]** The invite link to edit.
-    *   `options.name` **[string][1019]?** New name for the invite link, 1-64 characters.
-    *   `options.expireDate` **[number][1021]?** Point in time (Unix timestamp) when the link will expire, in 30-2592000 seconds.
-    *   `options.memberLimit` **[number][1021]?** Maximum number of chat members that can join the chat through the link.
-    *   `options.createsJoinRequest` **[boolean][1024]?** True, if the link is a primary link for inviting users to a chat.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the response contains an error.
-
-Returns **[Promise][1023]\<any>** The edited chat invite link as a ChatInviteLink object.
-
-## editChatInviteLink
-
-Edits the specified chat invite link. Returns the edited invite link as a ChatInviteLink object.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for editing the chat invite link.
-
-    *   `options.chatId` **[number][1021]?** Unique identifier of the target chat.
-    *   `options.inviteLink` **[string][1019]** The invite link to edit.
-    *   `options.name` **[string][1019]?** New name for the invite link, 1-64 characters.
-    *   `options.expireDate` **[number][1021]?** Point in time (Unix timestamp) when the link will expire, in 30-2592000 seconds.
-    *   `options.memberLimit` **[number][1021]?** Maximum number of chat members that can join the chat through the link.
-    *   `options.createsJoinRequest` **[boolean][1024]?** True, if the link is a primary link for inviting users to a chat.
+    *   `options.chatId` **[number][395]?** Unique identifier of the target chat.
+    *   `options.inviteLink` **[string][393]** The invite link to edit.
+    *   `options.name` **[string][393]?** New name for the invite link, 1-64 characters.
+    *   `options.expireDate` **[number][395]?** Point in time (Unix timestamp) when the link will expire, in 30-2592000 seconds.
+    *   `options.memberLimit` **[number][395]?** Maximum number of chat members that can join the chat through the link.
+    *   `options.createsJoinRequest` **[boolean][398]?** True, if the link is a primary link for inviting users to a chat.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the response contains an error.
+*   Throws **[TelegramApiError][223]** If the response contains an error.
 
-Returns **[Promise][1023]\<any>** The edited chat invite link as a ChatInviteLink object.
+Returns **[Promise][397]\<any>** The edited chat invite link as a ChatInviteLink object.
 
 ## revokeChatInviteLink
 
@@ -2565,35 +1170,17 @@ Revoke a chat invite link.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to use for the API call.
+*   `options` **[object][396]** The options to use for the API call.
 
-    *   `options.inviteLink` **[string][1019]** The invite link to revoke.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the invite link was generated.
+    *   `options.inviteLink` **[string][393]** The invite link to revoke.
+    *   `options.chatId` **[number][395]?** The ID of the chat where the invite link was generated.
         If not provided, the ID of the current chat instance will be used.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the API call fails, an error with the description of the problem.
+*   Throws **[TelegramApiError][223]** If the API call fails, an error with the description of the problem.
 
-Returns **[object][1022]** The API response object.
-
-## revokeChatInviteLink
-
-Revoke a chat invite link.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to use for the API call.
-
-    *   `options.inviteLink` **[string][1019]** The invite link to revoke.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the invite link was generated.
-        If not provided, the ID of the current chat instance will be used.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the API call fails, an error with the description of the problem.
-
-Returns **[object][1022]** The API response object.
+Returns **[object][396]** The API response object.
 
 ## approveChatJoinRequest
 
@@ -2601,33 +1188,16 @@ Approve a join request to a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to approve the chat join request.
+*   `options` **[object][396]** The options to approve the chat join request.
 
-    *   `options.userId` **[number][1021]** The user ID for the join request.
-    *   `options.chatId` **[number][1021]?** The chat ID for the join request. If not provided, it will use the chatId property of the bot instance.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the response contains an error code.
-
-Returns **[object][1022]** The result of the approveChatJoinRequest method.
-
-## approveChatJoinRequest
-
-Approve a join request to a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to approve the chat join request.
-
-    *   `options.userId` **[number][1021]** The user ID for the join request.
-    *   `options.chatId` **[number][1021]?** The chat ID for the join request. If not provided, it will use the chatId property of the bot instance.
+    *   `options.userId` **[number][395]** The user ID for the join request.
+    *   `options.chatId` **[number][395]?** The chat ID for the join request. If not provided, it will use the chatId property of the bot instance.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the response contains an error code.
+*   Throws **[TelegramApiError][223]** If the response contains an error code.
 
-Returns **[object][1022]** The result of the approveChatJoinRequest method.
+Returns **[object][396]** The result of the approveChatJoinRequest method.
 
 ## declineChatJoinRequest
 
@@ -2635,33 +1205,16 @@ Declines a chat join request from a user.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options object.
+*   `options` **[object][396]** Options object.
 
-    *   `options.userId` **[number][1021]** The user id of the user who sent the join request.
-    *   `options.chatId` **[number][1021]?** The chat id where the join request was sent. Required if `chatId` was not specified during instance creation.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API responds with an error.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the API response on success.
-
-## declineChatJoinRequest
-
-Declines a chat join request from a user.
-
-### Parameters
-
-*   `options` **[object][1022]** Options object.
-
-    *   `options.userId` **[number][1021]** The user id of the user who sent the join request.
-    *   `options.chatId` **[number][1021]?** The chat id where the join request was sent. Required if `chatId` was not specified during instance creation.
+    *   `options.userId` **[number][395]** The user id of the user who sent the join request.
+    *   `options.chatId` **[number][395]?** The chat id where the join request was sent. Required if `chatId` was not specified during instance creation.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API responds with an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API responds with an error.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the API response on success.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the API response on success.
 
 ## setChatPhoto
 
@@ -2669,33 +1222,16 @@ Sets a new profile photo for the chat. The photo can be a local file path or a U
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for setting the chat photo.
+*   `options` **[object][396]** Options for setting the chat photo.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - Required if `this.chatId` is not set. Unique identifier for the target chat.
-    *   `options.photo` **[string][1019]** The photo to set as the chat's new profile photo.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or if the response contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns True.
-
-## setChatPhoto
-
-Sets a new profile photo for the chat. The photo can be a local file path or a URL.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for setting the chat photo.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - Required if `this.chatId` is not set. Unique identifier for the target chat.
-    *   `options.photo` **[string][1019]** The photo to set as the chat's new profile photo.
+    *   `options.chatId` **[number][395]** =this.chatId - Required if `this.chatId` is not set. Unique identifier for the target chat.
+    *   `options.photo` **[string][393]** The photo to set as the chat's new profile photo.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or if the response contains an error code.
+*   Throws **[TelegramApiError][223]** If the request to the Telegram API fails or if the response contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns True.
+Returns **[Promise][397]<[object][396]>** On success, the method returns True.
 
 ## deleteChatPhoto
 
@@ -2703,29 +1239,14 @@ Use this method to delete a chat photo. Photos can't be changed for private chat
 
 ### Parameters
 
-*   `chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
-*   `options` **[string][1019]** Optional parameters.
+*   `chatId` **[number][395]** =this.chatId - Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
+*   `options` **[string][393]** Optional parameters.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error is encountered while processing the request.
+*   Throws **[TelegramApiError][223]** If an error is encountered while processing the request.
 
-Returns **[Promise][1023]<[boolean][1024]>** On success, returns True.
-
-## deleteChatPhoto
-
-Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns True on success.
-
-### Parameters
-
-*   `chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
-*   `options` **[string][1019]** Optional parameters.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error is encountered while processing the request.
-
-Returns **[Promise][1023]<[boolean][1024]>** On success, returns True.
+Returns **[Promise][397]<[boolean][398]>** On success, returns True.
 
 ## setChatTitle
 
@@ -2733,33 +1254,16 @@ Set a new chat title for a given chat ID.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to set a new chat title.
+*   `options` **[object][396]** The options to set a new chat title.
 
-    *   `options.chatId` **[string][1019]** Unique identifier for the target chat or username of the target channel. (optional, default `this.chatId`)
-    *   `options.title` **[string][1019]** New chat title, 1-255 characters.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the request to set a new chat title fails, this error is thrown.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the updated chat object is returned.
-
-## setChatTitle
-
-Set a new chat title for a given chat ID.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to set a new chat title.
-
-    *   `options.chatId` **[string][1019]** Unique identifier for the target chat or username of the target channel. (optional, default `this.chatId`)
-    *   `options.title` **[string][1019]** New chat title, 1-255 characters.
+    *   `options.chatId` **[string][393]** Unique identifier for the target chat or username of the target channel. (optional, default `this.chatId`)
+    *   `options.title` **[string][393]** New chat title, 1-255 characters.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the request to set a new chat title fails, this error is thrown.
+*   Throws **[TelegramApiError][223]** If the request to set a new chat title fails, this error is thrown.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the updated chat object is returned.
+Returns **[Promise][397]<[object][396]>** On success, the updated chat object is returned.
 
 ## setChatDescription
 
@@ -2767,33 +1271,16 @@ Sets the description of a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat ID to set the description for.
-    *   `options.description` **[string][1019]** The new description for the chat.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the request to the Telegram API fails or if the response contains an error.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a promise that resolves to the response from the Telegram API.
-
-## setChatDescription
-
-Sets the description of a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat ID to set the description for.
-    *   `options.description` **[string][1019]** The new description for the chat.
+    *   `options.chatId` **[number][395]** =this.chatId - The chat ID to set the description for.
+    *   `options.description` **[string][393]** The new description for the chat.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the request to the Telegram API fails or if the response contains an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the request to the Telegram API fails or if the response contains an error.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a promise that resolves to the response from the Telegram API.
+Returns **[Promise][397]<[object][396]>** Returns a promise that resolves to the response from the Telegram API.
 
 ## pinChatMessage
 
@@ -2801,35 +1288,17 @@ Pins a message in a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to pin the message.
+*   `options` **[object][396]** The options to pin the message.
 
-    *   `options.messageId` **[number][1021]** The ID of the message to pin.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the message is located. Uses the chatId property of the instance if not provided.
-    *   `options.notification` **[boolean][1024]?** Pass true to disable notifications for the message. Defaults to false.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while attempting to pin the message.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns True.
-
-## pinChatMessage
-
-Pins a message in a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to pin the message.
-
-    *   `options.messageId` **[number][1021]** The ID of the message to pin.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the message is located. Uses the chatId property of the instance if not provided.
-    *   `options.notification` **[boolean][1024]?** Pass true to disable notifications for the message. Defaults to false.
+    *   `options.messageId` **[number][395]** The ID of the message to pin.
+    *   `options.chatId` **[number][395]?** The ID of the chat where the message is located. Uses the chatId property of the instance if not provided.
+    *   `options.notification` **[boolean][398]?** Pass true to disable notifications for the message. Defaults to false.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while attempting to pin the message.
+*   Throws **[TelegramApiError][223]** If an error occurs while attempting to pin the message.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns True.
+Returns **[Promise][397]<[object][396]>** On success, the method returns True.
 
 ## unpinChatMessage
 
@@ -2837,33 +1306,16 @@ Unpins a message in a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for unpinning a message in a chat.
+*   `options` **[object][396]** The options for unpinning a message in a chat.
 
-    *   `options.messageId` **[number][1021]** The ID of the message to unpin.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the message to unpin is located. If not specified, the chat ID of the instance is used.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API returns an error response.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the result of the API call.
-
-## unpinChatMessage
-
-Unpins a message in a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for unpinning a message in a chat.
-
-    *   `options.messageId` **[number][1021]** The ID of the message to unpin.
-    *   `options.chatId` **[number][1021]?** The ID of the chat where the message to unpin is located. If not specified, the chat ID of the instance is used.
+    *   `options.messageId` **[number][395]** The ID of the message to unpin.
+    *   `options.chatId` **[number][395]?** The ID of the chat where the message to unpin is located. If not specified, the chat ID of the instance is used.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API returns an error response.
+*   Throws **[TelegramApiError][223]** Throws an error if the API returns an error response.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the result of the API call.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the result of the API call.
 
 ## unpinAllChatMessages
 
@@ -2871,27 +1323,13 @@ Unpins all chat messages in the specified chat.
 
 ### Parameters
 
-*   `chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+*   `chatId` **[number][395]** =this.chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When the API call fails.
+*   Throws **[TelegramApiError][223]** When the API call fails.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the sent [Message][1027] is returned.
-
-## unpinAllChatMessages
-
-Unpins all chat messages in the specified chat.
-
-### Parameters
-
-*   `chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When the API call fails.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the sent [Message][1027] is returned.
+Returns **[Promise][397]<[object][396]>** On success, the sent [Message][401] is returned.
 
 ## leaveChat
 
@@ -2899,27 +1337,13 @@ Leave a chat.
 
 ### Parameters
 
-*   `chatId` **[number][1021]** =this.chatId - The chat ID of the chat to leave.
+*   `chatId` **[number][395]** =this.chatId - The chat ID of the chat to leave.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When the response contains an error.
+*   Throws **[TelegramApiError][223]** When the response contains an error.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns True.
-
-## leaveChat
-
-Leave a chat.
-
-### Parameters
-
-*   `chatId` **[number][1021]** =this.chatId - The chat ID of the chat to leave.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When the response contains an error.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns True.
+Returns **[Promise][397]<[object][396]>** On success, the method returns True.
 
 ## getChat
 
@@ -2927,27 +1351,13 @@ Returns information about a chat.
 
 ### Parameters
 
-*   `chatId` **[string][1019]** The ID of the chat to get information about.
+*   `chatId` **[string][393]** The ID of the chat to get information about.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns an object containing information about the chat.
-
-## getChat
-
-Returns information about a chat.
-
-### Parameters
-
-*   `chatId` **[string][1019]** The ID of the chat to get information about.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns an object containing information about the chat.
+Returns **[Promise][397]<[object][396]>** Returns an object containing information about the chat.
 
 ## getChatAdministrators
 
@@ -2955,27 +1365,13 @@ Use this method to get a list of administrators in a chat. On success, returns a
 
 ### Parameters
 
-*   `chatId` **([number][1021] | [string][1019])** Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+*   `chatId` **([number][395] | [string][393])** Unique identifier for the target chat or username of the target channel (in the format @channelusername)
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or if the API returns an error
+*   Throws **[TelegramApiError][223]** If the request to the Telegram API fails or if the API returns an error
 
-Returns **[Promise][1023]<[Array][1020]\<any>>** On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots.
-
-## getChatAdministrators
-
-Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator will be returned.
-
-### Parameters
-
-*   `chatId` **([number][1021] | [string][1019])** Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or if the API returns an error
-
-Returns **[Promise][1023]<[Array][1020]\<any>>** On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots.
+Returns **[Promise][397]<[Array][394]\<any>>** On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots.
 
 ## getChatMemberCount
 
@@ -2983,27 +1379,13 @@ Retrieves the current number of members in a chat.
 
 ### Parameters
 
-*   `chatId` **[number][1021]** =this.chatId - The identifier of the chat. If not provided, the chatId property of the TelegramBot instance will be used.
+*   `chatId` **[number][395]** =this.chatId - The identifier of the chat. If not provided, the chatId property of the TelegramBot instance will be used.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error while calling the Telegram API.
+*   Throws **[TelegramApiError][223]** If there is an error while calling the Telegram API.
 
-Returns **[Promise][1023]<[number][1021]>** The number of members in the chat.
-
-## getChatMemberCount
-
-Retrieves the current number of members in a chat.
-
-### Parameters
-
-*   `chatId` **[number][1021]** =this.chatId - The identifier of the chat. If not provided, the chatId property of the TelegramBot instance will be used.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error while calling the Telegram API.
-
-Returns **[Promise][1023]<[number][1021]>** The number of members in the chat.
+Returns **[Promise][397]<[number][395]>** The number of members in the chat.
 
 ## getChatMember
 
@@ -3011,33 +1393,16 @@ Returns information about a member of a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing chatId and userId.
+*   `options` **[object][396]** An object containing chatId and userId.
 
-    *   `options.chatId` **([number][1021] | [string][1019])** Unique identifier for the target chat or username of the target channel.
-    *   `options.userId` **[number][1021]** Unique identifier of the target user.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or if there is an error code in the response.
-
-Returns **[Promise][1023]<[object][1022]>** On success, an object containing information about the member.
-
-## getChatMember
-
-Returns information about a member of a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing chatId and userId.
-
-    *   `options.chatId` **([number][1021] | [string][1019])** Unique identifier for the target chat or username of the target channel.
-    *   `options.userId` **[number][1021]** Unique identifier of the target user.
+    *   `options.chatId` **([number][395] | [string][393])** Unique identifier for the target chat or username of the target channel.
+    *   `options.userId` **[number][395]** Unique identifier of the target user.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the request to the Telegram API fails or if there is an error code in the response.
+*   Throws **[TelegramApiError][223]** If the request to the Telegram API fails or if there is an error code in the response.
 
-Returns **[Promise][1023]<[object][1022]>** On success, an object containing information about the member.
+Returns **[Promise][397]<[object][396]>** On success, an object containing information about the member.
 
 ## setChatStickerSet
 
@@ -3048,36 +1413,16 @@ Returns True on success.
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing options to pass.
+*   `options` **[object][396]** An object containing options to pass.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel.
-    *   `options.stickerSetName` **[string][1019]** Name of the sticker set to be set as the group's sticker set.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When the response contains an error.
-
-Returns **[Promise][1023]<[boolean][1024]>** Returns True on success.
-
-## setChatStickerSet
-
-Use this method to set a new group sticker set for a supergroup.
-The bot must be an administrator in the chat for this to work and must have the appropriate admin rights.
-Use the field can\_set\_sticker\_set optionally returned in getChat requests to check if the bot can use this method.
-Returns True on success.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing options to pass.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel.
-    *   `options.stickerSetName` **[string][1019]** Name of the sticker set to be set as the group's sticker set.
+    *   `options.chatId` **[number][395]** =this.chatId - Unique identifier for the target chat or username of the target channel.
+    *   `options.stickerSetName` **[string][393]** Name of the sticker set to be set as the group's sticker set.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When the response contains an error.
+*   Throws **[TelegramApiError][223]** When the response contains an error.
 
-Returns **[Promise][1023]<[boolean][1024]>** Returns True on success.
+Returns **[Promise][397]<[boolean][398]>** Returns True on success.
 
 ## deleteChatStickerSet
 
@@ -3085,43 +1430,21 @@ Deletes a chat's sticker set.
 
 ### Parameters
 
-*   `chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel.
+*   `chatId` **[number][395]** =this.chatId - Unique identifier for the target chat or username of the target channel.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while deleting the chat's sticker set.
+*   Throws **[TelegramApiError][223]** If an error occurs while deleting the chat's sticker set.
 
-Returns **[object][1022]** On success, the deleted chat's sticker set is returned.
-
-## deleteChatStickerSet
-
-Deletes a chat's sticker set.
-
-### Parameters
-
-*   `chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat or username of the target channel.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while deleting the chat's sticker set.
-
-Returns **[object][1022]** On success, the deleted chat's sticker set is returned.
+Returns **[object][396]** On success, the deleted chat's sticker set is returned.
 
 ## getForumTopicIconStickers
 
 Get a list of stickers corresponding to a forum topic icon
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error response
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error response
 
-Returns **[Promise][1023]<[Array][1020]<[object][1022]>>** An array of sticker objects for the corresponding forum topic icon
-
-## getForumTopicIconStickers
-
-Get a list of stickers corresponding to a forum topic icon
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error response
-
-Returns **[Promise][1023]<[Array][1020]<[object][1022]>>** An array of sticker objects for the corresponding forum topic icon
+Returns **[Promise][397]<[Array][394]<[object][396]>>** An array of sticker objects for the corresponding forum topic icon
 
 ## createForumTopic
 
@@ -3129,37 +1452,18 @@ Creates a forum topic with the specified options.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to use when creating the forum topic.
+*   `options` **[object][396]** The options to use when creating the forum topic.
 
-    *   `options.chatId` **[number][1021]?** The chat ID to use for the forum topic. If not provided, `this.chatId` is used instead.
-    *   `options.name` **[string][1019]** The name of the forum topic.
-    *   `options.iconColor` **[string][1019]** The icon color of the forum topic.
-    *   `options.iconCustomEmojiId` **[string][1019]** The ID of the custom emoji to use as the icon of the forum topic.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there was an error creating the forum topic.
-
-Returns **[Promise][1023]<[object][1022]>** The response from the Telegram API.
-
-## createForumTopic
-
-Creates a forum topic with the specified options.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to use when creating the forum topic.
-
-    *   `options.chatId` **[number][1021]?** The chat ID to use for the forum topic. If not provided, `this.chatId` is used instead.
-    *   `options.name` **[string][1019]** The name of the forum topic.
-    *   `options.iconColor` **[string][1019]** The icon color of the forum topic.
-    *   `options.iconCustomEmojiId` **[string][1019]** The ID of the custom emoji to use as the icon of the forum topic.
+    *   `options.chatId` **[number][395]?** The chat ID to use for the forum topic. If not provided, `this.chatId` is used instead.
+    *   `options.name` **[string][393]** The name of the forum topic.
+    *   `options.iconColor` **[string][393]** The icon color of the forum topic.
+    *   `options.iconCustomEmojiId` **[string][393]** The ID of the custom emoji to use as the icon of the forum topic.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there was an error creating the forum topic.
+*   Throws **[TelegramApiError][223]** If there was an error creating the forum topic.
 
-Returns **[Promise][1023]<[object][1022]>** The response from the Telegram API.
+Returns **[Promise][397]<[object][396]>** The response from the Telegram API.
 
 ## editForumTopic
 
@@ -3167,37 +1471,18 @@ Edits a forum topic.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for editing the forum topic.
+*   `options` **[object][396]** The options for editing the forum topic.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the forum topic is located.
-    *   `options.messageThreadId` **[number][1021]** The ID of the forum topic to edit.
-    *   `options.name` **[string][1019]** The new name for the forum topic.
-    *   `options.iconCustomEmojiId` **[string][1019]** The ID of the custom emoji to use as the new icon for the forum topic.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the API response contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** The edited forum topic object.
-
-## editForumTopic
-
-Edits a forum topic.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for editing the forum topic.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the forum topic is located.
-    *   `options.messageThreadId` **[number][1021]** The ID of the forum topic to edit.
-    *   `options.name` **[string][1019]** The new name for the forum topic.
-    *   `options.iconCustomEmojiId` **[string][1019]** The ID of the custom emoji to use as the new icon for the forum topic.
+    *   `options.chatId` **[number][395]** =this.chatId - The ID of the chat where the forum topic is located.
+    *   `options.messageThreadId` **[number][395]** The ID of the forum topic to edit.
+    *   `options.name` **[string][393]** The new name for the forum topic.
+    *   `options.iconCustomEmojiId` **[string][393]** The ID of the custom emoji to use as the new icon for the forum topic.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the API response contains an error code.
+*   Throws **[TelegramApiError][223]** If the API response contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** The edited forum topic object.
+Returns **[Promise][397]<[object][396]>** The edited forum topic object.
 
 ## closeForumTopic
 
@@ -3205,33 +1490,16 @@ Closes a forum topic in the specified chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to be passed to the function.
+*   `options` **[object][396]** The options to be passed to the function.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat ID.
-    *   `options.messageThreadId` **[number][1021]** The ID of the message thread to close.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error.
-
-Returns **[object][1022]** Returns a Promise that resolves to the result of the API call.
-
-## closeForumTopic
-
-Closes a forum topic in the specified chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to be passed to the function.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat ID.
-    *   `options.messageThreadId` **[number][1021]** The ID of the message thread to close.
+    *   `options.chatId` **[number][395]** =this.chatId - The chat ID.
+    *   `options.messageThreadId` **[number][395]** The ID of the message thread to close.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** If the Telegram API returns an error.
 
-Returns **[object][1022]** Returns a Promise that resolves to the result of the API call.
+Returns **[object][396]** Returns a Promise that resolves to the result of the API call.
 
 ## reopenForumTopic
 
@@ -3239,31 +1507,14 @@ Reopens a previously closed discussion thread in a group or a channel.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for reopening a discussion thread.
+*   `options` **[object][396]** Options for reopening a discussion thread.
 
-    *   `options.messageThreadId` **[string][1019]** The identifier of the thread to be reopened.
-    *   `options.chatId` **[string][1019]?** Unique identifier of the target chat or username of the target channel.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws error when the API call returns an error.
-
-Returns **[Promise][1023]\<void>**&#x20;
-
-## reopenForumTopic
-
-Reopens a previously closed discussion thread in a group or a channel.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for reopening a discussion thread.
-
-    *   `options.messageThreadId` **[string][1019]** The identifier of the thread to be reopened.
-    *   `options.chatId` **[string][1019]?** Unique identifier of the target chat or username of the target channel.
+    *   `options.messageThreadId` **[string][393]** The identifier of the thread to be reopened.
+    *   `options.chatId` **[string][393]?** Unique identifier of the target chat or username of the target channel.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws error when the API call returns an error.
+*   Throws **[TelegramApiError][223]** Throws error when the API call returns an error.
 
 ## deleteForumTopic
 
@@ -3271,33 +1522,16 @@ Delete a forum topic with the given message thread ID from the specified chat or
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the options for deleting a forum topic.
+*   `options` **[object][396]** An object containing the options for deleting a forum topic.
 
-    *   `options.messageThreadId` **[number][1021]** The ID of the message thread to delete.
-    *   `options.chatId` **[number][1021]?** The ID of the chat from which to delete the message thread. If not specified, uses the default chat ID of the TelegramBot instance.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error with the Telegram API request.
-
-Returns **[Promise][1023]<[object][1022]>** A Promise which resolves to an object representing the deleted forum topic.
-
-## deleteForumTopic
-
-Delete a forum topic with the given message thread ID from the specified chat or from the default chat ID of the TelegramBot instance.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the options for deleting a forum topic.
-
-    *   `options.messageThreadId` **[number][1021]** The ID of the message thread to delete.
-    *   `options.chatId` **[number][1021]?** The ID of the chat from which to delete the message thread. If not specified, uses the default chat ID of the TelegramBot instance.
+    *   `options.messageThreadId` **[number][395]** The ID of the message thread to delete.
+    *   `options.chatId` **[number][395]?** The ID of the chat from which to delete the message thread. If not specified, uses the default chat ID of the TelegramBot instance.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error with the Telegram API request.
+*   Throws **[TelegramApiError][223]** If there is an error with the Telegram API request.
 
-Returns **[Promise][1023]<[object][1022]>** A Promise which resolves to an object representing the deleted forum topic.
+Returns **[Promise][397]<[object][396]>** A Promise which resolves to an object representing the deleted forum topic.
 
 ## unpinAllForumTopicMessages
 
@@ -3305,33 +1539,16 @@ Unpins all messages in a specific message thread in a Telegram chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for unpinning messages.
+*   `options` **[object][396]** The options for unpinning messages.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the messages are located.
-    *   `options.messageThreadId` **[number][1021]** The ID of the message thread where the messages are located.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the API response object.
-
-## unpinAllForumTopicMessages
-
-Unpins all messages in a specific message thread in a Telegram chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for unpinning messages.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the messages are located.
-    *   `options.messageThreadId` **[number][1021]** The ID of the message thread where the messages are located.
+    *   `options.chatId` **[number][395]** =this.chatId - The ID of the chat where the messages are located.
+    *   `options.messageThreadId` **[number][395]** The ID of the message thread where the messages are located.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the API response object.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the API response object.
 
 ## editGeneralForumTopic
 
@@ -3339,33 +1556,16 @@ Edit a general forum topic.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to edit the forum topic.
+*   `options` **[object][396]** The options to edit the forum topic.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat id of the forum topic.
-    *   `options.name` **[string][1019]** The new name of the forum topic.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API call fails.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the edited forum topic object on success.
-
-## editGeneralForumTopic
-
-Edit a general forum topic.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to edit the forum topic.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The chat id of the forum topic.
-    *   `options.name` **[string][1019]** The new name of the forum topic.
+    *   `options.chatId` **[number][395]** =this.chatId - The chat id of the forum topic.
+    *   `options.name` **[string][393]** The new name of the forum topic.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API call fails.
+*   Throws **[TelegramApiError][223]** Throws an error if the API call fails.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the edited forum topic object on success.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the edited forum topic object on success.
 
 ## closeGeneralForumTopic
 
@@ -3373,27 +1573,13 @@ Closes a general forum topic in a Telegram chat.
 
 ### Parameters
 
-*   `chatId` **[number][1021]** =this.chatId - The ID of the chat where the forum topic is located.
+*   `chatId` **[number][395]** =this.chatId - The ID of the chat where the forum topic is located.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while closing the forum topic.
+*   Throws **[TelegramApiError][223]** If an error occurs while closing the forum topic.
 
-Returns **[object][1022]** The result of the API call to the Telegram server.
-
-## closeGeneralForumTopic
-
-Closes a general forum topic in a Telegram chat.
-
-### Parameters
-
-*   `chatId` **[number][1021]** =this.chatId - The ID of the chat where the forum topic is located.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while closing the forum topic.
-
-Returns **[object][1022]** The result of the API call to the Telegram server.
+Returns **[object][396]** The result of the API call to the Telegram server.
 
 ## reopenGeneralForumTopic
 
@@ -3401,27 +1587,13 @@ Reopens a general forum topic on the chat with the specified chat ID.
 
 ### Parameters
 
-*   `chatId` **[string][1019]** The chat ID of the chat where the topic is located. Optional if chat ID is set in the TelegramBot constructor.
+*   `chatId` **[string][393]** The chat ID of the chat where the topic is located. Optional if chat ID is set in the TelegramBot constructor.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response from the Telegram API contains an error code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response from the Telegram API contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the result of the Telegram API response.
-
-## reopenGeneralForumTopic
-
-Reopens a general forum topic on the chat with the specified chat ID.
-
-### Parameters
-
-*   `chatId` **[string][1019]** The chat ID of the chat where the topic is located. Optional if chat ID is set in the TelegramBot constructor.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response from the Telegram API contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the result of the Telegram API response.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the result of the Telegram API response.
 
 ## hideGeneralForumTopic
 
@@ -3429,27 +1601,13 @@ Hides the general forum topic for the specified chat.
 
 ### Parameters
 
-*   `chatId` **([string][1019] | [number][1021])** The ID of the chat to hide the general forum topic for.
+*   `chatId` **([string][393] | [number][395])** The ID of the chat to hide the general forum topic for.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error code.
 
-Returns **[Promise][1023]<[boolean][1024]>** Returns true if the general forum topic was successfully hidden.
-
-## hideGeneralForumTopic
-
-Hides the general forum topic for the specified chat.
-
-### Parameters
-
-*   `chatId` **([string][1019] | [number][1021])** The ID of the chat to hide the general forum topic for.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
-
-Returns **[Promise][1023]<[boolean][1024]>** Returns true if the general forum topic was successfully hidden.
+Returns **[Promise][397]<[boolean][398]>** Returns true if the general forum topic was successfully hidden.
 
 ## unhideGeneralForumTopic
 
@@ -3457,27 +1615,13 @@ Unhides a previously hidden general forum topic in a Telegram chat.
 
 ### Parameters
 
-*   `chatId` **([string][1019] | [number][1021])** The ID of the chat where the topic is hidden.
+*   `chatId` **([string][393] | [number][395])** The ID of the chat where the topic is hidden.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API responds with an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API responds with an error.
 
-Returns **[boolean][1024]** Returns `true` if the topic was successfully unhidden.
-
-## unhideGeneralForumTopic
-
-Unhides a previously hidden general forum topic in a Telegram chat.
-
-### Parameters
-
-*   `chatId` **([string][1019] | [number][1021])** The ID of the chat where the topic is hidden.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API responds with an error.
-
-Returns **[boolean][1024]** Returns `true` if the topic was successfully unhidden.
+Returns **[boolean][398]** Returns `true` if the topic was successfully unhidden.
 
 ## answerCallbackQuery
 
@@ -3485,39 +1629,19 @@ Sends an answer to a callback query sent from an inline keyboard or an inline bu
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.callbackQueryId` **[string][1019]** The unique identifier of the callback query to be answered.
-    *   `options.text` **[string][1019]?** Text of the notification to be sent, 0-200 characters.
-    *   `options.showAlert` **[boolean][1024]?** If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
-    *   `options.url` **[string][1019]?** URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game. Otherwise, you may use links like t.me/your\_bot?start=XXXX that open your bot with a parameter.
-    *   `options.cacheTime` **[number][1021]?** The maximum amount of time in seconds that the result of the callback query may be cached client-side. Defaults to 0.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code.
-
-Returns **[boolean][1024]** Returns true on success.
-
-## answerCallbackQuery
-
-Sends an answer to a callback query sent from an inline keyboard or an inline button.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.callbackQueryId` **[string][1019]** The unique identifier of the callback query to be answered.
-    *   `options.text` **[string][1019]?** Text of the notification to be sent, 0-200 characters.
-    *   `options.showAlert` **[boolean][1024]?** If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
-    *   `options.url` **[string][1019]?** URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game. Otherwise, you may use links like t.me/your\_bot?start=XXXX that open your bot with a parameter.
-    *   `options.cacheTime` **[number][1021]?** The maximum amount of time in seconds that the result of the callback query may be cached client-side. Defaults to 0.
+    *   `options.callbackQueryId` **[string][393]** The unique identifier of the callback query to be answered.
+    *   `options.text` **[string][393]?** Text of the notification to be sent, 0-200 characters.
+    *   `options.showAlert` **[boolean][398]?** If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
+    *   `options.url` **[string][393]?** URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game. Otherwise, you may use links like t.me/your\_bot?start=XXXX that open your bot with a parameter.
+    *   `options.cacheTime` **[number][395]?** The maximum amount of time in seconds that the result of the callback query may be cached client-side. Defaults to 0.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error\_code.
 
-Returns **[boolean][1024]** Returns true on success.
+Returns **[boolean][398]** Returns true on success.
 
 ## setMyCommands
 
@@ -3525,35 +1649,17 @@ Sets the list of commands supported by your bot.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options object.
+*   `options` **[object][396]** Options object.
 
-    *   `options.commands` **[Array][1020]<[object][1022]>** A list of bot commands.
-    *   `options.scope` **[String][1019]?** A string representing the bot command scope.
-    *   `options.languageCode` **[String][1019]?** A string representing the language code for the commands.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws a TelegramApiError if the API response contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
-
-## setMyCommands
-
-Sets the list of commands supported by your bot.
-
-### Parameters
-
-*   `options` **[object][1022]** Options object.
-
-    *   `options.commands` **[Array][1020]<[object][1022]>** A list of bot commands.
-    *   `options.scope` **[String][1019]?** A string representing the bot command scope.
-    *   `options.languageCode` **[String][1019]?** A string representing the language code for the commands.
+    *   `options.commands` **[Array][394]<[object][396]>** A list of bot commands.
+    *   `options.scope` **[String][393]?** A string representing the bot command scope.
+    *   `options.languageCode` **[String][393]?** A string representing the language code for the commands.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws a TelegramApiError if the API response contains an error code.
+*   Throws **[TelegramApiError][223]** Throws a TelegramApiError if the API response contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
 
 ## deleteMyCommands
 
@@ -3562,36 +1668,17 @@ Returns True on success.
 
 ### Parameters
 
-*   `options` **[object][1022]** Optional parameters for deleting bot commands.
+*   `options` **[object][396]** Optional parameters for deleting bot commands.
 
-    *   `options.scope` **[string][1019]** A string, which represent the scope of users. Pass "all\_private\_chats" to delete commands
+    *   `options.scope` **[string][393]** A string, which represent the scope of users. Pass "all\_private\_chats" to delete commands
         in all private chats and groups, or "all\_public\_chats" to delete commands in all chats.
-    *   `options.languageCode` **[string][1019]** A string, which represent the user language for which the commands are relevant.
+    *   `options.languageCode` **[string][393]** A string, which represent the user language for which the commands are relevant.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error is encountered while deleting bot commands.
+*   Throws **[TelegramApiError][223]** If an error is encountered while deleting bot commands.
 
-Returns **[Promise][1023]<[boolean][1024]>** On success, returns True.
-
-## deleteMyCommands
-
-Use this method to delete the list of the bot's commands for the given scope and user language.
-Returns True on success.
-
-### Parameters
-
-*   `options` **[object][1022]** Optional parameters for deleting bot commands.
-
-    *   `options.scope` **[string][1019]** A string, which represent the scope of users. Pass "all\_private\_chats" to delete commands
-        in all private chats and groups, or "all\_public\_chats" to delete commands in all chats.
-    *   `options.languageCode` **[string][1019]** A string, which represent the user language for which the commands are relevant.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error is encountered while deleting bot commands.
-
-Returns **[Promise][1023]<[boolean][1024]>** On success, returns True.
+Returns **[Promise][397]<[boolean][398]>** On success, returns True.
 
 ## getMyCommands
 
@@ -3599,33 +1686,16 @@ Get the list of commands set by the bot for its users.
 
 ### Parameters
 
-*   `options` **[object][1022]** Additional options for the request.
+*   `options` **[object][396]** Additional options for the request.
 
-    *   `options.scope` **[string][1019]?** A JSON-serialized object, describing scope of users.
-    *   `options.languageCode` **[string][1019]?** A two-letter ISO 639-1 language code or an empty string.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if there is a problem with the request.
-
-Returns **[Promise][1023]<[Array][1020]<[object][1022]>>** Returns an array of BotCommand on success.
-
-## getMyCommands
-
-Get the list of commands set by the bot for its users.
-
-### Parameters
-
-*   `options` **[object][1022]** Additional options for the request.
-
-    *   `options.scope` **[string][1019]?** A JSON-serialized object, describing scope of users.
-    *   `options.languageCode` **[string][1019]?** A two-letter ISO 639-1 language code or an empty string.
+    *   `options.scope` **[string][393]?** A JSON-serialized object, describing scope of users.
+    *   `options.languageCode` **[string][393]?** A two-letter ISO 639-1 language code or an empty string.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if there is a problem with the request.
+*   Throws **[TelegramApiError][223]** Throws an error if there is a problem with the request.
 
-Returns **[Promise][1023]<[Array][1020]<[object][1022]>>** Returns an array of BotCommand on success.
+Returns **[Promise][397]<[Array][394]<[object][396]>>** Returns an array of BotCommand on success.
 
 ## setMyName
 
@@ -3633,33 +1703,16 @@ Asynchronously sets the name and language code for a Telegram bot.
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the name and language code to set.
+*   `options` **[object][396]** An object containing the name and language code to set.
 
-    *   `options.name` **[string][1019]** The name to set for the bot.
-    *   `options.languageCode` **[string][1019]** The language code to set for the bot.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if there is an error in the API response.
-
-Returns **[Promise][1023]<[string][1019]>** The result of the API request.
-
-## setMyName
-
-Asynchronously sets the name and language code for a Telegram bot.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the name and language code to set.
-
-    *   `options.name` **[string][1019]** The name to set for the bot.
-    *   `options.languageCode` **[string][1019]** The language code to set for the bot.
+    *   `options.name` **[string][393]** The name to set for the bot.
+    *   `options.languageCode` **[string][393]** The language code to set for the bot.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if there is an error in the API response.
+*   Throws **[TelegramApiError][223]** Throws an error if there is an error in the API response.
 
-Returns **[Promise][1023]<[string][1019]>** The result of the API request.
+Returns **[Promise][397]<[string][393]>** The result of the API request.
 
 ## getMyName
 
@@ -3667,27 +1720,13 @@ Asynchronously retrieves the name of the user associated with the current API au
 
 ### Parameters
 
-*   `languageCode` **[string][1019]** An optional parameter to specify the language code in which to retrieve the name.
+*   `languageCode` **[string][393]** An optional parameter to specify the language code in which to retrieve the name.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error with the Telegram API.
+*   Throws **[TelegramApiError][223]** If there is an error with the Telegram API.
 
-Returns **[string][1019]** The name of the user associated with the current API authentication token.
-
-## getMyName
-
-Asynchronously retrieves the name of the user associated with the current API authentication token.
-
-### Parameters
-
-*   `languageCode` **[string][1019]** An optional parameter to specify the language code in which to retrieve the name.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error with the Telegram API.
-
-Returns **[string][1019]** The name of the user associated with the current API authentication token.
+Returns **[string][393]** The name of the user associated with the current API authentication token.
 
 ## setMyDescription
 
@@ -3695,28 +1734,13 @@ Set the description of the bot. This is a new field that is not yet widely avail
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the following properties:
+*   `options` **[object][396]** An object containing the following properties:
 
-    *   `options.description` **[string][1019]** The new description of the bot.
-    *   `options.languageCode` **[string][1019]?** The IETF language tag of the user's language.
+    *   `options.description` **[string][393]** The new description of the bot.
+    *   `options.languageCode` **[string][393]?** The IETF language tag of the user's language.
         If not specified, the server will use the default language code 'en'.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the updated User object representing the bot.
-Throws a TelegramApiError if the bot description could not be set.
-
-## setMyDescription
-
-Set the description of the bot. This is a new field that is not yet widely available.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the following properties:
-
-    *   `options.description` **[string][1019]** The new description of the bot.
-    *   `options.languageCode` **[string][1019]?** The IETF language tag of the user's language.
-        If not specified, the server will use the default language code 'en'.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the updated User object representing the bot.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the updated User object representing the bot.
 Throws a TelegramApiError if the bot description could not be set.
 
 ## getMyDescription
@@ -3725,27 +1749,13 @@ Get the bot's description, as set by the user.
 
 ### Parameters
 
-*   `languageCode` **[string][1019]?** IETF language tag of the user's language. Defaults to `en`.
+*   `languageCode` **[string][393]?** IETF language tag of the user's language. Defaults to `en`.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the API returns an error.
+*   Throws **[TelegramApiError][223]** If the API returns an error.
 
-Returns **[Promise][1023]<[string][1019]>** A promise that resolves to a string representing the bot's description.
-
-## getMyDescription
-
-Get the bot's description, as set by the user.
-
-### Parameters
-
-*   `languageCode` **[string][1019]?** IETF language tag of the user's language. Defaults to `en`.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the API returns an error.
-
-Returns **[Promise][1023]<[string][1019]>** A promise that resolves to a string representing the bot's description.
+Returns **[Promise][397]<[string][393]>** A promise that resolves to a string representing the bot's description.
 
 ## setMyShortDescription
 
@@ -3753,33 +1763,16 @@ Sets the bot's short description for the profile.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for setting the short description.
+*   `options` **[object][396]** Options for setting the short description.
 
-    *   `options.description` **[string][1019]** The new short description for the bot.
-    *   `options.languageCode` **[string][1019]** The language code of the new short description.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the request was unsuccessful, a TelegramApiError will be thrown with the description of the error.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns the bot's updated profile.
-
-## setMyShortDescription
-
-Sets the bot's short description for the profile.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for setting the short description.
-
-    *   `options.description` **[string][1019]** The new short description for the bot.
-    *   `options.languageCode` **[string][1019]** The language code of the new short description.
+    *   `options.description` **[string][393]** The new short description for the bot.
+    *   `options.languageCode` **[string][393]** The language code of the new short description.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the request was unsuccessful, a TelegramApiError will be thrown with the description of the error.
+*   Throws **[TelegramApiError][223]** If the request was unsuccessful, a TelegramApiError will be thrown with the description of the error.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns the bot's updated profile.
+Returns **[Promise][397]<[object][396]>** On success, the method returns the bot's updated profile.
 
 ## getMyShortDescription
 
@@ -3787,27 +1780,13 @@ Retrieves the bot's short description in the specified language or in English if
 
 ### Parameters
 
-*   `languageCode` **[string][1019]** Optional language code to get the short description in a specific language.
+*   `languageCode` **[string][393]** Optional language code to get the short description in a specific language.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** When the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** object with the bot's short description.
-
-## getMyShortDescription
-
-Retrieves the bot's short description in the specified language or in English if the language code is not specified.
-
-### Parameters
-
-*   `languageCode` **[string][1019]** Optional language code to get the short description in a specific language.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** object with the bot's short description.
+Returns **[Promise][397]<[object][396]>** object with the bot's short description.
 
 ## setChatMenuButton
 
@@ -3815,33 +1794,16 @@ Sets the menu button for a specific chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for setting the menu button.
+*   `options` **[object][396]** Options for setting the menu button.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the menu button will be set. If `chatId` is not provided, the instance's `chatId` property will be used.
-    *   `options.menuButton` **[object][1022]** The menu button object to be set. This object should conform to the Telegram Bot API's `InlineKeyboardButton` type.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error in the Telegram API response.
-
-Returns **[object][1022]** The result object from the Telegram API response.
-
-## setChatMenuButton
-
-Sets the menu button for a specific chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for setting the menu button.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - The ID of the chat where the menu button will be set. If `chatId` is not provided, the instance's `chatId` property will be used.
-    *   `options.menuButton` **[object][1022]** The menu button object to be set. This object should conform to the Telegram Bot API's `InlineKeyboardButton` type.
+    *   `options.chatId` **[number][395]** =this.chatId - The ID of the chat where the menu button will be set. If `chatId` is not provided, the instance's `chatId` property will be used.
+    *   `options.menuButton` **[object][396]** The menu button object to be set. This object should conform to the Telegram Bot API's `InlineKeyboardButton` type.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error in the Telegram API response.
+*   Throws **[TelegramApiError][223]** If there is an error in the Telegram API response.
 
-Returns **[object][1022]** The result object from the Telegram API response.
+Returns **[object][396]** The result object from the Telegram API response.
 
 ## getChatMenuButton
 
@@ -3849,27 +1811,13 @@ Gets the menu button of the chat with the given chat ID or the current chat ID i
 
 ### Parameters
 
-*   `chatId` **([number][1021] | [string][1019])?** The chat ID of the chat to get the menu button for.
+*   `chatId` **([number][395] | [string][393])?** The chat ID of the chat to get the menu button for.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error\_code.
+*   Throws **[TelegramApiError][223]** Throws an error if the API response contains an error\_code.
 
-Returns **[object][1022]** Returns the menu button of the chat.
-
-## getChatMenuButton
-
-Gets the menu button of the chat with the given chat ID or the current chat ID if available.
-
-### Parameters
-
-*   `chatId` **([number][1021] | [string][1019])?** The chat ID of the chat to get the menu button for.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error\_code.
-
-Returns **[object][1022]** Returns the menu button of the chat.
+Returns **[object][396]** Returns the menu button of the chat.
 
 ## setMyDefaultAdministratorRights
 
@@ -3877,33 +1825,16 @@ Set default administrator rights for the bot in a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.rights` **[object][1022]** New administrator rights of the bot.
-    *   `options.forChannels` **[boolean][1024]** Pass true if the default rights should be set for all groups and channels.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the updated rights for the bot.
-
-## setMyDefaultAdministratorRights
-
-Set default administrator rights for the bot in a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.rights` **[object][1022]** New administrator rights of the bot.
-    *   `options.forChannels` **[boolean][1024]** Pass true if the default rights should be set for all groups and channels.
+    *   `options.rights` **[object][396]** New administrator rights of the bot.
+    *   `options.forChannels` **[boolean][398]** Pass true if the default rights should be set for all groups and channels.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error\_code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the updated rights for the bot.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the updated rights for the bot.
 
 ## getMyDefaultAdministratorRights
 
@@ -3911,27 +1842,13 @@ Returns the default admin rights of the bot in a given channel or all channels.
 
 ### Parameters
 
-*   `forChannels` **[boolean][1024]** Pass `true` to return the default admin rights for all channels the bot is an administrator in.
+*   `forChannels` **[boolean][398]** Pass `true` to return the default admin rights for all channels the bot is an administrator in.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error\_code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
-
-## getMyDefaultAdministratorRights
-
-Returns the default admin rights of the bot in a given channel or all channels.
-
-### Parameters
-
-*   `forChannels` **[boolean][1024]** Pass `true` to return the default admin rights for all channels the bot is an administrator in.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error\_code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
 
 ## editMessageText
 
@@ -3939,45 +1856,22 @@ Edits the text of a message sent by the bot or via inline mode.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for editing the message text.
+*   `options` **[object][396]** Options for editing the message text.
 
-    *   `options.chatId` **[string][1019]?** Unique identifier for the target chat or username of the target channel.
-    *   `options.messageId` **[number][1021]** Identifier of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]** Identifier of the inline message to edit.
-    *   `options.text` **[string][1019]** New text of the message.
-    *   `options.parseMode` **[string][1019]?** Format of the new message text.
-    *   `options.entities` **[Array][1020]<[object][1022]>?** List of special entities that appear in message text.
-    *   `options.disableWebPagePreview` **[boolean][1024]?** Disables link previews for links in the message.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the request was unsuccessful.
-
-Returns **[object][1022]** Response object with edited message.
-
-## editMessageText
-
-Edits the text of a message sent by the bot or via inline mode.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for editing the message text.
-
-    *   `options.chatId` **[string][1019]?** Unique identifier for the target chat or username of the target channel.
-    *   `options.messageId` **[number][1021]** Identifier of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]** Identifier of the inline message to edit.
-    *   `options.text` **[string][1019]** New text of the message.
-    *   `options.parseMode` **[string][1019]?** Format of the new message text.
-    *   `options.entities` **[Array][1020]<[object][1022]>?** List of special entities that appear in message text.
-    *   `options.disableWebPagePreview` **[boolean][1024]?** Disables link previews for links in the message.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
+    *   `options.chatId` **[string][393]?** Unique identifier for the target chat or username of the target channel.
+    *   `options.messageId` **[number][395]** Identifier of the message to edit.
+    *   `options.inlineMessageId` **[string][393]** Identifier of the inline message to edit.
+    *   `options.text` **[string][393]** New text of the message.
+    *   `options.parseMode` **[string][393]?** Format of the new message text.
+    *   `options.entities` **[Array][394]<[object][396]>?** List of special entities that appear in message text.
+    *   `options.disableWebPagePreview` **[boolean][398]?** Disables link previews for links in the message.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options for the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the request was unsuccessful.
+*   Throws **[TelegramApiError][223]** If the request was unsuccessful.
 
-Returns **[object][1022]** Response object with edited message.
+Returns **[object][396]** Response object with edited message.
 
 ## editMessageCaption
 
@@ -3985,41 +1879,20 @@ Edits the caption of a message.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for editing the caption.
+*   `options` **[object][396]** The options for editing the caption.
 
-    *   `options.messageId` **[number][1021]** The message ID of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** Required if the message is an inline message. The inline message ID.
-    *   `options.caption` **[string][1019]?** The new caption of the message.
-    *   `options.parseMode` **[string][1019]?** The parsing mode of the new caption.
-    *   `options.captionEntities` **[Array][1020]?** List of special entities that appear in the caption, which can be specified instead of parse\_mode.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The reply markup of the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error editing the message caption.
-
-Returns **[Promise][1023]<[object][1022]>** The edited message object.
-
-## editMessageCaption
-
-Edits the caption of a message.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for editing the caption.
-
-    *   `options.messageId` **[number][1021]** The message ID of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** Required if the message is an inline message. The inline message ID.
-    *   `options.caption` **[string][1019]?** The new caption of the message.
-    *   `options.parseMode` **[string][1019]?** The parsing mode of the new caption.
-    *   `options.captionEntities` **[Array][1020]?** List of special entities that appear in the caption, which can be specified instead of parse\_mode.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** The reply markup of the message.
+    *   `options.messageId` **[number][395]** The message ID of the message to edit.
+    *   `options.inlineMessageId` **[string][393]?** Required if the message is an inline message. The inline message ID.
+    *   `options.caption` **[string][393]?** The new caption of the message.
+    *   `options.parseMode` **[string][393]?** The parsing mode of the new caption.
+    *   `options.captionEntities` **[Array][394]?** List of special entities that appear in the caption, which can be specified instead of parse\_mode.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** The reply markup of the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error editing the message caption.
+*   Throws **[TelegramApiError][223]** If there is an error editing the message caption.
 
-Returns **[Promise][1023]<[object][1022]>** The edited message object.
+Returns **[Promise][397]<[object][396]>** The edited message object.
 
 ## editMessageMedia
 
@@ -4027,37 +1900,18 @@ Edits the media of an existing message sent by the bot or via inline mode.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for editing the message media.
+*   `options` **[object][396]** The options for editing the message media.
 
-    *   `options.messageId` **[number][1021]** The message ID of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** The inline message ID of the message to edit (if in inline mode).
+    *   `options.messageId` **[number][395]** The message ID of the message to edit.
+    *   `options.inlineMessageId` **[string][393]?** The inline message ID of the message to edit (if in inline mode).
     *   `options.media` **any** The new media for the message.
     *   `options.replyMarkup` **any?** The new reply markup for the message (if any).
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error editing the message.
+*   Throws **[TelegramApiError][223]** If there is an error editing the message.
 
-Returns **[Promise][1023]<[object][1022]>** The edited message object.
-
-## editMessageMedia
-
-Edits the media of an existing message sent by the bot or via inline mode.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for editing the message media.
-
-    *   `options.messageId` **[number][1021]** The message ID of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** The inline message ID of the message to edit (if in inline mode).
-    *   `options.media` **any** The new media for the message.
-    *   `options.replyMarkup` **any?** The new reply markup for the message (if any).
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error editing the message.
-
-Returns **[Promise][1023]<[object][1022]>** The edited message object.
+Returns **[Promise][397]<[object][396]>** The edited message object.
 
 ## editMessageLiveLocation
 
@@ -4065,47 +1919,23 @@ Edits the live location of a message sent via the bot (for inline bots) or via t
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to edit the live location message.
+*   `options` **[object][396]** The options to edit the live location message.
 
-    *   `options.chatId` **[string][1019]?** Required if `inlineMessageId` is not specified. Unique identifier for the target chat.
-    *   `options.messageId` **[number][1021]?** Required if `inlineMessageId` is not specified. Identifier of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** Required if `chatId` and `messageId` are not specified. Identifier of the inline message to edit.
-    *   `options.latitude` **[number][1021]** Latitude of new location.
-    *   `options.longitude` **[number][1021]** Longitude of new location.
-    *   `options.horizontalAccuracy` **[number][1021]?** The radius of uncertainty for the location, measured in meters; 0-1500.
-    *   `options.heading` **[number][1021]?** Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
-    *   `options.proximityAlertRadius` **[number][1021]?** Maximum distance for proximity alerts about approaching another chat member, in meters.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options. An object of the `InlineKeyboardMarkup` type.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When an error occurs while editing the message.
-
-Returns **[Promise][1023]<[object][1022]>** On success, returns the edited message as a `Message` object.
-
-## editMessageLiveLocation
-
-Edits the live location of a message sent via the bot (for inline bots) or via the bot in a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to edit the live location message.
-
-    *   `options.chatId` **[string][1019]?** Required if `inlineMessageId` is not specified. Unique identifier for the target chat.
-    *   `options.messageId` **[number][1021]?** Required if `inlineMessageId` is not specified. Identifier of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** Required if `chatId` and `messageId` are not specified. Identifier of the inline message to edit.
-    *   `options.latitude` **[number][1021]** Latitude of new location.
-    *   `options.longitude` **[number][1021]** Longitude of new location.
-    *   `options.horizontalAccuracy` **[number][1021]?** The radius of uncertainty for the location, measured in meters; 0-1500.
-    *   `options.heading` **[number][1021]?** Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
-    *   `options.proximityAlertRadius` **[number][1021]?** Maximum distance for proximity alerts about approaching another chat member, in meters.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options. An object of the `InlineKeyboardMarkup` type.
+    *   `options.chatId` **[string][393]?** Required if `inlineMessageId` is not specified. Unique identifier for the target chat.
+    *   `options.messageId` **[number][395]?** Required if `inlineMessageId` is not specified. Identifier of the message to edit.
+    *   `options.inlineMessageId` **[string][393]?** Required if `chatId` and `messageId` are not specified. Identifier of the inline message to edit.
+    *   `options.latitude` **[number][395]** Latitude of new location.
+    *   `options.longitude` **[number][395]** Longitude of new location.
+    *   `options.horizontalAccuracy` **[number][395]?** The radius of uncertainty for the location, measured in meters; 0-1500.
+    *   `options.heading` **[number][395]?** Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
+    *   `options.proximityAlertRadius` **[number][395]?** Maximum distance for proximity alerts about approaching another chat member, in meters.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options. An object of the `InlineKeyboardMarkup` type.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When an error occurs while editing the message.
+*   Throws **[TelegramApiError][223]** When an error occurs while editing the message.
 
-Returns **[Promise][1023]<[object][1022]>** On success, returns the edited message as a `Message` object.
+Returns **[Promise][397]<[object][396]>** On success, returns the edited message as a `Message` object.
 
 ## stopMessageLiveLocation
 
@@ -4113,37 +1943,18 @@ Stop updating a live location message sent by the bot or via inline mode.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for stopping live location.
+*   `options` **[object][396]** Options for stopping live location.
 
-    *   `options.chatId` **([string][1019] | null)** Unique identifier for the target chat or username of the target channel. (optional, default `this.chatId`)
-    *   `options.messageId` **[number][1021]** Identifier of the sent message.
-    *   `options.inlineMessageId` **([string][1019] | null)** Identifier of the inline message.
-    *   `options.replyMarkup` **([object][1022] | null)** A reply markup object.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the stopped live location message object.
-
-## stopMessageLiveLocation
-
-Stop updating a live location message sent by the bot or via inline mode.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for stopping live location.
-
-    *   `options.chatId` **([string][1019] | null)** Unique identifier for the target chat or username of the target channel. (optional, default `this.chatId`)
-    *   `options.messageId` **[number][1021]** Identifier of the sent message.
-    *   `options.inlineMessageId` **([string][1019] | null)** Identifier of the inline message.
-    *   `options.replyMarkup` **([object][1022] | null)** A reply markup object.
+    *   `options.chatId` **([string][393] | null)** Unique identifier for the target chat or username of the target channel. (optional, default `this.chatId`)
+    *   `options.messageId` **[number][395]** Identifier of the sent message.
+    *   `options.inlineMessageId` **([string][393] | null)** Identifier of the inline message.
+    *   `options.replyMarkup` **([object][396] | null)** A reply markup object.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the stopped live location message object.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the stopped live location message object.
 
 ## editMessageReplyMarkup
 
@@ -4151,37 +1962,18 @@ Edits the reply markup of a message sent by the bot or via inline mode.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.chatId` **[string][1019]?** Required if `inlineMessageId` is not specified. The unique identifier of the target chat.
-    *   `options.messageId` **[number][1021]?** Required if `inlineMessageId` is not specified. Identifier of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** Required if `chatId` and `messageId` are not specified. Identifier of the inline message.
-    *   `options.replyMarkup` **[object][1022]** A new reply markup for the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while editing the message, an error object will be thrown.
-
-Returns **[object][1022]** On success, the edited Message is returned.
-
-## editMessageReplyMarkup
-
-Edits the reply markup of a message sent by the bot or via inline mode.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.chatId` **[string][1019]?** Required if `inlineMessageId` is not specified. The unique identifier of the target chat.
-    *   `options.messageId` **[number][1021]?** Required if `inlineMessageId` is not specified. Identifier of the message to edit.
-    *   `options.inlineMessageId` **[string][1019]?** Required if `chatId` and `messageId` are not specified. Identifier of the inline message.
-    *   `options.replyMarkup` **[object][1022]** A new reply markup for the message.
+    *   `options.chatId` **[string][393]?** Required if `inlineMessageId` is not specified. The unique identifier of the target chat.
+    *   `options.messageId` **[number][395]?** Required if `inlineMessageId` is not specified. Identifier of the message to edit.
+    *   `options.inlineMessageId` **[string][393]?** Required if `chatId` and `messageId` are not specified. Identifier of the inline message.
+    *   `options.replyMarkup` **[object][396]** A new reply markup for the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while editing the message, an error object will be thrown.
+*   Throws **[TelegramApiError][223]** If an error occurs while editing the message, an error object will be thrown.
 
-Returns **[object][1022]** On success, the edited Message is returned.
+Returns **[object][396]** On success, the edited Message is returned.
 
 ## stopPoll
 
@@ -4189,35 +1981,17 @@ Stops a poll in a chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to use for stopping the poll.
+*   `options` **[object][396]** The options to use for stopping the poll.
 
-    *   `options.messageId` **[number][1021]** Identifier of the original message with the poll.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** A JSON-serialized object for a new message inline keyboard.
-    *   `options.chatId` **[number][1021]?** Unique identifier for the target chat or username of the target channel.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while stopping the poll.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the stopped poll is returned.
-
-## stopPoll
-
-Stops a poll in a chat.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to use for stopping the poll.
-
-    *   `options.messageId` **[number][1021]** Identifier of the original message with the poll.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** A JSON-serialized object for a new message inline keyboard.
-    *   `options.chatId` **[number][1021]?** Unique identifier for the target chat or username of the target channel.
+    *   `options.messageId` **[number][395]** Identifier of the original message with the poll.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** A JSON-serialized object for a new message inline keyboard.
+    *   `options.chatId` **[number][395]?** Unique identifier for the target chat or username of the target channel.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while stopping the poll.
+*   Throws **[TelegramApiError][223]** If an error occurs while stopping the poll.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the stopped poll is returned.
+Returns **[Promise][397]<[object][396]>** On success, the stopped poll is returned.
 
 ## sendSticker
 
@@ -4225,47 +1999,23 @@ Sends a sticker message.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for sending the sticker message.
+*   `options` **[object][396]** The options for sending the sticker message.
 
-    *   `options.chatId` **([string][1019] | [number][1021])?** The ID of the chat where the message will be sent. Required if `this.chatId` is not set.
-    *   `options.sticker` **[string][1019]** The sticker file ID or URL.
-    *   `options.emoji` **[string][1019]?** The emoji corresponding to the sticker.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently, without a notification. False by default.
-    *   `options.content` **[boolean][1024]?** Pass true to send the sticker as a protected content message. False by default.
-    *   `options.replyToMessageId` **([string][1019] | [number][1021])?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true to allow sending the message without a reply message. False by default.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
-    *   `options.threadId` **([string][1019] | [number][1021])?** The ID of the thread where the message will be sent.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the request to the Telegram API fails.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent message object on success.
-
-## sendSticker
-
-Sends a sticker message.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for sending the sticker message.
-
-    *   `options.chatId` **([string][1019] | [number][1021])?** The ID of the chat where the message will be sent. Required if `this.chatId` is not set.
-    *   `options.sticker` **[string][1019]** The sticker file ID or URL.
-    *   `options.emoji` **[string][1019]?** The emoji corresponding to the sticker.
-    *   `options.notification` **[boolean][1024]?** Sends the message silently, without a notification. False by default.
-    *   `options.content` **[boolean][1024]?** Pass true to send the sticker as a protected content message. False by default.
-    *   `options.replyToMessageId` **([string][1019] | [number][1021])?** The ID of the message to reply to.
-    *   `options.allowReply` **[boolean][1024]?** Pass true to allow sending the message without a reply message. False by default.
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
-    *   `options.threadId` **([string][1019] | [number][1021])?** The ID of the thread where the message will be sent.
+    *   `options.chatId` **([string][393] | [number][395])?** The ID of the chat where the message will be sent. Required if `this.chatId` is not set.
+    *   `options.sticker` **[string][393]** The sticker file ID or URL.
+    *   `options.emoji` **[string][393]?** The emoji corresponding to the sticker.
+    *   `options.notification` **[boolean][398]?** Sends the message silently, without a notification. False by default.
+    *   `options.content` **[boolean][398]?** Pass true to send the sticker as a protected content message. False by default.
+    *   `options.replyToMessageId` **([string][393] | [number][395])?** The ID of the message to reply to.
+    *   `options.allowReply` **[boolean][398]?** Pass true to allow sending the message without a reply message. False by default.
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options for the message.
+    *   `options.threadId` **([string][393] | [number][395])?** The ID of the thread where the message will be sent.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the request to the Telegram API fails.
+*   Throws **[TelegramApiError][223]** Throws an error if the request to the Telegram API fails.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the sent message object on success.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the sent message object on success.
 
 ## getStickerSet
 
@@ -4273,27 +2023,13 @@ Get a sticker set by its name.
 
 ### Parameters
 
-*   `name` **[string][1019]** Name of the sticker set.
+*   `name` **[string][393]** Name of the sticker set.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** A Promise that returns an object representing the sticker set on success.
-
-## getStickerSet
-
-Get a sticker set by its name.
-
-### Parameters
-
-*   `name` **[string][1019]** Name of the sticker set.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** A Promise that returns an object representing the sticker set on success.
+Returns **[Promise][397]<[object][396]>** A Promise that returns an object representing the sticker set on success.
 
 ## getCustomEmojiStickers
 
@@ -4301,27 +2037,13 @@ Returns a list of sticker sets containing custom emojis
 
 ### Parameters
 
-*   `customEmojiIds` **[Array][1020]<[string][1019]>** An array of custom emoji ids to get related sticker sets
+*   `customEmojiIds` **[Array][394]<[string][393]>** An array of custom emoji ids to get related sticker sets
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error code
+*   Throws **[TelegramApiError][223]** Throws an error if the API response contains an error code
 
-Returns **[object][1022]** Returns an object representing the list of sticker sets containing custom emojis
-
-## getCustomEmojiStickers
-
-Returns a list of sticker sets containing custom emojis
-
-### Parameters
-
-*   `customEmojiIds` **[Array][1020]<[string][1019]>** An array of custom emoji ids to get related sticker sets
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error code
-
-Returns **[object][1022]** Returns an object representing the list of sticker sets containing custom emojis
+Returns **[object][396]** Returns an object representing the list of sticker sets containing custom emojis
 
 ## uploadStickerFile
 
@@ -4329,35 +2051,17 @@ Uploads a PNG image to create a new sticker file. The file must be less than 512
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the following parameters:
+*   `options` **[object][396]** An object containing the following parameters:
 
-    *   `options.userId` **[Number][1021]** Unique identifier for the target user or bot.
+    *   `options.userId` **[Number][395]** Unique identifier for the target user or bot.
     *   `options.sticker` **any** The PNG image data to be uploaded.
-    *   `options.stickerFormat` **[String][1019]** The file extension for the sticker (e.g. 'png').
+    *   `options.stickerFormat` **[String][393]** The file extension for the sticker (e.g. 'png').
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error during the API request.
+*   Throws **[TelegramApiError][223]** If there is an error during the API request.
 
-Returns **[object][1022]** The uploaded sticker file's information.
-
-## uploadStickerFile
-
-Uploads a PNG image to create a new sticker file. The file must be less than 512 KB in size.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the following parameters:
-
-    *   `options.userId` **[Number][1021]** Unique identifier for the target user or bot.
-    *   `options.sticker` **any** The PNG image data to be uploaded.
-    *   `options.stickerFormat` **[String][1019]** The file extension for the sticker (e.g. 'png').
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error during the API request.
-
-Returns **[object][1022]** The uploaded sticker file's information.
+Returns **[object][396]** The uploaded sticker file's information.
 
 ## createNewStickerSet
 
@@ -4365,45 +2069,22 @@ Creates a new sticker set with the specified options.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object containing the following properties:
+*   `options` **[object][396]** The options object containing the following properties:
 
-    *   `options.userId` **[number][1021]** The ID of the user who will create the sticker set.
-    *   `options.name` **[string][1019]** The unique name of the sticker set, 1-64 characters.
-    *   `options.title` **[string][1019]** The title of the sticker set, 1-64 characters.
-    *   `options.stickers` **[Array][1020]<[object][1022]>** An array of sticker objects containing the following properties:*   {string} emoji - Emoji corresponding to the sticker.
+    *   `options.userId` **[number][395]** The ID of the user who will create the sticker set.
+    *   `options.name` **[string][393]** The unique name of the sticker set, 1-64 characters.
+    *   `options.title` **[string][393]** The title of the sticker set, 1-64 characters.
+    *   `options.stickers` **[Array][394]<[object][396]>** An array of sticker objects containing the following properties:*   {string} emoji - Emoji corresponding to the sticker.
         *   {string} file - File path or URL of the sticker image.
-    *   `options.stickerFormat` **[string][1019]** The format of the stickers. Supported formats: "png", "webp", "tgs".
-    *   `options.stickerType` **[string][1019]** The type of the stickers. Supported types: "static" for static stickers, "animated" for animated stickers.
-    *   `options.needsRepainting` **[boolean][1024]** Whether the sticker set needs to be repainted. Defaults to false.
+    *   `options.stickerFormat` **[string][393]** The format of the stickers. Supported formats: "png", "webp", "tgs".
+    *   `options.stickerType` **[string][393]** The type of the stickers. Supported types: "static" for static stickers, "animated" for animated stickers.
+    *   `options.needsRepainting` **[boolean][398]** Whether the sticker set needs to be repainted. Defaults to false.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error creating the sticker set.
+*   Throws **[TelegramApiError][223]** If there is an error creating the sticker set.
 
-Returns **[object][1022]** The created sticker set object.
-
-## createNewStickerSet
-
-Creates a new sticker set with the specified options.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object containing the following properties:
-
-    *   `options.userId` **[number][1021]** The ID of the user who will create the sticker set.
-    *   `options.name` **[string][1019]** The unique name of the sticker set, 1-64 characters.
-    *   `options.title` **[string][1019]** The title of the sticker set, 1-64 characters.
-    *   `options.stickers` **[Array][1020]<[object][1022]>** An array of sticker objects containing the following properties:*   {string} emoji - Emoji corresponding to the sticker.
-        *   {string} file - File path or URL of the sticker image.
-    *   `options.stickerFormat` **[string][1019]** The format of the stickers. Supported formats: "png", "webp", "tgs".
-    *   `options.stickerType` **[string][1019]** The type of the stickers. Supported types: "static" for static stickers, "animated" for animated stickers.
-    *   `options.needsRepainting` **[boolean][1024]** Whether the sticker set needs to be repainted. Defaults to false.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error creating the sticker set.
-
-Returns **[object][1022]** The created sticker set object.
+Returns **[object][396]** The created sticker set object.
 
 ## addStickerToSet
 
@@ -4411,53 +2092,26 @@ Add a new sticker to a set created by the bot.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to add a sticker to a set.
+*   `options` **[object][396]** The options to add a sticker to a set.
 
-    *   `options.userId` **[number][1021]** The user id of the sticker set owner.
-    *   `options.name` **[string][1019]** The name of the sticker set.
-    *   `options.sticker` **[object][1022]** The sticker to add to the set.
+    *   `options.userId` **[number][395]** The user id of the sticker set owner.
+    *   `options.name` **[string][393]** The name of the sticker set.
+    *   `options.sticker` **[object][396]** The sticker to add to the set.
 
-        *   `options.sticker.fileId` **[string][1019]** The file id of the sticker.
-        *   `options.sticker.emoji` **[string][1019]** The emoji associated with the sticker.
-        *   `options.sticker.maskPosition` **[object][1022]?** The position where the mask should be placed on faces.
+        *   `options.sticker.fileId` **[string][393]** The file id of the sticker.
+        *   `options.sticker.emoji` **[string][393]** The emoji associated with the sticker.
+        *   `options.sticker.maskPosition` **[object][396]?** The position where the mask should be placed on faces.
 
-            *   `options.sticker.maskPosition.point` **[string][1019]** The part of the face where the mask should be placed.
-            *   `options.sticker.maskPosition.xShift` **[number][1021]** The horizontal shift in pixels.
-            *   `options.sticker.maskPosition.yShift` **[number][1021]** The vertical shift in pixels.
-            *   `options.sticker.maskPosition.scale` **[number][1021]** The scale of the mask.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while adding the sticker.
-
-Returns **[object][1022]** On success, the added Sticker object is returned.
-
-## addStickerToSet
-
-Add a new sticker to a set created by the bot.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to add a sticker to a set.
-
-    *   `options.userId` **[number][1021]** The user id of the sticker set owner.
-    *   `options.name` **[string][1019]** The name of the sticker set.
-    *   `options.sticker` **[object][1022]** The sticker to add to the set.
-
-        *   `options.sticker.fileId` **[string][1019]** The file id of the sticker.
-        *   `options.sticker.emoji` **[string][1019]** The emoji associated with the sticker.
-        *   `options.sticker.maskPosition` **[object][1022]?** The position where the mask should be placed on faces.
-
-            *   `options.sticker.maskPosition.point` **[string][1019]** The part of the face where the mask should be placed.
-            *   `options.sticker.maskPosition.xShift` **[number][1021]** The horizontal shift in pixels.
-            *   `options.sticker.maskPosition.yShift` **[number][1021]** The vertical shift in pixels.
-            *   `options.sticker.maskPosition.scale` **[number][1021]** The scale of the mask.
+            *   `options.sticker.maskPosition.point` **[string][393]** The part of the face where the mask should be placed.
+            *   `options.sticker.maskPosition.xShift` **[number][395]** The horizontal shift in pixels.
+            *   `options.sticker.maskPosition.yShift` **[number][395]** The vertical shift in pixels.
+            *   `options.sticker.maskPosition.scale` **[number][395]** The scale of the mask.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while adding the sticker.
+*   Throws **[TelegramApiError][223]** If an error occurs while adding the sticker.
 
-Returns **[object][1022]** On success, the added Sticker object is returned.
+Returns **[object][396]** On success, the added Sticker object is returned.
 
 ## setStickerPositionInSet
 
@@ -4465,33 +2119,16 @@ Set the position of a sticker in its set. Returns True on success.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for setting the sticker position.
+*   `options` **[object][396]** Options for setting the sticker position.
 
-    *   `options.sticker` **[string][1019]** File identifier of the sticker.
-    *   `options.position` **[number][1021]** New position of the sticker in the set (zero-based).
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker position.
-
-Returns **[Promise][1023]<[boolean][1024]>** A Promise that resolves to `true` on success.
-
-## setStickerPositionInSet
-
-Set the position of a sticker in its set. Returns True on success.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for setting the sticker position.
-
-    *   `options.sticker` **[string][1019]** File identifier of the sticker.
-    *   `options.position` **[number][1021]** New position of the sticker in the set (zero-based).
+    *   `options.sticker` **[string][393]** File identifier of the sticker.
+    *   `options.position` **[number][395]** New position of the sticker in the set (zero-based).
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker position.
+*   Throws **[TelegramApiError][223]** If an error occurs while setting the sticker position.
 
-Returns **[Promise][1023]<[boolean][1024]>** A Promise that resolves to `true` on success.
+Returns **[Promise][397]<[boolean][398]>** A Promise that resolves to `true` on success.
 
 ## deleteStickerFromSet
 
@@ -4500,42 +2137,13 @@ Returns True on success.
 
 ### Parameters
 
-*   `sticker` **[string][1019]** File identifier of the sticker to be deleted
+*   `sticker` **[string][393]** File identifier of the sticker to be deleted
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error returned by the Telegram API
+*   Throws **[TelegramApiError][223]** If there is an error returned by the Telegram API
 
-Returns **[Promise][1023]<[boolean][1024]>** On success, True is returned
-
-## deleteStickerFromSet
-
-Use this method to delete a sticker from a set created by the bot.
-Returns True on success.
-
-### Parameters
-
-*   `sticker` **[string][1019]** File identifier of the sticker to be deleted
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error returned by the Telegram API
-
-Returns **[Promise][1023]<[boolean][1024]>** On success, True is returned
-
-## setStickerEmoji
-
-Set the emoji associated with a sticker.
-
-### Parameters
-
-*   `options` **any**&#x20;
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there is an error returned from the Telegram API.
-
-Returns **[object][1022]** On success, the updated sticker object is returned.
+Returns **[Promise][397]<[boolean][398]>** On success, True is returned
 
 ## setStickerEmoji
 
@@ -4547,43 +2155,9 @@ Set the emoji associated with a sticker.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there is an error returned from the Telegram API.
+*   Throws **[TelegramApiError][223]** If there is an error returned from the Telegram API.
 
-Returns **[object][1022]** On success, the updated sticker object is returned.
-
-## setStickerKeywords
-
-Set the keywords associated with a sticker.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for setting sticker keywords.
-
-    *   `options.sticker` **[string][1019]** File identifier of the sticker.
-    *   `options.keywords` **[Array][1020]<[string][1019]>** An array of strings describing the sticker.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while setting sticker keywords.
-
-Returns **[object][1022]** Result of the API call.
-
-## setStickerKeywords
-
-Sets the keywords for a sticker.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.sticker` **[string][1019]** The file identifier of the sticker.
-    *   `options.keywords` **[Array][1020]<[string][1019]>** New list of keywords for the sticker.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker keywords.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the updated Sticker object is returned.
+Returns **[object][396]** On success, the updated sticker object is returned.
 
 ## setStickerKeywords
 
@@ -4591,16 +2165,16 @@ Set the keywords associated with a sticker.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for setting sticker keywords.
+*   `options` **[object][396]** Options for setting sticker keywords.
 
-    *   `options.sticker` **[string][1019]** File identifier of the sticker.
-    *   `options.keywords` **[Array][1020]<[string][1019]>** An array of strings describing the sticker.
+    *   `options.sticker` **[string][393]** File identifier of the sticker.
+    *   `options.keywords` **[Array][394]<[string][393]>** An array of strings describing the sticker.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while setting sticker keywords.
+*   Throws **[TelegramApiError][223]** If an error occurs while setting sticker keywords.
 
-Returns **[object][1022]** Result of the API call.
+Returns **[object][396]** Result of the API call.
 
 ## setStickerKeywords
 
@@ -4608,16 +2182,16 @@ Sets the keywords for a sticker.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.sticker` **[string][1019]** The file identifier of the sticker.
-    *   `options.keywords` **[Array][1020]<[string][1019]>** New list of keywords for the sticker.
+    *   `options.sticker` **[string][393]** The file identifier of the sticker.
+    *   `options.keywords` **[Array][394]<[string][393]>** New list of keywords for the sticker.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker keywords.
+*   Throws **[TelegramApiError][223]** If an error occurs while setting the sticker keywords.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the updated Sticker object is returned.
+Returns **[Promise][397]<[object][396]>** On success, the updated Sticker object is returned.
 
 ## setStickerMaskPosition
 
@@ -4625,20 +2199,20 @@ Sets the position of a sticker in the mask position for subsequent operation mas
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to set the sticker mask position.
+*   `options` **[object][396]** The options to set the sticker mask position.
 
-    *   `options.sticker` **[string][1019]** File identifier of the sticker.
-    *   `options.maskPosition` **[object][1022]** New mask position for the sticker.
+    *   `options.sticker` **[string][393]** File identifier of the sticker.
+    *   `options.maskPosition` **[object][396]** New mask position for the sticker.
 
-        *   `options.maskPosition.point_x` **[number][1021]** The x position where the mask should be placed on the sticker.
-        *   `options.maskPosition.point_y` **[number][1021]** The y position where the mask should be placed on the sticker.
-        *   `options.maskPosition.scale` **[number][1021]** The scale of the mask, should be between 0 and 1.
+        *   `options.maskPosition.point_x` **[number][395]** The x position where the mask should be placed on the sticker.
+        *   `options.maskPosition.point_y` **[number][395]** The y position where the mask should be placed on the sticker.
+        *   `options.maskPosition.scale` **[number][395]** The scale of the mask, should be between 0 and 1.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker mask position.
+*   Throws **[TelegramApiError][223]** If an error occurs while setting the sticker mask position.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the edited sticker is returned.
+Returns **[Promise][397]<[object][396]>** On success, the edited sticker is returned.
 
 ## setStickerMaskPosition
 
@@ -4646,62 +2220,20 @@ Set the position of a sticker in a mask.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for setting the sticker mask position
+*   `options` **[object][396]** The options for setting the sticker mask position
 
-    *   `options.sticker` **[string][1019]** File identifier of the sticker
-    *   `options.maskPosition` **[object][1022]** Position where the mask should be placed on the sticker
+    *   `options.sticker` **[string][393]** File identifier of the sticker
+    *   `options.maskPosition` **[object][396]** Position where the mask should be placed on the sticker
 
-        *   `options.maskPosition.point_x` **[number][1021]** The x position where the mask should be placed on the sticker, from 0 to 100.
-        *   `options.maskPosition.point_y` **[number][1021]** The y position where the mask should be placed on the sticker, from 0 to 100.
-        *   `options.maskPosition.scale` **[number][1021]** The scale of the mask, from 0 to 100.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker mask position.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the returned Promise will resolve with the updated Sticker object.
-
-## setStickerMaskPosition
-
-Sets the position of a sticker in the mask position for subsequent operation mask() calls.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to set the sticker mask position.
-
-    *   `options.sticker` **[string][1019]** File identifier of the sticker.
-    *   `options.maskPosition` **[object][1022]** New mask position for the sticker.
-
-        *   `options.maskPosition.point_x` **[number][1021]** The x position where the mask should be placed on the sticker.
-        *   `options.maskPosition.point_y` **[number][1021]** The y position where the mask should be placed on the sticker.
-        *   `options.maskPosition.scale` **[number][1021]** The scale of the mask, should be between 0 and 1.
+        *   `options.maskPosition.point_x` **[number][395]** The x position where the mask should be placed on the sticker, from 0 to 100.
+        *   `options.maskPosition.point_y` **[number][395]** The y position where the mask should be placed on the sticker, from 0 to 100.
+        *   `options.maskPosition.scale` **[number][395]** The scale of the mask, from 0 to 100.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker mask position.
+*   Throws **[TelegramApiError][223]** If an error occurs while setting the sticker mask position.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the edited sticker is returned.
-
-## setStickerMaskPosition
-
-Set the position of a sticker in a mask.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for setting the sticker mask position
-
-    *   `options.sticker` **[string][1019]** File identifier of the sticker
-    *   `options.maskPosition` **[object][1022]** Position where the mask should be placed on the sticker
-
-        *   `options.maskPosition.point_x` **[number][1021]** The x position where the mask should be placed on the sticker, from 0 to 100.
-        *   `options.maskPosition.point_y` **[number][1021]** The y position where the mask should be placed on the sticker, from 0 to 100.
-        *   `options.maskPosition.scale` **[number][1021]** The scale of the mask, from 0 to 100.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while setting the sticker mask position.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the returned Promise will resolve with the updated Sticker object.
+Returns **[Promise][397]<[object][396]>** On success, the returned Promise will resolve with the updated Sticker object.
 
 ## setStickerSetTitle
 
@@ -4709,33 +2241,16 @@ Sets the title of a sticker set.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for setting the sticker set title.
+*   `options` **[object][396]** Options for setting the sticker set title.
 
-    *   `options.name` **[string][1019]** Name of the sticker set.
-    *   `options.title` **[string][1019]** New title for the sticker set.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the API call returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the updated sticker set is returned.
-
-## setStickerSetTitle
-
-Sets the title of a sticker set.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for setting the sticker set title.
-
-    *   `options.name` **[string][1019]** Name of the sticker set.
-    *   `options.title` **[string][1019]** New title for the sticker set.
+    *   `options.name` **[string][393]** Name of the sticker set.
+    *   `options.title` **[string][393]** New title for the sticker set.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the API call returns an error.
+*   Throws **[TelegramApiError][223]** If the API call returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the updated sticker set is returned.
+Returns **[Promise][397]<[object][396]>** On success, the updated sticker set is returned.
 
 ## setStickerSetThumbnail
 
@@ -4743,35 +2258,17 @@ Set the thumbnail of a sticker set.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options object.
+*   `options` **[object][396]** Options object.
 
-    *   `options.name` **[string][1019]** Name of the sticker set.
-    *   `options.userId` **[number][1021]** Unique identifier of the target user.
+    *   `options.name` **[string][393]** Name of the sticker set.
+    *   `options.userId` **[number][395]** Unique identifier of the target user.
     *   `options.thumbnail` **any** New PNG image of the sticker set as a stream or a string URL-encoded file URL.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while executing the method, an error with a description is thrown.
+*   Throws **[TelegramApiError][223]** If an error occurs while executing the method, an error with a description is thrown.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the updated sticker set is returned.
-
-## setStickerSetThumbnail
-
-Set the thumbnail of a sticker set.
-
-### Parameters
-
-*   `options` **[object][1022]** Options object.
-
-    *   `options.name` **[string][1019]** Name of the sticker set.
-    *   `options.userId` **[number][1021]** Unique identifier of the target user.
-    *   `options.thumbnail` **any** New PNG image of the sticker set as a stream or a string URL-encoded file URL.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while executing the method, an error with a description is thrown.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the updated sticker set is returned.
+Returns **[Promise][397]<[object][396]>** On success, the updated sticker set is returned.
 
 ## setCustomEmojiStickerSetThumbnail
 
@@ -4779,33 +2276,16 @@ Set the thumbnail of a sticker set created with a custom emoji.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to set the custom emoji sticker set thumbnail.
+*   `options` **[object][396]** The options to set the custom emoji sticker set thumbnail.
 
-    *   `options.name` **[string][1019]** The name of the sticker set.
-    *   `options.customEmojiId` **[string][1019]** The ID of the custom emoji.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** The response from the Telegram API containing the result.
-
-## setCustomEmojiStickerSetThumbnail
-
-Set the thumbnail of a sticker set created with a custom emoji.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to set the custom emoji sticker set thumbnail.
-
-    *   `options.name` **[string][1019]** The name of the sticker set.
-    *   `options.customEmojiId` **[string][1019]** The ID of the custom emoji.
+    *   `options.name` **[string][393]** The name of the sticker set.
+    *   `options.customEmojiId` **[string][393]** The ID of the custom emoji.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** When the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** The response from the Telegram API containing the result.
+Returns **[Promise][397]<[object][396]>** The response from the Telegram API containing the result.
 
 ## deleteStickerSet
 
@@ -4813,27 +2293,13 @@ Use this method to delete a sticker set. Use the bot's username and the name of 
 
 ### Parameters
 
-*   `name` **[string][1019]** object containing the following required parameters
+*   `name` **[string][393]** object containing the following required parameters
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** When the request to the Telegram API fails or when the response contains an error.
+*   Throws **[TelegramApiError][223]** When the request to the Telegram API fails or when the response contains an error.
 
-Returns **[Promise][1023]<[object][1022]>** On success, returns True.
-
-## deleteStickerSet
-
-Use this method to delete a sticker set. Use the bot's username and the name of the sticker set.
-
-### Parameters
-
-*   `name` **[string][1019]** object containing the following required parameters
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** When the request to the Telegram API fails or when the response contains an error.
-
-Returns **[Promise][1023]<[object][1022]>** On success, returns True.
+Returns **[Promise][397]<[object][396]>** On success, returns True.
 
 ## answerInlineQuery
 
@@ -4841,43 +2307,21 @@ Answer an inline query.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for answering the inline query.
+*   `options` **[object][396]** The options for answering the inline query.
 
-    *   `options.inlineQueryId` **[string][1019]** Identifier of the inline query.
-    *   `options.results` **[Array][1020]<[object][1022]>** An array of results for the inline query.
-    *   `options.cacheTime` **[number][1021]** The maximum amount of time in seconds that the result of the inline query may be cached. (optional, default `300`)
-    *   `options.isPersonal` **[boolean][1024]** Pass `true`, if the results of the inline query should be kept on the server side. (optional, default `false`)
-    *   `options.nextOffset` **[string][1019]** The offset that a client should send in the next query with the same text to receive more results. (optional, default `''`)
-    *   `options.switchPmText` **[string][1019]?** If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch\_pm\_parameter.
-    *   `options.switchPmParameter` **[string][1019]?** The parameter for the start message sent to the bot when user presses the switch button.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** A Promise that resolves to the result of the request.
-
-## answerInlineQuery
-
-Answer an inline query.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for answering the inline query.
-
-    *   `options.inlineQueryId` **[string][1019]** Identifier of the inline query.
-    *   `options.results` **[Array][1020]<[object][1022]>** An array of results for the inline query.
-    *   `options.cacheTime` **[number][1021]** The maximum amount of time in seconds that the result of the inline query may be cached. (optional, default `300`)
-    *   `options.isPersonal` **[boolean][1024]** Pass `true`, if the results of the inline query should be kept on the server side. (optional, default `false`)
-    *   `options.nextOffset` **[string][1019]** The offset that a client should send in the next query with the same text to receive more results. (optional, default `''`)
-    *   `options.switchPmText` **[string][1019]?** If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch\_pm\_parameter.
-    *   `options.switchPmParameter` **[string][1019]?** The parameter for the start message sent to the bot when user presses the switch button.
+    *   `options.inlineQueryId` **[string][393]** Identifier of the inline query.
+    *   `options.results` **[Array][394]<[object][396]>** An array of results for the inline query.
+    *   `options.cacheTime` **[number][395]** The maximum amount of time in seconds that the result of the inline query may be cached. (optional, default `300`)
+    *   `options.isPersonal` **[boolean][398]** Pass `true`, if the results of the inline query should be kept on the server side. (optional, default `false`)
+    *   `options.nextOffset` **[string][393]** The offset that a client should send in the next query with the same text to receive more results. (optional, default `''`)
+    *   `options.switchPmText` **[string][393]?** If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch\_pm\_parameter.
+    *   `options.switchPmParameter` **[string][393]?** The parameter for the start message sent to the bot when user presses the switch button.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** If the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** A Promise that resolves to the result of the request.
+Returns **[Promise][397]<[object][396]>** A Promise that resolves to the result of the request.
 
 ## answerWebAppQuery
 
@@ -4885,33 +2329,16 @@ Use this method to answer a callback query sent from a web app.
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the parameters for the method.
+*   `options` **[object][396]** An object containing the parameters for the method.
 
-    *   `options.queryId` **[string][1019]** Unique identifier for the query to be answered.
+    *   `options.queryId` **[string][393]** Unique identifier for the query to be answered.
     *   `options.inlineQueryResult` **any** An array of results for the inline query.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** On error, an error object with an error code and description.
+*   Throws **[TelegramApiError][223]** On error, an error object with an error code and description.
 
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns the updated message object.
-
-## answerWebAppQuery
-
-Use this method to answer a callback query sent from a web app.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the parameters for the method.
-
-    *   `options.queryId` **[string][1019]** Unique identifier for the query to be answered.
-    *   `options.inlineQueryResult` **any** An array of results for the inline query.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** On error, an error object with an error code and description.
-
-Returns **[Promise][1023]<[object][1022]>** On success, the method returns the updated message object.
+Returns **[Promise][397]<[object][396]>** On success, the method returns the updated message object.
 
 ## sendInvoice
 
@@ -4919,85 +2346,42 @@ Sends an invoice to the specified chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for sending the invoice.
+*   `options` **[object][396]** Options for sending the invoice.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat.
-    *   `options.messageThreadId` **[number][1021]** Identifier of the message thread.
-    *   `options.title` **[string][1019]** Product name for the invoice.
-    *   `options.description` **[string][1019]** Product description for the invoice.
-    *   `options.payload` **[string][1019]** Bot-defined invoice payload, 1-128 bytes.
-    *   `options.providerToken` **[string][1019]** Payments provider token.
-    *   `options.currency` **[string][1019]** Three-letter ISO 4217 currency code.
-    *   `options.prices` **[Array][1020]** Array of price portions.
-    *   `options.maxTipAmount` **[number][1021]** Maximum accepted amount for tips.
-    *   `options.suggestedTipAmounts` **[Array][1020]** Suggested tip amounts.
-    *   `options.startParameter` **[string][1019]** Bot-defined identifier for the invoice.
-    *   `options.providerData` **[string][1019]** JSON-encoded data about the invoice, which will be shared with the payment provider.
-    *   `options.photoUrl` **[string][1019]** URL of the product photo for the invoice.
-    *   `options.photoSize` **[number][1021]** Size of the product photo for the invoice.
-    *   `options.photoWidth` **[number][1021]** Width of the product photo for the invoice.
-    *   `options.photoHeight` **[number][1021]** Height of the product photo for the invoice.
-    *   `options.needName` **[boolean][1024]** Pass true if the customer's full name should be collected.
-    *   `options.needPhoneNumber` **[boolean][1024]** Pass true if the customer's phone number should be collected.
-    *   `options.needEmail` **[boolean][1024]** Pass true if the customer's email address should be collected.
-    *   `options.needShippingAddress` **[boolean][1024]** Pass true if the customer's shipping address should be collected.
-    *   `options.sendPhoneNumberToProvider` **[boolean][1024]** Pass true if the customer's phone number should be sent to the payment provider.
-    *   `options.sendEmailToProvider` **[boolean][1024]** Pass true if the customer's email address should be sent to the payment provider.
-    *   `options.isFlexible` **[boolean][1024]** Pass true if the final price depends on the shipping method.
-    *   `options.disableNotification` **[boolean][1024]** Pass true if a notification for the invoice message should not be sent.
-    *   `options.protectContent` **[boolean][1024]** Pass true if the invoice message content should be encrypted.
-    *   `options.replyToMessageId` **[number][1021]** Identifier of the message to reply to.
-    *   `options.allowSendingWithoutReply` **[boolean][1024]** Pass true if the message can be sent without a reply.
-    *   `options.replyMarkup` **[object][1022]** Inline keyboard markup object.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there was an error sending the invoice.
-
-Returns **[object][1022]** Result object containing information about the sent invoice.
-
-## sendInvoice
-
-Sends an invoice to the specified chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for sending the invoice.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - Unique identifier for the target chat.
-    *   `options.messageThreadId` **[number][1021]** Identifier of the message thread.
-    *   `options.title` **[string][1019]** Product name for the invoice.
-    *   `options.description` **[string][1019]** Product description for the invoice.
-    *   `options.payload` **[string][1019]** Bot-defined invoice payload, 1-128 bytes.
-    *   `options.providerToken` **[string][1019]** Payments provider token.
-    *   `options.currency` **[string][1019]** Three-letter ISO 4217 currency code.
-    *   `options.prices` **[Array][1020]** Array of price portions.
-    *   `options.maxTipAmount` **[number][1021]** Maximum accepted amount for tips.
-    *   `options.suggestedTipAmounts` **[Array][1020]** Suggested tip amounts.
-    *   `options.startParameter` **[string][1019]** Bot-defined identifier for the invoice.
-    *   `options.providerData` **[string][1019]** JSON-encoded data about the invoice, which will be shared with the payment provider.
-    *   `options.photoUrl` **[string][1019]** URL of the product photo for the invoice.
-    *   `options.photoSize` **[number][1021]** Size of the product photo for the invoice.
-    *   `options.photoWidth` **[number][1021]** Width of the product photo for the invoice.
-    *   `options.photoHeight` **[number][1021]** Height of the product photo for the invoice.
-    *   `options.needName` **[boolean][1024]** Pass true if the customer's full name should be collected.
-    *   `options.needPhoneNumber` **[boolean][1024]** Pass true if the customer's phone number should be collected.
-    *   `options.needEmail` **[boolean][1024]** Pass true if the customer's email address should be collected.
-    *   `options.needShippingAddress` **[boolean][1024]** Pass true if the customer's shipping address should be collected.
-    *   `options.sendPhoneNumberToProvider` **[boolean][1024]** Pass true if the customer's phone number should be sent to the payment provider.
-    *   `options.sendEmailToProvider` **[boolean][1024]** Pass true if the customer's email address should be sent to the payment provider.
-    *   `options.isFlexible` **[boolean][1024]** Pass true if the final price depends on the shipping method.
-    *   `options.disableNotification` **[boolean][1024]** Pass true if a notification for the invoice message should not be sent.
-    *   `options.protectContent` **[boolean][1024]** Pass true if the invoice message content should be encrypted.
-    *   `options.replyToMessageId` **[number][1021]** Identifier of the message to reply to.
-    *   `options.allowSendingWithoutReply` **[boolean][1024]** Pass true if the message can be sent without a reply.
-    *   `options.replyMarkup` **[object][1022]** Inline keyboard markup object.
+    *   `options.chatId` **[number][395]** =this.chatId - Unique identifier for the target chat.
+    *   `options.messageThreadId` **[number][395]** Identifier of the message thread.
+    *   `options.title` **[string][393]** Product name for the invoice.
+    *   `options.description` **[string][393]** Product description for the invoice.
+    *   `options.payload` **[string][393]** Bot-defined invoice payload, 1-128 bytes.
+    *   `options.providerToken` **[string][393]** Payments provider token.
+    *   `options.currency` **[string][393]** Three-letter ISO 4217 currency code.
+    *   `options.prices` **[Array][394]** Array of price portions.
+    *   `options.maxTipAmount` **[number][395]** Maximum accepted amount for tips.
+    *   `options.suggestedTipAmounts` **[Array][394]** Suggested tip amounts.
+    *   `options.startParameter` **[string][393]** Bot-defined identifier for the invoice.
+    *   `options.providerData` **[string][393]** JSON-encoded data about the invoice, which will be shared with the payment provider.
+    *   `options.photoUrl` **[string][393]** URL of the product photo for the invoice.
+    *   `options.photoSize` **[number][395]** Size of the product photo for the invoice.
+    *   `options.photoWidth` **[number][395]** Width of the product photo for the invoice.
+    *   `options.photoHeight` **[number][395]** Height of the product photo for the invoice.
+    *   `options.needName` **[boolean][398]** Pass true if the customer's full name should be collected.
+    *   `options.needPhoneNumber` **[boolean][398]** Pass true if the customer's phone number should be collected.
+    *   `options.needEmail` **[boolean][398]** Pass true if the customer's email address should be collected.
+    *   `options.needShippingAddress` **[boolean][398]** Pass true if the customer's shipping address should be collected.
+    *   `options.sendPhoneNumberToProvider` **[boolean][398]** Pass true if the customer's phone number should be sent to the payment provider.
+    *   `options.sendEmailToProvider` **[boolean][398]** Pass true if the customer's email address should be sent to the payment provider.
+    *   `options.isFlexible` **[boolean][398]** Pass true if the final price depends on the shipping method.
+    *   `options.disableNotification` **[boolean][398]** Pass true if a notification for the invoice message should not be sent.
+    *   `options.protectContent` **[boolean][398]** Pass true if the invoice message content should be encrypted.
+    *   `options.replyToMessageId` **[number][395]** Identifier of the message to reply to.
+    *   `options.allowSendingWithoutReply` **[boolean][398]** Pass true if the message can be sent without a reply.
+    *   `options.replyMarkup` **[object][396]** Inline keyboard markup object.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there was an error sending the invoice.
+*   Throws **[TelegramApiError][223]** If there was an error sending the invoice.
 
-Returns **[object][1022]** Result object containing information about the sent invoice.
+Returns **[object][396]** Result object containing information about the sent invoice.
 
 ## createInvoiceLink
 
@@ -5005,69 +2389,34 @@ Creates a payment invoice link for a Telegram bot user.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for creating the payment link.
+*   `options` **[object][396]** The options for creating the payment link.
 
-    *   `options.title` **[string][1019]** The title of the product or service being purchased.
-    *   `options.description` **[string][1019]** The description of the product or service being purchased.
-    *   `options.payload` **[string][1019]** A developer-defined payload, which will be included in the payment notification.
-    *   `options.providerToken` **[string][1019]** The authentication token provided by the payment provider.
-    *   `options.currency` **[string][1019]** The currency of the payment, in ISO 4217 format.
-    *   `options.prices` **[Array][1020]<[object][1022]>** An array of price components for the product or service being purchased.
-    *   `options.maxTipAmount` **[number][1021]** The maximum tip amount allowed for the payment.
-    *   `options.suggestedTipAmounts` **[Array][1020]<[number][1021]>** An array of suggested tip amounts for the payment.
-    *   `options.providerData` **[string][1019]** Additional data to pass to the payment provider, in JSON format.
-    *   `options.photoUrl` **[string][1019]** The URL of a photo for the product or service being purchased.
-    *   `options.photoSize` **[number][1021]** The size of the photo in bytes.
-    *   `options.photoWidth` **[number][1021]** The width of the photo in pixels.
-    *   `options.photoHeight` **[number][1021]** The height of the photo in pixels.
-    *   `options.needName` **[boolean][1024]** Whether the user's name is needed for the payment.
-    *   `options.needPhoneNumber` **[boolean][1024]** Whether the user's phone number is needed for the payment.
-    *   `options.needEmail` **[boolean][1024]** Whether the user's email address is needed for the payment.
-    *   `options.needShippingAddress` **[boolean][1024]** Whether the user's shipping address is needed for the payment.
-    *   `options.sendPhoneNumberToProvider` **[boolean][1024]** Whether to send the user's phone number to the payment provider.
-    *   `options.sendEmailToProvider` **[boolean][1024]** Whether to send the user's email address to the payment provider.
-    *   `options.isFlexible` **[boolean][1024]** Whether the final payment amount can be changed by the user.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If there was an error creating the invoice link.
-
-Returns **[object][1022]** The response object, which contains the URL of the payment invoice link.
-
-## createInvoiceLink
-
-Creates a payment invoice link for a Telegram bot user.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for creating the payment link.
-
-    *   `options.title` **[string][1019]** The title of the product or service being purchased.
-    *   `options.description` **[string][1019]** The description of the product or service being purchased.
-    *   `options.payload` **[string][1019]** A developer-defined payload, which will be included in the payment notification.
-    *   `options.providerToken` **[string][1019]** The authentication token provided by the payment provider.
-    *   `options.currency` **[string][1019]** The currency of the payment, in ISO 4217 format.
-    *   `options.prices` **[Array][1020]<[object][1022]>** An array of price components for the product or service being purchased.
-    *   `options.maxTipAmount` **[number][1021]** The maximum tip amount allowed for the payment.
-    *   `options.suggestedTipAmounts` **[Array][1020]<[number][1021]>** An array of suggested tip amounts for the payment.
-    *   `options.providerData` **[string][1019]** Additional data to pass to the payment provider, in JSON format.
-    *   `options.photoUrl` **[string][1019]** The URL of a photo for the product or service being purchased.
-    *   `options.photoSize` **[number][1021]** The size of the photo in bytes.
-    *   `options.photoWidth` **[number][1021]** The width of the photo in pixels.
-    *   `options.photoHeight` **[number][1021]** The height of the photo in pixels.
-    *   `options.needName` **[boolean][1024]** Whether the user's name is needed for the payment.
-    *   `options.needPhoneNumber` **[boolean][1024]** Whether the user's phone number is needed for the payment.
-    *   `options.needEmail` **[boolean][1024]** Whether the user's email address is needed for the payment.
-    *   `options.needShippingAddress` **[boolean][1024]** Whether the user's shipping address is needed for the payment.
-    *   `options.sendPhoneNumberToProvider` **[boolean][1024]** Whether to send the user's phone number to the payment provider.
-    *   `options.sendEmailToProvider` **[boolean][1024]** Whether to send the user's email address to the payment provider.
-    *   `options.isFlexible` **[boolean][1024]** Whether the final payment amount can be changed by the user.
+    *   `options.title` **[string][393]** The title of the product or service being purchased.
+    *   `options.description` **[string][393]** The description of the product or service being purchased.
+    *   `options.payload` **[string][393]** A developer-defined payload, which will be included in the payment notification.
+    *   `options.providerToken` **[string][393]** The authentication token provided by the payment provider.
+    *   `options.currency` **[string][393]** The currency of the payment, in ISO 4217 format.
+    *   `options.prices` **[Array][394]<[object][396]>** An array of price components for the product or service being purchased.
+    *   `options.maxTipAmount` **[number][395]** The maximum tip amount allowed for the payment.
+    *   `options.suggestedTipAmounts` **[Array][394]<[number][395]>** An array of suggested tip amounts for the payment.
+    *   `options.providerData` **[string][393]** Additional data to pass to the payment provider, in JSON format.
+    *   `options.photoUrl` **[string][393]** The URL of a photo for the product or service being purchased.
+    *   `options.photoSize` **[number][395]** The size of the photo in bytes.
+    *   `options.photoWidth` **[number][395]** The width of the photo in pixels.
+    *   `options.photoHeight` **[number][395]** The height of the photo in pixels.
+    *   `options.needName` **[boolean][398]** Whether the user's name is needed for the payment.
+    *   `options.needPhoneNumber` **[boolean][398]** Whether the user's phone number is needed for the payment.
+    *   `options.needEmail` **[boolean][398]** Whether the user's email address is needed for the payment.
+    *   `options.needShippingAddress` **[boolean][398]** Whether the user's shipping address is needed for the payment.
+    *   `options.sendPhoneNumberToProvider` **[boolean][398]** Whether to send the user's phone number to the payment provider.
+    *   `options.sendEmailToProvider` **[boolean][398]** Whether to send the user's email address to the payment provider.
+    *   `options.isFlexible` **[boolean][398]** Whether the final payment amount can be changed by the user.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If there was an error creating the invoice link.
+*   Throws **[TelegramApiError][223]** If there was an error creating the invoice link.
 
-Returns **[object][1022]** The response object, which contains the URL of the payment invoice link.
+Returns **[object][396]** The response object, which contains the URL of the payment invoice link.
 
 ## answerShippingQuery
 
@@ -5075,37 +2424,18 @@ Sends a shipping query answer to the user.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options object.
+*   `options` **[object][396]** The options object.
 
-    *   `options.queryId` **[string][1019]** The ID of the shipping query.
-    *   `options.isDeliveryPossible` **[boolean][1024]** Specify true if delivery to the specified address is possible.
-    *   `options.shippingOptions` **[Array][1020]?** List of available shipping options.
-    *   `options.errorMessage` **[string][1019]?** Error message to display to the user if delivery to the specified address is not possible.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the result object upon successful execution of the method.
-
-## answerShippingQuery
-
-Sends a shipping query answer to the user.
-
-### Parameters
-
-*   `options` **[object][1022]** The options object.
-
-    *   `options.queryId` **[string][1019]** The ID of the shipping query.
-    *   `options.isDeliveryPossible` **[boolean][1024]** Specify true if delivery to the specified address is possible.
-    *   `options.shippingOptions` **[Array][1020]?** List of available shipping options.
-    *   `options.errorMessage` **[string][1019]?** Error message to display to the user if delivery to the specified address is not possible.
+    *   `options.queryId` **[string][393]** The ID of the shipping query.
+    *   `options.isDeliveryPossible` **[boolean][398]** Specify true if delivery to the specified address is possible.
+    *   `options.shippingOptions` **[Array][394]?** List of available shipping options.
+    *   `options.errorMessage` **[string][393]?** Error message to display to the user if delivery to the specified address is not possible.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the response contains an error code.
+*   Throws **[TelegramApiError][223]** Throws an error if the response contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to the result object upon successful execution of the method.
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to the result object upon successful execution of the method.
 
 ## answerPreCheckoutQuery
 
@@ -5113,37 +2443,18 @@ Use this method to respond to such pre-checkout queries. On success, True is ret
 
 ### Parameters
 
-*   `options` **[object][1022]** An object containing the response parameters.
+*   `options` **[object][396]** An object containing the response parameters.
 
-    *   `options.preCheckoutQueryId` **[string][1019]** Unique identifier for the query to be answered.
-    *   `options.ok` **[boolean][1024]** Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order.
+    *   `options.preCheckoutQueryId` **[string][393]** Unique identifier for the query to be answered.
+    *   `options.ok` **[boolean][398]** Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order.
         Specify False if there are any problems.
-    *   `options.errorMessage` **[string][1019]?** Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout.
+    *   `options.errorMessage` **[string][393]?** Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** On Telegram API error.
+*   Throws **[TelegramApiError][223]** On Telegram API error.
 
-Returns **[Promise][1023]<[boolean][1024]>** On success, True is returned.
-
-## answerPreCheckoutQuery
-
-Use this method to respond to such pre-checkout queries. On success, True is returned.
-
-### Parameters
-
-*   `options` **[object][1022]** An object containing the response parameters.
-
-    *   `options.preCheckoutQueryId` **[string][1019]** Unique identifier for the query to be answered.
-    *   `options.ok` **[boolean][1024]** Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order.
-        Specify False if there are any problems.
-    *   `options.errorMessage` **[string][1019]?** Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** On Telegram API error.
-
-Returns **[Promise][1023]<[boolean][1024]>** On success, True is returned.
+Returns **[Promise][397]<[boolean][398]>** On success, True is returned.
 
 ## setPassportDataErrors
 
@@ -5151,41 +2462,20 @@ Set errors in user Passport and revoke the verification of the data.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options to pass.
+*   `options` **[object][396]** The options to pass.
 
-    *   `options.userId` **[number][1021]** Required. Unique identifier of the target user.
-    *   `options.errors` **[Array][1020]<[object][1022]>** Required. An array describing the errors.
+    *   `options.userId` **[number][395]** Required. Unique identifier of the target user.
+    *   `options.errors` **[Array][394]<[object][396]>** Required. An array describing the errors.
 
-        *   `options.errors.source` **[string][1019]** Required. The section of the user's Telegram Passport which has the error, one of "utility\_bill", "bank\_statement", "rental\_agreement", "passport\_registration", "temporary\_registration".
-        *   `options.errors.type` **[string][1019]** Required. Type of element of the Telegram Passport which has the error, one of "personal\_details", "passport", "driver\_license", "identity\_card", "internal\_passport", "address", "utility\_bill", "bank\_statement", "rental\_agreement", "passport\_registration", "temporary\_registration".
-        *   `options.errors.message` **[string][1019]** Required. Error message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If the response from the API contains an error code.
-
-Returns **[Promise][1023]<[object][1022]>** On success, returns an object with the success status.
-
-## setPassportDataErrors
-
-Set errors in user Passport and revoke the verification of the data.
-
-### Parameters
-
-*   `options` **[object][1022]** The options to pass.
-
-    *   `options.userId` **[number][1021]** Required. Unique identifier of the target user.
-    *   `options.errors` **[Array][1020]<[object][1022]>** Required. An array describing the errors.
-
-        *   `options.errors.source` **[string][1019]** Required. The section of the user's Telegram Passport which has the error, one of "utility\_bill", "bank\_statement", "rental\_agreement", "passport\_registration", "temporary\_registration".
-        *   `options.errors.type` **[string][1019]** Required. Type of element of the Telegram Passport which has the error, one of "personal\_details", "passport", "driver\_license", "identity\_card", "internal\_passport", "address", "utility\_bill", "bank\_statement", "rental\_agreement", "passport\_registration", "temporary\_registration".
-        *   `options.errors.message` **[string][1019]** Required. Error message.
+        *   `options.errors.source` **[string][393]** Required. The section of the user's Telegram Passport which has the error, one of "utility\_bill", "bank\_statement", "rental\_agreement", "passport\_registration", "temporary\_registration".
+        *   `options.errors.type` **[string][393]** Required. Type of element of the Telegram Passport which has the error, one of "personal\_details", "passport", "driver\_license", "identity\_card", "internal\_passport", "address", "utility\_bill", "bank\_statement", "rental\_agreement", "passport\_registration", "temporary\_registration".
+        *   `options.errors.message` **[string][393]** Required. Error message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If the response from the API contains an error code.
+*   Throws **[TelegramApiError][223]** If the response from the API contains an error code.
 
-Returns **[Promise][1023]<[object][1022]>** On success, returns an object with the success status.
+Returns **[Promise][397]<[object][396]>** On success, returns an object with the success status.
 
 ## sendGame
 
@@ -5193,45 +2483,22 @@ Sends a game to the chat.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options for sending the game.
+*   `options` **[object][396]** Options for sending the game.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - ID of the chat where the game should be sent.
-    *   `options.gameShortName` **[string][1019]** Short name of the game to be sent.
-    *   `options.disableNotification` **[boolean][1024]** Pass true to disable notification for the message. (optional, default `false`)
-    *   `options.protectContent` **[boolean][1024]** Pass true to protect the content of the message from screenshots. (optional, default `false`)
-    *   `options.messageThreadId` **[number][1021]?** Identifier of the message thread.
-    *   `options.replyToMessageId` **[number][1021]?** Identifier of the message to reply to.
-    *   `options.allowSendingWithoutReply` **[boolean][1024]** Pass true to allow sending the message without a reply. (optional, default `false`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the game.
-
-Returns **[Promise][1023]<[object][1022]>** A Promise that resolves to the sent game object on success.
-
-## sendGame
-
-Sends a game to the chat.
-
-### Parameters
-
-*   `options` **[object][1022]** Options for sending the game.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - ID of the chat where the game should be sent.
-    *   `options.gameShortName` **[string][1019]** Short name of the game to be sent.
-    *   `options.disableNotification` **[boolean][1024]** Pass true to disable notification for the message. (optional, default `false`)
-    *   `options.protectContent` **[boolean][1024]** Pass true to protect the content of the message from screenshots. (optional, default `false`)
-    *   `options.messageThreadId` **[number][1021]?** Identifier of the message thread.
-    *   `options.replyToMessageId` **[number][1021]?** Identifier of the message to reply to.
-    *   `options.allowSendingWithoutReply` **[boolean][1024]** Pass true to allow sending the message without a reply. (optional, default `false`)
-    *   `options.replyMarkup` **([object][1022] | [string][1019])?** Additional interface options for the message.
+    *   `options.chatId` **[number][395]** =this.chatId - ID of the chat where the game should be sent.
+    *   `options.gameShortName` **[string][393]** Short name of the game to be sent.
+    *   `options.disableNotification` **[boolean][398]** Pass true to disable notification for the message. (optional, default `false`)
+    *   `options.protectContent` **[boolean][398]** Pass true to protect the content of the message from screenshots. (optional, default `false`)
+    *   `options.messageThreadId` **[number][395]?** Identifier of the message thread.
+    *   `options.replyToMessageId` **[number][395]?** Identifier of the message to reply to.
+    *   `options.allowSendingWithoutReply` **[boolean][398]** Pass true to allow sending the message without a reply. (optional, default `false`)
+    *   `options.replyMarkup` **([object][396] | [string][393])?** Additional interface options for the message.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** If an error occurs while sending the game.
+*   Throws **[TelegramApiError][223]** If an error occurs while sending the game.
 
-Returns **[Promise][1023]<[object][1022]>** A Promise that resolves to the sent game object on success.
+Returns **[Promise][397]<[object][396]>** A Promise that resolves to the sent game object on success.
 
 ## deleteMessage
 
@@ -5239,35 +2506,17 @@ Delete a message on Telegram.
 
 ### Parameters
 
-*   `options` **[object][1022]** Options object.
+*   `options` **[object][396]** Options object.
 
-    *   `options.chatId` **[number][1021]** =this.chatId - Chat ID where the message to be deleted is located.
-    *   `options.messageId` **[number][1021]** Message ID to be deleted.
-    *   `options.revoke` **[boolean][1024]** Pass true to delete the message for all chat members. Only used for channels.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error\_code.
-
-Returns **[object][1022]** Returns a Promise which will resolve to a message object if the message was deleted successfully.
-
-## deleteMessage
-
-Delete a message on Telegram.
-
-### Parameters
-
-*   `options` **[object][1022]** Options object.
-
-    *   `options.chatId` **[number][1021]** =this.chatId - Chat ID where the message to be deleted is located.
-    *   `options.messageId` **[number][1021]** Message ID to be deleted.
-    *   `options.revoke` **[boolean][1024]** Pass true to delete the message for all chat members. Only used for channels.
+    *   `options.chatId` **[number][395]** =this.chatId - Chat ID where the message to be deleted is located.
+    *   `options.messageId` **[number][395]** Message ID to be deleted.
+    *   `options.revoke` **[boolean][398]** Pass true to delete the message for all chat members. Only used for channels.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the API response contains an error\_code.
+*   Throws **[TelegramApiError][223]** Throws an error if the API response contains an error\_code.
 
-Returns **[object][1022]** Returns a Promise which will resolve to a message object if the message was deleted successfully.
+Returns **[object][396]** Returns a Promise which will resolve to a message object if the message was deleted successfully.
 
 ## createChat
 
@@ -5275,1077 +2524,16 @@ Creates a new chat with the specified options.
 
 ### Parameters
 
-*   `options` **[object][1022]** The options for creating the chat.
+*   `options` **[object][396]** The options for creating the chat.
 
-    *   `options.type` **[string][1019]** The type of the chat to create ('private', 'group', or 'supergroup').
-    *   `options.title` **[string][1019]** The title of the chat.
-
-<!---->
-
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
-
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to an object representing the created chat.
-
-## createChat
-
-Creates a new chat with the specified options.
-
-### Parameters
-
-*   `options` **[object][1022]** The options for creating the chat.
-
-    *   `options.type` **[string][1019]** The type of the chat to create ('private', 'group', or 'supergroup').
-    *   `options.title` **[string][1019]** The title of the chat.
+    *   `options.type` **[string][393]** The type of the chat to create ('private', 'group', or 'supergroup').
+    *   `options.title` **[string][393]** The title of the chat.
 
 <!---->
 
-*   Throws **[TelegramApiError][601]** Throws an error if the Telegram API returns an error.
+*   Throws **[TelegramApiError][223]** Throws an error if the Telegram API returns an error.
 
-Returns **[Promise][1023]<[object][1022]>** Returns a Promise that resolves to an object representing the created chat.
-
-## ChatActionType
-
-An object representing the available chat action types.
-
-Type: {Typing: [string][1019], UploadPhoto: [string][1019], RecordVideo: [string][1019], UploadVideo: [string][1019], RecordVoice: [string][1019], UploadVoice: [string][1019], UploadDocument: [string][1019], ChooseSticker: [string][1019], FindLocation: [string][1019], RecordVideoNote: [string][1019], UploadVideoNote: [string][1019]}
-
-### Properties
-
-*   `Typing` **[string][1019]**&#x20;
-*   `UploadPhoto` **[string][1019]**&#x20;
-*   `RecordVideo` **[string][1019]**&#x20;
-*   `UploadVideo` **[string][1019]**&#x20;
-*   `RecordVoice` **[string][1019]**&#x20;
-*   `UploadVoice` **[string][1019]**&#x20;
-*   `UploadDocument` **[string][1019]**&#x20;
-*   `ChooseSticker` **[string][1019]**&#x20;
-*   `FindLocation` **[string][1019]**&#x20;
-*   `RecordVideoNote` **[string][1019]**&#x20;
-*   `UploadVideoNote` **[string][1019]**&#x20;
-
-### Typing
-
-*   Represents a typing action.
-
-Type: [string][1019]
-
-### UploadPhoto
-
-*   Represents an action for uploading a photo.
-
-Type: [string][1019]
-
-### RecordVideo
-
-*   Represents an action for recording a video.
-
-Type: [string][1019]
-
-### UploadVideo
-
-*   Represents an action for uploading a video.
-
-Type: [string][1019]
-
-### RecordVoice
-
-*   Represents an action for recording a voice message.
-
-Type: [string][1019]
-
-### UploadVoice
-
-*   Represents an action for uploading a voice message.
-
-Type: [string][1019]
-
-### UploadDocument
-
-*   Represents an action for uploading a document.
-
-Type: [string][1019]
-
-### ChooseSticker
-
-*   Represents an action for choosing a sticker.
-
-Type: [string][1019]
-
-### FindLocation
-
-*   Represents an action for finding a location.
-
-Type: [string][1019]
-
-### RecordVideoNote
-
-*   Represents an action for recording a video note.
-
-Type: [string][1019]
-
-### UploadVideoNote
-
-*   Represents an action for uploading a video note.
-
-Type: [string][1019]
-
-## ChatActionType
-
-An object representing the available chat action types.
-
-Type: [object][1022]
-
-### Properties
-
-*   `Typing` **[string][1019]** Represents a typing action.
-*   `UploadPhoto` **[string][1019]** Represents an action for uploading a photo.
-*   `RecordVideo` **[string][1019]** Represents an action for recording a video.
-*   `UploadVideo` **[string][1019]** Represents an action for uploading a video.
-*   `RecordVoice` **[string][1019]** Represents an action for recording a voice message.
-*   `UploadVoice` **[string][1019]** Represents an action for uploading a voice message.
-*   `UploadDocument` **[string][1019]** Represents an action for uploading a document.
-*   `ChooseSticker` **[string][1019]** Represents an action for choosing a sticker.
-*   `FindLocation` **[string][1019]** Represents an action for finding a location.
-*   `RecordVideoNote` **[string][1019]** Represents an action for recording a video note.
-*   `UploadVideoNote` **[string][1019]** Represents an action for uploading a video note.
-
-### Typing
-
-*   Represents a typing action.
-
-Type: [string][1019]
-
-### UploadPhoto
-
-*   Represents an action for uploading a photo.
-
-Type: [string][1019]
-
-### RecordVideo
-
-*   Represents an action for recording a video.
-
-Type: [string][1019]
-
-### UploadVideo
-
-*   Represents an action for uploading a video.
-
-Type: [string][1019]
-
-### RecordVoice
-
-*   Represents an action for recording a voice message.
-
-Type: [string][1019]
-
-### UploadVoice
-
-*   Represents an action for uploading a voice message.
-
-Type: [string][1019]
-
-### UploadDocument
-
-*   Represents an action for uploading a document.
-
-Type: [string][1019]
-
-### ChooseSticker
-
-*   Represents an action for choosing a sticker.
-
-Type: [string][1019]
-
-### FindLocation
-
-*   Represents an action for finding a location.
-
-Type: [string][1019]
-
-### RecordVideoNote
-
-*   Represents an action for recording a video note.
-
-Type: [string][1019]
-
-### UploadVideoNote
-
-*   Represents an action for uploading a video note.
-
-Type: [string][1019]
-
-## ChatPermission
-
-An object containing chat permissions.
-
-Type: {CanSendOtherMessages: [string][1019], CanAddWebPagePreviews: [string][1019], CanSendMessages: [string][1019], CanSendAudios: [string][1019], CanSendDocuments: [string][1019], CanSendPhotos: [string][1019], CanSendVideos: [string][1019], CanSendVideoNotes: [string][1019], CanSendVoiceNotes: [string][1019], CanSendPolls: [string][1019]}
-
-### Properties
-
-*   `CanSendOtherMessages` **[string][1019]**&#x20;
-*   `CanAddWebPagePreviews` **[string][1019]**&#x20;
-*   `CanSendMessages` **[string][1019]**&#x20;
-*   `CanSendAudios` **[string][1019]**&#x20;
-*   `CanSendDocuments` **[string][1019]**&#x20;
-*   `CanSendPhotos` **[string][1019]**&#x20;
-*   `CanSendVideos` **[string][1019]**&#x20;
-*   `CanSendVideoNotes` **[string][1019]**&#x20;
-*   `CanSendVoiceNotes` **[string][1019]**&#x20;
-*   `CanSendPolls` **[string][1019]**&#x20;
-
-### CanSendOtherMessages
-
-*   Specifies if users can send other kinds of messages.
-
-Type: [string][1019]
-
-### CanAddWebPagePreviews
-
-*   Specifies if users can add web page previews to their messages.
-
-Type: [string][1019]
-
-### CanSendMessages
-
-*   Specifies if users can send text messages.
-
-Type: [string][1019]
-
-### CanSendAudios
-
-*   Specifies if users can send audio messages.
-
-Type: [string][1019]
-
-### CanSendDocuments
-
-*   Specifies if users can send document messages.
-
-Type: [string][1019]
-
-### CanSendPhotos
-
-*   Specifies if users can send photo messages.
-
-Type: [string][1019]
-
-### CanSendVideos
-
-*   Specifies if users can send video messages.
-
-Type: [string][1019]
-
-### CanSendVideoNotes
-
-*   Specifies if users can send video note messages.
-
-Type: [string][1019]
-
-### CanSendVoiceNotes
-
-*   Specifies if users can send voice note messages.
-
-Type: [string][1019]
-
-### CanSendPolls
-
-*   Specifies if users can send polls.
-
-Type: [string][1019]
-
-## ChatPermission
-
-An object containing chat permissions.
-
-Type: [Object][1022]
-
-### Properties
-
-*   `CanSendOtherMessages` **[string][1019]** Specifies if users can send other kinds of messages.
-*   `CanAddWebPagePreviews` **[string][1019]** Specifies if users can add web page previews to their messages.
-*   `CanSendMessages` **[string][1019]** Specifies if users can send text messages.
-*   `CanSendAudios` **[string][1019]** Specifies if users can send audio messages.
-*   `CanSendDocuments` **[string][1019]** Specifies if users can send document messages.
-*   `CanSendPhotos` **[string][1019]** Specifies if users can send photo messages.
-*   `CanSendVideos` **[string][1019]** Specifies if users can send video messages.
-*   `CanSendVideoNotes` **[string][1019]** Specifies if users can send video note messages.
-*   `CanSendVoiceNotes` **[string][1019]** Specifies if users can send voice note messages.
-*   `CanSendPolls` **[string][1019]** Specifies if users can send polls.
-
-### CanSendOtherMessages
-
-*   Specifies if users can send other kinds of messages.
-
-Type: [string][1019]
-
-### CanAddWebPagePreviews
-
-*   Specifies if users can add web page previews to their messages.
-
-Type: [string][1019]
-
-### CanSendMessages
-
-*   Specifies if users can send text messages.
-
-Type: [string][1019]
-
-### CanSendAudios
-
-*   Specifies if users can send audio messages.
-
-Type: [string][1019]
-
-### CanSendDocuments
-
-*   Specifies if users can send document messages.
-
-Type: [string][1019]
-
-### CanSendPhotos
-
-*   Specifies if users can send photo messages.
-
-Type: [string][1019]
-
-### CanSendVideos
-
-*   Specifies if users can send video messages.
-
-Type: [string][1019]
-
-### CanSendVideoNotes
-
-*   Specifies if users can send video note messages.
-
-Type: [string][1019]
-
-### CanSendVoiceNotes
-
-*   Specifies if users can send voice note messages.
-
-Type: [string][1019]
-
-### CanSendPolls
-
-*   Specifies if users can send polls.
-
-Type: [string][1019]
-
-## DocumentTypes
-
-*
-
-Type: [string][1019]
-
-## DocumentTypes
-
-Constants for document types.
-
-Type: [string][1019]
-
-### Properties
-
-*   `PersonalDetails` **[string][1019]** Personal details.
-*   `Passport` **[string][1019]** Passport.
-*   `DriverLicense` **[string][1019]** Driver's license.
-*   `IdentityCard` **[string][1019]** Identity card.
-*   `InternalPassport` **[string][1019]** Internal passport.
-*   `Address` **[string][1019]** Address.
-*   `UtilityBill` **[string][1019]** Utility bill.
-*   `BankStatement` **[string][1019]** Bank statement.
-*   `RentalAgreement` **[string][1019]** Rental agreement.
-*   `PassportRegistration` **[string][1019]** Passport registration.
-*   `TemporaryRegistration` **[string][1019]** Temporary registration.
-*   `PhoneNumber` **[string][1019]** Phone number.
-*   `Email` **[string][1019]** Email.
-
-## EntityType
-
-*
-
-Type: [string][1019]
-
-## EntityType
-
-Object representing types of Telegram message entities.
-
-Type: [string][1019]
-
-### Properties
-
-*   `Mention` **[string][1019]** A `@username` mention.
-*   `Hashtag` **[string][1019]** A `#hashtag` mention.
-*   `Cashtag` **[string][1019]** A `$cashtag` mention.
-*   `BotCommand` **[string][1019]** A bot command mention.
-*   `URL` **[string][1019]** A URL link.
-*   `Email` **[string][1019]** An email link.
-*   `PhoneNumber` **[string][1019]** A phone number link.
-*   `Bold` **[string][1019]** Bold text.
-*   `Italic` **[string][1019]** Italic text.
-*   `Underline` **[string][1019]** Underlined text.
-*   `Strikethrough` **[string][1019]** Strikethrough text.
-*   `Spoiler` **[string][1019]** Spoiler text.
-*   `Code` **[string][1019]** Monospace code text.
-*   `Pre` **[string][1019]** Preformatted code block.
-*   `TextLink` **[string][1019]** A clickable text URL link.
-*   `TextMention` **[string][1019]** A mention of a user by their username.
-*   `CustomEmoji` **[string][1019]** A custom emoji.
-
-## Events
-
-Events object with predefined event types.
-
-Type: {Message: [string][1019], EditedMessage: [string][1019], ChannelPost: [string][1019], EditedChannelPost: [string][1019], InlineQuery: [string][1019], ChosenInlineResult: [string][1019], CallbackQuery: [string][1019], ShippingQuery: [string][1019], PreCheckoutQuery: [string][1019], Poll: [string][1019], PollAnswer: [string][1019], ChatMember: [string][1019], MyChatMember: [string][1019], ChatJoinRequest: [string][1019], ReplyMessage: [string][1019]}
-
-### Properties
-
-*   `Message` **[string][1019]**&#x20;
-*   `EditedMessage` **[string][1019]**&#x20;
-*   `ChannelPost` **[string][1019]**&#x20;
-*   `EditedChannelPost` **[string][1019]**&#x20;
-*   `InlineQuery` **[string][1019]**&#x20;
-*   `ChosenInlineResult` **[string][1019]**&#x20;
-*   `CallbackQuery` **[string][1019]**&#x20;
-*   `ShippingQuery` **[string][1019]**&#x20;
-*   `PreCheckoutQuery` **[string][1019]**&#x20;
-*   `Poll` **[string][1019]**&#x20;
-*   `PollAnswer` **[string][1019]**&#x20;
-*   `ChatMember` **[string][1019]**&#x20;
-*   `MyChatMember` **[string][1019]**&#x20;
-*   `ChatJoinRequest` **[string][1019]**&#x20;
-*   `ReplyMessage` **[string][1019]**&#x20;
-
-### Message
-
-*   Represents the 'message' event.
-
-Type: [string][1019]
-
-### EditedMessage
-
-*   Represents the 'edited\_message' event.
-
-Type: [string][1019]
-
-### ChannelPost
-
-*   Represents the 'channel\_post' event.
-
-Type: [string][1019]
-
-### EditedChannelPost
-
-*   Represents the 'edited\_channel\_post' event.
-
-Type: [string][1019]
-
-### InlineQuery
-
-*   Represents the 'inline\_query' event.
-
-Type: [string][1019]
-
-### ChosenInlineResult
-
-*   Represents the 'chosen\_inline\_result' event.
-
-Type: [string][1019]
-
-### CallbackQuery
-
-*   Represents the 'callback\_query' event.
-
-Type: [string][1019]
-
-### ShippingQuery
-
-*   Represents the 'shipping\_query' event.
-
-Type: [string][1019]
-
-### PreCheckoutQuery
-
-*   Represents the 'pre\_checkout\_query' event.
-
-Type: [string][1019]
-
-### Poll
-
-*   Represents the 'poll' event.
-
-Type: [string][1019]
-
-### PollAnswer
-
-*   Represents the 'poll\_answer' event.
-
-Type: [string][1019]
-
-### ChatMember
-
-*   Represents the 'chat\_member' event.
-
-Type: [string][1019]
-
-### MyChatMember
-
-*   Represents the 'my\_chat\_member' event.
-
-Type: [string][1019]
-
-### ChatJoinRequest
-
-*   Represents the 'chat\_join\_request' event.
-
-Type: [string][1019]
-
-### ReplyMessage
-
-*   Represents the 'reply\_message' event.
-
-Type: [string][1019]
-
-## Events
-
-Events object with predefined event types.
-
-Type: [Object][1022]
-
-### Properties
-
-*   `Message` **[string][1019]** Represents the 'message' event.
-*   `EditedMessage` **[string][1019]** Represents the 'edited\_message' event.
-*   `ChannelPost` **[string][1019]** Represents the 'channel\_post' event.
-*   `EditedChannelPost` **[string][1019]** Represents the 'edited\_channel\_post' event.
-*   `InlineQuery` **[string][1019]** Represents the 'inline\_query' event.
-*   `ChosenInlineResult` **[string][1019]** Represents the 'chosen\_inline\_result' event.
-*   `CallbackQuery` **[string][1019]** Represents the 'callback\_query' event.
-*   `ShippingQuery` **[string][1019]** Represents the 'shipping\_query' event.
-*   `PreCheckoutQuery` **[string][1019]** Represents the 'pre\_checkout\_query' event.
-*   `Poll` **[string][1019]** Represents the 'poll' event.
-*   `PollAnswer` **[string][1019]** Represents the 'poll\_answer' event.
-*   `ChatMember` **[string][1019]** Represents the 'chat\_member' event.
-*   `MyChatMember` **[string][1019]** Represents the 'my\_chat\_member' event.
-*   `ChatJoinRequest` **[string][1019]** Represents the 'chat\_join\_request' event.
-*   `ReplyMessage` **[string][1019]** Represents the 'reply\_message' event.
-
-### Message
-
-*   Represents the 'message' event.
-
-Type: [string][1019]
-
-### EditedMessage
-
-*   Represents the 'edited\_message' event.
-
-Type: [string][1019]
-
-### ChannelPost
-
-*   Represents the 'channel\_post' event.
-
-Type: [string][1019]
-
-### EditedChannelPost
-
-*   Represents the 'edited\_channel\_post' event.
-
-Type: [string][1019]
-
-### InlineQuery
-
-*   Represents the 'inline\_query' event.
-
-Type: [string][1019]
-
-### ChosenInlineResult
-
-*   Represents the 'chosen\_inline\_result' event.
-
-Type: [string][1019]
-
-### CallbackQuery
-
-*   Represents the 'callback\_query' event.
-
-Type: [string][1019]
-
-### ShippingQuery
-
-*   Represents the 'shipping\_query' event.
-
-Type: [string][1019]
-
-### PreCheckoutQuery
-
-*   Represents the 'pre\_checkout\_query' event.
-
-Type: [string][1019]
-
-### Poll
-
-*   Represents the 'poll' event.
-
-Type: [string][1019]
-
-### PollAnswer
-
-*   Represents the 'poll\_answer' event.
-
-Type: [string][1019]
-
-### ChatMember
-
-*   Represents the 'chat\_member' event.
-
-Type: [string][1019]
-
-### MyChatMember
-
-*   Represents the 'my\_chat\_member' event.
-
-Type: [string][1019]
-
-### ChatJoinRequest
-
-*   Represents the 'chat\_join\_request' event.
-
-Type: [string][1019]
-
-### ReplyMessage
-
-*   Represents the 'reply\_message' event.
-
-Type: [string][1019]
-
-## GroupPermission
-
-An object containing group permissions.
-
-Type: {CanManageChat: [string][1019], CanChangeInfo: [string][1019], CanDeleteMessages: [string][1019], CanInviteUsers: [string][1019], CanRestrictMembers: [string][1019], CanPinMessages: [string][1019], CanManageTopics: [string][1019], CanPromoteMembers: [string][1019], CanManageVideoChats: [string][1019], CanManageVoiceChats: [string][1019]}
-
-### Properties
-
-*   `CanManageChat` **[string][1019]**&#x20;
-*   `CanChangeInfo` **[string][1019]**&#x20;
-*   `CanDeleteMessages` **[string][1019]**&#x20;
-*   `CanInviteUsers` **[string][1019]**&#x20;
-*   `CanRestrictMembers` **[string][1019]**&#x20;
-*   `CanPinMessages` **[string][1019]**&#x20;
-*   `CanManageTopics` **[string][1019]**&#x20;
-*   `CanPromoteMembers` **[string][1019]**&#x20;
-*   `CanManageVideoChats` **[string][1019]**&#x20;
-*   `CanManageVoiceChats` **[string][1019]**&#x20;
-
-### CanManageChat
-
-*   Specifies if users can manage the group.
-
-Type: [string][1019]
-
-### CanChangeInfo
-
-*   Specifies if users can change group information.
-
-Type: [string][1019]
-
-### CanDeleteMessages
-
-*   Specifies if users can delete messages.
-
-Type: [string][1019]
-
-### CanInviteUsers
-
-*   Specifies if users can invite other users to the group.
-
-Type: [string][1019]
-
-### CanRestrictMembers
-
-*   Specifies if users can restrict group members.
-
-Type: [string][1019]
-
-### CanPinMessages
-
-*   Specifies if users can pin messages.
-
-Type: [string][1019]
-
-### CanManageTopics
-
-*   Specifies if users can manage group topics.
-
-Type: [string][1019]
-
-### CanPromoteMembers
-
-*   Specifies if users can promote members.
-
-Type: [string][1019]
-
-### CanManageVideoChats
-
-*   Specifies if users can manage video groups.
-
-Type: [string][1019]
-
-### CanManageVoiceChats
-
-*   Specifies if users can manage voice groups.
-
-Type: [string][1019]
-
-## GroupPermission
-
-An object containing group permissions.
-
-Type: [Object][1022]
-
-### Properties
-
-*   `CanManageChat` **[string][1019]** Specifies if users can manage the group.
-*   `CanChangeInfo` **[string][1019]** Specifies if users can change group information.
-*   `CanDeleteMessages` **[string][1019]** Specifies if users can delete messages.
-*   `CanInviteUsers` **[string][1019]** Specifies if users can invite other users to the group.
-*   `CanRestrictMembers` **[string][1019]** Specifies if users can restrict group members.
-*   `CanPinMessages` **[string][1019]** Specifies if users can pin messages.
-*   `CanManageTopics` **[string][1019]** Specifies if users can manage group topics.
-*   `CanPromoteMembers` **[string][1019]** Specifies if users can promote members.
-*   `CanManageVideoChats` **[string][1019]** Specifies if users can manage video groups.
-*   `CanManageVoiceChats` **[string][1019]** Specifies if users can manage voice groups.
-
-### CanManageChat
-
-*   Specifies if users can manage the group.
-
-Type: [string][1019]
-
-### CanChangeInfo
-
-*   Specifies if users can change group information.
-
-Type: [string][1019]
-
-### CanDeleteMessages
-
-*   Specifies if users can delete messages.
-
-Type: [string][1019]
-
-### CanInviteUsers
-
-*   Specifies if users can invite other users to the group.
-
-Type: [string][1019]
-
-### CanRestrictMembers
-
-*   Specifies if users can restrict group members.
-
-Type: [string][1019]
-
-### CanPinMessages
-
-*   Specifies if users can pin messages.
-
-Type: [string][1019]
-
-### CanManageTopics
-
-*   Specifies if users can manage group topics.
-
-Type: [string][1019]
-
-### CanPromoteMembers
-
-*   Specifies if users can promote members.
-
-Type: [string][1019]
-
-### CanManageVideoChats
-
-*   Specifies if users can manage video groups.
-
-Type: [string][1019]
-
-### CanManageVoiceChats
-
-*   Specifies if users can manage voice groups.
-
-Type: [string][1019]
-
-## GroupStatus
-
-Enum representing the status of a group member.
-
-Type: [string][1019]
-
-### Administrator
-
-The user is an administrator of the group.
-
-### Left
-
-The user has left the group.
-
-### Member
-
-The user is a regular member of the group.
-
-### Creator
-
-The user is the creator of the group.
-
-## GroupStatus
-
-Enum representing the status of a group member.
-
-Type: [string][1019]
-
-### Administrator
-
-The user is an administrator of the group.
-
-### Left
-
-The user has left the group.
-
-### Member
-
-The user is a regular member of the group.
-
-### Creator
-
-The user is the creator of the group.
-
-## IntentBits
-
-Type: [Object][1022]
-
-### Properties
-
-*   `Message` **[number][1021]** Represents a bit flag for Telegram messages.
-*   `EditedMessage` **[number][1021]** Represents a bit flag for edited Telegram messages.
-*   `ChannelPost` **[number][1021]** Represents a bit flag for posts in Telegram channels.
-*   `EditedChannelPost` **[number][1021]** Represents a bit flag for edited posts in Telegram channels.
-*   `InlineQuery` **[number][1021]** Represents a bit flag for inline queries from users.
-*   `ChosenInlineResult` **[number][1021]** Represents a bit flag for chosen inline query results.
-*   `CallbackQuery` **[number][1021]** Represents a bit flag for callback queries from users.
-*   `ShippingQuery` **[number][1021]** Represents a bit flag for shipping queries from users.
-*   `PreCheckoutQuery` **[number][1021]** Represents a bit flag for pre-checkout queries from users.
-*   `Poll` **[number][1021]** Represents a bit flag for polls from users.
-*   `PollAnswer` **[number][1021]** Represents a bit flag for answers to polls from users.
-*   `MyChatMember` **[number][1021]** Represents a bit flag for a user's chat membership status in their own chat.
-*   `ChatMember` **[number][1021]** Represents a bit flag for a user's chat membership status in a chat they are a member of.
-*   `ChatJoinRequest` **[number][1021]** Represents a bit flag for a user's request to join a chat.
-
-### Message
-
-*   Represents a bit flag for Telegram messages.
-
-Type: [number][1021]
-
-### EditedMessage
-
-*   Represents a bit flag for edited Telegram messages.
-
-Type: [number][1021]
-
-### ChannelPost
-
-*   Represents a bit flag for posts in Telegram channels.
-
-Type: [number][1021]
-
-### EditedChannelPost
-
-*   Represents a bit flag for edited posts in Telegram channels.
-
-Type: [number][1021]
-
-### InlineQuery
-
-*   Represents a bit flag for inline queries from users.
-
-Type: [number][1021]
-
-### ChosenInlineResult
-
-*   Represents a bit flag for chosen inline query results.
-
-Type: [number][1021]
-
-### CallbackQuery
-
-*   Represents a bit flag for callback queries from users.
-
-Type: [number][1021]
-
-### ShippingQuery
-
-*   Represents a bit flag for shipping queries from users.
-
-Type: [number][1021]
-
-### PreCheckoutQuery
-
-*   Represents a bit flag for pre-checkout queries from users.
-
-Type: [number][1021]
-
-### Poll
-
-*   Represents a bit flag for polls from users.
-
-Type: [number][1021]
-
-### PollAnswer
-
-*   Represents a bit flag for answers to polls from users.
-
-Type: [number][1021]
-
-### MyChatMember
-
-*   Represents a bit flag for a user's chat membership status in their own chat.
-
-Type: [number][1021]
-
-### ChatMember
-
-*   Represents a bit flag for a user's chat membership status in a chat they are a member of.
-
-Type: [number][1021]
-
-### ChatJoinRequest
-
-*   Represents a bit flag for a user's request to join a chat.
-
-Type: [number][1021]
-
-## TelegramIntentBits
-
-Type: [Object][1022]
-
-### Properties
-
-*   `Message` **[string][1019]** Represents a Telegram message.
-*   `EditedMessage` **[string][1019]** Represents an edited Telegram message.
-*   `ChannelPost` **[string][1019]** Represents a post in a Telegram channel.
-*   `EditedChannelPost` **[string][1019]** Represents an edited post in a Telegram channel.
-*   `InlineQuery` **[string][1019]** Represents an inline query from a user.
-*   `ChosenInlineResult` **[string][1019]** Represents a chosen inline query result.
-*   `CallbackQuery` **[string][1019]** Represents a callback query from a user.
-*   `ShippingQuery` **[string][1019]** Represents a shipping query from a user.
-*   `PreCheckoutQuery` **[string][1019]** Represents a pre-checkout query from a user.
-*   `Poll` **[string][1019]** Represents a poll from a user.
-*   `PollAnswer` **[string][1019]** Represents an answer to a poll from a user.
-*   `MyChatMember` **[string][1019]** Represents a user's chat membership status in their own chat.
-*   `ChatMember` **[string][1019]** Represents a user's chat membership status in a chat they are a member of.
-*   `ChatJoinRequest` **[string][1019]** Represents a user's request to join a chat.
-
-### Message
-
-*   Represents a Telegram message.
-
-Type: [string][1019]
-
-### EditedMessage
-
-*   Represents an edited Telegram message.
-
-Type: [string][1019]
-
-### ChannelPost
-
-*   Represents a post in a Telegram channel.
-
-Type: [string][1019]
-
-### EditedChannelPost
-
-*   Represents an edited post in a Telegram channel.
-
-Type: [string][1019]
-
-### InlineQuery
-
-*   Represents an inline query from a user.
-
-Type: [string][1019]
-
-### ChosenInlineResult
-
-*   Represents a chosen inline query result.
-
-Type: [string][1019]
-
-### CallbackQuery
-
-*   Represents a callback query from a user.
-
-Type: [string][1019]
-
-### ShippingQuery
-
-*   Represents a shipping query from a user.
-
-Type: [string][1019]
-
-### PreCheckoutQuery
-
-*   Represents a pre-checkout query from a user.
-
-Type: [string][1019]
-
-### Poll
-
-*   Represents a poll from a user.
-
-Type: [string][1019]
-
-### PollAnswer
-
-*   Represents an answer to a poll from a user.
-
-Type: [string][1019]
-
-### MyChatMember
-
-*   Represents a user's chat membership status in their own chat.
-
-Type: [string][1019]
-
-### ChatMember
-
-*   Represents a user's chat membership status in a chat they are a member of.
-
-Type: [string][1019]
-
-### ChatJoinRequest
-
-*   Represents a user's request to join a chat.
-
-Type: [string][1019]
-
-## TelegramApiError
-
-**Extends Error**
-
-Custom error class for errors returned by the Telegram Bot API
-
-### constructor
-
-Creates a new instance of the TelegramApiError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message returned by the Telegram Bot API
+Returns **[Promise][397]<[object][396]>** Returns a Promise that resolves to an object representing the created chat.
 
 ## TelegramApiError
 
@@ -6355,29 +2543,7 @@ Custom error class for errors returned by the Telegram Bot API
 
 ### Parameters
 
-*   `error` **[string][1019]** The error message returned by the Telegram Bot API
-
-### constructor
-
-Creates a new instance of the TelegramApiError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message returned by the Telegram Bot API
-
-## EventError
-
-**Extends Error**
-
-Custom error class for errors related to event handling
-
-### constructor
-
-Creates a new instance of the EventError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message returned by the Telegram Bot API
 
 ## EventError
 
@@ -6387,29 +2553,7 @@ Custom error class for errors related to event handling
 
 ### Parameters
 
-*   `error` **[string][1019]** The error message
-
-### constructor
-
-Creates a new instance of the EventError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
-
-## TelegramTokenError
-
-**Extends Error**
-
-Custom error class for errors related to Telegram tokens
-
-### constructor
-
-Creates a new instance of the TelegramTokenError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message
 
 ## TelegramTokenError
 
@@ -6419,61 +2563,7 @@ Custom error class for errors related to Telegram tokens
 
 ### Parameters
 
-*   `error` **[string][1019]** The error message
-
-### constructor
-
-Creates a new instance of the TelegramTokenError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
-
-## IntentsError
-
-**Extends Error**
-
-Custom error class for errors related to intents
-
-### constructor
-
-Creates a new instance of the IntentsError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
-
-## IntentsError
-
-**Extends Error**
-
-Custom error class for errors related to intents
-
-### Parameters
-
-*   `error` **[string][1019]** The error message
-
-### constructor
-
-Creates a new instance of the IntentsError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
-
-## BitFieldError
-
-**Extends Error**
-
-Custom error class for errors related to bit fields
-
-### constructor
-
-Creates a new instance of the BitFieldError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message
 
 ## BitFieldError
 
@@ -6483,29 +2573,17 @@ Custom error class for errors related to bit fields
 
 ### Parameters
 
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message
 
-### constructor
-
-Creates a new instance of the BitFieldError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
-
-## ParameterError
+## IntentsError
 
 **Extends Error**
 
-Custom error class for errors related to function parameters
+Custom error class for errors related to intents
 
-### constructor
+### Parameters
 
-Creates a new instance of the ParameterError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message
 
 ## ParameterError
 
@@ -6515,29 +2593,7 @@ Custom error class for errors related to function parameters
 
 ### Parameters
 
-*   `error` **[string][1019]** The error message
-
-### constructor
-
-Creates a new instance of the ParameterError class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
-
-## ErrorTable
-
-**Extends Error**
-
-Custom error class for a collection of errors
-
-### constructor
-
-Creates a new instance of the ErrorTable class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message
 
 ## ErrorTable
 
@@ -6547,29 +2603,7 @@ Custom error class for a collection of errors
 
 ### Parameters
 
-*   `error` **[string][1019]** The error message
-
-### constructor
-
-Creates a new instance of the ErrorTable class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
-
-## ErrorExtension
-
-**Extends Error**
-
-Custom error class for a collection of errors
-
-### constructor
-
-Creates a new instance of the ErrorExtension class
-
-#### Parameters
-
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message
 
 ## ErrorExtension
 
@@ -6579,1019 +2613,130 @@ Custom error class for a collection of errors
 
 ### Parameters
 
-*   `error` **[string][1019]** The error message
+*   `error` **[string][393]** The error message
 
-### constructor
+## get
 
-Creates a new instance of the ErrorExtension class
+Retrieves the database object from the specified directory, table, and extension.
+
+### Parameters
+
+*   `dir` **[string][393]** The directory where the storage is located.
+*   `table` **[string][393]** The name of the table.
+*   `extname` **[string][393]** The extension of the storage file.
+
+Returns **any** The retrieved database object.
+
+## set
+
+Sets the database object in the specified directory, table, and extension.
+
+### Parameters
+
+*   `dir` **[string][393]** The directory where the storage is located.
+*   `table` **[string][393]** The name of the table.
+*   `db` **any** The database object to set.
+*   `extname` **[string][393]** The extension of the storage file.
+
+## SimpleStorage
+
+Class representing a simple storage.
+
+### Parameters
+
+*   `options` **[Object][396]** The options for configuring the simple storage. (optional, default `{}`)
+
+### get
+
+Retrieves the value associated with the given key from the specified table.
 
 #### Parameters
 
-*   `error` **[string][1019]** The error message
-
-## IntentsBitField
-
-### add
-
-Adds one or more bits to the bit field.
-
-#### Parameters
-
-*   `ints` **...[number][1021]** The bits to add to the bit field.
+*   `table` **[string][393]** The name of the table.
+*   `key` **any** The key to retrieve the value for.
 
 <!---->
 
-*   Throws **[BitFieldError][629]** If a specified bit is not a number.
+*   Throws **[ErrorTable][235]** Throws an error if the table name is invalid.
 
-Returns **[IntentsBitField][657]** The updated IntentsBitField instance.
+Returns **any** The value associated with the key.
 
-### add
+### set
 
-Adds one or more bits to the bit field.
+Sets the value for the given key in the specified table.
 
 #### Parameters
 
-*   `ints` **...[number][1021]** The bits to add to the bit field.
+*   `table` **[string][393]** The name of the table.
+*   `key` **any** The key to set the value for.
+*   `value` **any** The value to set.
 
 <!---->
 
-*   Throws **[BitFieldError][629]** If a specified bit is not a number.
+*   Throws **[ErrorTable][235]** Throws an error if the table name is invalid.
 
-Returns **[IntentsBitField][657]** The updated IntentsBitField instance.
+### delete
 
-### remove
-
-Removes one or more Telegram intents from the bitfield.
+Deletes the value associated with the given key from the specified table.
 
 #### Parameters
 
-*   `ints` **...[number][1021]** The bits that represent the Telegram intents to be removed.
+*   `table` **[string][393]** The name of the table.
+*   `key` **any** The key to delete.
 
 <!---->
 
-*   Throws **[BitFieldError][629]** If an invalid argument is passed.
+*   Throws **[ErrorTable][235]** Throws an error if the table name is invalid.
 
-Returns **[IntentsBitField][657]** The IntentsBitField instance.
+### has
 
-### remove
-
-Removes one or more Telegram intents from the bitfield.
+Checks if the specified table has a value associated with the given key.
 
 #### Parameters
 
-*   `ints` **...[number][1021]** The bits that represent the Telegram intents to be removed.
+*   `table` **[string][393]** The name of the table.
+*   `key` **any** The key to check.
 
 <!---->
 
-*   Throws **[BitFieldError][629]** If an invalid argument is passed.
+*   Throws **[ErrorTable][235]** Throws an error if the table name is invalid.
 
-Returns **[IntentsBitField][657]** The IntentsBitField instance.
+Returns **[boolean][398]** `true` if the table has the key, `false` otherwise.
 
-### serialize
+### filter
 
-Returns the bitfield as a number.
-
-Returns **[number][1021]** The bitfield.
-
-### serialize
-
-Returns the bitfield as a number.
-
-Returns **[number][1021]** The bitfield.
-
-## IntentsBitField
-
-### add
-
-Adds one or more bits to the bit field.
+Filters the values in the specified table based on the provided callback function.
 
 #### Parameters
 
-*   `ints` **...[number][1021]** The bits to add to the bit field.
+*   `table` **[string][393]** The name of the table.
+*   `callback` **[function][402]** The filter function.
 
 <!---->
 
-*   Throws **[BitFieldError][629]** If a specified bit is not a number.
+*   Throws **[ErrorTable][235]** Throws an error if the table name is invalid.
 
-Returns **[IntentsBitField][657]** The updated IntentsBitField instance.
+Returns **[object][396]** An object containing the filtered key-value pairs.
 
-### add
+### all
 
-Adds one or more bits to the bit field.
+Retrieves all the key-value pairs from the specified table.
 
 #### Parameters
 
-*   `ints` **...[number][1021]** The bits to add to the bit field.
+*   `table` **[string][393]** The name of the table.
 
 <!---->
 
-*   Throws **[BitFieldError][629]** If a specified bit is not a number.
+*   Throws **[ErrorTable][235]** Throws an error if the table name is invalid.
 
-Returns **[IntentsBitField][657]** The updated IntentsBitField instance.
-
-### remove
-
-Removes one or more Telegram intents from the bitfield.
-
-#### Parameters
-
-*   `ints` **...[number][1021]** The bits that represent the Telegram intents to be removed.
-
-<!---->
-
-*   Throws **[BitFieldError][629]** If an invalid argument is passed.
-
-Returns **[IntentsBitField][657]** The IntentsBitField instance.
-
-### remove
-
-Removes one or more Telegram intents from the bitfield.
-
-#### Parameters
-
-*   `ints` **...[number][1021]** The bits that represent the Telegram intents to be removed.
-
-<!---->
-
-*   Throws **[BitFieldError][629]** If an invalid argument is passed.
-
-Returns **[IntentsBitField][657]** The IntentsBitField instance.
-
-### serialize
-
-Returns the bitfield as a number.
-
-Returns **[number][1021]** The bitfield.
-
-### serialize
-
-Returns the bitfield as a number.
-
-Returns **[number][1021]** The bitfield.
-
-## toArray
-
-Returns an array of intent strings based on the current bit value
-
-Returns **[Array][1020]<[string][1019]>** Array of intent strings
-
-## toArray
-
-Returns an array of intent strings based on the current bit value
-
-Returns **[Array][1020]<[string][1019]>** Array of intent strings
-
-## has
-
-Checks if the bit field has a specific bit set
-
-### Parameters
-
-*   `bit` **[number][1021]** Bit to check
-
-Returns **[boolean][1024]** True if the bit is set, false otherwise
-
-## has
-
-Checks if the bit field has a specific bit set
-
-### Parameters
-
-*   `bit` **[number][1021]** Bit to check
-
-Returns **[boolean][1024]** True if the bit is set, false otherwise
-
-## decodeIntents
-
-Decodes a bit field instance and returns an array of intent strings
-
-### Parameters
-
-*   `intentsBitField` **[IntentsBitField][657]** Bit field instance to decode
-
-Returns **[Array][1020]<[string][1019]>** Array of intent strings
-
-## decodeIntents
-
-Decodes a bit field instance and returns an array of intent strings
-
-### Parameters
-
-*   `intentsBitField` **[IntentsBitField][657]** Bit field instance to decode
-
-Returns **[Array][1020]<[string][1019]>** Array of intent strings
-
-## MessageCollector
-
-**Extends EventEmitter**
-
-Represents a message collector.
-
-### constructor
-
-Creates a new MessageCollector.
-
-#### Parameters
-
-*   `options` **[Object][1022]** The options for the collector.
-
-    *   `options.chatId` **[number][1021]** The ID of the chat to collect messages from.
-    *   `options.filter` **[Function][1028]?** The filter function to determine which messages to collect (optional, default: () => true).
-    *   `options.time` **[number][1021]?** The duration in milliseconds for the collector to run (optional, default: 60000).
-    *   `options.max` **[number][1021]?** The maximum number of messages to collect (optional).
-
-### handleMessage
-
-Handles a new message received by the collector.
-
-#### Parameters
-
-*   `message` **[Object][1022]** The message object.
-
-Returns **void**&#x20;
-
-### handleMessage
-
-Handles a new message received by the collector.
-
-#### Parameters
-
-*   `message` **[Object][1022]** The message object.
-
-### collected
-
-Returns the collected messages.
-
-Returns **[Array][1020]** The collected messages.
-
-### collected
-
-Returns the collected messages.
-
-Returns **[Array][1020]** The collected messages.
-
-### stop
-
-Stops the message collector.
-
-Returns **void**&#x20;
-
-### stop
-
-Stops the message collector.
-
-## MessageCollector
-
-**Extends EventEmitter**
-
-Represents a message collector.
-
-### Parameters
-
-*   `options` **[Object][1022]** The options for the collector.
-
-### constructor
-
-Creates a new MessageCollector.
-
-#### Parameters
-
-*   `options` **[Object][1022]** The options for the collector.
-
-    *   `options.chatId` **[number][1021]** The ID of the chat to collect messages from.
-    *   `options.filter` **[Function][1028]?** The filter function to determine which messages to collect (optional, default: () => true).
-    *   `options.time` **[number][1021]?** The duration in milliseconds for the collector to run (optional, default: 60000).
-    *   `options.max` **[number][1021]?** The maximum number of messages to collect (optional).
-
-### handleMessage
-
-Handles a new message received by the collector.
-
-#### Parameters
-
-*   `message` **[Object][1022]** The message object.
-
-Returns **void**&#x20;
-
-### handleMessage
-
-Handles a new message received by the collector.
-
-#### Parameters
-
-*   `message` **[Object][1022]** The message object.
-
-### collected
-
-Returns the collected messages.
-
-Returns **[Array][1020]** The collected messages.
-
-### collected
-
-Returns the collected messages.
-
-Returns **[Array][1020]** The collected messages.
-
-### stop
-
-Stops the message collector.
-
-Returns **void**&#x20;
-
-### stop
-
-Stops the message collector.
-
-## constructor
-
-Creates a new Keyboard object.
-
-### Parameters
-
-*   `buttons` **[Array][1020]** A 2-dimensional array of Button objects representing the buttons on the keyboard.
-*   `options` **[Object][1022]** Additional options for the keyboard. (optional, default `{}`)
-
-    *   `options.inline` **[boolean][1024]** Whether the keyboard is an inline keyboard. (optional, default `false`)
-    *   `options.resize` **[boolean][1024]** Whether the keyboard should be resized to fit the user's screen. (optional, default `false`)
-    *   `options.oneTime` **[boolean][1024]** Whether the keyboard should disappear after the user presses a button. (optional, default `false`)
-    *   `options.selective` **[boolean][1024]** Whether the keyboard should be shown only to specific users. (optional, default `false`)
-
-## constructor
-
-Creates a new Keyboard object.
-
-### Parameters
-
-*   `buttons` **[Array][1020]** A 2-dimensional array of Button objects representing the buttons on the keyboard.
-*   `options` **[Object][1022]** Additional options for the keyboard. (optional, default `{}`)
-
-    *   `options.inline` **[boolean][1024]** Whether the keyboard is an inline keyboard. (optional, default `false`)
-    *   `options.resize` **[boolean][1024]** Whether the keyboard should be resized to fit the user's screen. (optional, default `false`)
-    *   `options.oneTime` **[boolean][1024]** Whether the keyboard should disappear after the user presses a button. (optional, default `false`)
-    *   `options.selective` **[boolean][1024]** Whether the keyboard should be shown only to specific users. (optional, default `false`)
-
-## toJSON
-
-Returns the keyboard object in the format expected by Telegram Bot API.
-
-Returns **[object][1022]** Returns the keyboard object in the format expected by Telegram Bot API.
-
-## toJSON
-
-Returns the keyboard object in the format expected by Telegram Bot API.
-
-Returns **[object][1022]** Returns the keyboard object in the format expected by Telegram Bot API.
-
-## setInline
-
-Sets the inline option of the keyboard.
-
-### Parameters
-
-*   `inline` **[boolean][1024]** Whether the keyboard should be displayed inline with the message.
-
-Returns **Keyboard** Returns the updated Keyboard object.
-
-## setInline
-
-Sets the inline option of the keyboard.
-
-### Parameters
-
-*   `inline` **[boolean][1024]** Whether the keyboard should be displayed inline with the message.
-
-Returns **Keyboard** Returns the updated Keyboard object.
-
-## setResize
-
-Sets the `resize` option for the keyboard.
-
-### Parameters
-
-*   `resize` **[boolean][1024]** Whether the keyboard should be resized to fit the user's screen.
-
-Returns **Keyboard** Returns the current `Keyboard` object for chaining.
-
-## setResize
-
-Sets the `resize` option for the keyboard.
-
-### Parameters
-
-*   `resize` **[boolean][1024]** Whether the keyboard should be resized to fit the user's screen.
-
-Returns **Keyboard** Returns the current `Keyboard` object for chaining.
-
-## setOneTime
-
-Sets whether the keyboard should disappear after the user presses a button.
-
-### Parameters
-
-*   `oneTime` **[boolean][1024]** Whether the keyboard should disappear after the user presses a button.
-
-Returns **Keyboard** Returns the Keyboard object.
-
-## setOneTime
-
-Sets whether the keyboard should disappear after the user presses a button.
-
-### Parameters
-
-*   `oneTime` **[boolean][1024]** Whether the keyboard should disappear after the user presses a button.
-
-Returns **Keyboard** Returns the Keyboard object.
-
-## setSelective
-
-Set the `selective` option for the keyboard.
-
-### Parameters
-
-*   `selective` **[boolean][1024]** Whether the keyboard should be shown only to specific users.
-
-Returns **Keyboard** Returns the `Keyboard` object with the `selective` option set.
-
-## setSelective
-
-Set the `selective` option for the keyboard.
-
-### Parameters
-
-*   `selective` **[boolean][1024]** Whether the keyboard should be shown only to specific users.
-
-Returns **Keyboard** Returns the `Keyboard` object with the `selective` option set.
-
-## addKeyboard
-
-Adds buttons to the keyboard buttons array.
-
-### Parameters
-
-*   `buttonRows` **...any** One or more button rows to add to the keyboard.
-*   `defaults` **[boolean][1024]?**&#x20;
-
-Returns **Keyboard** Returns the updated `Keyboard` object.
-
-## addKeyboard
-
-Adds buttons to the keyboard buttons array.
-
-### Parameters
-
-*   `buttonRows` **...any** One or more button rows to add to the keyboard.
-*   `defaults`   (optional, default `false`)
-
-Returns **Keyboard** Returns the updated `Keyboard` object.
-
-## Markup
-
-Class representing a button in the Telegram Bot API.
-
-### constructor
-
-Creates a new instance of the Markup class.
-
-#### Parameters
-
-*   `options` **[Object][1022]** Button settings. (optional, default `{}`)
-
-    *   `options.text` **[string][1019]?** Text on the button.
-    *   `options.action` **[string][1019]?** Button action to be passed to the event handler.
-    *   `options.type` **[string][1019]** Button action type. The default is 'callback\_data'. (optional, default `'callback_data'`)
-    *   `options.remove_keyboard` **[boolean][1024]** Flag indicating whether to remove the inline markup. (optional, default `false`)
-    *   `options.web_app` **[boolean][1024]?** Flag indicating whether the button is for a web app.
-    *   `options.force_reply` **[boolean][1024]?** Flag indicating whether to force a reply from the user.
-
-### setType
-
-Sets the button action type.
-
-#### Parameters
-
-*   `type` **[string][1019]** Button action type.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setType
-
-Sets the button action type.
-
-#### Parameters
-
-*   `type` **[string][1019]** Button action type.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setAction
-
-Sets the button action.
-
-#### Parameters
-
-*   `action` **[string][1019]** Button action to be passed to the event handler.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setAction
-
-Sets the button action.
-
-#### Parameters
-
-*   `action` **[string][1019]** Button action to be passed to the event handler.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setText
-
-Sets the text on the button.
-
-#### Parameters
-
-*   `text` **[string][1019]** Text on the button.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setText
-
-Sets the text on the button.
-
-#### Parameters
-
-*   `text` **[string][1019]** Text on the button.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setWebApp
-
-Sets the URL for the web app.
-
-#### Parameters
-
-*   `url` **[string][1019]** The URL of the web app.
-
-Returns **[Markup][738]** Returns the current object instance for chaining.
-
-### setWebApp
-
-Sets the URL for the web app.
-
-#### Parameters
-
-*   `url` **[string][1019]** The URL of the web app.
-
-Returns **[Markup][738]** Returns the current object instance for chaining.
-
-### setForceReply
-
-Sets the `force_reply` option for the reply keyboard.
-
-#### Parameters
-
-*   `forceReply` **[boolean][1024]** Indicates whether to enable the force reply feature.
-
-Returns **[Markup][738]** Returns the modified instance of the object.
-
-### setForceReply
-
-Sets the `force_reply` option for the reply keyboard.
-
-#### Parameters
-
-*   `forceReply` **[boolean][1024]** Indicates whether to enable the force reply feature.
-
-Returns **[Markup][738]** Returns the modified instance of the object.
-
-### toJSON
-
-Returns the button object in the format expected by Telegram Bot API.
-
-Returns **[object][1022]** Returns the button object in the format expected by Telegram Bot API.
-
-### toJSON
-
-Returns the button object in the format expected by Telegram Bot API.
-
-Returns **[object][1022]** Returns the button object in the format expected by Telegram Bot API.
-
-### toString
-
-Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-Returns **[string][1019]** Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-### toString
-
-Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-Returns **[string][1019]** Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-### setRemove
-
-Set the `remove_keyboard` option to remove the keyboard after the user presses a button.
-
-#### Parameters
-
-*   `remove` **[boolean][1024]** Whether the keyboard should be removed after the user presses a button. (optional, default `false`)
-
-Returns **[string][1019]** Returns a JSON string with the `remove_keyboard` option set to `true`.
-
-### setRemove
-
-Set the `remove_keyboard` option to remove the keyboard after the user presses a button.
-
-#### Parameters
-
-*   `remove` **[boolean][1024]** Whether the keyboard should be removed after the user presses a button. (optional, default `false`)
-
-Returns **[string][1019]** Returns a JSON string with the `remove_keyboard` option set to `true`.
-
-### fromJSON
-
-Creates a new Button object from a button object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttonObj` **[object][1022]** Button object in the format expected by Telegram Bot API.
-
-Returns **[Markup][738]** Returns an instance of the Markup object.
-
-### fromJSON
-
-Creates a new Button object from a button object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttonObj` **[object][1022]** Button object in the format expected by Telegram Bot API.
-
-Returns **[Markup][738]** Returns an instance of the Markup object.
-
-### inlineKeyboard
-
-Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttons` **[Array][1020]** A 2-dimensional array of Markup objects representing the buttons on the keyboard.
-
-Returns **[object][1022]** Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-### inlineKeyboard
-
-Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttons` **[Array][1020]** A 2-dimensional array of Markup objects representing the buttons on the keyboard.
-
-Returns **[object][1022]** Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-### addMarkupArray
-
-Generates a JSON string representing a reply markup object with an inline keyboard.
-
-#### Parameters
-
-*   `arrayMarkup` **[Array][1020]** An array containing elements of the markup.
-*   `arrayLength` **[number][1021]** The desired length of the markup array. Defaults to 10. (optional, default `10`)
-
-Returns **[string][1019]** Returns a JSON string representing the reply markup object.
-
-### addMarkupArray
-
-Generates a JSON string representing a reply markup object with an inline keyboard.
-
-#### Parameters
-
-*   `arrayMarkup` **[Array][1020]** An array containing elements of the markup.
-*   `arrayLength` **[number][1021]** The desired length of the markup array. Defaults to 10. (optional, default `10`)
-
-Returns **[string][1019]** Returns a JSON string representing the reply markup object.
-
-## Markup
-
-Class representing a button in the Telegram Bot API.
-
-### Parameters
-
-*   `options` **[Object][1022]** Button settings. (optional, default `{}`)
-
-### constructor
-
-Creates a new instance of the Markup class.
-
-#### Parameters
-
-*   `options` **[Object][1022]** Button settings. (optional, default `{}`)
-
-    *   `options.text` **[string][1019]?** Text on the button.
-    *   `options.action` **[string][1019]?** Button action to be passed to the event handler.
-    *   `options.type` **[string][1019]** Button action type. The default is 'callback\_data'. (optional, default `'callback_data'`)
-    *   `options.remove_keyboard` **[boolean][1024]** Flag indicating whether to remove the inline markup. (optional, default `false`)
-    *   `options.web_app` **[boolean][1024]?** Flag indicating whether the button is for a web app.
-    *   `options.force_reply` **[boolean][1024]?** Flag indicating whether to force a reply from the user.
-
-### setType
-
-Sets the button action type.
-
-#### Parameters
-
-*   `type` **[string][1019]** Button action type.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setType
-
-Sets the button action type.
-
-#### Parameters
-
-*   `type` **[string][1019]** Button action type.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setAction
-
-Sets the button action.
-
-#### Parameters
-
-*   `action` **[string][1019]** Button action to be passed to the event handler.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setAction
-
-Sets the button action.
-
-#### Parameters
-
-*   `action` **[string][1019]** Button action to be passed to the event handler.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setText
-
-Sets the text on the button.
-
-#### Parameters
-
-*   `text` **[string][1019]** Text on the button.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setText
-
-Sets the text on the button.
-
-#### Parameters
-
-*   `text` **[string][1019]** Text on the button.
-
-Returns **[Markup][738]** Returns an instance of the Markup object for method chaining.
-
-### setWebApp
-
-Sets the URL for the web app.
-
-#### Parameters
-
-*   `url` **[string][1019]** The URL of the web app.
-
-Returns **[Markup][738]** Returns the current object instance for chaining.
-
-### setWebApp
-
-Sets the URL for the web app.
-
-#### Parameters
-
-*   `url` **[string][1019]** The URL of the web app.
-
-Returns **[Markup][738]** Returns the current object instance for chaining.
-
-### setForceReply
-
-Sets the `force_reply` option for the reply keyboard.
-
-#### Parameters
-
-*   `forceReply` **[boolean][1024]** Indicates whether to enable the force reply feature.
-
-Returns **[Markup][738]** Returns the modified instance of the object.
-
-### setForceReply
-
-Sets the `force_reply` option for the reply keyboard.
-
-#### Parameters
-
-*   `forceReply` **[boolean][1024]** Indicates whether to enable the force reply feature.
-
-Returns **[Markup][738]** Returns the modified instance of the object.
-
-### toJSON
-
-Returns the button object in the format expected by Telegram Bot API.
-
-Returns **[object][1022]** Returns the button object in the format expected by Telegram Bot API.
-
-### toJSON
-
-Returns the button object in the format expected by Telegram Bot API.
-
-Returns **[object][1022]** Returns the button object in the format expected by Telegram Bot API.
-
-### toString
-
-Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-Returns **[string][1019]** Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-### toString
-
-Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-Returns **[string][1019]** Returns the text representation of the button object in the format expected by Telegram Bot API.
-
-### setRemove
-
-Set the `remove_keyboard` option to remove the keyboard after the user presses a button.
-
-#### Parameters
-
-*   `remove` **[boolean][1024]** Whether the keyboard should be removed after the user presses a button. (optional, default `false`)
-
-Returns **[string][1019]** Returns a JSON string with the `remove_keyboard` option set to `true`.
-
-### setRemove
-
-Set the `remove_keyboard` option to remove the keyboard after the user presses a button.
-
-#### Parameters
-
-*   `remove` **[boolean][1024]** Whether the keyboard should be removed after the user presses a button. (optional, default `false`)
-
-Returns **[string][1019]** Returns a JSON string with the `remove_keyboard` option set to `true`.
-
-### fromJSON
-
-Creates a new Button object from a button object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttonObj` **[object][1022]** Button object in the format expected by Telegram Bot API.
-
-Returns **[Markup][738]** Returns an instance of the Markup object.
-
-### fromJSON
-
-Creates a new Button object from a button object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttonObj` **[object][1022]** Button object in the format expected by Telegram Bot API.
-
-Returns **[Markup][738]** Returns an instance of the Markup object.
-
-### inlineKeyboard
-
-Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttons` **[Array][1020]** A 2-dimensional array of Markup objects representing the buttons on the keyboard.
-
-Returns **[object][1022]** Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-### inlineKeyboard
-
-Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-#### Parameters
-
-*   `buttons` **[Array][1020]** A 2-dimensional array of Markup objects representing the buttons on the keyboard.
-
-Returns **[object][1022]** Returns the inline keyboard object in the format expected by Telegram Bot API.
-
-### addMarkupArray
-
-Generates a JSON string representing a reply markup object with an inline keyboard.
-
-#### Parameters
-
-*   `arrayMarkup` **[Array][1020]** An array containing elements of the markup.
-*   `arrayLength` **[number][1021]** The desired length of the markup array. Defaults to 10. (optional, default `10`)
-
-Returns **[string][1019]** Returns a JSON string representing the reply markup object.
-
-### addMarkupArray
-
-Generates a JSON string representing a reply markup object with an inline keyboard.
-
-#### Parameters
-
-*   `arrayMarkup` **[Array][1020]** An array containing elements of the markup.
-*   `arrayLength` **[number][1021]** The desired length of the markup array. Defaults to 10. (optional, default `10`)
-
-Returns **[string][1019]** Returns a JSON string representing the reply markup object.
-
-## Request
-
-**Extends EventEmitter**
-
-Represents a request object for making requests to the Telegram Bot API.
-
-### Parameters
-
-*   `token` **[string][1019]?** The API token for the bot.
-*   `intents` **([string][1019] | [array][1020] | [number][1021])?** The types of updates the bot is interested in.
-*   `queryString` **[string][1019]?** The type of query string to use for requests.
-*   `offSetType` **([string][1019] | [boolean][1024] | [object][1022])?** The type of offset to use for updates.
-
-### constructor
-
-Constructs a new Request object.
-
-#### Parameters
-
-*   `token` **[string][1019]?** The API token for the bot.
-*   `intents` **([string][1019] | [array][1020] | [number][1021])?** The types of updates the bot is interested in.
-*   `queryString` **[string][1019]?** The type of query string to use for requests.
-*   `offSetType` **([string][1019] | [boolean][1024] | [object][1022])?** The type of offset to use for updates.
-
-### getUpdates
-
-Gets the updates from the Telegram Bot API.
-
-*   Throws **[TelegramTokenError][615]** When the token is invalid.
-*   Throws **[TelegramApiError][601]** When an error occurs with the Telegram Bot API.
-
-Returns **[Promise][1023]<[Array][1020]<[object][1022]>>** An array of updates.
-
-### getUpdates
-
-Gets the updates from the Telegram Bot API.
-
-*   Throws **[TelegramTokenError][615]** When the token is invalid.
-*   Throws **[TelegramApiError][601]** When an error occurs with the Telegram Bot API.
-
-Returns **[Promise][1023]<[Array][1020]<[object][1022]>>** An array of updates.
-
-### request
-
-Makes a request to the Telegram Bot API.
-
-#### Parameters
-
-*   `method` **[string][1019]** The API method to call.
-*   `params` **[Object][1022]** The parameters to include in the API call.
-
-Returns **[Promise][1023]<[object][1022]>** The response from the API call.
-
-### request
-
-Makes a request to the Telegram Bot API.
-
-#### Parameters
-
-*   `method` **[string][1019]** The API method to call.
-*   `params` **[Object][1022]** The parameters to include in the API call.
-
-Returns **[Promise][1023]<[object][1022]>** The response from the API call.
-
-### uptime
-
-Gets the uptime of the bot.
-
-Returns **[number][1021]** The uptime in milliseconds.
-
-### ping
-
-Gets the ping latency of the bot.
-
-Returns **[Promise][1023]<[number][1021]>** The ping latency in milliseconds.
-
-### updateId
-
-Gets the last update ID received.
-
-Returns **([number][1021] | null)** The last update ID, or null if not available.
-
-### lastObject
-
-Gets the last object received.
-
-Returns **[object][1022]** The last received object.
+Returns **[object][396]** An object containing all the key-value pairs.
 
 ## SessionTypes
 
 Types of sessions.
 
-Type: [string][1019]
+Type: [string][393]
 
 ### SimpleSession
 
@@ -7605,426 +2750,528 @@ Auto session type.
 
 Time session type.
 
-## SimpleStorage
+## Markup
 
-Class representing a simple storage.
-
-### constructor
-
-Creates an instance of SimpleStorage.
-
-#### Parameters
-
-*   `options` **[Object][1022]** The options for configuring the simple storage. (optional, default `{}`)
-
-    *   `options.path` **[string][1019]** The path to the storage directory. (optional, default `"database"`)
-    *   `options.table` **[Array][1020]<[string][1019]>** An array of table names. (optional, default `["main"]`)
-    *   `options.extname` **[string][1019]** The extension for storage files. (optional, default `".sql"`)
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table array is invalid.
-*   Throws **[ErrorExtension][650]** Throws an error if the extension is invalid.
-
-### get
-
-Retrieves the value associated with the given key from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to retrieve the value for.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **any** The value associated with the key.
-
-### get
-
-Retrieves the value associated with the given key from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to retrieve the value for.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **any** The value associated with the key.
-
-### set
-
-Sets the value for the given key in the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to set the value for.
-*   `value` **any** The value to set.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **void**&#x20;
-
-### set
-
-Sets the value for the given key in the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to set the value for.
-*   `value` **any** The value to set.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-### delete
-
-Deletes the value associated with the given key from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to delete.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **void**&#x20;
-
-### delete
-
-Deletes the value associated with the given key from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to delete.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-### has
-
-Checks if the specified table has a value associated with the given key.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to check.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[boolean][1024]** `true` if the table has the key, `false` otherwise.
-
-### has
-
-Checks if the specified table has a value associated with the given key.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to check.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[boolean][1024]** `true` if the table has the key, `false` otherwise.
-
-### filter
-
-Filters the values in the specified table based on the provided callback function.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `callback` **[function][1028]** The filter function.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[object][1022]** An object containing the filtered key-value pairs.
-
-### filter
-
-Filters the values in the specified table based on the provided callback function.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-*   `callback` **[function][1028]** The filter function.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[object][1022]** An object containing the filtered key-value pairs.
-
-### all
-
-Retrieves all the key-value pairs from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[object][1022]** An object containing all the key-value pairs.
-
-### all
-
-Retrieves all the key-value pairs from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[object][1022]** An object containing all the key-value pairs.
-
-## SimpleStorage
-
-Class representing a simple storage.
+Class representing a button in the Telegram Bot API.
 
 ### Parameters
 
-*   `options` **[Object][1022]** The options for configuring the simple storage. (optional, default `{}`)
+*   `options` **[Object][396]** Button settings. (optional, default `{}`)
 
-### constructor
+### setType
 
-Creates an instance of SimpleStorage.
-
-#### Parameters
-
-*   `options` **[Object][1022]** The options for configuring the simple storage. (optional, default `{}`)
-
-    *   `options.path` **[string][1019]** The path to the storage directory. (optional, default `"database"`)
-    *   `options.table` **[Array][1020]<[string][1019]>** An array of table names. (optional, default `["main"]`)
-    *   `options.extname` **[string][1019]** The extension for storage files. (optional, default `".sql"`)
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table array is invalid.
-*   Throws **[ErrorExtension][650]** Throws an error if the extension is invalid.
-
-### get
-
-Retrieves the value associated with the given key from the specified table.
+Sets the button action type.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to retrieve the value for.
+*   `type` **[string][393]** Button action type.
 
-<!---->
+Returns **[Markup][261]** Returns an instance of the Markup object for method chaining.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### setAction
 
-Returns **any** The value associated with the key.
-
-### get
-
-Retrieves the value associated with the given key from the specified table.
+Sets the button action.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to retrieve the value for.
+*   `action` **[string][393]** Button action to be passed to the event handler.
 
-<!---->
+Returns **[Markup][261]** Returns an instance of the Markup object for method chaining.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### setText
 
-Returns **any** The value associated with the key.
-
-### set
-
-Sets the value for the given key in the specified table.
+Sets the text on the button.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to set the value for.
-*   `value` **any** The value to set.
+*   `text` **[string][393]** Text on the button.
 
-<!---->
+Returns **[Markup][261]** Returns an instance of the Markup object for method chaining.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### setWebApp
 
-Returns **void**&#x20;
-
-### set
-
-Sets the value for the given key in the specified table.
+Sets the URL for the web app.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to set the value for.
-*   `value` **any** The value to set.
+*   `url` **[string][393]** The URL of the web app.
 
-<!---->
+Returns **[Markup][261]** Returns the current object instance for chaining.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### setForceReply
 
-### delete
-
-Deletes the value associated with the given key from the specified table.
+Sets the `force_reply` option for the reply keyboard.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to delete.
+*   `forceReply` **[boolean][398]** Indicates whether to enable the force reply feature.
 
-<!---->
+Returns **[Markup][261]** Returns the modified instance of the object.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### toJSON
 
-Returns **void**&#x20;
+Returns the button object in the format expected by Telegram Bot API.
 
-### delete
+Returns **[object][396]** Returns the button object in the format expected by Telegram Bot API.
 
-Deletes the value associated with the given key from the specified table.
+### toString
 
-#### Parameters
+Returns the text representation of the button object in the format expected by Telegram Bot API.
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to delete.
+Returns **[string][393]** Returns the text representation of the button object in the format expected by Telegram Bot API.
 
-<!---->
+### setRemove
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-### has
-
-Checks if the specified table has a value associated with the given key.
+Set the `remove_keyboard` option to remove the keyboard after the user presses a button.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to check.
+*   `remove` **[boolean][398]** Whether the keyboard should be removed after the user presses a button. (optional, default `false`)
 
-<!---->
+Returns **[string][393]** Returns a JSON string with the `remove_keyboard` option set to `true`.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### fromJSON
 
-Returns **[boolean][1024]** `true` if the table has the key, `false` otherwise.
-
-### has
-
-Checks if the specified table has a value associated with the given key.
+Creates a new Button object from a button object in the format expected by Telegram Bot API.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `key` **any** The key to check.
+*   `buttonObj` **[object][396]** Button object in the format expected by Telegram Bot API.
 
-<!---->
+Returns **[Markup][261]** Returns an instance of the Markup object.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### inlineKeyboard
 
-Returns **[boolean][1024]** `true` if the table has the key, `false` otherwise.
-
-### filter
-
-Filters the values in the specified table based on the provided callback function.
+Returns the inline keyboard object in the format expected by Telegram Bot API.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `callback` **[function][1028]** The filter function.
+*   `buttons` **[Array][394]** A 2-dimensional array of Markup objects representing the buttons on the keyboard.
 
-<!---->
+Returns **[object][396]** Returns the inline keyboard object in the format expected by Telegram Bot API.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+### addMarkupArray
 
-Returns **[object][1022]** An object containing the filtered key-value pairs.
-
-### filter
-
-Filters the values in the specified table based on the provided callback function.
+Generates a JSON string representing a reply markup object with an inline keyboard.
 
 #### Parameters
 
-*   `table` **[string][1019]** The name of the table.
-*   `callback` **[function][1028]** The filter function.
+*   `arrayMarkup` **[Array][394]** An array containing elements of the markup.
+*   `arrayLength` **[number][395]** The desired length of the markup array. Defaults to 10. (optional, default `10`)
 
-<!---->
+Returns **[string][393]** Returns a JSON string representing the reply markup object.
 
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
+## constructor
 
-Returns **[object][1022]** An object containing the filtered key-value pairs.
-
-### all
-
-Retrieves all the key-value pairs from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[object][1022]** An object containing all the key-value pairs.
-
-### all
-
-Retrieves all the key-value pairs from the specified table.
-
-#### Parameters
-
-*   `table` **[string][1019]** The name of the table.
-
-<!---->
-
-*   Throws **[ErrorTable][643]** Throws an error if the table name is invalid.
-
-Returns **[object][1022]** An object containing all the key-value pairs.
-
-## get
-
-Retrieves the database object from the specified directory, table, and extension.
+Creates a new Keyboard object.
 
 ### Parameters
 
-*   `dir` **[string][1019]** The directory where the storage is located.
-*   `table` **[string][1019]** The name of the table.
-*   `extname` **[string][1019]** The extension of the storage file.
+*   `buttons` **[Array][394]** A 2-dimensional array of Button objects representing the buttons on the keyboard.
+*   `options` **[Object][396]** Additional options for the keyboard. (optional, default `{}`)
 
-Returns **any** The retrieved database object.
+    *   `options.inline` **[boolean][398]** Whether the keyboard is an inline keyboard. (optional, default `false`)
+    *   `options.resize` **[boolean][398]** Whether the keyboard should be resized to fit the user's screen. (optional, default `false`)
+    *   `options.oneTime` **[boolean][398]** Whether the keyboard should disappear after the user presses a button. (optional, default `false`)
+    *   `options.selective` **[boolean][398]** Whether the keyboard should be shown only to specific users. (optional, default `false`)
 
-## set
+## toJSON
 
-Sets the database object in the specified directory, table, and extension.
+Returns the keyboard object in the format expected by Telegram Bot API.
+
+Returns **[object][396]** Returns the keyboard object in the format expected by Telegram Bot API.
+
+## setInline
+
+Sets the inline option of the keyboard.
 
 ### Parameters
 
-*   `dir` **[string][1019]** The directory where the storage is located.
-*   `table` **[string][1019]** The name of the table.
-*   `db` **any** The database object to set.
-*   `extname` **[string][1019]** The extension of the storage file.
+*   `inline` **[boolean][398]** Whether the keyboard should be displayed inline with the message.
+
+Returns **Keyboard** Returns the updated Keyboard object.
+
+## setResize
+
+Sets the `resize` option for the keyboard.
+
+### Parameters
+
+*   `resize` **[boolean][398]** Whether the keyboard should be resized to fit the user's screen.
+
+Returns **Keyboard** Returns the current `Keyboard` object for chaining.
+
+## setOneTime
+
+Sets whether the keyboard should disappear after the user presses a button.
+
+### Parameters
+
+*   `oneTime` **[boolean][398]** Whether the keyboard should disappear after the user presses a button.
+
+Returns **Keyboard** Returns the Keyboard object.
+
+## setSelective
+
+Set the `selective` option for the keyboard.
+
+### Parameters
+
+*   `selective` **[boolean][398]** Whether the keyboard should be shown only to specific users.
+
+Returns **Keyboard** Returns the `Keyboard` object with the `selective` option set.
+
+## addKeyboard
+
+Adds buttons to the keyboard buttons array.
+
+### Parameters
+
+*   `buttonRows` **...any** One or more button rows to add to the keyboard.
+*   `defaults`   (optional, default `false`)
+
+Returns **Keyboard** Returns the updated `Keyboard` object.
+
+## Events
+
+Events object with predefined event types.
+
+Type: [Object][396]
+
+### Properties
+
+*   `Message` **[string][393]** Represents the 'message' event.
+*   `EditedMessage` **[string][393]** Represents the 'edited\_message' event.
+*   `ChannelPost` **[string][393]** Represents the 'channel\_post' event.
+*   `EditedChannelPost` **[string][393]** Represents the 'edited\_channel\_post' event.
+*   `InlineQuery` **[string][393]** Represents the 'inline\_query' event.
+*   `ChosenInlineResult` **[string][393]** Represents the 'chosen\_inline\_result' event.
+*   `CallbackQuery` **[string][393]** Represents the 'callback\_query' event.
+*   `ShippingQuery` **[string][393]** Represents the 'shipping\_query' event.
+*   `PreCheckoutQuery` **[string][393]** Represents the 'pre\_checkout\_query' event.
+*   `Poll` **[string][393]** Represents the 'poll' event.
+*   `PollAnswer` **[string][393]** Represents the 'poll\_answer' event.
+*   `ChatMember` **[string][393]** Represents the 'chat\_member' event.
+*   `MyChatMember` **[string][393]** Represents the 'my\_chat\_member' event.
+*   `ChatJoinRequest` **[string][393]** Represents the 'chat\_join\_request' event.
+*   `ReplyMessage` **[string][393]** Represents the 'reply\_message' event.
+
+## ChatActionType
+
+An object representing the available chat action types.
+
+Type: [object][396]
+
+### Properties
+
+*   `Typing` **[string][393]** Represents a typing action.
+*   `UploadPhoto` **[string][393]** Represents an action for uploading a photo.
+*   `RecordVideo` **[string][393]** Represents an action for recording a video.
+*   `UploadVideo` **[string][393]** Represents an action for uploading a video.
+*   `RecordVoice` **[string][393]** Represents an action for recording a voice message.
+*   `UploadVoice` **[string][393]** Represents an action for uploading a voice message.
+*   `UploadDocument` **[string][393]** Represents an action for uploading a document.
+*   `ChooseSticker` **[string][393]** Represents an action for choosing a sticker.
+*   `FindLocation` **[string][393]** Represents an action for finding a location.
+*   `RecordVideoNote` **[string][393]** Represents an action for recording a video note.
+*   `UploadVideoNote` **[string][393]** Represents an action for uploading a video note.
+
+## EntityType
+
+Object representing types of Telegram message entities.
+
+Type: [string][393]
+
+### Properties
+
+*   `Mention` **[string][393]** A `@username` mention.
+*   `Hashtag` **[string][393]** A `#hashtag` mention.
+*   `Cashtag` **[string][393]** A `$cashtag` mention.
+*   `BotCommand` **[string][393]** A bot command mention.
+*   `URL` **[string][393]** A URL link.
+*   `Email` **[string][393]** An email link.
+*   `PhoneNumber` **[string][393]** A phone number link.
+*   `Bold` **[string][393]** Bold text.
+*   `Italic` **[string][393]** Italic text.
+*   `Underline` **[string][393]** Underlined text.
+*   `Strikethrough` **[string][393]** Strikethrough text.
+*   `Spoiler` **[string][393]** Spoiler text.
+*   `Code` **[string][393]** Monospace code text.
+*   `Pre` **[string][393]** Preformatted code block.
+*   `TextLink` **[string][393]** A clickable text URL link.
+*   `TextMention` **[string][393]** A mention of a user by their username.
+*   `CustomEmoji` **[string][393]** A custom emoji.
+
+## ChatPermission
+
+An object containing chat permissions.
+
+Type: [Object][396]
+
+### Properties
+
+*   `CanSendOtherMessages` **[string][393]** Specifies if users can send other kinds of messages.
+*   `CanAddWebPagePreviews` **[string][393]** Specifies if users can add web page previews to their messages.
+*   `CanSendMessages` **[string][393]** Specifies if users can send text messages.
+*   `CanSendAudios` **[string][393]** Specifies if users can send audio messages.
+*   `CanSendDocuments` **[string][393]** Specifies if users can send document messages.
+*   `CanSendPhotos` **[string][393]** Specifies if users can send photo messages.
+*   `CanSendVideos` **[string][393]** Specifies if users can send video messages.
+*   `CanSendVideoNotes` **[string][393]** Specifies if users can send video note messages.
+*   `CanSendVoiceNotes` **[string][393]** Specifies if users can send voice note messages.
+*   `CanSendPolls` **[string][393]** Specifies if users can send polls.
+
+## GroupPermission
+
+An object containing group permissions.
+
+Type: [Object][396]
+
+### Properties
+
+*   `CanManageChat` **[string][393]** Specifies if users can manage the group.
+*   `CanChangeInfo` **[string][393]** Specifies if users can change group information.
+*   `CanDeleteMessages` **[string][393]** Specifies if users can delete messages.
+*   `CanInviteUsers` **[string][393]** Specifies if users can invite other users to the group.
+*   `CanRestrictMembers` **[string][393]** Specifies if users can restrict group members.
+*   `CanPinMessages` **[string][393]** Specifies if users can pin messages.
+*   `CanManageTopics` **[string][393]** Specifies if users can manage group topics.
+*   `CanPromoteMembers` **[string][393]** Specifies if users can promote members.
+*   `CanManageVideoChats` **[string][393]** Specifies if users can manage video groups.
+*   `CanManageVoiceChats` **[string][393]** Specifies if users can manage voice groups.
+
+## GroupStatus
+
+Enum representing the status of a group member.
+
+Type: [string][393]
+
+### Administrator
+
+The user is an administrator of the group.
+
+### Left
+
+The user has left the group.
+
+### Member
+
+The user is a regular member of the group.
+
+### Creator
+
+The user is the creator of the group.
+
+## DocumentTypes
+
+Constants for document types.
+
+Type: [string][393]
+
+### Properties
+
+*   `PersonalDetails` **[string][393]** Personal details.
+*   `Passport` **[string][393]** Passport.
+*   `DriverLicense` **[string][393]** Driver's license.
+*   `IdentityCard` **[string][393]** Identity card.
+*   `InternalPassport` **[string][393]** Internal passport.
+*   `Address` **[string][393]** Address.
+*   `UtilityBill` **[string][393]** Utility bill.
+*   `BankStatement` **[string][393]** Bank statement.
+*   `RentalAgreement` **[string][393]** Rental agreement.
+*   `PassportRegistration` **[string][393]** Passport registration.
+*   `TemporaryRegistration` **[string][393]** Temporary registration.
+*   `PhoneNumber` **[string][393]** Phone number.
+*   `Email` **[string][393]** Email.
+
+## IntentBits
+
+Type: [Object][396]
+
+### Properties
+
+*   `Message` **[number][395]** Represents a bit flag for Telegram messages.
+*   `EditedMessage` **[number][395]** Represents a bit flag for edited Telegram messages.
+*   `ChannelPost` **[number][395]** Represents a bit flag for posts in Telegram channels.
+*   `EditedChannelPost` **[number][395]** Represents a bit flag for edited posts in Telegram channels.
+*   `InlineQuery` **[number][395]** Represents a bit flag for inline queries from users.
+*   `ChosenInlineResult` **[number][395]** Represents a bit flag for chosen inline query results.
+*   `CallbackQuery` **[number][395]** Represents a bit flag for callback queries from users.
+*   `ShippingQuery` **[number][395]** Represents a bit flag for shipping queries from users.
+*   `PreCheckoutQuery` **[number][395]** Represents a bit flag for pre-checkout queries from users.
+*   `Poll` **[number][395]** Represents a bit flag for polls from users.
+*   `PollAnswer` **[number][395]** Represents a bit flag for answers to polls from users.
+*   `MyChatMember` **[number][395]** Represents a bit flag for a user's chat membership status in their own chat.
+*   `ChatMember` **[number][395]** Represents a bit flag for a user's chat membership status in a chat they are a member of.
+*   `ChatJoinRequest` **[number][395]** Represents a bit flag for a user's request to join a chat.
+
+## TelegramIntentBits
+
+Type: [Object][396]
+
+### Properties
+
+*   `Message` **[string][393]** Represents a Telegram message.
+*   `EditedMessage` **[string][393]** Represents an edited Telegram message.
+*   `ChannelPost` **[string][393]** Represents a post in a Telegram channel.
+*   `EditedChannelPost` **[string][393]** Represents an edited post in a Telegram channel.
+*   `InlineQuery` **[string][393]** Represents an inline query from a user.
+*   `ChosenInlineResult` **[string][393]** Represents a chosen inline query result.
+*   `CallbackQuery` **[string][393]** Represents a callback query from a user.
+*   `ShippingQuery` **[string][393]** Represents a shipping query from a user.
+*   `PreCheckoutQuery` **[string][393]** Represents a pre-checkout query from a user.
+*   `Poll` **[string][393]** Represents a poll from a user.
+*   `PollAnswer` **[string][393]** Represents an answer to a poll from a user.
+*   `MyChatMember` **[string][393]** Represents a user's chat membership status in their own chat.
+*   `ChatMember` **[string][393]** Represents a user's chat membership status in a chat they are a member of.
+*   `ChatJoinRequest` **[string][393]** Represents a user's request to join a chat.
+
+## IntentsBitField
+
+### add
+
+Adds one or more bits to the bit field.
+
+#### Parameters
+
+*   `ints` **...[number][395]** The bits to add to the bit field.
+
+<!---->
+
+*   Throws **[BitFieldError][229]** If a specified bit is not a number.
+
+Returns **[IntentsBitField][317]** The updated IntentsBitField instance.
+
+### remove
+
+Removes one or more Telegram intents from the bitfield.
+
+#### Parameters
+
+*   `ints` **...[number][395]** The bits that represent the Telegram intents to be removed.
+
+<!---->
+
+*   Throws **[BitFieldError][229]** If an invalid argument is passed.
+
+Returns **[IntentsBitField][317]** The IntentsBitField instance.
+
+### serialize
+
+Returns the bitfield as a number.
+
+Returns **[number][395]** The bitfield.
+
+## toArray
+
+Returns an array of intent strings based on the current bit value
+
+Returns **[Array][394]<[string][393]>** Array of intent strings
+
+## has
+
+Checks if the bit field has a specific bit set
+
+### Parameters
+
+*   `bit` **[number][395]** Bit to check
+
+Returns **[boolean][398]** True if the bit is set, false otherwise
+
+## decodeIntents
+
+Decodes a bit field instance and returns an array of intent strings
+
+### Parameters
+
+*   `intentsBitField` **[IntentsBitField][317]** Bit field instance to decode
+
+Returns **[Array][394]<[string][393]>** Array of intent strings
+
+## MessageCollector
+
+**Extends EventEmitter**
+
+Represents a message collector.
+
+### Parameters
+
+*   `options` **[Object][396]** The options for the collector.
+
+### handleMessage
+
+Handles a new message received by the collector.
+
+#### Parameters
+
+*   `message` **[Object][396]** The message object.
+
+### collected
+
+Returns the collected messages.
+
+Returns **[Array][394]** The collected messages.
+
+### stop
+
+Stops the message collector.
+
+## Request
+
+**Extends EventEmitter**
+
+Represents a request object for making requests to the Telegram Bot API.
+
+### Parameters
+
+*   `token` **[string][393]?** The API token for the bot.
+*   `intents` **([string][393] | [array][394] | [number][395])?** The types of updates the bot is interested in.
+*   `queryString` **[string][393]?** The type of query string to use for requests.
+*   `offSetType` **([string][393] | [boolean][398] | [object][396])?** The type of offset to use for updates.
+
+### getUpdates
+
+Gets the updates from the Telegram Bot API.
+
+*   Throws **[TelegramTokenError][227]** When the token is invalid.
+*   Throws **[TelegramApiError][223]** When an error occurs with the Telegram Bot API.
+
+Returns **[Promise][397]<[Array][394]<[object][396]>>** An array of updates.
+
+### request
+
+Makes a request to the Telegram Bot API.
+
+#### Parameters
+
+*   `method` **[string][393]** The API method to call.
+*   `params` **[Object][396]** The parameters to include in the API call.
+
+Returns **[Promise][397]<[object][396]>** The response from the API call.
+
+### uptime
+
+Gets the uptime of the bot.
+
+Returns **[number][395]** The uptime in milliseconds.
+
+### ping
+
+Gets the ping latency of the bot.
+
+Returns **[Promise][397]<[number][395]>** The ping latency in milliseconds.
+
+### updateId
+
+Gets the last update ID received.
+
+Returns **([number][395] | null)** The last update ID, or null if not available.
+
+### lastObject
+
+Gets the last object received.
+
+Returns **[object][396]** The last received object.
 
 ## TelegramBot
 
@@ -8032,60 +3279,22 @@ Sets the database object in the specified directory, table, and extension.
 
 A class representing a Telegram Bot client.
 
-### constructor
+### Parameters
 
-Creates a new TelegramBot client.
+*   `token` **[string][393]** The Telegram Bot API token.
+*   `options` **[Object][396]?** The client options. (optional, default `{}`)
 
-#### Parameters
+### token
 
-*   `token` **[string][1019]** The Telegram Bot API token.
-*   `options` **[Object][1022]?** The client options.
+The Telegram Bot API token.
 
-    *   `options.intents` **([string][1019] | [array][1020] | [number][1021])?** The client intents.
-    *   `options.parseMode` **[string][1019]?** The parse mode for message formatting.
-    *   `options.chatId` **([string][1019] | [number][1021])?** The default chat ID for sending messages.
-    *   `options.queryString` **[string][1019]?** The default query string for API requests.
-    *   `options.offSetType` **([string][1019] | [object][1022])?** The type of offset to use for updates.
+Type: [string][393]
 
-### on
+### baseUrl
 
-Registers a listener for the specified event.
+The base URL for the Telegram Bot API.
 
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
-
-Returns **any**&#x20;
-
-### off
-
-Removes the specified listener for the given event.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function to remove.
-
-Returns **any**&#x20;
-
-### once
-
-Registers a one-time listener for the specified event.
-The listener is automatically removed after it's invoked.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
-
-Returns **any**&#x20;
-
-### login
-
-The function that starts the whole process
-
-Returns **[Promise][1023]\<void>**&#x20;
+Type: [string][393]
 
 ### login
 
@@ -8093,8 +3302,8 @@ Registers a listener for the specified event.
 
 #### Parameters
 
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
+*   `eventName` **[string][393]** The name of the event.
+*   `listener` **[Function][402]** The listener function.
 
 ### login
 
@@ -8108,8 +3317,8 @@ Removes the specified listener for the given event.
 
 #### Parameters
 
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function to remove.
+*   `eventName` **[string][393]** The name of the event.
+*   `listener` **[Function][402]** The listener function to remove.
 
 ### login
 
@@ -8124,8 +3333,8 @@ The listener is automatically removed after it's invoked.
 
 #### Parameters
 
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
+*   `eventName` **[string][393]** The name of the event.
+*   `listener` **[Function][402]** The listener function.
 
 ### login
 
@@ -8137,165 +3346,15 @@ return this.once(eventName, listener);
 
 The function that starts the whole process
 
-### token
-
-The Telegram Bot API token.
-
-Type: [string][1019]
-
-### baseUrl
-
-The base URL for the Telegram Bot API.
-
-Type: [string][1019]
-
-## TelegramBot
-
-**Extends BaseClient**
-
-A class representing a Telegram Bot client.
-
-### Parameters
-
-*   `token` **[string][1019]** The Telegram Bot API token.
-*   `options` **[Object][1022]?** The client options. (optional, default `{}`)
-
-### constructor
-
-Creates a new TelegramBot client.
-
-#### Parameters
-
-*   `token` **[string][1019]** The Telegram Bot API token.
-*   `options` **[Object][1022]?** The client options.
-
-    *   `options.intents` **([string][1019] | [array][1020] | [number][1021])?** The client intents.
-    *   `options.parseMode` **[string][1019]?** The parse mode for message formatting.
-    *   `options.chatId` **([string][1019] | [number][1021])?** The default chat ID for sending messages.
-    *   `options.queryString` **[string][1019]?** The default query string for API requests.
-    *   `options.offSetType` **([string][1019] | [object][1022])?** The type of offset to use for updates.
-
-### on
-
-Registers a listener for the specified event.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
-
-Returns **any**&#x20;
-
-### off
-
-Removes the specified listener for the given event.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function to remove.
-
-Returns **any**&#x20;
-
-### once
-
-Registers a one-time listener for the specified event.
-The listener is automatically removed after it's invoked.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
-
-Returns **any**&#x20;
-
-### login
-
-The function that starts the whole process
-
-Returns **[Promise][1023]\<void>**&#x20;
-
-### login
-
-Registers a listener for the specified event.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
-
-### login
-
-on(eventName, listener) {
-return this.on(eventName, listener);
-}
-
-### login
-
-Removes the specified listener for the given event.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function to remove.
-
-### login
-
-off(eventName, listener) {
-return this.off(eventName, listener);
-}
-
-### login
-
-Registers a one-time listener for the specified event.
-The listener is automatically removed after it's invoked.
-
-#### Parameters
-
-*   `eventName` **[string][1019]** The name of the event.
-*   `listener` **[Function][1028]** The listener function.
-
-### login
-
-once(eventName, listener) {
-return this.once(eventName, listener);
-}
-
-### login
-
-The function that starts the whole process
-
-### token
-
-The Telegram Bot API token.
-
-Type: [string][1019]
-
-### baseUrl
-
-The base URL for the Telegram Bot API.
-
-Type: [string][1019]
-
 ## checkMessageLinks
 
 Checks if a message contains any links.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains links, otherwise false.
-
-## checkMessageLinks
-
-Checks if a message contains any links.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains links, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains links, otherwise false.
 
 ## extractUserMentions
 
@@ -8303,19 +3362,9 @@ Extracts user mentions from a message.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to extract mentions from.
+*   `message` **[string][393]** The message to extract mentions from.
 
-Returns **[Array][1020]<[string][1019]>** An array of user mentions found in the message.
-
-## extractUserMentions
-
-Extracts user mentions from a message.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to extract mentions from.
-
-Returns **[Array][1020]<[string][1019]>** An array of user mentions found in the message.
+Returns **[Array][394]<[string][393]>** An array of user mentions found in the message.
 
 ## extractHashtags
 
@@ -8323,19 +3372,9 @@ Extracts hashtags from a message.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to extract hashtags from.
+*   `message` **[string][393]** The message to extract hashtags from.
 
-Returns **[Array][1020]<[string][1019]>** An array of hashtags found in the message.
-
-## extractHashtags
-
-Extracts hashtags from a message.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to extract hashtags from.
-
-Returns **[Array][1020]<[string][1019]>** An array of hashtags found in the message.
+Returns **[Array][394]<[string][393]>** An array of hashtags found in the message.
 
 ## checkLocation
 
@@ -8343,25 +3382,12 @@ Checks if a location object is valid.
 
 ### Parameters
 
-*   `location` **[object][1022]** The location object to check.
+*   `location` **[object][396]** The location object to check.
 
-    *   `location.latitude` **([string][1019] | [number][1021])** The latitude of the location.
-    *   `location.longitude` **([string][1019] | [number][1021])** The longitude of the location.
+    *   `location.latitude` **([string][393] | [number][395])** The latitude of the location.
+    *   `location.longitude` **([string][393] | [number][395])** The longitude of the location.
 
-Returns **[boolean][1024]** Returns true if the location object is valid, otherwise false.
-
-## checkLocation
-
-Checks if a location object is valid.
-
-### Parameters
-
-*   `location` **[object][1022]** The location object to check.
-
-    *   `location.latitude` **([string][1019] | [number][1021])** The latitude of the location.
-    *   `location.longitude` **([string][1019] | [number][1021])** The longitude of the location.
-
-Returns **[boolean][1024]** Returns true if the location object is valid, otherwise false.
+Returns **[boolean][398]** Returns true if the location object is valid, otherwise false.
 
 ## checkUserMentions
 
@@ -8369,19 +3395,9 @@ Checks if a message contains any user mentions.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains user mentions, otherwise false.
-
-## checkUserMentions
-
-Checks if a message contains any user mentions.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains user mentions, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains user mentions, otherwise false.
 
 ## checkHashtags
 
@@ -8389,19 +3405,9 @@ Checks if a message contains any hashtags.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains hashtags, otherwise false.
-
-## checkHashtags
-
-Checks if a message contains any hashtags.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains hashtags, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains hashtags, otherwise false.
 
 ## checkPhoneNumber
 
@@ -8409,19 +3415,9 @@ Checks if a phone number is valid.
 
 ### Parameters
 
-*   `phoneNumber` **[string][1019]** The phone number to check.
+*   `phoneNumber` **[string][393]** The phone number to check.
 
-Returns **[boolean][1024]** Returns true if the phone number is valid, otherwise false.
-
-## checkPhoneNumber
-
-Checks if a phone number is valid.
-
-### Parameters
-
-*   `phoneNumber` **[string][1019]** The phone number to check.
-
-Returns **[boolean][1024]** Returns true if the phone number is valid, otherwise false.
+Returns **[boolean][398]** Returns true if the phone number is valid, otherwise false.
 
 ## extractUserIdFromLink
 
@@ -8429,19 +3425,9 @@ Extracts the user ID from a Telegram link.
 
 ### Parameters
 
-*   `link` **[string][1019]** The Telegram link to extract the user ID from.
+*   `link` **[string][393]** The Telegram link to extract the user ID from.
 
-Returns **([string][1019] | null)** The extracted user ID, or null if not found.
-
-## extractUserIdFromLink
-
-Extracts the user ID from a Telegram link.
-
-### Parameters
-
-*   `link` **[string][1019]** The Telegram link to extract the user ID from.
-
-Returns **([string][1019] | null)** The extracted user ID, or null if not found.
+Returns **([string][393] | null)** The extracted user ID, or null if not found.
 
 ## checkGroupOrChannel
 
@@ -8449,19 +3435,9 @@ Checks if a message contains a Telegram group or channel link.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains a group or channel link, otherwise false.
-
-## checkGroupOrChannel
-
-Checks if a message contains a Telegram group or channel link.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains a group or channel link, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains a group or channel link, otherwise false.
 
 ## checkEmoji
 
@@ -8469,19 +3445,9 @@ Checks if a message contains only emoji characters.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains only emoji characters, otherwise false.
-
-## checkEmoji
-
-Checks if a message contains only emoji characters.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains only emoji characters, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains only emoji characters, otherwise false.
 
 ## checkSticker
 
@@ -8489,19 +3455,9 @@ Checks if a message contains only a Telegram sticker.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains only a Telegram sticker, otherwise false.
-
-## checkSticker
-
-Checks if a message contains only a Telegram sticker.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains only a Telegram sticker, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains only a Telegram sticker, otherwise false.
 
 ## extractUsernameFromLink
 
@@ -8509,19 +3465,9 @@ Extracts the username from a Telegram link.
 
 ### Parameters
 
-*   `link` **[string][1019]** The Telegram link to extract the username from.
+*   `link` **[string][393]** The Telegram link to extract the username from.
 
-Returns **([string][1019] | null)** The extracted username, or null if not found.
-
-## extractUsernameFromLink
-
-Extracts the username from a Telegram link.
-
-### Parameters
-
-*   `link` **[string][1019]** The Telegram link to extract the username from.
-
-Returns **([string][1019] | null)** The extracted username, or null if not found.
+Returns **([string][393] | null)** The extracted username, or null if not found.
 
 ## checkBot
 
@@ -8529,19 +3475,9 @@ Checks if a message contains a Telegram bot username.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains a Telegram bot username, otherwise false.
-
-## checkBot
-
-Checks if a message contains a Telegram bot username.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains a Telegram bot username, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains a Telegram bot username, otherwise false.
 
 ## checkChannel
 
@@ -8549,19 +3485,9 @@ Checks if a message contains a Telegram channel link (excluding usernames).
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains a Telegram channel link, otherwise false.
-
-## checkChannel
-
-Checks if a message contains a Telegram channel link (excluding usernames).
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains a Telegram channel link, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains a Telegram channel link, otherwise false.
 
 ## checkLink
 
@@ -8569,19 +3495,9 @@ Checks if a message contains a Telegram link.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains a Telegram link, otherwise false.
-
-## checkLink
-
-Checks if a message contains a Telegram link.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains a Telegram link, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains a Telegram link, otherwise false.
 
 ## checkGroup
 
@@ -8589,19 +3505,9 @@ Checks if a message contains a Telegram group link.
 
 ### Parameters
 
-*   `message` **[string][1019]** The message to check.
+*   `message` **[string][393]** The message to check.
 
-Returns **[boolean][1024]** Returns true if the message contains a Telegram group link, otherwise false.
-
-## checkGroup
-
-Checks if a message contains a Telegram group link.
-
-### Parameters
-
-*   `message` **[string][1019]** The message to check.
-
-Returns **[boolean][1024]** Returns true if the message contains a Telegram group link, otherwise false.
+Returns **[boolean][398]** Returns true if the message contains a Telegram group link, otherwise false.
 
 ## checkUsername
 
@@ -8609,19 +3515,9 @@ Checks if a username is valid.
 
 ### Parameters
 
-*   `username` **[string][1019]** The username to check.
+*   `username` **[string][393]** The username to check.
 
-Returns **[boolean][1024]** Returns true if the username is valid, otherwise false.
-
-## checkUsername
-
-Checks if a username is valid.
-
-### Parameters
-
-*   `username` **[string][1019]** The username to check.
-
-Returns **[boolean][1024]** Returns true if the username is valid, otherwise false.
+Returns **[boolean][398]** Returns true if the username is valid, otherwise false.
 
 ## extractUsername
 
@@ -8629,2072 +3525,810 @@ Extracts the username from a Telegram link.
 
 ### Parameters
 
-*   `link` **[string][1019]** The Telegram link to extract the username from.
+*   `link` **[string][393]** The Telegram link to extract the username from.
 
-Returns **([string][1019] | null)** The extracted username, or null if not found.
-
-## extractUsername
-
-Extracts the username from a Telegram link.
-
-### Parameters
-
-*   `link` **[string][1019]** The Telegram link to extract the username from.
-
-Returns **([string][1019] | null)** The extracted username, or null if not found.
+Returns **([string][393] | null)** The extracted username, or null if not found.
 
 [1]: #constructor
 
 [2]: #parameters
 
-[3]: #constructor-1
+[3]: #getme
 
-[4]: #parameters-1
+[4]: #deletewebhook
 
-[5]: #getme
+[5]: #parameters-1
 
-[6]: #getme-1
+[6]: #deletewebhook-1
 
-[7]: #deletewebhook
+[7]: #getwebhookinfo
 
-[8]: #parameters-2
+[8]: #sendmessage
 
-[9]: #deletewebhook-1
+[9]: #parameters-2
 
-[10]: #deletewebhook-2
+[10]: #sendphoto
 
 [11]: #parameters-3
 
-[12]: #deletewebhook-3
+[12]: #sendaudio
 
-[13]: #getwebhookinfo
+[13]: #parameters-4
 
-[14]: #getwebhookinfo-1
+[14]: #senddocument
 
-[15]: #sendmessage
+[15]: #parameters-5
 
-[16]: #parameters-4
+[16]: #sendvideo
 
-[17]: #sendmessage-1
+[17]: #parameters-6
 
-[18]: #parameters-5
+[18]: #sendanimation
 
-[19]: #sendphoto
+[19]: #parameters-7
 
-[20]: #parameters-6
+[20]: #sendvoice
 
-[21]: #sendphoto-1
+[21]: #parameters-8
 
-[22]: #parameters-7
+[22]: #sendvideonote
 
-[23]: #sendaudio
+[23]: #parameters-9
 
-[24]: #parameters-8
+[24]: #sendmediagroup
 
-[25]: #sendaudio-1
+[25]: #parameters-10
 
-[26]: #parameters-9
+[26]: #sendlocation
 
-[27]: #senddocument
+[27]: #parameters-11
 
-[28]: #parameters-10
+[28]: #sendvenue
 
-[29]: #senddocument-1
+[29]: #parameters-12
 
-[30]: #parameters-11
+[30]: #forwardmessage
 
-[31]: #sendvideo
+[31]: #parameters-13
 
-[32]: #parameters-12
+[32]: #copymessage
 
-[33]: #sendvideo-1
+[33]: #parameters-14
 
-[34]: #parameters-13
+[34]: #sendcontact
 
-[35]: #sendanimation
+[35]: #parameters-15
 
-[36]: #parameters-14
+[36]: #sendpoll
 
-[37]: #sendanimation-1
+[37]: #parameters-16
 
-[38]: #parameters-15
+[38]: #senddice
 
-[39]: #sendvoice
+[39]: #parameters-17
 
-[40]: #parameters-16
+[40]: #sendchataction
 
-[41]: #sendvoice-1
+[41]: #parameters-18
 
-[42]: #parameters-17
+[42]: #getuserprofilephotos
 
-[43]: #sendvideonote
+[43]: #parameters-19
 
-[44]: #parameters-18
+[44]: #getfile
 
-[45]: #sendvideonote-1
+[45]: #parameters-20
 
-[46]: #parameters-19
+[46]: #downloadfile
 
-[47]: #sendmediagroup
+[47]: #parameters-21
 
-[48]: #parameters-20
+[48]: #banchatmember
 
-[49]: #sendmediagroup-1
+[49]: #parameters-22
 
-[50]: #parameters-21
+[50]: #unbanchatmember
 
-[51]: #sendlocation
+[51]: #parameters-23
 
-[52]: #parameters-22
+[52]: #restrictchatmember
 
-[53]: #sendlocation-1
+[53]: #parameters-24
 
-[54]: #parameters-23
+[54]: #promotechatmember
 
-[55]: #sendvenue
+[55]: #parameters-25
 
-[56]: #parameters-24
+[56]: #setchatadministratorcustomtitle
 
-[57]: #sendvenue-1
+[57]: #parameters-26
 
-[58]: #parameters-25
+[58]: #banchatsenderchat
 
-[59]: #forwardmessage
+[59]: #parameters-27
 
-[60]: #parameters-26
+[60]: #unbanchatsenderchat
 
-[61]: #forwardmessage-1
+[61]: #parameters-28
 
-[62]: #parameters-27
+[62]: #setchatpermissions
 
-[63]: #copymessage
+[63]: #parameters-29
 
-[64]: #parameters-28
+[64]: #portchatinvitelink
 
-[65]: #copymessage-1
+[65]: #parameters-30
 
-[66]: #parameters-29
+[66]: #createchatinvitelink
 
-[67]: #sendcontact
+[67]: #parameters-31
 
-[68]: #parameters-30
+[68]: #editchatinvitelink
 
-[69]: #sendcontact-1
+[69]: #parameters-32
 
-[70]: #parameters-31
+[70]: #revokechatinvitelink
 
-[71]: #sendpoll
+[71]: #parameters-33
 
-[72]: #parameters-32
+[72]: #approvechatjoinrequest
 
-[73]: #sendpoll-1
+[73]: #parameters-34
 
-[74]: #parameters-33
+[74]: #declinechatjoinrequest
 
-[75]: #senddice
+[75]: #parameters-35
 
-[76]: #parameters-34
+[76]: #setchatphoto
 
-[77]: #senddice-1
+[77]: #parameters-36
 
-[78]: #parameters-35
+[78]: #deletechatphoto
 
-[79]: #sendchataction
+[79]: #parameters-37
 
-[80]: #parameters-36
+[80]: #setchattitle
 
-[81]: #sendchataction-1
+[81]: #parameters-38
 
-[82]: #parameters-37
+[82]: #setchatdescription
 
-[83]: #getuserprofilephotos
+[83]: #parameters-39
 
-[84]: #parameters-38
+[84]: #pinchatmessage
 
-[85]: #getuserprofilephotos-1
+[85]: #parameters-40
 
-[86]: #parameters-39
+[86]: #unpinchatmessage
 
-[87]: #getfile
+[87]: #parameters-41
 
-[88]: #parameters-40
+[88]: #unpinallchatmessages
 
-[89]: #getfile-1
+[89]: #parameters-42
 
-[90]: #parameters-41
+[90]: #leavechat
 
-[91]: #downloadfile
+[91]: #parameters-43
 
-[92]: #parameters-42
+[92]: #getchat
 
-[93]: #downloadfile-1
+[93]: #parameters-44
 
-[94]: #parameters-43
+[94]: #getchatadministrators
 
-[95]: #banchatmember
+[95]: #parameters-45
 
-[96]: #parameters-44
+[96]: #getchatmembercount
 
-[97]: #banchatmember-1
+[97]: #parameters-46
 
-[98]: #parameters-45
+[98]: #getchatmember
 
-[99]: #unbanchatmember
+[99]: #parameters-47
 
-[100]: #parameters-46
+[100]: #setchatstickerset
 
-[101]: #unbanchatmember-1
+[101]: #parameters-48
 
-[102]: #parameters-47
+[102]: #deletechatstickerset
 
-[103]: #restrictchatmember
+[103]: #parameters-49
 
-[104]: #parameters-48
+[104]: #getforumtopiciconstickers
 
-[105]: #restrictchatmember-1
+[105]: #createforumtopic
 
-[106]: #parameters-49
+[106]: #parameters-50
 
-[107]: #promotechatmember
+[107]: #editforumtopic
 
-[108]: #parameters-50
+[108]: #parameters-51
 
-[109]: #promotechatmember-1
+[109]: #closeforumtopic
 
-[110]: #parameters-51
+[110]: #parameters-52
 
-[111]: #setchatadministratorcustomtitle
+[111]: #reopenforumtopic
 
-[112]: #parameters-52
+[112]: #parameters-53
 
-[113]: #setchatadministratorcustomtitle-1
+[113]: #deleteforumtopic
 
-[114]: #parameters-53
+[114]: #parameters-54
 
-[115]: #banchatsenderchat
+[115]: #unpinallforumtopicmessages
 
-[116]: #parameters-54
+[116]: #parameters-55
 
-[117]: #banchatsenderchat-1
+[117]: #editgeneralforumtopic
 
-[118]: #parameters-55
+[118]: #parameters-56
 
-[119]: #unbanchatsenderchat
+[119]: #closegeneralforumtopic
 
-[120]: #parameters-56
+[120]: #parameters-57
 
-[121]: #unbanchatsenderchat-1
+[121]: #reopengeneralforumtopic
 
-[122]: #parameters-57
+[122]: #parameters-58
 
-[123]: #setchatpermissions
+[123]: #hidegeneralforumtopic
 
-[124]: #parameters-58
+[124]: #parameters-59
 
-[125]: #setchatpermissions-1
+[125]: #unhidegeneralforumtopic
 
-[126]: #parameters-59
+[126]: #parameters-60
 
-[127]: #portchatinvitelink
+[127]: #answercallbackquery
 
-[128]: #parameters-60
+[128]: #parameters-61
 
-[129]: #portchatinvitelink-1
+[129]: #setmycommands
 
-[130]: #parameters-61
+[130]: #parameters-62
 
-[131]: #createchatinvitelink
+[131]: #deletemycommands
 
-[132]: #parameters-62
+[132]: #parameters-63
 
-[133]: #createchatinvitelink-1
+[133]: #getmycommands
 
-[134]: #parameters-63
+[134]: #parameters-64
 
-[135]: #editchatinvitelink
+[135]: #setmyname
 
-[136]: #parameters-64
+[136]: #parameters-65
 
-[137]: #editchatinvitelink-1
+[137]: #getmyname
 
-[138]: #parameters-65
+[138]: #parameters-66
 
-[139]: #revokechatinvitelink
+[139]: #setmydescription
 
-[140]: #parameters-66
+[140]: #parameters-67
 
-[141]: #revokechatinvitelink-1
+[141]: #getmydescription
 
-[142]: #parameters-67
+[142]: #parameters-68
 
-[143]: #approvechatjoinrequest
+[143]: #setmyshortdescription
 
-[144]: #parameters-68
+[144]: #parameters-69
 
-[145]: #approvechatjoinrequest-1
+[145]: #getmyshortdescription
 
-[146]: #parameters-69
+[146]: #parameters-70
 
-[147]: #declinechatjoinrequest
+[147]: #setchatmenubutton
 
-[148]: #parameters-70
+[148]: #parameters-71
 
-[149]: #declinechatjoinrequest-1
+[149]: #getchatmenubutton
 
-[150]: #parameters-71
+[150]: #parameters-72
 
-[151]: #setchatphoto
+[151]: #setmydefaultadministratorrights
 
-[152]: #parameters-72
+[152]: #parameters-73
 
-[153]: #setchatphoto-1
+[153]: #getmydefaultadministratorrights
 
-[154]: #parameters-73
+[154]: #parameters-74
 
-[155]: #deletechatphoto
+[155]: #editmessagetext
 
-[156]: #parameters-74
+[156]: #parameters-75
 
-[157]: #deletechatphoto-1
+[157]: #editmessagecaption
 
-[158]: #parameters-75
+[158]: #parameters-76
 
-[159]: #setchattitle
+[159]: #editmessagemedia
 
-[160]: #parameters-76
+[160]: #parameters-77
 
-[161]: #setchattitle-1
+[161]: #editmessagelivelocation
 
-[162]: #parameters-77
+[162]: #parameters-78
 
-[163]: #setchatdescription
+[163]: #stopmessagelivelocation
 
-[164]: #parameters-78
+[164]: #parameters-79
 
-[165]: #setchatdescription-1
+[165]: #editmessagereplymarkup
 
-[166]: #parameters-79
+[166]: #parameters-80
 
-[167]: #pinchatmessage
+[167]: #stoppoll
 
-[168]: #parameters-80
+[168]: #parameters-81
 
-[169]: #pinchatmessage-1
+[169]: #sendsticker
 
-[170]: #parameters-81
+[170]: #parameters-82
 
-[171]: #unpinchatmessage
+[171]: #getstickerset
 
-[172]: #parameters-82
+[172]: #parameters-83
 
-[173]: #unpinchatmessage-1
+[173]: #getcustomemojistickers
 
-[174]: #parameters-83
+[174]: #parameters-84
 
-[175]: #unpinallchatmessages
+[175]: #uploadstickerfile
 
-[176]: #parameters-84
+[176]: #parameters-85
 
-[177]: #unpinallchatmessages-1
+[177]: #createnewstickerset
 
-[178]: #parameters-85
+[178]: #parameters-86
 
-[179]: #leavechat
+[179]: #addstickertoset
 
-[180]: #parameters-86
+[180]: #parameters-87
 
-[181]: #leavechat-1
+[181]: #setstickerpositioninset
 
-[182]: #parameters-87
+[182]: #parameters-88
 
-[183]: #getchat
+[183]: #deletestickerfromset
 
-[184]: #parameters-88
+[184]: #parameters-89
 
-[185]: #getchat-1
+[185]: #setstickeremoji
 
-[186]: #parameters-89
+[186]: #parameters-90
 
-[187]: #getchatadministrators
+[187]: #setstickerkeywords
 
-[188]: #parameters-90
+[188]: #parameters-91
 
-[189]: #getchatadministrators-1
+[189]: #setstickerkeywords-1
 
-[190]: #parameters-91
+[190]: #parameters-92
 
-[191]: #getchatmembercount
+[191]: #setstickermaskposition
 
-[192]: #parameters-92
+[192]: #parameters-93
 
-[193]: #getchatmembercount-1
+[193]: #setstickermaskposition-1
 
-[194]: #parameters-93
+[194]: #parameters-94
 
-[195]: #getchatmember
+[195]: #setstickersettitle
 
-[196]: #parameters-94
+[196]: #parameters-95
 
-[197]: #getchatmember-1
+[197]: #setstickersetthumbnail
 
-[198]: #parameters-95
+[198]: #parameters-96
 
-[199]: #setchatstickerset
+[199]: #setcustomemojistickersetthumbnail
 
-[200]: #parameters-96
+[200]: #parameters-97
 
-[201]: #setchatstickerset-1
+[201]: #deletestickerset
 
-[202]: #parameters-97
+[202]: #parameters-98
 
-[203]: #deletechatstickerset
+[203]: #answerinlinequery
 
-[204]: #parameters-98
+[204]: #parameters-99
 
-[205]: #deletechatstickerset-1
+[205]: #answerwebappquery
 
-[206]: #parameters-99
+[206]: #parameters-100
 
-[207]: #getforumtopiciconstickers
+[207]: #sendinvoice
 
-[208]: #getforumtopiciconstickers-1
+[208]: #parameters-101
 
-[209]: #createforumtopic
+[209]: #createinvoicelink
 
-[210]: #parameters-100
+[210]: #parameters-102
 
-[211]: #createforumtopic-1
+[211]: #answershippingquery
 
-[212]: #parameters-101
+[212]: #parameters-103
 
-[213]: #editforumtopic
+[213]: #answerprecheckoutquery
 
-[214]: #parameters-102
+[214]: #parameters-104
 
-[215]: #editforumtopic-1
+[215]: #setpassportdataerrors
 
-[216]: #parameters-103
+[216]: #parameters-105
 
-[217]: #closeforumtopic
+[217]: #sendgame
 
-[218]: #parameters-104
+[218]: #parameters-106
 
-[219]: #closeforumtopic-1
+[219]: #deletemessage
 
-[220]: #parameters-105
+[220]: #parameters-107
 
-[221]: #reopenforumtopic
+[221]: #createchat
 
-[222]: #parameters-106
+[222]: #parameters-108
 
-[223]: #reopenforumtopic-1
+[223]: #telegramapierror
 
-[224]: #parameters-107
+[224]: #parameters-109
 
-[225]: #deleteforumtopic
+[225]: #eventerror
 
-[226]: #parameters-108
+[226]: #parameters-110
 
-[227]: #deleteforumtopic-1
+[227]: #telegramtokenerror
 
-[228]: #parameters-109
+[228]: #parameters-111
 
-[229]: #unpinallforumtopicmessages
+[229]: #bitfielderror
 
-[230]: #parameters-110
+[230]: #parameters-112
 
-[231]: #unpinallforumtopicmessages-1
+[231]: #intentserror
 
-[232]: #parameters-111
+[232]: #parameters-113
 
-[233]: #editgeneralforumtopic
+[233]: #parametererror
 
-[234]: #parameters-112
+[234]: #parameters-114
 
-[235]: #editgeneralforumtopic-1
+[235]: #errortable
 
-[236]: #parameters-113
+[236]: #parameters-115
 
-[237]: #closegeneralforumtopic
+[237]: #errorextension
 
-[238]: #parameters-114
+[238]: #parameters-116
 
-[239]: #closegeneralforumtopic-1
+[239]: #get
 
-[240]: #parameters-115
+[240]: #parameters-117
 
-[241]: #reopengeneralforumtopic
+[241]: #set
 
-[242]: #parameters-116
+[242]: #parameters-118
 
-[243]: #reopengeneralforumtopic-1
+[243]: #simplestorage
 
-[244]: #parameters-117
+[244]: #parameters-119
 
-[245]: #hidegeneralforumtopic
+[245]: #get-1
 
-[246]: #parameters-118
+[246]: #parameters-120
 
-[247]: #hidegeneralforumtopic-1
+[247]: #set-1
 
-[248]: #parameters-119
+[248]: #parameters-121
 
-[249]: #unhidegeneralforumtopic
+[249]: #delete
 
-[250]: #parameters-120
+[250]: #parameters-122
 
-[251]: #unhidegeneralforumtopic-1
+[251]: #has
 
-[252]: #parameters-121
+[252]: #parameters-123
 
-[253]: #answercallbackquery
+[253]: #filter
 
-[254]: #parameters-122
+[254]: #parameters-124
 
-[255]: #answercallbackquery-1
+[255]: #all
 
-[256]: #parameters-123
+[256]: #parameters-125
 
-[257]: #setmycommands
+[257]: #sessiontypes
 
-[258]: #parameters-124
+[258]: #simplesession
 
-[259]: #setmycommands-1
+[259]: #autosession
 
-[260]: #parameters-125
+[260]: #timesession
 
-[261]: #deletemycommands
+[261]: #markup
 
 [262]: #parameters-126
 
-[263]: #deletemycommands-1
+[263]: #settype
 
 [264]: #parameters-127
 
-[265]: #getmycommands
+[265]: #setaction
 
 [266]: #parameters-128
 
-[267]: #getmycommands-1
+[267]: #settext
 
 [268]: #parameters-129
 
-[269]: #setmyname
+[269]: #setwebapp
 
 [270]: #parameters-130
 
-[271]: #setmyname-1
+[271]: #setforcereply
 
 [272]: #parameters-131
 
-[273]: #getmyname
+[273]: #tojson
 
-[274]: #parameters-132
+[274]: #tostring
 
-[275]: #getmyname-1
+[275]: #setremove
 
-[276]: #parameters-133
+[276]: #parameters-132
 
-[277]: #setmydescription
+[277]: #fromjson
 
-[278]: #parameters-134
+[278]: #parameters-133
 
-[279]: #setmydescription-1
+[279]: #inlinekeyboard
 
-[280]: #parameters-135
+[280]: #parameters-134
 
-[281]: #getmydescription
+[281]: #addmarkuparray
 
-[282]: #parameters-136
+[282]: #parameters-135
 
-[283]: #getmydescription-1
+[283]: #constructor-1
 
-[284]: #parameters-137
+[284]: #parameters-136
 
-[285]: #setmyshortdescription
+[285]: #tojson-1
 
-[286]: #parameters-138
+[286]: #setinline
 
-[287]: #setmyshortdescription-1
+[287]: #parameters-137
 
-[288]: #parameters-139
+[288]: #setresize
 
-[289]: #getmyshortdescription
+[289]: #parameters-138
 
-[290]: #parameters-140
+[290]: #setonetime
 
-[291]: #getmyshortdescription-1
+[291]: #parameters-139
 
-[292]: #parameters-141
+[292]: #setselective
 
-[293]: #setchatmenubutton
+[293]: #parameters-140
 
-[294]: #parameters-142
+[294]: #addkeyboard
 
-[295]: #setchatmenubutton-1
+[295]: #parameters-141
 
-[296]: #parameters-143
+[296]: #events
 
-[297]: #getchatmenubutton
+[297]: #properties
 
-[298]: #parameters-144
+[298]: #chatactiontype
 
-[299]: #getchatmenubutton-1
+[299]: #properties-1
 
-[300]: #parameters-145
+[300]: #entitytype
 
-[301]: #setmydefaultadministratorrights
+[301]: #properties-2
 
-[302]: #parameters-146
+[302]: #chatpermission
 
-[303]: #setmydefaultadministratorrights-1
+[303]: #properties-3
 
-[304]: #parameters-147
+[304]: #grouppermission
 
-[305]: #getmydefaultadministratorrights
+[305]: #properties-4
 
-[306]: #parameters-148
+[306]: #groupstatus
 
-[307]: #getmydefaultadministratorrights-1
+[307]: #administrator
 
-[308]: #parameters-149
+[308]: #left
 
-[309]: #editmessagetext
+[309]: #member
 
-[310]: #parameters-150
+[310]: #creator
 
-[311]: #editmessagetext-1
+[311]: #documenttypes
 
-[312]: #parameters-151
+[312]: #properties-5
 
-[313]: #editmessagecaption
+[313]: #intentbits
 
-[314]: #parameters-152
+[314]: #properties-6
 
-[315]: #editmessagecaption-1
+[315]: #telegramintentbits
 
-[316]: #parameters-153
+[316]: #properties-7
 
-[317]: #editmessagemedia
+[317]: #intentsbitfield
 
-[318]: #parameters-154
+[318]: #add
 
-[319]: #editmessagemedia-1
+[319]: #parameters-142
 
-[320]: #parameters-155
+[320]: #remove
 
-[321]: #editmessagelivelocation
+[321]: #parameters-143
 
-[322]: #parameters-156
+[322]: #serialize
 
-[323]: #editmessagelivelocation-1
+[323]: #toarray
 
-[324]: #parameters-157
+[324]: #has-1
 
-[325]: #stopmessagelivelocation
+[325]: #parameters-144
 
-[326]: #parameters-158
+[326]: #decodeintents
 
-[327]: #stopmessagelivelocation-1
+[327]: #parameters-145
 
-[328]: #parameters-159
+[328]: #messagecollector
 
-[329]: #editmessagereplymarkup
+[329]: #parameters-146
 
-[330]: #parameters-160
+[330]: #handlemessage
 
-[331]: #editmessagereplymarkup-1
+[331]: #parameters-147
 
-[332]: #parameters-161
+[332]: #collected
 
-[333]: #stoppoll
+[333]: #stop
 
-[334]: #parameters-162
+[334]: #request
 
-[335]: #stoppoll-1
+[335]: #parameters-148
 
-[336]: #parameters-163
+[336]: #getupdates
 
-[337]: #sendsticker
+[337]: #request-1
 
-[338]: #parameters-164
+[338]: #parameters-149
 
-[339]: #sendsticker-1
+[339]: #uptime
 
-[340]: #parameters-165
+[340]: #ping
 
-[341]: #getstickerset
+[341]: #updateid
 
-[342]: #parameters-166
+[342]: #lastobject
 
-[343]: #getstickerset-1
+[343]: #telegrambot
 
-[344]: #parameters-167
+[344]: #parameters-150
 
-[345]: #getcustomemojistickers
+[345]: #token
 
-[346]: #parameters-168
+[346]: #baseurl
 
-[347]: #getcustomemojistickers-1
+[347]: #login
 
-[348]: #parameters-169
+[348]: #parameters-151
 
-[349]: #uploadstickerfile
+[349]: #login-1
 
-[350]: #parameters-170
+[350]: #login-2
 
-[351]: #uploadstickerfile-1
+[351]: #parameters-152
 
-[352]: #parameters-171
+[352]: #login-3
 
-[353]: #createnewstickerset
+[353]: #login-4
 
-[354]: #parameters-172
+[354]: #parameters-153
 
-[355]: #createnewstickerset-1
+[355]: #login-5
 
-[356]: #parameters-173
+[356]: #login-6
 
-[357]: #addstickertoset
+[357]: #checkmessagelinks
 
-[358]: #parameters-174
+[358]: #parameters-154
 
-[359]: #addstickertoset-1
+[359]: #extractusermentions
 
-[360]: #parameters-175
+[360]: #parameters-155
 
-[361]: #setstickerpositioninset
+[361]: #extracthashtags
 
-[362]: #parameters-176
+[362]: #parameters-156
 
-[363]: #setstickerpositioninset-1
+[363]: #checklocation
 
-[364]: #parameters-177
+[364]: #parameters-157
 
-[365]: #deletestickerfromset
+[365]: #checkusermentions
 
-[366]: #parameters-178
+[366]: #parameters-158
 
-[367]: #deletestickerfromset-1
+[367]: #checkhashtags
 
-[368]: #parameters-179
+[368]: #parameters-159
 
-[369]: #setstickeremoji
+[369]: #checkphonenumber
 
-[370]: #parameters-180
+[370]: #parameters-160
 
-[371]: #setstickeremoji-1
+[371]: #extractuseridfromlink
 
-[372]: #parameters-181
+[372]: #parameters-161
 
-[373]: #setstickerkeywords
+[373]: #checkgrouporchannel
 
-[374]: #parameters-182
+[374]: #parameters-162
 
-[375]: #setstickerkeywords-1
+[375]: #checkemoji
 
-[376]: #parameters-183
+[376]: #parameters-163
 
-[377]: #setstickerkeywords-2
+[377]: #checksticker
 
-[378]: #parameters-184
+[378]: #parameters-164
 
-[379]: #setstickerkeywords-3
+[379]: #extractusernamefromlink
 
-[380]: #parameters-185
+[380]: #parameters-165
 
-[381]: #setstickermaskposition
+[381]: #checkbot
 
-[382]: #parameters-186
+[382]: #parameters-166
 
-[383]: #setstickermaskposition-1
+[383]: #checkchannel
 
-[384]: #parameters-187
+[384]: #parameters-167
 
-[385]: #setstickermaskposition-2
+[385]: #checklink
 
-[386]: #parameters-188
+[386]: #parameters-168
 
-[387]: #setstickermaskposition-3
+[387]: #checkgroup
 
-[388]: #parameters-189
+[388]: #parameters-169
 
-[389]: #setstickersettitle
+[389]: #checkusername
 
-[390]: #parameters-190
+[390]: #parameters-170
 
-[391]: #setstickersettitle-1
+[391]: #extractusername
 
-[392]: #parameters-191
+[392]: #parameters-171
 
-[393]: #setstickersetthumbnail
+[393]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[394]: #parameters-192
+[394]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[395]: #setstickersetthumbnail-1
+[395]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[396]: #parameters-193
+[396]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[397]: #setcustomemojistickersetthumbnail
+[397]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[398]: #parameters-194
+[398]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[399]: #setcustomemojistickersetthumbnail-1
+[399]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
 
-[400]: #parameters-195
+[400]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
 
-[401]: #deletestickerset
+[401]: https://core.telegram.org/bots/api#message
 
-[402]: #parameters-196
-
-[403]: #deletestickerset-1
-
-[404]: #parameters-197
-
-[405]: #answerinlinequery
-
-[406]: #parameters-198
-
-[407]: #answerinlinequery-1
-
-[408]: #parameters-199
-
-[409]: #answerwebappquery
-
-[410]: #parameters-200
-
-[411]: #answerwebappquery-1
-
-[412]: #parameters-201
-
-[413]: #sendinvoice
-
-[414]: #parameters-202
-
-[415]: #sendinvoice-1
-
-[416]: #parameters-203
-
-[417]: #createinvoicelink
-
-[418]: #parameters-204
-
-[419]: #createinvoicelink-1
-
-[420]: #parameters-205
-
-[421]: #answershippingquery
-
-[422]: #parameters-206
-
-[423]: #answershippingquery-1
-
-[424]: #parameters-207
-
-[425]: #answerprecheckoutquery
-
-[426]: #parameters-208
-
-[427]: #answerprecheckoutquery-1
-
-[428]: #parameters-209
-
-[429]: #setpassportdataerrors
-
-[430]: #parameters-210
-
-[431]: #setpassportdataerrors-1
-
-[432]: #parameters-211
-
-[433]: #sendgame
-
-[434]: #parameters-212
-
-[435]: #sendgame-1
-
-[436]: #parameters-213
-
-[437]: #deletemessage
-
-[438]: #parameters-214
-
-[439]: #deletemessage-1
-
-[440]: #parameters-215
-
-[441]: #createchat
-
-[442]: #parameters-216
-
-[443]: #createchat-1
-
-[444]: #parameters-217
-
-[445]: #chatactiontype
-
-[446]: #properties
-
-[447]: #typing
-
-[448]: #uploadphoto
-
-[449]: #recordvideo
-
-[450]: #uploadvideo
-
-[451]: #recordvoice
-
-[452]: #uploadvoice
-
-[453]: #uploaddocument
-
-[454]: #choosesticker
-
-[455]: #findlocation
-
-[456]: #recordvideonote
-
-[457]: #uploadvideonote
-
-[458]: #chatactiontype-1
-
-[459]: #properties-1
-
-[460]: #typing-1
-
-[461]: #uploadphoto-1
-
-[462]: #recordvideo-1
-
-[463]: #uploadvideo-1
-
-[464]: #recordvoice-1
-
-[465]: #uploadvoice-1
-
-[466]: #uploaddocument-1
-
-[467]: #choosesticker-1
-
-[468]: #findlocation-1
-
-[469]: #recordvideonote-1
-
-[470]: #uploadvideonote-1
-
-[471]: #chatpermission
-
-[472]: #properties-2
-
-[473]: #cansendothermessages
-
-[474]: #canaddwebpagepreviews
-
-[475]: #cansendmessages
-
-[476]: #cansendaudios
-
-[477]: #cansenddocuments
-
-[478]: #cansendphotos
-
-[479]: #cansendvideos
-
-[480]: #cansendvideonotes
-
-[481]: #cansendvoicenotes
-
-[482]: #cansendpolls
-
-[483]: #chatpermission-1
-
-[484]: #properties-3
-
-[485]: #cansendothermessages-1
-
-[486]: #canaddwebpagepreviews-1
-
-[487]: #cansendmessages-1
-
-[488]: #cansendaudios-1
-
-[489]: #cansenddocuments-1
-
-[490]: #cansendphotos-1
-
-[491]: #cansendvideos-1
-
-[492]: #cansendvideonotes-1
-
-[493]: #cansendvoicenotes-1
-
-[494]: #cansendpolls-1
-
-[495]: #documenttypes
-
-[496]: #documenttypes-1
-
-[497]: #properties-4
-
-[498]: #entitytype
-
-[499]: #entitytype-1
-
-[500]: #properties-5
-
-[501]: #events
-
-[502]: #properties-6
-
-[503]: #message
-
-[504]: #editedmessage
-
-[505]: #channelpost
-
-[506]: #editedchannelpost
-
-[507]: #inlinequery
-
-[508]: #choseninlineresult
-
-[509]: #callbackquery
-
-[510]: #shippingquery
-
-[511]: #precheckoutquery
-
-[512]: #poll
-
-[513]: #pollanswer
-
-[514]: #chatmember
-
-[515]: #mychatmember
-
-[516]: #chatjoinrequest
-
-[517]: #replymessage
-
-[518]: #events-1
-
-[519]: #properties-7
-
-[520]: #message-1
-
-[521]: #editedmessage-1
-
-[522]: #channelpost-1
-
-[523]: #editedchannelpost-1
-
-[524]: #inlinequery-1
-
-[525]: #choseninlineresult-1
-
-[526]: #callbackquery-1
-
-[527]: #shippingquery-1
-
-[528]: #precheckoutquery-1
-
-[529]: #poll-1
-
-[530]: #pollanswer-1
-
-[531]: #chatmember-1
-
-[532]: #mychatmember-1
-
-[533]: #chatjoinrequest-1
-
-[534]: #replymessage-1
-
-[535]: #grouppermission
-
-[536]: #properties-8
-
-[537]: #canmanagechat
-
-[538]: #canchangeinfo
-
-[539]: #candeletemessages
-
-[540]: #caninviteusers
-
-[541]: #canrestrictmembers
-
-[542]: #canpinmessages
-
-[543]: #canmanagetopics
-
-[544]: #canpromotemembers
-
-[545]: #canmanagevideochats
-
-[546]: #canmanagevoicechats
-
-[547]: #grouppermission-1
-
-[548]: #properties-9
-
-[549]: #canmanagechat-1
-
-[550]: #canchangeinfo-1
-
-[551]: #candeletemessages-1
-
-[552]: #caninviteusers-1
-
-[553]: #canrestrictmembers-1
-
-[554]: #canpinmessages-1
-
-[555]: #canmanagetopics-1
-
-[556]: #canpromotemembers-1
-
-[557]: #canmanagevideochats-1
-
-[558]: #canmanagevoicechats-1
-
-[559]: #groupstatus
-
-[560]: #administrator
-
-[561]: #left
-
-[562]: #member
-
-[563]: #creator
-
-[564]: #groupstatus-1
-
-[565]: #administrator-1
-
-[566]: #left-1
-
-[567]: #member-1
-
-[568]: #creator-1
-
-[569]: #intentbits
-
-[570]: #properties-10
-
-[571]: #message-2
-
-[572]: #editedmessage-2
-
-[573]: #channelpost-2
-
-[574]: #editedchannelpost-2
-
-[575]: #inlinequery-2
-
-[576]: #choseninlineresult-2
-
-[577]: #callbackquery-2
-
-[578]: #shippingquery-2
-
-[579]: #precheckoutquery-2
-
-[580]: #poll-2
-
-[581]: #pollanswer-2
-
-[582]: #mychatmember-2
-
-[583]: #chatmember-2
-
-[584]: #chatjoinrequest-2
-
-[585]: #telegramintentbits
-
-[586]: #properties-11
-
-[587]: #message-3
-
-[588]: #editedmessage-3
-
-[589]: #channelpost-3
-
-[590]: #editedchannelpost-3
-
-[591]: #inlinequery-3
-
-[592]: #choseninlineresult-3
-
-[593]: #callbackquery-3
-
-[594]: #shippingquery-3
-
-[595]: #precheckoutquery-3
-
-[596]: #poll-3
-
-[597]: #pollanswer-3
-
-[598]: #mychatmember-3
-
-[599]: #chatmember-3
-
-[600]: #chatjoinrequest-3
-
-[601]: #telegramapierror
-
-[602]: #constructor-2
-
-[603]: #parameters-218
-
-[604]: #telegramapierror-1
-
-[605]: #parameters-219
-
-[606]: #constructor-3
-
-[607]: #parameters-220
-
-[608]: #eventerror
-
-[609]: #constructor-4
-
-[610]: #parameters-221
-
-[611]: #eventerror-1
-
-[612]: #parameters-222
-
-[613]: #constructor-5
-
-[614]: #parameters-223
-
-[615]: #telegramtokenerror
-
-[616]: #constructor-6
-
-[617]: #parameters-224
-
-[618]: #telegramtokenerror-1
-
-[619]: #parameters-225
-
-[620]: #constructor-7
-
-[621]: #parameters-226
-
-[622]: #intentserror
-
-[623]: #constructor-8
-
-[624]: #parameters-227
-
-[625]: #intentserror-1
-
-[626]: #parameters-228
-
-[627]: #constructor-9
-
-[628]: #parameters-229
-
-[629]: #bitfielderror
-
-[630]: #constructor-10
-
-[631]: #parameters-230
-
-[632]: #bitfielderror-1
-
-[633]: #parameters-231
-
-[634]: #constructor-11
-
-[635]: #parameters-232
-
-[636]: #parametererror
-
-[637]: #constructor-12
-
-[638]: #parameters-233
-
-[639]: #parametererror-1
-
-[640]: #parameters-234
-
-[641]: #constructor-13
-
-[642]: #parameters-235
-
-[643]: #errortable
-
-[644]: #constructor-14
-
-[645]: #parameters-236
-
-[646]: #errortable-1
-
-[647]: #parameters-237
-
-[648]: #constructor-15
-
-[649]: #parameters-238
-
-[650]: #errorextension
-
-[651]: #constructor-16
-
-[652]: #parameters-239
-
-[653]: #errorextension-1
-
-[654]: #parameters-240
-
-[655]: #constructor-17
-
-[656]: #parameters-241
-
-[657]: #intentsbitfield
-
-[658]: #add
-
-[659]: #parameters-242
-
-[660]: #add-1
-
-[661]: #parameters-243
-
-[662]: #remove
-
-[663]: #parameters-244
-
-[664]: #remove-1
-
-[665]: #parameters-245
-
-[666]: #serialize
-
-[667]: #serialize-1
-
-[668]: #intentsbitfield-1
-
-[669]: #add-2
-
-[670]: #parameters-246
-
-[671]: #add-3
-
-[672]: #parameters-247
-
-[673]: #remove-2
-
-[674]: #parameters-248
-
-[675]: #remove-3
-
-[676]: #parameters-249
-
-[677]: #serialize-2
-
-[678]: #serialize-3
-
-[679]: #toarray
-
-[680]: #toarray-1
-
-[681]: #has
-
-[682]: #parameters-250
-
-[683]: #has-1
-
-[684]: #parameters-251
-
-[685]: #decodeintents
-
-[686]: #parameters-252
-
-[687]: #decodeintents-1
-
-[688]: #parameters-253
-
-[689]: #messagecollector
-
-[690]: #constructor-18
-
-[691]: #parameters-254
-
-[692]: #handlemessage
-
-[693]: #parameters-255
-
-[694]: #handlemessage-1
-
-[695]: #parameters-256
-
-[696]: #collected
-
-[697]: #collected-1
-
-[698]: #stop
-
-[699]: #stop-1
-
-[700]: #messagecollector-1
-
-[701]: #parameters-257
-
-[702]: #constructor-19
-
-[703]: #parameters-258
-
-[704]: #handlemessage-2
-
-[705]: #parameters-259
-
-[706]: #handlemessage-3
-
-[707]: #parameters-260
-
-[708]: #collected-2
-
-[709]: #collected-3
-
-[710]: #stop-2
-
-[711]: #stop-3
-
-[712]: #constructor-20
-
-[713]: #parameters-261
-
-[714]: #constructor-21
-
-[715]: #parameters-262
-
-[716]: #tojson
-
-[717]: #tojson-1
-
-[718]: #setinline
-
-[719]: #parameters-263
-
-[720]: #setinline-1
-
-[721]: #parameters-264
-
-[722]: #setresize
-
-[723]: #parameters-265
-
-[724]: #setresize-1
-
-[725]: #parameters-266
-
-[726]: #setonetime
-
-[727]: #parameters-267
-
-[728]: #setonetime-1
-
-[729]: #parameters-268
-
-[730]: #setselective
-
-[731]: #parameters-269
-
-[732]: #setselective-1
-
-[733]: #parameters-270
-
-[734]: #addkeyboard
-
-[735]: #parameters-271
-
-[736]: #addkeyboard-1
-
-[737]: #parameters-272
-
-[738]: #markup
-
-[739]: #constructor-22
-
-[740]: #parameters-273
-
-[741]: #settype
-
-[742]: #parameters-274
-
-[743]: #settype-1
-
-[744]: #parameters-275
-
-[745]: #setaction
-
-[746]: #parameters-276
-
-[747]: #setaction-1
-
-[748]: #parameters-277
-
-[749]: #settext
-
-[750]: #parameters-278
-
-[751]: #settext-1
-
-[752]: #parameters-279
-
-[753]: #setwebapp
-
-[754]: #parameters-280
-
-[755]: #setwebapp-1
-
-[756]: #parameters-281
-
-[757]: #setforcereply
-
-[758]: #parameters-282
-
-[759]: #setforcereply-1
-
-[760]: #parameters-283
-
-[761]: #tojson-2
-
-[762]: #tojson-3
-
-[763]: #tostring
-
-[764]: #tostring-1
-
-[765]: #setremove
-
-[766]: #parameters-284
-
-[767]: #setremove-1
-
-[768]: #parameters-285
-
-[769]: #fromjson
-
-[770]: #parameters-286
-
-[771]: #fromjson-1
-
-[772]: #parameters-287
-
-[773]: #inlinekeyboard
-
-[774]: #parameters-288
-
-[775]: #inlinekeyboard-1
-
-[776]: #parameters-289
-
-[777]: #addmarkuparray
-
-[778]: #parameters-290
-
-[779]: #addmarkuparray-1
-
-[780]: #parameters-291
-
-[781]: #markup-1
-
-[782]: #parameters-292
-
-[783]: #constructor-23
-
-[784]: #parameters-293
-
-[785]: #settype-2
-
-[786]: #parameters-294
-
-[787]: #settype-3
-
-[788]: #parameters-295
-
-[789]: #setaction-2
-
-[790]: #parameters-296
-
-[791]: #setaction-3
-
-[792]: #parameters-297
-
-[793]: #settext-2
-
-[794]: #parameters-298
-
-[795]: #settext-3
-
-[796]: #parameters-299
-
-[797]: #setwebapp-2
-
-[798]: #parameters-300
-
-[799]: #setwebapp-3
-
-[800]: #parameters-301
-
-[801]: #setforcereply-2
-
-[802]: #parameters-302
-
-[803]: #setforcereply-3
-
-[804]: #parameters-303
-
-[805]: #tojson-4
-
-[806]: #tojson-5
-
-[807]: #tostring-2
-
-[808]: #tostring-3
-
-[809]: #setremove-2
-
-[810]: #parameters-304
-
-[811]: #setremove-3
-
-[812]: #parameters-305
-
-[813]: #fromjson-2
-
-[814]: #parameters-306
-
-[815]: #fromjson-3
-
-[816]: #parameters-307
-
-[817]: #inlinekeyboard-2
-
-[818]: #parameters-308
-
-[819]: #inlinekeyboard-3
-
-[820]: #parameters-309
-
-[821]: #addmarkuparray-2
-
-[822]: #parameters-310
-
-[823]: #addmarkuparray-3
-
-[824]: #parameters-311
-
-[825]: #request
-
-[826]: #parameters-312
-
-[827]: #constructor-24
-
-[828]: #parameters-313
-
-[829]: #getupdates
-
-[830]: #getupdates-1
-
-[831]: #request-1
-
-[832]: #parameters-314
-
-[833]: #request-2
-
-[834]: #parameters-315
-
-[835]: #uptime
-
-[836]: #ping
-
-[837]: #updateid
-
-[838]: #lastobject
-
-[839]: #sessiontypes
-
-[840]: #simplesession
-
-[841]: #autosession
-
-[842]: #timesession
-
-[843]: #simplestorage
-
-[844]: #constructor-25
-
-[845]: #parameters-316
-
-[846]: #get
-
-[847]: #parameters-317
-
-[848]: #get-1
-
-[849]: #parameters-318
-
-[850]: #set
-
-[851]: #parameters-319
-
-[852]: #set-1
-
-[853]: #parameters-320
-
-[854]: #delete
-
-[855]: #parameters-321
-
-[856]: #delete-1
-
-[857]: #parameters-322
-
-[858]: #has-2
-
-[859]: #parameters-323
-
-[860]: #has-3
-
-[861]: #parameters-324
-
-[862]: #filter
-
-[863]: #parameters-325
-
-[864]: #filter-1
-
-[865]: #parameters-326
-
-[866]: #all
-
-[867]: #parameters-327
-
-[868]: #all-1
-
-[869]: #parameters-328
-
-[870]: #simplestorage-1
-
-[871]: #parameters-329
-
-[872]: #constructor-26
-
-[873]: #parameters-330
-
-[874]: #get-2
-
-[875]: #parameters-331
-
-[876]: #get-3
-
-[877]: #parameters-332
-
-[878]: #set-2
-
-[879]: #parameters-333
-
-[880]: #set-3
-
-[881]: #parameters-334
-
-[882]: #delete-2
-
-[883]: #parameters-335
-
-[884]: #delete-3
-
-[885]: #parameters-336
-
-[886]: #has-4
-
-[887]: #parameters-337
-
-[888]: #has-5
-
-[889]: #parameters-338
-
-[890]: #filter-2
-
-[891]: #parameters-339
-
-[892]: #filter-3
-
-[893]: #parameters-340
-
-[894]: #all-2
-
-[895]: #parameters-341
-
-[896]: #all-3
-
-[897]: #parameters-342
-
-[898]: #get-4
-
-[899]: #parameters-343
-
-[900]: #set-4
-
-[901]: #parameters-344
-
-[902]: #telegrambot
-
-[903]: #constructor-27
-
-[904]: #parameters-345
-
-[905]: #on
-
-[906]: #parameters-346
-
-[907]: #off
-
-[908]: #parameters-347
-
-[909]: #once
-
-[910]: #parameters-348
-
-[911]: #login
-
-[912]: #login-1
-
-[913]: #parameters-349
-
-[914]: #login-2
-
-[915]: #login-3
-
-[916]: #parameters-350
-
-[917]: #login-4
-
-[918]: #login-5
-
-[919]: #parameters-351
-
-[920]: #login-6
-
-[921]: #login-7
-
-[922]: #token
-
-[923]: #baseurl
-
-[924]: #telegrambot-1
-
-[925]: #parameters-352
-
-[926]: #constructor-28
-
-[927]: #parameters-353
-
-[928]: #on-1
-
-[929]: #parameters-354
-
-[930]: #off-1
-
-[931]: #parameters-355
-
-[932]: #once-1
-
-[933]: #parameters-356
-
-[934]: #login-8
-
-[935]: #login-9
-
-[936]: #parameters-357
-
-[937]: #login-10
-
-[938]: #login-11
-
-[939]: #parameters-358
-
-[940]: #login-12
-
-[941]: #login-13
-
-[942]: #parameters-359
-
-[943]: #login-14
-
-[944]: #login-15
-
-[945]: #token-1
-
-[946]: #baseurl-1
-
-[947]: #checkmessagelinks
-
-[948]: #parameters-360
-
-[949]: #checkmessagelinks-1
-
-[950]: #parameters-361
-
-[951]: #extractusermentions
-
-[952]: #parameters-362
-
-[953]: #extractusermentions-1
-
-[954]: #parameters-363
-
-[955]: #extracthashtags
-
-[956]: #parameters-364
-
-[957]: #extracthashtags-1
-
-[958]: #parameters-365
-
-[959]: #checklocation
-
-[960]: #parameters-366
-
-[961]: #checklocation-1
-
-[962]: #parameters-367
-
-[963]: #checkusermentions
-
-[964]: #parameters-368
-
-[965]: #checkusermentions-1
-
-[966]: #parameters-369
-
-[967]: #checkhashtags
-
-[968]: #parameters-370
-
-[969]: #checkhashtags-1
-
-[970]: #parameters-371
-
-[971]: #checkphonenumber
-
-[972]: #parameters-372
-
-[973]: #checkphonenumber-1
-
-[974]: #parameters-373
-
-[975]: #extractuseridfromlink
-
-[976]: #parameters-374
-
-[977]: #extractuseridfromlink-1
-
-[978]: #parameters-375
-
-[979]: #checkgrouporchannel
-
-[980]: #parameters-376
-
-[981]: #checkgrouporchannel-1
-
-[982]: #parameters-377
-
-[983]: #checkemoji
-
-[984]: #parameters-378
-
-[985]: #checkemoji-1
-
-[986]: #parameters-379
-
-[987]: #checksticker
-
-[988]: #parameters-380
-
-[989]: #checksticker-1
-
-[990]: #parameters-381
-
-[991]: #extractusernamefromlink
-
-[992]: #parameters-382
-
-[993]: #extractusernamefromlink-1
-
-[994]: #parameters-383
-
-[995]: #checkbot
-
-[996]: #parameters-384
-
-[997]: #checkbot-1
-
-[998]: #parameters-385
-
-[999]: #checkchannel
-
-[1000]: #parameters-386
-
-[1001]: #checkchannel-1
-
-[1002]: #parameters-387
-
-[1003]: #checklink
-
-[1004]: #parameters-388
-
-[1005]: #checklink-1
-
-[1006]: #parameters-389
-
-[1007]: #checkgroup
-
-[1008]: #parameters-390
-
-[1009]: #checkgroup-1
-
-[1010]: #parameters-391
-
-[1011]: #checkusername
-
-[1012]: #parameters-392
-
-[1013]: #checkusername-1
-
-[1014]: #parameters-393
-
-[1015]: #extractusername
-
-[1016]: #parameters-394
-
-[1017]: #extractusername-1
-
-[1018]: #parameters-395
-
-[1019]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-
-[1020]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[1021]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-
-[1022]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-
-[1023]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-
-[1024]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
-
-[1025]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
-
-[1026]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
-
-[1027]: https://core.telegram.org/bots/api#message
-
-[1028]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[402]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
