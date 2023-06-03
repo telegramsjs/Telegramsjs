@@ -4,7 +4,6 @@ const querystring = require('querystring');
 const BaseClient = require("./BaseClient.js");
 const { EventError, ParameterError } = require("./errorcollection.js");
 const MessageCollector = require("./MessageCollector");
-const MarkupCollector = require("./MarkupCollector");
 /**
  * A class representing a Telegram Bot client.
  * @extends BaseClient
