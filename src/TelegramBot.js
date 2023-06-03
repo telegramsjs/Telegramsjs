@@ -3,7 +3,8 @@ const path = require('path');
 const querystring = require('querystring');
 const BaseClient = require("./BaseClient.js");
 const { EventError, ParameterError } = require("./errorcollection.js");
-const ms = require('ms');
+const MessageCollector = require("./MessageCollector");
+const MarkupCollector = require("./MarkupCollector");
 /**
  * A class representing a Telegram Bot client.
  * @extends BaseClient
@@ -38,6 +39,7 @@ class TelegramBot extends BaseClient {
      * @type {string}
      */
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
+    this.countCollector = 0;
   }
   
   /**
@@ -98,13 +100,10 @@ class TelegramBot extends BaseClient {
   while (true) {
     const getUpdates = await this.getUpdates();
     for (const updates of getUpdates) {
-      console.log(this.lastTimeMap);
       let responseLastTime = this.lastTimeMap?.get('lastTime');
-      console.log(responseLastTime);
       if (responseLastTime === 'auto')
         responseLastTime = true
         
-      console.log(responseLastTime);
       if (responseLastTime) {
         const leave = (chat_id) => {
           let chatId;
@@ -151,7 +150,7 @@ class TelegramBot extends BaseClient {
             notification: options.notification ?? defaults.replyMarkup,
             content: options.content ?? defaults.replyMarkup,
             threadId: options.threadId ?? defaults.replyMarkup,
-            parseMode: options.parseMode ?? defaults.replyMarkup
+            parseMode: options.parseMode ?? defaults.replyMode
           });
         };
         
@@ -312,7 +311,29 @@ class TelegramBot extends BaseClient {
         const isContact = () => checkEntities('contact');
         const isPoll = () => checkEntities('poll');
         const isLocation = () => checkEntities('location');
-
+        const createMessageCollector = (options) => {
+          let {
+            chatId,
+            filter,
+            time,
+            max
+          } = options;
+          chatId = chatId ? chatId : updates.message.chat.id;
+          filter = filter ? filter : () => true;
+          time = time ? time : 60000;
+          const response = new MessageCollector({
+            chatId,
+            filter,
+            time,
+            max, 
+          });
+          
+          this.on('message', (msg) => {
+            response.handleMessage(msg);
+          });
+          
+          return response;
+        };
         
         const deferUpdate = async (id) => {
           const queryId = updates?.callback_query?.id
@@ -384,6 +405,7 @@ class TelegramBot extends BaseClient {
                 remove,
                 update,
                 reply,
+                createMessageCollector,
                 isCommand,
                 isLocation,
                 isPoll,

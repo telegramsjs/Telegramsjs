@@ -1,13 +1,14 @@
 exports.TelegramBot = require("./TelegramBot");
 exports.BaseClient = require("./BaseClient");
 exports.SimpleStorage = require("./session/SimpleStorage");
-exports.CashSession = require("./session/CashSession.js");
+exports.CashSession = require("./session/CashSession");
 exports.SessionTypes = require("./session/SessionTypes");
-console.log(exports);
 exports.Request = require("./request");
 exports.Collection = require('@telegram.ts/collection');
+exports.Search = require('@telegram.ts/documentation');
 exports.Markup = require("./replyMarkup/Markup");
 exports.Keyboard = require("./replyMarkup/Keyboard");
+exports.MessageCollector = require("./MessageCollector");
 
 exports.Events = require("./constanta/Events");
 exports.ChatActionType = require("./constanta/ChatActionType");

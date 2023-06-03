@@ -1,9 +1,14 @@
 export const TelegramBot: typeof import("./TelegramBot");
 export const BaseClient: typeof import("./BaseClient");
+export const SimpleStorage: typeof import("./session/SimpleStorage");
+export const CashSession: typeof import("./session/CashSession");
+export const SessionTypes: typeof import("./session/SessionTypes");
 export const Request: typeof import("./request");
 export const Collection: typeof import("@telegram.ts/collection");
+export const Search: typeof import("@telegram.ts/documentation");
 export const Markup: typeof import("./replyMarkup/Markup");
 export const Keyboard: typeof import("./replyMarkup/Keyboard");
+export const MessageCollector: typeof import("./MessageCollector");
 export const Events: any;
 export const ChatActionType: any;
 export const EntityType: typeof import("./constanta/EntityType");

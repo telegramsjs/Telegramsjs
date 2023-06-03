@@ -1,4 +1,3 @@
-const ms = require('ms');
 const https = require('https');
 const querystring = require('querystring');
 const { TelegramApiError, TelegramTokenError, IntentsError } = require("./errorcollection.js");

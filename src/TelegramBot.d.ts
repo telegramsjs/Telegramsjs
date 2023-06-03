@@ -8,24 +8,20 @@ declare class TelegramBot extends BaseClient {
      * Creates a new TelegramBot client.
      * @param {string} token - The Telegram Bot API token.
      * @param {Object} [options] - The client options.
-     * @param {Object} [options.intents] - The client intents.
+     * @param {string | array | number} [options.intents] - The client intents.
      * @param {string} [options.parseMode] - The parse mode for message formatting.
      * @param {string | number} [options.chatId] - The default chat ID for sending messages.
      * @param {string} [options.queryString] - The default query string for API requests.
      * @param {string | object} [options.offSetType] - The type of offset to use for updates.
      */
     constructor(token: string, options?: {
-        intents?: any;
+        intents?: string | any[] | number;
         parseMode?: string;
         chatId?: string | number;
         queryString?: string;
         offSetType?: string | object;
     });
-    /**
-     * The Telegram Bot API token.
-     * @type {string}
-     */
-    token: string;
+    countCollector: number;
     /**
      * Registers a listener for the specified event.
      * @param {string} eventName - The name of the event.
