@@ -4,8 +4,9 @@ exports.SimpleStorage = require("./session/SimpleStorage");
 exports.CashSession = require("./session/CashSession");
 exports.SessionTypes = require("./session/SessionTypes");
 exports.Request = require("./request");
-exports.Collection.Collection = require('@telegram.ts/collection');
-exports.Search = require('@telegram.ts/documentation');
+
+exports.Collection = require('@telegram.ts/collection').Collection;
+exports.Search = require('@telegram.ts/documentation').Search;
 exports.Markup = require("./replyMarkup/Markup");
 exports.Keyboard = require("./replyMarkup/Keyboard");
 exports.MessageCollector = require("./MessageCollector");
