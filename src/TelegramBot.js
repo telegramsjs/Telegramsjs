@@ -275,41 +275,152 @@ class TelegramBot extends BaseClient {
             });
         }
 
-        
-        const checkEntities = (...entityTypes) => {
-          const allEntities = entityTypes.flatMap((entityType) => [
-            updates.message?.[entityType],
-            updates.edited_message?.[entityType],
-            updates.channel_post?.[entityType],
-            updates.channel_post?.pinned_message?.[entityType],
-            updates.pinned_message?.[entityType],
-            updates.edited_channel_post?.[entityType]
-            ]);
-            
-            return allEntities.some((entities) => entities && entities.length > 0);
-        };
-        
         const isCommand = (checkAllEntities = false) => {
-          if (checkAllEntities) {
-            return checkEntities('entities', 'caption_entities', 'text_entities').some((entities) =>
-            entities.some((entity) => entity.type === 'bot_command')
-            );
-          } else {
-            return checkEntities('entities', 'caption_entities', 'text_entities').some(
-              (entities) => entities && entities[0] && entities[0].type === 'bot_command'
-              );
-          }
+          let commandFound = false;
+          const allEntities = [
+            updates.message?.entities, updates.edited_message?.entities, updates.pinned_message?.entities, updates.channel_post?.entities, updates.channel_post?.pinned_message?.entities, updates.pinned_message?.entities, updates.message?.caption_entities, updates.pinned_message?.caption_entities, updates.channel_post?.pinned_message?.caption_entities, updates.edited_channel_post?.caption_entities].filter(Boolean);
+            
+            if (checkAllEntities) {
+              for (const entities of allEntities) {
+                for (const entity of entities) {
+                  if (entity.type === 'bot_command') {
+                    commandFound = true;
+                    break;
+                  }
+                }
+                if (commandFound) {
+                  break;
+                }
+              }
+            } else {
+              const firstEntities = allEntities[0];
+              if (firstEntities) {
+                const firstEntity = firstEntities[0];
+                if (firstEntity) {
+                  commandFound = firstEntity.type === 'bot_command';
+                }
+              }
+            }
+            return commandFound;
         };
         
-        const isPhoto = () => checkEntities('photo');
-        const isDocument = () => checkEntities('document');
-        const isAudio = () => checkEntities('audio');
-        const isVideoNote = () => checkEntities('video_note');
-        const isVoice = () => checkEntities('voice');
-        const isSticker = () => checkEntities('sticker');
-        const isContact = () => checkEntities('contact');
-        const isPoll = () => checkEntities('poll');
-        const isLocation = () => checkEntities('location');
+        const isPhoto = () => {
+          let photoFound = false;
+          const allEntities = [updates.message?.photo, updates.edited_message?.photo, updates.channel_post?.photo, updates.pinned_message?.photo, updates.channel_post?.pinned_message?.photo, updates.edited_channel_post?.photo].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              photoFound = true;
+              break;
+            }
+          }
+          return photoFound;
+        };
+        
+        const isDocument = () => {
+          let documentFound = false;
+          const allEntities = [updates.message?.document, updates.edited_message?.document, updates.channel_post?.document, updates.pinned_message?.document, updates.channel_post?.pinned_message?.document, updates.edited_channel_post?.document].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              documentFound = true;
+              break;
+            }
+          }
+          return documentFound;
+        };
+        
+        const isAudio = () => {
+          let audioFound = false;
+          const allEntities = [updates.message?.audio, updates.edited_message?.audio, updates.channel_post?.audio, updates.pinned_message?.audio, updates.channel_post?.pinned_message?.audio, updates.edited_channel_post?.audio].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              audioFound = true;
+              break;
+            }
+          }
+          return audioFound;
+        };
+        
+        const isVideoNote = () => {
+          let videoNoteFound = false;
+          const allEntities = [updates.message?.video_note, updates.edited_message?.video_note, updates.channel_post?.video_note, updates.pinned_message?.video_note, updates.channel_post?.pinned_message?.video_note, updates.edited_channel_post?.video_note].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              videoNoteFound = true;
+              break;
+            }
+          }
+          return videoNoteFound;
+        };
+        
+        const isVoice = () => {
+          let voiceFound = false;
+          const allEntities = [updates.message?.voice, updates.edited_message?.voice, updates.channel_post?.voice, updates.pinned_message?.voice, updates.channel_post?.pinned_message?.voice, updates.edited_channel_post?.voice].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              voiceFound = true;
+              break;
+            }
+          }
+          return voiceFound;
+        };
+        
+        const isSticker = () => {
+          let stickerFound = false;
+          const allEntities = [updates.message?.sticker, updates.edited_message?.sticker, updates.channel_post?.sticker, updates.pinned_message?.sticker, updates.channel_post?.pinned_message?.sticker, updates.edited_channel_post?.sticker].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              stickerFound = true;
+              break;
+            }
+          }
+          return stickerFound;
+        };
+        
+        const isContact = () => {
+          let contactFound = false;
+          const allEntities = [updates.message?.contact, updates.edited_message?.contact, updates.channel_post?.contact, updates.pinned_message?.contact, updates.channel_post?.pinned_message?.contact, updates.edited_channel_post?.contact].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              contactFound = true;
+              break;
+            }
+          }
+          return contactFound;
+        };
+        
+        const isPoll = () => {
+          let pollFound = false;
+          const allEntities = [updates.message?.poll, updates.edited_message?.poll, updates.channel_post?.poll, updates.pinned_message?.poll, updates.channel_post?.pinned_message?.poll, updates.edited_channel_post?.poll].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              pollFound = true;
+              break;
+            }
+          }
+          return pollFound;
+        };
+        
+        const isLocation = () => {
+          let locationFound = false;
+          const allEntities = [updates.message?.location, updates.edited_message?.location, updates.channel_post?.location, updates.pinned_message?.location, updates.channel_post?.pinned_message?.location, updates.edited_channel_post?.location].filter(Boolean);
+
+          for (const entities of allEntities) {
+            if (entities.length > 0) {
+              locationFound = true;
+              break;
+            }
+          }
+          return locationFound;
+        };
+        
         const createMessageCollector = (options) => {
           let {
             chatId,
