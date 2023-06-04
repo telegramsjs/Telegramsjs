@@ -152,7 +152,10 @@ The `setMyDescription` and `setDescription` methods set the bot's description, w
 `Telegramsjs` provides a simple and flexible way to create Telegram bots using Node.js. With its easy-to-use syntax and event-driven architecture, it is a great choice for developers who want to build bots quickly and efficiently.
 
 ## 📖 Documentation
-[Telegramsjs Documentation](https://github.com/Sempai-07/Telegramsjs/tree/main/docs)
+[Telegramsjs Documentation-1](https://github.com/Sempai-07/Telegramsjs/tree/main/docs)
+[Telegramsjs Documentation-2](https://github.com/Sempai-07/Telegramsjs/blob/main/documentation.md)
+[Collection](https://telegram-ts-collection.surge.sh/)
+[Formatters](https://telegram-ts-formatters.surge.sh/)
 
 ## 🎒 Contributions
 We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the [Official support server](https://discord.gg/j8G7jhHMbs) or the [Official Telegram channel](https://t.me/sempaika_telegrams_js).
