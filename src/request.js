@@ -5,6 +5,7 @@ const { EventEmitter } = require('events');
 const { decodeIntents, IntentsBitField } = require("./IntentsBitField.js");
 const CashSession = require("./session/CashSession.js");
 const lastTimeMap = new CashSession();
+
 /**
  * Represents a request object for making requests to the Telegram Bot API.
  * @extends EventEmitter
@@ -16,38 +17,43 @@ class Request extends EventEmitter {
    * @param {string | array | number} [intents] - The types of updates the bot is interested in.
    * @param {string} [queryString] - The type of query string to use for requests.
    * @param {string | boolean | object} [offSetType] - The type of offset to use for updates.
+   * @param {string} [options.parseMode] - The parse mode for message formatting.
    */
-  constructor(token, intents, queryString, offSetType) {
+  constructor(token, intents, queryString, offSetType, parseMode) {
     super();
     this.token = token;
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
     this.offset = 0;
     this.queryString = queryString ?? 'application/x-www-form-urlencoded';
     this.offSetType = offSetType ?? 'time';
+    this.parseMode = parseMode;
+
     if (this.offSetType == 'time') {
       this.lastTimeMap = lastTimeMap;
-    }
-    else if (this.offSetType instanceof Map)
+    } else if (this.offSetType instanceof Map) {
       this.lastTimeMap = this.offSetType;
-    else if (this.offSetType === false) {
+    } else if (this.offSetType === false) {
       lastTimeMap.set('lastTime', true);
       this.lastTimeMap = lastTimeMap;
-    }
-    else if (this.offSetType === 'auto') {
-      lastTimeMap.set('lastTime', 'auto')
+    } else if (this.offSetType === 'auto') {
+      lastTimeMap.set('lastTime', 'auto');
       this.lastTimeMap = lastTimeMap;
     }
-      
-    if ((this.offSetType === false || this.offSetType === 'time'))
-    setTimeout(function() {
-      lastTimeMap.set('lastTime', true);
-    }, 3000);
 
-    if (typeof intents?.bits === 'number')
+    if (this.offSetType === false || this.offSetType === 'time') {
+      setTimeout(function() {
+        lastTimeMap.set('lastTime', true);
+      }, 3000);
+    }
+
+    if (typeof intents?.bits === 'number') {
       this.intents = decodeIntents(intents);
-    else if (typeof intents === 'object' && (typeof intents?.[0] === 'string' || typeof intents?.[0]?.[0] === 'string'))
+    } else if (
+      typeof intents === 'object' &&
+      (typeof intents?.[0] === 'string' || typeof intents?.[0]?.[0] === 'string')
+    ) {
       this.intents = intents;
-    else if (typeof intents === 'object') {
+    } else if (typeof intents === 'object') {
       this.intents = decodeIntents(new IntentsBitField(intents?.[0]));
     } else if (typeof intents === 'number') {
       this.intents = decodeIntents(new IntentsBitField(intents));
@@ -69,11 +75,13 @@ class Request extends EventEmitter {
     };
     const response = await this.request('getUpdates', params);
     const updates = response.result;
+
     if (Array.isArray(updates) && updates.length > 0) {
       this.update_id = updates[0].update_id + 1;
       this.last_object = updates[0];
       this.offset = updates[updates.length - 1].update_id + 1;
     }
+
     if (response?.error_code === 401) {
       throw new TelegramTokenError('Invalid token of telegrams bot');
     } else if (response?.error_code !== undefined) {
@@ -166,6 +174,66 @@ class Request extends EventEmitter {
    */
   get lastObject() {
     return this.last_object;
+  }
+
+  /**
+   * Set the token for the bot.
+   * @param {string} token - The token to set.
+   * @returns {boolean} - Returns true if the token was set successfully.
+   */
+  setToken(token) {
+    this.token = token;
+    return true;
+  }
+
+  /**
+   * Set the intents for the bot.
+   * @param {string | array | number} intents - The intents to set.
+   * @returns {boolean} - Returns true if the intents were set successfully.
+   */
+  setIntents(intents) {
+    this.intents = intents;
+    return true;
+  }
+
+  /**
+   * Set the parse mode for the bot.
+   * @param {string} parseMode - The parse mode to set.
+   * @returns {boolean} - Returns true if the parse mode was set successfully.
+   */
+  setParseMode(parseMode) {
+    this.parseMode = parseMode;
+    return true;
+  }
+
+  /**
+   * Set the chat ID for the bot.
+   * @param {string | number } chatId - The chat ID to set.
+   * @returns {string | number} - Returns the chat ID that was set.
+   */
+  setChatId(chatId) {
+    this.chatId = chatId;
+    return chatId;
+  }
+
+  /**
+   * Set the query string for the bot.
+   * @param {string} queryString - The query string to set.
+   * @returns {boolean} - Returns true if the query string was set successfully.
+   */
+  setQueryString(queryString) {
+    this.queryString = queryString;
+    return true;
+  }
+
+  /**
+   * Set the offset type for the bot.
+   * @param {string} offSetType - The offset type to set.
+   * @returns {string} - Returns the offset type that was set.
+   */
+  setOffSetType(offSetType) {
+    this.offSetType = offSetType;
+    return offSetType;
   }
 }
 

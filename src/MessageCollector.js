@@ -60,6 +60,74 @@ class MessageCollector extends EventEmitter {
   collected() {
     return this.collectedMessages;
   }
+  
+  /**
+   * Returns the count of collected messages.
+   * @returns {number} The count of collected messages.
+   */
+  count() {
+    return this.collectedMessages.length;
+  }
+
+  /**
+   * Clears the collected messages.
+   * @returns {boolean} `true` if the collected messages are cleared successfully, `false` otherwise.
+   */
+  clear() {
+    this.collectedMessages = [];
+    return true;
+  }
+
+  /**
+   * Sets a new filter function for the collector.
+   * @param {Function} filter - The new filter function.
+   * @returns {boolean} `true` if the filter function is set successfully, `false` otherwise.
+   */
+  setFilter(filter) {
+    if (typeof filter === 'function') {
+      this.filter = filter;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Sets a new duration for the collector to run.
+   * @param {number} time - The new duration in milliseconds.
+   * @returns {boolean} `true` if the duration is set successfully, `false` otherwise.
+   */
+  setTime(time) {
+    if (typeof time === 'number' && time >= 0) {
+      this.time = time;
+      clearInterval(this.interval);
+      this.interval = setInterval(() => {
+        this.emit('interval');
+      }, this.time);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Sets a new maximum number of messages to collect.
+   * @param {number} max - The new maximum number of messages.
+   * @returns {boolean} `true` if the maximum number is set successfully, `false` otherwise.
+   */
+  setMax(max) {
+    if (typeof max === 'number' && max >= 0) {
+      this.max = max;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns whether the collector is currently running.
+   * @returns {boolean} `true` if the collector is running, `false` otherwise.
+   */
+  isRunning() {
+    return !!this.interval;
+  }
 
   /**
    * Stops the message collector.

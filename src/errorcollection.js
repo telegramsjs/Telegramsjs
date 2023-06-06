@@ -8,10 +8,15 @@ class TelegramApiError extends Error {
    * @param {string} error - The error message returned by the Telegram Bot API
    */
   constructor(error) {
-    const message = error.description?.replace("Bad Request: ", "")?.replace("can't parse entities:", "")?.replace("Conflict: ", "")?.replace("can't parse BotCommand: ", "").toLowerCase();
+    let message;
+    if (error.error_code !== undefined) {
+      message = error.description?.replace("Bad Request: ", "")?.replace("can't parse entities:", "")?.replace("Conflict: ", "")?.replace("can't parse BotCommand: ", "").toLowerCase();
+    } else {
+      message = error.description = 'unknown error';
+    }
     super(message);
-    this.name = `TelegramApiError[${error.error_code}]`;
-    this.code = error.error_code;
+    this.name = `TelegramApiError[${error.error_code ?? 0}]`;
+    this.code = error.error_code ?? 0;
     this.ok = error.ok;
   }
 }

@@ -95,7 +95,13 @@ class TelegramBot extends BaseClient {
   };
   
   let lastUpdateTimestamp = new Date();
-  this.emit('ready', responseClient);
+  (async() => {
+   this.getMe().then(res => {
+     this.emit('ready', responseClient);
+   }).catch(err => {
+     console.log(err);
+   })
+  })();
   while (true) {
     const getUpdates = await this.getUpdates();
     for (const updates of getUpdates) {
