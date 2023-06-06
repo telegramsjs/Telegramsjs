@@ -52,6 +52,7 @@ declare class Keyboard {
     /**
      * Adds markups to the keyboard markups array.
      * @param  {...any} markupRows - One or more markup rows to add to the keyboard.
+     * @param {boolean} defaults - Specifies whether to use default values for the markups.
      * @returns {Keyboard} Returns the updated `Keyboard` object.
      */
     addKeyboard(markupRows: any[], defaults?: boolean): Keyboard;

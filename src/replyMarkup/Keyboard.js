@@ -22,12 +22,12 @@ class Keyboard {
    * @returns {object} Returns the keyboard object in the format expected by Telegram Bot API.
    */
   toJSON() {
-    const keyboard = JSON.stringify({
+    const keyboard = {
       keyboard: this.markups,
       resize_keyboard: this.resize,
       one_time_keyboard: this.oneTime,
       selective: this.selective,
-    });
+    };
     return keyboard;
   }
   
@@ -74,6 +74,7 @@ class Keyboard {
   /**
    * Adds markups to the keyboard markups array.
    * @param  {...any} markupRows - One or more markup rows to add to the keyboard.
+   * @param {boolean} defaults - Specifies whether to use default values for the markups.
    * @returns {Keyboard} Returns the updated `Keyboard` object.
    */
   addKeyboard(markupRows, defaults = false) {

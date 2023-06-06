@@ -10,7 +10,7 @@ class Markup {
    * @param {string} [options.action] - Button action to be passed to the event handler.
    * @param {string} [options.type='callback_data'] - Button action type. The default is 'callback_data'.
    * @param {boolean} [options.remove_keyboard=false] - Flag indicating whether to remove the inline markup.
-   * @param {boolean} [options.web_app] - Flag indicating whether the markup is for a web app.
+   * @param {object | string | boolean} [options.web_app] - Flag indicating whether the markup is for a web app.
    * @param {boolean} [options.force_reply] - Flag indicating whether to force a reply from the user.
    */
   constructor(options = {}) {
@@ -66,11 +66,17 @@ class Markup {
 
   /**
    * Sets the URL for the web app.
-   * @param {string} url - The URL of the web app.
+   * @param {object | string | boolean} url - The URL of the web app.
    * @returns {Markup} Returns the current object instance for chaining.
    */
   setWebApp(url) {
-    this.web_app = url;
+    if (typeof url === 'string') {
+      this.web_app = {
+        url: url
+      };
+    } else {
+      this.web_app = url;
+    }
     return this;
   }
 
