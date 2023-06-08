@@ -1,0 +1,23 @@
+# Main
+- [Introduction](/)
+  # Class
+  - [TelegramBot](/class/TelegramBot.md)
+  - [IntentsBitField](/class/IntentsBitField.md)
+  - [MessageCollector](/class/MessageCollector.md)
+  - [Request](/class/Request.md)
+  - [Markup](/class/Markup.md)
+  - [Keyboard](/class/Keyboard.md)
+  - [SimpleStorage](/class/SimpleStorage.md)
+  # Constanta
+  - [ChatActionType](/constanta/ChatActionType.md)
+  - [ChatPermission](/constanta/ChatPermission.md)
+  - [DocumentTypes](/constanta/DocumentTypes.md)
+  - [EntityType](/constanta/EntityType.md)
+  - [Events](/constanta/Events.md)
+  - [GroupPermission](/constanta/GroupPermission.md)
+  - [GroupStatus](/constanta/GroupStatus.md)
+  - [IntentsBits](/constanta/IntentBits.md)
+  - [QueryString](/constanta/QueryString.md)
+  - [TelegramIntentBits](/constanta/TelegramIntentBits.md)
+  # Methods
+  - [All](/method/index.md)

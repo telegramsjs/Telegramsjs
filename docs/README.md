@@ -1,10 +1,6 @@
 <div style="text-align: center;">
    <h1>Telegramsjs</h1><br>
    <image src="https://raw.githubusercontent.com/Sempai-07/Telegramsjs/main/docs/avatar.png"><br>
-   
-   [![Bot API](https://img.shields.io/badge/Bot%20API-v.6.7-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
-   [![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
-   [![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
    </div>
 
 ## ⚙️ Introduction
@@ -152,14 +148,14 @@ The `setMyDescription` and `setDescription` methods set the bot's description, w
 `Telegramsjs` provides a simple and flexible way to create Telegram bots using Node.js. With its easy-to-use syntax and event-driven architecture, it is a great choice for developers who want to build bots quickly and efficiently.
 
 ## 📖 Documentation
-[Telegramsjs](https://telegramsjs.surge.sh)<br>
-[Telegramsjs Documentation-1](https://github.com/Sempai-07/Telegramsjs/tree/main/docs)<br>
-[Telegramsjs Documentation-2](https://github.com/Sempai-07/Telegramsjs/blob/main/documentation.md)<br>
-[Collection](https://telegram-ts-collection.surge.sh/)<br>
+[Telegramsjs](https://telegramsjs.surge.sh/)
+[Telegramsjs Documentation-1](https://github.com/Sempai-07/Telegramsjs/tree/main/docs)
+[Telegramsjs Documentation-2](https://github.com/Sempai-07/Telegramsjs/blob/main/documentation.md)
+[Collection](https://telegram-ts-collection.surge.sh/)
 [Formatters](https://telegram-ts-formatters.surge.sh/)
 
 ## 🎒 Contributions
-We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the [Official support server](https://discord.gg/j8G7jhHMbs) or the [Official Telegram channel](https://t.me/sempaika_telegrams_js).
+We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the [Official support server](https://discord.gg/j8G7jhHMbs) (`discord`)
 
 ## 📒 Example 
 To see the correct use of the library, see the page on GitHub.
