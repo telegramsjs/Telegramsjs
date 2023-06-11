@@ -1,11 +1,6 @@
 node_modules/
-test.documentation.js
+example/
+dist/
+documentation.md
 index.js
 package-lock.json
-test.webhook.js
-test.collection.js
-test.error.js
-test.formatters.js
-test.telegram.js
-test.util.js
-test/
