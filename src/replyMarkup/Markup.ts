@@ -7,7 +7,13 @@ export class Markup {
   private action: string | undefined;
   private type: string | undefined;
   private remove_keyboard: boolean | undefined;
-  private web_app: string | object | boolean | undefined;
+  private web_app: object | undefined;
+  private login_url: object | undefined;
+  private switch_inline_query: string | undefined;
+  private switch_inline_query_current_chat: string | undefined;
+  private switch_inline_query_chosen_chat: object | undefined;
+  private callback_game: object | undefined;
+  private pay: boolean | undefined;
   private force_reply: boolean | undefined;
   /**
    * Creates a new instance of the Markup class.
@@ -15,23 +21,41 @@ export class Markup {
    * @param {string} [options.text] - Text on the markup.
    * @param {string} [options.action] - Button action to be passed to the event handler.
    * @param {string} [options.type='callback_data'] - Button action type. The default is 'callback_data'.
-   * @param {boolean} [options.remove_keyboard=false] - Flag indicating whether to remove the inline markup.
-   * @param {object | string | boolean} [options.web_app] - Flag indicating whether the markup is for a web app.
-   * @param {boolean} [options.force_reply] - Flag indicating whether to force a reply from the user.
+   * @param {boolean} [options.removeKeyboard=false] - Flag indicating whether to remove the inline markup.
+   * @param {object} [options.webApp] - Object representing the web app URL.
+   * @param {object} [options.loginUrl] - Object representing the login URL.
+   * @param {string} [options.switchInlineQuery] - Inline query string.
+   * @param {string} [options.switchInlineQueryCurrentChat] - Inline query for the current chat.
+   * @param {object} [options.switchInlineQueryChosenChat] - Object representing the chosen inline query chat.
+   * @param {object} [options.callbackGame] - Object representing the callback game.
+   * @param {boolean} [options.pay] - Flag indicating whether the markup is for a payment.
+   * @param {boolean} [options.forceReply] - Flag indicating whether to force a reply from the user.
    */
   constructor(options: {
-    text?: string,
-    action?: string,
-    type?: string,
-    removeKeyboard?: boolean,
-    webApp?: string | object | boolean,
-    forceReply?: boolean
+    text?: string;
+    action?: string;
+    type?: string;
+    removeKeyboard?: boolean;
+    webApp?: object;
+    loginUrl?: object;
+    switchInlineQuery?: string;
+    switchInlineQueryCurrentChat?: string;
+    switchInlineQueryChosenChat?: object;
+    callbackGame?: object;
+    pay?: boolean;
+    forceReply?: boolean;
   } = {}) {
     this.text = options.text;
     this.action = options.action;
     this.type = options.type ?? 'callback_data';
     this.remove_keyboard = options.removeKeyboard ?? false;
     this.web_app = options.webApp;
+    this.login_url = options.loginUrl;
+    this.switch_inline_query = options.switchInlineQuery;
+    this.switch_inline_query_current_chat = options.switchInlineQueryCurrentChat;
+    this.switch_inline_query_chosen_chat = options.switchInlineQueryChosenChat;
+    this.callback_game = options.callbackGame;
+    this.pay = options.pay;
     this.force_reply = options.forceReply;
     return this;
   }
@@ -81,22 +105,96 @@ export class Markup {
 
   /**
    * Sets the URL for the web app.
-   * @param {object | string | boolean} url - The URL of the web app.
+   * @param {object} url - The URL of the web app.
    * @returns {Markup} Returns the current object instance for chaining.
    */
-  setWebApp(
-    url: string | object | boolean
-    ): Markup {
-    if (typeof url === 'string') {
-      this.web_app = {
-        url: url
-      };
-    } else {
-      this.web_app = url;
-    }
+  setWebApp(webApp: {
+    url: string;
+  } = {url: ''}): Markup {
+    this.web_app = {
+      url: webApp
+    };
     return this;
   }
-
+  
+  /**
+   * Sets the login URL for the markup.
+   * @param {object} loginUrl - Object representing the login URL for the markup.
+   * @returns {Markup} Returns the current object for method chaining.
+   */
+  setLoginUrl(loginUrl: {
+    url: string;
+    forward_text?: string;
+    bot_username?: string;
+    request_write_access?: boolean;
+  } = {url: ''}): Markup {
+    this.login_url = loginUrl;
+    return this;
+  }
+  
+  /**
+   * Sets the switch inline query for the markup.
+   * @param {string} switchInlineQuery - Inline query string for the markup.
+   * @returns {Markup} Returns the current object for method chaining.
+   */
+  setSwitchInlineQuery(switchInlineQuery: string): Markup {
+    this.switch_inline_query = switchInlineQuery;
+    return this;
+  }
+  
+  /**
+   * Sets the switch inline query for the current chat.
+   * @param {string} switchInlineQueryCurrentChat - Inline query string for the current chat.
+   * @returns {Markup} Returns the current object for method chaining.
+   */
+  setSwitchInlineQueryCurrentChat(switchInlineQueryCurrentChat: string): Markup {
+    this.switch_inline_query_current_chat = switchInlineQueryCurrentChat;
+    return this;
+  }
+  
+  /**
+   * Sets the chosen inline query chat for the markup.
+   * @param {object} switchInlineQueryChosenChat - Object representing the chosen inline query chat.
+   * @returns {Markup} Returns the current object for method chaining.
+   */
+  setSwitchInlineQueryChosenChat(switchInlineQueryChosenChat: {
+    query?: string;
+    allow_user_chats?: boolean;
+    allow_bot_chats?: boolean;
+    allow_group_chats?: boolean;
+    allow_channel_chats?: boolean;
+  }): Markup {
+    this.switch_inline_query_chosen_chat = switchInlineQueryChosenChat;
+    return this;
+  }
+  
+  /**
+   * Sets the callback game for the markup.
+   * @param {object} callbackGame - Object representing the callback game for the markup.
+   * @returns {Markup} Returns the current object for method chaining.
+   */
+  setCallbackGame(callbackGame: {
+    user_id: number;
+    score: number;
+    force?: boolean;
+    disable_edit_message?: boolean;
+    chat_id?: number;
+    message_id?: number;
+    inline_message_id?: number;
+    } = {user_id: 0, score: 0}) : Markup {
+    this.callback_game = callbackGame;
+    return this;
+  }
+  
+  /**
+   * Sets the `pay` option for the markup.
+   * @param {boolean} pay - Indicates whether the markup is for a payment.
+   * @returns {Markup} Returns an instance of the Markup object for method chaining.
+   */
+  setPay(pay: boolean): Markup {
+    this.pay = pay;
+    return this;
+  }
   /**
    * Sets the `force_reply` option for the reply keyboard.
    * @param {boolean} forceReply - Indicates whether to enable the force reply feature.
@@ -117,13 +215,12 @@ export class Markup {
       text: string;
       action: string;
       type: string;
-    }
-    ): Markup {
-    const markup = new Markup()
+    }): Markup {
+      const markup = new Markup()
       .setText(markupObj.text)
       .setAction(markupObj.action)
       .setType(markupObj.type);
-    return markup;
+      return markup;
   }
 
   /**
@@ -173,14 +270,26 @@ export class Markup {
     const markup: {
       text?: string;
       remove_keyboard?: boolean;
-      web_app?: string | boolean | object;
+      web_app?: object;
       force_reply?: boolean;
+      login_url?: object;
+      switch_inline_query?: string;
+      switch_inline_query_current_chat?: string;
+      switch_inline_query_chosen_chat?: object;
+      callback_game?: object;
+      pay?: boolean;
       [key: string]: any;
     } = {
       text: this.text,
       remove_keyboard: this.remove_keyboard,
+      login_url: this.login_url,
       web_app: this.web_app,
-      force_reply: this.force_reply,
+      switch_inline_query: this.switch_inline_query,
+      switch_inline_query_current_chat: this.switch_inline_query_current_chat,
+      switch_inline_query_chosen_chat: this.switch_inline_query_chosen_chat,
+      callback_game: this.callback_game,
+      pay: this.pay,
+      force_reply: this.force_reply
     };
     markup[this.type as string] = this.action;
     return markup;

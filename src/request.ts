@@ -23,23 +23,23 @@ export class Request extends EventEmitter {
   private offSetType: any;
   private parseMode?: string;
   private chatId?: number | string;
-  private intents?: readonly string[] | number[] | null;
+  private intents?: string[] | number[] | null = null;
   private startTime: number = Date.now();
   private update_id?: number;
   private last_object?: object;
-  private lastTimeMap: Collection<string, boolean | string>;
+  private lastTimeMap: Collection<any, any>;
 
   /**
    * Constructs a new Request object.
    * @param {string} [token] - The API token for the bot.
-   * @param {string | array | number} [intents] - The types of updates the bot is interested in.
+   * @param {string[] | number[] | null} [intents] - The types of updates the bot is interested in.
    * @param {string} [queryString] - The type of query string to use for requests.
    * @param {string | boolean | object} [offSetType] - The type of offset to use for updates.
    * @param {string} [options.parseMode] - The parse mode for message formatting.
    */
   constructor(
     token: string,
-    intents: string | any[] | number | undefined,
+    intents: readonly string[] | number[] | null,
     queryString: string | undefined,
     offSetType: any,
     parseMode?: string
@@ -53,15 +53,15 @@ export class Request extends EventEmitter {
     this.parseMode = parseMode;
 
     if (this.offSetType == 'time') {
-      this.lastTimeMap = lastTimeMap as Collection<string, boolean | string>;
+      this.lastTimeMap = lastTimeMap as Collection<any, any>;
     } else if (this.offSetType instanceof Collection) {
-      this.lastTimeMap = this.offSetType as Collection<string, boolean | string>;
+      this.lastTimeMap = this.offSetType as Collection<any, any>;
     } else if (this.offSetType === false) {
       lastTimeMap.set('lastTime', true);
-      this.lastTimeMap = lastTimeMap as Collection<string, boolean | string>;
+      this.lastTimeMap = lastTimeMap as Collection<any, any>;
     } else if (this.offSetType === 'auto') {
       lastTimeMap.set('lastTime', 'auto');
-      this.lastTimeMap = lastTimeMap as Collection<string, boolean | string>;
+      this.lastTimeMap = lastTimeMap as Collection<any, any>;
     }
 
     if (this.offSetType === false || this.offSetType === 'time') {
@@ -80,7 +80,7 @@ export class Request extends EventEmitter {
       this.intents = null;
     }
 
-    this.lastTimeMap = lastTimeMap as Collection<string, boolean | string>;
+    this.lastTimeMap = lastTimeMap as Collection<any, any>;
   }
 
   /**
@@ -106,7 +106,7 @@ export class Request extends EventEmitter {
     }
 
     if (response?.error_code === 401) {
-      throw new TelegramTokenError('Invalid token of telegrams bot');
+      throw new TelegramTokenError('invalid token of telegrams bot');
     } else if (response?.error_code !== undefined) {
       throw new TelegramApiError(response.description);
     }
@@ -216,7 +216,7 @@ export class Request extends EventEmitter {
    * @param {string[] | number[] | null} intents - The intents to set.
    * @returns {boolean} - Returns true if the intents were set successfully.
    */
-  setIntents(intents: string[] | number[] | null): boolean {
+  setIntents(intents: string[] | number[] | null = null): boolean {
     this.intents = intents;
     return true;
   }
