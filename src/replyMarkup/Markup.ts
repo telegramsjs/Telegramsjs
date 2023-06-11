@@ -111,9 +111,7 @@ export class Markup {
   setWebApp(webApp: {
     url: string;
   } = {url: ''}): Markup {
-    this.web_app = {
-      url: webApp
-    };
+    this.web_app = webApp;
     return this;
   }
   
