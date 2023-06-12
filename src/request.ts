@@ -16,18 +16,18 @@ const lastTimeMap = new Collection();
  * @extends EventEmitter
  */
 export class Request extends EventEmitter {
-  private token: string;
-  private baseUrl: string;
-  private offset: number;
-  private queryString: string;
-  private offSetType: any;
-  private parseMode?: string;
-  private chatId?: number | string;
-  private intents?: string[] | number[] | null | undefined = null;
-  private startTime: number = Date.now();
-  private update_id?: number;
-  private last_object?: object;
-  private lastTimeMap: Collection<any, any>;
+  token: string;
+  baseUrl: string;
+  offset: number;
+  queryString: string;
+  offSetType: any;
+  parseMode?: string;
+  chatId?: number | string;
+  intents?: string[] | number[] | null | undefined = null;
+  startTime: number = Date.now();
+  update_id?: number;
+  last_object?: object;
+  lastTimeMap: Collection<any, any>;
 
   /**
    * Constructs a new Request object.
@@ -94,7 +94,7 @@ export class Request extends EventEmitter {
     this.startTime = Date.now();
     const params: Record<string, string | number | boolean | readonly string[] | readonly number[] | readonly boolean[] | null> = {
       offset: this.offset,
-      allowed_updates: this.intents,
+      allowed_updates: this.intents as readonly string[] | readonly number[] | readonly boolean[] | null,
     };
     const response: any = await this.request('getUpdates', params);
     const updates = response.result;

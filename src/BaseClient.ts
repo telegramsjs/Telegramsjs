@@ -10,12 +10,12 @@ type TelegramApiResponse = {
 };
 
 export class BaseClient extends Request {
-  private token: string = '';
-  private intents: string[] | number[] | null | undefined = null;
-  private parseMode: string = '';
-  private chatId: string | number = '';
-  private queryString: string = '';
-  private offSetType: any;
+  token: string = '';
+  intents: string[] | number[] | null | undefined = null;
+  parseMode: string = '';
+  chatId: string | number = '';
+  queryString: string = '';
+  offSetType: any;
   /**
    * Creat method Telegram Api
   * @param {string} token - The Telegram Bot API token.
@@ -77,7 +77,7 @@ export class BaseClient extends Request {
       drop_pending_updates: options?.dropPendingUpdates
     };
     const response: TelegramApiResponse = await this.request(method, params);
-    if (!!response) {
+    if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
     return response.result;
@@ -486,7 +486,7 @@ export class BaseClient extends Request {
  */
   async sendMediaGroup(options: any): Promise<object | undefined> {
   const method = 'sendMediaGroup';
-  const params = {
+  const params: any = {
     chat_id: this.chatId ? this.chatId : options.chatId,
     disable_notification: options.notification,
     protect_content: options.content,
@@ -3178,5 +3178,4 @@ export class BaseClient extends Request {
     }
     return response.result;
   }
-
 }
