@@ -638,6 +638,21 @@ export class Collection<K, V> {
      }
      return chunks;
    }
+   
+   /**
+    * keyOf - returns the first key corresponding to the specified value in the collection 
+    * @param {V} value - what to look for in the collection
+    * @return {K | undefined} - returns the first key corresponding to the specified value in the collection 
+    */
+    
+    keyOf(value: V): K | undefined {
+      for (const [key, val] of this.entries()) {
+        if (Object.is(val, value)) {
+          return key;
+        }
+      }
+      return undefined;
+    }
 
 
   /**
