@@ -8,8 +8,8 @@ import { MessageCollector } from "./collection/MessageCollector";
  * A class representing a Telegram Bot client.
  * @extends BaseClient
  */
-class TelegramBot extends BaseClient {
-  private token: string;
+export class TelegramBot extends BaseClient {
+  private token: string = '';
   private intents: readonly string[] | number[] | null = null;
   private parseMode: string = '';
   private chatId: string | number = '';
@@ -92,7 +92,7 @@ class TelegramBot extends BaseClient {
     /**
    * The function that starts the whole process
   */
-  async login() {
+  async login(): void {
   const client = await this.getMe();
   
   const responseClient = await {
@@ -119,7 +119,7 @@ class TelegramBot extends BaseClient {
   while (true) {
     const getUpdates = await this.getUpdates();
     for (const updates of getUpdates) {
-      let responseLastTime = this.lastTimeMap?.get('lastTime');
+      let responseLastTime = this.lastTimeMap.get('lastTime');
       if (responseLastTime === 'auto')
         responseLastTime = true
         
@@ -569,6 +569,4 @@ class TelegramBot extends BaseClient {
     }
   }
  }
-}
-
-module.exports = TelegramBot;
+};

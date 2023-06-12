@@ -2,6 +2,13 @@ import * as https from 'https';
 import { Request } from "./request.js";
 import { TelegramApiError } from "./errorcollection.js";
 
+type TelegramApiResponse = {
+  error_code?: number;
+  description?: string;
+  ok?: boolean;
+  result?: object | undefined;
+};
+
 export class BaseClient extends Request {
   private token: string = '';
   private intents: string[] | number[] | null | undefined = null;
@@ -44,12 +51,12 @@ export class BaseClient extends Request {
   *
   * @async
   
-  * @returns {Promise<object>} Returns a Promise that resolves with an object containing information about the bot.
+  * @returns {Promise<object | undefined>} Returns a Promise that resolves with an object containing information about the bot.
   * @throws {TelegramApiError} Throws an error if the response is empty or if there is an error returned by the Telegram API.
   */
-  async getMe(): Promise<object> {
+  async getMe(): Promise<object | undefined> {
     const method = 'getMe';
-    const response: any = await this.request(method);
+    const response: TelegramApiResponse = await this.request(method);
     if (!response) {
       throw new TelegramApiError(response);
     }
@@ -61,17 +68,17 @@ export class BaseClient extends Request {
  * @async
  * @param {object} options - Options to configure the webhook deletion.
  * @param {boolean} options.dropPendingUpdates - Pass true to drop pending updates while deleting the webhook.
- * @returns {Promise<object>} - Returns the response object containing the result of the deletion request.
+ * @returns {Promise<object | undefined>} - Returns the response object containing the result of the deletion request.
  * @throws {TelegramApiError} - Throws an error if the webhook deletion fails.
  */
-  async deleteWebhook(options: any): Promise<object> {
+  async deleteWebhook(options: any): Promise<object | undefined> {
     const method = 'deleteWebhook';
     const params = {
       drop_pending_updates: options?.dropPendingUpdates
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response) {
-      throw new TelegramApiError('Failed to delete webhook');
+      throw new TelegramApiError(response);
     }
     return response.result;
   }
@@ -80,12 +87,12 @@ export class BaseClient extends Request {
  * Get current webhook status.
  * @async
  
- * @returns {Promise<object>} An object representing the current webhook status.
+ * @returns {Promise<object | undefined>} An object representing the current webhook status.
  * @throws {TelegramApiError} If an error occurs while fetching the webhook status.
  */
-  async getWebhookInfo(): Promise<object> {
+  async getWebhookInfo(): Promise<object | undefined> {
     const method = 'getWebhookInfo';
-    const response: any = await this.request(method);
+    const response: TelegramApiResponse = await this.request(method);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -106,10 +113,10 @@ export class BaseClient extends Request {
    * @param {number} [options.threadId] - Unique identifier for the target message thread.
    * @param {number} [options.replyToMessageId] - If the message is a reply, the ID of the original message.
    * @param {string} [options.parseMode=this.parseMode] - Send `'Markdown'` or `'HTML'` if you want Telegram apps to show bold, italic, fixed-width text, or inline URLs in your bot's message.
-   * @returns {Promise<object>} Returns the sent message.
+   * @returns {Promise<object | undefined>} Returns the sent message.
    * @throws {TelegramApiError} Throws an error if there is a problem with the Telegram API request.
    */
-   async sendMessage(options: any): Promise<object> {
+   async sendMessage(options: any): Promise<object | undefined> {
      const method = 'sendMessage';
      const params = {
        chat_id: this.chatId ? this.chatId : options.chatId,
@@ -122,7 +129,7 @@ export class BaseClient extends Request {
        reply_to_message_id: options.replyToMessageId,
        parse_mode: options.parseMode ? options.parseMode : this.parseMode
      };
-     const response: any = await this.request(method, params);
+     const response: TelegramApiResponse = await this.request(method, params);
      
      if (!!response?.error_code) {
        throw new TelegramApiError(response);
@@ -145,10 +152,10 @@ export class BaseClient extends Request {
  * @param {number} [options.replyToMessageId] - The ID of the message being replied to.
  * @param {boolean} [options.allowReply] - If the message can be sent without a reply to another message.
  * @param {object} [options.replyMarkup] - The reply markup object.
- * @returns {Promise<object>} - The sent photo object.
+ * @returns {Promise<object | undefined>} - The sent photo object.
  * @throws {TelegramApiError} - If an error occurs while sending the photo.
  */
-   async sendPhoto(options: any): Promise<object> {
+   async sendPhoto(options: any): Promise<object | undefined> {
     const method = 'sendPhoto';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -164,7 +171,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -193,9 +200,9 @@ export class BaseClient extends Request {
     * @param {boolean} [options.allowReply=false] - If true, allows the message to be sent without replying to a message.
     * @param {object | string} [options.replyMarkup] - The reply markup of the message.
     * @throws {TelegramApiError} If there is an error sending the message.
-    * @returns {Promise<object>} The sent audio message object.
+    * @returns {Promise<object | undefined>} The sent audio message object.
     */
-   async sendAudio(options: any): Promise<object> {
+   async sendAudio(options: any): Promise<object | undefined> {
     const method = 'sendAudio';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -214,7 +221,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -240,9 +247,9 @@ export class BaseClient extends Request {
     * @param {boolean} [options.allowReply] - Pass true to enable sending the message without a reply.
     * @param {object | string} [options.replyMarkup] - InlineKeyboardMarkup or ReplyKeyboardMarkup for the sent message.
     * @throws {TelegramApiError} When the request to the Telegram API fails.
-    * @returns {Promise<object>} The sent message object.
+    * @returns {Promise<object | undefined>} The sent message object.
     */
-   async sendDocument(options: any): Promise<object> {
+   async sendDocument(options: any): Promise<object | undefined> {
     const method = 'sendDocument';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -259,7 +266,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -288,10 +295,10 @@ export class BaseClient extends Request {
    * @param {number} [options.replyToMessageId] - The ID of the message to reply to.
    * @param {boolean} [options.allowReply] - Pass true, if the message should be sent even if the specified replied-to message is not found.
    * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
-   * @returns {Promise<object>} Returns a Promise that resolves to the sent video message object on success.
+   * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent video message object on success.
    * @throws {TelegramApiError} Throws an error if the API response returns an error code.
    */
-  async sendVideo(options: any): Promise<object> {
+  async sendVideo(options: any): Promise<object | undefined> {
   const method = 'sendVideo';
   const params = {
     chat_id: this.chatId ? this.chatId : options.chatId,
@@ -311,7 +318,7 @@ export class BaseClient extends Request {
     allow_sending_without_reply: options.allowReply,
     reply_markup: options.replyMarkup
   };
-  const response: any = await this.request(method, params);
+  const response: TelegramApiResponse = await this.request(method, params);
 
   if (!!response?.error_code) {
     throw new TelegramApiError(response);
@@ -340,10 +347,10 @@ export class BaseClient extends Request {
    * @param {boolean} [options.allowReply] - Whether the message can be sent without a reply.
    * @param {object | string} [options.replyMarkup] - The reply markup for the message.
    * @param {string} [options.threadId] - The id of the message thread to send the animation to.
-   * @returns {Promise<object>} - The response object from the Telegram API.
+   * @returns {Promise<object | undefined>} - The response object from the Telegram API.
    * @throws {TelegramApiError} - If there was an error while sending the animation message.
    */
-  async sendAnimation(options: any): Promise<object> {
+  async sendAnimation(options: any): Promise<object | undefined> {
     const method = 'sendAnimation';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -363,7 +370,7 @@ export class BaseClient extends Request {
       reply_markup: options.replyMarkup,
       message_thread_id: options.threadId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -387,10 +394,10 @@ export class BaseClient extends Request {
    * @param {boolean} [options.allowReply] - Pass true if sending the message without reply is allowed.
    * @param {object | string} [options.replyMarkup] - InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply. Additional interface options for the message.
    * @param {string} [options.threadId] - Unique identifier for the target chat thread.
-   * @returns {Promise<object>} On success, the sent Message is returned.
+   * @returns {Promise<object | undefined>} On success, the sent Message is returned.
    * @throws {TelegramApiError} If an error occurs while sending the voice message.
    */
-  async sendVoice(options: any): Promise<object> {
+  async sendVoice(options: any): Promise<object | undefined> {
     const method = 'sendVoice';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -406,7 +413,7 @@ export class BaseClient extends Request {
       reply_markup: options.replyMarkup,
       message_thread_id: options.threadId,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -430,9 +437,9 @@ export class BaseClient extends Request {
    * @param {boolean} [options.allowReply] - Pass true, if the message should be sent even without a reply message.
    * @param {object | string} [options.replyMarkup] - Additional interface options (JSON-serialized object).
    * @throws {TelegramApiError} Throws an error if the response contains an error_code property.
-  * @returns {Promise<object>} Returns a Promise that resolves to the sent message object.
+  * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent message object.
   */
-  async sendVideoNote(options: any): Promise<object> {
+  async sendVideoNote(options: any): Promise<object | undefined> {
   const method = 'sendVideoNote';
   const params = {
     chat_id: this.chatId ? this.chatId : options.chatId,
@@ -447,7 +454,7 @@ export class BaseClient extends Request {
     allow_sending_without_reply: options.allowReply,
     reply_markup: options.replyMarkup
   };
-  const response: any = await this.request(method, params);
+  const response: TelegramApiResponse = await this.request(method, params);
 
   if (!!response?.error_code) {
     throw new TelegramApiError(response);
@@ -474,10 +481,10 @@ export class BaseClient extends Request {
  * @param {number} [options.media[].height] - The height of the media (for videos and photos).
  * @param {number} [options.media[].duration] - Duration of the video/audio (in seconds).
  * @param {boolean} [options.media[].supportsStreaming] - Pass true if the uploaded video supports streaming.
- * @returns {Promise<object>} Returns a Promise that resolves to the sent media group object on success.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent media group object on success.
  * @throws {TelegramApiError} Throws an error if the response contains an error code.
  */
-  async sendMediaGroup(options: any): Promise<object> {
+  async sendMediaGroup(options: any): Promise<object | undefined> {
   const method = 'sendMediaGroup';
   const params = {
     chat_id: this.chatId ? this.chatId : options.chatId,
@@ -497,7 +504,7 @@ export class BaseClient extends Request {
       supports_streaming: options?.media?.supportsStreaming
     }
   };
-  const response: any = await this.request(method, params);
+  const response: TelegramApiResponse = await this.request(method, params);
 
    if (!!response?.error_code) {
      throw new TelegramApiError(response);
@@ -523,10 +530,10 @@ export class BaseClient extends Request {
  * @param {number} [options.replyToMessageId] - The ID of the message to which this message is a reply.
  * @param {boolean} [options.allowReply=true] - Pass true if the message should be sent even if the specified reply_to_message_id is not found.
  * @param {object | string} [options.replyMarkup] - A JSON-serialized object for an inline keyboard or custom reply keyboard.
- * @returns {Promise<object>} The sent location message object.
+ * @returns {Promise<object | undefined>} The sent location message object.
  * @throws {TelegramApiError} If the Telegram API returns an error.
  */
-  async sendLocation(options: any): Promise<object> {
+  async sendLocation(options: any): Promise<object | undefined> {
     const method = 'sendLocation';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -543,7 +550,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -570,10 +577,10 @@ export class BaseClient extends Request {
  * @param {number} [options.replyToMessageId] - Id of the message to reply to.
  * @param {boolean} [options.allowReply] - Pass True, if the message should be sent even if the specified replied-to message is not found.
  * @param {object | string} [options.replyMarkup] - Additional interface options. An object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.
- * @returns {Promise<object>} On success, the sent Message is returned.
+ * @returns {Promise<object | undefined>} On success, the sent Message is returned.
  * @throws {TelegramApiError} When there's an error sending the message.
  */
-  async sendVenue(options: any): Promise<object> {
+  async sendVenue(options: any): Promise<object | undefined> {
     const method = 'sendVenue';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -592,7 +599,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -612,9 +619,9 @@ export class BaseClient extends Request {
  * @param {boolean} options.notification - Pass `true` to disable notification for the message. Optional.
  * @param {boolean} options.content - Pass `true` to protect forwarded message from being copied. Optional.
  * @throws {TelegramApiError} If an error occurs while forwarding the message.
- * @returns {Promise<object>} The forwarded message object.
+ * @returns {Promise<object | undefined>} The forwarded message object.
  */
-   async forwardMessage(options: any): Promise<object> {
+   async forwardMessage(options: any): Promise<object | undefined> {
     const method = 'forwardMessage';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -624,7 +631,7 @@ export class BaseClient extends Request {
       disable_notification: options.notification,
       protect_content: options.content
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -651,9 +658,9 @@ export class BaseClient extends Request {
  * @param {boolean} [options.allowSendingWithoutReply] - Pass true to allow sending the message without a reply.
  * @param {object | string} [options.replyMarkup] - The inline keyboard markup for the message.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Promise<object>} Returns the copied message object.
+ * @returns {Promise<object | undefined>} Returns the copied message object.
  */
-   async copyMessage(options: any): Promise<object> {
+   async copyMessage(options: any): Promise<object | undefined> {
     const method = 'copyMessage';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -669,7 +676,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowSendingWithoutReply,
       reply_markup: options.replyMarkup
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -693,10 +700,10 @@ export class BaseClient extends Request {
  * @param {number} [options.replyToMessageId] - ID of the message being replied to.
  * @param {boolean} [options.allowReply=true] - Allows sending the message without a reply if true.
  * @param {object | string} [options.replyMarkup] - Additional options for reply markup.
- * @returns {Promise<object>} - Result of the sent contact message.
+ * @returns {Promise<object | undefined>} - Result of the sent contact message.
  * @throws {TelegramApiError} - Throws an error if the API request fails.
  */
-   async sendContact(options: any): Promise<object> {
+   async sendContact(options: any): Promise<object | undefined> {
     const method = 'sendContact';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -711,7 +718,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -744,9 +751,9 @@ export class BaseClient extends Request {
  * @param {boolean} options.allowReply - Whether to allow sending the poll without replying to a message or not.
  * @param {object} options.replyMarkup - The reply markup for the message.
  * @throws {TelegramApiError} If an error occurs while sending the poll.
- * @returns {Promise<object>} The response from the Telegram API.
+ * @returns {Promise<object | undefined>} The response from the Telegram API.
  */
-  async sendPoll(options: any): Promise<object> {
+  async sendPoll(options: any): Promise<object | undefined> {
     const method = 'sendPoll';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -769,7 +776,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -790,10 +797,10 @@ export class BaseClient extends Request {
  * @param {number} [options.replyToMessageId] - The ID of the message to reply to.
  * @param {boolean} [options.allowReply=false] - Pass True, if the message should be sent even if the specified replied-to message is not found.
  * @param {object | string} [options.replyMarkup] - Additional interface options for sending the message.
- * @returns {Promise<object>} Returns a Promise that resolves to the sent message object on success.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent message object on success.
  * @throws {TelegramApiError} Throws an error when there is an error in the request.
  */
-  async sendDice(options: any): Promise<object> {
+  async sendDice(options: any): Promise<object | undefined> {
     const method = 'sendDice';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -805,7 +812,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -821,16 +828,16 @@ export class BaseClient extends Request {
  * @param {string} options.action - The type of action to send to the user (typing, upload_photo, record_video, upload_video, record_audio, upload_audio, upload_document, find_location, record_video_note, upload_video_note).
  * @param {string} options.threadId - Unique identifier for the target chat message thread.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error code.
- * @returns {Promise<object>} The response object from the Telegram API containing information about the sent chat action.
+ * @returns {Promise<object | undefined>} The response object from the Telegram API containing information about the sent chat action.
  */
-  async sendChatAction(options: any): Promise<object> {
+  async sendChatAction(options: any): Promise<object | undefined> {
     const method = 'sendChatAction';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       action: options.action,
       message_thread_id: options.threadId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -848,16 +855,16 @@ export class BaseClient extends Request {
  * @param {number} [options.offset] - Sequential number of the first photo to be returned. By default, all photos are returned.
  * @param {number} [options.limit] - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Promise<object>} On success, an object containing the user profile photos is returned.
+ * @returns {Promise<object | undefined>} On success, an object containing the user profile photos is returned.
  */
-  async getUserProfilePhotos(options: any): Promise<object> {
+  async getUserProfilePhotos(options: any): Promise<object | undefined> {
     const method = 'getUserProfilePhotos';
     const params = {
       user_id: options.userId,
       offset: options.offset,
       limit: options.limit
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
     throw new TelegramApiError(response);
@@ -871,14 +878,14 @@ export class BaseClient extends Request {
  * @async
  * @param {string} fileId - ID of the file to fetch information for
  * @throws {TelegramApiError} If the Telegram API returns an error
- * @returns {Promise<object>} An object containing information about the file
+ * @returns {Promise<object | undefined>} An object containing information about the file
  */
-  async getFile(fileId: string): Promise<object> {
+  async getFile(fileId: string): Promise<object | undefined> {
     const method = 'getFile';
     const params = {
       file_id: fileId
       };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -916,10 +923,10 @@ export class BaseClient extends Request {
  * @param {number} options.userId - The ID of the user to be banned.
  * @param {number} options.untilDate - Date when the user will be unbanned, unix time.
  * @param {boolean} options.revokeMessages - Pass True to delete all messages from the chat for the user that is being removed.
- * @returns {Promise<object>} - On success, returns True.
+ * @returns {Promise<object | undefined>} - On success, returns True.
  * @throws {TelegramApiError} - If an error occurs while executing the request.
  */
-  async banChatMember(options: any): Promise<object> {
+  async banChatMember(options: any): Promise<object | undefined> {
     const method = 'banChatMember';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -927,7 +934,7 @@ export class BaseClient extends Request {
       until_date: options.untilDate,
       revoke_messages: options.revokeMessages
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -943,17 +950,17 @@ export class BaseClient extends Request {
  * @param {string|number} options.userId - Unique identifier of the chat member to unban.
  * @param {string|number} [options.chatId] - Unique identifier of the target chat. If not specified, defaults to the chat associated with the bot instance.
  * @param {boolean} [options.onlyIfBanned=false] - If `true`, only unban the chat member if they are currently banned. Otherwise, unban the chat member regardless of their current ban status.
- * @returns {Promise<object>} - Promise which resolves to the result of the Telegram API request.
+ * @returns {Promise<object | undefined>} - Promise which resolves to the result of the Telegram API request.
  * @throws {TelegramApiError} - If the request to the Telegram API fails or returns an error.
  */
-  async unbanChatMember(options: any): Promise<object> {
+  async unbanChatMember(options: any): Promise<object | undefined> {
     const method = 'unbanChatMember';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.userId,
       only_if_banned: options.onlyIfBanned
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
     throw new TelegramApiError(response);
@@ -970,10 +977,10 @@ export class BaseClient extends Request {
  * @param {object} options.permissions - The new permissions to restrict the chat member to.
  * @param {boolean} [options.useIndependentChatPermissions] - Pass true to use the chat member's own permissions instead of the default permissions.
  * @param {number} [options.untilDate] - The date when the restrictions will be lifted.
- * @returns {Promise<object>} The updated ChatMember object.
+ * @returns {Promise<object | undefined>} The updated ChatMember object.
  * @throws {TelegramApiError} Throws an error if the API response contains an error.
  */
-  async restrictChatMember(options: any): Promise<object> {
+  async restrictChatMember(options: any): Promise<object | undefined> {
     const method = 'restrictChatMember';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -982,7 +989,7 @@ export class BaseClient extends Request {
       use_independent_chat_permissions: options.useIndependentChatPermissions,
       until_date: options.untilDate
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1010,9 +1017,9 @@ export class BaseClient extends Request {
  * @param {boolean} [options.canPinMessages] - Pass true to allow the user to pin messages in the chat.
  * @param {boolean} [options.canManageTopics] - Pass true to allow the user to manage chat topics.
  * @throws {TelegramApiError} Throws an error with the Telegram API description if the response contains an error.
- * @returns {Promise<object>} Returns a Promise that resolves to the promoted user object on success.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the promoted user object on success.
  */
-  async promoteChatMember(options: any): Promise<object> {
+  async promoteChatMember(options: any): Promise<object | undefined> {
     const method = 'promoteChatMember';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -1030,7 +1037,7 @@ export class BaseClient extends Request {
       can_pin_messages: options.canPinMessages,
       can_manage_topics: options.canManageTopics
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1047,21 +1054,21 @@ export class BaseClient extends Request {
  * @param {number} [options.chatId] - The ID of the chat where the administrator's custom title should be set. If not provided, uses the current chat ID from the instance.
  * @param {string} options.customTitle - The custom title to set for the administrator.
  * @throws {TelegramApiError} If an error occurs while setting the custom title.
- * @returns {Promise<boolean>} A promise that resolves with `true` if the custom title was set successfully.
+ * @returns {Promise<object | undefined>} A promise that resolves with `true` if the custom title was set successfully.
  */
-  async setChatAdministratorCustomTitle(options: any): Promise<boolean> {
+  async setChatAdministratorCustomTitle(options: any): Promise<object | undefined> {
     const method = 'setChatAdministratorCustomTitle';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.userId,
       custom_title: options.customTitle
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
-    return true;
+    return response.result;
   }
   
   /**
@@ -1072,15 +1079,15 @@ export class BaseClient extends Request {
  * @param {string} [options.chatId=this.chatId] - The ID of the chat where the user is banned.
  * @param {number} options.senderChatId - The ID of the user to be banned.
  * @throws {TelegramApiError} If an error occurs while banning the user.
- * @returns {Promise<object>} The result of the request.
+ * @returns {Promise<object | undefined>} The result of the request.
  */
-  async banChatSenderChat(options: any): Promise<object> {
+  async banChatSenderChat(options: any): Promise<object | undefined> {
     const method = 'banChatMember';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.senderChatId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1097,15 +1104,15 @@ export class BaseClient extends Request {
  * @param {number} options.senderChatId - Unique identifier of the target user.
  * @param {number} [options.chatId] - Unique identifier of the target chat, required if `chatId` is not defined in class instance.
  * @throws {TelegramApiError} When an error occurs while unbanning the chat member.
- * @returns {Promise<object>} On success, the returned object will contain the `ok` field set to `true`.
+ * @returns {Promise<object | undefined>} On success, the returned object will contain the `ok` field set to `true`.
  */
-  async unbanChatSenderChat(options: any): Promise<object> {
+  async unbanChatSenderChat(options: any): Promise<object | undefined> {
     const method = 'unbanChatMember';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.senderChatId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1122,16 +1129,16 @@ export class BaseClient extends Request {
  * @param {object} options.permissions - The chat permissions to set. This should be an object containing key-value pairs where the keys are the names of the permissions and the values are booleans indicating whether the permission should be allowed or not.
  * @param {boolean} [options.independentPermissions=false] - Whether to use independent chat permissions or not.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Promise<object>} Returns a promise which resolves to the result of the API request.
+ * @returns {Promise<object | undefined>} Returns a promise which resolves to the result of the API request.
  */
-  async setChatPermissions(options: any): Promise<object> {
+  async setChatPermissions(options: any): Promise<object | undefined> {
     const method = 'setChatPermissions';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       permissions: options.permissions,
       use_independent_chat_permissions: options.independentPermissions
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1147,12 +1154,12 @@ export class BaseClient extends Request {
  * @throws {TelegramApiError} If an error occurs while exporting the chat invite link.
  * @returns {Promise<string>} The invite link for the chat.
  */
-  async portChatInviteLink(chatId: string): Promise<object> {
+  async portChatInviteLink(chatId: string): Promise<object | undefined> {
     const method = 'portChatInviteLink';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1168,10 +1175,10 @@ export class BaseClient extends Request {
  * @param {Date} [options.expireDate] - The date and time when the invite link will expire.
  * @param {number} [options.memberLimit] - The maximum number of members that can join the chat using the invite link. If not provided, there will be no limit.
  * @param {boolean} [options.createsJoinRequest] - Determines whether the invite link creates a join request instead of adding the user directly to the chat. Defaults to false.
- * @returns {Promise<object>} - The created chat invite link object.
+ * @returns {Promise<object | undefined>} - The created chat invite link object.
  * @throws {TelegramApiError} - If the API response contains an error.
  */
-  async createChatInviteLink(options: any): Promise<object> {
+  async createChatInviteLink(options: any): Promise<object | undefined> {
     const method = 'createChatInviteLink';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -1181,7 +1188,7 @@ export class BaseClient extends Request {
       creates_join_request: options.createsJoinRequest
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1198,10 +1205,10 @@ export class BaseClient extends Request {
  * @param {number} [options.expireDate] - Point in time (Unix timestamp) when the link will expire, in 30-2592000 seconds.
  * @param {number} [options.memberLimit] - Maximum number of chat members that can join the chat through the link.
  * @param {boolean} [options.createsJoinRequest] - True, if the link is a primary link for inviting users to a chat.
- * @returns {Promise<object>} - The edited chat invite link as a ChatInviteLink object.
+ * @returns {Promise<object | undefined>} - The edited chat invite link as a ChatInviteLink object.
  * @throws {TelegramApiError} - If the response contains an error.
  */
-  async editChatInviteLink(options: any): Promise<object> {
+  async editChatInviteLink(options: any): Promise<object | undefined> {
     const method = 'editChatInviteLink';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -1212,7 +1219,7 @@ export class BaseClient extends Request {
       creates_join_request: options.createsJoinRequest
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1228,16 +1235,16 @@ export class BaseClient extends Request {
  * @param {number} [options.chatId] - The ID of the chat where the invite link was generated.
  * If not provided, the ID of the current chat instance will be used.
  * @throws {TelegramApiError} If the API call fails, an error with the description of the problem.
- * @returns {Promise<object>} The API response object.
+ * @returns {Promise<object | undefined>} The API response object.
  */
-  async revokeChatInviteLink(options: any): Promise<object> {
+  async revokeChatInviteLink(options: any): Promise<object | undefined> {
     const method = 'revokeChatInviteLink';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       invite_link: options.inviteLink
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1252,15 +1259,15 @@ export class BaseClient extends Request {
  * @param {number} options.userId - The user ID for the join request.
  * @param {number} [options.chatId] - The chat ID for the join request. If not provided, it will use the chatId property of the bot instance.
  * @throws {TelegramApiError} If the response contains an error code.
- * @returns {Promise<object>} The result of the approveChatJoinRequest method.
+ * @returns {Promise<object | undefined>} The result of the approveChatJoinRequest method.
  */
-  async approveChatJoinRequest(options: any): Promise<object> {
+  async approveChatJoinRequest(options: any): Promise<object | undefined> {
     const method = 'approveChatJoinRequest';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.userId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1277,15 +1284,15 @@ export class BaseClient extends Request {
  * @param {number} options.userId - The user id of the user who sent the join request.
  * @param {number} [options.chatId] - The chat id where the join request was sent. Required if `chatId` was not specified during instance creation.
  * @throws {TelegramApiError} Throws an error if the Telegram API responds with an error.
- * @returns {Promise<object>} Returns a Promise that resolves to the API response on success.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the API response on success.
  */
-  async declineChatJoinRequest(options: any): Promise<object> {
+  async declineChatJoinRequest(options: any): Promise<object | undefined> {
     const method = 'declineChatJoinRequest';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.userId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1301,16 +1308,16 @@ export class BaseClient extends Request {
  * @param {number} options.chatId=this.chatId - Required if `this.chatId` is not set. Unique identifier for the target chat.
  * @param {string} options.photo - The photo to set as the chat's new profile photo.
  * @throws {TelegramApiError} If the request to the Telegram API fails or if the response contains an error code.
- * @returns {Promise<object>} On success, the method returns True.
+ * @returns {Promise<object | undefined>} On success, the method returns True.
  */
-  async setChatPhoto(options: any): Promise<object> {
+  async setChatPhoto(options: any): Promise<object | undefined> {
     const method = 'setChatPhoto';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       photo: options.photo
     };
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1322,15 +1329,15 @@ export class BaseClient extends Request {
    * @param {string} options - Optional parameters.
    * @param {number} chatId=this.chatId - Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
    * @throws {TelegramApiError} If an error is encountered while processing the request.
-   * @returns {Promise<boolean>} On success, returns True.
+   * @returns {Promise<object | undefined>} On success, returns True.
    */ 
-  async deleteChatPhoto(chatId: number): Promise<boolean> {
+  async deleteChatPhoto(chatId: number): Promise<object | undefined> {
     const method = 'deleteChatPhoto';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     };
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1344,17 +1351,17 @@ export class BaseClient extends Request {
  * @param {object} options - The options to set a new chat title.
  * @param {string} [options.chatId=this.chatId] - Unique identifier for the target chat or username of the target channel.
  * @param {string} options.title - New chat title, 1-255 characters.
- * @returns {Promise<object>} On success, the updated chat object is returned.
+ * @returns {Promise<object | undefined>} On success, the updated chat object is returned.
  * @throws {TelegramApiError} If the request to set a new chat title fails, this error is thrown.
  */
-  async setChatTitle(options: any): Promise<object> {
+  async setChatTitle(options: any): Promise<object | undefined> {
     const method = 'setChatTitle';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       title: options.title
     };
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1369,16 +1376,16 @@ export class BaseClient extends Request {
  * @param {number} options.chatId=this.chatId - The chat ID to set the description for.
  * @param {string} options.description - The new description for the chat.
  * @throws {TelegramApiError} Throws an error if the request to the Telegram API fails or if the response contains an error.
- * @returns {Promise<object>} Returns a promise that resolves to the response from the Telegram API.
+ * @returns {Promise<object | undefined>} Returns a promise that resolves to the response from the Telegram API.
  */
-  async setChatDescription(options: any): Promise<object> {
+  async setChatDescription(options: any): Promise<object | undefined> {
     const method = 'setChatDescription';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       description: options.description
     };
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1394,9 +1401,9 @@ export class BaseClient extends Request {
  * @param {number} [options.chatId] - The ID of the chat where the message is located. Uses the chatId property of the instance if not provided.
  * @param {boolean} [options.notification] - Pass true to disable notifications for the message. Defaults to false.
  * @throws {TelegramApiError} If an error occurs while attempting to pin the message.
- * @returns {Promise<object>} On success, the method returns True.
+ * @returns {Promise<object | undefined>} On success, the method returns True.
  */
-  async pinChatMessage(options: any): Promise<object> {
+  async pinChatMessage(options: any): Promise<object | undefined> {
     const method = 'pinChatMessage';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -1404,7 +1411,7 @@ export class BaseClient extends Request {
       disable_notification: options.notification
     };
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1418,15 +1425,15 @@ export class BaseClient extends Request {
  * @param {number} options.messageId - The ID of the message to unpin.
  * @param {number} [options.chatId] - The ID of the chat where the message to unpin is located. If not specified, the chat ID of the instance is used.
  * @throws {TelegramApiError} Throws an error if the API returns an error response.
- * @returns {Promise<object>} Returns a Promise that resolves to the result of the API call.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result of the API call.
  */
-  async unpinChatMessage(options: any): Promise<object> {
+  async unpinChatMessage(options: any): Promise<object | undefined> {
     const method = 'unpinChatMessage';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       message_id: options.messageId,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1440,14 +1447,14 @@ export class BaseClient extends Request {
  * @async
  * @param {number} chatId=this.chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
  * @throws {TelegramApiError} When the API call fails.
- * @returns {Promise<object>} On success, the sent [Message](https://core.telegram.org/bots/api#message) is returned.
+ * @returns {Promise<object | undefined>} On success, the sent [Message](https://core.telegram.org/bots/api#message) is returned.
  */
-  async unpinAllChatMessages(chatId: number): Promise<object> {
+  async unpinAllChatMessages(chatId: number): Promise<object | undefined> {
     const method = 'unpinAllChatMessages';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1460,15 +1467,15 @@ export class BaseClient extends Request {
  * @async
  * @param {number} chatId=this.chatId - The chat ID of the chat to leave.
  * @throws {TelegramApiError} When the response contains an error.
- * @returns {Promise<object>} On success, the method returns True.
+ * @returns {Promise<object | undefined>} On success, the method returns True.
  */
 
-  async leaveChat(chatId: number): Promise<object> {
+  async leaveChat(chatId: number): Promise<object | undefined> {
     const method = 'leaveChat';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1482,15 +1489,15 @@ export class BaseClient extends Request {
    * @async
    * @param {string} chatId - The ID of the chat to get information about.
    * @throws {TelegramApiError} Throws an error if the response contains an error code.
-   * @returns {Promise<object>} Returns an object containing information about the chat.
+   * @returns {Promise<object | undefined>} Returns an object containing information about the chat.
    */
 
-  async getChat(chatId: string): Promise<object> {
+  async getChat(chatId: string): Promise<object | undefined> {
     const method = 'getChat';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1504,12 +1511,12 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} If the request to the Telegram API fails or if the API returns an error
    * @returns {Promise<Array<any>>} - On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots.
    */
-  async getChatAdministrators(chatId: number | string): Promise<object> {
+  async getChatAdministrators(chatId: number | string): Promise<object | undefined> {
     const method = 'getChatAdministrators';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1521,15 +1528,15 @@ export class BaseClient extends Request {
   * Retrieves the current number of members in a chat.
   * @async
   * @param {number} chatId=this.chatId - The identifier of the chat. If not provided, the chatId property of the TelegramBot instance will be used.
-  * @returns {Promise<number>} The number of members in the chat.
+  * @returns {Promise<object | undefined>} The number of members in the chat.
   * @throws {TelegramApiError} If there is an error while calling the Telegram API.
   */
-  async getChatMemberCount(chatId: number): Promise<number> {
+  async getChatMemberCount(chatId: number): Promise<object | undefined> {
     const method = 'getChatMemberCount';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1545,16 +1552,16 @@ export class BaseClient extends Request {
    * @param {number|string} options.chatId - Unique identifier for the target chat or username of the target channel.
    * @param {number} options.userId - Unique identifier of the target user.
    * @throws {TelegramApiError} If the request to the Telegram API fails or if there is an error code in the response.
-   * @returns {Promise<object>} On success, an object containing information about the member.
+   * @returns {Promise<object | undefined>} On success, an object containing information about the member.
    */
-  async getChatMember(options: any): Promise<object> {
+  async getChatMember(options: any): Promise<object | undefined> {
     const method = 'getChatMember';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       user_id: options.userId
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1570,17 +1577,17 @@ export class BaseClient extends Request {
    * @param {object} options - An object containing options to pass.
    * @param {number} options.chatId=this.chatId - Unique identifier for the target chat or username of the target channel.
    * @param {string} options.stickerSetName - Name of the sticker set to be set as the group's sticker set.
-   * @return {Promise<boolean>} Returns True on success.
+   * @return {Promise<object | undefined>} Returns True on success.
    * @throws {TelegramApiError} When the response contains an error.
    */
-  async setChatStickerSet(options: any): Promise<boolean> {
+  async setChatStickerSet(options: any): Promise<object | undefined> {
     const method = 'setChatStickerSet';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       sticker_set_name: options.stickerSetName
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1593,15 +1600,15 @@ export class BaseClient extends Request {
  * @async
  * @param {number} chatId=this.chatId - Unique identifier for the target chat or username of the target channel.
  * @throws {TelegramApiError} If an error occurs while deleting the chat's sticker set.
- * @returns {Promise<object>} On success, the deleted chat's sticker set is returned.
+ * @returns {Promise<object | undefined>} On success, the deleted chat's sticker set is returned.
  */
-  async deleteChatStickerSet(chatId: number): Promise<object> {
+  async deleteChatStickerSet(chatId: number): Promise<object | undefined> {
     const method = 'deleteChatStickerSet';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1611,12 +1618,12 @@ export class BaseClient extends Request {
   /**
  * Get a list of stickers corresponding to a forum topic icon
  * @async
- * @returns {Promise<object[]>} An array of sticker objects for the corresponding forum topic icon
+ * @returns {Promise<object>} An array of sticker objects for the corresponding forum topic icon
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error response
  */
-  async getForumTopicIconStickers(): Promise<object[]> {
+  async getForumTopicIconStickers(): Promise<object | undefined> {
     const method = 'getForumTopicIconStickers';
-    const response: any = await this.request(method);
+    const response: TelegramApiResponse = await this.request(method);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1631,10 +1638,10 @@ export class BaseClient extends Request {
  * @param {string} options.name - The name of the forum topic.
  * @param {string} options.iconColor - The icon color of the forum topic.
  * @param {string} options.iconCustomEmojiId - The ID of the custom emoji to use as the icon of the forum topic.
- * @returns {Promise<object>} - The response from the Telegram API.
+ * @returns {Promise<object | undefined>} - The response from the Telegram API.
  * @throws {TelegramApiError} - If there was an error creating the forum topic.
  */
-  async createForumTopic(options: any): Promise<object> {
+  async createForumTopic(options: any): Promise<object | undefined> {
     const method = 'createForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -1643,7 +1650,7 @@ export class BaseClient extends Request {
       icon_custom_emoji_id: options.iconCustomEmojiId
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1660,9 +1667,9 @@ export class BaseClient extends Request {
  * @param {string} options.name - The new name for the forum topic.
  * @param {string} options.iconCustomEmojiId - The ID of the custom emoji to use as the new icon for the forum topic.
  * @throws {TelegramApiError} If the API response contains an error code.
- * @returns {Promise<object>} The edited forum topic object.
+ * @returns {Promise<object | undefined>} The edited forum topic object.
  */
-  async editForumTopic(options: any): Promise<object> {
+  async editForumTopic(options: any): Promise<object | undefined> {
     const method = 'editForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -1671,7 +1678,7 @@ export class BaseClient extends Request {
       icon_custom_emoji_id: options.iconCustomEmojiId
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1686,16 +1693,16 @@ export class BaseClient extends Request {
   * @param {number} options.chatId=this.chatId - The chat ID.
   * @param {number} options.messageThreadId - The ID of the message thread to close.
   * @throws {TelegramApiError} If the Telegram API returns an error.
-  * @returns {Promise<object>} Returns a Promise that resolves to the result of the API call.
+  * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result of the API call.
   */
-  async closeForumTopic(options: any): Promise<object> {
+  async closeForumTopic(options: any): Promise<object | undefined> {
     const method = 'closeForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       message_thread_id: options.messageThreadId
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1712,14 +1719,14 @@ export class BaseClient extends Request {
  * @param {string} [options.chatId] - Unique identifier of the target chat or username of the target channel.
  * @throws {TelegramApiError} Throws error when the API call returns an error.
  */
-  async reopenForumTopic(options: any): Promise<object> {
+  async reopenForumTopic(options: any): Promise<object | undefined> {
     const method = 'reopenForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       message_thread_id: options.messageThreadId
     }
 
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -1733,16 +1740,16 @@ export class BaseClient extends Request {
  * @param {object} options - An object containing the options for deleting a forum topic.
  * @param {number} options.messageThreadId - The ID of the message thread to delete.
  * @param {number} [options.chatId] - The ID of the chat from which to delete the message thread. If not specified, uses the default chat ID of the TelegramBot instance.
- * @returns {Promise<object>} - A Promise which resolves to an object representing the deleted forum topic.
+ * @returns {Promise<object | undefined>} - A Promise which resolves to an object representing the deleted forum topic.
  * @throws {TelegramApiError} - If there is an error with the Telegram API request.
  */
-  async deleteForumTopic(options: any): Promise<object> {
+  async deleteForumTopic(options: any): Promise<object | undefined> {
     const method = 'deleteForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       message_thread_id: options.messageThreadId
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1759,15 +1766,15 @@ export class BaseClient extends Request {
  * @param {number} options.chatId=this.chatId - The ID of the chat where the messages are located.
  * @param {number} options.messageThreadId - The ID of the message thread where the messages are located.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
- * @returns {Promise<object>} Returns a Promise that resolves to the API response object.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the API response object.
  */
-  async unpinAllForumTopicMessages(options: any): Promise<object> {
+  async unpinAllForumTopicMessages(options: any): Promise<object | undefined> {
     const method = 'unpinAllForumTopicMessages';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       message_thread_id: options.messageThreadId
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1782,16 +1789,16 @@ export class BaseClient extends Request {
  * @param {object} options - The options to edit the forum topic.
  * @param {number} options.chatId=this.chatId - The chat id of the forum topic.
  * @param {string} options.name - The new name of the forum topic.
- * @returns {Promise<object>} Returns a Promise that resolves to the edited forum topic object on success.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the edited forum topic object on success.
  * @throws {TelegramApiError} Throws an error if the API call fails.
  */
-  async editGeneralForumTopic(options: any): Promise<object> {
+  async editGeneralForumTopic(options: any): Promise<object | undefined> {
     const method = 'editGeneralForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       name: options.name
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1804,14 +1811,14 @@ export class BaseClient extends Request {
  * @async
  * @param {number} chatId=this.chatId - The ID of the chat where the forum topic is located.
  * @throws {TelegramApiError} If an error occurs while closing the forum topic.
- * @returns {Promise<object>} The result of the API call to the Telegram server.
+ * @returns {Promise<object | undefined>} The result of the API call to the Telegram server.
  */
-  async closeGeneralForumTopic(chatId: number): Promise<object> {
+  async closeGeneralForumTopic(chatId: number): Promise<object | undefined> {
     const method = 'closeGeneralForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1824,14 +1831,14 @@ export class BaseClient extends Request {
    * @async
    * @param {string} chatId - The chat ID of the chat where the topic is located. Optional if chat ID is set in the TelegramBot constructor.
    * @throws {TelegramApiError} Throws an error if the response from the Telegram API contains an error code.
-   * @returns {Promise<object>} Returns a Promise that resolves to the result of the Telegram API response.
+   * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result of the Telegram API response.
    */
-  async reopenGeneralForumTopic(chatId: string): Promise<object> {
+  async reopenGeneralForumTopic(chatId: string): Promise<object | undefined> {
     const method = 'reopenGeneralForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1844,40 +1851,40 @@ export class BaseClient extends Request {
  * 
  * @async
  * @param {string | number} chatId - The ID of the chat to hide the general forum topic for.
- * @returns {Promise<boolean>} - Returns true if the general forum topic was successfully hidden.
+ * @returns {Promise<object | undefined>} - Returns true if the general forum topic was successfully hidden.
  * @throws {TelegramApiError} - Throws an error if the response contains an error code.
  */
-  async hideGeneralForumTopic(chatId: number | string): Promise<boolean> {
+  async hideGeneralForumTopic(chatId: number | string): Promise<object | undefined> {
     const method = 'hideGeneralForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
-    return true;
+    return response.result;
   }
   
   /**
  * Unhides a previously hidden general forum topic in a Telegram chat.
  * @async
  * @param {string | number} chatId - The ID of the chat where the topic is hidden.
- * @returns {Promise<boolean>} - Returns `true` if the topic was successfully unhidden.
+ * @returns {Promise<object | undefined>} - Returns `true` if the topic was successfully unhidden.
  * @throws {TelegramApiError} - Throws an error if the Telegram API responds with an error.
  */
-  async unhideGeneralForumTopic(chatId: string | number): Promise<boolean> {
+  async unhideGeneralForumTopic(chatId: string | number): Promise<object | undefined> {
     const method = 'unhideGeneralForumTopic';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
-    return true;
+    return response.result;
   }
   
   /**
@@ -1891,9 +1898,9 @@ export class BaseClient extends Request {
  * @param {string} [options.url] - URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game. Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
  * @param {number} [options.cacheTime] - The maximum amount of time in seconds that the result of the callback query may be cached client-side. Defaults to 0.
  * @throws {TelegramApiError} Throws an error if the response contains an error_code.
- * @returns {Promise<boolean>} Returns true on success.
+ * @returns {Promise<object | undefined>} Returns true on success.
  */
-  async answerCallbackQuery(options: any): Promise<boolean> {
+  async answerCallbackQuery(options: any): Promise<object | undefined> {
     const method = 'answerCallbackQuery';
     const params = {
       callback_query_id: options.callbackQueryId,
@@ -1902,12 +1909,12 @@ export class BaseClient extends Request {
       url: options.url,
       cache_time: options.cacheTime
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
-    return true;
+    return response.result;
   }
   
   /**
@@ -1918,17 +1925,17 @@ export class BaseClient extends Request {
  * @param {Array<object>} options.commands - A list of bot commands.
  * @param {String} [options.scope] - A string representing the bot command scope.
  * @param {String} [options.languageCode] - A string representing the language code for the commands.
- * @returns {Promise<object>} Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
  * @throws {TelegramApiError} Throws a TelegramApiError if the API response contains an error code.
  */
-  async setMyCommands(options: any): Promise<object> {
+  async setMyCommands(options: any): Promise<object | undefined> {
     const method = 'setMyCommands';
     const params = {
       commands: options.commands,
       scope: options?.scope,
       language_code: options?.languageCode
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1945,17 +1952,17 @@ export class BaseClient extends Request {
    * in all private chats and groups, or "all_public_chats" to delete commands in all chats.
    * @param {string} options.languageCode - A string, which represent the user language for which the commands are relevant.
    * 
-   * @returns {Promise<boolean>} - On success, returns True.
+   * @returns {Promise<object | undefined>} - On success, returns True.
    * 
    * @throws {TelegramApiError} - If an error is encountered while deleting bot commands.
    */
-  async deleteMyCommands(options: any): Promise<boolean> {
+  async deleteMyCommands(options: any): Promise<object | undefined> {
     const method = 'deleteMyCommands';
     const params = {
       scope: options?.scope,
       language_code: options?.languageCode
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1970,16 +1977,16 @@ export class BaseClient extends Request {
  * @param {object} options - Additional options for the request.
  * @param {string} [options.scope] - A JSON-serialized object, describing scope of users. 
  * @param {string} [options.languageCode] - A two-letter ISO 639-1 language code or an empty string.
- * @returns {Promise<object[]>} Returns an array of BotCommand on success.
+ * @returns {Promise<object|undefined>} Returns an array of BotCommand on success.
  * @throws {TelegramApiError} Throws an error if there is a problem with the request.
  */
-  async getMyCommands(options: any): Promise<object[]> {
+  async getMyCommands(options: any): Promise<object | undefined> {
     const method = 'getMyCommands';
     const params = {
       scope: options?.scope,
       language_code: options?.languageCode
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -1991,20 +1998,19 @@ export class BaseClient extends Request {
  * Asynchronously sets the name and language code for a Telegram bot.
  * 
  * @async
-  setMyName
  * @param {object} options - An object containing the name and language code to set.
  * @param {string} options.name - The name to set for the bot.
  * @param {string} options.languageCode - The language code to set for the bot.
- * @returns {Promise<string>} The result of the API request.
+ * @returns {Promise<object | undefined>} The result of the API request.
  * @throws {TelegramApiError} Throws an error if there is an error in the API response.
  */
-  async setMyName(options: any): Promise<string> {
+  async setMyName(options: any): Promise<object | undefined> {
     const method = 'setMyName';
     const params = {
       name: options?.name,
       language_code: options?.languageCode
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2017,14 +2023,14 @@ export class BaseClient extends Request {
  * @async
  * @param {string} languageCode - An optional parameter to specify the language code in which to retrieve the name.
  * @throws {TelegramApiError} If there is an error with the Telegram API.
- * @returns {Promise<string>} The name of the user associated with the current API authentication token.
+ * @returns {Promise<object | undefined>} The name of the user associated with the current API authentication token.
  */
-  async getMyName(languageCode: string): Promise<string> {
+  async getMyName(languageCode: string): Promise<object | undefined> {
     const method = 'getMyName';
     const params = {
       language_code: languageCode
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2040,16 +2046,16 @@ export class BaseClient extends Request {
    * @param {string} options.description - The new description of the bot.
    * @param {string} [options.languageCode] - The IETF language tag of the user's language. 
    * If not specified, the server will use the default language code 'en'.
-   * @returns {Promise<object>} Returns a Promise that resolves to the updated User object representing the bot. 
+   * @returns {Promise<object | undefined>} Returns a Promise that resolves to the updated User object representing the bot. 
    * @throws a TelegramApiError if the bot description could not be set.
    */
-  async setMyDescription(options: any): Promise<object> {
+  async setMyDescription(options: any): Promise<object | undefined> {
     const method = 'setMyDescription';
     const params = {
       description: options.description,
       language_code: options.languageCode
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2062,14 +2068,14 @@ export class BaseClient extends Request {
  * @async
  * @param {string} [languageCode] - IETF language tag of the user's language. Defaults to `en`.
  * @throws {TelegramApiError} If the API returns an error.
- * @returns {Promise<string>} A promise that resolves to a string representing the bot's description.
+ * @returns {Promise<object | undefined>} A promise that resolves to a string representing the bot's description.
  */
-  async getMyDescription(languageCode: string): Promise<string> {
+  async getMyDescription(languageCode: string): Promise<object | undefined> {
     const method = 'getMyDescription';
     const params = {
       language_code: languageCode
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -2083,16 +2089,16 @@ export class BaseClient extends Request {
    * @param {object} options - Options for setting the short description.
    * @param {string} options.description - The new short description for the bot.
    * @param {string} options.languageCode - The language code of the new short description.
-   * @returns {Promise<object>} - On success, the method returns the bot's updated profile.
+   * @returns {Promise<object | undefined>} - On success, the method returns the bot's updated profile.
    * @throws {TelegramApiError} - If the request was unsuccessful, a TelegramApiError will be thrown with the description of the error.
    */
-  async setMyShortDescription(options: any): Promise<object> {
+  async setMyShortDescription(options: any): Promise<object | undefined> {
     const method = 'setMyShortDescription';
     const params = {
       short_description: options.description,
       language_code: options.languageCode
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -2105,15 +2111,15 @@ export class BaseClient extends Request {
  * @async
  * @param {string} languageCode - Optional language code to get the short description in a specific language.
  * @throws {TelegramApiError} When the Telegram API returns an error.
- * @returns {Promise<object>} object with the bot's short description.
+ * @returns {Promise<object | undefined>} object with the bot's short description.
  */
-  async getMyShortDescription(languageCode: string): Promise<object> {
+  async getMyShortDescription(languageCode: string): Promise<object | undefined> {
     const method = 'getMyShortDescription';
     const params = {
       language_code: languageCode
     }
     
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
     }
@@ -2128,15 +2134,15 @@ export class BaseClient extends Request {
  * @param {number} options.chatId=this.chatId - The ID of the chat where the menu button will be set. If `chatId` is not provided, the instance's `chatId` property will be used.
  * @param {object} options.menuButton - The menu button object to be set. This object should conform to the Telegram Bot API's `InlineKeyboardButton` type.
  * @throws {TelegramApiError} If there is an error in the Telegram API response.
- * @returns {Promise<object>} The result object from the Telegram API response.
+ * @returns {Promise<object | undefined>} The result object from the Telegram API response.
  */
-  async setChatMenuButton(options: any): Promise<object> {
+  async setChatMenuButton(options: any): Promise<object | undefined> {
     const method = 'setChatMenuButton';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       menu_button: options.menuButton
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2149,14 +2155,14 @@ export class BaseClient extends Request {
  * @async
  * @param {number | string} [chatId] - The chat ID of the chat to get the menu button for.
  * @throws {TelegramApiError} Throws an error if the API response contains an error_code.
- * @returns {Promise<object>} Returns the menu button of the chat.
+ * @returns {Promise<object | undefined>} Returns the menu button of the chat.
  */
-  async getChatMenuButton(chatId: number | string): Promise<object> {
+  async getChatMenuButton(chatId: number | string): Promise<object | undefined> {
     const method = 'getChatMenuButton';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2171,16 +2177,16 @@ export class BaseClient extends Request {
  * @param {object} options - The options object.
  * @param {object} options.rights - New administrator rights of the bot.
  * @param {boolean} options.forChannels - Pass true if the default rights should be set for all groups and channels.
- * @returns {Promise<object>} Returns a Promise that resolves to the updated rights for the bot.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the updated rights for the bot.
  * @throws {TelegramApiError} Throws an error if the response contains an error_code.
  */
-  async setMyDefaultAdministratorRights(options: any): Promise<object> {
+  async setMyDefaultAdministratorRights(options: any): Promise<object | undefined> {
     const method = 'setMyDefaultAdministratorRights';
     const params = {
       rights: options.rights,
       for_channels: options.forChannels
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2194,14 +2200,14 @@ export class BaseClient extends Request {
  * @async
  * @param {boolean} forChannels - Pass `true` to return the default admin rights for all channels the bot is an administrator in.
  * @throws {TelegramApiError} Throws an error if the response contains an error_code.
- * @returns {Promise<object>} Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
  */
-  async getMyDefaultAdministratorRights(forChannels: boolean): Promise<object> {
+  async getMyDefaultAdministratorRights(forChannels: boolean): Promise<object | undefined> {
     const method = 'getMyDefaultAdministratorRights';
     const params = {
       for_channels: forChannels
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2222,10 +2228,10 @@ export class BaseClient extends Request {
  * @param {Array<object>} [options.entities] - List of special entities that appear in message text.
  * @param {boolean} [options.disableWebPagePreview] - Disables link previews for links in the message.
  * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
- * @returns {Promise<object>} Response object with edited message.
+ * @returns {Promise<object | undefined>} Response object with edited message.
  * @throws {TelegramApiError} If the request was unsuccessful.
  */
-  async editMessageText(options: any): Promise<object> {
+  async editMessageText(options: any): Promise<object | undefined> {
     const method = 'editMessageText';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2237,7 +2243,7 @@ export class BaseClient extends Request {
       disable_web_page_preview: options.disableWebPagePreview,
       reply_markup: options.replyMarkup,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2255,10 +2261,10 @@ export class BaseClient extends Request {
  * @param {string} [options.parseMode] - The parsing mode of the new caption.
  * @param {Array} [options.captionEntities] - List of special entities that appear in the caption, which can be specified instead of parse_mode.
  * @param {object | string} [options.replyMarkup] - The reply markup of the message.
- * @returns {Promise<object>} The edited message object.
+ * @returns {Promise<object | undefined>} The edited message object.
  * @throws {TelegramApiError} If there is an error editing the message caption.
  */
-  async editMessageCaption(options: any): Promise<object> {
+  async editMessageCaption(options: any): Promise<object | undefined> {
     const method = 'editMessageCaption';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2269,7 +2275,7 @@ export class BaseClient extends Request {
       caption_entities: options.captionEntities,
       reply_markup: options.replyMarkup,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2285,10 +2291,10 @@ export class BaseClient extends Request {
  * @param {string} [options.inlineMessageId] - The inline message ID of the message to edit (if in inline mode).
  * @param {any} options.media - The new media for the message.
  * @param {any} [options.replyMarkup] - The new reply markup for the message (if any).
- * @returns {Promise<object>} The edited message object.
+ * @returns {Promise<object | undefined>} The edited message object.
  * @throws {TelegramApiError} If there is an error editing the message.
  */
-  async editMessageMedia(options: any): Promise<object> {
+  async editMessageMedia(options: any): Promise<object | undefined> {
     const method = 'editMessageMedia';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2297,7 +2303,7 @@ export class BaseClient extends Request {
       media: options.media,
       reply_markup: options.replyMarkup,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2320,9 +2326,9 @@ export class BaseClient extends Request {
  * @param {number} [options.proximityAlertRadius] - Maximum distance for proximity alerts about approaching another chat member, in meters.
  * @param {object | string} [options.replyMarkup] - Additional interface options. An object of the `InlineKeyboardMarkup` type.
  * @throws {TelegramApiError} When an error occurs while editing the message.
- * @returns {Promise<object>} On success, returns the edited message as a `Message` object.
+ * @returns {Promise<object | undefined>} On success, returns the edited message as a `Message` object.
  */
-  async editMessageLiveLocation(options: any): Promise<object> {
+  async editMessageLiveLocation(options: any): Promise<object | undefined> {
     const method = 'editMessageLiveLocation';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2335,7 +2341,7 @@ export class BaseClient extends Request {
       proximity_alert_radius: options.proximityAlertRadius,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2353,10 +2359,10 @@ export class BaseClient extends Request {
  * @param {number} options.messageId - Identifier of the sent message.
  * @param {string|null} options.inlineMessageId - Identifier of the inline message.
  * @param {object|null} options.replyMarkup - A reply markup object.
- * @returns {Promise<object>} Returns a Promise that resolves to the stopped live location message object.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the stopped live location message object.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
  */
-  async stopMessageLiveLocation(options: any): Promise<object> {
+  async stopMessageLiveLocation(options: any): Promise<object | undefined> {
     const method = 'stopMessageLiveLocation';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2364,7 +2370,7 @@ export class BaseClient extends Request {
       inline_message_id: options.inlineMessageId,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2382,9 +2388,9 @@ export class BaseClient extends Request {
  * @param {string} [options.inlineMessageId] - Required if `chatId` and `messageId` are not specified. Identifier of the inline message.
  * @param {object} options.replyMarkup - A new reply markup for the message.
  * @throws {TelegramApiError} If an error occurs while editing the message, an error object will be thrown.
- * @returns {Promise<object>} On success, the edited Message is returned.
+ * @returns {Promise<object | undefined>} On success, the edited Message is returned.
  */
-  async editMessageReplyMarkup(options: any): Promise<object> {
+  async editMessageReplyMarkup(options: any): Promise<object | undefined> {
     const method = 'editMessageReplyMarkup';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2392,7 +2398,7 @@ export class BaseClient extends Request {
       inline_message_id: options.inlineMessageId,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2409,16 +2415,16 @@ export class BaseClient extends Request {
  * @param {object | string} [options.replyMarkup] - A JSON-serialized object for a new message inline keyboard.
  * @param {number} [options.chatId] - Unique identifier for the target chat or username of the target channel.
  * @throws {TelegramApiError} If an error occurs while stopping the poll.
- * @returns {Promise<object>} On success, the stopped poll is returned.
+ * @returns {Promise<object | undefined>} On success, the stopped poll is returned.
  */
-  async stopPoll(options: any): Promise<object> {
+  async stopPoll(options: any): Promise<object | undefined> {
     const method = 'stopPoll';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       message_id: options.messageId,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2440,9 +2446,9 @@ export class BaseClient extends Request {
  * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
  * @param {string|number} [options.threadId] - The ID of the thread where the message will be sent.
  * @throws {TelegramApiError} Throws an error if the request to the Telegram API fails.
- * @returns {Promise<object>} Returns a Promise that resolves to the sent message object on success.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent message object on success.
  */
-  async sendSticker(options: any): Promise<object> {
+  async sendSticker(options: any): Promise<object | undefined> {
     const method = 'sendSticker';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2455,7 +2461,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowReply,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2468,15 +2474,15 @@ export class BaseClient extends Request {
  *
  * @async
  * @param {string} name - Name of the sticker set.
- * @returns {Promise<object>} A Promise that returns an object representing the sticker set on success.
+ * @returns {Promise<object | undefined>} A Promise that returns an object representing the sticker set on success.
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
  */
-  async getStickerSet(name: string): Promise<object> {
+  async getStickerSet(name: string): Promise<object | undefined> {
     const method = 'getStickerSet';
     const params = {
       name: name
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2489,14 +2495,14 @@ export class BaseClient extends Request {
  * @async
  * @param {string[]} customEmojiIds - An array of custom emoji ids to get related sticker sets
  * @throws {TelegramApiError} Throws an error if the API response contains an error code
- * @returns {Promise<object>} Returns an object representing the list of sticker sets containing custom emojis
+ * @returns {Promise<object | undefined>} Returns an object representing the list of sticker sets containing custom emojis
  */
-  async getCustomEmojiStickers(customEmojiIds: string[]): Promise<object> {
+  async getCustomEmojiStickers(customEmojiIds: string[]): Promise<object | undefined> {
     const method = 'getCustomEmojiStickers';
     const params = {
       custom_emoji_ids: customEmojiIds
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2513,16 +2519,16 @@ export class BaseClient extends Request {
  * @param {any} options.sticker - The PNG image data to be uploaded.
  * @param {string} options.stickerFormat - The file extension for the sticker (e.g. 'png').
  * @throws {TelegramApiError} If there is an error during the API request.
- * @returns {Promise<object>} The uploaded sticker file's information.
+ * @returns {Promise<object | undefined>} The uploaded sticker file's information.
  */
-  async uploadStickerFile(options: any): Promise<object> {
+  async uploadStickerFile(options: any): Promise<object | undefined> {
     const method = 'uploadStickerFile';
     const params = {
       user_id: options.userId,
       sticker: options.sticker,
       sticker_format: options.stickerFormat,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2545,9 +2551,9 @@ export class BaseClient extends Request {
  * @param {string} options.stickerType - The type of the stickers. Supported types: "static" for static stickers, "animated" for animated stickers.
  * @param {boolean} options.needsRepainting - Whether the sticker set needs to be repainted. Defaults to false.
  * @throws {TelegramApiError} If there is an error creating the sticker set.
- * @returns {Promise<object>} The created sticker set object.
+ * @returns {Promise<object | undefined>} The created sticker set object.
  */
-  async createNewStickerSet(options: any): Promise<object> {
+  async createNewStickerSet(options: any): Promise<object | undefined> {
     const method = 'createNewStickerSet';
     const params = {
       user_id: options.userId,
@@ -2558,7 +2564,7 @@ export class BaseClient extends Request {
       sticker_type: options.stickerType,
       needs_repainting: options.needsRepainting,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2582,17 +2588,17 @@ export class BaseClient extends Request {
    * @param {number} options.sticker.maskPosition.xShift - The horizontal shift in pixels.
    * @param {number} options.sticker.maskPosition.yShift - The vertical shift in pixels.
    * @param {number} options.sticker.maskPosition.scale - The scale of the mask.
-   * @returns {Promise<object>} On success, the added Sticker object is returned.
+   * @returns {Promise<object | undefined>} On success, the added Sticker object is returned.
    * @throws {TelegramApiError} If an error occurs while adding the sticker.
    */
-  async addStickerToSet(options: any): Promise<object> {
+  async addStickerToSet(options: any): Promise<object | undefined> {
     const method = 'addStickerToSet';
     const params = {
       user_id: options.userId,
       name: options.name,
       sticker: options.sticker,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2608,15 +2614,15 @@ export class BaseClient extends Request {
  * @param {string} options.sticker - File identifier of the sticker.
  * @param {number} options.position - New position of the sticker in the set (zero-based).
  * @throws {TelegramApiError} If an error occurs while setting the sticker position.
- * @returns {Promise<boolean>} A Promise that resolves to `true` on success.
+ * @returns {Promise<object | undefined>} A Promise that resolves to `true` on success.
  */
-  async setStickerPositionInSet(options: any): Promise<boolean> {
+  async setStickerPositionInSet(options: any): Promise<object | undefined> {
     const method = 'setStickerPositionInSet';
     const params = {
       sticker: options.sticker,
       position: options.position,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2629,15 +2635,15 @@ export class BaseClient extends Request {
    * Returns True on success.
    * @async
    * @param {string} sticker - File identifier of the sticker to be deleted
-   * @returns {Promise<boolean>} On success, True is returned
+   * @returns {Promise<object | undefined>} On success, True is returned
    * @throws {TelegramApiError} If there is an error returned by the Telegram API
    */
-  async deleteStickerFromSet(sticker: string): Promise<boolean> {
+  async deleteStickerFromSet(sticker: string): Promise<object | undefined> {
     const method = 'deleteStickerFromSet';
     const params = {
       sticker: sticker,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2651,15 +2657,15 @@ export class BaseClient extends Request {
  * @param {string} options.sticker - The file identifier of the sticker.
  * @param {Array<string>} options.emojiList - List of emojis corresponding to the sticker.
  * @throws {TelegramApiError} If there is an error returned from the Telegram API.
- * @returns {Promise<object>} On success, the updated sticker object is returned.
+ * @returns {Promise<object | undefined>} On success, the updated sticker object is returned.
  */
-  async setStickerEmoji(options: any): Promise<object> {
+  async setStickerEmoji(options: any): Promise<object | undefined> {
     const method = 'setStickerEmoji';
     const params = {
       sticker: options.sticker,
       emoji_list: options.emojiList
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2676,15 +2682,15 @@ export class BaseClient extends Request {
  * @param {string} options.sticker - File identifier of the sticker.
  * @param {string[]} options.keywords - An array of strings describing the sticker.
  * @throws {TelegramApiError} If an error occurs while setting sticker keywords.
- * @returns {Promise<object>} Result of the API call.
+ * @returns {Promise<object | undefined>} Result of the API call.
  */
-  async setStickerKeywords(options: any): Promise<object> {
+  async setStickerKeywords(options: any): Promise<object | undefined> {
     const method = 'setStickerKeywords';
     const params = {
       sticker: options.sticker,
       keywords: options.keywords
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2701,16 +2707,16 @@ export class BaseClient extends Request {
  * @param {number} options.maskPosition.point_x - The x position where the mask should be placed on the sticker.
  * @param {number} options.maskPosition.point_y - The y position where the mask should be placed on the sticker.
  * @param {number} options.maskPosition.scale - The scale of the mask, should be between 0 and 1.
- * @returns {Promise<object>} On success, the edited sticker is returned.
+ * @returns {Promise<object | undefined>} On success, the edited sticker is returned.
  * @throws {TelegramApiError} If an error occurs while setting the sticker mask position.
  */
-  async setStickerMaskPosition(options: any): Promise<object> {
+  async setStickerMaskPosition(options: any): Promise<object | undefined> {
     const method = 'setStickerMaskPosition';
     const params = {
       sticker: options.sticker,
       mask_position: options.maskPosition
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2727,15 +2733,15 @@ export class BaseClient extends Request {
  * @param {string} options.name - Name of the sticker set.
  * @param {string} options.title - New title for the sticker set.
  * @throws {TelegramApiError} If the API call returns an error.
- * @returns {Promise<object>} On success, the updated sticker set is returned.
+ * @returns {Promise<object | undefined>} On success, the updated sticker set is returned.
  */
-  async setStickerSetTitle(options: any): Promise<object> {
+  async setStickerSetTitle(options: any): Promise<object | undefined> {
     const method = 'setStickerSetTitle';
     const params = {
       name: options.name,
       title: options.title
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2750,17 +2756,17 @@ export class BaseClient extends Request {
    * @param {string} options.name - Name of the sticker set.
    * @param {number} options.userId - Unique identifier of the target user.
    * @param {any} options.thumbnail - New PNG image of the sticker set as a stream or a string URL-encoded file URL.
-   * @returns {Promise<object>} On success, the updated sticker set is returned.
+   * @returns {Promise<object | undefined>} On success, the updated sticker set is returned.
    * @throws {TelegramApiError} If an error occurs while executing the method, an error with a description is thrown.
    */
-  async setStickerSetThumbnail(options: any): Promise<object> {
+  async setStickerSetThumbnail(options: any): Promise<object | undefined> {
     const method = 'setStickerSetThumbnail';
     const params = {
       name: options.name,
       user_id: options.userId,
       thumbnail: options.thumbnail
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2777,15 +2783,15 @@ export class BaseClient extends Request {
  * @param {string} options.name - The name of the sticker set.
  * @param {string} options.customEmojiId - The ID of the custom emoji.
  * @throws {TelegramApiError} When the Telegram API returns an error.
- * @returns {Promise<object>} The response from the Telegram API containing the result.
+ * @returns {Promise<object | undefined>} The response from the Telegram API containing the result.
  */
-  async setCustomEmojiStickerSetThumbnail(options: any): Promise<object> {
+  async setCustomEmojiStickerSetThumbnail(options: any): Promise<object | undefined> {
     const method = 'setCustomEmojiStickerSetThumbnail';
     const params = {
       name: options.name,
       custom_emoji_id: options.customEmojiId
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2798,14 +2804,14 @@ export class BaseClient extends Request {
    * @async
    * @param {string} name - object containing the following required parameters
    * @throws {TelegramApiError} When the request to the Telegram API fails or when the response contains an error.
-   * @returns {Promise<object>} On success, returns True.
+   * @returns {Promise<object | undefined>} On success, returns True.
    */
-  async deleteStickerSet(name: string): Promise<object> {
+  async deleteStickerSet(name: string): Promise<object | undefined> {
     const method = 'deleteStickerSet';
     const params = {
       name: name
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2824,10 +2830,10 @@ export class BaseClient extends Request {
  * @param {string} [options.nextOffset] - The offset that a client should send in the next query with the same text to receive more results.
  * @param {string} [options.switchPmText] - If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter.
  * @param {string} [options.switchPmParameter] - The parameter for the start message sent to the bot when user presses the switch button.
- * @returns {Promise<object>} - A Promise that resolves to the result of the request.
+ * @returns {Promise<object | undefined>} - A Promise that resolves to the result of the request.
  * @throws {TelegramApiError} - If the Telegram API returns an error.
  */
-  async answerInlineQuery(options: any): Promise<object> {
+  async answerInlineQuery(options: any): Promise<object | undefined> {
     const method = 'answerInlineQuery';
     const params = {
       inline_query_id: options.inlineQueryId,
@@ -2839,7 +2845,7 @@ export class BaseClient extends Request {
       switch_pm_parameter: options.switchPmParameter,
       button: options.button
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2854,16 +2860,16 @@ export class BaseClient extends Request {
    * @param {object} options - An object containing the parameters for the method.
    * @param {string} options.queryId - Unique identifier for the query to be answered.
    * @param {any} options.inlineQueryResult - An array of results for the inline query.
-   * @returns {Promise<object>} On success, the method returns the updated message object.
+   * @returns {Promise<object | undefined>} On success, the method returns the updated message object.
    * @throws {TelegramApiError} On error, an error object with an error code and description.
    */
-  async answerWebAppQuery(options: any): Promise<object> {
+  async answerWebAppQuery(options: any): Promise<object | undefined> {
     const method = 'answerWebAppQuery';
     const params = {
       web_app_query_id: options.queryId,
       result: options.inlineQueryResult
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2904,10 +2910,10 @@ export class BaseClient extends Request {
  * @param {number} options.replyToMessageId - Identifier of the message to reply to.
  * @param {boolean} options.allowSendingWithoutReply - Pass true if the message can be sent without a reply.
  * @param {object} options.replyMarkup - Inline keyboard markup object.
- * @returns {Promise<object>} Result object containing information about the sent invoice.
+ * @returns {Promise<object | undefined>} Result object containing information about the sent invoice.
  * @throws {TelegramApiError} If there was an error sending the invoice.
  */
-  async sendInvoice(options: any): Promise<object> {
+  async sendInvoice(options: any): Promise<object | undefined> {
     const method = 'sendInvoice';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -2939,7 +2945,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowSendingWithoutReply,
       reply_markup: options.replyMarkup,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -2973,9 +2979,9 @@ export class BaseClient extends Request {
  * @param {boolean} options.sendEmailToProvider - Whether to send the user's email address to the payment provider.
  * @param {boolean} options.isFlexible - Whether the final payment amount can be changed by the user.
  * @throws {TelegramApiError} If there was an error creating the invoice link.
- * @returns {Promise<object>} The response object, which contains the URL of the payment invoice link.
+ * @returns {Promise<object | undefined>} The response object, which contains the URL of the payment invoice link.
  */
-  async createInvoiceLink(options: any): Promise<object> {
+  async createInvoiceLink(options: any): Promise<object | undefined> {
     const method = 'createInvoiceLink';
     const params = {
       title: options.title,
@@ -2999,7 +3005,7 @@ export class BaseClient extends Request {
       send_email_to_provider: options.sendEmailToProvider,
       is_flexible: options.isFlexible,
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -3016,9 +3022,9 @@ export class BaseClient extends Request {
  * @param {Array} [options.shippingOptions] - List of available shipping options.
  * @param {string} [options.errorMessage] - Error message to display to the user if delivery to the specified address is not possible.
  * @throws {TelegramApiError} Throws an error if the response contains an error code.
- * @returns {Promise<object>} Returns a Promise that resolves to the result object upon successful execution of the method.
+ * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result object upon successful execution of the method.
  */
-  async answerShippingQuery(options: any): Promise<object> {
+  async answerShippingQuery(options: any): Promise<object | undefined> {
     const method = 'answerShippingQuery';
     const params = {
       shipping_query_id: options.queryId,
@@ -3026,7 +3032,7 @@ export class BaseClient extends Request {
       shipping_options: options.shippingOptions,
     error_message: options.errorMessage,
     };
-   const response: any = await this.request(method, params);
+   const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -3042,17 +3048,17 @@ export class BaseClient extends Request {
    * @param {boolean} options.ok - Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. 
    * Specify False if there are any problems.
    * @param {string} [options.errorMessage] - Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout.
-   * @returns {Promise<boolean>} On success, True is returned.
+   * @returns {Promise<object | undefined>} On success, True is returned.
    * @throws {TelegramApiError} On Telegram API error.
    */
-  async answerPreCheckoutQuery(options: any): Promise<object> {
+  async answerPreCheckoutQuery(options: any): Promise<object | undefined> {
     const method = 'answerPreCheckoutQuery';
     const params = {
       pre_checkout_query_id: options.preCheckoutQueryId,
       ok: options.ok,
       error_message: options.errorMessage
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -3072,15 +3078,15 @@ export class BaseClient extends Request {
    * @param {string} options.errors.message - Required. Error message.
    * 
    * @throws {TelegramApiError} If the response from the API contains an error code.
-   * @returns {Promise<object>} On success, returns an object with the success status.
+   * @returns {Promise<object | undefined>} On success, returns an object with the success status.
    */
-  async setPassportDataErrors(options: any): Promise<object> {
+  async setPassportDataErrors(options: any): Promise<object | undefined> {
     const method = 'setPassportDataErrors';
     const params = {
       user_id: options.userId,
       errors: options.errors
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -3100,10 +3106,10 @@ export class BaseClient extends Request {
  * @param {number} [options.replyToMessageId] - Identifier of the message to reply to.
  * @param {boolean} [options.allowSendingWithoutReply=false] - Pass true to allow sending the message without a reply.
  * @param {object | string} [options.replyMarkup] - Additional interface options for the message.
- * @returns {Promise<object>} A Promise that resolves to the sent game object on success.
+ * @returns {Promise<object | undefined>} A Promise that resolves to the sent game object on success.
  * @throws {TelegramApiError} If an error occurs while sending the game.
  */
-  async sendGame(options: any): Promise<object> {
+  async sendGame(options: any): Promise<object | undefined> {
     const method = 'sendGame';
     const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
@@ -3115,7 +3121,7 @@ export class BaseClient extends Request {
       allow_sending_without_reply: options.allowSendingWithoutReply,
       reply_markup: options.replyMarkup
     }
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
 
     if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -3134,7 +3140,7 @@ export class BaseClient extends Request {
    * @return {object} Returns a Promise which will resolve to a message object if the message was deleted successfully.
    * @throws {TelegramApiError} Throws an error if the API response contains an error_code.
    */
-   async deleteMessage(options: any): Promise<object> {
+   async deleteMessage(options: any): Promise<object | undefined> {
      const method = 'deleteMessage';
      const params = {
        chat_id: this.chatId ? this.chatId : options.chatId,
@@ -3142,7 +3148,7 @@ export class BaseClient extends Request {
        revoke: options.revoke
      };
      
-     const response: any = await this.request(method, params);
+     const response: TelegramApiResponse = await this.request(method, params);
 
      if (!!response?.error_code) {
       throw new TelegramApiError(response);
@@ -3157,16 +3163,16 @@ export class BaseClient extends Request {
   * @param {object} options - The options for creating the chat.
   * @param {string} options.type - The type of the chat to create ('private', 'group', or 'supergroup').
   * @param {string} options.title - The title of the chat.
-  * @returns {Promise<object>} - Returns a Promise that resolves to an object representing the created chat.
+  * @returns {Promise<object | undefined>} - Returns a Promise that resolves to an object representing the created chat.
   * @throws {TelegramApiError} - Throws an error if the Telegram API returns an error.
   */
-  async createChat(options: any): Promise<object> {
+  async createChat(options: any): Promise<object | undefined> {
     const method = 'createChat';
     const params = {
       chat_type: options.type,
       title: options.title
     };
-    const response: any = await this.request(method, params);
+    const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
       throw new TelegramApiError(response)
     }

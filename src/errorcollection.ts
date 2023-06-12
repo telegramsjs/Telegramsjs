@@ -3,24 +3,35 @@
  * @extends Error
  */
 class TelegramApiError extends Error {
-  public code: number;
-  public ok: boolean;
+  public code?: number;
+  public ok?: boolean;
 
   /**
    * Creates a new instance of the TelegramApiError class
-   * @param {string} error - The error message returned by the Telegram Bot API
+   * @param {string | object} error - The error message returned by the Telegram Bot API
    */
-  constructor(error: { error_code?: number, description?: string, ok: boolean }) {
-    let message: string;
+  constructor(error: {
+    error_code?: number,
+    description?: string,
+    ok?: boolean 
+  }) {
+    let message: {
+      description: string;
+    } = { description: '' };
+
     if (error.error_code !== undefined) {
-      message = (error.description?.replace("Bad Request: ", "")?.replace("can't parse entities:", "")?.replace("Conflict: ", "")?.replace("can't parse BotCommand: ", "") || "").toLowerCase();
+      message.description = (error.description?.replace("Bad Request: ", "")?.replace("can't parse entities:", "")?.replace("Conflict: ", "")?.replace("can't parse BotCommand: ", "") || "").toLowerCase();
+    } else if (typeof error === 'string') {
+      message.description = error;
     } else {
-      message = error.description || 'unknown error';
+      message.description = error.description || 'unknown error';
     }
-    super(message);
-    this.name = `TelegramApiError[${error.error_code ?? 0}]`;
-    this.code = error.error_code ?? 0;
-    this.ok = error.ok;
+
+    super(message.description);
+
+    this.name = `TelegramApiError[${error?.error_code ?? 0}]`;
+    this.code = error?.error_code ?? 0;
+    this.ok = error?.ok;
   }
 }
 

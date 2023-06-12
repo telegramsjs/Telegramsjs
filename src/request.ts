@@ -23,7 +23,7 @@ export class Request extends EventEmitter {
   private offSetType: any;
   private parseMode?: string;
   private chatId?: number | string;
-  private intents?: string[] | number[] | null = null;
+  private intents?: string[] | number[] | null | undefined = null;
   private startTime: number = Date.now();
   private update_id?: number;
   private last_object?: object;
@@ -123,7 +123,7 @@ export class Request extends EventEmitter {
    */
   async request(
     method: string,
-    params: Record<string, string | number | boolean | readonly string[] | readonly number[] | readonly boolean[] | null>
+    params?: Record<string, string | number | boolean | readonly string[] | readonly number[] | readonly boolean[] | null>
     ): Promise<object> {
     const url = `${this.baseUrl}/${method}`;
     const data = querystring.stringify(params);

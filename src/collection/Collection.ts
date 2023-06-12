@@ -624,6 +624,23 @@ export class Collection<K, V> {
   }
   
   /**
+   * chunk - splits the collection into subcollections of the given size and returns an array with new collections 
+   * @param {number} size - the amount by which this class will be divided
+   * @return {array} - returns an array with new collections 
+   */
+   chunk(size: number): any[] {
+     const chunks = [];
+     const values = this.toArray();
+     for (let i = 0; i < values.length; i += size) {
+       const chunkValues = values.slice(i, i + size);
+       const chunk = new Collection(chunkValues.map((value, index) => [index, value]));
+       chunks.push(chunk);
+     }
+     return chunks;
+   }
+
+
+  /**
    * Returns a new Collection with the value at the specified index replaced.
    * @template K, V
    * @param {number} index - The index of the element to replace.
