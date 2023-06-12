@@ -628,7 +628,7 @@ export class Collection<K, V> {
    * @param {number} size - the amount by which this class will be divided
    * @return {array} - returns an array with new collections 
    */
-   chunk(size: number): any[] {
+  public chunk(size: number): any[] {
      const chunks = [];
      const values = this.toArray();
      for (let i = 0; i < values.length; i += size) {
@@ -645,7 +645,7 @@ export class Collection<K, V> {
     * @return {K | undefined} - returns the first key corresponding to the specified value in the collection 
     */
     
-    keyOf(value: V): K | undefined {
+   public keyOf(value: V): K | undefined {
       for (const [key, val] of this.entries()) {
         if (Object.is(val, value)) {
           return key;
