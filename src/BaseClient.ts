@@ -11,11 +11,11 @@ type TelegramApiResponse = {
 
 export class BaseClient extends Request {
   token: string = '';
-  intents: string[] | number[] | null | undefined = null;
-  parseMode: string = '';
-  chatId: string | number = '';
-  queryString: string = '';
-  offSetType: any;
+  intents?: string[] | number[] | null | undefined = null;
+  parseMode?: string = '';
+  chatId?: string | number = '';
+  queryString?: string | undefined = '';
+  offSetType?: any;
   /**
    * Creat method Telegram Api
   * @param {string} token - The Telegram Bot API token.
@@ -28,11 +28,11 @@ export class BaseClient extends Request {
    */
   constructor(
     token: string, 
-    intents: readonly string[] | number[] | null,
-    parseMode: string, 
-    chatId: string | number, 
-    queryString: string,
-    offSetType: any
+    intents?: readonly string[] | number[] | null,
+    parseMode?: string, 
+    chatId?: string | number, 
+    queryString?: string,
+    offSetType?: any
     ) {
     super(
       token,

@@ -6,7 +6,7 @@ import { UpdateProcessor } from "./helpers/UpdateProcessor";
  */
 export class TelegramBot extends BaseClient {
   token: string = '';
-  intents: string[] | number[] | null | undefined = null;
+  intents: string[] | number[] | null = null;
   parseMode: string = '';
   chatId: string | number = '';
   queryString: string = '';
@@ -24,7 +24,7 @@ export class TelegramBot extends BaseClient {
    * @param {string | object} [options.offSetType] - The type of offset to use for updates.
    */
   constructor(token: string, options: {
-    intents?: string[] | number[] | null | undefined = null;
+    intents?: readonly string[] | number[] | null;
     parseMode?: string;
     chatId?: string | number;
     queryString?: string;
@@ -32,7 +32,7 @@ export class TelegramBot extends BaseClient {
   } = {}) {
     super(
       token,
-      options.intents,
+      options.intents || null,
       options.parseMode,
       options.chatId,
       options.queryString,
