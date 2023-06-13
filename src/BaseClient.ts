@@ -108,7 +108,7 @@ export class BaseClient extends Request {
    * @param {object} options - object containing options for the message
    * @param {number|string} [options.chatId=this.chatId] - Unique identifier for the target chat or username of the target channel
    * @param {string} options.text - Text of the message to be sent.
-   * @param {object | string} [options.replyMarkup] - Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
+   * @param {string} [options.replyMarkup] - Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
    * @param {boolean} [options.allowReply] - Pass `true` if the message should be sent even if the specified replied-to message is not found
    * @param {boolean} [options.notification] - Sends the message silently. Users will receive a notification with no sound.
    * @param {boolean} [options.content] - Pass `true` if the message should be encrypted.
@@ -118,18 +118,28 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns the sent message.
    * @throws {TelegramApiError} Throws an error if there is a problem with the Telegram API request.
    */
-   async sendMessage(options: any): Promise<object | undefined> {
+   async sendMessage(options: {
+     chatId: string | number;
+     text: string;
+     replyMarkup?: string;
+     allowReply?: boolean;
+     notification?: boolean;
+     content?: boolean;
+     threadId?: number;
+     replyToMessageId?: number;
+     parseMode?: string;
+   }): Promise<object | undefined> {
      const method = 'sendMessage';
-     const params = {
+     const params: Record<string, string | number | boolean | readonly string[] | readonly number[] | readonly boolean[] | null> = {
        chat_id: this.chatId ? this.chatId : options.chatId,
        text: options.text,
-       reply_markup: options.replyMarkup,
-       allow_sending_without_reply: options.allowReply,
-       disable_notification: options.notification,
-       protect_content: options.content,
-       message_thread_id: options.threadId,
-       reply_to_message_id: options.replyToMessageId,
-       parse_mode: options.parseMode ? options.parseMode : this.parseMode
+       reply_markup: options.replyMarkup as string | null,
+       allow_sending_without_reply: options.allowReply as boolean | null,
+       disable_notification: options.notification as boolean | null,
+       protect_content: options.content as boolean | null,
+       message_thread_id: options.threadId as number | null,
+       reply_to_message_id: options.replyToMessageId as number | null,
+       parse_mode: options.parseMode ? options.parseMode : this.parseMode as string | null
      };
      const response: TelegramApiResponse = await this.request(method, params);
      
