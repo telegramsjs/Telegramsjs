@@ -71,7 +71,9 @@ export class BaseClient extends Request {
  * @returns {Promise<object | undefined>} - Returns the response object containing the result of the deletion request.
  * @throws {TelegramApiError} - Throws an error if the webhook deletion fails.
  */
-  async deleteWebhook(options: any): Promise<object | undefined> {
+  async deleteWebhook(options: {
+    dropPendingUpdates: boolean;
+  }): Promise<object | undefined> {
     const method = 'deleteWebhook';
     const params = {
       drop_pending_updates: options?.dropPendingUpdates
@@ -1465,12 +1467,12 @@ export class BaseClient extends Request {
  * Leave a chat.
  *
  * @async
- * @param {number} chatId=this.chatId - The chat ID of the chat to leave.
+ * @param {number | string} chatId=this.chatId - The chat ID of the chat to leave.
  * @throws {TelegramApiError} When the response contains an error.
  * @returns {Promise<object | undefined>} On success, the method returns True.
  */
 
-  async leaveChat(chatId: number): Promise<object | undefined> {
+  async leaveChat(chatId: number | string): Promise<object | undefined> {
     const method = 'leaveChat';
     const params = {
       chat_id: this.chatId ? this.chatId : chatId,
