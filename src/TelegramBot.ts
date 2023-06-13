@@ -7,12 +7,13 @@ import { UpdateProcessor } from "./helpers/UpdateProcessor";
 export class TelegramBot extends BaseClient {
   token: string = '';
   intents: string[] | number[] | null = null;
-  parseMode: string = '';
-  chatId: string | number = '';
-  queryString: string = '';
-  offSetType: any;
+  parseMode?: string;
+  chatId?: string | number;
+  queryString?: string;
+  offSetType?: any;
   baseUrl: string = '';
-  countCollector: number = 0;
+  countCollector?: number;
+  updatesProcess: UpdateProcessor;
   /**
    * Creates a new TelegramBot client.
    * @param {string} token - The Telegram Bot API token.
@@ -38,6 +39,11 @@ export class TelegramBot extends BaseClient {
       options.queryString,
       options.offSetType
     );
+    
+    this.updatesProcess = new UpdateProcessor(
+      this,
+      this.token
+      );
     /**
      * The Telegram Bot API token.
      * @type {string}
@@ -71,23 +77,13 @@ export class TelegramBot extends BaseClient {
   
   let lastUpdateTimestamp = new Date();
   (async() => {
-   this.getMe().then(res => {
-     this.emit('ready', responseClient);
-   }).catch(err => {
-     console.log(err);
-   })
+    this.getMe().then(res => {
+      this.emit('ready', responseClient);
+    }).catch(err => {
+      console.log(err);
+    })
   })();
-  while (true) {
-    const getUpdates = await this.getUpdates();
-    for (const updates of getUpdates) {
-      let responseLastTime = this.lastTimeMap.get('lastTime');
-      if (responseLastTime === 'auto')
-        responseLastTime = true
-        
-      if (responseLastTime) {
-        
-      }
-    }
-  }
+  
+  this.updatesProcess.processUpdate();
  }
 };

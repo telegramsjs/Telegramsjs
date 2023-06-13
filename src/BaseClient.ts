@@ -12,9 +12,9 @@ type TelegramApiResponse = {
 export class BaseClient extends Request {
   token: string = '';
   intents?: string[] | number[] | null | undefined = null;
-  parseMode?: string = '';
-  chatId?: string | number = '';
-  queryString?: string | undefined = '';
+  parseMode?: string;
+  chatId?: string | number;
+  queryString?: string | undefined;
   offSetType?: any;
   /**
    * Creat method Telegram Api

@@ -1,3 +1,5 @@
+import { TelegramBot } from "./TelegramBot";
+import { BaseClient } from "./BaseClient";
 import { Collection } from "./collection/Collection";
 import { Markup, Keyboard } from "./replyMarkup/index";
 import { MessageCollector } from "./collection/MessageCollector";
@@ -39,6 +41,8 @@ import {
 import { version } from "../package.json";
 
 export {
+  TelegramBot,
+  BaseClient,
   Collection,
   Markup,
   Keyboard,

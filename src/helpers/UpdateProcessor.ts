@@ -10,7 +10,7 @@ type MessageTypeMap = {
 };
 
 type ResponseApi = {
-  update_id: number;
+  update_id?: number;
   message?: object;
   edited_message?: object;
   channel_post?: object;
@@ -81,73 +81,79 @@ export class UpdateProcessor extends BaseClient {
   bot: TelegramBot;
   updates!: ResponseApi;
 
-  constructor(
-    bot: TelegramBot,
-    token: string
-    ) {
+  constructor(bot: TelegramBot, token: string) {
     super(token);
     this.bot = bot;
   }
 
-  public processUpdate(
-    updates: ResponseApi
-    ): void {
-    for (const [type, options] of Object.entries(messageTypeMap)) {
-      const updateProperty: any = updates[type as keyof ResponseApi];
-      this.updates = updates as ResponseApi;
-      if (updateProperty) {
-        const chat: any = Object.assign({}, updateProperty.chat, {
-          send: this.send,
-          leave: this.leave,
-          typing: this.typing
-        });
-        const message: any = {
-          ...updateProperty,
-          chat,
-          client: this,
-          remove: this.remove,
-          edit: this.edit,
-          reply: this.reply,
-          createMessageCollector: this.createMessageCollector,
-          isCommand: this.isCommand,
-          isLocation: this.isLocation,
-          isPoll: this.isPoll,
-          isContact: this.isContact,
-          isSticker: this.isSticker,
-          isVoice: this.isVoice,
-          isVideoNote: this.isVideoNote,
-          isAudio: this.isAudio,
-          isDocument: this.isDocument,
-          isPhoto: this.isPhoto,
-          deferUpdate: type === 'callback_query' ? this.deferUpdate : null
-        };
-        this.bot.emit(options.event, message);
-        if (options.textEvent && updateProperty.text) {
-          this.bot.emit(options.textEvent, message);
+  public async processUpdate(updates?: ResponseApi): Promise<void> {
+    while (true) {
+      const getUpdates = await this.bot.getUpdates();
+      for (const update of getUpdates) {
+        let responseLastTime = this.bot.lastTimeMap.get('lastTime');
+        if (responseLastTime === 'auto')
+          responseLastTime = true;
+
+        if (responseLastTime) {
+          for (const [type, options] of Object.entries(messageTypeMap)) {
+            const updateProperty: any = (update as ResponseApi)[type as keyof ResponseApi];
+            this.updates = updateProperty as ResponseApi;
+            if (updateProperty) {
+              const chat: any = Object.assign({}, updateProperty.chat, {
+                send: this.send,
+                leave: this.leave,
+                typing: this.typing
+              });
+              const message: any = {
+                ...updateProperty,
+                chat,
+                client: this,
+                remove: this.remove,
+                edit: this.edit,
+                reply: this.reply,
+                createMessageCollector: this.createMessageCollector,
+                isCommand: this.isCommand,
+                isLocation: this.isLocation,
+                isPoll: this.isPoll,
+                isContact: this.isContact,
+                isSticker: this.isSticker,
+                isVoice: this.isVoice,
+                isVideoNote: this.isVideoNote,
+                isAudio: this.isAudio,
+                isDocument: this.isDocument,
+                isPhoto: this.isPhoto,
+                deferUpdate: type === 'callback_query' ? this.deferUpdate : null
+              };
+              this.bot.emit(options.event, message);
+              if (options.textEvent && updateProperty.text) {
+                this.bot.emit(options.textEvent, message);
+              }
+              if (options.captionEvent && updateProperty.caption) {
+                this.bot.emit(options.captionEvent, message);
+              }
+              if (type === 'message' && updateProperty.reply_to_message) {
+                this.bot.emit('reply_message', message);
+              }
+              break;
+            }
+          }
         }
-        if (options.captionEvent && updateProperty.caption) {
-          this.bot.emit(options.captionEvent, message);
-        }
-        if (type === 'message' && updateProperty.reply_to_message) {
-          this.bot.emit('reply_message', message);
-        }
-        break;
       }
     }
   }
-  
+
   reply(): void {
-    
+
   }
-  
+
   send(): void {
-    
+
   }
-  
+
   typing(): void {
-    
+
   }
-  
+
   leave(chatId?: number | string): object {
     let chat_id: string | number;
     if (this.updates?.callback_query) {
@@ -157,60 +163,60 @@ export class UpdateProcessor extends BaseClient {
     }
     return this.leaveChat(chat_id);
   }
-  
+
   remove(): void {
-    
+
   }
-  
+
   edit(): void {
-    
+
   }
-  
+
   createMessageCollector(): void {
-    
+
   }
-  
+
   deferUpdate(): void {
-    
+
   }
-  
+
   isCommand(): void {
-    
+
   }
-  
+
   isPhoto(): void {
-    
+
   }
-  
+
   isDocument(): void {
-    
+
   }
-  
+
   isAudio(): void {
-    
+
   }
-  
+
   isVideoNote(): void {
-    
+
   }
-  
+
   isSticker(): void {
-    
+
   }
-  
+
   isVoice(): void {
-    
+
   }
-  
+
   isContact(): void {
-    
+
   }
-  
+
   isPoll(): void {
-    
+
   }
-  
+
   isLocation(): void {
-    
+
   }
 };

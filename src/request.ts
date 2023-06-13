@@ -19,11 +19,11 @@ export class Request extends EventEmitter {
   token: string;
   baseUrl: string;
   offset: number;
-  queryString: string;
-  offSetType: any;
+  queryString?: string;
+  offSetType?: any;
   parseMode?: string;
   chatId?: number | string;
-  intents?: string[] | number[] | null | undefined = null;
+  intents?: readonly string[] | number[] | null;
   startTime: number = Date.now();
   update_id?: number;
   last_object?: object;
@@ -39,9 +39,9 @@ export class Request extends EventEmitter {
    */
   constructor(
     token: string,
-    intents: readonly string[] | number[] | null,
-    queryString: string | undefined,
-    offSetType: any,
+    intents?: readonly string[] | number[] | null,
+    queryString?: string | undefined,
+    offSetType?: any,
     parseMode?: string
   ) {
     super();
