@@ -1,4 +1,5 @@
-import { BaseClient } from "./BaseClient";
+import { BaseClient } from "../BaseClient";
+import { TelegramBot } from "../TelegramBot";
 
 type MessageTypeMap = {
   [key: string]: {
@@ -6,6 +7,24 @@ type MessageTypeMap = {
     textEvent?: string;
     captionEvent?: string;
   };
+};
+
+type ResponseApi = {
+  update_id: number;
+  message?: object;
+  edited_message?: object;
+  channel_post?: object;
+  edited_channel_post?: object;
+  inline_query?: object;
+  chosen_inline_result?: object;
+  callback_query?: object;
+  shipping_query?: object;
+  pre_checkout_query?: object;
+  poll?: object;
+  poll_answer?: object;
+  my_chat_member?: object;
+  chat_member?: object;
+  chat_join_request?: object;
 };
 
 const messageTypeMap: MessageTypeMap = {
@@ -59,28 +78,33 @@ const messageTypeMap: MessageTypeMap = {
 };
 
 export class UpdateProcessor extends BaseClient {
-  private bot: TelegramBot;
+  bot: TelegramBot;
+  updates!: ResponseApi;
 
-  constructor(bot: TelegramBot) {
-    super();
+  constructor(
+    bot: TelegramBot,
+    token: string
+    ) {
+    super(token);
     this.bot = bot;
   }
 
   public processUpdate(
-    updates: object
+    updates: ResponseApi
     ): void {
     for (const [type, options] of Object.entries(messageTypeMap)) {
-      const updateProperty = updates[type];
+      const updateProperty: any = updates[type as keyof ResponseApi];
+      this.updates = updates as ResponseApi;
       if (updateProperty) {
-        const chat = Object.assign({}, updateProperty.chat, {
+        const chat: any = Object.assign({}, updateProperty.chat, {
           send: this.send,
           leave: this.leave,
           typing: this.typing
         });
-        const message = {
+        const message: any = {
           ...updateProperty,
           chat,
-          client: responseClient,
+          client: this,
           remove: this.remove,
           edit: this.edit,
           reply: this.reply,
@@ -124,8 +148,14 @@ export class UpdateProcessor extends BaseClient {
     
   }
   
-  leave(): void {
-    
+  leave(chatId?: number | string): object {
+    let chat_id: string | number;
+    if (this.updates?.callback_query) {
+      chat_id = chatId ?? (this.updates?.callback_query as any)?.message?.chat?.id;
+    } else {
+      chat_id = chatId ?? (this.updates?.message as any)?.chat?.id;
+    }
+    return this.leaveChat(chat_id);
   }
   
   remove(): void {
