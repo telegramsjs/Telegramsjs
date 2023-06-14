@@ -12,6 +12,8 @@ type MessageTypeMap = {
 type ResponseApi = {
   update_id?: number;
   message?: object;
+  chat?: object;
+  from?: object;
   edited_message?: object;
   channel_post?: object;
   edited_channel_post?: object;
@@ -77,13 +79,22 @@ const messageTypeMap: MessageTypeMap = {
   },
 };
 
-export class UpdateProcessor extends BaseClient {
+export class UpdateProcessor {
   bot: TelegramBot;
   updates!: ResponseApi;
+  functions: BaseClient;
 
-  constructor(bot: TelegramBot, token: string) {
-    super(token);
+  constructor(bot: TelegramBot) {
     this.bot = bot;
+    this.functions = new BaseClient(
+      bot.token,
+      bot.intents,
+      bot.parseMode,
+      bot.chatId,
+      bot.queryString,
+      bot.offSetType
+    );
+    console.log(this.functions);
   }
 
   public async processUpdate(updates?: ResponseApi): Promise<void> {
@@ -101,7 +112,7 @@ export class UpdateProcessor extends BaseClient {
             if (updateProperty) {
               const chat: any = Object.assign({}, updateProperty.chat, {
                 send: this.send,
-                leave: this.leave,
+                leave: (args?: string | number) => this.leave(args),
                 typing: this.typing
               });
               const message: any = {
@@ -157,11 +168,11 @@ export class UpdateProcessor extends BaseClient {
   leave(chatId?: number | string): object {
     let chat_id: string | number;
     if (this.updates?.callback_query) {
-      chat_id = chatId ?? (this.updates?.callback_query as any)?.message?.chat?.id;
+      chat_id = (this.updates?.callback_query as any)?.message?.chat?.id;
     } else {
-      chat_id = chatId ?? (this.updates?.message as any)?.chat?.id;
+      chat_id = (this.updates?.chat as any)?.id;
     }
-    return this.leaveChat(chat_id);
+    return this.functions.leaveChat(chat_id);
   }
 
   remove(): void {

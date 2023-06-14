@@ -13,7 +13,7 @@ export class TelegramBot extends BaseClient {
   offSetType?: any;
   baseUrl: string = '';
   countCollector?: number;
-  updatesProcess: UpdateProcessor;
+  updatesProcess?: UpdateProcessor;
   /**
    * Creates a new TelegramBot client.
    * @param {string} token - The Telegram Bot API token.
@@ -39,11 +39,6 @@ export class TelegramBot extends BaseClient {
       options.queryString,
       options.offSetType
     );
-    
-    this.updatesProcess = new UpdateProcessor(
-      this,
-      this.token
-      );
     /**
      * The Telegram Bot API token.
      * @type {string}
@@ -76,6 +71,7 @@ export class TelegramBot extends BaseClient {
   };
   
   let lastUpdateTimestamp = new Date();
+  this.updatesProcess = new UpdateProcessor(this);
   (async() => {
     this.getMe().then(res => {
       this.emit('ready', responseClient);
@@ -84,6 +80,6 @@ export class TelegramBot extends BaseClient {
     })
   })();
   
-  this.updatesProcess.processUpdate();
+  this.updatesProcess.processUpdate(this);
  }
 };
