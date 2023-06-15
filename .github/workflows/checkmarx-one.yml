@@ -18,7 +18,7 @@ name: Checkmarx Scan
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches: [ "main", "v1" ]
+    branches: ["main", "v1"]
 
 permissions:
   contents: read
@@ -44,7 +44,7 @@ jobs:
       - name: Checkmarx One scan
         uses: checkmarx/ast-github-action@8e887bb93dacc44e0f5b64ee2b06d5815f89d4fc
         with:
-          base_uri: https://ast.checkmarx.net  # This should be replaced by your base uri for Checkmarx One
+          base_uri: https://ast.checkmarx.net # This should be replaced by your base uri for Checkmarx One
           cx_client_id: ${{ secrets.CX_CLIENT_ID }} # This should be created within your Checkmarx One account : https://checkmarx.com/resource/documents/en/34965-118315-authentication-for-checkmarx-one-cli.html#UUID-a4e31a96-1f36-6293-e95a-97b4b9189060_UUID-4123a2ff-32d0-2287-8dd2-3c36947f675e
           cx_client_secret: ${{ secrets.CX_CLIENT_SECRET }} # This should be created within your Checkmarx One account : https://checkmarx.com/resource/documents/en/34965-118315-authentication-for-checkmarx-one-cli.html#UUID-a4e31a96-1f36-6293-e95a-97b4b9189060_UUID-4123a2ff-32d0-2287-8dd2-3c36947f675e
           cx_tenant: ${{ secrets.CX_TENANT }} # This should be replaced by your tenant for Checkmarx One

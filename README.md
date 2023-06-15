@@ -8,21 +8,29 @@
    </div>
 
 ## ⚙️ Introduction
+
 `Telegramsjs` is a lightweight `Node.js` library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as `Telegraf.js` or `node-telegram-bot-api`. The library has a syntax that is similar to `Discord.js`. This library provides a way to create Telegram bots with ease and flexibility.
 
 ## ⚒️ Installation
+
 You can install the telegramsjs library using npm:
+
 ```
 npm install telegramsjs
 ```
 
 ## 📙 Usage
+
 First, you need to create a new instance of the TelegramBot class by providing your Telegram bot token:
 
 ```javascript
-const { TelegramBot, IntentsBitField, IntentBits, Events } = require("telegramsjs");
-const intents = new IntentsBitField()
-  .add(
+const {
+  TelegramBot,
+  IntentsBitField,
+  IntentBits,
+  Events,
+} = require("telegramsjs");
+const intents = new IntentsBitField().add(
   IntentBits.Message,
   IntentBits.EditedMessage,
   IntentBits.EditedChannelPost,
@@ -33,13 +41,13 @@ const intents = new IntentsBitField()
   IntentBits.ShippingQuery,
   IntentBits.PreCheckoutQuery,
   IntentBits.Poll,
-  IntentBits.PollAnswer, 
-  IntentBits.MyChatMember, 
-  IntentBits.ChatMember
-  );
+  IntentBits.PollAnswer,
+  IntentBits.MyChatMember,
+  IntentBits.ChatMember,
+);
 
-const bot = new TelegramBot('TELEGRAM_BOT_TOKEN', {
-  intents: intents.toArray()
+const bot = new TelegramBot("TELEGRAM_BOT_TOKEN", {
+  intents: intents.toArray(),
 });
 ```
 
@@ -62,7 +70,7 @@ The library provides several events that you can listen to, including:
 Here's an example of how to listen to the `message` event:
 
 ```javascript
-bot.on('message', (message) => {
+bot.on("message", message => {
   // your code here
 });
 ```
@@ -78,13 +86,13 @@ bot.commands = new Collection();
 You can add commands to the `commands` collection using the `set` method.
 
 ```javascript
-bot.commands.set('/help', {
-  description: 'Displays help information.',
+bot.commands.set("/help", {
+  description: "Displays help information.",
   code: (bot, message) => {
     message.chat.send({
-      text: 'Here are some helpful tips...'
+      text: "Here are some helpful tips...",
     });
-  }
+  },
 });
 ```
 
@@ -94,26 +102,26 @@ To handle multiple commands, you can create a separate file for each command and
 
 ```javascript
 async function loadCommands(dir) {
-  const fs = require('fs');
-  const path = require('path');
+  const fs = require("fs");
+  const path = require("path");
 
-  const readDirRecursive = async (directory) => {
+  const readDirRecursive = async directory => {
     const files = await fs.readdirSync(directory);
     for (const file of files) {
       const filePath = path.join(directory, file);
       if (fs.statSync(filePath).isDirectory()) {
         await readDirRecursive(filePath);
-      } else if (file.endsWith('.js')) {
+      } else if (file.endsWith(".js")) {
         const pull = require(filePath);
         bot.commands.set(pull.command, pull);
       }
     }
-  }
-  
+  };
+
   await readDirRecursive(path.join(process.cwd(), dir));
 }
 
-loadCommands('./commands/');
+loadCommands("./commands/");
 ```
 
 The loader function reads all the files in the `./commands/` directory and adds each command to the `commands` collection.
@@ -122,26 +130,26 @@ Now you can create a file with the `.js` extension for each command:
 
 ```javascript
 module.exports = {
-  command: '/start',
-  description: 'Start command',
+  command: "/start",
+  description: "Start command",
   code: (bot, message) => {
     message.chat.send({
-      text: 'Starting...'
+      text: "Starting...",
     });
-  }
+  },
 };
 ```
 
 You can set the bot's description and commands using the `setMyDescription` and `setCommands` methods respectively.
 
 ```javascript
-bot.once('ready', async (client) => {
+bot.once("ready", async client => {
   await client.setDescription({
-    description: 'My awesome Telegram bot'
+    description: "My awesome Telegram bot",
   });
 
   await client.setCommands({
-    commands: JSON.stringify(bot.commands.toArray())
+    commands: JSON.stringify(bot.commands.toArray()),
   });
 });
 ```
@@ -149,9 +157,11 @@ bot.once('ready', async (client) => {
 The `setMyDescription` and `setDescription` methods set the bot's description, while the `setMyCommands` and `setCommands` methods set the bot's commands.
 
 ## 🎃 Conclusion
+
 `Telegramsjs` provides a simple and flexible way to create Telegram bots using Node.js. With its easy-to-use syntax and event-driven architecture, it is a great choice for developers who want to build bots quickly and efficiently.
 
 ## 📖 Documentation
+
 [Telegramsjs](https://telegramsjs.surge.sh)<br>
 [Telegramsjs Documentation-1](https://github.com/Sempai-07/Telegramsjs/tree/main/docs)<br>
 [Telegramsjs Documentation-2](https://github.com/Sempai-07/Telegramsjs/blob/main/documentation.md)<br>
@@ -159,10 +169,13 @@ The `setMyDescription` and `setDescription` methods set the bot's description, w
 [Formatters](https://telegram-ts-formatters.surge.sh/)
 
 ## 🎒 Contributions
+
 We welcome your contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the [Official support server](https://discord.gg/j8G7jhHMbs) or the [Official Telegram channel](https://t.me/sempaika_telegrams_js).
 
-## 📒 Example 
+## 📒 Example
+
 To see the correct use of the library, see the page on GitHub.
 
 ## 🧾 License
+
 `Telegramsjs` is available under the `MIT` license. For more information, please refer to the [LICENSE](https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE) file.

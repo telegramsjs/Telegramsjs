@@ -4,3 +4,9 @@ dist/
 documentation.md
 index.js
 package-lock.json
+dist/
+docs/
+.txt
+.error
+tg.ts
+.prettierrc

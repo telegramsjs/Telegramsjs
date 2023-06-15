@@ -35,7 +35,7 @@ import {
   checkUsername,
   extractUsername,
 } from "./Util";
-import { version } from "../package.json";
+import { version } from "./package.json";
 
 export {
   TelegramBot,
