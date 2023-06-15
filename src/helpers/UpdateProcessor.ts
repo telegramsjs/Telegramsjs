@@ -12,6 +12,7 @@ type MessageTypeMap = {
 
 type ResponseApi = {
   update_id?: number;
+  message_id?: number;
   message?: object;
   chat?: object;
   from?: object;
@@ -28,6 +29,7 @@ type ResponseApi = {
   my_chat_member?: object;
   chat_member?: object;
   chat_join_request?: object;
+  pinned_message?: object;
 };
 
 type SendOptions = {
@@ -37,6 +39,7 @@ type SendOptions = {
   replyMarkup?: string;
   allowReply?: boolean;
   notification?: boolean;
+  replyToMessageId?: number;
   content?: boolean;
   threadId?: number;
   parseMode?: string;
@@ -48,7 +51,8 @@ type Defaults = {
   messageId?: number;
   replyMarkup?: string;
   allowReply?: boolean;
-  notification?: boolean;
+  notification?: boolean
+  replyToMessageId?: number;
   content?: boolean;
   threadId?: number;
   parseMode?: string;
@@ -119,7 +123,6 @@ export class UpdateProcessor {
       bot.queryString,
       bot.offSetType
     );
-    console.log(this.functions);
   }
 
   public async processUpdate(updates?: ResponseApi): Promise<void> {
@@ -137,28 +140,14 @@ export class UpdateProcessor {
             if (updateProperty) {
               const chat: any = Object.assign({}, updateProperty.chat, {
                 send: (args: SendOptions, defaults?: Defaults) => this.send(args, defaults),
-                leave: (args?: string | number) => this.leave(args),
-                typing: this.typing
+                leave: (args?: string | number) => this.leave(args)
               });
               const message: any = {
                 ...updateProperty,
                 chat,
                 client: this,
-                remove: this.remove,
-                edit: this.edit,
-                reply: this.reply,
-                createMessageCollector: this.createMessageCollector,
-                isCommand: this.isCommand,
-                isLocation: this.isLocation,
-                isPoll: this.isPoll,
-                isContact: this.isContact,
-                isSticker: this.isSticker,
-                isVoice: this.isVoice,
-                isVideoNote: this.isVideoNote,
-                isAudio: this.isAudio,
-                isDocument: this.isDocument,
-                isPhoto: this.isPhoto,
-                deferUpdate: type === 'callback_query' ? this.deferUpdate : null
+                reply: (args: SendOptions, defaults?: Defaults) => this.reply(args, defaults),
+                isCommand: (args?: boolean) => this.isCommand(args)
               };
               this.bot.emit(options.event, message);
               if (options.textEvent && updateProperty.text) {
@@ -178,9 +167,53 @@ export class UpdateProcessor {
     }
   }
 
-  reply(): void {
+  public async reply(
+    options: SendOptions,
+    defaults?: Defaults
+    ): Promise<object | undefined> {
+      let chatId: string | number;
+      let messageId: number | undefined;
+      let text: string | undefined = typeof options === 'object' ? options.text : options;
+      
+      if (typeof options === 'object' && typeof defaults === 'object') {
+        throw new ParameterError('default object should not have a text property');
+      } else if (typeof options === 'string' && defaults?.text) {
+        throw new ParameterError('default object should not be used with a string message');
+      } else if (typeof options === 'string' && typeof defaults === 'string') {
+        throw new ParameterError('this code should not have two string parameters simultaneously.');
+      }
+      
+      if ((this.updates?.callback_query as any)?.message) {
+        chatId = options?.chatId || defaults?.chatId || (this.updates.callback_query as any)?.chat?.id;
+        messageId = options?.messageId || defaults?.messageId || (this.updates.callback_query as any)?.message?.message_id;
+      } else if (this.updates?.edited_message) {
+        chatId = options?.chatId || defaults?.chatId || (this.updates.edited_message as any)?.chat?.id;
+        messageId = options?.messageId || defaults?.messageId || (this.updates.edited_message as any)?.message_id;
+      } else if (this.updates?.edited_channel_post) {
+        chatId = options?.chatId || defaults?.chatId || (this.updates.edited_channel_post as any)?.chat?.id;
+        messageId = options?.messageId || defaults?.messageId || (this.updates.edited_channel_post as any)?.message_id;
+      } else {
+        chatId = options?.chatId || defaults?.chatId || (this.updates?.chat as any)?.id || (this.updates?.channel_post as any)?.chat?.id;
+        messageId = options?.messageId || defaults?.messageId || this.updates?.message_id || (this.updates?.channel_post as any)?.message_id;
+      }
+    
+    if (text === undefined) {
+      throw new ParameterError('Text is missing');
+    }
+    
+    return this.functions.sendMessage({
+      text: text,
+      chatId: chatId,
+      replyMarkup: options.replyMarkup ?? defaults?.replyMarkup,
+      allowReply: options.allowReply ?? defaults?.allowReply,
+      replyToMessageId: messageId,
+      notification: options.notification ?? defaults?.notification,
+      content: options.content ?? defaults?.content,
+      threadId: options.threadId ?? defaults?.threadId,
+      parseMode: options.parseMode ?? defaults?.parseMode
+    });
+   }
 
-  }
 
   public async send(
     options: SendOptions,
@@ -222,11 +255,6 @@ export class UpdateProcessor {
       });
     }
 
-
-  typing(): void {
-
-  }
-
   public async leave(chatId?: number | string): Promise<object | undefined> {
     let chat_id: string | number;
     if (this.updates?.callback_query) {
@@ -237,59 +265,31 @@ export class UpdateProcessor {
     return this.functions.leaveChat(chat_id);
   }
 
-  remove(): void {
-
-  }
-
-  edit(): void {
-
-  }
-
-  createMessageCollector(): void {
-
-  }
-
-  deferUpdate(): void {
-
-  }
-
-  isCommand(): void {
-
-  }
-
-  isPhoto(): void {
-
-  }
-
-  isDocument(): void {
-
-  }
-
-  isAudio(): void {
-
-  }
-
-  isVideoNote(): void {
-
-  }
-
-  isSticker(): void {
-
-  }
-
-  isVoice(): void {
-
-  }
-
-  isContact(): void {
-
-  }
-
-  isPoll(): void {
-
-  }
-
-  isLocation(): void {
-
+  public isCommand(checkAllEntities?: boolean): boolean {
+    let commandFound = false;
+    const allEntities = [
+      (this.updates.message as any)?.entities, (this.updates.edited_message as any)?.entities, (this.updates.pinned_message as any)?.entities, (this.updates.channel_post as any)?.entities, (this.updates.channel_post as any)?.pinned_message?.entities, (this.updates.pinned_message as any)?.entities, (this.updates.message as any)?.caption_entities, (this.updates.pinned_message as any)?.caption_entities, (this.updates.channel_post as any)?.pinned_message?.caption_entities, (this.updates.edited_channel_post as any)?.caption_entities].filter(Boolean);
+      if (checkAllEntities) {
+        for (const entities of allEntities) {
+          for (const entity of entities) {
+            if (entity.type === 'bot_command') {
+              commandFound = true;
+              break;
+            }
+          }
+          if (commandFound) {
+            break;
+          }
+        }
+      } else {
+        const firstEntities = allEntities[0];
+        if (firstEntities) {
+          const firstEntity = firstEntities[0];
+          if (firstEntity) {
+            commandFound = firstEntity.type === 'bot_command';
+          }
+        }
+      }
+      return commandFound;
   }
 };
