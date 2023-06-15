@@ -124,7 +124,7 @@ export class BaseClient extends Request {
      replyMarkup?: string;
      allowReply?: boolean;
      notification?: boolean;
-     content?: boolean;
+     content?: boolean | undefined;
      threadId?: number;
      replyToMessageId?: number;
      parseMode?: string;

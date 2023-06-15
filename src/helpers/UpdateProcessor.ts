@@ -1,5 +1,6 @@
 import { BaseClient } from "../BaseClient";
 import { TelegramBot } from "../TelegramBot";
+import { ParameterError } from "../errorcollection";
 
 type MessageTypeMap = {
   [key: string]: {
@@ -28,6 +29,30 @@ type ResponseApi = {
   chat_member?: object;
   chat_join_request?: object;
 };
+
+type SendOptions = {
+  chatId?: number | string;
+  messageId?: number;
+  text?: string;
+  replyMarkup?: string;
+  allowReply?: boolean;
+  notification?: boolean;
+  content?: boolean;
+  threadId?: number;
+  parseMode?: string;
+}
+
+type Defaults = {
+  text?: string;
+  chatId?: number | string;
+  messageId?: number;
+  replyMarkup?: string;
+  allowReply?: boolean;
+  notification?: boolean;
+  content?: boolean;
+  threadId?: number;
+  parseMode?: string;
+}
 
 const messageTypeMap: MessageTypeMap = {
   message: {
@@ -111,7 +136,7 @@ export class UpdateProcessor {
             this.updates = updateProperty as ResponseApi;
             if (updateProperty) {
               const chat: any = Object.assign({}, updateProperty.chat, {
-                send: this.send,
+                send: (args: SendOptions, defaults?: Defaults) => this.send(args, defaults),
                 leave: (args?: string | number) => this.leave(args),
                 typing: this.typing
               });
@@ -157,15 +182,52 @@ export class UpdateProcessor {
 
   }
 
-  send(): void {
+  public async send(
+    options: SendOptions,
+    defaults?: Defaults
+    ): Promise<object | undefined> {
+      let chatId: string | number;
+      let messageId: number | undefined;
+      let text: string | undefined = typeof options === 'object' ? options.text : options;
+      
+      if (typeof options === 'object' && typeof defaults === 'object') {
+        throw new ParameterError('default object should not have a text property');
+      } else if (typeof options === 'string' && defaults?.text) {
+        throw new ParameterError('default object should not be used with a string message');
+      } else if (typeof options === 'string' && typeof defaults === 'string') {
+        throw new ParameterError('this code should not have two string parameters simultaneously.');
+      }
+      
+      if ((this.updates?.callback_query as any)?.message) {
+        chatId = options?.chatId || defaults?.chatId || (this.updates.callback_query as any)?.chat?.id;
+      } else if (this.updates?.chat) {
+        chatId = options?.chatId || defaults?.chatId || (this.updates.chat as any)?.id;
+      } else {
+        throw new ParameterError('ChatId is missing');
+      }
+      
+      if (text === undefined) {
+        throw new ParameterError('Text is missing');
+      }
+      
+      return this.functions.sendMessage({
+        text: text,
+        chatId: chatId,
+        replyMarkup: options?.replyMarkup ?? defaults?.replyMarkup,
+        allowReply: options?.allowReply ?? defaults?.allowReply,
+        notification: options?.notification ?? defaults?.notification,
+        content: options?.content ?? defaults?.content,
+        threadId: options?.threadId ?? defaults?.threadId,
+        parseMode: options?.parseMode ?? defaults?.parseMode
+      });
+    }
 
-  }
 
   typing(): void {
 
   }
 
-  leave(chatId?: number | string): object {
+  public async leave(chatId?: number | string): Promise<object | undefined> {
     let chat_id: string | number;
     if (this.updates?.callback_query) {
       chat_id = (this.updates?.callback_query as any)?.message?.chat?.id;
