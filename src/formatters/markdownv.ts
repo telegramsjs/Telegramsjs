@@ -8,10 +8,10 @@ import { ParameterError } from "../errorcollection";
  * @returns {string} The input text formatted as bold
  */
 export function bold(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `**${text}**`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `**${text}**`;
 }
 
 /**
@@ -22,10 +22,10 @@ export function bold(text: string): string {
  * @returns {string} The input text formatted as italic
  */
 export function italic(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `_${text}_`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `_${text}_`;
 }
 
 /**
@@ -36,10 +36,10 @@ export function italic(text: string): string {
  * @returns {string} The input text formatted as underlined
  */
 export function underline(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `__${text}__`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `__${text}__`;
 }
 
 /**
@@ -50,10 +50,10 @@ export function underline(text: string): string {
  * @returns {string} The input text formatted as strikethrough
  */
 export function strikethrough(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `~~${text}~~`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `~~${text}~~`;
 }
 
 /**
@@ -64,10 +64,10 @@ export function strikethrough(text: string): string {
  * @returns {string} The input code formatted as inline code
  */
 export function code(text: string, language: string = "") {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `\`\`\`${language}\n${text}\n\`\`\``;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `\`\`\`${language}\n${text}\n\`\`\``;
 }
 
 /**
@@ -79,13 +79,13 @@ export function code(text: string, language: string = "") {
  * @returns {string} An md hyperlink element with the specified text and URL
  */
 export function link(text: string, url: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	if (!url) {
-		throw new ParameterError("missing required argument: url");
-	}
-	return `[${text}](${url})`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  if (!url) {
+    throw new ParameterError("missing required argument: url");
+  }
+  return `[${text}](${url})`;
 }
 
 /**
@@ -97,10 +97,10 @@ export function link(text: string, url: string): string {
  * @returns {string} An Md image element with the specified URL and alternate text
  */
 export function image(url: string, alt: string): string {
-	if (!url) {
-		throw new ParameterError("missing required argument: url");
-	}
-	return `![${alt}](${url})`;
+  if (!url) {
+    throw new ParameterError("missing required argument: url");
+  }
+  return `![${alt}](${url})`;
 }
 
 /**
@@ -111,14 +111,14 @@ export function image(url: string, alt: string): string {
  * @returns {string} The heading tag with the specified text and level.
  */
 export function heading(text: string, level: number = 1): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	if (level < 1 || level > 6) {
-		throw new ParameterError("invalid heading level");
-	}
-	const hash = "#".repeat(level);
-	return `${hash} ${text}`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  if (level < 1 || level > 6) {
+    throw new ParameterError("invalid heading level");
+  }
+  const hash = "#".repeat(level);
+  return `${hash} ${text}`;
 }
 
 /**
@@ -129,10 +129,10 @@ export function heading(text: string, level: number = 1): string {
  * @returns {string} An Md paragraph element containing the input text
  */
 export function paragraph(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `${text}\n\n`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `${text}\n\n`;
 }
 
 /**
@@ -144,12 +144,12 @@ export function paragraph(text: string): string {
  * @returns {string} An md list element containing the specified list items
  */
 export function list(items: any[], ordered: boolean = false): string {
-	if (!items) {
-		throw new ParameterError("missing required argument: items");
-	}
-	const tag = ordered ? "1." : "*";
-	const listItems = items.map(item => `${tag} ${item}`).join("\n");
-	return `${listItems}\n\n`;
+  if (!items) {
+    throw new ParameterError("missing required argument: items");
+  }
+  const tag = ordered ? "1." : "*";
+  const listItems = items.map(item => `${tag} ${item}`).join("\n");
+  return `${listItems}\n\n`;
 }
 
 /**
@@ -161,8 +161,8 @@ export function list(items: any[], ordered: boolean = false): string {
  * @returns {string} An HTML code block element containing
  **/
 export function codeBlock(code: string, language: string = ""): string {
-	if (!code) {
-		throw new ParameterError("missing required argument: code");
-	}
-	return `\`\`\`${language}\n${code}\n\`\`\``;
+  if (!code) {
+    throw new ParameterError("missing required argument: code");
+  }
+  return `\`\`\`${language}\n${code}\n\`\`\``;
 }

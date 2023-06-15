@@ -8,10 +8,10 @@ import { ParameterError } from "../errorcollection";
  * @returns {string} The input text formatted as bold
  */
 export function bold(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `<b>${text}</b>`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `<b>${text}</b>`;
 }
 
 /**
@@ -22,10 +22,10 @@ export function bold(text: string): string {
  * @returns {string} The input text formatted as italic
  */
 export function italic(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `<i>${text}</i>`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `<i>${text}</i>`;
 }
 
 /**
@@ -36,10 +36,10 @@ export function italic(text: string): string {
  * @returns {string} The input text formatted as underlined
  */
 export function underline(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `<u>${text}</u>`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `<u>${text}</u>`;
 }
 
 /**
@@ -50,10 +50,10 @@ export function underline(text: string): string {
  * @returns {string} The input text formatted as strikethrough
  */
 export function strikethrough(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `<s>${text}</s>`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `<s>${text}</s>`;
 }
 
 /**
@@ -64,10 +64,10 @@ export function strikethrough(text: string): string {
  * @returns {string} The input code formatted as inline code
  */
 export function code(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `<code>${text}</code>`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `<code>${text}</code>`;
 }
 
 /**
@@ -79,13 +79,13 @@ export function code(text: string): string {
  * @returns {string} An HTML hyperlink element with the specified text and URL
  */
 export function link(text: string, url: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	if (!url) {
-		throw new ParameterError("missing required argument: url");
-	}
-	return `<a href="${url}">${text}</a>`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  if (!url) {
+    throw new ParameterError("missing required argument: url");
+  }
+  return `<a href="${url}">${text}</a>`;
 }
 
 /**
@@ -97,10 +97,10 @@ export function link(text: string, url: string): string {
  * @returns {string} An HTML image element with the specified URL and alternate text
  */
 export function image(url: string, alt: string): string {
-	if (!url) {
-		throw new ParameterError("missing required argument: url");
-	}
-	return `<img src="${url}" alt="${alt}">`;
+  if (!url) {
+    throw new ParameterError("missing required argument: url");
+  }
+  return `<img src="${url}" alt="${alt}">`;
 }
 
 /**
@@ -111,10 +111,10 @@ export function image(url: string, alt: string): string {
  * @returns {string} An HTML paragraph element containing the input text
  */
 export function paragraph(text: string): string {
-	if (!text) {
-		throw new ParameterError("missing required argument: text");
-	}
-	return `${text}\n\n`;
+  if (!text) {
+    throw new ParameterError("missing required argument: text");
+  }
+  return `${text}\n\n`;
 }
 
 /**
@@ -126,12 +126,12 @@ export function paragraph(text: string): string {
  * @returns {string} An HTML list element containing the specified list items
  */
 export function list(items: any[], ordered: boolean = false): string {
-	if (!items) {
-		throw new ParameterError("missing required argument: items");
-	}
-	const tag = ordered ? "1." : "*";
-	const listItems = items.map(item => `${tag} ${item}`).join("\n");
-	return `${listItems}\n\n`;
+  if (!items) {
+    throw new ParameterError("missing required argument: items");
+  }
+  const tag = ordered ? "1." : "*";
+  const listItems = items.map(item => `${tag} ${item}`).join("\n");
+  return `${listItems}\n\n`;
 }
 
 /**
@@ -143,8 +143,8 @@ export function list(items: any[], ordered: boolean = false): string {
  * @returns {string} An HTML code block element containing
  **/
 export function codeBlock(code: string, language: string = ""): string {
-	if (!code) {
-		throw new ParameterError("missing required argument: code");
-	}
-	return `<pre><code class="language-${language}">${code}</code></pre>`;
+  if (!code) {
+    throw new ParameterError("missing required argument: code");
+  }
+  return `<pre><code class="language-${language}">${code}</code></pre>`;
 }
