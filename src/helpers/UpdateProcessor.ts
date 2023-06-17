@@ -2,6 +2,9 @@ import { BaseClient } from "../BaseClient";
 import { TelegramBot } from "../TelegramBot";
 import { ParameterError } from "../errorcollection";
 
+/**
+ * Represents a map of message types and their corresponding events.
+ */
 type MessageTypeMap = {
   [key: string]: {
     event: string;
@@ -10,6 +13,9 @@ type MessageTypeMap = {
   };
 };
 
+/**
+ * Represents the response API object.
+ */
 type ResponseApi = {
   update_id?: number;
   message_id?: number;
@@ -32,6 +38,9 @@ type ResponseApi = {
   pinned_message?: object;
 };
 
+/**
+ * Represents the options for sending a message.
+ */
 type SendOptions = {
   chatId?: number | string;
   messageId?: number;
@@ -45,6 +54,9 @@ type SendOptions = {
   parseMode?: string;
 };
 
+/**
+ * Represents the default options for sending a message.
+ */
 type Defaults = {
   text?: string;
   chatId?: number | string;
@@ -108,11 +120,29 @@ const messageTypeMap: MessageTypeMap = {
   },
 };
 
+/**
+ * Represents the UpdateProcessor class.
+ */
 export class UpdateProcessor {
+  /**
+   * The TelegramBot instance.
+   */
   bot: TelegramBot;
+
+  /**
+   * The response updates object.
+   */
   updates!: ResponseApi;
+
+  /**
+   * The BaseClient instance.
+   */
   functions: BaseClient;
 
+  /**
+   * Creates an instance of UpdateProcessor.
+   * @param {TelegramBot} bot - The TelegramBot instance.
+   */
   constructor(bot: TelegramBot) {
     this.bot = bot;
     this.functions = new BaseClient(
@@ -125,6 +155,11 @@ export class UpdateProcessor {
     );
   }
 
+  /**
+   * Processes the updates.
+   * @param {ResponseApi} [updates] - The updates object.
+   * @returns {Promise<void>}
+   */
   public async processUpdate(updates?: ResponseApi): Promise<void> {
     while (true) {
       const getUpdates = await this.bot.getUpdates();
@@ -170,6 +205,12 @@ export class UpdateProcessor {
     }
   }
 
+  /**
+   * Sends a reply message.
+   * @param {SendOptions} options - The options for sending a message.
+   * @param {Defaults} [defaults] - The default options for sending a message.
+   * @returns {Promise<object | undefined>}
+   */
   public async reply(
     options: SendOptions,
     defaults?: Defaults,
@@ -250,6 +291,12 @@ export class UpdateProcessor {
     });
   }
 
+  /**
+   * Sends a message.
+   * @param {SendOptions} options - The options for sending a message.
+   * @param {Defaults} [defaults] - The default options for sending a message.
+   * @returns {Promise<object | undefined>}
+   */
   public async send(
     options: SendOptions,
     defaults?: Defaults,
@@ -301,6 +348,11 @@ export class UpdateProcessor {
     });
   }
 
+  /**
+   * Leaves a chat.
+   * @param {number | string} [chatId] - The ID of the chat to leave.
+   * @returns {Promise<object | undefined>}
+   */
   public async leave(chatId?: number | string): Promise<object | undefined> {
     let chat_id: string | number;
     if (this.updates?.callback_query) {
@@ -311,6 +363,11 @@ export class UpdateProcessor {
     return this.functions.leaveChat(chat_id);
   }
 
+  /**
+   * Checks if the update contains a command.
+   * @param {boolean} [checkAllEntities] - Whether to check all entities in the update.
+   * @returns {boolean} - Indicates whether a command is found in the update.
+   */
   public isCommand(checkAllEntities?: boolean): boolean {
     let commandFound = false;
     const allEntities = [
@@ -321,31 +378,25 @@ export class UpdateProcessor {
       (this.updates.channel_post as any)?.pinned_message?.entities,
       (this.updates.pinned_message as any)?.entities,
       (this.updates.message as any)?.caption_entities,
-      (this.updates.pinned_message as any)?.caption_entities,
-      (this.updates.channel_post as any)?.pinned_message?.caption_entities,
-      (this.updates.edited_channel_post as any)?.caption_entities,
-    ].filter(Boolean);
-    if (checkAllEntities) {
-      for (const entities of allEntities) {
+      (this.updates.edited_message as any)?.caption_entities,
+      (this.updates.channel_post as any)?.caption_entities,
+      (this.updates.message as any)?.reply_to_message?.entities,
+      (this.updates.message as any)?.reply_to_message?.caption_entities,
+    ];
+
+    for (const entities of allEntities) {
+      if (Array.isArray(entities)) {
         for (const entity of entities) {
           if (entity.type === "bot_command") {
             commandFound = true;
-            break;
+            if (!checkAllEntities) {
+              return commandFound;
+            }
           }
-        }
-        if (commandFound) {
-          break;
-        }
-      }
-    } else {
-      const firstEntities = allEntities[0];
-      if (firstEntities) {
-        const firstEntity = firstEntities[0];
-        if (firstEntity) {
-          commandFound = firstEntity.type === "bot_command";
         }
       }
     }
+
     return commandFound;
   }
 }

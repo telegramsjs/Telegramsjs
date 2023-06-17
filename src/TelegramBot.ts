@@ -87,11 +87,6 @@ export class TelegramBot extends BaseClient {
       });
     }
   }
-
-  public use(args?: any): boolean {
-    this.session = args;
-    return true;
-  }
   /**
    * The function that starts the whole process.
    */

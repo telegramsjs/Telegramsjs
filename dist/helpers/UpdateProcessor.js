@@ -85,7 +85,14 @@ const messageTypeMap = {
     event: "chat_join_request",
   },
 };
+/**
+ * Represents the UpdateProcessor class.
+ */
 class UpdateProcessor {
+  /**
+   * Creates an instance of UpdateProcessor.
+   * @param {TelegramBot} bot - The TelegramBot instance.
+   */
   constructor(bot) {
     this.bot = bot;
     this.functions = new BaseClient_1.BaseClient(
@@ -97,6 +104,11 @@ class UpdateProcessor {
       bot.offSetType,
     );
   }
+  /**
+   * Processes the updates.
+   * @param {ResponseApi} [updates] - The updates object.
+   * @returns {Promise<void>}
+   */
   processUpdate(updates) {
     return __awaiter(this, void 0, void 0, function* () {
       while (true) {
@@ -140,6 +152,12 @@ class UpdateProcessor {
       }
     });
   }
+  /**
+   * Sends a reply message.
+   * @param {SendOptions} options - The options for sending a message.
+   * @param {Defaults} [defaults] - The default options for sending a message.
+   * @returns {Promise<object | undefined>}
+   */
   reply(options, defaults) {
     var _a,
       _b,
@@ -357,6 +375,12 @@ class UpdateProcessor {
       });
     });
   }
+  /**
+   * Sends a message.
+   * @param {SendOptions} options - The options for sending a message.
+   * @param {Defaults} [defaults] - The default options for sending a message.
+   * @returns {Promise<object | undefined>}
+   */
   send(options, defaults) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     return __awaiter(this, void 0, void 0, function* () {
@@ -473,6 +497,11 @@ class UpdateProcessor {
       });
     });
   }
+  /**
+   * Leaves a chat.
+   * @param {number | string} [chatId] - The ID of the chat to leave.
+   * @returns {Promise<object | undefined>}
+   */
   leave(chatId) {
     var _a, _b, _c, _d, _e, _f, _g;
     return __awaiter(this, void 0, void 0, function* () {
@@ -507,8 +536,13 @@ class UpdateProcessor {
       return this.functions.leaveChat(chat_id);
     });
   }
+  /**
+   * Checks if the update contains a command.
+   * @param {boolean} [checkAllEntities] - Whether to check all entities in the update.
+   * @returns {boolean} - Indicates whether a command is found in the update.
+   */
   isCommand(checkAllEntities) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
     let commandFound = false;
     const allEntities = [
       (_a = this.updates.message) === null || _a === void 0
@@ -535,37 +569,34 @@ class UpdateProcessor {
       (_h = this.updates.message) === null || _h === void 0
         ? void 0
         : _h.caption_entities,
-      (_j = this.updates.pinned_message) === null || _j === void 0
+      (_j = this.updates.edited_message) === null || _j === void 0
         ? void 0
         : _j.caption_entities,
-      (_l =
-        (_k = this.updates.channel_post) === null || _k === void 0
+      (_k = this.updates.channel_post) === null || _k === void 0
+        ? void 0
+        : _k.caption_entities,
+      (_m =
+        (_l = this.updates.message) === null || _l === void 0
           ? void 0
-          : _k.pinned_message) === null || _l === void 0
+          : _l.reply_to_message) === null || _m === void 0
         ? void 0
-        : _l.caption_entities,
-      (_m = this.updates.edited_channel_post) === null || _m === void 0
+        : _m.entities,
+      (_p =
+        (_o = this.updates.message) === null || _o === void 0
+          ? void 0
+          : _o.reply_to_message) === null || _p === void 0
         ? void 0
-        : _m.caption_entities,
-    ].filter(Boolean);
-    if (checkAllEntities) {
-      for (const entities of allEntities) {
+        : _p.caption_entities,
+    ];
+    for (const entities of allEntities) {
+      if (Array.isArray(entities)) {
         for (const entity of entities) {
           if (entity.type === "bot_command") {
             commandFound = true;
-            break;
+            if (!checkAllEntities) {
+              return commandFound;
+            }
           }
-        }
-        if (commandFound) {
-          break;
-        }
-      }
-    } else {
-      const firstEntities = allEntities[0];
-      if (firstEntities) {
-        const firstEntity = firstEntities[0];
-        if (firstEntity) {
-          commandFound = firstEntity.type === "bot_command";
         }
       }
     }
