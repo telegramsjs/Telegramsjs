@@ -79,7 +79,7 @@ export class TelegramBot extends BaseClient {
       });
     } else if (Array.isArray(command)) {
       this.on("message", (message: object) => {
-        const args = (message as any)?.text?.join?.(" ");
+        const args = (message as any)?.text?.split?.(" ");
         const text = (message as any)?.text;
         if (text && command.some(cmd => text.startsWith(`/${cmd}`))) {
           callback(message, args);

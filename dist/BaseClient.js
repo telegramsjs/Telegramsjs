@@ -192,7 +192,7 @@ class BaseClient extends request_js_1.Request {
         allow_sending_without_reply: options.allowReply,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         reply_to_message_id: options.replyToMessageId,
         parse_mode: options.parseMode ? options.parseMode : this.parseMode,
       };
@@ -231,13 +231,11 @@ class BaseClient extends request_js_1.Request {
       const method = "sendPhoto";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         photo: options.photo,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         has_spoiler: options.hasSpoiler,
         disable_notification: options.notification,
         protect_content: options.content,
@@ -284,13 +282,11 @@ class BaseClient extends request_js_1.Request {
       const method = "sendAudio";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         audio: options.audio,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         duration: options.duration,
         performer: options.performer,
         title: options.title,
@@ -337,14 +333,12 @@ class BaseClient extends request_js_1.Request {
       const method = "sendDocument";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         document: options.document,
         thumbnail: options.thumbnail,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         disable_content_type_detection: options.disableContentTypeDetection,
         disable_notification: options.notification,
         protect_content: options.content,
@@ -398,10 +392,8 @@ class BaseClient extends request_js_1.Request {
         height: options.height,
         thumbnail: options.thumbnail,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         has_spoiler: options.hasSpoiler,
         supports_streaming: options.supportsStreaming,
         disable_notification: options.notification,
@@ -456,17 +448,15 @@ class BaseClient extends request_js_1.Request {
         height: options.height,
         thumbnail: options.thumbnail,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         has_spoiler: options.hasSpoiler,
         disable_notification: options.notification,
         protect_content: options.content,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
       };
       const response = yield this.request(method, params);
       if (
@@ -505,17 +495,15 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         voice: options.voice,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         duration: options.duration,
         disable_notification: options.notification,
         protect_content: options.content,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
       };
       const response = yield this.request(method, params);
       if (
@@ -557,7 +545,7 @@ class BaseClient extends request_js_1.Request {
         thumbnail: options.thumbnail,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -603,7 +591,7 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         media: {
@@ -702,7 +690,7 @@ class BaseClient extends request_js_1.Request {
       const method = "sendLocation";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         latitude: options.latitude,
         longitude: options.longitude,
         horizontal_accuracy: options.accuracy,
@@ -753,7 +741,7 @@ class BaseClient extends request_js_1.Request {
       const method = "sendVenue";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         latitude: options.latitude,
         longitude: options.longitude,
         title: options.title,
@@ -800,7 +788,7 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         from_chat_id: options.fromChatId,
         message_id: options.messageId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         disable_notification: options.notification,
         protect_content: options.content,
       };
@@ -843,12 +831,10 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         from_chat_id: options.fromChatId,
         message_id: options.messageId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         disable_notification: options.notification,
         protect_content: options.content,
         reply_to_message_id: options.replyToMessageId,
@@ -896,7 +882,7 @@ class BaseClient extends request_js_1.Request {
         vcard: options.vcard,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -958,7 +944,7 @@ class BaseClient extends request_js_1.Request {
         is_closed: options.isClosed,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -998,7 +984,7 @@ class BaseClient extends request_js_1.Request {
         emoji: options.emoji,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -1030,7 +1016,7 @@ class BaseClient extends request_js_1.Request {
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
         action: options.action,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
       };
       const response = yield this.request(method, params);
       if (
@@ -2678,9 +2664,7 @@ class BaseClient extends request_js_1.Request {
         message_id: options.messageId,
         inline_message_id: options.inlineMessageId,
         text: options.text,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
         entities: options.entities,
         disable_web_page_preview: options.disableWebPagePreview,
         reply_markup: options.replyMarkup,
@@ -2717,10 +2701,8 @@ class BaseClient extends request_js_1.Request {
         message_id: options.messageId,
         inline_message_id: options.inlineMessageId,
         caption: options.caption,
-        parse_mode: options.parseMode
-          ? options.parseMode
-          : this.parseMode || null,
-        caption_entities: options.captionEntities || null,
+        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        caption_entities: options.captionEntities,
         reply_markup: options.replyMarkup,
       };
       const response = yield this.request(method, params);
@@ -2924,7 +2906,7 @@ class BaseClient extends request_js_1.Request {
       const method = "sendSticker";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId || null,
+        message_thread_id: options.threadId,
         sticker: options.sticker,
         emoji: options.emoji,
         disable_notification: options.notification,

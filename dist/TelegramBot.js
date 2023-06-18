@@ -110,7 +110,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
                 ? void 0
                 : message.text) === null || _a === void 0
               ? void 0
-              : _a.join) === null || _b === void 0
+              : _a.split) === null || _b === void 0
             ? void 0
             : _b.call(_a, " ");
         const text =
