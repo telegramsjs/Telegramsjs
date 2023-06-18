@@ -192,7 +192,7 @@ class BaseClient extends request_js_1.Request {
         allow_sending_without_reply: options.allowReply,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         reply_to_message_id: options.replyToMessageId,
         parse_mode: options.parseMode ? options.parseMode : this.parseMode,
       };
@@ -216,13 +216,13 @@ class BaseClient extends request_js_1.Request {
    * @param {any} options.photo - The photo to be sent. Can be a string URL or Buffer.
    * @param {string} options.caption - The photo caption.
    * @param {string} [options.parseMode] - The parse mode of the caption. Can be "MarkdownV2" or "HTML".
-   * @param {Array<object>} options.captionEntities - The special entities of the caption.
+   * @param {string[]} options.captionEntities - The special entities of the caption.
    * @param {boolean} [options.hasSpoiler] - If the photo should be marked as a spoiler.
    * @param {boolean} [options.notification] - If notifications should be disabled for the message.
    * @param {boolean} [options.content] - If the message should be protected by the "new forwarded messages privacy mode".
    * @param {number} [options.replyToMessageId] - The ID of the message being replied to.
    * @param {boolean} [options.allowReply] - If the message can be sent without a reply to another message.
-   * @param {object} [options.replyMarkup] - The reply markup object.
+   * @param {string} [options.replyMarkup] - The reply markup object.
    * @returns {Promise<object | undefined>} - The sent photo object.
    * @throws {TelegramApiError} - If an error occurs while sending the photo.
    */
@@ -231,11 +231,13 @@ class BaseClient extends request_js_1.Request {
       const method = "sendPhoto";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         photo: options.photo,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         has_spoiler: options.hasSpoiler,
         disable_notification: options.notification,
         protect_content: options.content,
@@ -282,11 +284,13 @@ class BaseClient extends request_js_1.Request {
       const method = "sendAudio";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         audio: options.audio,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         duration: options.duration,
         performer: options.performer,
         title: options.title,
@@ -333,12 +337,14 @@ class BaseClient extends request_js_1.Request {
       const method = "sendDocument";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         document: options.document,
         thumbnail: options.thumbnail,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         disable_content_type_detection: options.disableContentTypeDetection,
         disable_notification: options.notification,
         protect_content: options.content,
@@ -392,8 +398,10 @@ class BaseClient extends request_js_1.Request {
         height: options.height,
         thumbnail: options.thumbnail,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         has_spoiler: options.hasSpoiler,
         supports_streaming: options.supportsStreaming,
         disable_notification: options.notification,
@@ -448,15 +456,17 @@ class BaseClient extends request_js_1.Request {
         height: options.height,
         thumbnail: options.thumbnail,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         has_spoiler: options.hasSpoiler,
         disable_notification: options.notification,
         protect_content: options.content,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
       };
       const response = yield this.request(method, params);
       if (
@@ -495,15 +505,17 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         voice: options.voice,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         duration: options.duration,
         disable_notification: options.notification,
         protect_content: options.content,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
       };
       const response = yield this.request(method, params);
       if (
@@ -545,7 +557,7 @@ class BaseClient extends request_js_1.Request {
         thumbnail: options.thumbnail,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -591,7 +603,7 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         media: {
@@ -690,7 +702,7 @@ class BaseClient extends request_js_1.Request {
       const method = "sendLocation";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         latitude: options.latitude,
         longitude: options.longitude,
         horizontal_accuracy: options.accuracy,
@@ -741,7 +753,7 @@ class BaseClient extends request_js_1.Request {
       const method = "sendVenue";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         latitude: options.latitude,
         longitude: options.longitude,
         title: options.title,
@@ -788,7 +800,7 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         from_chat_id: options.fromChatId,
         message_id: options.messageId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         disable_notification: options.notification,
         protect_content: options.content,
       };
@@ -831,10 +843,12 @@ class BaseClient extends request_js_1.Request {
         chat_id: this.chatId ? this.chatId : options.chatId,
         from_chat_id: options.fromChatId,
         message_id: options.messageId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         disable_notification: options.notification,
         protect_content: options.content,
         reply_to_message_id: options.replyToMessageId,
@@ -882,7 +896,7 @@ class BaseClient extends request_js_1.Request {
         vcard: options.vcard,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -944,7 +958,7 @@ class BaseClient extends request_js_1.Request {
         is_closed: options.isClosed,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -984,7 +998,7 @@ class BaseClient extends request_js_1.Request {
         emoji: options.emoji,
         disable_notification: options.notification,
         protect_content: options.content,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         reply_to_message_id: options.replyToMessageId,
         allow_sending_without_reply: options.allowReply,
         reply_markup: options.replyMarkup,
@@ -1016,7 +1030,7 @@ class BaseClient extends request_js_1.Request {
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
         action: options.action,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
       };
       const response = yield this.request(method, params);
       if (
@@ -2281,9 +2295,9 @@ class BaseClient extends request_js_1.Request {
    * @async
    
    * @param {object} options - Options object.
-   * @param {Array<object>} options.commands - A list of bot commands.
-   * @param {String} [options.scope] - A string representing the bot command scope.
-   * @param {String} [options.languageCode] - A string representing the language code for the commands.
+   * @param {Array<object> | string} options.commands - A list of bot commands.
+   * @param {string} [options.scope] - A string representing the bot command scope.
+   * @param {string} [options.languageCode] - A string representing the language code for the commands.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
    * @throws {TelegramApiError} Throws a TelegramApiError if the API response contains an error code.
    */
@@ -2380,7 +2394,7 @@ class BaseClient extends request_js_1.Request {
    * @async
    * @param {object} options - An object containing the name and language code to set.
    * @param {string} options.name - The name to set for the bot.
-   * @param {string} options.languageCode - The language code to set for the bot.
+   * @param {string} [options.languageCode] - The language code to set for the bot.
    * @returns {Promise<object | undefined>} The result of the API request.
    * @throws {TelegramApiError} Throws an error if there is an error in the API response.
    */
@@ -2488,7 +2502,7 @@ class BaseClient extends request_js_1.Request {
      
      * @param {object} options - Options for setting the short description.
      * @param {string} options.description - The new short description for the bot.
-     * @param {string} options.languageCode - The language code of the new short description.
+     * @param {string} [options.languageCode] - The language code of the new short description.
      * @returns {Promise<object | undefined>} - On success, the method returns the bot's updated profile.
      * @throws {TelegramApiError} - If the request was unsuccessful, a TelegramApiError will be thrown with the description of the error.
      */
@@ -2664,7 +2678,9 @@ class BaseClient extends request_js_1.Request {
         message_id: options.messageId,
         inline_message_id: options.inlineMessageId,
         text: options.text,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
         entities: options.entities,
         disable_web_page_preview: options.disableWebPagePreview,
         reply_markup: options.replyMarkup,
@@ -2701,8 +2717,10 @@ class BaseClient extends request_js_1.Request {
         message_id: options.messageId,
         inline_message_id: options.inlineMessageId,
         caption: options.caption,
-        parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-        caption_entities: options.captionEntities,
+        parse_mode: options.parseMode
+          ? options.parseMode
+          : this.parseMode || null,
+        caption_entities: options.captionEntities || null,
         reply_markup: options.replyMarkup,
       };
       const response = yield this.request(method, params);
@@ -2906,7 +2924,7 @@ class BaseClient extends request_js_1.Request {
       const method = "sendSticker";
       const params = {
         chat_id: this.chatId ? this.chatId : options.chatId,
-        message_thread_id: options.threadId,
+        message_thread_id: options.threadId || null,
         sticker: options.sticker,
         emoji: options.emoji,
         disable_notification: options.notification,

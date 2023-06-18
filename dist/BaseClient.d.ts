@@ -1,5 +1,28 @@
 /// <reference types="node" />
 import { Request } from "./request.js";
+type ChatPermissions = {
+  [permission: string]: boolean;
+};
+type StickerOptions = {
+  emoji: string;
+  file: string;
+};
+type MaskPosition = {
+  point: string;
+  xShift: number;
+  yShift: number;
+  scale: number;
+};
+type Sticker = {
+  fileId: string;
+  emoji: string;
+  maskPosition?: MaskPosition;
+};
+type PassportError = {
+  source: string;
+  type: string;
+  message: string;
+};
 export declare class BaseClient extends Request {
   token: string;
   intents?: string[] | number[] | null | undefined;
@@ -89,17 +112,30 @@ export declare class BaseClient extends Request {
    * @param {any} options.photo - The photo to be sent. Can be a string URL or Buffer.
    * @param {string} options.caption - The photo caption.
    * @param {string} [options.parseMode] - The parse mode of the caption. Can be "MarkdownV2" or "HTML".
-   * @param {Array<object>} options.captionEntities - The special entities of the caption.
+   * @param {string[]} options.captionEntities - The special entities of the caption.
    * @param {boolean} [options.hasSpoiler] - If the photo should be marked as a spoiler.
    * @param {boolean} [options.notification] - If notifications should be disabled for the message.
    * @param {boolean} [options.content] - If the message should be protected by the "new forwarded messages privacy mode".
    * @param {number} [options.replyToMessageId] - The ID of the message being replied to.
    * @param {boolean} [options.allowReply] - If the message can be sent without a reply to another message.
-   * @param {object} [options.replyMarkup] - The reply markup object.
+   * @param {string} [options.replyMarkup] - The reply markup object.
    * @returns {Promise<object | undefined>} - The sent photo object.
    * @throws {TelegramApiError} - If an error occurs while sending the photo.
    */
-  sendPhoto(options: any): Promise<object | undefined>;
+  sendPhoto(options: {
+    chatId: number | string;
+    threadId?: number;
+    photo: any;
+    caption: string;
+    parseMode?: string;
+    captionEntities?: string[];
+    hasSpoiler?: boolean;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: string;
+  }): Promise<object | undefined>;
   /**
       * Sends an audio message to the chat.
       * @async
@@ -123,7 +159,23 @@ export declare class BaseClient extends Request {
       * @throws {TelegramApiError} If there is an error sending the message.
       * @returns {Promise<object | undefined>} The sent audio message object.
       */
-  sendAudio(options: any): Promise<object | undefined>;
+  sendAudio(options: {
+    chatId?: number | string;
+    threadId?: string;
+    audio: any;
+    caption?: string;
+    parseMode?: string;
+    captionEntities?: any[];
+    duration?: number;
+    performer?: string;
+    title?: string;
+    thumbnail?: any;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Sends a document to the chat.
    * @async
@@ -144,7 +196,21 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} When the request to the Telegram API fails.
    * @returns {Promise<object | undefined>} The sent message object.
    */
-  sendDocument(options: any): Promise<object | undefined>;
+  sendDocument(options: {
+    chatId?: number | string;
+    threadId?: string;
+    document: any;
+    thumbnail?: any;
+    caption?: string;
+    parseMode?: string;
+    captionEntities?: any[];
+    disableContentTypeDetection?: boolean;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
      * Sends a video message to a chat.
      * @async
@@ -169,7 +235,24 @@ export declare class BaseClient extends Request {
      * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent video message object on success.
      * @throws {TelegramApiError} Throws an error if the API response returns an error code.
      */
-  sendVideo(options: any): Promise<object | undefined>;
+  sendVideo(options: {
+    chatId: string | number;
+    video: any;
+    duration?: number;
+    width?: number;
+    height?: number;
+    thumbnail?: string | any;
+    caption?: string;
+    parseMode?: string;
+    captionEntities?: any[];
+    hasSpoiler?: boolean;
+    supportsStreaming?: boolean;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
      * Sends an animation message to a specified chat or channel.
      * @async
@@ -194,7 +277,24 @@ export declare class BaseClient extends Request {
      * @returns {Promise<object | undefined>} - The response object from the Telegram API.
      * @throws {TelegramApiError} - If there was an error while sending the animation message.
      */
-  sendAnimation(options: any): Promise<object | undefined>;
+  sendAnimation(options: {
+    chatId?: string;
+    animation: string;
+    duration?: number;
+    width?: number;
+    height?: number;
+    thumbnail?: string;
+    caption?: string;
+    parseMode?: string;
+    captionEntities?: any[];
+    hasSpoiler?: boolean;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+    threadId?: string;
+  }): Promise<object | undefined>;
   /**
    * Sends a voice message to the specified chat.
    * @async
@@ -214,7 +314,20 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} On success, the sent Message is returned.
    * @throws {TelegramApiError} If an error occurs while sending the voice message.
    */
-  sendVoice(options: any): Promise<object | undefined>;
+  sendVoice(options: {
+    voice: string;
+    chatId?: string | number;
+    caption?: string;
+    parseMode?: string;
+    captionEntities?: any[];
+    duration?: number;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+    threadId?: string;
+  }): Promise<object | undefined>;
   /**
    * Sends a video note message to a chat.
    * @async
@@ -233,7 +346,19 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the response contains an error_code property.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent message object.
    */
-  sendVideoNote(options: any): Promise<object | undefined>;
+  sendVideoNote(options: {
+    chatId: string | number;
+    videoNote: string;
+    duration?: number;
+    length?: number;
+    thumbnail?: object;
+    notification?: boolean;
+    content?: boolean;
+    threadId?: number;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Sends a media group to the specified chat.
    * @async
@@ -256,7 +381,24 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent media group object on success.
    * @throws {TelegramApiError} Throws an error if the response contains an error code.
    */
-  sendMediaGroup(options: any): Promise<object | undefined>;
+  sendMediaGroup(options: {
+    chatId: number;
+    notification?: boolean;
+    content?: boolean;
+    threadId?: number;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    media: {
+      type: string;
+      media: string | any;
+      caption?: string;
+      parseMode?: string;
+      width?: number;
+      height?: number;
+      duration?: number;
+      supportsStreaming?: boolean;
+    }[];
+  }): Promise<object | undefined>;
   /**
    * Sends a location message to a chat.
    *
@@ -278,7 +420,20 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} The sent location message object.
    * @throws {TelegramApiError} If the Telegram API returns an error.
    */
-  sendLocation(options: any): Promise<object | undefined>;
+  sendLocation(options: {
+    latitude: number;
+    longitude: number;
+    accuracy?: number;
+    livePeriod?: number;
+    heading?: number;
+    proximityRadius?: number;
+    notification?: boolean;
+    content?: boolean;
+    threadId?: number;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Sends a venue message to the chat.
    * @async
@@ -301,7 +456,23 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} On success, the sent Message is returned.
    * @throws {TelegramApiError} When there's an error sending the message.
    */
-  sendVenue(options: any): Promise<object | undefined>;
+  sendVenue(options: {
+    chatId?: string;
+    threadId?: number;
+    latitude: number;
+    longitude: number;
+    title: string;
+    address: string;
+    foursquareId?: string;
+    foursquareType?: string;
+    googlePlaceId?: string;
+    googlePlaceType?: string;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Forward a message to a chat.
    *
@@ -316,7 +487,14 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while forwarding the message.
    * @returns {Promise<object | undefined>} The forwarded message object.
    */
-  forwardMessage(options: any): Promise<object | undefined>;
+  forwardMessage(options: {
+    chatId?: number;
+    fromChatId: number;
+    messageId: number;
+    threadId?: number;
+    notification?: boolean;
+    content?: boolean;
+  }): Promise<object | undefined>;
   /**
    * Copy a message from one chat to another.
    *
@@ -338,7 +516,20 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
    * @returns {Promise<object | undefined>} Returns the copied message object.
    */
-  copyMessage(options: any): Promise<object | undefined>;
+  copyMessage(options: {
+    fromChatId: string;
+    messageId: string;
+    threadId?: string;
+    chatId?: string;
+    caption?: string;
+    parseMode?: string;
+    captionEntities?: object[];
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: string;
+    allowSendingWithoutReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Sends a contact to the chat.
    *
@@ -358,7 +549,19 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - Result of the sent contact message.
    * @throws {TelegramApiError} - Throws an error if the API request fails.
    */
-  sendContact(options: any): Promise<object | undefined>;
+  sendContact(options: {
+    chatId?: number;
+    phoneNumber: string;
+    firstName: string;
+    lastName?: string;
+    vcard?: string;
+    notification?: boolean;
+    content?: boolean;
+    threadId?: number;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Sends a poll to the chat with the given options.
    *
@@ -386,7 +589,27 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while sending the poll.
    * @returns {Promise<object | undefined>} The response from the Telegram API.
    */
-  sendPoll(options: any): Promise<object | undefined>;
+  sendPoll(options: {
+    chatId?: number;
+    question: string;
+    options: string[];
+    isAnonymous: boolean;
+    type: string;
+    allowsMultipleAnswers: boolean;
+    correctOptionId?: number;
+    explanation?: string;
+    explanationParseMode?: string;
+    explanationEntities?: object[];
+    openPeriod: number;
+    closeDate?: number;
+    isClosed?: boolean;
+    notification?: boolean;
+    content?: boolean;
+    threadId?: number;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object;
+  }): Promise<object | undefined>;
   /**
    * Sends a dice animation to the chat.
    *
@@ -403,7 +626,16 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent message object on success.
    * @throws {TelegramApiError} Throws an error when there is an error in the request.
    */
-  sendDice(options: any): Promise<object | undefined>;
+  sendDice(options: {
+    chatId?: number;
+    emoji: string;
+    notification?: boolean;
+    content?: boolean;
+    threadId?: number;
+    replyToMessageId?: number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Sends a chat action to indicate the bot is performing an action (typing, uploading a photo etc.) to the user.
    * @async
@@ -414,7 +646,11 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the Telegram API returns an error code.
    * @returns {Promise<object | undefined>} The response object from the Telegram API containing information about the sent chat action.
    */
-  sendChatAction(options: any): Promise<object | undefined>;
+  sendChatAction(options: {
+    chatId?: number;
+    action: string;
+    threadId: string;
+  }): Promise<object | undefined>;
   /**
    * Returns user profile photos.
    *
@@ -427,7 +663,11 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
    * @returns {Promise<object | undefined>} On success, an object containing the user profile photos is returned.
    */
-  getUserProfilePhotos(options: any): Promise<object | undefined>;
+  getUserProfilePhotos(options: {
+    userId: number;
+    offset?: number;
+    limit?: number;
+  }): Promise<object | undefined>;
   /**
    * Get information about a file on the Telegram server
    *
@@ -456,7 +696,12 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - On success, returns True.
    * @throws {TelegramApiError} - If an error occurs while executing the request.
    */
-  banChatMember(options: any): Promise<object | undefined>;
+  banChatMember(options: {
+    chatId?: string;
+    userId: number;
+    untilDate: number;
+    revokeMessages: boolean;
+  }): Promise<object | undefined>;
   /**
    * Unban a previously banned chat member in a Telegram chat.
    * @async
@@ -468,7 +713,11 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - Promise which resolves to the result of the Telegram API request.
    * @throws {TelegramApiError} - If the request to the Telegram API fails or returns an error.
    */
-  unbanChatMember(options: any): Promise<object | undefined>;
+  unbanChatMember(options: {
+    userId: string | number;
+    chatId?: string | number;
+    onlyIfBanned?: boolean;
+  }): Promise<object | undefined>;
   /**
    * Restricts a chat member's permissions.
    * @async
@@ -481,7 +730,12 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} The updated ChatMember object.
    * @throws {TelegramApiError} Throws an error if the API response contains an error.
    */
-  restrictChatMember(options: any): Promise<object | undefined>;
+  restrictChatMember(options: {
+    userId: number;
+    permissions: object;
+    useIndependentChatPermissions?: boolean;
+    untilDate?: number;
+  }): Promise<object | undefined>;
   /**
    * Promotes a user in a chat with additional privileges.
    * @async
@@ -503,7 +757,22 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error with the Telegram API description if the response contains an error.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the promoted user object on success.
    */
-  promoteChatMember(options: any): Promise<object | undefined>;
+  promoteChatMember(options: {
+    userId: number;
+    chatId?: number;
+    isAnonymous?: boolean;
+    canManageChat?: boolean;
+    canPostMessages?: boolean;
+    canEditMessages?: boolean;
+    canDeleteMessages?: boolean;
+    canManageVideoChats?: boolean;
+    canRestrictMembers?: boolean;
+    canPromoteMembers?: boolean;
+    canChangeInfo?: boolean;
+    canInviteUsers?: boolean;
+    canPinMessages?: boolean;
+    canManageTopics?: boolean;
+  }): Promise<object | undefined>;
   /**
    * Sets a custom title for a chat administrator.
    * @async
@@ -515,7 +784,11 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while setting the custom title.
    * @returns {Promise<object | undefined>} A promise that resolves with `true` if the custom title was set successfully.
    */
-  setChatAdministratorCustomTitle(options: any): Promise<object | undefined>;
+  setChatAdministratorCustomTitle(options: {
+    userId: number;
+    chatId?: number;
+    customTitle: string;
+  }): Promise<object | undefined>;
   /**
    * Ban a user from sending messages in a chat.
    * @async
@@ -526,7 +799,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while banning the user.
    * @returns {Promise<object | undefined>} The result of the request.
    */
-  banChatSenderChat(options: any): Promise<object | undefined>;
+  banChatSenderChat(options: {
+    chatId?: string;
+    senderChatId: number;
+  }): Promise<object | undefined>;
   /**
    * Unban a previously kicked chat member from the chat and remove any previous ban on their username.
    *
@@ -538,7 +814,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} When an error occurs while unbanning the chat member.
    * @returns {Promise<object | undefined>} On success, the returned object will contain the `ok` field set to `true`.
    */
-  unbanChatSenderChat(options: any): Promise<object | undefined>;
+  unbanChatSenderChat(options: {
+    senderChatId: number;
+    chatId?: string;
+  }): Promise<object | undefined>;
   /**
    * Sets chat permissions for a given chat.
    * @async
@@ -550,7 +829,11 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
    * @returns {Promise<object | undefined>} Returns a promise which resolves to the result of the API request.
    */
-  setChatPermissions(options: any): Promise<object | undefined>;
+  setChatPermissions(options: {
+    chatId?: string;
+    permissions: ChatPermissions;
+    independentPermissions?: boolean;
+  }): Promise<object | undefined>;
   /**
    * Exports the invite link to a chat. If `chatId` is not defined on the instance, it should be provided in `options`.
    *
@@ -572,7 +855,13 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - The created chat invite link object.
    * @throws {TelegramApiError} - If the API response contains an error.
    */
-  createChatInviteLink(options: any): Promise<object | undefined>;
+  createChatInviteLink(options: {
+    chatId?: string;
+    name?: string;
+    expireDate?: Date;
+    memberLimit?: number;
+    createsJoinRequest?: boolean;
+  }): Promise<object | undefined>;
   /**
    * Edits the specified chat invite link. Returns the edited invite link as a ChatInviteLink object.
    * @async
@@ -586,7 +875,14 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - The edited chat invite link as a ChatInviteLink object.
    * @throws {TelegramApiError} - If the response contains an error.
    */
-  editChatInviteLink(options: any): Promise<object | undefined>;
+  editChatInviteLink(options: {
+    chatId?: string;
+    inviteLink: string;
+    name?: string;
+    expireDate?: number;
+    memberLimit?: number;
+    createsJoinRequest?: boolean;
+  }): Promise<object | undefined>;
   /**
    * Revoke a chat invite link.
    *
@@ -598,7 +894,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If the API call fails, an error with the description of the problem.
    * @returns {Promise<object | undefined>} The API response object.
    */
-  revokeChatInviteLink(options: any): Promise<object | undefined>;
+  revokeChatInviteLink(options: {
+    inviteLink: string;
+    chatId?: string;
+  }): Promise<object | undefined>;
   /**
    * Approve a join request to a chat.
    * @async
@@ -609,7 +908,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If the response contains an error code.
    * @returns {Promise<object | undefined>} The result of the approveChatJoinRequest method.
    */
-  approveChatJoinRequest(options: any): Promise<object | undefined>;
+  approveChatJoinRequest(options: {
+    userId: number;
+    chatId?: number;
+  }): Promise<object | undefined>;
   /**
    * Declines a chat join request from a user.
    *
@@ -632,7 +934,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If the request to the Telegram API fails or if the response contains an error code.
    * @returns {Promise<object | undefined>} On success, the method returns True.
    */
-  setChatPhoto(options: any): Promise<object | undefined>;
+  setChatPhoto(options: {
+    userId: number;
+    chatId?: number;
+  }): Promise<object | undefined>;
   /**
    * Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns True on success.
    * @param {string} options - Optional parameters.
@@ -651,7 +956,10 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} On success, the updated chat object is returned.
    * @throws {TelegramApiError} If the request to set a new chat title fails, this error is thrown.
    */
-  setChatTitle(options: any): Promise<object | undefined>;
+  setChatTitle(options: {
+    chatId?: string;
+    title: string;
+  }): Promise<object | undefined>;
   /**
    * Sets the description of a chat.
    * @async
@@ -662,7 +970,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the request to the Telegram API fails or if the response contains an error.
    * @returns {Promise<object | undefined>} Returns a promise that resolves to the response from the Telegram API.
    */
-  setChatDescription(options: any): Promise<object | undefined>;
+  setChatDescription(options: {
+    chatId?: number;
+    description: string;
+  }): Promise<object | undefined>;
   /**
    * Pins a message in a chat.
    * @async
@@ -674,7 +985,11 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while attempting to pin the message.
    * @returns {Promise<object | undefined>} On success, the method returns True.
    */
-  pinChatMessage(options: any): Promise<object | undefined>;
+  pinChatMessage(options: {
+    chatId?: number;
+    messageId: number;
+    notification?: boolean;
+  }): Promise<object | undefined>;
   /**
    * Unpins a message in a chat.
    * @async
@@ -684,7 +999,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the API returns an error response.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result of the API call.
    */
-  unpinChatMessage(options: any): Promise<object | undefined>;
+  unpinChatMessage(options: {
+    messageId: number;
+    chatId?: number;
+  }): Promise<object | undefined>;
   /**
    * Unpins all chat messages in the specified chat.
    *
@@ -737,7 +1055,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If the request to the Telegram API fails or if there is an error code in the response.
    * @returns {Promise<object | undefined>} On success, an object containing information about the member.
    */
-  getChatMember(options: any): Promise<object | undefined>;
+  getChatMember(options: {
+    chatId?: number | string;
+    userId: number;
+  }): Promise<object | undefined>;
   /**
    * Use this method to set a new group sticker set for a supergroup.
    * The bot must be an administrator in the chat for this to work and must have the appropriate admin rights.
@@ -750,7 +1071,10 @@ export declare class BaseClient extends Request {
    * @return {Promise<object | undefined>} Returns True on success.
    * @throws {TelegramApiError} When the response contains an error.
    */
-  setChatStickerSet(options: any): Promise<object | undefined>;
+  setChatStickerSet(options: {
+    chatId?: number;
+    stickerSetName: string;
+  }): Promise<object | undefined>;
   /**
    * Deletes a chat's sticker set.
    *
@@ -778,7 +1102,12 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - The response from the Telegram API.
    * @throws {TelegramApiError} - If there was an error creating the forum topic.
    */
-  createForumTopic(options: any): Promise<object | undefined>;
+  createForumTopic(options: {
+    chatId?: number;
+    name: string;
+    iconColor: string;
+    iconCustomEmojiId: string;
+  }): Promise<object | undefined>;
   /**
    * Edits a forum topic.
    * @async
@@ -791,7 +1120,12 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If the API response contains an error code.
    * @returns {Promise<object | undefined>} The edited forum topic object.
    */
-  editForumTopic(options: any): Promise<object | undefined>;
+  editForumTopic(options: {
+    chatId?: number;
+    messageThreadId: number;
+    name: string;
+    iconCustomEmojiId: string;
+  }): Promise<object | undefined>;
   /**
     * Closes a forum topic in the specified chat.
     * @async
@@ -802,7 +1136,10 @@ export declare class BaseClient extends Request {
     * @throws {TelegramApiError} If the Telegram API returns an error.
     * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result of the API call.
     */
-  closeForumTopic(options: any): Promise<object | undefined>;
+  closeForumTopic(options: {
+    chatId?: number;
+    messageThreadId: number;
+  }): Promise<object | undefined>;
   /**
    * Reopens a previously closed discussion thread in a group or a channel.
    *
@@ -813,7 +1150,10 @@ export declare class BaseClient extends Request {
    * @param {string} [options.chatId] - Unique identifier of the target chat or username of the target channel.
    * @throws {TelegramApiError} Throws error when the API call returns an error.
    */
-  reopenForumTopic(options: any): Promise<object | undefined>;
+  reopenForumTopic(options: {
+    messageThreadId: string;
+    chatId?: string;
+  }): Promise<object | undefined>;
   /**
    * Delete a forum topic with the given message thread ID from the specified chat or from the default chat ID of the TelegramBot instance.
    * @async
@@ -824,7 +1164,10 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - A Promise which resolves to an object representing the deleted forum topic.
    * @throws {TelegramApiError} - If there is an error with the Telegram API request.
    */
-  deleteForumTopic(options: any): Promise<object | undefined>;
+  deleteForumTopic(options: {
+    messageThreadId: number;
+    chatId?: number;
+  }): Promise<object | undefined>;
   /**
    * Unpins all messages in a specific message thread in a Telegram chat.
    *
@@ -836,7 +1179,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the API response object.
    */
-  unpinAllForumTopicMessages(options: any): Promise<object | undefined>;
+  unpinAllForumTopicMessages(options: {
+    chatId?: number;
+    messageThreadId: number;
+  }): Promise<object | undefined>;
   /**
    * Edit a general forum topic.
    *
@@ -847,7 +1193,10 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the edited forum topic object on success.
    * @throws {TelegramApiError} Throws an error if the API call fails.
    */
-  editGeneralForumTopic(options: any): Promise<object | undefined>;
+  editGeneralForumTopic(options: {
+    chatId?: number;
+    name: string;
+  }): Promise<object | undefined>;
   /**
    * Closes a general forum topic in a Telegram chat.
    * @async
@@ -894,19 +1243,34 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the response contains an error_code.
    * @returns {Promise<object | undefined>} Returns true on success.
    */
-  answerCallbackQuery(options: any): Promise<object | undefined>;
+  answerCallbackQuery(options: {
+    callbackQueryId: string;
+    text?: string;
+    showAlert?: boolean;
+    url?: string;
+    cacheTime?: number;
+  }): Promise<object | undefined>;
   /**
    * Sets the list of commands supported by your bot.
    * @async
    
    * @param {object} options - Options object.
-   * @param {Array<object>} options.commands - A list of bot commands.
-   * @param {String} [options.scope] - A string representing the bot command scope.
-   * @param {String} [options.languageCode] - A string representing the language code for the commands.
+   * @param {Array<object> | string} options.commands - A list of bot commands.
+   * @param {string} [options.scope] - A string representing the bot command scope.
+   * @param {string} [options.languageCode] - A string representing the language code for the commands.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the API response on success, or throws a TelegramApiError on failure.
    * @throws {TelegramApiError} Throws a TelegramApiError if the API response contains an error code.
    */
-  setMyCommands(options: any): Promise<object | undefined>;
+  setMyCommands(options: {
+    commands:
+      | Array<{
+          command: string;
+          description: string;
+        }>
+      | string;
+    scope?: string;
+    languageCode?: string;
+  }): Promise<object | undefined>;
   /**
    * Use this method to delete the list of the bot's commands for the given scope and user language.
    * Returns True on success.
@@ -920,7 +1284,10 @@ export declare class BaseClient extends Request {
    *
    * @throws {TelegramApiError} - If an error is encountered while deleting bot commands.
    */
-  deleteMyCommands(options: any): Promise<object | undefined>;
+  deleteMyCommands(options?: {
+    scope?: string;
+    languageCode?: string;
+  }): Promise<object | undefined>;
   /**
    * Get the list of commands set by the bot for its users.
    *
@@ -931,18 +1298,24 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object|undefined>} Returns an array of BotCommand on success.
    * @throws {TelegramApiError} Throws an error if there is a problem with the request.
    */
-  getMyCommands(options: any): Promise<object | undefined>;
+  getMyCommands(options?: {
+    scope?: string;
+    languageCode?: string;
+  }): Promise<object | undefined>;
   /**
    * Asynchronously sets the name and language code for a Telegram bot.
    *
    * @async
    * @param {object} options - An object containing the name and language code to set.
    * @param {string} options.name - The name to set for the bot.
-   * @param {string} options.languageCode - The language code to set for the bot.
+   * @param {string} [options.languageCode] - The language code to set for the bot.
    * @returns {Promise<object | undefined>} The result of the API request.
    * @throws {TelegramApiError} Throws an error if there is an error in the API response.
    */
-  setMyName(options: any): Promise<object | undefined>;
+  setMyName(options: {
+    name: string;
+    languageCode?: string;
+  }): Promise<object | undefined>;
   /**
    * Asynchronously retrieves the name of the user associated with the current API authentication token.
    * @async
@@ -962,7 +1335,10 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the updated User object representing the bot.
    * @throws a TelegramApiError if the bot description could not be set.
    */
-  setMyDescription(options: any): Promise<object | undefined>;
+  setMyDescription(options: {
+    description: string;
+    languageCode?: string;
+  }): Promise<object | undefined>;
   /**
    * Get the bot's description, as set by the user.
    * @async
@@ -977,11 +1353,14 @@ export declare class BaseClient extends Request {
      
      * @param {object} options - Options for setting the short description.
      * @param {string} options.description - The new short description for the bot.
-     * @param {string} options.languageCode - The language code of the new short description.
+     * @param {string} [options.languageCode] - The language code of the new short description.
      * @returns {Promise<object | undefined>} - On success, the method returns the bot's updated profile.
      * @throws {TelegramApiError} - If the request was unsuccessful, a TelegramApiError will be thrown with the description of the error.
      */
-  setMyShortDescription(options: any): Promise<object | undefined>;
+  setMyShortDescription(options: {
+    description: string;
+    languageCode?: string;
+  }): Promise<object | undefined>;
   /**
    * Retrieves the bot's short description in the specified language or in English if the language code is not specified.
    *
@@ -1001,7 +1380,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If there is an error in the Telegram API response.
    * @returns {Promise<object | undefined>} The result object from the Telegram API response.
    */
-  setChatMenuButton(options: any): Promise<object | undefined>;
+  setChatMenuButton(options: {
+    chatId?: number;
+    menuButton: any;
+  }): Promise<object | undefined>;
   /**
    * Gets the menu button of the chat with the given chat ID or the current chat ID if available.
    * @async
@@ -1020,7 +1402,10 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the updated rights for the bot.
    * @throws {TelegramApiError} Throws an error if the response contains an error_code.
    */
-  setMyDefaultAdministratorRights(options: any): Promise<object | undefined>;
+  setMyDefaultAdministratorRights(options: {
+    rights: any;
+    forChannels: boolean;
+  }): Promise<object | undefined>;
   /**
    * Returns the default admin rights of the bot in a given channel or all channels.
    *
@@ -1048,7 +1433,16 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Response object with edited message.
    * @throws {TelegramApiError} If the request was unsuccessful.
    */
-  editMessageText(options: any): Promise<object | undefined>;
+  editMessageText(options: {
+    chatId?: string;
+    messageId?: number;
+    inlineMessageId?: string;
+    text: string;
+    parseMode?: string;
+    entities?: object[];
+    disableWebPagePreview?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Edits the caption of a message.
    * @async
@@ -1062,7 +1456,14 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} The edited message object.
    * @throws {TelegramApiError} If there is an error editing the message caption.
    */
-  editMessageCaption(options: any): Promise<object | undefined>;
+  editMessageCaption(options: {
+    messageId: number;
+    inlineMessageId?: string;
+    caption?: string;
+    parseMode?: string;
+    captionEntities?: object[];
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Edits the media of an existing message sent by the bot or via inline mode.
    * @async
@@ -1074,7 +1475,12 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} The edited message object.
    * @throws {TelegramApiError} If there is an error editing the message.
    */
-  editMessageMedia(options: any): Promise<object | undefined>;
+  editMessageMedia(options: {
+    messageId: number;
+    inlineMessageId?: string;
+    media: any;
+    replyMarkup?: any;
+  }): Promise<object | undefined>;
   /**
    * Edits the live location of a message sent via the bot (for inline bots) or via the bot in a chat.
    * @async
@@ -1092,7 +1498,17 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} When an error occurs while editing the message.
    * @returns {Promise<object | undefined>} On success, returns the edited message as a `Message` object.
    */
-  editMessageLiveLocation(options: any): Promise<object | undefined>;
+  editMessageLiveLocation(options: {
+    chatId?: string;
+    messageId?: number;
+    inlineMessageId?: string;
+    latitude: number;
+    longitude: number;
+    horizontalAccuracy?: number;
+    heading?: number;
+    proximityAlertRadius?: number;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Stop updating a live location message sent by the bot or via inline mode.
    *
@@ -1106,7 +1522,12 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the stopped live location message object.
    * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
    */
-  stopMessageLiveLocation(options: any): Promise<object | undefined>;
+  stopMessageLiveLocation(options: {
+    chatId?: string | null;
+    messageId: number;
+    inlineMessageId?: string | null;
+    replyMarkup?: object | null;
+  }): Promise<object | undefined>;
   /**
    * Edits the reply markup of a message sent by the bot or via inline mode.
    * @async
@@ -1119,7 +1540,12 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while editing the message, an error object will be thrown.
    * @returns {Promise<object | undefined>} On success, the edited Message is returned.
    */
-  editMessageReplyMarkup(options: any): Promise<object | undefined>;
+  editMessageReplyMarkup(options: {
+    chatId?: string;
+    messageId?: number;
+    inlineMessageId?: string;
+    replyMarkup: object;
+  }): Promise<object | undefined>;
   /**
    * Stops a poll in a chat.
    *
@@ -1131,7 +1557,11 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while stopping the poll.
    * @returns {Promise<object | undefined>} On success, the stopped poll is returned.
    */
-  stopPoll(options: any): Promise<object | undefined>;
+  stopPoll(options: {
+    messageId: number;
+    replyMarkup?: object | string;
+    chatId?: number | string;
+  }): Promise<object | undefined>;
   /**
    * Sends a sticker message.
    * @async
@@ -1148,7 +1578,17 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the request to the Telegram API fails.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent message object on success.
    */
-  sendSticker(options: any): Promise<object | undefined>;
+  sendSticker(options: {
+    chatId?: string | number;
+    sticker: string;
+    emoji?: string;
+    notification?: boolean;
+    content?: boolean;
+    replyToMessageId?: string | number;
+    allowReply?: boolean;
+    replyMarkup?: object | string;
+    threadId?: string | number;
+  }): Promise<object | undefined>;
   /**
    * Get a sticker set by its name.
    *
@@ -1177,7 +1617,11 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If there is an error during the API request.
    * @returns {Promise<object | undefined>} The uploaded sticker file's information.
    */
-  uploadStickerFile(options: any): Promise<object | undefined>;
+  uploadStickerFile(options: {
+    userId: number;
+    sticker: any;
+    stickerFormat: string;
+  }): Promise<object | undefined>;
   /**
    * Creates a new sticker set with the specified options.
    *
@@ -1195,7 +1639,15 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If there is an error creating the sticker set.
    * @returns {Promise<object | undefined>} The created sticker set object.
    */
-  createNewStickerSet(options: any): Promise<object | undefined>;
+  createNewStickerSet(options: {
+    userId: number;
+    name: string;
+    title: string;
+    stickers: StickerOptions[];
+    stickerFormat: string;
+    stickerType: string;
+    needsRepainting?: boolean;
+  }): Promise<object | undefined>;
   /**
      * Add a new sticker to a set created by the bot.
      *
@@ -1215,7 +1667,11 @@ export declare class BaseClient extends Request {
      * @returns {Promise<object | undefined>} On success, the added Sticker object is returned.
      * @throws {TelegramApiError} If an error occurs while adding the sticker.
      */
-  addStickerToSet(options: any): Promise<object | undefined>;
+  addStickerToSet(options: {
+    userId: number;
+    name: string;
+    sticker: Sticker;
+  }): Promise<object | undefined>;
   /**
    * Set the position of a sticker in its set. Returns True on success.
    * @async
@@ -1226,7 +1682,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while setting the sticker position.
    * @returns {Promise<object | undefined>} A Promise that resolves to `true` on success.
    */
-  setStickerPositionInSet(options: any): Promise<object | undefined>;
+  setStickerPositionInSet(options: {
+    sticker: string;
+    position: number;
+  }): Promise<object | undefined>;
   /**
    * Use this method to delete a sticker from a set created by the bot.
    * Returns True on success.
@@ -1244,7 +1703,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If there is an error returned from the Telegram API.
    * @returns {Promise<object | undefined>} On success, the updated sticker object is returned.
    */
-  setStickerEmoji(options: any): Promise<object | undefined>;
+  setStickerEmoji(options: {
+    sticker: string;
+    emojiList: string[];
+  }): Promise<object | undefined>;
   /**
    * Set the keywords associated with a sticker.
    *
@@ -1256,7 +1718,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while setting sticker keywords.
    * @returns {Promise<object | undefined>} Result of the API call.
    */
-  setStickerKeywords(options: any): Promise<object | undefined>;
+  setStickerKeywords(options: {
+    sticker: string;
+    keywords: string[];
+  }): Promise<object | undefined>;
   /**
    * Sets the position of a sticker in the mask position for subsequent operation mask() calls.
    * @async
@@ -1269,7 +1734,14 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} On success, the edited sticker is returned.
    * @throws {TelegramApiError} If an error occurs while setting the sticker mask position.
    */
-  setStickerMaskPosition(options: any): Promise<object | undefined>;
+  setStickerMaskPosition(options: {
+    sticker: string;
+    maskPosition: {
+      point_x: number;
+      point_y: number;
+      scale: number;
+    };
+  }): Promise<object | undefined>;
   /**
    * Sets the title of a sticker set.
    *
@@ -1281,7 +1753,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If the API call returns an error.
    * @returns {Promise<object | undefined>} On success, the updated sticker set is returned.
    */
-  setStickerSetTitle(options: any): Promise<object | undefined>;
+  setStickerSetTitle(options: {
+    name: string;
+    title: string;
+  }): Promise<object | undefined>;
   /**
    * Set the thumbnail of a sticker set.
    * @async
@@ -1292,7 +1767,11 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} On success, the updated sticker set is returned.
    * @throws {TelegramApiError} If an error occurs while executing the method, an error with a description is thrown.
    */
-  setStickerSetThumbnail(options: any): Promise<object | undefined>;
+  setStickerSetThumbnail(options: {
+    name: string;
+    userId: number;
+    thumbnail: any;
+  }): Promise<object | undefined>;
   /**
    * Set the thumbnail of a sticker set created with a custom emoji.
    *
@@ -1304,7 +1783,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} When the Telegram API returns an error.
    * @returns {Promise<object | undefined>} The response from the Telegram API containing the result.
    */
-  setCustomEmojiStickerSetThumbnail(options: any): Promise<object | undefined>;
+  setCustomEmojiStickerSetThumbnail(options: {
+    name: string;
+    customEmojiId: string;
+  }): Promise<object | undefined>;
   /**
    * Use this method to delete a sticker set. Use the bot's username and the name of the sticker set.
    * @async
@@ -1327,7 +1809,15 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} - A Promise that resolves to the result of the request.
    * @throws {TelegramApiError} - If the Telegram API returns an error.
    */
-  answerInlineQuery(options: any): Promise<object | undefined>;
+  answerInlineQuery(options: {
+    inlineQueryId: string;
+    results: object[];
+    cacheTime?: number;
+    isPersonal?: boolean;
+    nextOffset?: string;
+    switchPmText?: string;
+    switchPmParameter?: string;
+  }): Promise<object | undefined>;
   /**
      * Use this method to answer a callback query sent from a web app.
      * @async
@@ -1338,7 +1828,10 @@ export declare class BaseClient extends Request {
      * @returns {Promise<object | undefined>} On success, the method returns the updated message object.
      * @throws {TelegramApiError} On error, an error object with an error code and description.
      */
-  answerWebAppQuery(options: any): Promise<object | undefined>;
+  answerWebAppQuery(options: {
+    queryId: string;
+    inlineQueryResult: any[];
+  }): Promise<object | undefined>;
   /**
    * Sends an invoice to the specified chat.
    * @async
@@ -1375,7 +1868,36 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Result object containing information about the sent invoice.
    * @throws {TelegramApiError} If there was an error sending the invoice.
    */
-  sendInvoice(options: any): Promise<object | undefined>;
+  sendInvoice(options: {
+    chatId?: number;
+    messageThreadId?: number;
+    title: string;
+    description: string;
+    payload: string;
+    providerToken: string;
+    currency: string;
+    prices: any[];
+    maxTipAmount: number;
+    suggestedTipAmounts: any[];
+    startParameter: string;
+    providerData: string;
+    photoUrl: string;
+    photoSize: number;
+    photoWidth: number;
+    photoHeight: number;
+    needName: boolean;
+    needPhoneNumber: boolean;
+    needEmail: boolean;
+    needShippingAddress: boolean;
+    sendPhoneNumberToProvider: boolean;
+    sendEmailToProvider: boolean;
+    isFlexible: boolean;
+    disableNotification: boolean;
+    protectContent: boolean;
+    replyToMessageId: number;
+    allowSendingWithoutReply: boolean;
+    replyMarkup: object | string;
+  }): Promise<object | undefined>;
   /**
    * Creates a payment invoice link for a Telegram bot user.
    * @async
@@ -1404,7 +1926,28 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If there was an error creating the invoice link.
    * @returns {Promise<object | undefined>} The response object, which contains the URL of the payment invoice link.
    */
-  createInvoiceLink(options: any): Promise<object | undefined>;
+  createInvoiceLink(options: {
+    title: string;
+    description: string;
+    payload: string;
+    providerToken: string;
+    currency: string;
+    prices: object[];
+    maxTipAmount: number;
+    suggestedTipAmounts: number[];
+    providerData: string;
+    photoUrl: string;
+    photoSize: number;
+    photoWidth: number;
+    photoHeight: number;
+    needName: boolean;
+    needPhoneNumber: boolean;
+    needEmail: boolean;
+    needShippingAddress: boolean;
+    sendPhoneNumberToProvider: boolean;
+    sendEmailToProvider: boolean;
+    isFlexible: boolean;
+  }): Promise<object | undefined>;
   /**
    * Sends a shipping query answer to the user.
    * @async
@@ -1416,7 +1959,12 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the response contains an error code.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result object upon successful execution of the method.
    */
-  answerShippingQuery(options: any): Promise<object | undefined>;
+  answerShippingQuery(options: {
+    queryId: string;
+    isDeliveryPossible: boolean;
+    shippingOptions?: any[];
+    errorMessage?: string;
+  }): Promise<object | undefined>;
   /**
    * Use this method to respond to such pre-checkout queries. On success, True is returned.
    *
@@ -1428,7 +1976,11 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} On success, True is returned.
    * @throws {TelegramApiError} On Telegram API error.
    */
-  answerPreCheckoutQuery(options: any): Promise<object | undefined>;
+  answerPreCheckoutQuery(options: {
+    preCheckoutQueryId: string;
+    ok: boolean;
+    errorMessage?: string;
+  }): Promise<object | undefined>;
   /**
    * Set errors in user Passport and revoke the verification of the data.
    *
@@ -1443,7 +1995,10 @@ export declare class BaseClient extends Request {
    * @throws {TelegramApiError} If the response from the API contains an error code.
    * @returns {Promise<object | undefined>} On success, returns an object with the success status.
    */
-  setPassportDataErrors(options: any): Promise<object | undefined>;
+  setPassportDataErrors(options: {
+    userId: number;
+    errors: PassportError[];
+  }): Promise<object | undefined>;
   /**
    * Sends a game to the chat.
    * @async
@@ -1459,7 +2014,16 @@ export declare class BaseClient extends Request {
    * @returns {Promise<object | undefined>} A Promise that resolves to the sent game object on success.
    * @throws {TelegramApiError} If an error occurs while sending the game.
    */
-  sendGame(options: any): Promise<object | undefined>;
+  sendGame(options: {
+    chatId?: number;
+    gameShortName: string;
+    disableNotification?: boolean;
+    protectContent?: boolean;
+    messageThreadId?: number;
+    replyToMessageId?: number;
+    allowSendingWithoutReply?: boolean;
+    replyMarkup?: object | string;
+  }): Promise<object | undefined>;
   /**
    * Delete a message on Telegram.
    *
@@ -1471,7 +2035,11 @@ export declare class BaseClient extends Request {
    * @return {object} Returns a Promise which will resolve to a message object if the message was deleted successfully.
    * @throws {TelegramApiError} Throws an error if the API response contains an error_code.
    */
-  deleteMessage(options: any): Promise<object | undefined>;
+  deleteMessage(options: {
+    chatId?: number;
+    messageId: number;
+    revoke?: boolean;
+  }): Promise<object | undefined>;
   /**
     * Creates a new chat with the specified options.
     * @async
@@ -1482,5 +2050,9 @@ export declare class BaseClient extends Request {
     * @returns {Promise<object | undefined>} - Returns a Promise that resolves to an object representing the created chat.
     * @throws {TelegramApiError} - Throws an error if the Telegram API returns an error.
     */
-  createChat(options: any): Promise<object | undefined>;
+  createChat(options: {
+    type: string;
+    title: string;
+  }): Promise<object | undefined>;
 }
+export {};
