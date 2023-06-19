@@ -1,17 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.codeBlock =
-  exports.list =
-  exports.paragraph =
-  exports.heading =
-  exports.image =
-  exports.link =
-  exports.code =
-  exports.strikethrough =
-  exports.underline =
-  exports.italic =
-  exports.bold =
-    void 0;
+exports.codeBlock = exports.list = exports.paragraph = exports.heading = exports.image = exports.link = exports.code = exports.strikethrough = exports.underline = exports.italic = exports.bold = void 0;
 const errorcollection_1 = require("../errorcollection");
 /**
  * Creates bold text
@@ -21,12 +10,10 @@ const errorcollection_1 = require("../errorcollection");
  * @returns {string} The input text formatted as bold
  */
 function bold(text) {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  return `**${text}**`;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    return `**${text}**`;
 }
 exports.bold = bold;
 /**
@@ -37,12 +24,10 @@ exports.bold = bold;
  * @returns {string} The input text formatted as italic
  */
 function italic(text) {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  return `_${text}_`;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    return `_${text}_`;
 }
 exports.italic = italic;
 /**
@@ -53,12 +38,10 @@ exports.italic = italic;
  * @returns {string} The input text formatted as underlined
  */
 function underline(text) {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  return `__${text}__`;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    return `__${text}__`;
 }
 exports.underline = underline;
 /**
@@ -69,12 +52,10 @@ exports.underline = underline;
  * @returns {string} The input text formatted as strikethrough
  */
 function strikethrough(text) {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  return `~~${text}~~`;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    return `~~${text}~~`;
 }
 exports.strikethrough = strikethrough;
 /**
@@ -85,12 +66,10 @@ exports.strikethrough = strikethrough;
  * @returns {string} The input code formatted as inline code
  */
 function code(text, language = "") {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  return `\`\`\`${language}\n${text}\n\`\`\``;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    return `\`\`\`${language}\n${text}\n\`\`\``;
 }
 exports.code = code;
 /**
@@ -102,17 +81,13 @@ exports.code = code;
  * @returns {string} An md hyperlink element with the specified text and URL
  */
 function link(text, url) {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  if (!url) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: url",
-    );
-  }
-  return `[${text}](${url})`;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    if (!url) {
+        throw new errorcollection_1.ParameterError("missing required argument: url");
+    }
+    return `[${text}](${url})`;
 }
 exports.link = link;
 /**
@@ -124,12 +99,10 @@ exports.link = link;
  * @returns {string} An Md image element with the specified URL and alternate text
  */
 function image(url, alt) {
-  if (!url) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: url",
-    );
-  }
-  return `![${alt}](${url})`;
+    if (!url) {
+        throw new errorcollection_1.ParameterError("missing required argument: url");
+    }
+    return `![${alt}](${url})`;
 }
 exports.image = image;
 /**
@@ -140,16 +113,14 @@ exports.image = image;
  * @returns {string} The heading tag with the specified text and level.
  */
 function heading(text, level = 1) {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  if (level < 1 || level > 6) {
-    throw new errorcollection_1.ParameterError("invalid heading level");
-  }
-  const hash = "#".repeat(level);
-  return `${hash} ${text}`;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    if (level < 1 || level > 6) {
+        throw new errorcollection_1.ParameterError("invalid heading level");
+    }
+    const hash = "#".repeat(level);
+    return `${hash} ${text}`;
 }
 exports.heading = heading;
 /**
@@ -160,12 +131,10 @@ exports.heading = heading;
  * @returns {string} An Md paragraph element containing the input text
  */
 function paragraph(text) {
-  if (!text) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: text",
-    );
-  }
-  return `${text}\n\n`;
+    if (!text) {
+        throw new errorcollection_1.ParameterError("missing required argument: text");
+    }
+    return `${text}\n\n`;
 }
 exports.paragraph = paragraph;
 /**
@@ -177,14 +146,12 @@ exports.paragraph = paragraph;
  * @returns {string} An md list element containing the specified list items
  */
 function list(items, ordered = false) {
-  if (!items) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: items",
-    );
-  }
-  const tag = ordered ? "1." : "*";
-  const listItems = items.map(item => `${tag} ${item}`).join("\n");
-  return `${listItems}\n\n`;
+    if (!items) {
+        throw new errorcollection_1.ParameterError("missing required argument: items");
+    }
+    const tag = ordered ? "1." : "*";
+    const listItems = items.map(item => `${tag} ${item}`).join("\n");
+    return `${listItems}\n\n`;
 }
 exports.list = list;
 /**
@@ -196,11 +163,9 @@ exports.list = list;
  * @returns {string} An HTML code block element containing
  **/
 function codeBlock(code, language = "") {
-  if (!code) {
-    throw new errorcollection_1.ParameterError(
-      "missing required argument: code",
-    );
-  }
-  return `\`\`\`${language}\n${code}\n\`\`\``;
+    if (!code) {
+        throw new errorcollection_1.ParameterError("missing required argument: code");
+    }
+    return `\`\`\`${language}\n${code}\n\`\`\``;
 }
 exports.codeBlock = codeBlock;

@@ -24,8 +24,8 @@ declare function extractHashtags(message: string): string[];
  * @returns {boolean} - Returns true if the location object is valid, otherwise false.
  */
 declare function checkLocation(location: {
-  latitude: string | number;
-  longitude: string | number;
+    latitude: string | number;
+    longitude: string | number;
 }): boolean;
 /**
  * Checks if a message contains any user mentions.
@@ -111,23 +111,4 @@ declare function checkUsername(username: string): boolean;
  * @returns {string|null} - The extracted username, or null if not found.
  */
 declare function extractUsername(link: string): string | null;
-export {
-  checkMessageLinks,
-  extractUserMentions,
-  extractHashtags,
-  checkLocation,
-  checkUserMentions,
-  checkHashtags,
-  checkPhoneNumber,
-  extractUserIdFromLink,
-  checkGroupOrChannel,
-  checkEmoji,
-  checkSticker,
-  extractUsernameFromLink,
-  checkBot,
-  checkChannel,
-  checkLink,
-  checkGroup,
-  checkUsername,
-  extractUsername,
-};
+export { checkMessageLinks, extractUserMentions, extractHashtags, checkLocation, checkUserMentions, checkHashtags, checkPhoneNumber, extractUserIdFromLink, checkGroupOrChannel, checkEmoji, checkSticker, extractUsernameFromLink, checkBot, checkChannel, checkLink, checkGroup, checkUsername, extractUsername, };
