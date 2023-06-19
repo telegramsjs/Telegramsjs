@@ -129,7 +129,7 @@ export class BaseClient extends Request {
    * @param {object} options - object containing options for the message
    * @param {number|string} [options.chatId=this.chatId] - Unique identifier for the target chat or username of the target channel
    * @param {string} options.text - Text of the message to be sent.
-   * @param {string} [options.replyMarkup] - Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
+   * @param {object | string} [options.replyMarkup] - Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard, or to force a reply from the user.
    * @param {boolean} [options.allowReply] - Pass `true` if the message should be sent even if the specified replied-to message is not found
    * @param {boolean} [options.notification] - Sends the message silently. Users will receive a notification with no sound.
    * @param {boolean} [options.content] - Pass `true` if the message should be encrypted.
@@ -142,7 +142,7 @@ export class BaseClient extends Request {
   async sendMessage(options: {
     chatId: string | number;
     text: string;
-    replyMarkup?: string;
+    replyMarkup?: any;
     allowReply?: boolean;
     notification?: boolean;
     content?: boolean | undefined;
@@ -215,19 +215,28 @@ export class BaseClient extends Request {
     replyMarkup?: string;
   }): Promise<object | undefined> {
     const method = "sendPhoto";
-    const params = {
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
       chat_id: this.chatId ? this.chatId : options.chatId,
-      message_thread_id: options.threadId,
+      message_thread_id: options.threadId || null,
       photo: options.photo,
       caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
-      has_spoiler: options.hasSpoiler,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
-      reply_markup: options.replyMarkup,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      has_spoiler: options.hasSpoiler || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      reply_markup: options.replyMarkup || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -275,25 +284,35 @@ export class BaseClient extends Request {
     content?: boolean;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendAudio";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_thread_id: options.threadId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_thread_id: options.threadId || null,
       audio: options.audio,
-      caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
-      duration: options.duration,
-      performer: options.performer,
-      title: options.title,
-      thumbnail: options.thumbnail,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
-      reply_markup: options.replyMarkup,
+      caption: options.caption || null,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      duration: options.duration || null,
+      performer: options.performer || null,
+      title: options.title || null,
+      thumbnail: options.thumbnail || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
+      reply_markup: options.replyMarkup
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -336,22 +355,32 @@ export class BaseClient extends Request {
     content?: boolean;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendDocument";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_thread_id: options.threadId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_thread_id: options.threadId || null,
       document: options.document,
-      thumbnail: options.thumbnail,
-      caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
-      disable_content_type_detection: options.disableContentTypeDetection,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      thumbnail: options.thumbnail || null,
+      caption: options.caption || null,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      disable_content_type_detection: options.disableContentTypeDetection || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -367,7 +396,7 @@ export class BaseClient extends Request {
    * @async
    
    * @param {object} options - Options for the video message.
-   * @param {string|number} options.chatId - Unique identifier for the target chat or username of the target channel.
+   * @param {string|number} [options.chatId] - Unique identifier for the target chat or username of the target channel.
    * @param {any} options.video - Video to send. Can be a string path or a stream.
    * @param {number} [options.duration] - Duration of the video in seconds.
    * @param {number} [options.width] - Width of the video.
@@ -387,7 +416,7 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the API response returns an error code.
    */
   async sendVideo(options: {
-    chatId: string | number;
+    chatId?: string | number;
     video: any;
     duration?: number;
     width?: number;
@@ -402,25 +431,35 @@ export class BaseClient extends Request {
     content?: boolean;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendVideo";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       video: options.video,
-      duration: options.duration,
-      width: options.width,
-      height: options.height,
-      thumbnail: options.thumbnail,
-      caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
-      has_spoiler: options.hasSpoiler,
-      supports_streaming: options.supportsStreaming,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      duration: options.duration || null,
+      width: options.width || null,
+      height: options.height || null,
+      thumbnail: options.thumbnail || null,
+      caption: options.caption || null,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      has_spoiler: options.hasSpoiler || null,
+      supports_streaming: options.supportsStreaming || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -470,27 +509,37 @@ export class BaseClient extends Request {
     content?: boolean;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
     threadId?: string;
   }): Promise<object | undefined> {
     const method = "sendAnimation";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       animation: options.animation,
-      duration: options.duration,
-      width: options.width,
-      height: options.height,
-      thumbnail: options.thumbnail,
-      caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
-      has_spoiler: options.hasSpoiler,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      duration: options.duration || null,
+      width: options.width || null,
+      height: options.height || null,
+      thumbnail: options.thumbnail || null,
+      caption: options.caption || null,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      has_spoiler: options.hasSpoiler || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
-      message_thread_id: options.threadId,
+      message_thread_id: options.threadId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -530,23 +579,33 @@ export class BaseClient extends Request {
     content?: boolean;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
     threadId?: string;
   }): Promise<object | undefined> {
     const method = "sendVoice";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       voice: options.voice,
-      caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
-      duration: options.duration,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      caption: options.caption || null,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      duration: options.duration || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
-      message_thread_id: options.threadId,
+      message_thread_id: options.threadId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -560,7 +619,7 @@ export class BaseClient extends Request {
    * Sends a video note message to a chat.
    * @async
    * @param {object} options - The options object.
-   * @param {string|number} options.chatId - The chat ID to send the message to.
+   * @param {string|number} [options.chatId] - The chat ID to send the message to.
    * @param {string} options.videoNote - The video note file to send. Pass a file ID or a URL to the video note file.
    * @param {number} [options.duration] - Duration of the video note in seconds.
    * @param {number} [options.length] - File size of the video note.
@@ -575,7 +634,7 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the sent message object.
    */
   async sendVideoNote(options: {
-    chatId: string | number;
+    chatId?: string | number;
     videoNote: string;
     duration?: number;
     length?: number;
@@ -585,20 +644,31 @@ export class BaseClient extends Request {
     threadId?: number;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendVideoNote";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       video_note: options.videoNote,
-      duration: options.duration,
-      length: options.length,
-      thumbnail: options.thumbnail,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      message_thread_id: options.threadId,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      duration: options.duration || null,
+      length: options.length || null,
+      //@ts-ignore
+      thumbnail: options.thumbnail || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      message_thread_id: options.threadId || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -619,7 +689,7 @@ export class BaseClient extends Request {
    * @param {number} [options.threadId] - Send message as a reply to a message thread.
    * @param {number} [options.replyToMessageId] - The ID of the message being replied to.
    * @param {boolean} [options.allowReply=false] - Pass true to allow sending the media group without replying to a message.
-   * @param {object[]} options.media - An array of media objects to be sent in the media group.
+   * @param {any[]} options.media - An array of media objects to be sent in the media group.
    * @param {string} options.media[].type - Type of the media (photo, video, etc.).
    * @param {string | any} options.media[].media - The media to send (as a string).
    * @param {string} [options.media[].caption] - Caption of the media (0-1024 characters).
@@ -632,7 +702,7 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the response contains an error code.
    */
   async sendMediaGroup(options: {
-    chatId: number;
+    chatId?: number;
     notification?: boolean;
     content?: boolean;
     threadId?: number;
@@ -650,21 +720,39 @@ export class BaseClient extends Request {
     }[];
   }): Promise<object | undefined> {
     const method = "sendMediaGroup";
-    const params: any = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      message_thread_id: options.threadId,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      message_thread_id: options.threadId || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       media: {
+        //@ts-ignore
         type: options?.media?.type,
+        //@ts-ignore
         media: options?.media?.media,
+        //@ts-ignore
         caption: options?.media?.caption,
+        //@ts-ignore
         parse_mode: options?.media?.parseMode,
+        //@ts-ignore
         width: options?.media?.width,
+        //@ts-ignore
         height: options?.media?.height,
+        //@ts-ignore
         duration: options?.media?.duration,
+        //@ts-ignore
         supports_streaming: options?.media?.supportsStreaming,
       },
     };
@@ -698,6 +786,7 @@ export class BaseClient extends Request {
  * @throws {TelegramApiError} If the Telegram API returns an error.
  */
   async sendLocation(options: {
+    chatId?: number;
     latitude: number;
     longitude: number;
     accuracy?: number;
@@ -709,22 +798,32 @@ export class BaseClient extends Request {
     threadId?: number;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendLocation";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_thread_id: options.threadId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_thread_id: options.threadId || null,
       latitude: options.latitude,
       longitude: options.longitude,
-      horizontal_accuracy: options.accuracy,
-      live_period: options.livePeriod,
-      heading: options.heading,
-      proximity_alert_radius: options.proximityRadius,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      horizontal_accuracy: options.accuracy || null,
+      live_period: options.livePeriod || null,
+      heading: options.heading || null,
+      proximity_alert_radius: options.proximityRadius || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -772,24 +871,34 @@ export class BaseClient extends Request {
     content?: boolean;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendVenue";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_thread_id: options.threadId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_thread_id: options.threadId || null,
       latitude: options.latitude,
       longitude: options.longitude,
       title: options.title,
       address: options.address,
-      foursquare_id: options.foursquareId,
-      foursquare_type: options.foursquareType,
-      google_place_id: options.googlePlaceId,
-      google_place_type: options.googlePlaceType,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      foursquare_id: options.foursquareId || null,
+      foursquare_type: options.foursquareType || null,
+      google_place_id: options.googlePlaceId || null,
+      google_place_type: options.googlePlaceType || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -823,13 +932,22 @@ export class BaseClient extends Request {
     content?: boolean;
   }): Promise<object | undefined> {
     const method = "forwardMessage";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       from_chat_id: options.fromChatId,
       message_id: options.messageId,
-      message_thread_id: options.threadId,
-      disable_notification: options.notification,
-      protect_content: options.content,
+      message_thread_id: options.threadId || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -851,7 +969,7 @@ export class BaseClient extends Request {
  * @param {string} [options.chatId=this.chatId] - The chat ID of the chat where the message will be copied to. If not provided, uses the chat ID set in the constructor.
  * @param {string} [options.caption] - The caption of the message to be copied.
  * @param {string} [options.parseMode=this.parseMode] - The parsing mode of the message caption. If not provided, uses the parse mode set in the constructor.
- * @param {object[]} [options.captionEntities] - The entities in the message caption.
+ * @param {string[]} [options.captionEntities] - The entities in the message caption.
  * @param {boolean} [options.notification] - Sends the message silently. Users will receive a notification with no sound.
  * @param {boolean} [options.content] - Pass true to protect the content of the message from being forwarded without permission.
  * @param {string} [options.replyToMessageId] - The message ID being replied to.
@@ -867,26 +985,36 @@ export class BaseClient extends Request {
     chatId?: string;
     caption?: string;
     parseMode?: string;
-    captionEntities?: object[];
+    captionEntities?: string[];
     notification?: boolean;
     content?: boolean;
     replyToMessageId?: string;
     allowSendingWithoutReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "copyMessage";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       from_chat_id: options.fromChatId,
       message_id: options.messageId,
-      message_thread_id: options.threadId,
-      caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowSendingWithoutReply,
+      message_thread_id: options.threadId || null,
+      caption: options.caption || null,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowSendingWithoutReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -927,20 +1055,30 @@ export class BaseClient extends Request {
     threadId?: number;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendContact";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params:Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       phone_number: options.phoneNumber,
       first_name: options.firstName,
-      last_name: options.lastName,
-      vcard: options.vcard,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      message_thread_id: options.threadId,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      last_name: options.lastName || null,
+      vcard: options.vcard || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      message_thread_id: options.threadId || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -965,7 +1103,7 @@ export class BaseClient extends Request {
    * @param {number} options.correctOptionId - The correct answer option ID for the quiz type poll.
    * @param {string} options.explanation - The explanation for the correct answer option in the quiz type poll.
    * @param {string} options.explanationParseMode - The parse mode for the explanation message.
-   * @param {object[]} options.explanationEntities - An array of message entities in the explanation message.
+   * @param {any[]} options.explanationEntities - An array of message entities in the explanation message.
    * @param {number} options.openPeriod - The amount of time in seconds the poll will be open for.
    * @param {number} options.closeDate - The date when the poll will be automatically closed.
    * @param {boolean} options.isClosed - Whether the poll is closed or not.
@@ -988,7 +1126,7 @@ export class BaseClient extends Request {
     correctOptionId?: number;
     explanation?: string;
     explanationParseMode?: string;
-    explanationEntities?: object[];
+    explanationEntities?: string[];
     openPeriod: number;
     closeDate?: number;
     isClosed?: boolean;
@@ -1000,25 +1138,35 @@ export class BaseClient extends Request {
     replyMarkup?: object;
   }): Promise<object | undefined> {
     const method = "sendPoll";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       question: options.question,
       options: options.options,
       is_anonymous: options.isAnonymous,
       type: options.type,
       allows_multiple_answers: options.allowsMultipleAnswers,
-      correct_option_id: options.correctOptionId,
-      explanation: options.explanation,
-      explanation_parse_mode: options.explanationParseMode,
-      explanation_entities: options.explanationEntities,
-      open_period: options.openPeriod,
-      close_date: options.closeDate,
-      is_closed: options.isClosed,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      message_thread_id: options.threadId,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      correct_option_id: options.correctOptionId || null,
+      explanation: options.explanation || null,
+      explanation_parse_mode: options.explanationParseMode || null,
+      explanation_entities: options.explanationEntities || null,
+      open_period: options.openPeriod || null,
+      close_date: options.closeDate || null,
+      is_closed: options.isClosed || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      message_thread_id: options.threadId || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1053,17 +1201,27 @@ export class BaseClient extends Request {
     threadId?: number;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendDice";
-    const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+    const params: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | readonly string[]
+      | readonly number[]
+      | readonly boolean[]
+      | null
+    > = {
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       emoji: options.emoji,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      message_thread_id: options.threadId,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      message_thread_id: options.threadId || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1091,7 +1249,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "sendChatAction";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       action: options.action,
       message_thread_id: options.threadId,
     };
@@ -1123,8 +1281,8 @@ export class BaseClient extends Request {
     const method = "getUserProfilePhotos";
     const params = {
       user_id: options.userId,
-      offset: options.offset,
-      limit: options.limit,
+      offset: options.offset || null,
+      limit: options.limit || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1198,7 +1356,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "banChatMember";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.userId,
       until_date: options.untilDate,
       revoke_messages: options.revokeMessages,
@@ -1229,9 +1387,9 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "unbanChatMember";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.userId,
-      only_if_banned: options.onlyIfBanned,
+      only_if_banned: options.onlyIfBanned || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1255,17 +1413,19 @@ export class BaseClient extends Request {
  */
   async restrictChatMember(options: {
     userId: number;
-    permissions: object;
+    permissions: any;
     useIndependentChatPermissions?: boolean;
     untilDate?: number;
+    chatId?: string | number;
   }): Promise<object | undefined> {
     const method = "restrictChatMember";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.userId,
+      //@ts-ignore
       permissions: options.permissions,
-      use_independent_chat_permissions: options.useIndependentChatPermissions,
-      until_date: options.untilDate,
+      use_independent_chat_permissions: options.useIndependentChatPermissions || null,
+      until_date: options.untilDate || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1314,20 +1474,20 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "promoteChatMember";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.userId,
-      is_anonymous: options.isAnonymous,
-      can_manage_chat: options.canManageChat,
-      can_post_messages: options.canPostMessages,
-      can_edit_messages: options.canEditMessages,
-      can_delete_messages: options.canDeleteMessages,
-      can_manage_video_chats: options.canManageVideoChats,
-      can_restrict_members: options.canRestrictMembers,
-      can_promote_members: options.canPromoteMembers,
-      can_change_info: options.canChangeInfo,
-      can_invite_users: options.canInviteUsers,
-      can_pin_messages: options.canPinMessages,
-      can_manage_topics: options.canManageTopics,
+      is_anonymous: options.isAnonymous || null,
+      can_manage_chat: options.canManageChat || null,
+      can_post_messages: options.canPostMessages || null,
+      can_edit_messages: options.canEditMessages || null,
+      can_delete_messages: options.canDeleteMessages || null,
+      can_manage_video_chats: options.canManageVideoChats || null,
+      can_restrict_members: options.canRestrictMembers || null,
+      can_promote_members: options.canPromoteMembers || null,
+      can_change_info: options.canChangeInfo || null,
+      can_invite_users: options.canInviteUsers || null,
+      can_pin_messages: options.canPinMessages || null,
+      can_manage_topics: options.canManageTopics || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1355,7 +1515,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "setChatAdministratorCustomTitle";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.userId,
       custom_title: options.customTitle,
     };
@@ -1383,7 +1543,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "banChatMember";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.senderChatId,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1411,7 +1571,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "unbanChatMember";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.senderChatId,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1435,14 +1595,14 @@ export class BaseClient extends Request {
  */
   async setChatPermissions(options: {
     chatId?: string;
-    permissions: ChatPermissions;
+    permissions: any;
     independentPermissions?: boolean;
   }): Promise<object | undefined> {
     const method = "setChatPermissions";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       permissions: options.permissions,
-      use_independent_chat_permissions: options.independentPermissions,
+      use_independent_chat_permissions: options.independentPermissions || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1460,10 +1620,10 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while exporting the chat invite link.
    * @returns {Promise<string>} The invite link for the chat.
    */
-  async portChatInviteLink(chatId: string): Promise<object | undefined> {
+  async portChatInviteLink(chatId?: string): Promise<object | undefined> {
     const method = "portChatInviteLink";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
@@ -1487,17 +1647,17 @@ export class BaseClient extends Request {
   async createChatInviteLink(options: {
     chatId?: string;
     name?: string;
-    expireDate?: Date;
+    expireDate?: any;
     memberLimit?: number;
     createsJoinRequest?: boolean;
   }): Promise<object | undefined> {
     const method = "createChatInviteLink";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      name: options.name,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      name: options.name || null,
       expire_date: options.expireDate,
-      member_limit: options.memberLimit,
-      creates_join_request: options.createsJoinRequest,
+      member_limit: options.memberLimit || null,
+      creates_join_request: options.createsJoinRequest || null,
     };
 
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1530,12 +1690,12 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "editChatInviteLink";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       invite_link: options.inviteLink,
-      name: options.name,
-      expire_date: options.expireDate,
-      member_limit: options.memberLimit,
-      creates_join_request: options.createsJoinRequest,
+      name: options.name || null,
+      expire_date: options.expireDate || null,
+      member_limit: options.memberLimit || null,
+      creates_join_request: options.createsJoinRequest || null,
     };
 
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1562,7 +1722,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "revokeChatInviteLink";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       invite_link: options.inviteLink,
     };
 
@@ -1589,7 +1749,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "approveChatJoinRequest";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.userId,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1636,12 +1796,12 @@ export class BaseClient extends Request {
  * @returns {Promise<object | undefined>} On success, the method returns True.
  */
   async setChatPhoto(options: {
-    userId: number;
+    photo: any;
     chatId?: number;
   }): Promise<object | undefined> {
     const method = "setChatPhoto";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       photo: options.photo,
     };
 
@@ -1688,7 +1848,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "setChatTitle";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       title: options.title,
     };
 
@@ -1715,7 +1875,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "setChatDescription";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       description: options.description,
     };
 
@@ -1744,9 +1904,9 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "pinChatMessage";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_id: options.messageId,
-      disable_notification: options.notification,
+      disable_notification: options.notification || null,
     };
 
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1771,7 +1931,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "unpinChatMessage";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_id: options.messageId,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1790,10 +1950,10 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} When the API call fails.
    * @returns {Promise<object | undefined>} On success, the sent [Message](https://core.telegram.org/bots/api#message) is returned.
    */
-  async unpinAllChatMessages(chatId: number): Promise<object | undefined> {
+  async unpinAllChatMessages(chatId?: number): Promise<object | undefined> {
     const method = "unpinAllChatMessages";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
@@ -1811,10 +1971,10 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} On success, the method returns True.
    */
 
-  async leaveChat(chatId: number | string): Promise<object | undefined> {
+  async leaveChat(chatId?: number | string): Promise<object | undefined> {
     const method = "leaveChat";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1833,10 +1993,10 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns an object containing information about the chat.
    */
 
-  async getChat(chatId: string): Promise<object | undefined> {
+  async getChat(chatId?: string): Promise<object | undefined> {
     const method = "getChat";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1853,11 +2013,11 @@ export class BaseClient extends Request {
    * @returns {Promise<Array<any>>} - On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots.
    */
   async getChatAdministrators(
-    chatId: number | string,
+    chatId?: number | string,
   ): Promise<object | undefined> {
     const method = "getChatAdministrators";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1874,10 +2034,10 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} The number of members in the chat.
    * @throws {TelegramApiError} If there is an error while calling the Telegram API.
    */
-  async getChatMemberCount(chatId: number): Promise<object | undefined> {
+  async getChatMemberCount(chatId?: number): Promise<object | undefined> {
     const method = "getChatMemberCount";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -1903,7 +2063,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "getChatMember";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       user_id: options.userId,
     };
 
@@ -1932,7 +2092,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "setChatStickerSet";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       sticker_set_name: options.stickerSetName,
     };
 
@@ -1951,10 +2111,10 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while deleting the chat's sticker set.
    * @returns {Promise<object | undefined>} On success, the deleted chat's sticker set is returned.
    */
-  async deleteChatStickerSet(chatId: number): Promise<object | undefined> {
+  async deleteChatStickerSet(chatId?: number): Promise<object | undefined> {
     const method = "deleteChatStickerSet";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
 
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1998,7 +2158,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "createForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       name: options.name,
       icon_color: options.iconColor,
       icon_custom_emoji_id: options.iconCustomEmojiId,
@@ -2031,7 +2191,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "editForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.messageThreadId,
       name: options.name,
       icon_custom_emoji_id: options.iconCustomEmojiId,
@@ -2060,7 +2220,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "closeForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.messageThreadId,
     };
 
@@ -2087,7 +2247,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "reopenForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.messageThreadId,
     };
 
@@ -2114,7 +2274,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "deleteForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.messageThreadId,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2142,7 +2302,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "unpinAllForumTopicMessages";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.messageThreadId,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2169,7 +2329,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "editGeneralForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       name: options.name,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2187,10 +2347,10 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} If an error occurs while closing the forum topic.
    * @returns {Promise<object | undefined>} The result of the API call to the Telegram server.
    */
-  async closeGeneralForumTopic(chatId: number): Promise<object | undefined> {
+  async closeGeneralForumTopic(chatId?: number): Promise<object | undefined> {
     const method = "closeGeneralForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2207,10 +2367,10 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} Throws an error if the response from the Telegram API contains an error code.
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to the result of the Telegram API response.
    */
-  async reopenGeneralForumTopic(chatId: string): Promise<object | undefined> {
+  async reopenGeneralForumTopic(chatId?: string): Promise<object | undefined> {
     const method = "reopenGeneralForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2229,11 +2389,11 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} - Throws an error if the response contains an error code.
    */
   async hideGeneralForumTopic(
-    chatId: number | string,
+    chatId?: number | string,
   ): Promise<object | undefined> {
     const method = "hideGeneralForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2251,11 +2411,11 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} - Throws an error if the Telegram API responds with an error.
    */
   async unhideGeneralForumTopic(
-    chatId: string | number,
+    chatId?: string | number,
   ): Promise<object | undefined> {
     const method = "unhideGeneralForumTopic";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2288,10 +2448,10 @@ export class BaseClient extends Request {
     const method = "answerCallbackQuery";
     const params = {
       callback_query_id: options.callbackQueryId,
-      text: options.text,
-      show_alert: options.showAlert,
-      url: options.url,
-      cache_time: options.cacheTime,
+      text: options.text || null,
+      show_alert: options.showAlert || null,
+      url: options.url || null,
+      cache_time: options.cacheTime || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2313,20 +2473,15 @@ export class BaseClient extends Request {
  * @throws {TelegramApiError} Throws a TelegramApiError if the API response contains an error code.
  */
   async setMyCommands(options: {
-    commands:
-      | Array<{
-          command: string;
-          description: string;
-        }>
-      | string;
+    commands: any;
     scope?: string;
     languageCode?: string;
   }): Promise<object | undefined> {
     const method = "setMyCommands";
     const params = {
       commands: options.commands,
-      scope: options?.scope,
-      language_code: options?.languageCode,
+      scope: options?.scope || null,
+      language_code: options?.languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2355,8 +2510,8 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "deleteMyCommands";
     const params = {
-      scope: options?.scope,
-      language_code: options?.languageCode,
+      scope: options?.scope || null,
+      language_code: options?.languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2382,8 +2537,8 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "getMyCommands";
     const params = {
-      scope: options?.scope,
-      language_code: options?.languageCode,
+      scope: options?.scope || null,
+      language_code: options?.languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2410,7 +2565,7 @@ export class BaseClient extends Request {
     const method = "setMyName";
     const params = {
       name: options?.name,
-      language_code: options?.languageCode,
+      language_code: options?.languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2427,10 +2582,10 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} If there is an error with the Telegram API.
    * @returns {Promise<object | undefined>} The name of the user associated with the current API authentication token.
    */
-  async getMyName(languageCode: string): Promise<object | undefined> {
+  async getMyName(languageCode?: string): Promise<object | undefined> {
     const method = "getMyName";
     const params = {
-      language_code: languageCode,
+      language_code: languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2458,7 +2613,7 @@ export class BaseClient extends Request {
     const method = "setMyDescription";
     const params = {
       description: options.description,
-      language_code: options.languageCode,
+      language_code: options.languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2475,10 +2630,10 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} If the API returns an error.
    * @returns {Promise<object | undefined>} A promise that resolves to a string representing the bot's description.
    */
-  async getMyDescription(languageCode: string): Promise<object | undefined> {
+  async getMyDescription(languageCode?: string): Promise<object | undefined> {
     const method = "getMyDescription";
     const params = {
-      language_code: languageCode,
+      language_code: languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
@@ -2504,7 +2659,7 @@ export class BaseClient extends Request {
     const method = "setMyShortDescription";
     const params = {
       short_description: options.description,
-      language_code: options.languageCode,
+      language_code: options.languageCode || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
     if (!!response?.error_code) {
@@ -2522,11 +2677,11 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} object with the bot's short description.
    */
   async getMyShortDescription(
-    languageCode: string,
+    languageCode?: string,
   ): Promise<object | undefined> {
     const method = "getMyShortDescription";
     const params = {
-      language_code: languageCode,
+      language_code: languageCode || null,
     };
 
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2552,7 +2707,7 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "setChatMenuButton";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       menu_button: options.menuButton,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2571,11 +2726,11 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns the menu button of the chat.
    */
   async getChatMenuButton(
-    chatId: number | string,
+    chatId?: number | string,
   ): Promise<object | undefined> {
     const method = "getChatMenuButton";
     const params = {
-      chat_id: this.chatId ? this.chatId : chatId,
+      chat_id: this.chatId ? this.chatId : chatId || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2657,19 +2812,20 @@ export class BaseClient extends Request {
     inlineMessageId?: string;
     text: string;
     parseMode?: string;
-    entities?: object[];
+    entities?: string[];
     disableWebPagePreview?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "editMessageText";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_id: options.messageId,
-      inline_message_id: options.inlineMessageId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_id: options.messageId || null,
+      inline_message_id: options.inlineMessageId || null,
       text: options.text,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      entities: options.entities,
-      disable_web_page_preview: options.disableWebPagePreview,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      entities: options.entities || null,
+      disable_web_page_preview: options.disableWebPagePreview || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2698,17 +2854,17 @@ export class BaseClient extends Request {
     inlineMessageId?: string;
     caption?: string;
     parseMode?: string;
-    captionEntities?: object[];
-    replyMarkup?: object | string;
+    captionEntities?: string[];
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "editMessageCaption";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
       message_id: options.messageId,
-      inline_message_id: options.inlineMessageId,
-      caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode,
-      caption_entities: options.captionEntities,
+      inline_message_id: options.inlineMessageId || null,
+      caption: options.caption || null,
+      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      caption_entities: options.captionEntities || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2735,12 +2891,13 @@ export class BaseClient extends Request {
     inlineMessageId?: string;
     media: any;
     replyMarkup?: any;
+    chatId?: string | number;
   }): Promise<object | undefined> {
     const method = "editMessageMedia";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_id: options.messageId,
-      inline_message_id: options.inlineMessageId,
+      inline_message_id: options.inlineMessageId || null,
       media: options.media,
       reply_markup: options.replyMarkup,
     };
@@ -2778,18 +2935,19 @@ export class BaseClient extends Request {
     horizontalAccuracy?: number;
     heading?: number;
     proximityAlertRadius?: number;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "editMessageLiveLocation";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_id: options.messageId,
-      inline_message_id: options.inlineMessageId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_id: options.messageId || null,
+      inline_message_id: options.inlineMessageId || null,
       latitude: options.latitude,
       longitude: options.longitude,
-      horizontal_accuracy: options.horizontalAccuracy,
-      heading: options.heading,
-      proximity_alert_radius: options.proximityAlertRadius,
+      horizontal_accuracy: options.horizontalAccuracy || null,
+      heading: options.heading || null,
+      proximity_alert_radius: options.proximityAlertRadius || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2814,17 +2972,18 @@ export class BaseClient extends Request {
  * @throws {TelegramApiError} Throws an error if the Telegram API returns an error.
  */
   async stopMessageLiveLocation(options: {
-    chatId?: string | null;
+    chatId?: string;
     messageId: number;
     inlineMessageId?: string | null;
-    replyMarkup?: object | null;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "stopMessageLiveLocation";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_id: options.messageId,
-      inline_message_id: options.inlineMessageId,
-      reply_markup: options.replyMarkup,
+      inline_message_id: options.inlineMessageId || null,
+      //@ts-ignore
+      reply_markup: options.replyMarkup || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -2850,13 +3009,14 @@ export class BaseClient extends Request {
     chatId?: string;
     messageId?: number;
     inlineMessageId?: string;
-    replyMarkup: object;
+    replyMarkup: any;
   }): Promise<object | undefined> {
     const method = "editMessageReplyMarkup";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_id: options.messageId,
-      inline_message_id: options.inlineMessageId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_id: options.messageId || null,
+      inline_message_id: options.inlineMessageId || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2880,13 +3040,14 @@ export class BaseClient extends Request {
    */
   async stopPoll(options: {
     messageId: number;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
     chatId?: number | string;
   }): Promise<object | undefined> {
     const method = "stopPoll";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_id: options.messageId,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2921,19 +3082,20 @@ export class BaseClient extends Request {
     content?: boolean;
     replyToMessageId?: string | number;
     allowReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
     threadId?: string | number;
   }): Promise<object | undefined> {
     const method = "sendSticker";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_thread_id: options.threadId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_thread_id: options.threadId || null,
       sticker: options.sticker,
-      emoji: options.emoji,
-      disable_notification: options.notification,
-      protect_content: options.content,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowReply,
+      emoji: options.emoji || null,
+      disable_notification: options.notification || null,
+      protect_content: options.content || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowReply || null,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -3038,7 +3200,7 @@ export class BaseClient extends Request {
     userId: number;
     name: string;
     title: string;
-    stickers: StickerOptions[];
+    stickers: any;
     stickerFormat: string;
     stickerType: string;
     needsRepainting?: boolean;
@@ -3051,7 +3213,7 @@ export class BaseClient extends Request {
       stickers: options.stickers,
       sticker_format: options.stickerFormat,
       sticker_type: options.stickerType,
-      needs_repainting: options.needsRepainting,
+      needs_repainting: options.needsRepainting || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -3083,7 +3245,7 @@ export class BaseClient extends Request {
   async addStickerToSet(options: {
     userId: number;
     name: string;
-    sticker: Sticker;
+    sticker: any;
   }): Promise<object | undefined> {
     const method = "addStickerToSet";
     const params = {
@@ -3214,11 +3376,7 @@ export class BaseClient extends Request {
    */
   async setStickerMaskPosition(options: {
     sticker: string;
-    maskPosition: {
-      point_x: number;
-      point_y: number;
-      scale: number;
-    };
+    maskPosition: any;
   }): Promise<object | undefined> {
     const method = "setStickerMaskPosition";
     const params = {
@@ -3354,22 +3512,24 @@ export class BaseClient extends Request {
    */
   async answerInlineQuery(options: {
     inlineQueryId: string;
-    results: object[];
+    results: string[];
     cacheTime?: number;
     isPersonal?: boolean;
     nextOffset?: string;
     switchPmText?: string;
     switchPmParameter?: string;
+    button?: any;
   }): Promise<object | undefined> {
     const method = "answerInlineQuery";
     const params = {
       inline_query_id: options.inlineQueryId,
       results: options.results,
-      cache_time: options.cacheTime,
-      is_personal: options.isPersonal,
-      next_offset: options.nextOffset,
-      switch_pm_text: options.switchPmText,
-      switch_pm_parameter: options.switchPmParameter,
+      cache_time: options.cacheTime || null,
+      is_personal: options.isPersonal || null,
+      next_offset: options.nextOffset || null,
+      switch_pm_text: options.switchPmText || null,
+      switch_pm_parameter: options.switchPmParameter || null,
+      //@ts-ignore
       button: options.button,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -3471,12 +3631,12 @@ export class BaseClient extends Request {
     protectContent: boolean;
     replyToMessageId: number;
     allowSendingWithoutReply: boolean;
-    replyMarkup: object | string;
+    replyMarkup: any;
   }): Promise<object | undefined> {
     const method = "sendInvoice";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
-      message_thread_id: options.messageThreadId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
+      message_thread_id: options.messageThreadId || null,
       title: options.title,
       description: options.description,
       payload: options.payload,
@@ -3502,6 +3662,7 @@ export class BaseClient extends Request {
       protect_content: options.protectContent,
       reply_to_message_id: options.replyToMessageId,
       allow_sending_without_reply: options.allowSendingWithoutReply,
+      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -3546,7 +3707,7 @@ export class BaseClient extends Request {
     payload: string;
     providerToken: string;
     currency: string;
-    prices: object[];
+    prices: any[];
     maxTipAmount: number;
     suggestedTipAmounts: number[];
     providerData: string;
@@ -3614,8 +3775,8 @@ export class BaseClient extends Request {
     const params = {
       shipping_query_id: options.queryId,
       ok: options.isDeliveryPossible,
-      shipping_options: options.shippingOptions,
-      error_message: options.errorMessage,
+      shipping_options: options.shippingOptions || null,
+      error_message: options.errorMessage || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -3645,7 +3806,7 @@ export class BaseClient extends Request {
     const params = {
       pre_checkout_query_id: options.preCheckoutQueryId,
       ok: options.ok,
-      error_message: options.errorMessage,
+      error_message: options.errorMessage || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -3671,7 +3832,7 @@ export class BaseClient extends Request {
    */
   async setPassportDataErrors(options: {
     userId: number;
-    errors: PassportError[];
+    errors: any;
   }): Promise<object | undefined> {
     const method = "setPassportDataErrors";
     const params = {
@@ -3709,17 +3870,18 @@ export class BaseClient extends Request {
     messageThreadId?: number;
     replyToMessageId?: number;
     allowSendingWithoutReply?: boolean;
-    replyMarkup?: object | string;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendGame";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       game_short_name: options.gameShortName,
-      disable_notification: options.disableNotification,
-      protect_content: options.protectContent,
-      message_thread_id: options.messageThreadId,
-      reply_to_message_id: options.replyToMessageId,
-      allow_sending_without_reply: options.allowSendingWithoutReply,
+      disable_notification: options.disableNotification || null,
+      protect_content: options.protectContent || null,
+      message_thread_id: options.messageThreadId || null,
+      reply_to_message_id: options.replyToMessageId || null,
+      allow_sending_without_reply: options.allowSendingWithoutReply || null,
+      // @ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -3748,9 +3910,9 @@ export class BaseClient extends Request {
   }): Promise<object | undefined> {
     const method = "deleteMessage";
     const params = {
-      chat_id: this.chatId ? this.chatId : options.chatId,
+      chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_id: options.messageId,
-      revoke: options.revoke,
+      revoke: options.revoke || null,
     };
 
     const response: TelegramApiResponse = await this.request(method, params);
