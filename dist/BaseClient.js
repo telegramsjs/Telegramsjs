@@ -465,8 +465,7 @@ class BaseClient extends request_js_1.Request {
                 video_note: options.videoNote,
                 duration: options.duration || null,
                 length: options.length || null,
-                //@ts-ignore
-                thumbnail: options.thumbnail || null,
+                thumbnail: options.thumbnail,
                 disable_notification: options.notification || null,
                 protect_content: options.content || null,
                 message_thread_id: options.threadId || null,
@@ -505,7 +504,6 @@ class BaseClient extends request_js_1.Request {
      * @throws {TelegramApiError} Throws an error if the response contains an error code.
      */
     sendMediaGroup(options) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
         return __awaiter(this, void 0, void 0, function* () {
             const method = "sendMediaGroup";
             const params = {
@@ -515,25 +513,19 @@ class BaseClient extends request_js_1.Request {
                 message_thread_id: options.threadId || null,
                 reply_to_message_id: options.replyToMessageId || null,
                 allow_sending_without_reply: options.allowReply || null,
-                //@ts-ignore
-                media: {
-                    //@ts-ignore
-                    type: (_a = options === null || options === void 0 ? void 0 : options.media) === null || _a === void 0 ? void 0 : _a.type,
-                    //@ts-ignore
-                    media: (_b = options === null || options === void 0 ? void 0 : options.media) === null || _b === void 0 ? void 0 : _b.media,
-                    //@ts-ignore
-                    caption: (_c = options === null || options === void 0 ? void 0 : options.media) === null || _c === void 0 ? void 0 : _c.caption,
-                    //@ts-ignore
-                    parse_mode: (_d = options === null || options === void 0 ? void 0 : options.media) === null || _d === void 0 ? void 0 : _d.parseMode,
-                    //@ts-ignore
-                    width: (_e = options === null || options === void 0 ? void 0 : options.media) === null || _e === void 0 ? void 0 : _e.width,
-                    //@ts-ignore
-                    height: (_f = options === null || options === void 0 ? void 0 : options.media) === null || _f === void 0 ? void 0 : _f.height,
-                    //@ts-ignore
-                    duration: (_g = options === null || options === void 0 ? void 0 : options.media) === null || _g === void 0 ? void 0 : _g.duration,
-                    //@ts-ignore
-                    supports_streaming: (_h = options === null || options === void 0 ? void 0 : options.media) === null || _h === void 0 ? void 0 : _h.supportsStreaming,
+                media: options.media
+                /*
+                {
+                  type: options?.media?.type,
+                  media: options?.media?.media,
+                  caption: options?.media?.caption,
+                  parse_mode: options?.media?.parseMode,
+                  width: options?.media?.width,
+                  height: options?.media?.height,
+                  duration: options?.media?.duration,
+                  supports_streaming: options?.media?.supportsStreaming,
                 },
+                */
             };
             const response = yield this.request(method, params);
             if (!!(response === null || response === void 0 ? void 0 : response.error_code)) {
@@ -809,7 +801,6 @@ class BaseClient extends request_js_1.Request {
                 message_thread_id: options.threadId || null,
                 reply_to_message_id: options.replyToMessageId || null,
                 allow_sending_without_reply: options.allowReply || null,
-                //@ts-ignore
                 reply_markup: options.replyMarkup,
             };
             const response = yield this.request(method, params);

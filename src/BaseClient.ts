@@ -9,34 +9,6 @@ type TelegramApiResponse = {
   result?: object | undefined;
 };
 
-type ChatPermissions = {
-  [permission: string]: boolean;
-};
-
-type StickerOptions = {
-  emoji: string;
-  file: string;
-};
-
-type MaskPosition = {
-  point: string;
-  xShift: number;
-  yShift: number;
-  scale: number;
-};
-
-type Sticker = {
-  fileId: string;
-  emoji: string;
-  maskPosition?: MaskPosition;
-};
-
-type PassportError = {
-  source: string;
-  type: string;
-  message: string;
-};
-
 export class BaseClient extends Request {
   token: string = "";
   intents?: string[] | number[] | null | undefined = null;
@@ -151,16 +123,7 @@ export class BaseClient extends Request {
     parseMode?: string;
   }): Promise<object | undefined> {
     const method = "sendMessage";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       text: options.text,
       reply_markup: options.replyMarkup as string | null,
@@ -215,16 +178,7 @@ export class BaseClient extends Request {
     replyMarkup?: string;
   }): Promise<object | undefined> {
     const method = "sendPhoto";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId,
       message_thread_id: options.threadId || null,
       photo: options.photo,
@@ -287,16 +241,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendAudio";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.threadId || null,
       audio: options.audio,
@@ -358,16 +303,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendDocument";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.threadId || null,
       document: options.document,
@@ -434,16 +370,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendVideo";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       video: options.video,
       duration: options.duration || null,
@@ -513,16 +440,7 @@ export class BaseClient extends Request {
     threadId?: string;
   }): Promise<object | undefined> {
     const method = "sendAnimation";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       animation: options.animation,
       duration: options.duration || null,
@@ -583,16 +501,7 @@ export class BaseClient extends Request {
     threadId?: string;
   }): Promise<object | undefined> {
     const method = "sendVoice";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       voice: options.voice,
       caption: options.caption || null,
@@ -638,7 +547,7 @@ export class BaseClient extends Request {
     videoNote: string;
     duration?: number;
     length?: number;
-    thumbnail?: object;
+    thumbnail?: any;
     notification?: boolean;
     content?: boolean;
     threadId?: number;
@@ -647,22 +556,12 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendVideoNote";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       video_note: options.videoNote,
       duration: options.duration || null,
       length: options.length || null,
-      //@ts-ignore
-      thumbnail: options.thumbnail || null,
+      thumbnail: options.thumbnail,
       disable_notification: options.notification || null,
       protect_content: options.content || null,
       message_thread_id: options.threadId || null,
@@ -708,53 +607,29 @@ export class BaseClient extends Request {
     threadId?: number;
     replyToMessageId?: number;
     allowReply?: boolean;
-    media: {
-      type: string;
-      media: string | any;
-      caption?: string;
-      parseMode?: string;
-      width?: number;
-      height?: number;
-      duration?: number;
-      supportsStreaming?: boolean;
-    }[];
+    media: any;
   }): Promise<object | undefined> {
     const method = "sendMediaGroup";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       disable_notification: options.notification || null,
       protect_content: options.content || null,
       message_thread_id: options.threadId || null,
       reply_to_message_id: options.replyToMessageId || null,
       allow_sending_without_reply: options.allowReply || null,
-      //@ts-ignore
-      media: {
-        //@ts-ignore
+      media: options.media
+      /*
+      {
         type: options?.media?.type,
-        //@ts-ignore
         media: options?.media?.media,
-        //@ts-ignore
         caption: options?.media?.caption,
-        //@ts-ignore
         parse_mode: options?.media?.parseMode,
-        //@ts-ignore
         width: options?.media?.width,
-        //@ts-ignore
         height: options?.media?.height,
-        //@ts-ignore
         duration: options?.media?.duration,
-        //@ts-ignore
         supports_streaming: options?.media?.supportsStreaming,
       },
+      */
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -801,16 +676,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendLocation";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.threadId || null,
       latitude: options.latitude,
@@ -874,16 +740,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendVenue";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       message_thread_id: options.threadId || null,
       latitude: options.latitude,
@@ -932,16 +789,7 @@ export class BaseClient extends Request {
     content?: boolean;
   }): Promise<object | undefined> {
     const method = "forwardMessage";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       from_chat_id: options.fromChatId,
       message_id: options.messageId,
@@ -993,16 +841,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "copyMessage";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       from_chat_id: options.fromChatId,
       message_id: options.messageId,
@@ -1058,16 +897,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendContact";
-    const params:Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       phone_number: options.phoneNumber,
       first_name: options.firstName,
@@ -1135,19 +965,10 @@ export class BaseClient extends Request {
     threadId?: number;
     replyToMessageId?: number;
     allowReply?: boolean;
-    replyMarkup?: object;
+    replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendPoll";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       question: options.question,
       options: options.options,
@@ -1166,7 +987,6 @@ export class BaseClient extends Request {
       message_thread_id: options.threadId || null,
       reply_to_message_id: options.replyToMessageId || null,
       allow_sending_without_reply: options.allowReply || null,
-      //@ts-ignore
       reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -1204,16 +1024,7 @@ export class BaseClient extends Request {
     replyMarkup?: any;
   }): Promise<object | undefined> {
     const method = "sendDice";
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params = {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       emoji: options.emoji,
       disable_notification: options.notification || null,

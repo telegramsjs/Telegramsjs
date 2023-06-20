@@ -321,7 +321,7 @@ export declare class BaseClient extends Request {
         videoNote: string;
         duration?: number;
         length?: number;
-        thumbnail?: object;
+        thumbnail?: any;
         notification?: boolean;
         content?: boolean;
         threadId?: number;
@@ -358,16 +358,7 @@ export declare class BaseClient extends Request {
         threadId?: number;
         replyToMessageId?: number;
         allowReply?: boolean;
-        media: {
-            type: string;
-            media: string | any;
-            caption?: string;
-            parseMode?: string;
-            width?: number;
-            height?: number;
-            duration?: number;
-            supportsStreaming?: boolean;
-        }[];
+        media: any;
     }): Promise<object | undefined>;
     /**
    * Sends a location message to a chat.
@@ -579,7 +570,7 @@ export declare class BaseClient extends Request {
         threadId?: number;
         replyToMessageId?: number;
         allowReply?: boolean;
-        replyMarkup?: object;
+        replyMarkup?: any;
     }): Promise<object | undefined>;
     /**
      * Sends a dice animation to the chat.
