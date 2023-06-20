@@ -3,7 +3,6 @@ example/
 documentation.md
 index.js
 package-lock.json
-docs/
 .txt
 .error
 tg.ts

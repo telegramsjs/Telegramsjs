@@ -1,6 +1,5 @@
 const { Collection } = require("../dist/collection/Collection.js");
 
-
 test("Testing the `get` method - retrieve the value associated with the given key", () => {
   const collection = new Collection();
   collection.set("key1", "value1");
@@ -17,8 +16,8 @@ test("Testing the `set` method - associate the given value with the given key", 
   collection.set("key2", "value2");
   collection.set("key3", "value3");
   collection.set("key2", "value");
-  const res = collection.get("key2")
-  expect(res).toBe("value")
+  const res = collection.get("key2");
+  expect(res).toBe("value");
 });
 
 test("Testing the `has` method - check whether the collection contains a given key", () => {
@@ -40,7 +39,7 @@ test("Testing the `delete` method - remove the key-value pair associated with th
   collection.set("key3", "value3");
   collection.delete("key3");
   const res = collection.get("key3");
-  
+
   expect(res).toBe(undefined);
 });
 
@@ -50,7 +49,7 @@ test("Testing the `clear` method - remove all key-value pairs from the collectio
   collection.set("key2", "value2");
   collection.set("key3", "value3");
   collection.delete("key2");
-  
+
   expect(collection.size).toEqual(2);
 });
 
@@ -63,7 +62,7 @@ test("Testing the `forEach` method - call a given function for each key-value pa
   collection.forEach((v, k, c) => {
     res.push(k);
   });
-  
+
   expect(res).toEqual(["key1", "key2", "key3"]);
 });
 
@@ -72,9 +71,9 @@ test("Testing the `filter` method - create a new collection that includes only t
   collection.set("key1", "value1");
   collection.set("key2", "value2");
   collection.set("key3", "value3");
-  
+
   const res = collection.filter((v, k) => v !== "value2");
-  
+
   expect(res.toArray()).toEqual(["value1", "value3"]);
 });
 
@@ -85,9 +84,9 @@ test("Testing the `map` method - creates a new collection with the results of ca
   collection.set("key3", "value3");
 
   const res = collection.map((value, key, collection) => {
-    return value.toUpperCase() + '-' + key;
+    return value.toUpperCase() + "-" + key;
   });
-  
+
   expect(res.toArray()).toEqual(["VALUE1-key1", "VALUE2-key2", "VALUE3-key3"]);
 });
 
@@ -97,10 +96,10 @@ test("Testing the `some` method - tests whether at least one element passes the 
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-  const result1 = collection.some((value) => value > 25);
+  const result1 = collection.some(value => value > 25);
   expect(result1).toBe(true);
 
-  const result2 = collection.some((value) => value > 50);
+  const result2 = collection.some(value => value > 50);
   expect(result2).toBe(false);
 });
 
@@ -110,10 +109,10 @@ test("Testing the `every` method - tests whether all elements pass the test", ()
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-  const result1 = collection.every((value) => value > 5);
+  const result1 = collection.every(value => value > 5);
   expect(result1).toBe(true);
 
-  const result2 = collection.every((value) => value > 15);
+  const result2 = collection.every(value => value > 15);
   expect(result2).toBe(false);
 });
 
@@ -133,10 +132,10 @@ test("Testing the `find` method - returns the value of the first element that pa
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-  const result1 = collection.find((value) => value > 15);
+  const result1 = collection.find(value => value > 15);
   expect(result1).toBe(20);
 
-  const result2 = collection.find((value) => value > 50);
+  const result2 = collection.find(value => value > 50);
   expect(result2).toBeUndefined();
 });
 
@@ -148,7 +147,7 @@ test("Testing the `reduceRight` method - reduces the collection from right to le
 
   const concatenated = collection.reduceRight(
     (accumulator, value) => accumulator + value,
-    ""
+    "",
   );
   expect(concatenated).toBe("302010");
 });
@@ -159,8 +158,8 @@ test("Testing the `flat` method - applies a mapping function and flattens the re
   collection.set("key2", [3, 4]);
   collection.set("key3", [5, 6]);
 
-  const flattened = collection.flat((value) => value.map((v) => v * 2));
-  
+  const flattened = collection.flat(value => value.map(v => v * 2));
+
   expect(flattened.toArray()).toEqual([4, 8, 12]);
 });
 
@@ -190,10 +189,10 @@ test("Testing the `findKey` method - returns the key of the first element that p
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-  const result1 = collection.findKey((value) => value > 15);
+  const result1 = collection.findKey(value => value > 15);
   expect(result1).toBe("key2");
 
-  const result2 = collection.findKey((value) => value > 50);
+  const result2 = collection.findKey(value => value > 50);
   expect(result2).toBeUndefined();
 });
 
@@ -223,7 +222,7 @@ test("Testing the `flatMap` method - applies a mapping function and flattens the
   collection.set("key2", [3, 4]);
   collection.set("key3", [5, 6]);
 
-  const mapped = collection.flatMap((value) => value.map((v) => v * 2));
+  const mapped = collection.flatMap(value => value.map(v => v * 2));
   expect(mapped.toArray()).toEqual([4, 8, 12]);
 });
 
@@ -233,7 +232,7 @@ test("Testing the `mapValues` method - applies a mapping function to each value"
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-  const mapped = collection.mapValues((value) => value * 2);
+  const mapped = collection.mapValues(value => value * 2);
   expect(mapped.toArray()).toEqual([20, 40, 60]);
 });
 
@@ -345,7 +344,7 @@ test("Testing the `tap` method - performs an operation on each value in the coll
   collection.set("key3", 30);
 
   let sum = 0;
-  const callback = (value) => {
+  const callback = value => {
     sum += value;
   };
 
@@ -451,7 +450,7 @@ test("Testing the `sweep` method - creates a new collection with duplicate value
   collection.set("key4", 30);
 
   const swept = collection.sweep();
-  
+
   expect(swept.toArray()).toEqual([10, 20, 30]);
 });
 
@@ -462,13 +461,13 @@ test("Testing the `partition` method - partitions the collection into two groups
   collection.set("key3", 30);
   collection.set("key4", 40);
 
-  const partitioned = collection.partition((value) => value % 2 === 0);
+  const partitioned = collection.partition(value => value % 2 === 0);
 
   expect(partitioned).toHaveLength(2);
 
   const [group1, group2] = partitioned;
-  
-  expect(group1.values).toEqual([ 10, 20, 30, 40 ]);
+
+  expect(group1.values).toEqual([10, 20, 30, 40]);
   expect(group2.values).toEqual([]);
 });
 
@@ -495,12 +494,12 @@ test("Testing the `toArrayByKey` method - returns an array of grouped values by 
   collection.set("key4", 30);
 
   const arrayByKey = collection.toArrayByKey();
-  
+
   expect(arrayByKey).toEqual([
-  { key: 'key1', values: [ 10 ] },
-  { key: 'key2', values: [ 20 ] },
-  { key: 'key3', values: [ 20 ] },
-  { key: 'key4', values: [ 30 ] }
+    { key: "key1", values: [10] },
+    { key: "key2", values: [20] },
+    { key: "key3", values: [20] },
+    { key: "key4", values: [30] },
   ]);
 });
 
@@ -524,9 +523,9 @@ test("Testing the `clone` method - creates a copy of the collection", () => {
   collection1.set("key2", 20);
 
   const collection2 = collection1.clone();
-  
+
   expect(collection2.toArray()).toEqual([10, 20]);
-  
+
   expect(collection1 === collection2).toBe(false);
 });
 
@@ -537,7 +536,7 @@ test("Testing the `toSplised` method - returns a new Collection instance contain
   collection.set("key3", "value3");
 
   const res = collection.toSplised(1, 3);
-  
+
   expect(res.toArray()).toEqual(["value2", "value3"]);
 });
 
@@ -548,7 +547,7 @@ test("Testing the `with` method - returns a new collection with the replaced val
   collection.set("key3", "value3");
 
   const res = collection.with(1, "new ♥");
-  
+
   expect(res.toArray()[1] === collection.toArray()[1]).toBe(false);
 });
 
@@ -559,7 +558,7 @@ test("Testing the `toReversed` method - returns a new Collection instance with k
   collection.set("key3", "value3");
 
   const res = collection.toReversed();
-  
+
   expect(res.toArray()).toEqual(["value3", "value2", "value1"]);
 });
 
@@ -574,7 +573,7 @@ test("Testing the `chunk` method - splits the collection into subcollections of 
   expect(result).toEqual([
     new Collection([[0, "value1"]]),
     new Collection([[0, "value2"]]),
-    new Collection([[0, "value3"]])
+    new Collection([[0, "value3"]]),
   ]);
 });
 
@@ -585,7 +584,7 @@ test("Testing the `keyOf` - returns the first key corresponding to the specified
   collection.set("key3", "value3");
 
   const res = collection.keyOf("value3");
-  
+
   expect(res).toBe("key3");
 });
 
@@ -602,4 +601,3 @@ test("Testing the `toJSON` method - converts the collection to JSON", () => {
     key3: 30,
   });
 });
-
