@@ -16,3 +16,4 @@ type TelegramIntentBits = {
 };
 export declare const TelegramIntentBits: TelegramIntentBits;
 export {};
+//# sourceMappingURL=TelegramIntentBits.d.ts.map

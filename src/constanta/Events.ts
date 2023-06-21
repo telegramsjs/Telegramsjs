@@ -14,6 +14,9 @@ type Events = {
   MyChatMember: string;
   ChatJoinRequest: string;
   ReplyMessage: string;
+  Ready: string;
+  Collected: string;
+  Interval: string;
 };
 
 export const Events: Events = {
@@ -32,4 +35,7 @@ export const Events: Events = {
   MyChatMember: "my_chat_member",
   ChatJoinRequest: "chat_join_request",
   ReplyMessage: "reply_message",
+  Ready: "ready",
+  Collected: "collected",
+  Interval: "interval"
 };

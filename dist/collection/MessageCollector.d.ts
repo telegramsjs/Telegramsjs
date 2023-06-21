@@ -80,3 +80,4 @@ export declare class MessageCollector extends EventEmitter {
      */
     stop(): void;
 }
+//# sourceMappingURL=MessageCollector.d.ts.map

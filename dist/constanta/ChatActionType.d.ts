@@ -13,3 +13,4 @@ type ChatActionType = {
 };
 export declare const ChatActionType: ChatActionType;
 export {};
+//# sourceMappingURL=ChatActionType.d.ts.map

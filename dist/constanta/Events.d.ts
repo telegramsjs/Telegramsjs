@@ -14,6 +14,10 @@ type Events = {
     MyChatMember: string;
     ChatJoinRequest: string;
     ReplyMessage: string;
+    Ready: string;
+    Collected: string;
+    Interval: string;
 };
 export declare const Events: Events;
 export {};
+//# sourceMappingURL=Events.d.ts.map

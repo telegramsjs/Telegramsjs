@@ -45,3 +45,4 @@ export declare class IntentsBitField {
  * @returns {string[]} - Array of intent strings
  */
 export declare function decodeIntents(intentsBitField: IntentsBitField): string[];
+//# sourceMappingURL=IntentsBitField.d.ts.map

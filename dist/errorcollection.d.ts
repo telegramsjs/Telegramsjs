@@ -93,3 +93,4 @@ declare class ErrorExtension extends Error {
     constructor(error: string);
 }
 export { TelegramApiError, EventError, TelegramTokenError, IntentsError, BitFieldError, ParameterError, ErrorTable, ErrorExtension, };
+//# sourceMappingURL=errorcollection.d.ts.map

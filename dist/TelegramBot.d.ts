@@ -42,3 +42,4 @@ export declare class TelegramBot extends BaseClient {
      */
     login(): Promise<void>;
 }
+//# sourceMappingURL=TelegramBot.d.ts.map

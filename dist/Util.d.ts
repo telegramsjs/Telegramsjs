@@ -112,3 +112,4 @@ declare function checkUsername(username: string): boolean;
  */
 declare function extractUsername(link: string): string | null;
 export { checkMessageLinks, extractUserMentions, extractHashtags, checkLocation, checkUserMentions, checkHashtags, checkPhoneNumber, extractUserIdFromLink, checkGroupOrChannel, checkEmoji, checkSticker, extractUsernameFromLink, checkBot, checkChannel, checkLink, checkGroup, checkUsername, extractUsername, };
+//# sourceMappingURL=Util.d.ts.map

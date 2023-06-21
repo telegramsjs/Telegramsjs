@@ -12,3 +12,4 @@ type GroupPermission = {
 };
 export declare const GroupPermission: GroupPermission;
 export {};
+//# sourceMappingURL=GroupPermission.d.ts.map

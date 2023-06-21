@@ -15,3 +15,4 @@ type DocumentTypes = {
 };
 export declare const DocumentTypes: DocumentTypes;
 export {};
+//# sourceMappingURL=DocumentTypes.d.ts.map

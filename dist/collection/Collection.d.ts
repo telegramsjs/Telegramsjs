@@ -336,3 +336,4 @@ export declare class Collection<K, V> {
     [Symbol.iterator](): IterableIterator<[K, V]>;
 }
 export {};
+//# sourceMappingURL=Collection.d.ts.map

@@ -12,3 +12,4 @@ type ChatPermission = {
 };
 export declare const ChatPermission: ChatPermission;
 export {};
+//# sourceMappingURL=ChatPermission.d.ts.map

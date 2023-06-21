@@ -6,3 +6,4 @@ type GroupStatus = {
 };
 export declare const GroupStatus: GroupStatus;
 export {};
+//# sourceMappingURL=GroupStatus.d.ts.map

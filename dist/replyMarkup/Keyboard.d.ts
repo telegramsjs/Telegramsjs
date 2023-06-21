@@ -56,3 +56,4 @@ export declare class Keyboard {
      */
     addKeyboard(markupRows: any[], defaults?: boolean): this;
 }
+//# sourceMappingURL=Keyboard.d.ts.map

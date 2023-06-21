@@ -16,3 +16,4 @@ type IntentBits = {
 };
 export declare const IntentBits: IntentBits;
 export {};
+//# sourceMappingURL=IntentBits.d.ts.map

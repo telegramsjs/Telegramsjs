@@ -19,3 +19,4 @@ type EntityType = {
 };
 export declare const EntityType: EntityType;
 export {};
+//# sourceMappingURL=EntityType.d.ts.map

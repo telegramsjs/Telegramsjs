@@ -101,3 +101,4 @@ export declare class Request extends EventEmitter {
      */
     setOffSetType(offSetType: string | boolean | object | undefined): string;
 }
+//# sourceMappingURL=request.d.ts.map

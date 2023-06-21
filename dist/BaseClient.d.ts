@@ -2009,3 +2009,4 @@ export declare class BaseClient extends Request {
         title: string;
     }): Promise<object | undefined>;
 }
+//# sourceMappingURL=BaseClient.d.ts.map

@@ -17,4 +17,7 @@ exports.Events = {
     MyChatMember: "my_chat_member",
     ChatJoinRequest: "chat_join_request",
     ReplyMessage: "reply_message",
+    Ready: "ready",
+    Collected: "collected",
+    Interval: "interval"
 };

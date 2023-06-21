@@ -90,3 +90,4 @@ export declare function list(items: any[], ordered?: boolean): string;
  * @returns {string} An HTML code block element containing
  **/
 export declare function codeBlock(code: string, language?: string): string;
+//# sourceMappingURL=markdownv.d.ts.map

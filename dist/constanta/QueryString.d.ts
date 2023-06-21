@@ -6,3 +6,4 @@ export declare const QueryString: {
     ApplicationJSON: string;
     ApplicationUrlencoded: string;
 };
+//# sourceMappingURL=QueryString.d.ts.map

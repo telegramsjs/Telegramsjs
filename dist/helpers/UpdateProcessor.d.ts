@@ -109,3 +109,4 @@ export declare class UpdateProcessor {
     isCommand(checkAllEntities?: boolean): boolean;
 }
 export {};
+//# sourceMappingURL=UpdateProcessor.d.ts.map
