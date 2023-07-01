@@ -53,15 +53,24 @@ export class Request extends EventEmitter {
     this.parseMode = parseMode;
 
     if (this.offSetType == "time") {
-      this.lastTimeMap = lastTimeMap as Collection<string | number | boolean, string | number | boolean | any[]>;
+      this.lastTimeMap = lastTimeMap as Collection<
+        string | number | boolean,
+        string | number | boolean | any[]
+      >;
     } else if (this.offSetType instanceof Collection) {
       this.lastTimeMap = this.offSetType as Collection<any, any>;
     } else if (this.offSetType === false) {
       lastTimeMap.set("lastTime", true);
-      this.lastTimeMap = lastTimeMap as Collection<string | number | boolean, string | number | boolean | any[]>;
+      this.lastTimeMap = lastTimeMap as Collection<
+        string | number | boolean,
+        string | number | boolean | any[]
+      >;
     } else if (this.offSetType === "auto") {
       lastTimeMap.set("lastTime", "auto");
-      this.lastTimeMap = lastTimeMap as Collection<string | number | boolean, string | number | boolean | any[]>;
+      this.lastTimeMap = lastTimeMap as Collection<
+        string | number | boolean,
+        string | number | boolean | any[]
+      >;
     }
 
     if (this.offSetType === false || this.offSetType === "time") {
@@ -80,7 +89,10 @@ export class Request extends EventEmitter {
       this.intents = null;
     }
 
-    this.lastTimeMap = lastTimeMap as Collection<string | number | boolean, string | number | boolean | any[]>;
+    this.lastTimeMap = lastTimeMap as Collection<
+      string | number | boolean,
+      string | number | boolean | any[]
+    >;
   }
 
   /**

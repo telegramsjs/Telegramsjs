@@ -183,7 +183,9 @@ export class BaseClient extends Request {
       message_thread_id: options.threadId || null,
       photo: options.photo,
       caption: options.caption,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
       has_spoiler: options.hasSpoiler || null,
       disable_notification: options.notification || null,
@@ -246,7 +248,9 @@ export class BaseClient extends Request {
       message_thread_id: options.threadId || null,
       audio: options.audio,
       caption: options.caption || null,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
       duration: options.duration || null,
       performer: options.performer || null,
@@ -257,7 +261,7 @@ export class BaseClient extends Request {
       reply_to_message_id: options.replyToMessageId || null,
       allow_sending_without_reply: options.allowReply || null,
       //@ts-ignore
-      reply_markup: options.replyMarkup
+      reply_markup: options.replyMarkup,
     };
     const response: TelegramApiResponse = await this.request(method, params);
 
@@ -309,9 +313,12 @@ export class BaseClient extends Request {
       document: options.document,
       thumbnail: options.thumbnail || null,
       caption: options.caption || null,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
-      disable_content_type_detection: options.disableContentTypeDetection || null,
+      disable_content_type_detection:
+        options.disableContentTypeDetection || null,
       disable_notification: options.notification || null,
       protect_content: options.content || null,
       reply_to_message_id: options.replyToMessageId || null,
@@ -378,7 +385,9 @@ export class BaseClient extends Request {
       height: options.height || null,
       thumbnail: options.thumbnail || null,
       caption: options.caption || null,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
       has_spoiler: options.hasSpoiler || null,
       supports_streaming: options.supportsStreaming || null,
@@ -448,7 +457,9 @@ export class BaseClient extends Request {
       height: options.height || null,
       thumbnail: options.thumbnail || null,
       caption: options.caption || null,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
       has_spoiler: options.hasSpoiler || null,
       disable_notification: options.notification || null,
@@ -505,7 +516,9 @@ export class BaseClient extends Request {
       chat_id: this.chatId ? this.chatId : options.chatId || null,
       voice: options.voice,
       caption: options.caption || null,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
       duration: options.duration || null,
       disable_notification: options.notification || null,
@@ -617,7 +630,7 @@ export class BaseClient extends Request {
       message_thread_id: options.threadId || null,
       reply_to_message_id: options.replyToMessageId || null,
       allow_sending_without_reply: options.allowReply || null,
-      media: options.media
+      media: options.media,
       /*
       {
         type: options?.media?.type,
@@ -847,7 +860,9 @@ export class BaseClient extends Request {
       message_id: options.messageId,
       message_thread_id: options.threadId || null,
       caption: options.caption || null,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
       disable_notification: options.notification || null,
       protect_content: options.content || null,
@@ -1235,7 +1250,8 @@ export class BaseClient extends Request {
       user_id: options.userId,
       //@ts-ignore
       permissions: options.permissions,
-      use_independent_chat_permissions: options.useIndependentChatPermissions || null,
+      use_independent_chat_permissions:
+        options.useIndependentChatPermissions || null,
       until_date: options.untilDate || null,
     };
     const response: TelegramApiResponse = await this.request(method, params);
@@ -2633,7 +2649,9 @@ export class BaseClient extends Request {
       message_id: options.messageId || null,
       inline_message_id: options.inlineMessageId || null,
       text: options.text,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       entities: options.entities || null,
       disable_web_page_preview: options.disableWebPagePreview || null,
       //@ts-ignore
@@ -2673,7 +2691,9 @@ export class BaseClient extends Request {
       message_id: options.messageId,
       inline_message_id: options.inlineMessageId || null,
       caption: options.caption || null,
-      parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+      parse_mode: options.parseMode
+        ? options.parseMode
+        : this.parseMode || null,
       caption_entities: options.captionEntities || null,
       //@ts-ignore
       reply_markup: options.replyMarkup,

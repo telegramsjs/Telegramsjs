@@ -15,6 +15,7 @@ import { IntentsBitField, decodeIntents } from "./IntentsBitField";
 import { IntentBits } from "./constanta/IntentBits";
 import { TelegramIntentBits } from "./constanta/TelegramIntentBits";
 import { html, markdownv } from "./formatters/index";
+import { Context } from "./helpers/Context";
 import {
   checkMessageLinks,
   extractUserMentions,
@@ -35,7 +36,7 @@ import {
   checkUsername,
   extractUsername,
 } from "./Util";
-const version = "1.0.0-beta.6";
+const version = "1.5.0";
 
 export {
   TelegramBot,
@@ -44,6 +45,7 @@ export {
   Markup,
   Keyboard,
   MessageCollector,
+  Context,
   Events,
   ChatActionType,
   EntityType,
