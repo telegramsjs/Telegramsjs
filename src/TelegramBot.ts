@@ -1,5 +1,5 @@
 import { BaseClient } from "./BaseClient";
-import { UpdateProcessor } from "./helpers/UpdateProcessor";
+import { CombinedClass } from "./helpers/CombinedClass";
 
 /**
  * A class representing a Telegram Bot client.
@@ -14,7 +14,7 @@ export class TelegramBot extends BaseClient {
   offSetType?: any;
   baseUrl: string = "";
   countCollector?: number;
-  updatesProcess?: UpdateProcessor;
+  updatesProcess?: CombinedClass;
 
   /**
    * Creates a new TelegramBot client.
@@ -106,7 +106,7 @@ export class TelegramBot extends BaseClient {
       setName: this.setMyName.bind(this),
     };
 
-    this.updatesProcess = new UpdateProcessor(this);
+    this.updatesProcess = new CombinedClass(this);
 
     (async () => {
       this.getMe()
@@ -118,6 +118,6 @@ export class TelegramBot extends BaseClient {
         });
     })();
 
-    this.updatesProcess.processUpdate(this);
+    this.updatesProcess.processUpdate();
   }
 }
