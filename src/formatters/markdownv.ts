@@ -147,8 +147,7 @@ export function list(items: any[], ordered: boolean = false): string {
   if (!items) {
     throw new ParameterError("missing required argument: items");
   }
-  const tag = ordered ? "1." : "*";
-  const listItems = items.map(item => `${tag} ${item}`).join("\n");
+  const listItems = items.map((item, index) => `${index + 1}. ${item}`).join("\n");
   return `${listItems}\n\n`;
 }
 
