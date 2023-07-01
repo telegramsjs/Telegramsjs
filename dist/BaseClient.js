@@ -176,7 +176,9 @@ class BaseClient extends request_js_1.Request {
                 message_thread_id: options.threadId || null,
                 photo: options.photo,
                 caption: options.caption,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 has_spoiler: options.hasSpoiler || null,
                 disable_notification: options.notification || null,
@@ -223,7 +225,9 @@ class BaseClient extends request_js_1.Request {
                 message_thread_id: options.threadId || null,
                 audio: options.audio,
                 caption: options.caption || null,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 duration: options.duration || null,
                 performer: options.performer || null,
@@ -234,7 +238,7 @@ class BaseClient extends request_js_1.Request {
                 reply_to_message_id: options.replyToMessageId || null,
                 allow_sending_without_reply: options.allowReply || null,
                 //@ts-ignore
-                reply_markup: options.replyMarkup
+                reply_markup: options.replyMarkup,
             };
             const response = yield this.request(method, params);
             if (!!(response === null || response === void 0 ? void 0 : response.error_code)) {
@@ -272,7 +276,9 @@ class BaseClient extends request_js_1.Request {
                 document: options.document,
                 thumbnail: options.thumbnail || null,
                 caption: options.caption || null,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 disable_content_type_detection: options.disableContentTypeDetection || null,
                 disable_notification: options.notification || null,
@@ -324,7 +330,9 @@ class BaseClient extends request_js_1.Request {
                 height: options.height || null,
                 thumbnail: options.thumbnail || null,
                 caption: options.caption || null,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 has_spoiler: options.hasSpoiler || null,
                 supports_streaming: options.supportsStreaming || null,
@@ -377,7 +385,9 @@ class BaseClient extends request_js_1.Request {
                 height: options.height || null,
                 thumbnail: options.thumbnail || null,
                 caption: options.caption || null,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 has_spoiler: options.hasSpoiler || null,
                 disable_notification: options.notification || null,
@@ -421,7 +431,9 @@ class BaseClient extends request_js_1.Request {
                 chat_id: this.chatId ? this.chatId : options.chatId || null,
                 voice: options.voice,
                 caption: options.caption || null,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 duration: options.duration || null,
                 disable_notification: options.notification || null,
@@ -513,7 +525,7 @@ class BaseClient extends request_js_1.Request {
                 message_thread_id: options.threadId || null,
                 reply_to_message_id: options.replyToMessageId || null,
                 allow_sending_without_reply: options.allowReply || null,
-                media: options.media
+                media: options.media,
                 /*
                 {
                   type: options?.media?.type,
@@ -693,7 +705,9 @@ class BaseClient extends request_js_1.Request {
                 message_id: options.messageId,
                 message_thread_id: options.threadId || null,
                 caption: options.caption || null,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 disable_notification: options.notification || null,
                 protect_content: options.content || null,
@@ -2272,7 +2286,9 @@ class BaseClient extends request_js_1.Request {
                 message_id: options.messageId || null,
                 inline_message_id: options.inlineMessageId || null,
                 text: options.text,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 entities: options.entities || null,
                 disable_web_page_preview: options.disableWebPagePreview || null,
                 //@ts-ignore
@@ -2305,7 +2321,9 @@ class BaseClient extends request_js_1.Request {
                 message_id: options.messageId,
                 inline_message_id: options.inlineMessageId || null,
                 caption: options.caption || null,
-                parse_mode: options.parseMode ? options.parseMode : this.parseMode || null,
+                parse_mode: options.parseMode
+                    ? options.parseMode
+                    : this.parseMode || null,
                 caption_entities: options.captionEntities || null,
                 //@ts-ignore
                 reply_markup: options.replyMarkup,

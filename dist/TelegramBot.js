@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TelegramBot = void 0;
 const BaseClient_1 = require("./BaseClient");
-const UpdateProcessor_1 = require("./helpers/UpdateProcessor");
+const CombinedClass_1 = require("./helpers/CombinedClass");
 /**
  * A class representing a Telegram Bot client.
  * @extends BaseClient
@@ -78,7 +78,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.getMe();
             const responseClient = yield Object.assign(Object.assign({}, client), { setCommands: this.setMyCommands.bind(this), getCommands: this.getMyCommands.bind(this), deleteCommands: this.deleteMyCommands.bind(this), setDescription: this.setMyDescription.bind(this), getDescription: this.getMyDescription.bind(this), setShortDescription: this.setMyShortDescription.bind(this), getShortDescription: this.getMyShortDescription.bind(this), getName: this.getMyName.bind(this), setName: this.setMyName.bind(this) });
-            this.updatesProcess = new UpdateProcessor_1.UpdateProcessor(this);
+            this.updatesProcess = new CombinedClass_1.CombinedClass(this);
             (() => __awaiter(this, void 0, void 0, function* () {
                 this.getMe()
                     .then(res => {
@@ -88,7 +88,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
                     console.log(err);
                 });
             }))();
-            this.updatesProcess.processUpdate(this);
+            this.updatesProcess.processUpdate();
         });
     }
 }

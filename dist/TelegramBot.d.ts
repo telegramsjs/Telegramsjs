@@ -1,5 +1,5 @@
 import { BaseClient } from "./BaseClient";
-import { UpdateProcessor } from "./helpers/UpdateProcessor";
+import { CombinedClass } from "./helpers/CombinedClass";
 /**
  * A class representing a Telegram Bot client.
  * @extends BaseClient
@@ -13,7 +13,7 @@ export declare class TelegramBot extends BaseClient {
     offSetType?: any;
     baseUrl: string;
     countCollector?: number;
-    updatesProcess?: UpdateProcessor;
+    updatesProcess?: CombinedClass;
     /**
      * Creates a new TelegramBot client.
      * @param {string} token - The Telegram Bot API token.

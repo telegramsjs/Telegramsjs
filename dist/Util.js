@@ -89,7 +89,7 @@ exports.checkHashtags = checkHashtags;
  * @returns {boolean} - Returns true if the phone number is valid, otherwise false.
  */
 function checkPhoneNumber(phoneNumber) {
-    const telegramPhoneRegex = /^\+[1-9]\d{10,14}$/;
+    const telegramPhoneRegex = /^\+[1-9]\d{1,14}$/;
     return telegramPhoneRegex.test(phoneNumber);
 }
 exports.checkPhoneNumber = checkPhoneNumber;
@@ -158,7 +158,7 @@ exports.extractUsernameFromLink = extractUsernameFromLink;
  * @returns {boolean} - Returns true if the message contains a Telegram bot username, otherwise false.
  */
 function checkBot(message) {
-    const telegramBotRegex = /^@[a-zA-Z0-9_]{5,32}$/i;
+    const telegramBotRegex = /@([a-zA-Z0-9_]{5,})\b/i;
     return telegramBotRegex.test(message);
 }
 exports.checkBot = checkBot;
@@ -199,7 +199,7 @@ exports.checkGroup = checkGroup;
  * @returns {boolean} - Returns true if the username is valid, otherwise false.
  */
 function checkUsername(username) {
-    const telegramUsernameRegex = /^@?([a-zA-Z0-9_]{5,32})$/;
+    const telegramUsernameRegex = /^@[a-zA-Z0-9_]{5,32}$/;
     return telegramUsernameRegex.test(username);
 }
 exports.checkUsername = checkUsername;

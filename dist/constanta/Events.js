@@ -19,5 +19,5 @@ exports.Events = {
     ReplyMessage: "reply_message",
     Ready: "ready",
     Collected: "collected",
-    Interval: "interval"
+    Interval: "interval",
 };

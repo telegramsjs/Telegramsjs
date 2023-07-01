@@ -149,8 +149,9 @@ function list(items, ordered = false) {
     if (!items) {
         throw new errorcollection_1.ParameterError("missing required argument: items");
     }
-    const tag = ordered ? "1." : "*";
-    const listItems = items.map(item => `${tag} ${item}`).join("\n");
+    const listItems = items
+        .map((item, index) => `${index + 1}. ${item}`)
+        .join("\n");
     return `${listItems}\n\n`;
 }
 exports.list = list;
