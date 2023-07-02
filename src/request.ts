@@ -42,7 +42,11 @@ export class Request extends EventEmitter {
     intents?: readonly string[] | number[] | null,
     queryString?: string | undefined,
     offSetType?: any,
+<<<<<<< HEAD
     parseMode?: string,
+=======
+    parseMode?: string
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ) {
     super();
     this.token = token;
@@ -157,7 +161,11 @@ export class Request extends EventEmitter {
       | readonly number[]
       | readonly boolean[]
       | null
+<<<<<<< HEAD
     >,
+=======
+    >
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object> {
     const url = `${this.baseUrl}/${method}`;
     const data = querystring.stringify(params);
@@ -171,10 +179,17 @@ export class Request extends EventEmitter {
         },
       };
 
+<<<<<<< HEAD
       const req = https.request(url, options, res => {
         let response = "";
 
         res.on("data", chunk => {
+=======
+      const req = https.request(url, options, (res) => {
+        let response = "";
+
+        res.on("data", (chunk) => {
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
           response += chunk;
         });
 
@@ -187,7 +202,11 @@ export class Request extends EventEmitter {
         });
       });
 
+<<<<<<< HEAD
       req.on("error", error => {
+=======
+      req.on("error", (error) => {
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
         reject(error);
       });
 

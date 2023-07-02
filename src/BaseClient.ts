@@ -13,7 +13,11 @@ export class BaseClient extends Request {
   token: string = "";
   intents?: string[] | number[] | null | undefined = null;
   parseMode?: string;
+<<<<<<< HEAD
   chatId?: string | number;
+=======
+  catId?: string | number;
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   queryString?: string | undefined;
   offSetType?: any;
   /**
@@ -32,7 +36,11 @@ export class BaseClient extends Request {
     parseMode?: string,
     chatId?: string | number,
     queryString?: string,
+<<<<<<< HEAD
     offSetType?: any,
+=======
+    offSetType?: any
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ) {
     super(token, intents, queryString, offSetType, parseMode);
     this.parseMode = parseMode;
@@ -1150,7 +1158,11 @@ export class BaseClient extends Request {
     const fileUrl = `https://api.telegram.org/file/bot${this.token}/${filePath}`;
     return new Promise<Buffer>((resolve, reject) => {
       https
+<<<<<<< HEAD
         .get(fileUrl, res => {
+=======
+        .get(fileUrl, (res) => {
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
           if (res.statusCode !== 200) {
             reject(new Error(`Failed to download file: ${res.statusCode}`));
             return;
@@ -1840,7 +1852,11 @@ export class BaseClient extends Request {
    * @returns {Promise<Array<any>>} - On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots.
    */
   async getChatAdministrators(
+<<<<<<< HEAD
     chatId?: number | string,
+=======
+    chatId?: number | string
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object | undefined> {
     const method = "getChatAdministrators";
     const params = {
@@ -2216,7 +2232,11 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} - Throws an error if the response contains an error code.
    */
   async hideGeneralForumTopic(
+<<<<<<< HEAD
     chatId?: number | string,
+=======
+    chatId?: number | string
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object | undefined> {
     const method = "hideGeneralForumTopic";
     const params = {
@@ -2238,7 +2258,11 @@ export class BaseClient extends Request {
    * @throws {TelegramApiError} - Throws an error if the Telegram API responds with an error.
    */
   async unhideGeneralForumTopic(
+<<<<<<< HEAD
     chatId?: string | number,
+=======
+    chatId?: string | number
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object | undefined> {
     const method = "unhideGeneralForumTopic";
     const params = {
@@ -2504,7 +2528,11 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} object with the bot's short description.
    */
   async getMyShortDescription(
+<<<<<<< HEAD
     languageCode?: string,
+=======
+    languageCode?: string
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object | undefined> {
     const method = "getMyShortDescription";
     const params = {
@@ -2553,7 +2581,11 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns the menu button of the chat.
    */
   async getChatMenuButton(
+<<<<<<< HEAD
     chatId?: number | string,
+=======
+    chatId?: number | string
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object | undefined> {
     const method = "getChatMenuButton";
     const params = {
@@ -2603,7 +2635,11 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns a Promise that resolves to an object with the default admin rights of the bot in the specified channel(s).
    */
   async getMyDefaultAdministratorRights(
+<<<<<<< HEAD
     forChannels: boolean,
+=======
+    forChannels: boolean
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object | undefined> {
     const method = "getMyDefaultAdministratorRights";
     const params = {
@@ -2966,7 +3002,11 @@ export class BaseClient extends Request {
    * @returns {Promise<object | undefined>} Returns an object representing the list of sticker sets containing custom emojis
    */
   async getCustomEmojiStickers(
+<<<<<<< HEAD
     customEmojiIds: string[],
+=======
+    customEmojiIds: string[]
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Promise<object | undefined> {
     const method = "getCustomEmojiStickers";
     const params = {

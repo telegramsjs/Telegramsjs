@@ -45,7 +45,11 @@ export class Markup {
       callbackGame?: object;
       pay?: boolean;
       forceReply?: boolean;
+<<<<<<< HEAD
     } = {},
+=======
+    } = {}
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ) {
     this.text = options.text;
     this.action = options.action;
@@ -112,7 +116,11 @@ export class Markup {
   setWebApp(
     webApp: {
       url: string;
+<<<<<<< HEAD
     } = { url: "" },
+=======
+    } = { url: "" }
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Markup {
     this.web_app = webApp;
     return this;
@@ -129,7 +137,11 @@ export class Markup {
       forward_text?: string;
       bot_username?: string;
       request_write_access?: boolean;
+<<<<<<< HEAD
     } = { url: "" },
+=======
+    } = { url: "" }
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Markup {
     this.login_url = loginUrl;
     return this;
@@ -151,7 +163,11 @@ export class Markup {
    * @returns {Markup} Returns the current object for method chaining.
    */
   setSwitchInlineQueryCurrentChat(
+<<<<<<< HEAD
     switchInlineQueryCurrentChat: string,
+=======
+    switchInlineQueryCurrentChat: string
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Markup {
     this.switch_inline_query_current_chat = switchInlineQueryCurrentChat;
     return this;
@@ -187,7 +203,11 @@ export class Markup {
       chat_id?: number;
       message_id?: number;
       inline_message_id?: number;
+<<<<<<< HEAD
     } = { user_id: 0, score: 0 },
+=======
+    } = { user_id: 0, score: 0 }
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ): Markup {
     this.callback_game = callbackGame;
     return this;
@@ -235,8 +255,13 @@ export class Markup {
    * @returns {string} Returns the inline keyboard string in the format expected by Telegram Bot API.
    */
   static inlineKeyboard(markups: Markup[][]): string {
+<<<<<<< HEAD
     const inlineKeyboard = markups.map(row => {
       return row.map(markup => {
+=======
+    const inlineKeyboard = markups.map((row) => {
+      return row.map((markup) => {
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
         return markup.toJSON();
       });
     });

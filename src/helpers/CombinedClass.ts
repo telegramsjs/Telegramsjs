@@ -180,8 +180,14 @@ class CombinedClass {
       this.chatMember ??
       this.myChatMember ??
       this.chatJoinRequest ??
+<<<<<<< HEAD
       this.updates as any
       )?.chat;
+=======
+      this.message ??
+      (this.updates as any)
+    )?.chat;
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   }
 
   get senderChat() {
@@ -292,9 +298,15 @@ class CombinedClass {
       }
     }
   }
+<<<<<<< HEAD
 
   // Add other methods or properties specific to the CombinedClass
   // that you want to incorporate from both UpdateProcessor and Context classes.
 }
 
 export { CombinedClass };
+=======
+}
+
+export { CombinedClass };
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)

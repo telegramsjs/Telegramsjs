@@ -21,7 +21,11 @@ export class Keyboard {
       resize?: boolean;
       oneTime?: boolean;
       selective?: boolean;
+<<<<<<< HEAD
     } = {},
+=======
+    } = {}
+>>>>>>> 4b1566e (add @grammyjs/types and action. beginning)
   ) {
     this.markups = markups ?? [];
     this.inline = options.inline ?? false;
