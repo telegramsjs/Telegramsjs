@@ -52,11 +52,7 @@
 
     /* Emit */
     "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
-<<<<<<< HEAD
-    "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
-=======
     "declarationMap": true /* Create sourcemaps for d.ts files. */,
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
     // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
     // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */

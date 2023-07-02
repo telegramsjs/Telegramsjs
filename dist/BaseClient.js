@@ -946,11 +946,7 @@ class BaseClient extends request_js_1.Request {
             const fileUrl = `https://api.telegram.org/file/bot${this.token}/${filePath}`;
             return new Promise((resolve, reject) => {
                 https
-<<<<<<< HEAD
-                    .get(fileUrl, res => {
-=======
                     .get(fileUrl, (res) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                     if (res.statusCode !== 200) {
                         reject(new Error(`Failed to download file: ${res.statusCode}`));
                         return;

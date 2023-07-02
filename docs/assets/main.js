@@ -27,11 +27,7 @@
       e || !t || !t.__esModule
         ? re(r, "default", { value: t, enumerable: !0 })
         : r,
-<<<<<<< HEAD
-      t,
-=======
       t
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     )
   );
   var ae = Pe((se, oe) => {
@@ -77,11 +73,7 @@
               continue;
             }
             throw new TypeError(
-<<<<<<< HEAD
-              "clone is not deep and does not support nested objects",
-=======
               "clone is not deep and does not support nested objects"
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             );
           }
           return r;
@@ -159,11 +151,7 @@
             : e === t.Set.empty
             ? this
             : new t.Set(
-<<<<<<< HEAD
-                Object.keys(this.elements).concat(Object.keys(e.elements)),
-=======
                 Object.keys(this.elements).concat(Object.keys(e.elements))
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
               );
         }),
         (t.idf = function (e, r) {
@@ -197,11 +185,7 @@
           return e.map(function (m) {
             return new t.Token(
               t.utils.asString(m).toLowerCase(),
-<<<<<<< HEAD
-              t.utils.clone(r),
-=======
               t.utils.clone(r)
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             );
           });
         for (
@@ -244,11 +228,7 @@
             t.utils.warn(
               `Function is not registered with pipeline. This may cause problems when serialising the index.
 `,
-<<<<<<< HEAD
-              e,
-=======
               e
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             );
         }),
         (t.Pipeline.load = function (e) {
@@ -1041,11 +1021,7 @@
                 t.version +
                 "' does not match serialized index '" +
                 e.version +
-<<<<<<< HEAD
-                "'",
-=======
                 "'"
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             );
           for (var u = 0; u < i.length; u++) {
             var d = i[u],
@@ -1091,11 +1067,7 @@
         (t.Builder.prototype.field = function (e, r) {
           if (/\//.test(e))
             throw new RangeError(
-<<<<<<< HEAD
-              "Field '" + e + "' contains illegal character '/'",
-=======
               "Field '" + e + "' contains illegal character '/'"
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             );
           this._fields[e] = r || {};
         }),
@@ -1218,11 +1190,7 @@
         }),
         (t.Builder.prototype.createTokenSet = function () {
           this.tokenSet = t.TokenSet.fromArray(
-<<<<<<< HEAD
-            Object.keys(this.invertedIndex).sort(),
-=======
             Object.keys(this.invertedIndex).sort()
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
           );
         }),
         (t.Builder.prototype.build = function () {
@@ -1273,11 +1241,7 @@
                 this.metadata[i][a][d] == null
                   ? (this.metadata[i][a][d] = e.metadata[i][a][d])
                   : (this.metadata[i][a][d] = this.metadata[i][a][d].concat(
-<<<<<<< HEAD
-                      e.metadata[i][a][d],
-=======
                       e.metadata[i][a][d]
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                     ));
               }
             }
@@ -1687,21 +1651,12 @@
         this.ensureFocusedElementVisible(),
         this.listenForCodeCopies(),
         window.addEventListener("hashchange", () =>
-<<<<<<< HEAD
-          this.ensureFocusedElementVisible(),
-        );
-    }
-    createComponents(e) {
-      ne.forEach(r => {
-        e.querySelectorAll(r.selector).forEach(n => {
-=======
           this.ensureFocusedElementVisible()
         );
     }
     createComponents(e) {
       ne.forEach((r) => {
         e.querySelectorAll(r.selector).forEach((n) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
           n.dataset.hasInstance ||
             (new r.constructor({ el: n, app: this }),
             (n.dataset.hasInstance = String(!0)));
@@ -1746,20 +1701,12 @@
       }
     }
     listenForCodeCopies() {
-<<<<<<< HEAD
-      document.querySelectorAll("pre > button").forEach(e => {
-=======
       document.querySelectorAll("pre > button").forEach((e) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
         let r;
         e.addEventListener("click", () => {
           e.previousElementSibling instanceof HTMLElement &&
             navigator.clipboard.writeText(
-<<<<<<< HEAD
-              e.previousElementSibling.innerText.trim(),
-=======
               e.previousElementSibling.innerText.trim()
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             ),
             (e.textContent = "Copied!"),
             e.classList.add("visible"),
@@ -1798,11 +1745,7 @@
       n = document.querySelector("#tsd-search .results");
     if (!r || !n)
       throw new Error(
-<<<<<<< HEAD
-        "The input field or the result list wrapper was not found",
-=======
         "The input field or the result list wrapper was not found"
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
       );
     let i = !1;
     n.addEventListener("mousedown", () => (i = !0)),
@@ -1821,17 +1764,10 @@
       "input",
       ie(() => {
         Re(t, e, r, n);
-<<<<<<< HEAD
-      }, 200),
-    );
-    let i = !1;
-    r.addEventListener("keydown", s => {
-=======
       }, 200)
     );
     let i = !1;
     r.addEventListener("keydown", (s) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
       (i = !0),
         s.key == "Enter"
           ? Fe(e, r)
@@ -1843,17 +1779,10 @@
           ? ue(e, 1)
           : (i = !1);
     }),
-<<<<<<< HEAD
-      r.addEventListener("keypress", s => {
-        i && s.preventDefault();
-      }),
-      document.body.addEventListener("keydown", s => {
-=======
       r.addEventListener("keypress", (s) => {
         i && s.preventDefault();
       }),
       document.body.addEventListener("keydown", (s) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
         s.altKey ||
           s.ctrlKey ||
           s.metaKey ||
@@ -1943,11 +1872,7 @@
     '"': "&quot;",
   };
   function K(t) {
-<<<<<<< HEAD
-    return t.replace(/[&<>"'"]/g, e => Me[e]);
-=======
     return t.replace(/[&<>"'"]/g, (e) => Me[e]);
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   }
   var P = class {
     constructor(e) {
@@ -1963,30 +1888,18 @@
     De = !1,
     D = !1,
     pe = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-<<<<<<< HEAD
-      navigator.userAgent,
-=======
       navigator.userAgent
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     );
   document.documentElement.classList.add(pe ? "is-mobile" : "not-mobile");
   pe &&
     "ontouchstart" in document.documentElement &&
     ((De = !0), (M = "touchstart"), (fe = "touchmove"), (N = "touchend"));
-<<<<<<< HEAD
-  document.addEventListener(M, t => {
-=======
   document.addEventListener(M, (t) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     (ee = !0), (D = !1);
     let e = M == "touchstart" ? t.targetTouches[0] : t;
     (J.y = e.pageY || 0), (J.x = e.pageX || 0);
   });
-<<<<<<< HEAD
-  document.addEventListener(fe, t => {
-=======
   document.addEventListener(fe, (t) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     if (ee && !D) {
       let e = M == "touchstart" ? t.targetTouches[0] : t,
         r = J.x - (e.pageX || 0),
@@ -1997,28 +1910,17 @@
   document.addEventListener(N, () => {
     ee = !1;
   });
-<<<<<<< HEAD
-  document.addEventListener("click", t => {
-=======
   document.addEventListener("click", (t) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     he && (t.preventDefault(), t.stopImmediatePropagation(), (he = !1));
   });
   var X = class extends P {
     constructor(r) {
       super(r);
       (this.className = this.el.dataset.toggle || ""),
-<<<<<<< HEAD
-        this.el.addEventListener(N, n => this.onPointerUp(n)),
-        this.el.addEventListener("click", n => n.preventDefault()),
-        document.addEventListener(M, n => this.onDocumentPointerDown(n)),
-        document.addEventListener(N, n => this.onDocumentPointerUp(n));
-=======
         this.el.addEventListener(N, (n) => this.onPointerUp(n)),
         this.el.addEventListener("click", (n) => n.preventDefault()),
         document.addEventListener(M, (n) => this.onDocumentPointerDown(n)),
         document.addEventListener(N, (n) => this.onDocumentPointerUp(n));
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     }
     setActive(r) {
       if (this.active == r) return;
@@ -2089,17 +1991,10 @@
       (this.el.checked = this.value),
         document.documentElement.classList.toggle(this.key, this.value),
         this.app.filterChanged(),
-<<<<<<< HEAD
-        document.querySelectorAll(".tsd-index-section").forEach(r => {
-          r.style.display = "block";
-          let n = Array.from(r.querySelectorAll(".tsd-index-link")).every(
-            i => i.offsetParent == null,
-=======
         document.querySelectorAll(".tsd-index-section").forEach((r) => {
           r.style.display = "block";
           let n = Array.from(r.querySelectorAll(".tsd-index-link")).every(
             (i) => i.offsetParent == null
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
           );
           r.style.display = n ? "none" : "block";
         });
@@ -2143,11 +2038,7 @@
   ge && ve(ge);
   var Ae = new U();
   Object.defineProperty(window, "app", { value: Ae });
-<<<<<<< HEAD
-  document.querySelectorAll("summary a").forEach(t => {
-=======
   document.querySelectorAll("summary a").forEach((t) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     t.addEventListener("click", () => {
       location.assign(t.href);
     });

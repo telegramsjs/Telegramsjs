@@ -87,14 +87,9 @@
   },
   "homepage": "https://telegramsjs.surge.sh",
   "dependencies": {
-<<<<<<< HEAD
-    "@types/node": "^20.3.1",
-    "querystring": "^0.2.1"
-=======
     "@grammyjs/types": "^3.1.2",
     "@types/node": "^20.3.1",
     "querystring": "^0.2.1",
     "telegramsjs": "^1.0.0"
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   }
 }

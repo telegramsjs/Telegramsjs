@@ -96,17 +96,10 @@ test("Testing the `some` method - tests whether at least one element passes the 
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-<<<<<<< HEAD
-  const result1 = collection.some(value => value > 25);
-  expect(result1).toBe(true);
-
-  const result2 = collection.some(value => value > 50);
-=======
   const result1 = collection.some((value) => value > 25);
   expect(result1).toBe(true);
 
   const result2 = collection.some((value) => value > 50);
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   expect(result2).toBe(false);
 });
 
@@ -116,17 +109,10 @@ test("Testing the `every` method - tests whether all elements pass the test", ()
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-<<<<<<< HEAD
-  const result1 = collection.every(value => value > 5);
-  expect(result1).toBe(true);
-
-  const result2 = collection.every(value => value > 15);
-=======
   const result1 = collection.every((value) => value > 5);
   expect(result1).toBe(true);
 
   const result2 = collection.every((value) => value > 15);
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   expect(result2).toBe(false);
 });
 
@@ -146,17 +132,10 @@ test("Testing the `find` method - returns the value of the first element that pa
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-<<<<<<< HEAD
-  const result1 = collection.find(value => value > 15);
-  expect(result1).toBe(20);
-
-  const result2 = collection.find(value => value > 50);
-=======
   const result1 = collection.find((value) => value > 15);
   expect(result1).toBe(20);
 
   const result2 = collection.find((value) => value > 50);
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   expect(result2).toBeUndefined();
 });
 
@@ -168,11 +147,7 @@ test("Testing the `reduceRight` method - reduces the collection from right to le
 
   const concatenated = collection.reduceRight(
     (accumulator, value) => accumulator + value,
-<<<<<<< HEAD
-    "",
-=======
     ""
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   );
   expect(concatenated).toBe("302010");
 });
@@ -183,11 +158,7 @@ test("Testing the `flat` method - applies a mapping function and flattens the re
   collection.set("key2", [3, 4]);
   collection.set("key3", [5, 6]);
 
-<<<<<<< HEAD
-  const flattened = collection.flat(value => value.map(v => v * 2));
-=======
   const flattened = collection.flat((value) => value.map((v) => v * 2));
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
 
   expect(flattened.toArray()).toEqual([4, 8, 12]);
 });
@@ -218,17 +189,10 @@ test("Testing the `findKey` method - returns the key of the first element that p
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-<<<<<<< HEAD
-  const result1 = collection.findKey(value => value > 15);
-  expect(result1).toBe("key2");
-
-  const result2 = collection.findKey(value => value > 50);
-=======
   const result1 = collection.findKey((value) => value > 15);
   expect(result1).toBe("key2");
 
   const result2 = collection.findKey((value) => value > 50);
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   expect(result2).toBeUndefined();
 });
 
@@ -258,11 +222,7 @@ test("Testing the `flatMap` method - applies a mapping function and flattens the
   collection.set("key2", [3, 4]);
   collection.set("key3", [5, 6]);
 
-<<<<<<< HEAD
-  const mapped = collection.flatMap(value => value.map(v => v * 2));
-=======
   const mapped = collection.flatMap((value) => value.map((v) => v * 2));
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   expect(mapped.toArray()).toEqual([4, 8, 12]);
 });
 
@@ -272,11 +232,7 @@ test("Testing the `mapValues` method - applies a mapping function to each value"
   collection.set("key2", 20);
   collection.set("key3", 30);
 
-<<<<<<< HEAD
-  const mapped = collection.mapValues(value => value * 2);
-=======
   const mapped = collection.mapValues((value) => value * 2);
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   expect(mapped.toArray()).toEqual([20, 40, 60]);
 });
 
@@ -388,11 +344,7 @@ test("Testing the `tap` method - performs an operation on each value in the coll
   collection.set("key3", 30);
 
   let sum = 0;
-<<<<<<< HEAD
-  const callback = value => {
-=======
   const callback = (value) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     sum += value;
   };
 
@@ -509,11 +461,7 @@ test("Testing the `partition` method - partitions the collection into two groups
   collection.set("key3", 30);
   collection.set("key4", 40);
 
-<<<<<<< HEAD
-  const partitioned = collection.partition(value => value % 2 === 0);
-=======
   const partitioned = collection.partition((value) => value % 2 === 0);
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
 
   expect(partitioned).toHaveLength(2);
 

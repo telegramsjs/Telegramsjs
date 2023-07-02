@@ -144,15 +144,9 @@ class Request extends events_1.EventEmitter {
                         "Content-Length": data.length.toString(),
                     },
                 };
-<<<<<<< HEAD
-                const req = https.request(url, options, res => {
-                    let response = "";
-                    res.on("data", chunk => {
-=======
                 const req = https.request(url, options, (res) => {
                     let response = "";
                     res.on("data", (chunk) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                         response += chunk;
                     });
                     res.on("end", () => {
@@ -164,11 +158,7 @@ class Request extends events_1.EventEmitter {
                         }
                     });
                 });
-<<<<<<< HEAD
-                req.on("error", error => {
-=======
                 req.on("error", (error) => {
->>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                     reject(error);
                 });
                 req.write(data);
