@@ -1,5 +1,9 @@
 import { BaseClient } from "./BaseClient";
 import { CombinedClass } from "./helpers/CombinedClass";
+<<<<<<< HEAD
+=======
+import { type CallbackQuery, type Message } from "@grammyjs/types";
+>>>>>>> 3f98043 (add @grammyjs/types and action. beginning)
 
 /**
  * A class representing a Telegram Bot client.
@@ -34,7 +38,11 @@ export class TelegramBot extends BaseClient {
       chatId?: string | number;
       queryString?: string;
       offSetType?: any;
+<<<<<<< HEAD
     } = {},
+=======
+    } = {}
+>>>>>>> 3f98043 (add @grammyjs/types and action. beginning)
   ) {
     super(
       token,
@@ -42,7 +50,11 @@ export class TelegramBot extends BaseClient {
       options.parseMode,
       options.chatId,
       options.queryString,
+<<<<<<< HEAD
       options.offSetType,
+=======
+      options.offSetType
+>>>>>>> 3f98043 (add @grammyjs/types and action. beginning)
     );
 
     /**
@@ -63,6 +75,7 @@ export class TelegramBot extends BaseClient {
   /**
    * Defines a command handler.
    * @param {string | string[]} command - The command string or an array of command strings.
+<<<<<<< HEAD
    * @param {Function} callback - The callback function to handle the command.
    */
   public command(
@@ -73,20 +86,78 @@ export class TelegramBot extends BaseClient {
       this.on("message", (message: object) => {
         const args = (message as any)?.text?.join?.(" ");
         const text = (message as any)?.text;
+=======
+   * @param {(message: Message.TextMessage, args?: string[]) => void} callback - The callback function to handle the command.
+   */
+  public command(
+    command: string | string[],
+    callback: (message: Message.TextMessage, args?: string[]) => void
+  ): void {
+    if (typeof command === "string") {
+      this.on("message", (message: Message.TextMessage) => {
+        const args = message.text.split?.(" ");
+        const text = message.text;
+>>>>>>> 3f98043 (add @grammyjs/types and action. beginning)
         if (text && text.startsWith(`/${command}`)) {
           callback(message, args);
         }
       });
     } else if (Array.isArray(command)) {
+<<<<<<< HEAD
       this.on("message", (message: object) => {
         const args = (message as any)?.text?.split?.(" ");
         const text = (message as any)?.text;
         if (text && command.some(cmd => text.startsWith(`/${cmd}`))) {
+=======
+      this.on("message", (message: Message.TextMessage) => {
+        const args = message.text.split?.(" ");
+        const text = message.text;
+        if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
+>>>>>>> 3f98043 (add @grammyjs/types and action. beginning)
           callback(message, args);
         }
       });
     }
   }
+<<<<<<< HEAD
+=======
+  
+  /**
+   * Defines an action handler.
+   * @param {string | string[]} data - The action data string or an array of action data strings.
+   * @param {(callbackQuery: CallbackQuery) => void} callback - The callback function to handle the action.
+   * @param {boolean} [answer=false] - Whether to answer the action.
+   */
+  public action(
+    data: string | string[],
+    callback: (callbackQuery: CallbackQuery) => void,
+    answer: boolean = false
+  ): void {
+    if (typeof data === "string") {
+      this.on("callback_query", (ctx) => {
+        if (answer) {
+          this.answerCallbackQuery({
+            callbackQueryId: ctx.id,
+          });
+        }
+        if (ctx.data === data) {
+          callback(ctx);
+        }
+      });
+    } else if (Array.isArray(data)) {
+      this.on("callback_query", (ctx) => {
+        if (answer) {
+          this.answerCallbackQuery({
+            callbackQueryId: ctx.id,
+          });
+        }
+        if (data.some((d) => d === ctx.data)) {
+          callback(ctx);
+        }
+      });
+    }
+  }
+>>>>>>> 3f98043 (add @grammyjs/types and action. beginning)
   /**
    * The function that starts the whole process.
    */
@@ -110,10 +181,17 @@ export class TelegramBot extends BaseClient {
 
     (async () => {
       this.getMe()
+<<<<<<< HEAD
         .then(res => {
           this.emit("ready", responseClient);
         })
         .catch(err => {
+=======
+        .then((res) => {
+          this.emit("ready", responseClient);
+        })
+        .catch((err) => {
+>>>>>>> 3f98043 (add @grammyjs/types and action. beginning)
           console.log(err);
         });
     })();
