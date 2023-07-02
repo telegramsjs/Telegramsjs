@@ -19,7 +19,11 @@ class IntentsBitField {
      * @throws {BitFieldError} If a specified bit is not a number.
      */
     add(...ints) {
+<<<<<<< HEAD
         const filter = ints.filter(i => {
+=======
+        const filter = ints.filter((i) => {
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             if (typeof i !== "number") {
                 throw new errorcollection_1.BitFieldError(`specified "${i}" is not correct`);
             }
@@ -36,7 +40,11 @@ class IntentsBitField {
      * @throws {BitFieldError} - If an invalid argument is passed.
      */
     remove(...ints) {
+<<<<<<< HEAD
         const filter = ints.filter(i => {
+=======
+        const filter = ints.filter((i) => {
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
             if (typeof i !== "number") {
                 throw new errorcollection_1.BitFieldError(`specified "${i}" is not correct`);
             }

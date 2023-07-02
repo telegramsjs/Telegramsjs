@@ -42,10 +42,17 @@ describe("Markup", () => {
       expect(markup.login_url).toBe(options.loginUrl);
       expect(markup.switch_inline_query).toBe(options.switchInlineQuery);
       expect(markup.switch_inline_query_current_chat).toBe(
+<<<<<<< HEAD
         options.switchInlineQueryCurrentChat,
       );
       expect(markup.switch_inline_query_chosen_chat).toBe(
         options.switchInlineQueryChosenChat,
+=======
+        options.switchInlineQueryCurrentChat
+      );
+      expect(markup.switch_inline_query_chosen_chat).toBe(
+        options.switchInlineQueryChosenChat
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
       );
       expect(markup.callback_game).toBe(options.callbackGame);
       expect(markup.pay).toBe(options.pay);

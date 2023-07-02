@@ -127,8 +127,13 @@ class CombinedClass {
         return (_a = this.updates) === null || _a === void 0 ? void 0 : _a.chat_join_request;
     }
     get chat() {
+<<<<<<< HEAD
         var _a, _b, _c, _d;
         return (_d = ((_c = (_b = (_a = this.chatMember) !== null && _a !== void 0 ? _a : this.myChatMember) !== null && _b !== void 0 ? _b : this.chatJoinRequest) !== null && _c !== void 0 ? _c : this.updates)) === null || _d === void 0 ? void 0 : _d.chat;
+=======
+        var _a, _b, _c, _d, _e;
+        return (_e = ((_d = (_c = (_b = (_a = this.chatMember) !== null && _a !== void 0 ? _a : this.myChatMember) !== null && _b !== void 0 ? _b : this.chatJoinRequest) !== null && _c !== void 0 ? _c : this.message) !== null && _d !== void 0 ? _d : this.updates)) === null || _e === void 0 ? void 0 : _e.chat;
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     }
     get senderChat() {
         var _a;

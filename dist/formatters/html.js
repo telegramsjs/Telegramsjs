@@ -132,7 +132,11 @@ function list(items, ordered = false) {
         throw new errorcollection_1.ParameterError("missing required argument: items");
     }
     const tag = ordered ? "1." : "*";
+<<<<<<< HEAD
     const listItems = items.map(item => `${tag} ${item}`).join("\n");
+=======
+    const listItems = items.map((item) => `${tag} ${item}`).join("\n");
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     return `${listItems}\n\n`;
 }
 exports.list = list;

@@ -166,8 +166,13 @@ class Markup {
      * @returns {string} Returns the inline keyboard string in the format expected by Telegram Bot API.
      */
     static inlineKeyboard(markups) {
+<<<<<<< HEAD
         const inlineKeyboard = markups.map(row => {
             return row.map(markup => {
+=======
+        const inlineKeyboard = markups.map((row) => {
+            return row.map((markup) => {
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                 return markup.toJSON();
             });
         });

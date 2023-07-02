@@ -4,7 +4,11 @@ export declare class BaseClient extends Request {
     token: string;
     intents?: string[] | number[] | null | undefined;
     parseMode?: string;
+<<<<<<< HEAD
     chatId?: string | number;
+=======
+    catId?: string | number;
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
     queryString?: string | undefined;
     offSetType?: any;
     /**

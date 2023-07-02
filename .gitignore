@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 node_modules/
 example/
 documentation.md
@@ -7,3 +8,12 @@ package-lock.json
 .error
 tg.ts
 .prettierrc
+=======
+untitled.txt
+node_modules/
+package-lock.json
+example
+docs.nojekyll
+tg.js
+index.js
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)

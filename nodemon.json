@@ -2,5 +2,9 @@
   "watch": ["."],
   "ext": ".ts,.js,.json,.html,.css",
   "ignore": ["./node_modules", "./database"],
+<<<<<<< HEAD
   "exec": "node test.telegram.js"
+=======
+  "exec": "node tg.js"
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
 }

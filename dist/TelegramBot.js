@@ -47,14 +47,23 @@ class TelegramBot extends BaseClient_1.BaseClient {
     /**
      * Defines a command handler.
      * @param {string | string[]} command - The command string or an array of command strings.
+<<<<<<< HEAD
      * @param {Function} callback - The callback function to handle the command.
+=======
+     * @param {(message: Message.TextMessage, args?: string[]) => void} callback - The callback function to handle the command.
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
      */
     command(command, callback) {
         if (typeof command === "string") {
             this.on("message", (message) => {
                 var _a, _b;
+<<<<<<< HEAD
                 const args = (_b = (_a = message === null || message === void 0 ? void 0 : message.text) === null || _a === void 0 ? void 0 : _a.join) === null || _b === void 0 ? void 0 : _b.call(_a, " ");
                 const text = message === null || message === void 0 ? void 0 : message.text;
+=======
+                const args = (_b = (_a = message.text).split) === null || _b === void 0 ? void 0 : _b.call(_a, " ");
+                const text = message.text;
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                 if (text && text.startsWith(`/${command}`)) {
                     callback(message, args);
                 }
@@ -63,15 +72,56 @@ class TelegramBot extends BaseClient_1.BaseClient {
         else if (Array.isArray(command)) {
             this.on("message", (message) => {
                 var _a, _b;
+<<<<<<< HEAD
                 const args = (_b = (_a = message === null || message === void 0 ? void 0 : message.text) === null || _a === void 0 ? void 0 : _a.split) === null || _b === void 0 ? void 0 : _b.call(_a, " ");
                 const text = message === null || message === void 0 ? void 0 : message.text;
                 if (text && command.some(cmd => text.startsWith(`/${cmd}`))) {
+=======
+                const args = (_b = (_a = message.text).split) === null || _b === void 0 ? void 0 : _b.call(_a, " ");
+                const text = message.text;
+                if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                     callback(message, args);
                 }
             });
         }
     }
     /**
+<<<<<<< HEAD
+=======
+     * Defines an action handler.
+     * @param {string | string[]} data - The action data string or an array of action data strings.
+     * @param {(callbackQuery: CallbackQuery) => void} callback - The callback function to handle the action.
+     * @param {boolean} [answer=false] - Whether to answer the action.
+     */
+    action(data, callback, answer = false) {
+        if (typeof data === "string") {
+            this.on("callback_query", (ctx) => {
+                if (answer) {
+                    this.answerCallbackQuery({
+                        callbackQueryId: ctx.id,
+                    });
+                }
+                if (ctx.data === data) {
+                    callback(ctx);
+                }
+            });
+        }
+        else if (Array.isArray(data)) {
+            this.on("callback_query", (ctx) => {
+                if (answer) {
+                    this.answerCallbackQuery({
+                        callbackQueryId: ctx.id,
+                    });
+                }
+                if (data.some((d) => d === ctx.data)) {
+                    callback(ctx);
+                }
+            });
+        }
+    }
+    /**
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
      * The function that starts the whole process.
      */
     login() {
@@ -81,10 +131,17 @@ class TelegramBot extends BaseClient_1.BaseClient {
             this.updatesProcess = new CombinedClass_1.CombinedClass(this);
             (() => __awaiter(this, void 0, void 0, function* () {
                 this.getMe()
+<<<<<<< HEAD
                     .then(res => {
                     this.emit("ready", responseClient);
                 })
                     .catch(err => {
+=======
+                    .then((res) => {
+                    this.emit("ready", responseClient);
+                })
+                    .catch((err) => {
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
                     console.log(err);
                 });
             }))();

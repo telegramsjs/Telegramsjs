@@ -44,7 +44,11 @@ const intents = new IntentsBitField().add(
 
 const bot = new TelegramBot("TELEGRAM_BOT_TOKEN", {
   intents: intents.toArray(),
+<<<<<<< HEAD
   offSetType: "time"
+=======
+  offSetType: "time",
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
 });
 ```
 
@@ -67,7 +71,11 @@ The library provides several events that you can listen to, including:
 Here's an example of how to listen to the `message` event:
 
 ```typescript
+<<<<<<< HEAD
 bot.on("message", message => {
+=======
+bot.on("message", (message) => {
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   // your code here
 });
 ```
@@ -98,7 +106,11 @@ The `code` property is a callback function that is called when the command is ex
 You can set the bot's description and commands using the `setMyDescription` and `setCommands` methods respectively.
 
 ```typescript
+<<<<<<< HEAD
 bot.once("ready", async client => {
+=======
+bot.once("ready", async (client) => {
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
   await client.setDescription({
     description: "My awesome Telegram bot",
   });
@@ -131,4 +143,8 @@ To see the correct use of the library, refer to the GitHub page.
 
 ## 🧾 License
 
+<<<<<<< HEAD
 `Telegramsjs` is available under the `MIT` license. For more information, please refer to the [LICENSE](https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE) file.
+=======
+`Telegramsjs` is available under the `MIT` license. For more information, please refer to the [LICENSE](https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE) file.
+>>>>>>> 38a3db8 (add @grammyjs/types and action. beginning)
