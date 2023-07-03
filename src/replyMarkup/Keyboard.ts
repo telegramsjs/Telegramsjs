@@ -1,18 +1,18 @@
-import { type InlineKeyboardButton } from '@grammyjs/types';
+import { type InlineKeyboardButton } from "@grammyjs/types";
 
 type InlineKeyboard = {
   resize_keyboard?: boolean;
   one_time_keyboard: boolean;
   selective: boolean;
-  keyboard: InlineKeyboardButton[][]
-}
+  keyboard: InlineKeyboardButton[][];
+};
 
 export class Keyboard {
-  private keyboard: InlineKeyboardButton[][] = [];
-  private inline: boolean;
-  private resize: boolean;
-  private oneTime: boolean;
-  private selective: boolean;
+  keyboard: InlineKeyboardButton[][] = [];
+  inline: boolean;
+  resize: boolean;
+  oneTime: boolean;
+  selective: boolean;
 
   constructor(
     markups: InlineKeyboardButton[][] = [],
@@ -40,7 +40,7 @@ export class Keyboard {
       resize_keyboard: this.resize,
       one_time_keyboard: this.oneTime,
       selective: this.selective,
-      keyboard: this.keyboard
+      keyboard: this.keyboard,
     };
     return keyboard;
   }
@@ -100,7 +100,7 @@ export class Keyboard {
         this.keyboard = markupRows as InlineKeyboardButton[][];
       } else if (defaults === false) {
         const row: InlineKeyboardButton[] = Array.isArray(markupRows[i])
-          ? markupRows[i] as InlineKeyboardButton[]
+          ? (markupRows[i] as InlineKeyboardButton[])
           : [markupRows[i] as InlineKeyboardButton];
         this.keyboard.push(row);
       }
