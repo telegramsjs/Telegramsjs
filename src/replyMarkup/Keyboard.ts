@@ -1,4 +1,4 @@
-import { type InlineKeyboardButton } from "@grammyjs/types";
+import type { InlineKeyboardButton } from "@telegram.ts/types";
 
 type InlineKeyboard = {
   resize_keyboard?: boolean;

@@ -1,6 +1,6 @@
 import { BaseClient } from "./BaseClient";
 import { CombinedClass } from "./helpers/CombinedClass";
-import { type CallbackQuery, type Message } from "@grammyjs/types";
+import type { CallbackQuery, Message } from "@telegram.ts/types";
 
 /**
  * A class representing a Telegram Bot client.
@@ -88,7 +88,7 @@ export class TelegramBot extends BaseClient {
       });
     }
   }
-  
+
   /**
    * Defines an action handler.
    * @param {string | string[]} data - The action data string or an array of action data strings.
