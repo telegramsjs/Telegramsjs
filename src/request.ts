@@ -1,4 +1,4 @@
-import * as https from "https";
+import axios from "axios";
 import * as querystring from "querystring";
 import {
   TelegramApiError,
@@ -8,6 +8,7 @@ import {
 import { EventEmitter } from "events";
 import { decodeIntents, IntentsBitField } from "./IntentsBitField";
 import { Collection } from "./collection/Collection";
+import { Update } from "@telegram.ts/types";
 
 const lastTimeMap = new Collection();
 
@@ -26,7 +27,7 @@ export class Request extends EventEmitter {
   intents?: readonly string[] | number[] | null;
   startTime: number = Date.now();
   update_id?: number;
-  last_object?: object;
+  last_object?: Update;
   lastTimeMap: Collection<any, any>;
 
   /**
@@ -102,7 +103,7 @@ export class Request extends EventEmitter {
    * @throws {TelegramTokenError} When the token is invalid.
    * @throws {TelegramApiError} When an error occurs with the Telegram Bot API.
    */
-  async getUpdates(): Promise<object[]> {
+  async getUpdates(): Promise<Update[]> {
     this.startTime = Date.now();
     const params: Record<
       string,
@@ -121,6 +122,7 @@ export class Request extends EventEmitter {
         | readonly boolean[]
         | null,
     };
+
     const response: any = await this.request("getUpdates", params);
     const updates = response.result;
 
@@ -162,38 +164,19 @@ export class Request extends EventEmitter {
     const url = `${this.baseUrl}/${method}`;
     const data = querystring.stringify(params);
 
-    return new Promise((resolve, reject) => {
-      const options: https.RequestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": this.queryString,
-          "Content-Length": data.length.toString(),
-        },
-      };
+    const options = {
+      headers: {
+        "Content-Type": this.queryString,
+        "Content-Length": data.length.toString(),
+      },
+    };
 
-      const req = https.request(url, options, (res) => {
-        let response = "";
-
-        res.on("data", (chunk) => {
-          response += chunk;
-        });
-
-        res.on("end", () => {
-          try {
-            resolve(JSON.parse(response));
-          } catch (error) {
-            reject(error);
-          }
-        });
-      });
-
-      req.on("error", (error) => {
-        reject(error);
-      });
-
-      req.write(data);
-      req.end();
-    });
+    try {
+      const response = await axios.post(url, data, options);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   /**
@@ -210,7 +193,7 @@ export class Request extends EventEmitter {
    * @async
    * @returns {number | undefined} The ping latency in milliseconds.
    */
-  async ping(): Promise<number | undefined> {
+  async ping(): Promise<number> {
     const startTime = Date.now();
     const response = await this.request("getMe", {});
     const endTime = Date.now();
@@ -228,9 +211,9 @@ export class Request extends EventEmitter {
 
   /**
    * Gets the last object received.
-   * @returns {object} The last received object.
+   * @returns {Update} The last received object.
    */
-  get lastObject(): object | undefined {
+  get lastObject(): Update | undefined {
     return this.last_object;
   }
 
@@ -250,7 +233,7 @@ export class Request extends EventEmitter {
    * @param {string[] | number[] | null} intents - The intents to set.
    * @returns {boolean} - Returns true if the intents were set successfully.
    */
-  setIntents(intents: string[] | number[] | null = null): boolean {
+  setIntents(intents: string[] | number[]): boolean {
     this.intents = intents;
     return true;
   }
@@ -260,7 +243,7 @@ export class Request extends EventEmitter {
    * @param {string | undefined} parseMode - The parse mode to set.
    * @returns {boolean} - Returns true if the parse mode was set successfully.
    */
-  setParseMode(parseMode: string | undefined): boolean {
+  setParseMode(parseMode: string): boolean {
     this.parseMode = parseMode;
     return true;
   }
@@ -268,11 +251,11 @@ export class Request extends EventEmitter {
   /**
    * Set the chat ID for the bot.
    * @param {string | number } chatId - The chat ID to set.
-   * @returns {string | number} - Returns the chat ID that was set.
+   * @returns {boolean} - Returns the chat ID that was set.
    */
-  setChatId(chatId: string | number): string | number {
+  setChatId(chatId: string | number): boolean {
     this.chatId = chatId;
-    return chatId;
+    return true;
   }
 
   /**
@@ -287,10 +270,10 @@ export class Request extends EventEmitter {
 
   /**
    * Set the offset type for the bot.
-   * @param {string | boolean | object | undefined} offSetType - The offset type to set.
-   * @returns {string} - Returns the offset type that was set.
+   * @param {any} offSetType - The offset type to set.
+   * @returns {any} - Returns the offset type that was set.
    */
-  setOffSetType(offSetType: string | boolean | object | undefined): string {
+  setOffSetType(offSetType: any): any {
     this.offSetType = offSetType ?? "time";
     return this.offSetType;
   }
