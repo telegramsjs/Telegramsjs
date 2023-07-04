@@ -1,20 +1,26 @@
+import type {
+  KeyboardButton,
+  LoginUrl,
+  InlineKeyboardButton,
+} from "@telegram.ts/types";
+
 /**
  * Class representing a markup in the Telegram Bot API.
  * @class
  */
 export class Markup {
-  private text: string | undefined;
-  private action: string | undefined;
-  private type: string | undefined;
-  private remove_keyboard: boolean | undefined;
-  private web_app: object | undefined;
-  private login_url: object | undefined;
-  private switch_inline_query: string | undefined;
-  private switch_inline_query_current_chat: string | undefined;
-  private switch_inline_query_chosen_chat: object | undefined;
-  private callback_game: object | undefined;
-  private pay: boolean | undefined;
-  private force_reply: boolean | undefined;
+  text?: string;
+  action?: string;
+  type?: string;
+  remove_keyboard?: boolean;
+  web_app?: KeyboardButton.WebAppButton;
+  login_url?: LoginUrl;
+  switch_inline_query?: string;
+  switch_inline_query_current_chat?: string;
+  switch_inline_query_chosen_chat?: InlineKeyboardButton.SwitchInlineChosenChatButton;
+  callback_game?: InlineKeyboardButton.GameButton;
+  pay?: boolean;
+  force_reply?: boolean;
   /**
    * Creates a new instance of the Markup class.
    * @param {Object} [options={}] - Button settings.
@@ -22,12 +28,12 @@ export class Markup {
    * @param {string} [options.action] - Button action to be passed to the event handler.
    * @param {string} [options.type='callback_data'] - Button action type. The default is 'callback_data'.
    * @param {boolean} [options.removeKeyboard=false] - Flag indicating whether to remove the inline markup.
-   * @param {object} [options.webApp] - Object representing the web app URL.
-   * @param {object} [options.loginUrl] - Object representing the login URL.
+   * @param {KeyboardButton.WebAppButton} [options.webApp] - Object representing the web app URL.
+   * @param {LoginUrl} [options.loginUrl] - Object representing the login URL.
    * @param {string} [options.switchInlineQuery] - Inline query string.
    * @param {string} [options.switchInlineQueryCurrentChat] - Inline query for the current chat.
-   * @param {object} [options.switchInlineQueryChosenChat] - Object representing the chosen inline query chat.
-   * @param {object} [options.callbackGame] - Object representing the callback game.
+   * @param {switchInlineQueryChosenChat} [options.switchInlineQueryChosenChat] - Object representing the chosen inline query chat.
+   * @param {InlineKeyboardButton.GameButton} [options.callbackGame] - Object representing the callback game.
    * @param {boolean} [options.pay] - Flag indicating whether the markup is for a payment.
    * @param {boolean} [options.forceReply] - Flag indicating whether to force a reply from the user.
    */
@@ -37,12 +43,12 @@ export class Markup {
       action?: string;
       type?: string;
       removeKeyboard?: boolean;
-      webApp?: object;
-      loginUrl?: object;
+      webApp?: KeyboardButton.WebAppButton;
+      loginUrl?: LoginUrl;
       switchInlineQuery?: string;
       switchInlineQueryCurrentChat?: string;
-      switchInlineQueryChosenChat?: object;
-      callbackGame?: object;
+      switchInlineQueryChosenChat?: InlineKeyboardButton.SwitchInlineChosenChatButton;
+      callbackGame?: InlineKeyboardButton.GameButton;
       pay?: boolean;
       forceReply?: boolean;
     } = {}
@@ -106,31 +112,20 @@ export class Markup {
 
   /**
    * Sets the URL for the web app.
-   * @param {object} url - The URL of the web app.
+   * @param {KeyboardButton.WebAppButton} url - The URL of the web app.
    * @returns {Markup} Returns the current object instance for chaining.
    */
-  setWebApp(
-    webApp: {
-      url: string;
-    } = { url: "" }
-  ): Markup {
+  setWebApp(webApp: KeyboardButton.WebAppButton): Markup {
     this.web_app = webApp;
     return this;
   }
 
   /**
    * Sets the login URL for the markup.
-   * @param {object} loginUrl - Object representing the login URL for the markup.
+   * @param {LoginUrl} loginUrl - Object representing the login URL for the markup.
    * @returns {Markup} Returns the current object for method chaining.
    */
-  setLoginUrl(
-    loginUrl: {
-      url: string;
-      forward_text?: string;
-      bot_username?: string;
-      request_write_access?: boolean;
-    } = { url: "" }
-  ): Markup {
+  setLoginUrl(loginUrl: LoginUrl): Markup {
     this.login_url = loginUrl;
     return this;
   }
@@ -159,36 +154,22 @@ export class Markup {
 
   /**
    * Sets the chosen inline query chat for the markup.
-   * @param {object} switchInlineQueryChosenChat - Object representing the chosen inline query chat.
+   * @param {InlineKeyboardButton.SwitchInlineChosenChatButton} switchInlineQueryChosenChat - Object representing the chosen inline query chat.
    * @returns {Markup} Returns the current object for method chaining.
    */
-  setSwitchInlineQueryChosenChat(switchInlineQueryChosenChat: {
-    query?: string;
-    allow_user_chats?: boolean;
-    allow_bot_chats?: boolean;
-    allow_group_chats?: boolean;
-    allow_channel_chats?: boolean;
-  }): Markup {
+  setSwitchInlineQueryChosenChat(
+    switchInlineQueryChosenChat: InlineKeyboardButton.SwitchInlineChosenChatButton
+  ): Markup {
     this.switch_inline_query_chosen_chat = switchInlineQueryChosenChat;
     return this;
   }
 
   /**
    * Sets the callback game for the markup.
-   * @param {object} callbackGame - Object representing the callback game for the markup.
+   * @param {InlineKeyboardButton.GameButton} callbackGame - Object representing the callback game for the markup.
    * @returns {Markup} Returns the current object for method chaining.
    */
-  setCallbackGame(
-    callbackGame: {
-      user_id: number;
-      score: number;
-      force?: boolean;
-      disable_edit_message?: boolean;
-      chat_id?: number;
-      message_id?: number;
-      inline_message_id?: number;
-    } = { user_id: 0, score: 0 }
-  ): Markup {
+  setCallbackGame(callbackGame: InlineKeyboardButton.GameButton): Markup {
     this.callback_game = callbackGame;
     return this;
   }
@@ -213,10 +194,14 @@ export class Markup {
   }
 
   /**
-   * Creates a new Button object from a markup object in the format expected by Telegram Bot API.
-   * @param {object} markupObj - Button object in the format expected by Telegram Bot API.
-   * @returns {Markup} Returns an instance of the Markup object.
-   */
+  * Creates a new Button object from a markup object in the format expected by Telegram Bot API.
+  * @param {{
+  text: string;
+  action: string;
+  type: string;
+  }} markupObj - Button object in the format expected by Telegram Bot API.
+  * @returns {Markup} Returns an instance of the Markup object.
+  */
   static fromJSON(markupObj: {
     text: string;
     action: string;
@@ -266,20 +251,44 @@ export class Markup {
   }
 
   /**
-   * Returns the markup object in the format expected by Telegram Bot API.
-   * @returns {object} Returns the markup object in the format expected by Telegram Bot API.
-   */
-  toJSON(): object {
+  * Returns the markup object in the format expected by Telegram Bot API.
+  * @returns {{
+  text?: string;
+  remove_keyboard?: boolean;
+  web_app?: KeyboardButton.WebAppButton;
+  force_reply?: boolean;
+  login_url?: LoginUrl;
+  switch_inline_query?: string;
+  switch_inline_query_current_chat?: string;
+  switch_inline_query_chosen_chat?: InlineKeyboardButton.SwitchInlineChosenChatButton;
+  callback_game?: InlineKeyboardButton.GameButton;
+  pay?: boolean;
+  [key: string]: any;
+  }} Returns the markup object in the format expected by Telegram Bot API.
+  */
+  toJSON(): {
+    text?: string;
+    remove_keyboard?: boolean;
+    web_app?: KeyboardButton.WebAppButton;
+    force_reply?: boolean;
+    login_url?: LoginUrl;
+    switch_inline_query?: string;
+    switch_inline_query_current_chat?: string;
+    switch_inline_query_chosen_chat?: InlineKeyboardButton.SwitchInlineChosenChatButton;
+    callback_game?: InlineKeyboardButton.GameButton;
+    pay?: boolean;
+    [key: string]: any;
+  } {
     const markup: {
       text?: string;
       remove_keyboard?: boolean;
-      web_app?: object;
+      web_app?: KeyboardButton.WebAppButton;
       force_reply?: boolean;
-      login_url?: object;
+      login_url?: LoginUrl;
       switch_inline_query?: string;
       switch_inline_query_current_chat?: string;
-      switch_inline_query_chosen_chat?: object;
-      callback_game?: object;
+      switch_inline_query_chosen_chat?: InlineKeyboardButton.SwitchInlineChosenChatButton;
+      callback_game?: InlineKeyboardButton.GameButton;
       pay?: boolean;
       [key: string]: any;
     } = {
