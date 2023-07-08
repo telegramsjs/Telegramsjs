@@ -46,6 +46,14 @@ export class Keyboard {
   }
 
   /**
+   * Returns the text representation of the inline object in the format expected by Telegram Bot API.
+   * @returns {string} Returns the text representation of the inline object in the format expected by Telegram Bot API.
+   */
+  toString(): string {
+    return JSON.stringify(this.toJSON());
+  }
+
+  /**
    * Sets the inline option of the keyboard.
    * @param {boolean} inline - Whether the keyboard should be displayed inline with the message.
    * @returns {Keyboard} Returns the updated Keyboard object.

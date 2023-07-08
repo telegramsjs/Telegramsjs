@@ -17,7 +17,9 @@ class TelegramApiError extends Error {
   }) {
     let message: {
       description: string;
-    } = { description: "" };
+    } = {
+      description: "",
+    };
 
     if (error.error_code !== undefined) {
       message.description = (

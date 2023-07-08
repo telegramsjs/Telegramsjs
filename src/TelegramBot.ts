@@ -57,8 +57,6 @@ export class TelegramBot extends BaseClient {
      * @type {string}
      */
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
-
-    this.countCollector = 0;
   }
 
   /**

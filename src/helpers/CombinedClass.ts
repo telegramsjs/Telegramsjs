@@ -1,5 +1,6 @@
 import { TelegramBot } from "../TelegramBot";
 import { ParameterError } from "../errorcollection";
+import {} from "@telegram.ts/types";
 
 type MessageTypeMap = {
   [key: string]: {
