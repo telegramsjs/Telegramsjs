@@ -3,25 +3,29 @@
  * @extends Error
  */
 class TelegramApiError extends Error {
-  public code?: number;
-  public ok?: boolean;
+  public code: number;
+  public ok: boolean;
+  public method: string;
 
   /**
    * Creates a new instance of the TelegramApiError class
    * @param {string | object} error - The error message returned by the Telegram Bot API
    */
-  constructor(error: {
-    error_code?: number;
-    description?: string;
-    ok?: boolean;
-  }) {
+  constructor(
+    error: {
+      error_code: number;
+      description: string;
+      ok: boolean;
+    },
+    method: string
+  ) {
     let message: {
       description: string;
     } = {
       description: "",
     };
 
-    if (error.error_code !== undefined) {
+    if (error?.error_code !== undefined) {
       message.description = (
         error.description
           ?.replace("Bad Request: ", "")
@@ -37,9 +41,10 @@ class TelegramApiError extends Error {
 
     super(message.description);
 
-    this.name = `TelegramApiError[${error?.error_code ?? 0}]`;
-    this.code = error?.error_code ?? 0;
-    this.ok = error?.ok;
+    this.name = `TelegramApiError[${error.error_code ?? 0}]`;
+    this.method = method;
+    this.code = error.error_code ?? 0;
+    this.ok = error.ok;
   }
 }
 
@@ -50,20 +55,6 @@ class TelegramApiError extends Error {
 class EventError extends Error {
   /**
    * Creates a new instance of the EventError class
-   * @param {string} error - The error message
-   */
-  constructor(error: string) {
-    super(error);
-  }
-}
-
-/**
- * Custom error class for errors related to Telegram tokens
- * @extends Error
- */
-class TelegramTokenError extends Error {
-  /**
-   * Creates a new instance of the TelegramTokenError class
    * @param {string} error - The error message
    */
   constructor(error: string) {
@@ -144,7 +135,6 @@ class ErrorExtension extends Error {
 export {
   TelegramApiError,
   EventError,
-  TelegramTokenError,
   IntentsError,
   BitFieldError,
   ParameterError,

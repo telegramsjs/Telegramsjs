@@ -1,10 +1,6 @@
 import axios from "axios";
 import * as querystring from "querystring";
-import {
-  TelegramApiError,
-  TelegramTokenError,
-  IntentsError,
-} from "./errorcollection";
+import { TelegramApiError, IntentsError } from "./errorcollection";
 import { EventEmitter } from "events";
 import { decodeIntents, IntentsBitField } from "./IntentsBitField";
 import { Collection } from "./collection/Collection";
@@ -176,16 +172,20 @@ export class Request extends EventEmitter {
       const response = await axios.post(url, data, options);
       return response.data;
     } catch (error) {
-      const telegramError = error as {
-        error_code?: number;
-        description?: string;
-        ok?: boolean;
+      let telegramError = error as {
+        response: {
+          data: {
+            error_code: number;
+            description: string;
+            ok: boolean;
+          };
+        };
       };
-      if (telegramError.error_code === 401) {
-        throw new TelegramTokenError("invalid token of telegrams bot");
-      } else if (telegramError.error_code !== undefined) {
-        throw new TelegramApiError(telegramError);
-      }
+      telegramError.response.data.error_code === 404
+        ? (telegramError.response.data.description =
+            "invalid token of telegrams bot")
+        : telegramError.response.data.description;
+      throw new TelegramApiError(telegramError.response.data, method);
     }
 
     return {};
