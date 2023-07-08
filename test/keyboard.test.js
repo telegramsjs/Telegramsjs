@@ -13,7 +13,7 @@ describe("Keyboard", () => {
 
       const keyboard = new Keyboard(markups, options);
 
-      expect(keyboard.markups).toEqual(markups);
+      expect(keyboard.keyboard).toEqual(markups);
       expect(keyboard.inline).toBe(true);
       expect(keyboard.resize).toBe(true);
       expect(keyboard.oneTime).toBe(true);
@@ -26,7 +26,7 @@ describe("Keyboard", () => {
 
       const keyboard = new Keyboard(markups, options);
 
-      expect(keyboard.markups).toEqual(markups);
+      expect(keyboard.keyboard).toEqual(markups);
       expect(keyboard.inline).toBe(false);
       expect(keyboard.resize).toBe(false);
       expect(keyboard.oneTime).toBe(false);
@@ -36,7 +36,7 @@ describe("Keyboard", () => {
     test("should initialize markups with an empty array if not provided", () => {
       const keyboard = new Keyboard();
 
-      expect(keyboard.markups).toEqual([]);
+      expect(keyboard.keyboard).toEqual([]);
     });
   });
 
@@ -113,7 +113,7 @@ describe("Keyboard", () => {
 
       keyboard.addKeyboard(markupRows);
 
-      expect(keyboard.markups).toEqual(markupRows);
+      expect(keyboard.keyboard).toEqual(markupRows);
     });
 
     test("should add markup rows to the keyboard with defaults", () => {
@@ -122,7 +122,7 @@ describe("Keyboard", () => {
 
       keyboard.addKeyboard(markupRows, true);
 
-      expect(keyboard.markups).toEqual(markupRows);
+      expect(keyboard.keyboard).toEqual(markupRows);
     });
 
     test("should add single markup row to the keyboard", () => {
@@ -131,7 +131,7 @@ describe("Keyboard", () => {
 
       keyboard.addKeyboard(markupRow);
 
-      expect(keyboard.markups).toEqual([markupRow]);
+      expect(keyboard.keyboard).toEqual([markupRow]);
     });
   });
 });
