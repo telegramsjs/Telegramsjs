@@ -1,4 +1,3 @@
-import * as https from "https";
 import { Request } from "./request.js";
 import { TelegramApiError } from "./errorcollection.js";
 import { UserFromGetMe, Message } from "@telegram.ts/types";
