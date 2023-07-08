@@ -8,7 +8,14 @@ import {
 import { EventEmitter } from "events";
 import { decodeIntents, IntentsBitField } from "./IntentsBitField";
 import { Collection } from "./collection/Collection";
-import { Update } from "@telegram.ts/types";
+import type { Update, GetUpdates } from "@telegram.ts/types";
+
+type TelegramApiResponse = {
+  error_code?: number;
+  description?: string;
+  ok?: boolean;
+  result?: any;
+};
 
 const lastTimeMap = new Collection();
 
@@ -123,7 +130,7 @@ export class Request extends EventEmitter {
         | null,
     };
 
-    const response: any = await this.request("getUpdates", params);
+    const response = await this.request("getUpdates", params);
     const updates = response.result;
 
     if (Array.isArray(updates) && updates.length > 0) {
@@ -132,13 +139,7 @@ export class Request extends EventEmitter {
       this.offset = updates[updates.length - 1].update_id + 1;
     }
 
-    if (response?.error_code === 401) {
-      throw new TelegramTokenError("invalid token of telegrams bot");
-    } else if (response?.error_code !== undefined) {
-      throw new TelegramApiError(response.description);
-    }
-
-    return updates ?? [];
+    return Array.isArray(updates) ? updates : [];
   }
 
   /**
@@ -146,7 +147,7 @@ export class Request extends EventEmitter {
    * @async
    * @param {string} method - The API method to call.
    * @param {object} params - The parameters to include in the API call.
-   * @returns {Promise.<object>} The response from the API call.
+   * @returns {Promise.<Update>} The response from the API call.
    */
   async request(
     method: string,
@@ -160,7 +161,7 @@ export class Request extends EventEmitter {
       | readonly boolean[]
       | null
     >
-  ): Promise<object> {
+  ): Promise<TelegramApiResponse> {
     const url = `${this.baseUrl}/${method}`;
     const data = querystring.stringify(params);
 
@@ -175,8 +176,19 @@ export class Request extends EventEmitter {
       const response = await axios.post(url, data, options);
       return response.data;
     } catch (error) {
-      throw error;
+      const telegramError = error as {
+        error_code?: number;
+        description?: string;
+        ok?: boolean;
+      };
+      if (telegramError.error_code === 401) {
+        throw new TelegramTokenError("invalid token of telegrams bot");
+      } else if (telegramError.error_code !== undefined) {
+        throw new TelegramApiError(telegramError);
+      }
     }
+
+    return {};
   }
 
   /**
