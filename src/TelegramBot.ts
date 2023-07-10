@@ -6,16 +6,12 @@ import type { CallbackQuery, Message } from "@telegram.ts/types";
  * A class representing a Telegram Bot client.
  * @extends BaseClient
  */
-export class TelegramBot extends BaseClient {
+export class TelegramBot<F> extends BaseClient<F> {
   token: string = "";
   intents: string[] | number[] | null = null;
-  parseMode?: string;
-  chatId?: string | number;
-  queryString?: string;
   offSetType?: any;
   baseUrl: string = "";
-  countCollector?: number;
-  updatesProcess?: CombinedClass;
+  updatesProcess?: CombinedClass<F>;
 
   /**
    * Creates a new TelegramBot client.
@@ -31,20 +27,9 @@ export class TelegramBot extends BaseClient {
     token: string,
     options: {
       intents?: readonly string[] | number[] | null;
-      parseMode?: string;
-      chatId?: string | number;
-      queryString?: string;
-      offSetType?: any;
     } = {}
   ) {
-    super(
-      token,
-      options.intents || null,
-      options.parseMode,
-      options.chatId,
-      options.queryString,
-      options.offSetType
-    );
+    super(token, options.intents || null);
 
     /**
      * The Telegram Bot API token.
@@ -102,7 +87,7 @@ export class TelegramBot extends BaseClient {
       this.on("callback_query", (ctx) => {
         if (answer) {
           this.answerCallbackQuery({
-            callbackQueryId: ctx.id,
+            callback_query_id: ctx.id,
           });
         }
         if (ctx.data === data) {
@@ -113,7 +98,7 @@ export class TelegramBot extends BaseClient {
       this.on("callback_query", (ctx) => {
         if (answer) {
           this.answerCallbackQuery({
-            callbackQueryId: ctx.id,
+            callback_query_id: ctx.id,
           });
         }
         if (data.some((d) => d === ctx.data)) {
@@ -141,7 +126,7 @@ export class TelegramBot extends BaseClient {
       setName: this.setMyName.bind(this),
     };
 
-    this.updatesProcess = new CombinedClass(this);
+    const updatesProcess = new CombinedClass<F>(this);
 
     (async () => {
       this.getMe()
@@ -153,6 +138,6 @@ export class TelegramBot extends BaseClient {
         });
     })();
 
-    this.updatesProcess.processUpdate();
+    updatesProcess.processUpdate();
   }
 }
