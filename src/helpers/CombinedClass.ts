@@ -360,9 +360,6 @@ class CombinedClass<F> {
     return this.updates?.passport_data;
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#answerinlinequery
-   */
   answerInlineQuery(args: {
     results: readonly InlineQueryResult[];
     cache_time?: number;
@@ -376,9 +373,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#answercallbackquery
-   */
   answerCallbackQuery(args?: {
     text?: string;
     show_alert?: boolean;
@@ -391,9 +385,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#answershippingquery
-   */
   answerShippingQuery(args: {
     ok: boolean;
     shipping_options?: readonly ShippingOption[];
@@ -405,9 +396,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#answerprecheckoutquery
-   */
   answerPreCheckoutQuery(args: { ok: boolean; error_message?: string }) {
     return this.bot.answerPreCheckoutQuery({
       pre_checkout_query_id: this.preCheckoutQuery.id,
@@ -415,9 +403,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#editmessagetext
-   */
   editMessageText(
     text: string,
     args?: {
@@ -437,9 +422,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#editmessagecaption
-   */
   editMessageCaption(
     caption?: string,
     args?: {
@@ -457,9 +439,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#editmessagemedia
-   */
   editMessageMedia(media: InputMedia<F>, reply_markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageMedia({
       chat_id: this.chat?.id,
@@ -470,9 +449,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#editmessagereplymarkup
-   */
   editMessageReplyMarkup(markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageReplyMarkup({
       chat_id: this.chat?.id,
@@ -482,9 +458,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#editmessagelivelocation
-   */
   editMessageLiveLocation(replyMarkup?: InlineKeyboardMarkup) {
     return this.bot.editMessageLiveLocation({
       chat_id: this.chat?.id,
@@ -494,9 +467,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#stopmessagelivelocation
-   */
   stopMessageLiveLocation(
     latitude: number,
     longitude: number,
@@ -517,9 +487,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendmessage
-   */
   sendMessage(
     text: string,
     args?: {
@@ -545,23 +512,14 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#getchat
-   */
   getChat() {
     return this.bot.getChat(this.chat.id);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#exportchatinvitelink
-   */
   exportChatInviteLink() {
     return this.bot.exportChatInviteLink(this.chat.id);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#createchatinvitelink
-   */
   createChatInviteLink(args?: {
     name?: string;
     expire_date?: number;
@@ -574,9 +532,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#editchatinvitelink
-   */
   editChatInviteLink(args: {
     invite_link: string;
     name?: string;
@@ -590,19 +545,12 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#revokechatinvitelink
-   */
   revokeChatInviteLink(invite_link: string) {
     return this.bot.revokeChatInviteLink({
       chat_id: this.chat.id,
       invite_link,
     });
   }
-
-  /**
-   * @see https://core.telegram.org/bots/api#banchatmember
-   */
 
   banChatMember(
     userId: number,
@@ -618,17 +566,10 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#banchatmember
-   * @deprecated since API 5.3. Use {@link Context.banChatMember}
-   */
   get kickChatMember() {
     return this.banChatMember;
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#unbanchatmember
-   */
   unbanChatMember(userId: number, onlyIfBanned?: boolean) {
     return this.bot.unbanChatMember({
       chat_id: this.chat.id,
@@ -637,9 +578,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#restrictchatmember
-   */
   restrictChatMember(args: {
     user_id: number;
     permissions: ChatPermissions;
@@ -652,9 +590,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#promotechatmember
-   */
   promoteChatMember(
     userId: number,
     args?: {
@@ -679,9 +614,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#setchatadministratorcustomtitle
-   */
   setChatAdministratorCustomTitle(args: {
     user_id: number;
     custom_title: string;
@@ -692,26 +624,17 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#setchatphoto
-   */
-  setChatPhoto(photo: any) {
+  setChatPhoto(photo: F) {
     return this.bot.setChatPhoto({
       chat_id: this.chat.id,
       photo,
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#deletechatphoto
-   */
   deleteChatPhoto() {
     return this.bot.deleteChatPhoto(this.chat.id);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#setchattitle
-   */
   setChatTitle(title: string) {
     return this.bot.setChatTitle({
       chat_id: this.chat.id,
@@ -719,9 +642,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#setchatdescription
-   */
   setChatDescription(description: string) {
     return this.bot.setChatDescription({
       chat_id: this.chat.id,
@@ -729,9 +649,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#pinchatmessage
-   */
   pinChatMessage(messageId: number, disableNotification?: boolean) {
     return this.bot.pinChatMessage({
       chat_id: this.chat.id,
@@ -740,9 +657,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#unpinchatmessage
-   */
   unpinChatMessage(messageId: number) {
     return this.bot.unpinChatMessage({
       chat_id: this.chat.id,
@@ -750,23 +664,14 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#unpinallchatmessages
-   */
   unpinAllChatMessages() {
     return this.bot.unpinAllChatMessages(this.chat.id);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#leavechat
-   */
   leaveChat() {
     return this.bot.leaveChat(this.chat.id);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#setchatpermissions
-   */
   setChatPermissions(
     permissions: ChatPermissions,
     use_independent_chat_permissions?: boolean
@@ -778,16 +683,10 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#getchatadministrators
-   */
   getChatAdministrators() {
     return this.bot.getChatAdministrators(this.chat.id);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#getchatmember
-   */
   getChatMember(userId: number) {
     return this.bot.getChatMember({
       chat_id: this.chat.id,
@@ -795,16 +694,10 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#getchatmembercount
-   */
   getChatMembersCount() {
     return this.bot.getChatMemberCount(this.chat.id);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#setpassportdataerrors
-   */
   setPassportDataErrors(errors: readonly PassportElementError[]) {
     return this.bot.setPassportDataErrors({
       user_id: this.from.id,
@@ -812,9 +705,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendphoto
-   */
   sendPhoto(
     photo: F | string,
     args?: {
@@ -841,9 +731,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendmediagroup
-   */
   sendMediaGroup(
     media: ReadonlyArray<
       | InputMediaAudio<F>
@@ -866,9 +753,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendaudio
-   */
   sendAudio(
     audio: F | string,
     args?: {
@@ -898,9 +782,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#senddice
-   */
   sendDice(args: {
     emoji?: string;
     disable_notification?: boolean;
@@ -920,9 +801,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#senddocument
-   */
   sendDocument(
     document: F | string,
     args?: {
@@ -950,9 +828,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendsticker
-   */
   sendSticker(
     sticker: F | string,
     args?: {
@@ -976,9 +851,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendvideo
-   */
   sendVideo(
     video: F | string,
     args?: {
@@ -1004,9 +876,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendanimation
-   */
   sendAnimation(
     animation: F | string,
     args?: {
@@ -1037,9 +906,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendvideonote
-   */
   sendVideoNote(
     videoNote: F | string,
     args?: {
@@ -1065,9 +931,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendinvoice
-   */
   sendInvoice(args: {
     title: string;
     description: string;
@@ -1103,9 +966,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendgame
-   */
   sendGame(
     gameShortName: string,
     args: {
@@ -1124,9 +984,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendvoice
-   */
   sendVoice(
     voice: F | string,
     args?: {
@@ -1156,9 +1013,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendpoll
-   */
   sendPoll(
     options: readonly string[],
     args: {
@@ -1192,9 +1046,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#stoppoll
-   */
   stopPoll(args: { message_id: number; reply_markup?: InlineKeyboardMarkup }) {
     return this.bot.stopPoll({
       chat_id: this.chat.id,
@@ -1202,9 +1053,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendlocation
-   */
   sendLocation(
     latitude: number,
     longitude: number,
@@ -1234,9 +1082,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendvenue
-   */
   sendVenue(
     latitude: number,
     longitude: number,
@@ -1269,9 +1114,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendcontact
-   */
   sendContact(
     phoneNumber: string,
     firstName: string,
@@ -1298,17 +1140,10 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @deprecated use {@link Telegram.getStickerSet}
-   * @see https://core.telegram.org/bots/api#getstickerset
-   */
   getStickerSet(name: string) {
     return this.bot.getStickerSet(name);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#setchatstickerset
-   */
   setChatStickerSet(sticker_set_name: string) {
     return this.bot.setChatStickerSet({
       chat_id: this.chat.id,
@@ -1316,20 +1151,10 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#deletechatstickerset
-   */
   deleteChatStickerSet() {
     return this.bot.deleteChatStickerSet(this.chat.id);
   }
 
-  /**
-   * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this
-   * to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a
-   * ForumTopic object.
-   *
-   * @see https://core.telegram.org/bots/api#createforumtopic
-   */
   createForumTopic(args: {
     name: string;
     icon_color?:
@@ -1347,13 +1172,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in
-   * the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the
-   * topic. Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#editforumtopic
-   */
   editForumTopic(args: { name?: string; icon_custom_emoji_id?: string }) {
     return this.bot.editForumTopic({
       chat_id: this.chat.id,
@@ -1362,13 +1180,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat
-   * for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
-   * Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#closeforumtopic
-   */
   closeForumTopic() {
     return this.bot.closeForumTopic({
       chat_id: this.chat.id,
@@ -1376,13 +1187,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat
-   * for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
-   * Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#reopenforumtopic
-   */
   reopenForumTopic() {
     return this.bot.reopenForumTopic({
       chat_id: this.chat.id,
@@ -1390,13 +1194,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an
-   * administrator in the chat for this to work and must have the can_delete_messages administrator rights.
-   * Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#deleteforumtopic
-   */
   deleteForumTopic() {
     return this.bot.deleteForumTopic({
       chat_id: this.chat.id,
@@ -1404,12 +1201,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat
-   * for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#unpinallforumtopicmessages
-   */
   unpinAllForumTopicMessages() {
     return this.bot.unpinAllForumTopicMessages({
       chat_id: this.chat.id,
@@ -1417,12 +1208,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator
-   * in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#editgeneralforumtopic
-   */
   editGeneralForumTopic(name: string) {
     return this.bot.editGeneralForumTopic({
       chat_id: this.chat.id,
@@ -1430,52 +1215,22 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the
-   * chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#closegeneralforumtopic
-   */
   closeGeneralForumTopic() {
     return this.bot.closeGeneralForumTopic(this.chat.id);
   }
 
-  /**
-   * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in
-   * the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically
-   * unhidden if it was hidden. Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#reopengeneralforumtopic
-   */
   reopenGeneralForumTopic() {
     return this.bot.reopenGeneralForumTopic(this.chat.id);
   }
 
-  /**
-   * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat
-   * for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed
-   * if it was open. Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#hidegeneralforumtopic
-   */
   hideGeneralForumTopic() {
     return this.bot.hideGeneralForumTopic(this.chat.id);
   }
 
-  /**
-   * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the
-   * chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
-   *
-   * @see https://core.telegram.org/bots/api#unhidegeneralforumtopic
-   */
   unhideGeneralForumTopic() {
     return this.bot.unhideGeneralForumTopic(this.chat.id);
   }
 
-  /**
-   * @deprecated use {@link Telegram.setStickerPositionInSet}
-   * @see https://core.telegram.org/bots/api#setstickerpositioninset
-   */
   setStickerPositionInSet(sticker: string, position: number) {
     return this.bot.setStickerPositionInSet({
       sticker,
@@ -1483,10 +1238,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @deprecated use {@link Telegram.setStickerSetThumb}
-   * @see https://core.telegram.org/bots/api#setstickersetthumb
-   */
   setStickerSetThumbnail(args: {
     name: string;
     user_id: number;
@@ -1497,17 +1248,10 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @deprecated use {@link Telegram.deleteStickerFromSet}
-   * @see https://core.telegram.org/bots/api#deletestickerfromset
-   */
   deleteStickerFromSet(sticker: string) {
     return this.bot.deleteStickerFromSet(sticker);
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#uploadstickerfile
-   */
   uploadStickerFile(args: {
     sticker_format: "static" | "animated" | "video";
     sticker: any;
@@ -1518,9 +1262,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#createnewstickerset
-   */
   createNewStickerSet(args: {
     name: string;
     title: string;
@@ -1535,38 +1276,23 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#addstickertoset
-   */
-  addStickerToSet(args: { name: string; sticker: InputSticker<any> }) {
+  addStickerToSet(args: { name: string; sticker: InputSticker<F> }) {
     return this.bot.addStickerToSet({
       user_id: this.from.id,
       ...args,
     });
   }
 
-  /**
-   * @deprecated use {@link Telegram.getMyCommands}
-   * @see https://core.telegram.org/bots/api#getmycommands
-   */
   getMyCommands() {
     return this.bot.getMyCommands();
   }
 
-  /**
-   * @deprecated use {@link Telegram.setMyCommands}
-   * @see https://core.telegram.org/bots/api#setmycommands
-   */
   setMyCommands(commands: readonly BotCommand[]) {
     return this.bot.setMyCommands({
       commands,
     });
   }
 
-  /**
-   * @deprecated use {@link Context.replyWithMarkdownV2}
-   * @see https://core.telegram.org/bots/api#sendmessage
-   */
   replyWithMarkdown(
     text: string,
     args?: {
@@ -1590,9 +1316,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendmessage
-   */
   replyWithMarkdownV2(
     text: string,
     args?: {
@@ -1616,9 +1339,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#sendmessage
-   */
   replyWithHTML(
     text: string,
     args?: {
@@ -1642,9 +1362,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#deletemessage
-   */
   deleteMessage(messageId?: number) {
     if (typeof messageId !== "undefined") {
       return this.bot.deleteMessage({
@@ -1659,9 +1376,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#forwardmessage
-   */
   forwardMessage(
     chatId: string | number,
     args: {
@@ -1679,9 +1393,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#copymessage
-   */
   copyMessage(
     chatId: string | number,
     args: {
@@ -1709,9 +1420,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#approvechatjoinrequest
-   */
   approveChatJoinRequest(userId: number) {
     return this.bot.approveChatJoinRequest({
       chat_id: this.chat.id,
@@ -1719,9 +1427,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#declinechatjoinrequest
-   */
   declineChatJoinRequest(userId: number) {
     return this.bot.declineChatJoinRequest({
       chat_id: this.chat.id,
@@ -1729,9 +1434,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#banchatsenderchat
-   */
   banChatSenderChat(senderChatId: number) {
     return this.bot.banChatSenderChat({
       chat_id: this.chat.id,
@@ -1739,9 +1441,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#unbanchatsenderchat
-   */
   unbanChatSenderChat(senderChatId: number) {
     return this.bot.unbanChatSenderChat({
       chat_id: this.chat.id,
@@ -1749,10 +1448,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to change the bot's menu button in the current private chat. Returns true on success.
-   * @see https://core.telegram.org/bots/api#setchatmenubutton
-   */
   setChatMenuButton(menuButton?: MenuButton) {
     return this.bot.setChatMenuButton({
       chat_id: this.chat.id,
@@ -1760,10 +1455,6 @@ class CombinedClass<F> {
     });
   }
 
-  /**
-   * Use this method to get the current value of the bot's menu button in the current private chat. Returns MenuButton on success.
-   * @see https://core.telegram.org/bots/api#getchatmenubutton
-   */
   getChatMenuButton() {
     return this.bot.getChatMenuButton(this.chat.id);
   }
