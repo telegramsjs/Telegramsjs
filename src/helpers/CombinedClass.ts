@@ -1548,7 +1548,7 @@ class CombinedClass<F> {
             const message: any = {
               ...updateProperty,
               chat,
-              client: this,
+              telegram: this.bot,
               reply: (
                 text: string,
                 args?: {
