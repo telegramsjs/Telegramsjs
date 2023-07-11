@@ -1,7 +1,7 @@
 import { TelegramBot } from "./TelegramBot";
 import { BaseClient } from "./BaseClient";
 import { Collection } from "./collection/Collection";
-import { Markup, Keyboard } from "./replyMarkup/index";
+import { Markup } from "./Markup";
 import { MessageCollector } from "./collection/MessageCollector";
 import { Events } from "./constanta/Events";
 import { ChatActionType } from "./constanta/ChatActionType";
@@ -42,7 +42,6 @@ export {
   BaseClient,
   Collection,
   Markup,
-  Keyboard,
   MessageCollector,
   Events,
   ChatActionType,
