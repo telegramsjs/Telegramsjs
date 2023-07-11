@@ -1,6 +1,7 @@
 import { BaseClient } from "./BaseClient";
 import { CombinedClass } from "./helpers/CombinedClass";
 import type { CallbackQuery, Message } from "@telegram.ts/types";
+import { Context } from "./Context";
 
 /**
  * A class representing a Telegram Bot client.
@@ -51,10 +52,10 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    */
   public command(
     command: string | string[],
-    callback: (message: Message.TextMessage, args?: string[]) => void
+    callback: (message: Message.TextMessage & Context<F>, args?: string[]) => void
   ): void {
     if (typeof command === "string") {
-      this.on("message", (message: Message.TextMessage) => {
+      this.on("message", (message) => {
         const args = message.text.split?.(" ");
         const text = message.text;
         if (text && text.startsWith(`/${command}`)) {
@@ -62,7 +63,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
         }
       });
     } else if (Array.isArray(command)) {
-      this.on("message", (message: Message.TextMessage) => {
+      this.on("message", (message) => {
         const args = message.text.split?.(" ");
         const text = message.text;
         if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
@@ -80,7 +81,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    */
   public action(
     data: string | string[],
-    callback: (callbackQuery: CallbackQuery) => void,
+    callback: (callbackQuery: CallbackQuery & Context<F>) => void,
     answer: boolean = false
   ): void {
     if (typeof data === "string") {
