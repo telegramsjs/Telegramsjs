@@ -6,7 +6,7 @@ import type { CallbackQuery, Message } from "@telegram.ts/types";
  * A class representing a Telegram Bot client.
  * @extends BaseClient
  */
-export class TelegramBot<F> extends BaseClient<F> {
+export class TelegramBot<F = Buffer> extends BaseClient<F> {
   token: string = "";
   intents: string[] | number[] | null = null;
   offSetType?: any;
@@ -113,25 +113,12 @@ export class TelegramBot<F> extends BaseClient<F> {
   public async login(): Promise<void> {
     const client = await this.getMe();
 
-    const responseClient = await {
-      ...client,
-      setCommands: this.setMyCommands.bind(this),
-      getCommands: this.getMyCommands.bind(this),
-      deleteCommands: this.deleteMyCommands.bind(this),
-      setDescription: this.setMyDescription.bind(this),
-      getDescription: this.getMyDescription.bind(this),
-      setShortDescription: this.setMyShortDescription.bind(this),
-      getShortDescription: this.getMyShortDescription.bind(this),
-      getName: this.getMyName.bind(this),
-      setName: this.setMyName.bind(this),
-    };
-
     const updatesProcess = new CombinedClass<F>(this);
 
     (async () => {
       this.getMe()
         .then((res) => {
-          this.emit("ready", responseClient);
+          this.emit("ready", client);
         })
         .catch((err) => {
           console.log(err);
