@@ -146,44 +146,39 @@ export class Markup {
     return true;
   }
 
-  public static text(text: string, hide = false): Button {
+  public static text(text: string): Button {
     return {
       text,
-      hide,
     };
   }
 
-  public static contactRequest(text: string, hide = false): Button {
+  public static contactRequest(text: string): Button {
     return {
       text,
       request_contact: true,
-      hide,
     };
   }
 
-  public static locationRequest(text: string, hide = false): Button {
+  public static locationRequest(text: string): Button {
     return {
       text,
       request_location: true,
-      hide,
     };
   }
 
-  public static pollRequest(text: string, type: string, hide = false): Button {
+  public static pollRequest(text: string, type: string): Button {
     return {
       text,
       request_poll: {
         type,
       },
-      hide,
     };
   }
 
   public static userRequest(
     text: string,
     request_id: string,
-    user_is_premium: boolean,
-    hide = false
+    user_is_premium: boolean
   ): Button {
     return {
       text,
@@ -191,30 +186,23 @@ export class Markup {
         request_id,
         user_is_premium,
       },
-      hide,
     };
   }
 
-  public static botRequest(
-    text: string,
-    request_id: string,
-    hide = false
-  ): Button {
+  public static botRequest(text: string, request_id: string): Button {
     return {
       text,
       request_user: {
         request_id,
         user_is_bot: true,
       },
-      hide,
     };
   }
 
   public static groupRequest(
     text: string,
     request_id: string,
-    args: any,
-    hide = false
+    args: any
   ): Button {
     return {
       text,
@@ -223,15 +211,13 @@ export class Markup {
         chat_is_channel: false,
         ...args,
       },
-      hide,
     };
   }
 
   public static channelRequest(
     text: string,
     request_id: string,
-    args: any,
-    hide = false
+    args: any
   ): Button {
     return {
       text,
@@ -240,89 +226,67 @@ export class Markup {
         chat_is_channel: true,
         ...args,
       },
-      hide,
     };
   }
 
-  public static url(text: string, url: string, hide = false): Button {
+  public static url(text: string, url: string): Button {
     return {
       text,
       url,
-      hide,
     };
   }
 
-  public static callback(text: string, data: string, hide = false): Button {
+  public static callback(text: string, data: string): Button {
     return {
       text,
       callback_data: data,
-      hide,
     };
   }
 
-  public static switchToChat(
-    text: string,
-    value: string,
-    hide = false
-  ): Button {
+  public static switchToChat(text: string, value: string): Button {
     return {
       text,
       switch_inline_query: value,
-      hide,
     };
   }
 
-  public static switchToCurrentChat(
-    text: string,
-    value: string,
-    hide = false
-  ): Button {
+  public static switchToCurrentChat(text: string, value: string): Button {
     return {
       text,
       switch_inline_query_current_chat: value,
-      hide,
     };
   }
 
-  public static game(text: string, hide = false): Button {
+  public static game(text: string): Button {
     return {
       text,
       callback_game: {},
-      hide,
     };
   }
 
-  public static pay(text: string, hide = false): Button {
+  public static pay(text: string): Button {
     return {
       text,
       pay: true,
-      hide,
     };
   }
 
-  public static login(
-    text: string,
-    url: string,
-    opts = {},
-    hide = false
-  ): Button {
+  public static login(text: string, url: string, opts = {}): Button {
     return {
       text,
       login_url: {
         ...opts,
         url,
       },
-      hide,
     };
   }
 
-  public static webApp(text: string, url: string, hide = false): Button {
+  public static webApp(text: string, url: string): Button {
     return {
       text,
       web_app: {
         url,
       },
-      hide,
     };
   }
 

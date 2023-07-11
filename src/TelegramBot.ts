@@ -52,7 +52,10 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    */
   public command(
     command: string | string[],
-    callback: (message: Message.TextMessage & Context<F>, args?: string[]) => void
+    callback: (
+      message: Message.TextMessage & Context<F>,
+      args?: string[]
+    ) => void
   ): void {
     if (typeof command === "string") {
       this.on("message", (message) => {
