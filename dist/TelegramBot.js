@@ -28,7 +28,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
      * @param {string | object} [options.offSetType] - The type of offset to use for updates.
      */
     constructor(token, options = {}) {
-        super(token, options.intents || null, options.parseMode, options.chatId, options.queryString, options.offSetType);
+        super(token, options.intents || null);
         this.token = "";
         this.intents = null;
         this.baseUrl = "";
@@ -42,7 +42,6 @@ class TelegramBot extends BaseClient_1.BaseClient {
          * @type {string}
          */
         this.baseUrl = `https://api.telegram.org/bot${this.token}`;
-        this.countCollector = 0;
     }
     /**
      * Defines a command handler.
@@ -82,7 +81,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
             this.on("callback_query", (ctx) => {
                 if (answer) {
                     this.answerCallbackQuery({
-                        callbackQueryId: ctx.id,
+                        callback_query_id: ctx.id,
                     });
                 }
                 if (ctx.data === data) {
@@ -94,7 +93,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
             this.on("callback_query", (ctx) => {
                 if (answer) {
                     this.answerCallbackQuery({
-                        callbackQueryId: ctx.id,
+                        callback_query_id: ctx.id,
                     });
                 }
                 if (data.some((d) => d === ctx.data)) {
@@ -110,7 +109,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.getMe();
             const responseClient = yield Object.assign(Object.assign({}, client), { setCommands: this.setMyCommands.bind(this), getCommands: this.getMyCommands.bind(this), deleteCommands: this.deleteMyCommands.bind(this), setDescription: this.setMyDescription.bind(this), getDescription: this.getMyDescription.bind(this), setShortDescription: this.setMyShortDescription.bind(this), getShortDescription: this.getMyShortDescription.bind(this), getName: this.getMyName.bind(this), setName: this.setMyName.bind(this) });
-            this.updatesProcess = new CombinedClass_1.CombinedClass(this);
+            const updatesProcess = new CombinedClass_1.CombinedClass(this);
             (() => __awaiter(this, void 0, void 0, function* () {
                 this.getMe()
                     .then((res) => {
@@ -120,7 +119,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
                     console.log(err);
                 });
             }))();
-            this.updatesProcess.processUpdate();
+            updatesProcess.processUpdate();
         });
     }
 }

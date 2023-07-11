@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorExtension = exports.ErrorTable = exports.ParameterError = exports.BitFieldError = exports.IntentsError = exports.TelegramTokenError = exports.EventError = exports.TelegramApiError = void 0;
+exports.ErrorExtension = exports.ErrorTable = exports.ParameterError = exports.BitFieldError = exports.IntentsError = exports.EventError = exports.TelegramApiError = void 0;
 /**
  * Custom error class for errors returned by the Telegram Bot API
  * @extends Error
@@ -10,10 +10,12 @@ class TelegramApiError extends Error {
      * Creates a new instance of the TelegramApiError class
      * @param {string | object} error - The error message returned by the Telegram Bot API
      */
-    constructor(error) {
+    constructor(error, method) {
         var _a, _b, _c, _d, _e, _f;
-        let message = { description: "" };
-        if (error.error_code !== undefined) {
+        let message = {
+            description: "",
+        };
+        if ((error === null || error === void 0 ? void 0 : error.error_code) !== undefined) {
             message.description = (((_d = (_c = (_b = (_a = error.description) === null || _a === void 0 ? void 0 : _a.replace("Bad Request: ", "")) === null || _b === void 0 ? void 0 : _b.replace("can't parse entities:", "")) === null || _c === void 0 ? void 0 : _c.replace("Conflict: ", "")) === null || _d === void 0 ? void 0 : _d.replace("can't parse BotCommand: ", "")) || "").toLowerCase();
         }
         else if (typeof error === "string") {
@@ -23,9 +25,10 @@ class TelegramApiError extends Error {
             message.description = error.description || "unknown error";
         }
         super(message.description);
-        this.name = `TelegramApiError[${(_e = error === null || error === void 0 ? void 0 : error.error_code) !== null && _e !== void 0 ? _e : 0}]`;
-        this.code = (_f = error === null || error === void 0 ? void 0 : error.error_code) !== null && _f !== void 0 ? _f : 0;
-        this.ok = error === null || error === void 0 ? void 0 : error.ok;
+        this.name = `TelegramApiError[${(_e = error.error_code) !== null && _e !== void 0 ? _e : 0}]`;
+        this.method = method;
+        this.code = (_f = error.error_code) !== null && _f !== void 0 ? _f : 0;
+        this.ok = error.ok;
     }
 }
 exports.TelegramApiError = TelegramApiError;
@@ -43,20 +46,6 @@ class EventError extends Error {
     }
 }
 exports.EventError = EventError;
-/**
- * Custom error class for errors related to Telegram tokens
- * @extends Error
- */
-class TelegramTokenError extends Error {
-    /**
-     * Creates a new instance of the TelegramTokenError class
-     * @param {string} error - The error message
-     */
-    constructor(error) {
-        super(error);
-    }
-}
-exports.TelegramTokenError = TelegramTokenError;
 /**
  * Custom error class for errors related to bit fields
  * @extends Error

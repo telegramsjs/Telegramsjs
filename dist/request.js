@@ -31,15 +31,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Request = void 0;
-const https = __importStar(require("https"));
+const axios_1 = __importDefault(require("axios"));
 const querystring = __importStar(require("querystring"));
 const errorcollection_1 = require("./errorcollection");
 const events_1 = require("events");
 const IntentsBitField_1 = require("./IntentsBitField");
-const Collection_1 = require("./collection/Collection");
-const lastTimeMap = new Collection_1.Collection();
 /**
  * Represents a request object for making requests to the Telegram Bot API.
  * @extends EventEmitter
@@ -53,34 +54,12 @@ class Request extends events_1.EventEmitter {
      * @param {string | boolean | object} [offSetType] - The type of offset to use for updates.
      * @param {string} [options.parseMode] - The parse mode for message formatting.
      */
-    constructor(token, intents, queryString, offSetType, parseMode) {
+    constructor(token, intents) {
         super();
         this.startTime = Date.now();
         this.token = token;
         this.baseUrl = `https://api.telegram.org/bot${this.token}`;
         this.offset = 0;
-        this.queryString = queryString !== null && queryString !== void 0 ? queryString : "application/x-www-form-urlencoded";
-        this.offSetType = offSetType !== null && offSetType !== void 0 ? offSetType : "time";
-        this.parseMode = parseMode;
-        if (this.offSetType == "time") {
-            this.lastTimeMap = lastTimeMap;
-        }
-        else if (this.offSetType instanceof Collection_1.Collection) {
-            this.lastTimeMap = this.offSetType;
-        }
-        else if (this.offSetType === false) {
-            lastTimeMap.set("lastTime", true);
-            this.lastTimeMap = lastTimeMap;
-        }
-        else if (this.offSetType === "auto") {
-            lastTimeMap.set("lastTime", "auto");
-            this.lastTimeMap = lastTimeMap;
-        }
-        if (this.offSetType === false || this.offSetType === "time") {
-            setTimeout(() => {
-                lastTimeMap.set("lastTime", true);
-            }, 3000);
-        }
         if (typeof intents === "number") {
             this.intents = (0, IntentsBitField_1.decodeIntents)(new IntentsBitField_1.IntentsBitField(intents));
         }
@@ -93,7 +72,6 @@ class Request extends events_1.EventEmitter {
         else {
             this.intents = null;
         }
-        this.lastTimeMap = lastTimeMap;
     }
     /**
      * Gets the updates from the Telegram Bot API.
@@ -116,13 +94,7 @@ class Request extends events_1.EventEmitter {
                 this.last_object = updates[0];
                 this.offset = updates[updates.length - 1].update_id + 1;
             }
-            if ((response === null || response === void 0 ? void 0 : response.error_code) === 401) {
-                throw new errorcollection_1.TelegramTokenError("invalid token of telegrams bot");
-            }
-            else if ((response === null || response === void 0 ? void 0 : response.error_code) !== undefined) {
-                throw new errorcollection_1.TelegramApiError(response.description);
-            }
-            return updates !== null && updates !== void 0 ? updates : [];
+            return Array.isArray(updates) ? updates : [];
         });
     }
     /**
@@ -130,40 +102,33 @@ class Request extends events_1.EventEmitter {
      * @async
      * @param {string} method - The API method to call.
      * @param {object} params - The parameters to include in the API call.
-     * @returns {Promise.<object>} The response from the API call.
+     * @returns {Promise.<Update>} The response from the API call.
      */
     request(method, params) {
         return __awaiter(this, void 0, void 0, function* () {
             const url = `${this.baseUrl}/${method}`;
-            const data = querystring.stringify(params);
-            return new Promise((resolve, reject) => {
-                const options = {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": this.queryString,
-                        "Content-Length": data.length.toString(),
-                    },
-                };
-                const req = https.request(url, options, (res) => {
-                    let response = "";
-                    res.on("data", (chunk) => {
-                        response += chunk;
-                    });
-                    res.on("end", () => {
-                        try {
-                            resolve(JSON.parse(response));
-                        }
-                        catch (error) {
-                            reject(error);
-                        }
-                    });
-                });
-                req.on("error", (error) => {
-                    reject(error);
-                });
-                req.write(data);
-                req.end();
-            });
+            let paramsType;
+            if (params) {
+                const formattedParams = params;
+                paramsType = querystring.stringify(formattedParams);
+            }
+            const options = {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            };
+            try {
+                const response = yield axios_1.default.post(url, paramsType, options);
+                return response.data;
+            }
+            catch (error) {
+                let telegramError = error;
+                telegramError.response.data.error_code === 404
+                    ? (telegramError.response.data.description =
+                        "invalid token of telegrams bot")
+                    : telegramError.response.data.description;
+                throw new errorcollection_1.TelegramApiError(telegramError.response.data, method);
+            }
         });
     }
     /**
@@ -198,7 +163,7 @@ class Request extends events_1.EventEmitter {
     }
     /**
      * Gets the last object received.
-     * @returns {object} The last received object.
+     * @returns {Update} The last received object.
      */
     get lastObject() {
         return this.last_object;
@@ -218,41 +183,14 @@ class Request extends events_1.EventEmitter {
      * @param {string[] | number[] | null} intents - The intents to set.
      * @returns {boolean} - Returns true if the intents were set successfully.
      */
-    setIntents(intents = null) {
+    setIntents(intents) {
         this.intents = intents;
         return true;
     }
     /**
-     * Set the parse mode for the bot.
-     * @param {string | undefined} parseMode - The parse mode to set.
-     * @returns {boolean} - Returns true if the parse mode was set successfully.
-     */
-    setParseMode(parseMode) {
-        this.parseMode = parseMode;
-        return true;
-    }
-    /**
-     * Set the chat ID for the bot.
-     * @param {string | number } chatId - The chat ID to set.
-     * @returns {string | number} - Returns the chat ID that was set.
-     */
-    setChatId(chatId) {
-        this.chatId = chatId;
-        return chatId;
-    }
-    /**
-     * Set the query string for the bot.
-     * @param {string} queryString - The query string to set.
-     * @returns {boolean} - Returns true if the query string was set successfully.
-     */
-    setQueryString(queryString) {
-        this.queryString = queryString;
-        return true;
-    }
-    /**
      * Set the offset type for the bot.
-     * @param {string | boolean | object | undefined} offSetType - The offset type to set.
-     * @returns {string} - Returns the offset type that was set.
+     * @param {any} offSetType - The offset type to set.
+     * @returns {any} - Returns the offset type that was set.
      */
     setOffSetType(offSetType) {
         this.offSetType = offSetType !== null && offSetType !== void 0 ? offSetType : "time";

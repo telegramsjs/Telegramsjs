@@ -1,20 +1,16 @@
 import { BaseClient } from "./BaseClient";
 import { CombinedClass } from "./helpers/CombinedClass";
-import { type CallbackQuery, type Message } from "@grammyjs/types";
+import type { CallbackQuery, Message } from "@telegram.ts/types";
 /**
  * A class representing a Telegram Bot client.
  * @extends BaseClient
  */
-export declare class TelegramBot extends BaseClient {
+export declare class TelegramBot<F> extends BaseClient<F> {
     token: string;
     intents: string[] | number[] | null;
-    parseMode?: string;
-    chatId?: string | number;
-    queryString?: string;
     offSetType?: any;
     baseUrl: string;
-    countCollector?: number;
-    updatesProcess?: CombinedClass;
+    updatesProcess?: CombinedClass<F>;
     /**
      * Creates a new TelegramBot client.
      * @param {string} token - The Telegram Bot API token.
@@ -27,10 +23,6 @@ export declare class TelegramBot extends BaseClient {
      */
     constructor(token: string, options?: {
         intents?: readonly string[] | number[] | null;
-        parseMode?: string;
-        chatId?: string | number;
-        queryString?: string;
-        offSetType?: any;
     });
     /**
      * Defines a command handler.

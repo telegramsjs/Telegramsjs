@@ -3,17 +3,18 @@
  * @extends Error
  */
 declare class TelegramApiError extends Error {
-    code?: number;
-    ok?: boolean;
+    code: number;
+    ok: boolean;
+    method: string;
     /**
      * Creates a new instance of the TelegramApiError class
      * @param {string | object} error - The error message returned by the Telegram Bot API
      */
     constructor(error: {
-        error_code?: number;
-        description?: string;
-        ok?: boolean;
-    });
+        error_code: number;
+        description: string;
+        ok: boolean;
+    }, method: string);
 }
 /**
  * Custom error class for errors related to event handling
@@ -22,17 +23,6 @@ declare class TelegramApiError extends Error {
 declare class EventError extends Error {
     /**
      * Creates a new instance of the EventError class
-     * @param {string} error - The error message
-     */
-    constructor(error: string);
-}
-/**
- * Custom error class for errors related to Telegram tokens
- * @extends Error
- */
-declare class TelegramTokenError extends Error {
-    /**
-     * Creates a new instance of the TelegramTokenError class
      * @param {string} error - The error message
      */
     constructor(error: string);
@@ -92,5 +82,5 @@ declare class ErrorExtension extends Error {
      */
     constructor(error: string);
 }
-export { TelegramApiError, EventError, TelegramTokenError, IntentsError, BitFieldError, ParameterError, ErrorTable, ErrorExtension, };
+export { TelegramApiError, EventError, IntentsError, BitFieldError, ParameterError, ErrorTable, ErrorExtension, };
 //# sourceMappingURL=errorcollection.d.ts.map

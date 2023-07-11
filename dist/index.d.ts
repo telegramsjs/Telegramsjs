@@ -1,7 +1,7 @@
 import { TelegramBot } from "./TelegramBot";
 import { BaseClient } from "./BaseClient";
 import { Collection } from "./collection/Collection";
-import { Markup, Keyboard } from "./replyMarkup/index";
+import { Markup } from "./Markup";
 import { MessageCollector } from "./collection/MessageCollector";
 import { Events } from "./constanta/Events";
 import { ChatActionType } from "./constanta/ChatActionType";
@@ -17,5 +17,5 @@ import { TelegramIntentBits } from "./constanta/TelegramIntentBits";
 import { html, markdownv } from "./formatters/index";
 import { checkMessageLinks, extractUserMentions, extractHashtags, checkLocation, checkUserMentions, checkHashtags, checkPhoneNumber, extractUserIdFromLink, checkGroupOrChannel, checkEmoji, checkSticker, extractUsernameFromLink, checkBot, checkChannel, checkLink, checkGroup, checkUsername, extractUsername } from "./Util";
 declare const version = "1.5.0";
-export { TelegramBot, BaseClient, Collection, Markup, Keyboard, MessageCollector, Events, ChatActionType, EntityType, QueryString, ChatPermission, GroupPermission, GroupStatus, DocumentTypes, IntentsBitField, decodeIntents, IntentBits, TelegramIntentBits, html, markdownv, checkMessageLinks, extractUserMentions, extractHashtags, checkLocation, checkUserMentions, checkHashtags, checkPhoneNumber, extractUserIdFromLink, checkGroupOrChannel, checkEmoji, checkSticker, extractUsernameFromLink, checkBot, checkChannel, checkLink, checkGroup, checkUsername, extractUsername, version, };
+export { TelegramBot, BaseClient, Collection, Markup, MessageCollector, Events, ChatActionType, EntityType, QueryString, ChatPermission, GroupPermission, GroupStatus, DocumentTypes, IntentsBitField, decodeIntents, IntentBits, TelegramIntentBits, html, markdownv, checkMessageLinks, extractUserMentions, extractHashtags, checkLocation, checkUserMentions, checkHashtags, checkPhoneNumber, extractUserIdFromLink, checkGroupOrChannel, checkEmoji, checkSticker, extractUsernameFromLink, checkBot, checkChannel, checkLink, checkGroup, checkUsername, extractUsername, version, };
 //# sourceMappingURL=index.d.ts.map
