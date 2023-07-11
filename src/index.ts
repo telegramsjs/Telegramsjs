@@ -79,6 +79,4 @@ export {
   version,
 };
 
-import { ContextFun } from "./ContextFun";
-
-export { ContextFun };
+export { Context } from "./Context";
