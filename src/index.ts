@@ -3,6 +3,7 @@ import { BaseClient } from "./BaseClient";
 import { Collection } from "./collection/Collection";
 import { Markup } from "./Markup";
 import { MessageCollector } from "./collection/MessageCollector";
+import { CombinedClass } from "./helpers/CombinedClass";
 import { Events } from "./constanta/Events";
 import { ChatActionType } from "./constanta/ChatActionType";
 import { EntityType } from "./constanta/EntityType";
@@ -77,3 +78,7 @@ export {
   extractUsername,
   version,
 };
+
+import { ContextFun } from "./ContextFun";
+
+export { ContextFun };

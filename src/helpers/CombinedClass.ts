@@ -1241,7 +1241,7 @@ class CombinedClass<F> {
   setStickerSetThumbnail(args: {
     name: string;
     user_id: number;
-    thumbnail?: any;
+    thumbnail?: F;
   }) {
     return this.bot.setStickerSetThumbnail({
       ...args,
@@ -1254,7 +1254,7 @@ class CombinedClass<F> {
 
   uploadStickerFile(args: {
     sticker_format: "static" | "animated" | "video";
-    sticker: any;
+    sticker: F;
   }) {
     return this.bot.uploadStickerFile({
       user_id: this.from.id,
@@ -1265,7 +1265,7 @@ class CombinedClass<F> {
   createNewStickerSet(args: {
     name: string;
     title: string;
-    stickers: InputSticker<any>[];
+    stickers: InputSticker<F>[];
     sticker_format: "static" | "animated" | "video";
     sticker_type?: "regular" | "mask" | "custom_emoji";
     needs_repainting?: boolean;
