@@ -782,7 +782,7 @@ class CombinedClass<F> {
     });
   }
 
-  sendDice(args: {
+  sendDice(args?: {
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
@@ -968,7 +968,7 @@ class CombinedClass<F> {
 
   sendGame(
     gameShortName: string,
-    args: {
+    args?: {
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -1144,10 +1144,10 @@ class CombinedClass<F> {
     return this.bot.getStickerSet(name);
   }
 
-  setChatStickerSet(sticker_set_name: string) {
+  setChatStickerSet(stickerSetName: string) {
     return this.bot.setChatStickerSet({
       chat_id: this.chat.id,
-      sticker_set_name,
+      sticker_set_name: stickerSetName,
     });
   }
 
@@ -1172,7 +1172,7 @@ class CombinedClass<F> {
     });
   }
 
-  editForumTopic(args: { name?: string; icon_custom_emoji_id?: string }) {
+  editForumTopic(args?: { name?: string; icon_custom_emoji_id?: string }) {
     return this.bot.editForumTopic({
       chat_id: this.chat.id,
       message_thread_id: this.updates.message_thread_id,

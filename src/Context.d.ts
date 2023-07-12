@@ -314,7 +314,7 @@ export type Context<F = Buffer> = {
     }
   ): Promise<Message.AudioMessage>;
 
-  sendDice(args: {
+  sendDice(args?: {
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
@@ -453,7 +453,7 @@ export type Context<F = Buffer> = {
 
   sendGame(
     gameShortName: string,
-    args: {
+    args?: {
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -578,7 +578,7 @@ export type Context<F = Buffer> = {
 
   getStickerSet(name: string): Promise<StickerSet>;
 
-  setChatStickerSet(sticker_set_name: string): Promise<boolean>;
+  setChatStickerSet(stickerSetName: string): Promise<boolean>;
 
   deleteChatStickerSet(): Promise<boolean>;
 
@@ -594,7 +594,7 @@ export type Context<F = Buffer> = {
     icon_custom_emoji_id?: string;
   }): Promise<ForumTopic>;
 
-  editForumTopic(args: {
+  editForumTopic(args?: {
     name?: string;
     icon_custom_emoji_id?: string;
   }): Promise<boolean>;
