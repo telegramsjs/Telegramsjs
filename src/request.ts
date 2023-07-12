@@ -3,7 +3,7 @@ import * as querystring from "querystring";
 import { TelegramApiError, IntentsError } from "./errorcollection";
 import { EventEmitter } from "events";
 import { decodeIntents, IntentsBitField } from "./IntentsBitField";
-import type { Update, GetUpdates } from "@telegram.ts/types";
+import { Update } from "@telegram.ts/types";
 
 type TelegramApiResponse = {
   error_code?: number;
@@ -20,8 +20,7 @@ export class Request extends EventEmitter {
   token: string;
   baseUrl: string;
   offset: number;
-  offSetType?: any;
-  intents?: readonly string[] | number[] | null;
+  intents?: string[] | number[] | number | null;
   startTime: number = Date.now();
   update_id?: number;
   last_object?: Update;
@@ -29,12 +28,9 @@ export class Request extends EventEmitter {
   /**
    * Constructs a new Request object.
    * @param {string} [token] - The API token for the bot.
-   * @param {string[] | number[] | null} [intents] - The types of updates the bot is interested in.
-   * @param {string} [queryString] - The type of query string to use for requests.
-   * @param {string | boolean | object} [offSetType] - The type of offset to use for updates.
-   * @param {string} [options.parseMode] - The parse mode for message formatting.
+   * @param {string[] | number[] | number | null} [intents] - The types of updates the bot is interested in.
    */
-  constructor(token: string, intents?: readonly string[] | number[] | null) {
+  constructor(token: string, intents?: string[] | number[] | number | null) {
     super();
     this.token = token;
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
@@ -54,28 +50,18 @@ export class Request extends EventEmitter {
   /**
    * Gets the updates from the Telegram Bot API.
    * @async
-   * @returns {Promise.<Array.<object>>} An array of updates.
+   * @returns {Promise.<Array.<Update>>} An array of updates.
    * @throws {TelegramTokenError} When the token is invalid.
    * @throws {TelegramApiError} When an error occurs with the Telegram Bot API.
    */
   async getUpdates(): Promise<Update[]> {
     this.startTime = Date.now();
-    const params: Record<
-      string,
-      | string
-      | number
-      | boolean
-      | readonly string[]
-      | readonly number[]
-      | readonly boolean[]
-      | null
-    > = {
+    const params: {
+      offset: number;
+      allowed_updates?: string[] | number[] | number | null;
+    } = {
       offset: this.offset,
-      allowed_updates: this.intents as
-        | readonly string[]
-        | readonly number[]
-        | readonly boolean[]
-        | null,
+      allowed_updates: this.intents,
     };
 
     const response = await this.request("getUpdates", params);
@@ -95,7 +81,7 @@ export class Request extends EventEmitter {
    * @async
    * @param {string} method - The API method to call.
    * @param {object} params - The parameters to include in the API call.
-   * @returns {Promise.<Update>} The response from the API call.
+   * @returns {Promise.<TelegramApiResponse>} The response from the API call.
    */
   async request(method: string, params?: object): Promise<TelegramApiResponse> {
     const url = `${this.baseUrl}/${method}`;
@@ -114,6 +100,7 @@ export class Request extends EventEmitter {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };
+
     try {
       const response = await axios.post(url, paramsType, options);
       return response.data;
@@ -127,10 +114,12 @@ export class Request extends EventEmitter {
           };
         };
       };
-      telegramError.response.data.error_code === 404
-        ? (telegramError.response.data.description =
-            "invalid token of telegrams bot")
-        : telegramError.response.data.description;
+
+      if (telegramError.response.data.error_code === 404) {
+        telegramError.response.data.description =
+          "Invalid token for Telegram bot";
+      }
+
       throw new TelegramApiError(telegramError.response.data, method);
     }
   }
@@ -147,7 +136,7 @@ export class Request extends EventEmitter {
   /**
    * Gets the ping latency of the bot.
    * @async
-   * @returns {number | undefined} The ping latency in milliseconds.
+   * @returns {Promise.<number>} The ping latency in milliseconds.
    */
   async ping(): Promise<number> {
     const startTime = Date.now();
@@ -186,21 +175,11 @@ export class Request extends EventEmitter {
 
   /**
    * Set the intents for the bot.
-   * @param {string[] | number[] | null} intents - The intents to set.
+   * @param {string[] | number[] | number | null} intents - The intents to set.
    * @returns {boolean} - Returns true if the intents were set successfully.
    */
-  setIntents(intents: string[] | number[]): boolean {
+  setIntents(intents?: string[] | number[] | number | null): boolean {
     this.intents = intents;
     return true;
-  }
-
-  /**
-   * Set the offset type for the bot.
-   * @param {any} offSetType - The offset type to set.
-   * @returns {any} - Returns the offset type that was set.
-   */
-  setOffSetType(offSetType: any): any {
-    this.offSetType = offSetType ?? "time";
-    return this.offSetType;
   }
 }

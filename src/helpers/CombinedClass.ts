@@ -186,123 +186,82 @@ class CombinedClass<F> {
     );
   }
 
-  get me() {
+  get me(): string | undefined {
     const me = this.botInfo?.username;
-    if (!me) {
-      throw new Error("getMe is not available");
-    }
     return me;
   }
 
-  get messageId() {
+  get messageId(): number | undefined {
     const messageId = this.updates.message_id;
-    if (!messageId) {
-      throw new Error("messageId is not available");
-    }
     return messageId;
   }
 
-  get editedMessage() {
+  get editedMessage():
+    | (Message & Update.Edited & Update.NonChannel)
+    | undefined {
     const editedMessage = this.updates?.edited_message;
-    if (!editedMessage) {
-      throw new Error("editedMessage is not available");
-    }
     return editedMessage;
   }
 
-  get inlineQuery() {
+  get inlineQuery(): InlineQuery | undefined {
     const inlineQuery = this.updates?.inline_query;
-    if (!inlineQuery) {
-      throw new Error("inlineQuery is not available");
-    }
     return inlineQuery;
   }
 
-  get shippingQuery() {
+  get shippingQuery(): ShippingQuery | undefined {
     const shippingQuery = this.updates?.shipping_query;
-    if (!shippingQuery) {
-      throw new Error("shippingQuery is not available");
-    }
     return shippingQuery;
   }
 
-  get preCheckoutQuery() {
+  get preCheckoutQuery(): PreCheckoutQuery | undefined {
     const preCheckoutQuery = this.updates?.pre_checkout_query;
-    if (!preCheckoutQuery) {
-      throw new Error("preCheckoutQuery is not available");
-    }
     return preCheckoutQuery;
   }
 
-  get chosenInlineResult() {
+  get chosenInlineResult(): ChosenInlineResult | undefined {
     const chosenInlineResult = this.updates?.chosen_inline_result;
-    if (!chosenInlineResult) {
-      throw new Error("chosenInlineResult is not available");
-    }
     return chosenInlineResult;
   }
 
-  get channelPost() {
+  get channelPost(): (Message & Update.Channel) | undefined {
     const channelPost = this.updates?.channel_post;
-    if (!channelPost) {
-      throw new Error("channelPost is not available");
-    }
     return channelPost;
   }
 
-  get editedChannelPost() {
+  get editedChannelPost():
+    | (Message & Update.Edited & Update.Channel)
+    | undefined {
     const editedChannelPost = this.updates?.edited_channel_post;
-    if (!editedChannelPost) {
-      throw new Error("editedChannelPost is not available");
-    }
     return editedChannelPost;
   }
 
-  get callbackQuery(): CallbackQuery {
+  get callbackQuery(): CallbackQuery | undefined {
     const callbackQuery = this.updates?.callback_query;
-    if (!callbackQuery) {
-      throw new Error("CallbackQuery is not available");
-    }
     return callbackQuery;
   }
 
-  get poll(): Poll {
+  get poll(): Poll | undefined {
     const poll = this.updates?.poll;
-    if (!poll) {
-      throw new Error("Poll is not available");
-    }
     return poll;
   }
 
-  get pollAnswer(): PollAnswer {
-    const pollAnswer = this.updates.poll_answer;
-    if (!pollAnswer) {
-      throw new Error("PollAnswer is not available");
-    }
+  get pollAnswer(): PollAnswer | undefined {
+    const pollAnswer = this.updates?.poll_answer;
     return pollAnswer;
   }
 
-  get myChatMember() {
+  get myChatMember(): ChatMemberUpdated | undefined {
     const myChatMember = this.updates?.my_chat_member;
-    if (!myChatMember) {
-      throw new Error("myChatMember is not available");
-    }
     return myChatMember;
   }
 
-  get chatMember() {
+  get chatMember(): ChatMemberUpdated | undefined {
     const chatMember = this.updates?.chat_member;
-    if (!chatMember) {
-      throw new Error("chatMember is not available");
-    }
     return chatMember;
   }
 
-  get chatJoinRequest() {
+  get chatJoinRequest(): ChatJoinRequest | undefined {
     const chatJoinRequest = this.updates?.chat_join_request;
-    if (!chatJoinRequest) {
-      throw new Error("chatJoinRequest is not available");
-    }
     return chatJoinRequest;
   }
 
@@ -321,9 +280,6 @@ class CombinedClass<F> {
 
   get senderChat() {
     const senderChat = this.updates?.sender_chat;
-    if (!senderChat) {
-      throw new Error("senderChat is not available");
-    }
     return senderChat;
   }
 
@@ -360,6 +316,10 @@ class CombinedClass<F> {
     return this.updates?.passport_data;
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#answerinlinequery
+   */
+
   answerInlineQuery(args: {
     results: readonly InlineQueryResult[];
     cache_time?: number;
@@ -368,11 +328,14 @@ class CombinedClass<F> {
     button?: InlineQueryResultsButton;
   }) {
     return this.bot.answerInlineQuery({
-      inline_query_id: this.inlineQuery.id,
+      inline_query_id: this.inlineQuery?.id as string,
       ...args,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#answercallbackquery
+   */
   answerCallbackQuery(args?: {
     text?: string;
     show_alert?: boolean;
@@ -380,29 +343,38 @@ class CombinedClass<F> {
     cache_time?: number;
   }) {
     return this.bot.answerCallbackQuery({
-      callback_query_id: this.callbackQuery.id,
+      callback_query_id: this.callbackQuery?.id as string,
       ...args,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#answershippingquery
+   */
   answerShippingQuery(args: {
     ok: boolean;
     shipping_options?: readonly ShippingOption[];
     error_message?: string;
   }) {
     return this.bot.answerShippingQuery({
-      shipping_query_id: this.shippingQuery.id,
+      shipping_query_id: this.shippingQuery?.id as string,
       ...args,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#answerprecheckoutquery
+   */
   answerPreCheckoutQuery(args: { ok: boolean; error_message?: string }) {
     return this.bot.answerPreCheckoutQuery({
-      pre_checkout_query_id: this.preCheckoutQuery.id,
+      pre_checkout_query_id: this.preCheckoutQuery?.id as string,
       ...args,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editmessagetext
+   */
   editMessageText(
     text: string,
     args?: {
@@ -422,6 +394,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editmessagecaption
+   */
   editMessageCaption(
     caption?: string,
     args?: {
@@ -439,6 +414,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editmessagemedia
+   */
   editMessageMedia(media: InputMedia<F>, reply_markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageMedia({
       chat_id: this.chat?.id,
@@ -449,6 +427,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editmessagereplymarkup
+   */
   editMessageReplyMarkup(markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageReplyMarkup({
       chat_id: this.chat?.id,
@@ -458,6 +439,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editmessagelivelocation
+   */
   editMessageLiveLocation(replyMarkup?: InlineKeyboardMarkup) {
     return this.bot.editMessageLiveLocation({
       chat_id: this.chat?.id,
@@ -467,6 +451,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#stopmessagelivelocation
+   */
   stopMessageLiveLocation(
     latitude: number,
     longitude: number,
@@ -487,6 +474,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendmessage
+   */
   sendMessage(
     text: string,
     args?: {
@@ -512,14 +502,23 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#getchat
+   */
   getChat() {
     return this.bot.getChat(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#exportchatinvitelink
+   */
   exportChatInviteLink() {
     return this.bot.exportChatInviteLink(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#createchatinvitelink
+   */
   createChatInviteLink(args?: {
     name?: string;
     expire_date?: number;
@@ -532,6 +531,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editchatinvitelink
+   */
   editChatInviteLink(args: {
     invite_link: string;
     name?: string;
@@ -545,6 +547,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#revokechatinvitelink
+   */
   revokeChatInviteLink(invite_link: string) {
     return this.bot.revokeChatInviteLink({
       chat_id: this.chat.id,
@@ -552,6 +557,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#banchatmember
+   */
   banChatMember(
     userId: number,
     args?: {
@@ -566,10 +574,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#kickchatmember
+   */
   get kickChatMember() {
     return this.banChatMember;
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#unbanchatmember
+   */
   unbanChatMember(userId: number, onlyIfBanned?: boolean) {
     return this.bot.unbanChatMember({
       chat_id: this.chat.id,
@@ -578,6 +592,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#restrictchatmember
+   */
   restrictChatMember(args: {
     user_id: number;
     permissions: ChatPermissions;
@@ -590,6 +607,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#promotechatmember
+   */
   promoteChatMember(
     userId: number,
     args?: {
@@ -614,6 +634,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setchatadministratorcustomtitle
+   */
   setChatAdministratorCustomTitle(args: {
     user_id: number;
     custom_title: string;
@@ -624,6 +647,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setchatphoto
+   */
   setChatPhoto(photo: F) {
     return this.bot.setChatPhoto({
       chat_id: this.chat.id,
@@ -631,10 +657,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#deletechatphoto
+   */
   deleteChatPhoto() {
     return this.bot.deleteChatPhoto(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setchattitle
+   */
   setChatTitle(title: string) {
     return this.bot.setChatTitle({
       chat_id: this.chat.id,
@@ -642,6 +674,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setchatdescription
+   */
   setChatDescription(description: string) {
     return this.bot.setChatDescription({
       chat_id: this.chat.id,
@@ -649,6 +684,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#pinchatmessage
+   */
   pinChatMessage(messageId: number, disableNotification?: boolean) {
     return this.bot.pinChatMessage({
       chat_id: this.chat.id,
@@ -657,6 +695,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#unpinchatmessage
+   */
   unpinChatMessage(messageId: number) {
     return this.bot.unpinChatMessage({
       chat_id: this.chat.id,
@@ -664,14 +705,23 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#unpinallchatmessages
+   */
   unpinAllChatMessages() {
     return this.bot.unpinAllChatMessages(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#leavechat
+   */
   leaveChat() {
     return this.bot.leaveChat(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setchatpermissions
+   */
   setChatPermissions(
     permissions: ChatPermissions,
     use_independent_chat_permissions?: boolean
@@ -683,10 +733,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#getchatadministrators
+   */
   getChatAdministrators() {
     return this.bot.getChatAdministrators(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#getchatmember
+   */
   getChatMember(userId: number) {
     return this.bot.getChatMember({
       chat_id: this.chat.id,
@@ -694,10 +750,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#getchatmemberscount
+   */
   getChatMembersCount() {
     return this.bot.getChatMemberCount(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setpassportdataerrors
+   */
   setPassportDataErrors(errors: readonly PassportElementError[]) {
     return this.bot.setPassportDataErrors({
       user_id: this.from.id,
@@ -705,6 +767,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendphoto
+   */
   sendPhoto(
     photo: F | string,
     args?: {
@@ -731,6 +796,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendmediagroup
+   */
   sendMediaGroup(
     media: ReadonlyArray<
       | InputMediaAudio<F>
@@ -753,6 +821,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendaudio
+   */
   sendAudio(
     audio: F | string,
     args?: {
@@ -782,6 +853,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#senddice
+   */
   sendDice(args?: {
     emoji?: string;
     disable_notification?: boolean;
@@ -801,6 +875,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#senddocument
+   */
   sendDocument(
     document: F | string,
     args?: {
@@ -828,6 +905,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendsticker
+   */
   sendSticker(
     sticker: F | string,
     args?: {
@@ -851,6 +931,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendvideo
+   */
   sendVideo(
     video: F | string,
     args?: {
@@ -876,6 +959,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendanimation
+   */
   sendAnimation(
     animation: F | string,
     args?: {
@@ -906,6 +992,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendvideonote
+   */
   sendVideoNote(
     videoNote: F | string,
     args?: {
@@ -931,6 +1020,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendinvoice
+   */
   sendInvoice(args: {
     title: string;
     description: string;
@@ -966,6 +1058,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendgame
+   */
   sendGame(
     gameShortName: string,
     args?: {
@@ -984,6 +1079,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendvoice
+   */
   sendVoice(
     voice: F | string,
     args?: {
@@ -1013,6 +1111,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendpoll
+   */
   sendPoll(
     options: readonly string[],
     args: {
@@ -1046,6 +1147,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#stoppoll
+   */
   stopPoll(args: { message_id: number; reply_markup?: InlineKeyboardMarkup }) {
     return this.bot.stopPoll({
       chat_id: this.chat.id,
@@ -1053,6 +1157,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendlocation
+   */
   sendLocation(
     latitude: number,
     longitude: number,
@@ -1082,6 +1189,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendvenue
+   */
   sendVenue(
     latitude: number,
     longitude: number,
@@ -1114,6 +1224,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendcontact
+   */
   sendContact(
     phoneNumber: string,
     firstName: string,
@@ -1140,10 +1253,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#getstickerset
+   */
   getStickerSet(name: string) {
     return this.bot.getStickerSet(name);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setchatstickerset
+   */
   setChatStickerSet(stickerSetName: string) {
     return this.bot.setChatStickerSet({
       chat_id: this.chat.id,
@@ -1151,10 +1270,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#deletechatstickerset
+   */
   deleteChatStickerSet() {
     return this.bot.deleteChatStickerSet(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#createforumtopic
+   */
   createForumTopic(args: {
     name: string;
     icon_color?:
@@ -1172,6 +1297,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editforumtopic
+   */
   editForumTopic(args?: { name?: string; icon_custom_emoji_id?: string }) {
     return this.bot.editForumTopic({
       chat_id: this.chat.id,
@@ -1180,6 +1308,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#closeforumtopic
+   */
   closeForumTopic() {
     return this.bot.closeForumTopic({
       chat_id: this.chat.id,
@@ -1187,6 +1318,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#reopenforumtopic
+   */
   reopenForumTopic() {
     return this.bot.reopenForumTopic({
       chat_id: this.chat.id,
@@ -1194,6 +1328,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#deleteforumtopic
+   */
   deleteForumTopic() {
     return this.bot.deleteForumTopic({
       chat_id: this.chat.id,
@@ -1201,6 +1338,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#unpinallforumtopicmessages
+   */
   unpinAllForumTopicMessages() {
     return this.bot.unpinAllForumTopicMessages({
       chat_id: this.chat.id,
@@ -1208,6 +1348,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#editgeneralforumtopic
+   */
   editGeneralForumTopic(name: string) {
     return this.bot.editGeneralForumTopic({
       chat_id: this.chat.id,
@@ -1215,22 +1358,37 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#closegeneralforumtopic
+   */
   closeGeneralForumTopic() {
     return this.bot.closeGeneralForumTopic(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#reopengeneralforumtopic
+   */
   reopenGeneralForumTopic() {
     return this.bot.reopenGeneralForumTopic(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#hidegeneralforumtopic
+   */
   hideGeneralForumTopic() {
     return this.bot.hideGeneralForumTopic(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#unhidegeneralforumtopic
+   */
   unhideGeneralForumTopic() {
     return this.bot.unhideGeneralForumTopic(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setstickerpositioninset
+   */
   setStickerPositionInSet(sticker: string, position: number) {
     return this.bot.setStickerPositionInSet({
       sticker,
@@ -1238,6 +1396,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setstickersetthumbnail
+   */
   setStickerSetThumbnail(args: {
     name: string;
     user_id: number;
@@ -1248,10 +1409,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#deletestickerfromset
+   */
   deleteStickerFromSet(sticker: string) {
     return this.bot.deleteStickerFromSet(sticker);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#uploadstickerfile
+   */
   uploadStickerFile(args: {
     sticker_format: "static" | "animated" | "video";
     sticker: F;
@@ -1262,6 +1429,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#createnewstickerset
+   */
   createNewStickerSet(args: {
     name: string;
     title: string;
@@ -1276,6 +1446,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#addstickertoset
+   */
   addStickerToSet(args: { name: string; sticker: InputSticker<F> }) {
     return this.bot.addStickerToSet({
       user_id: this.from.id,
@@ -1283,16 +1456,25 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#getmycommands
+   */
   getMyCommands() {
     return this.bot.getMyCommands();
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setmycommands
+   */
   setMyCommands(commands: readonly BotCommand[]) {
     return this.bot.setMyCommands({
       commands,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendmessage
+   */
   replyWithMarkdown(
     text: string,
     args?: {
@@ -1316,6 +1498,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendmessage
+   */
   replyWithMarkdownV2(
     text: string,
     args?: {
@@ -1339,6 +1524,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendmessage
+   */
   replyWithHTML(
     text: string,
     args?: {
@@ -1362,6 +1550,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#deletemessage
+   */
   deleteMessage(messageId?: number) {
     if (typeof messageId !== "undefined") {
       return this.bot.deleteMessage({
@@ -1372,10 +1563,13 @@ class CombinedClass<F> {
     const message = this.getMessageFromAnySource;
     return this.bot.deleteMessage({
       chat_id: this.chat.id,
-      message_id: message.message_id,
+      message_id: message.message_id as number,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#forwardmessage
+   */
   forwardMessage(
     chatId: string | number,
     args: {
@@ -1387,12 +1581,15 @@ class CombinedClass<F> {
     const message = this.getMessageFromAnySource;
     return this.bot.forwardMessage({
       chat_id: chatId,
-      message_thread_id: message.chat.id,
-      from_chat_id: message.message_id,
+      message_thread_id: message.chat?.id,
+      from_chat_id: message.message_id as number,
       ...args,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#copymessage
+   */
   copyMessage(
     chatId: string | number,
     args: {
@@ -1414,12 +1611,15 @@ class CombinedClass<F> {
     const message = this.getMessageFromAnySource;
     return this.bot.copyMessage({
       chat_id: chatId,
-      message_thread_id: message.chat.id,
-      from_chat_id: message.message_id,
+      message_thread_id: message.chat?.id as number,
+      from_chat_id: message.message_id as number,
       ...args,
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#approvechatjoinrequest
+   */
   approveChatJoinRequest(userId: number) {
     return this.bot.approveChatJoinRequest({
       chat_id: this.chat.id,
@@ -1427,6 +1627,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#declinechatjoinrequest
+   */
   declineChatJoinRequest(userId: number) {
     return this.bot.declineChatJoinRequest({
       chat_id: this.chat.id,
@@ -1434,6 +1637,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#banchatsenderchat
+   */
   banChatSenderChat(senderChatId: number) {
     return this.bot.banChatSenderChat({
       chat_id: this.chat.id,
@@ -1441,6 +1647,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#unbanchatsenderchat
+   */
   unbanChatSenderChat(senderChatId: number) {
     return this.bot.unbanChatSenderChat({
       chat_id: this.chat.id,
@@ -1448,6 +1657,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#setchatmenubutton
+   */
   setChatMenuButton(menuButton?: MenuButton) {
     return this.bot.setChatMenuButton({
       chat_id: this.chat.id,
@@ -1455,10 +1667,16 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#getchatmenubutton
+   */
   getChatMenuButton() {
     return this.bot.getChatMenuButton(this.chat.id);
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendmessage
+   */
   reply(
     text: string,
     args?: {
@@ -1485,6 +1703,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#sendmessage
+   */
   send(
     text: string,
     args?: {
@@ -1510,6 +1731,9 @@ class CombinedClass<F> {
     });
   }
 
+  /**
+   * @see https://core.telegram.org/bots/api#leavechat
+   */
   leave() {
     return this.bot.leaveChat(this.chat.id);
   }

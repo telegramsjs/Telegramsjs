@@ -1,16 +1,17 @@
 /**
- * Custom error class for errors returned by the Telegram Bot API
- * @extends Error
+ * Represents an error that occurs when interacting with the Telegram Bot API.
  */
 class TelegramApiError extends Error {
-  public code: number;
-  public ok: boolean;
-  public method: string;
+  code: number;
+  ok: boolean;
+  method: string;
 
   /**
-   * Creates a new instance of the TelegramApiError class
-   * @param {string | object} error - The error message returned by the Telegram Bot API
+   * Constructs a new TelegramApiError object.
+   * @param {object | string} error - The error object or error message.
+   * @param {string} method - The method that caused the error.
    */
+
   constructor(
     error: {
       error_code: number;
