@@ -3,11 +3,9 @@ import { BaseClient } from "./BaseClient";
 import { Collection } from "./collection/Collection";
 import { Markup } from "./Markup";
 import { MessageCollector } from "./collection/MessageCollector";
-import { CombinedClass } from "./helpers/CombinedClass";
 import { Events } from "./constanta/Events";
 import { ChatActionType } from "./constanta/ChatActionType";
 import { EntityType } from "./constanta/EntityType";
-import { QueryString } from "./constanta/QueryString";
 import { ChatPermission } from "./constanta/ChatPermission";
 import { GroupPermission } from "./constanta/GroupPermission";
 import { GroupStatus } from "./constanta/GroupStatus";
@@ -47,7 +45,6 @@ export {
   Events,
   ChatActionType,
   EntityType,
-  QueryString,
   ChatPermission,
   GroupPermission,
   GroupStatus,
