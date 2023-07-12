@@ -1790,6 +1790,414 @@ class CombinedClass<F> {
                     | ForceReply;
                 }
               ) => this.reply(text, args),
+              answerInlineQuery: (args: {
+        results: readonly InlineQueryResult[];
+        cache_time?: number;
+        is_personal?: boolean;
+        next_offset?: string;
+        button?: InlineQueryResultsButton;
+    }) => this.answerInlineQuery(args),
+    answerCallbackQuery: (args?: {
+        text?: string;
+        show_alert?: boolean;
+        url?: string;
+        cache_time?: number;
+    }) => this.answerCallbackQuery(args),
+    answerShippingQuery: (args: {
+        ok: boolean;
+        shipping_options?: readonly ShippingOption[];
+        error_message?: string;
+    }) => this.answerShippingQuery(args),
+    answerPreCheckoutQuery: (args: {
+        ok: boolean;
+        error_message?: string;
+    }) => this.answerPreCheckoutQuery(args),
+    editMessageText: (text: string, args?: {
+        message_id?: number;
+        parse_mode?: ParseMode;
+        entities?: MessageEntity[];
+        disable_web_page_preview?: boolean;
+        reply_markup?: InlineKeyboardMarkup;
+    }) => this.editMessageText(text, args),
+    editMessageCaption: (caption?: string, args?: {
+        parse_mode?: ParseMode;
+        caption_entities?: MessageEntity[];
+        reply_markup?: InlineKeyboardMarkup;
+    }) => this.editMessageCaption(caption, args),
+    editMessageMedia: (media: InputMedia<F>, reply_markup?: InlineKeyboardMarkup) => this.editMessageMedia(media, reply_markup),
+    editMessageReplyMarkup: (markup?: InlineKeyboardMarkup) => this.editMessageReplyMarkup(markup),
+    editMessageLiveLocation: (replyMarkup?: InlineKeyboardMarkup) => this.editMessageLiveLocation(replyMarkup),
+    stopMessageLiveLocation: (latitude: number, longitude: number, args?: {
+        horizontal_accuracy?: number;
+        heading?: number;
+        proximity_alert_radius?: number;
+        reply_markup?: InlineKeyboardMarkup;
+    }) => this.stopMessageLiveLocation(latitude, longitude, args),
+    sendMessage: (text: string, args?: {
+        parse_mode?: ParseMode;
+        entities?: MessageEntity[];
+        disable_web_page_preview?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendMessage(text, args),
+    getChat: () => this.getChat(),
+    exportChatInviteLink: () => this.exportChatInviteLink(),
+    createChatInviteLink: (args?: {
+        name?: string;
+        expire_date?: number;
+        member_limit?: number;
+        creates_join_request?: boolean;
+    }) => this.createChatInviteLink(args),
+    editChatInviteLink: (args: {
+        invite_link: string;
+        name?: string;
+        expire_date?: number;
+        member_limit?: number;
+        creates_join_request?: boolean;
+    }) => this.editChatInviteLink(args),
+    revokeChatInviteLink: (invite_link: string) => this.revokeChatInviteLink(invite_link),
+    banChatMember: (userId: number, args?: {
+        until_date?: number;
+        revoke_messages?: boolean;
+    }) => this.banChatMember(userId, args),
+    kickChatMember: () => this.kickChatMember,
+    unbanChatMember: (userId: number, onlyIfBanned?: boolean) => this.unbanChatMember(userId, onlyIfBanned),
+    restrictChatMember: (args: {
+        user_id: number;
+        permissions: ChatPermissions;
+        use_independent_chat_permissions?: boolean;
+        until_date?: number;
+    }) => this.restrictChatMember(args),
+    promoteChatMember: (userId: number, args?: {
+        is_anonymous?: boolean;
+        can_manage_chat?: boolean;
+        can_post_messages?: boolean;
+        can_edit_messages?: boolean;
+        can_delete_messages?: boolean;
+        can_manage_video_chats?: boolean;
+        can_restrict_members?: boolean;
+        can_promote_members?: boolean;
+        can_change_info?: boolean;
+        can_invite_users?: boolean;
+        can_pin_messages?: boolean;
+        can_manage_topics?: boolean;
+    }) => this.promoteChatMember(userId, args),
+    setChatAdministratorCustomTitle: (args: {
+        user_id: number;
+        custom_title: string;
+    }) => this.setChatAdministratorCustomTitle(args),
+    setChatPhoto: (photo: F) => this.setChatPhoto(photo),
+    deleteChatPhoto: () => this.deleteChatPhoto(),
+    setChatTitle: (title: string) => this.setChatTitle(title),
+    setChatDescription: (description: string) => this.setChatDescription(description),
+    pinChatMessage: (messageId: number, disableNotification?: boolean) => this.pinChatMessage(messageId, disableNotification),
+    unpinChatMessage: (messageId: number) => this.unpinChatMessage(messageId),
+    unpinAllChatMessages: () => this.unpinAllChatMessages(),
+    leaveChat: () => this.leaveChat(),
+    setChatPermissions: (permissions: ChatPermissions, use_independent_chat_permissions?: boolean) => this.setChatPermissions(permissions, use_independent_chat_permissions),
+    getChatAdministrators: () => this.getChatAdministrators(),
+    getChatMember: (userId: number) => this.getChatMember(userId),
+    getChatMembersCount: () => this.getChatMembersCount(),
+    setPassportDataErrors: (errors: readonly PassportElementError[]) => this.setPassportDataErrors(errors),
+    sendPhoto: (photo: F | string, args?: {
+        caption?: string;
+        parse_mode?: ParseMode;
+        caption_entities?: MessageEntity[];
+        has_spoiler?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendPhoto(photo, args),
+    sendMediaGroup: (media: ReadonlyArray<InputMediaAudio<F> | InputMediaDocument<F> | InputMediaPhoto<F> | InputMediaVideo<F>>, args?: {
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+    }) => this.sendMediaGroup(media, args),
+    sendAudio: (audio: F | string, args?: {
+        caption?: string;
+        parse_mode?: ParseMode;
+        caption_entities?: MessageEntity[];
+        duration?: number;
+        performer?: string;
+        title?: string;
+        thumbnail?: F;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendAudio(audio, args),
+    sendDice: (args?: {
+        emoji?: string;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendDice(args),
+    sendDocument: (document: F | string, args?: {
+        thumbnail?: F;
+        caption?: string;
+        parse_mode?: ParseMode;
+        caption_entities?: MessageEntity[];
+        disable_content_type_detection?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendDocument(document, args),
+    sendSticker: (sticker: F | string, args?: {
+        emoji?: string;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendSticker(sticker, args),
+    sendVideo: (video: F | string, args?: {
+        duration?: number;
+        length?: number;
+        thumbnail?: F;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendVideo(video, args),
+    sendAnimation: (animation: F | string, args?: {
+        duration?: number;
+        width?: number;
+        height?: number;
+        thumbnail?: F;
+        caption?: string;
+        parse_mode?: ParseMode;
+        caption_entities?: MessageEntity[];
+        has_spoiler?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendAnimation(animation, args),
+    sendVideoNote: (videoNote: F | string, args?: {
+        duration?: number;
+        length?: number;
+        thumbnail?: F;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendVideoNote(videoNote, args),
+    sendInvoice: (args: {
+        title: string;
+        description: string;
+        payload: string;
+        provider_token: string;
+        currency: string;
+        prices: readonly LabeledPrice[];
+        max_tip_amount?: number;
+        suggested_tip_amounts?: number[];
+        start_parameter?: string;
+        provider_data?: string;
+        photo_url?: string;
+        photo_size?: number;
+        photo_width?: number;
+        photo_height?: number;
+        need_name?: boolean;
+        need_phone_number?: boolean;
+        need_email?: boolean;
+        need_shipping_address?: boolean;
+        send_phone_number_to_provider?: boolean;
+        send_email_to_provider?: boolean;
+        is_flexible?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup;
+    }) => this.sendInvoice(args),
+    sendGame: (gameShortName: string, args?: {
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup;
+    }) => this.sendGame(gameShortName, args),
+    sendVoice: (voice: F | string, args?: {
+        caption?: string;
+        parse_mode?: ParseMode;
+        caption_entities?: MessageEntity[];
+        duration?: number;
+        performer?: string;
+        title?: string;
+        thumbnail?: F;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendVoice(voice, args),
+    sendPoll: (options: readonly string[], args: {
+        question: string;
+        is_anonymous?: boolean;
+        type?: "quiz" | "regular";
+        allows_multiple_answers?: boolean;
+        correct_option_id?: number;
+        explanation?: string;
+        explanation_parse_mode?: ParseMode;
+        explanation_entities?: MessageEntity[];
+        open_period?: number;
+        close_date?: number;
+        is_closed?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendPoll(options, args),
+    stopPoll: (args: {
+        message_id: number;
+        reply_markup?: InlineKeyboardMarkup;
+    }) => this.stopPoll(args),
+    sendLocation: (latitude: number, longitude: number, args?: {
+        message_thread_id?: number;
+        horizontal_accuracy?: number;
+        live_period?: number;
+        heading?: number;
+        proximity_alert_radius?: number;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendLocation(latitude, longitude, args),
+    sendVenue: (latitude: number, longitude: number, title: string, address: string, args?: {
+        foursquare_id?: string;
+        foursquare_type?: string;
+        google_place_id?: string;
+        google_place_type?: string;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendVenue(latitude, longitude, title, address, args),
+    sendContact: (phoneNumber: string, firstName: string, args?: {
+        last_name?: string;
+        vcard?: string;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.sendContact(phoneNumber, firstName, args),
+    getStickerSet: (name: string) => this.getStickerSet(name),
+    setChatStickerSet: (stickerSetName: string) => this.setChatStickerSet(stickerSetName),
+    deleteChatStickerSet: () => this.deleteChatStickerSet(),
+    createForumTopic: (args: {
+        name: string;
+        icon_color?: 0x6fb9f0 | 0xffd67e | 0xcb86db | 0x8eee98 | 0xff93b2 | 0xfb6f5f;
+        icon_custom_emoji_id?: string;
+    }) => this.createForumTopic(args),
+    editForumTopic: (args?: {
+        name?: string;
+        icon_custom_emoji_id?: string;
+    }) => this.editForumTopic(args),
+    closeForumTopic: () => this.closeForumTopic(),
+    reopenForumTopic: () => this.reopenForumTopic(),
+    deleteForumTopic: () => this.deleteForumTopic(),
+    unpinAllForumTopicMessages: () => this.unpinAllForumTopicMessages(),
+    editGeneralForumTopic: (name: string) => this.editGeneralForumTopic(name),
+    closeGeneralForumTopic: () => this.closeGeneralForumTopic(),
+    reopenGeneralForumTopic: () => this.reopenGeneralForumTopic(),
+    hideGeneralForumTopic: () => this.hideGeneralForumTopic(),
+    unhideGeneralForumTopic: () => this.unhideGeneralForumTopic(),
+    setStickerPositionInSet: (sticker: string, position: number) => this.setStickerPositionInSet(sticker, position),
+    setStickerSetThumbnail: (args: {
+        name: string;
+        user_id: number;
+        thumbnail?: F;
+    }) => this.setStickerSetThumbnail(args),
+    deleteStickerFromSet: (sticker: string) => this.deleteStickerFromSet(sticker),
+    uploadStickerFile: (args: {
+        sticker_format: "static" | "animated" | "video";
+        sticker: F;
+    }) => this.uploadStickerFile(args),
+    createNewStickerSet: (args: {
+        name: string;
+        title: string;
+        stickers: InputSticker<F>[];
+        sticker_format: "static" | "animated" | "video";
+        sticker_type?: "regular" | "mask" | "custom_emoji";
+        needs_repainting?: boolean;
+    }) => this.createNewStickerSet(args),
+    addStickerToSet: (args: {
+        name: string;
+        sticker: InputSticker<F>;
+    }) => this.addStickerToSet(args),
+    getMyCommands: () => this.getMyCommands(),
+    setMyCommands: (commands: readonly BotCommand[]) => this.setMyCommands(commands),
+    replyWithMarkdown: (text: string, args?: {
+        message_thread_id?: number;
+        entities?: MessageEntity[];
+        disable_web_page_preview?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.replyWithMarkdown(text, args),
+    replyWithMarkdownV2: (text: string, args?: {
+        message_thread_id?: number;
+        entities?: MessageEntity[];
+        disable_web_page_preview?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.replyWithMarkdownV2(text, args),
+    replyWithHTML: (text: string, args?: {
+        message_thread_id?: number;
+        entities?: MessageEntity[];
+        disable_web_page_preview?: boolean;
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.replyWithHTML(text, args),
+    deleteMessage: (messageId?: number) => this.deleteMessage(messageId),
+    forwardMessage: (chatId: string | number, args: {
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        message_id: number;
+    }) => this.forwardMessage(chatId, args),
+    copyMessage: (chatId: string | number, args: {
+        message_id: number;
+        caption?: string;
+        parse_mode?: string;
+        caption_entities?: MessageEntity[];
+        disable_notification?: boolean;
+        protect_content?: boolean;
+        reply_to_message_id?: number;
+        allow_sending_without_reply?: boolean;
+        reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+    }) => this.copyMessage(chatId, args),
+    approveChatJoinRequest: (userId: number) => this.approveChatJoinRequest(userId),
+    declineChatJoinRequest: (userId: number) => this.declineChatJoinRequest(userId),
+    banChatSenderChat: (senderChatId: number) => this.banChatSenderChat(senderChatId),
+    unbanChatSenderChat: (senderChatId: number) => this.unbanChatSenderChat(senderChatId),
+    setChatMenuButton: (menuButton?: MenuButton) => this.setChatMenuButton(menuButton),
+    getChatMenuButton: () => this.getChatMenuButton()
             };
             this.bot.emit(options.event, message);
             if (options.textEvent && updateProperty.text) {
