@@ -161,25 +161,4 @@ export class Request extends EventEmitter {
   get lastObject(): Update | undefined {
     return this.last_object;
   }
-
-  /**
-   * Set the token for the bot.
-   * @param {string} token - The token to set.
-   * @returns {boolean} - Returns true if the token was set successfully.
-   */
-  setToken(token: string): boolean {
-    this.token = token;
-    this.baseUrl = `https://api.telegram.org/bot${this.token}`;
-    return true;
-  }
-
-  /**
-   * Set the intents for the bot.
-   * @param {string[] | number[] | number | null} intents - The intents to set.
-   * @returns {boolean} - Returns true if the intents were set successfully.
-   */
-  setIntents(intents?: string[] | number[] | number | null): boolean {
-    this.intents = intents;
-    return true;
-  }
 }
