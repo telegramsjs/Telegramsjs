@@ -1,7 +1,7 @@
 {
   "name": "telegramsjs",
   "description": "Telegramsjs is a lightweight Node.js library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as Telegraf.js or node-telegram-bot-api. The library has a syntax that is similar to Discord.js. This library provides a way to create Telegram bots with ease and flexibility.",
-  "version": "1.5.0",
+  "version": "1.5.0-beta.20230712.1",
   "main": "./dist/index.js",
   "types": [
     "dist/BaseClient.d.ts",
@@ -19,7 +19,6 @@
     "dist/constanta/GroupPermission.d.ts",
     "dist/constanta/GroupStatus.d.ts",
     "dist/constanta/IntentBits.d.ts",
-    "dist/constanta/QueryString.d.ts",
     "dist/constanta/TelegramIntentBits.d.ts",
     "dist/errorcollection.d.ts",
     "dist/formatters/html.d.ts",
@@ -27,9 +26,7 @@
     "dist/formatters/markdownv.d.ts",
     "dist/helpers/CombinedClass.d.ts",
     "dist/index.d.ts",
-    "dist/replyMarkup/Keyboard.d.ts",
-    "dist/replyMarkup/Markup.d.ts",
-    "dist/replyMarkup/index.d.ts",
+    "dist/Markup.d.ts",
     "dist/request.d.ts"
   ],
   "license": "MIT",
@@ -41,31 +38,26 @@
     "LICENSE"
   ],
   "exports": {
-    ".": [
-      {
-        "default": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
+    ".": [{
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
       "./dist/index.js"
     ],
-    "./markup": [
-      {
-        "default": "./dist/replyMarkup/index.js",
-        "types": "./dist/replyMarkup/index.d.ts"
-      }
-    ],
-    "./html": [
-      {
-        "default": "./dist/formatters/html.js",
-        "types": "./dist/formatters/html.d.ts"
-      },
+    "./markup": [{
+      "default": "./dist/Markup.js",
+      "types": "./dist/Markup.d.ts"
+    }],
+    "./html": [{
+      "default": "./dist/formatters/html.js",
+      "types": "./dist/formatters/html.d.ts"
+    },
       "./dist/formatters/html.js"
     ],
-    "./markdownv": [
-      {
-        "default": "./dist/formatters/markdownv.js",
-        "types": "./dist/formatters/markdownv.d.ts"
-      },
+    "./markdownv": [{
+      "default": "./dist/formatters/markdownv.js",
+      "types": "./dist/formatters/markdownv.d.ts"
+    },
       "./dist/formatters/markdownv.js"
     ],
     "./package.json": "./package.json"
