@@ -493,7 +493,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "sendChatAction";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async getUserProfilePhotos(params: {
@@ -539,7 +539,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "banChatMember";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async unbanChatMember(params: {
@@ -549,7 +549,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "unbanChatMember";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async restrictChatMember(params: {
@@ -561,7 +561,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "restrictChatMember";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async promoteChatMember(params: {
@@ -582,7 +582,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "promoteChatMember";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async setChatAdministratorCustomTitle(params: {
@@ -592,7 +592,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "setChatAdministratorCustomTitle";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async banChatSenderChat(params: {
@@ -601,7 +601,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "banChatMember";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async unbanChatSenderChat(params: {
@@ -610,7 +610,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "unbanChatMember";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async setChatPermissions(params: {
@@ -620,7 +620,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "setChatPermissions";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async exportChatInviteLink(chatId?: number | string): Promise<string> {
@@ -672,7 +672,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "approveChatJoinRequest";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async declineChatJoinRequest(params: {
@@ -681,7 +681,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "declineChatJoinRequest";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async setChatPhoto(params: {
@@ -690,7 +690,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "setChatPhoto";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async deleteChatPhoto(chatId: number | string): Promise<boolean> {
@@ -698,7 +698,7 @@ export class BaseClient<F> extends Request {
     const response = await this.request(method, {
       chat_id: chatId,
     });
-    return true;
+    return response.result;
   }
 
   async setChatTitle(params: {
@@ -707,7 +707,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "setChatTitle";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async setChatDescription(params: {
@@ -716,7 +716,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "setChatDescription";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async pinChatMessage(params: {
@@ -726,7 +726,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "pinChatMessage";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async unpinChatMessage(params: {
@@ -735,7 +735,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "unpinChatMessage";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async unpinAllChatMessages(chatId: number | string): Promise<boolean> {
@@ -743,7 +743,7 @@ export class BaseClient<F> extends Request {
     const response = await this.request(method, {
       chat_id: chatId,
     });
-    return true;
+    return response.result;
   }
 
   async leaveChat(chatId: number | string): Promise<boolean> {
@@ -751,7 +751,7 @@ export class BaseClient<F> extends Request {
     const response = await this.request(method, {
       chat_id: chatId,
     });
-    return true;
+    return response.result;
   }
 
   async getChat(chatId: number | string): Promise<ChatFromGetChat> {
@@ -795,7 +795,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "setChatStickerSet";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async deleteChatStickerSet(chatId?: number | string): Promise<boolean> {
@@ -803,7 +803,7 @@ export class BaseClient<F> extends Request {
     const response = await this.request(method, {
       chat_id: chatId,
     });
-    return true;
+    return response.result;
   }
 
   async getForumTopicIconStickers(): Promise<Sticker[]> {
@@ -837,7 +837,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "editForumTopic";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async closeForumTopic(params: {
@@ -846,7 +846,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "closeForumTopic";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async reopenForumTopic(params: {
@@ -855,7 +855,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "reopenForumTopic";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async deleteForumTopic(params: {
@@ -864,7 +864,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "deleteForumTopic";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async unpinAllForumTopicMessages(params: {
@@ -873,7 +873,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "unpinAllForumTopicMessages";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async editGeneralForumTopic(params: {
@@ -882,7 +882,7 @@ export class BaseClient<F> extends Request {
   }): Promise<boolean> {
     const method = "editGeneralForumTopic";
     const response = await this.request(method, params);
-    return true;
+    return response.result;
   }
 
   async closeGeneralForumTopic(chatId: number | string): Promise<boolean> {
@@ -890,7 +890,7 @@ export class BaseClient<F> extends Request {
     const response = await this.request(method, {
       chat_id: chatId,
     });
-    return true;
+    return response.result;
   }
 
   async reopenGeneralForumTopic(chatId: number | string): Promise<boolean> {
@@ -899,7 +899,7 @@ export class BaseClient<F> extends Request {
       chat_id: chatId,
     });
 
-    return true;
+    return response.result;
   }
 
   async hideGeneralForumTopic(chatId: number | string): Promise<boolean> {
@@ -908,7 +908,7 @@ export class BaseClient<F> extends Request {
       chat_id: chatId,
     });
 
-    return true;
+    return response.result;
   }
 
   async unhideGeneralForumTopic(chatId: string | number): Promise<boolean> {
@@ -917,7 +917,7 @@ export class BaseClient<F> extends Request {
       chat_id: chatId,
     });
 
-    return true;
+    return response.result;
   }
 
   async answerCallbackQuery(params: {
@@ -930,7 +930,7 @@ export class BaseClient<F> extends Request {
     const method = "answerCallbackQuery";
     const response = await this.request(method, params);
 
-    return true;
+    return response.result;
   }
 
   async setMyCommands(params: {
