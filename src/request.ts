@@ -12,6 +12,18 @@ type TelegramApiResponse = {
   result?: any;
 };
 
+function reform(reformText: any): any {
+  if (typeof reformText === "object" && reformText !== null) {
+    for (const key in reformText) {
+      if (typeof reformText[key] === "object") {
+        reformText[key] = JSON.stringify(reformText[key]);
+      }
+    }
+  }
+
+  return reformText;
+}
+
 /**
  * Represents a request object for making requests to the Telegram Bot API.
  * @extends EventEmitter
@@ -88,7 +100,8 @@ export class Request extends EventEmitter {
 
     let paramsType: string | undefined;
     if (params) {
-      const formattedParams: Record<string, string> = params as Record<
+      const reforms = reform(params);
+      const formattedParams: Record<string, string> = reforms as Record<
         string,
         string
       >;
