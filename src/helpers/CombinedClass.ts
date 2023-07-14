@@ -1,5 +1,6 @@
 import { TelegramBot } from "../TelegramBot";
 import { ParameterError } from "../errorcollection";
+import { MessageCollector } from "../collection/MessageCollector";
 import {
   Message,
   Chat,
@@ -1738,6 +1739,23 @@ class CombinedClass<F> {
     return this.bot.leaveChat(this.chat.id);
   }
 
+  messageCollector(
+    filter?: Function,
+    time?: number,
+    max?: number
+  ): MessageCollector {
+    const message = new MessageCollector({
+      chatId: this.chat.id,
+      filter,
+      time,
+      max,
+    });
+    this.bot.on("message", (ctx: Message) => {
+      message.handleMessage(ctx);
+    });
+    return message;
+  }
+
   async processUpdate() {
     while (true) {
       const getUpdates = await this.bot.getUpdates();
@@ -2395,6 +2413,11 @@ class CombinedClass<F> {
               setChatMenuButton: (menuButton?: MenuButton) =>
                 this.setChatMenuButton(menuButton),
               getChatMenuButton: () => this.getChatMenuButton(),
+              messageCollector: (
+                filter?: Function,
+                time?: number,
+                max?: number
+              ) => this.messageCollector(filter, time, max),
             };
             this.bot.emit(options.event, message);
             if (options.textEvent && updateProperty.text) {
