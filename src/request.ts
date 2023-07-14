@@ -3,13 +3,14 @@ import * as querystring from "querystring";
 import { TelegramApiError, IntentsError } from "./errorcollection";
 import { EventEmitter } from "events";
 import { decodeIntents, IntentsBitField } from "./IntentsBitField";
-import { Update } from "@telegram.ts/types";
+import { Update, ResponseParameters } from "@telegram.ts/types";
 
 type TelegramApiResponse = {
+  ok?: boolean;
   error_code?: number;
   description?: string;
-  ok?: boolean;
   result?: any;
+  parameters?: ResponseParameters;
 };
 
 function reform(reformText: any): any {
@@ -124,6 +125,7 @@ export class Request extends EventEmitter {
             error_code: number;
             description: string;
             ok: boolean;
+            parameters: ResponseParameters;
           };
         };
       };

@@ -1,3 +1,4 @@
+import { ResponseParameters } from "@telegram.ts/types";
 /**
  * Represents an error that occurs when interacting with the Telegram Bot API.
  */
@@ -5,6 +6,7 @@ class TelegramApiError extends Error {
   code: number;
   ok: boolean;
   method: string;
+  parameters?: ResponseParameters;
 
   /**
    * Constructs a new TelegramApiError object.
@@ -17,6 +19,7 @@ class TelegramApiError extends Error {
       error_code: number;
       description: string;
       ok: boolean;
+      parameters?: ResponseParameters;
     },
     method: string
   ) {
@@ -43,6 +46,7 @@ class TelegramApiError extends Error {
     super(message.description);
 
     this.name = `TelegramApiError[${error.error_code ?? 0}]`;
+    this.parameters = error.parameters;
     this.method = method;
     this.code = error.error_code ?? 0;
     this.ok = error.ok;
