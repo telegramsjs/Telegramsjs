@@ -8,7 +8,6 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
   intents?: string[] | number[] | number | null;
   baseUrl: string = "";
   session?: any;
-  updatesProcess?: CombinedClass<F>;
 
   constructor(
     token: string,
@@ -159,6 +158,34 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    */
   public use(params: any): void {
     this.session = params;
+  }
+
+  /**
+   * Registers a callback function to be executed when a message is received
+   * that includes the specified text.
+   * ```ts
+   * import { TelegramBot } from "telegramsjs"
+   *
+   * const bot = new TelegramBot('BOT_TOKEN');
+   *
+   * bot.hears('hi', (ctx) => ctx.reply('hi!'));
+   *
+   * bot.login()
+   * ```
+   * @param {string | string[]} text - The text to match in the received messages.
+   * @param {(message: (Message.TextMessage & Context<F>)) => void} callback - The callback function to be executed when a matching message is received.
+   * It receives the matched message object as a parameter.
+   * @returns void
+   */
+  public hears(
+    text: string,
+    callback: (message: Message.TextMessage & Context<F>) => void
+  ): void {
+    this.on("message", (message: Message.TextMessage & Context<F>) => {
+      if (message.text.includes(text)) {
+        callback(message);
+      }
+    });
   }
 
   /**
