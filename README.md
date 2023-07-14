@@ -28,22 +28,66 @@ To get started, create a new instance of the `TelegramBot` class by providing yo
 
 ```typescript
 import { TelegramBot, Context } from "telegramsjs";
-import { Message, UserFromGetMe } from "@telegram.ts/types";
+import { UserFromGetMe, Message } from "@telegram.ts/types";
 
-const bot = new TelegramBot("TELEGRAM_BOT_TOKEN");
+const bot = new TelegramBot("BOT_TOKEN");
 
-bot.on("ready", (client: UserFromGetMe) => {
-  console.log("Starting bot", client);
+function isCommand(ctx: Context): boolean {
+  return ctx.entities?.[0]?.type === "bot_command" ? true : false;
+}
+
+bot.on("ready", async (client: UserFromGetMe) => {
+  bot.setMyCommands({
+    commands: [
+      {
+        command: "/start",
+        description: "starting command",
+      },
+      {
+        command: "/remove",
+        description: "remove session",
+      },
+      {
+        command: "/stats",
+        description: "statistics session",
+      },
+    ],
+  });
+
+  console.log(`Starting ${client.username}`);
 });
 
-bot.on("message", (message: Message & Context) => {
-  message.reply("Hello ❤️");
+bot.use({});
+
+bot.on("message", (ctx) => {
+  if (isCommand(ctx)) return;
+  bot.session.counter = bot.session.counter || 0;
+  bot.session.counter++;
+  ctx.replyWithMarkdownV2(
+    `Counter updated, new value: \`${bot.session.counter}\``
+  );
 });
 
-bot.command(["hello", "text"], (msg, args) => {
-  message.reply(
-    `Thank you for using telegramsjs ❤️ `,
-    !args[0] ? args[0] : msg.from.firs_name
+bot.command("start", (ctx) => {
+  const username = ctx.from.username
+    ? `@${ctx.from.username}`
+    : ctx.from.first_name;
+  ctx.replyWithMarkdown(`${username}, *thanks for using telegramsjs ❤️*`);
+});
+
+bot.command("remove", (ctx) => {
+  ctx.replyWithMarkdownV2(
+    `Removing session from database: \`${bot.session.counter}\``
+  );
+  bot.session = null;
+});
+
+bot.command("stats", (ctx) => {
+  const username = ctx.from.username
+    ? `@${ctx.from.username}`
+    : ctx.from.first_name;
+  ctx.replyWithMarkdownV2(
+    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`
   );
 });
 
@@ -53,21 +97,67 @@ bot.login();
 ### JavaScript Example
 
 ```javascript
-const { TelegramBot } = require("telegramsjs");
-const bot = new TelegramBot("TELEGRAM_BOT_TOKEN");
+const { TelegramBot, Context } = require("telegramsjs");
+const { UserFromGetMe, Message } = require("@telegram.ts/types");
 
-bot.on("ready", (client) => {
-  console.log("Starting bot", client);
+const bot = new TelegramBot("BOT_TOKEN");
+
+function isCommand(ctx) {
+  return ctx.entities?.[0]?.type === "bot_command" ? true : false;
+}
+
+bot.on("ready", async (client) => {
+  bot.setMyCommands({
+    commands: [
+      {
+        command: "/start",
+        description: "starting command",
+      },
+      {
+        command: "/remove",
+        description: "remove session",
+      },
+      {
+        command: "/stats",
+        description: "statistics session",
+      },
+    ],
+  });
+
+  console.log(`Starting ${client.username}`);
 });
 
-bot.on("message", (message) => {
-  message.reply("Hello ❤️");
+bot.use({});
+
+bot.on("message", (ctx) => {
+  if (isCommand(ctx)) return;
+  bot.session.counter = bot.session.counter || 0;
+  bot.session.counter++;
+  ctx.replyWithMarkdownV2(
+    `Counter updated, new value: \`${bot.session.counter}\``
+  );
 });
 
-bot.command(["hello", "text"], (msg, args) => {
-  message.reply(
-    `Thank you for using telegramsjs ❤️ `,
-    !args[0] ? args[0] : msg.from.firs_name
+bot.command("start", (ctx) => {
+  const username = ctx.from.username
+    ? `@${ctx.from.username}`
+    : ctx.from.first_name;
+  ctx.replyWithMarkdown(`${username}, *thanks for using telegramsjs ❤️*`);
+});
+
+bot.command("remove", (ctx) => {
+  ctx.replyWithMarkdownV2(
+    `Removing session from database: \`${bot.session.counter}\``
+  );
+  bot.session = null;
+});
+
+bot.command("stats", (ctx) => {
+  const username = ctx.from.username
+    ? `@${ctx.from.username}`
+    : ctx.from.first_name;
+  ctx.replyWithMarkdownV2(
+    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`
   );
 });
 
