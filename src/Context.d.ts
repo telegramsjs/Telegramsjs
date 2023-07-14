@@ -1,3 +1,4 @@
+import { MessageCollector } from "../collection/MessageCollector";
 import {
   Message,
   Chat,
@@ -966,4 +967,10 @@ export type Context<F = Buffer> = {
    * @see https://core.telegram.org/bots/api#leavechat
    */
   leave(): Promise<boolean>;
+
+  messageCollector(
+    filter?: Function,
+    time?: number,
+    max?: number
+  ): MessageCollector;
 };

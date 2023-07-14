@@ -5,13 +5,13 @@ import { EventEmitter } from "events";
  * @extends EventEmitter
  */
 export class MessageCollector extends EventEmitter {
-  private chatId: number;
-  private filter: Function;
-  private time: number;
-  private max?: number;
-  private collectedMessages: any[];
-  private interval: NodeJS.Timeout | null;
-  private countCollector: number;
+  chatId: number;
+  filter: Function;
+  time: number;
+  max?: number;
+  collectedMessages: any[];
+  interval: NodeJS.Timeout | null;
+  countCollector: number;
 
   /**
    * Creates a new MessageCollector.
@@ -39,7 +39,7 @@ export class MessageCollector extends EventEmitter {
 
     /**
      * The interval ID for the collector.
-     * @private
+     * @
      * @type {NodeJS.Timeout}
      */
     this.interval = setInterval(() => {
