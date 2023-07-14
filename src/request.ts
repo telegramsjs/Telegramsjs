@@ -125,7 +125,7 @@ export class Request extends EventEmitter {
             error_code: number;
             description: string;
             ok: boolean;
-            parameters: ResponseParameters;
+            parameters?: ResponseParameters;
           };
         };
       };
