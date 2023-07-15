@@ -39,5 +39,5 @@ export const Events: Events = {
   Ready: "ready",
   Collected: "collected",
   Interval: "interval",
-  Update: "update"
+  Update: "update",
 };

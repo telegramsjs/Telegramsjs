@@ -1756,9 +1756,14 @@ class CombinedClass<F> {
     return message;
   }
 
-  async processUpdate() {
+  async processUpdate(webhook?: Update[]) {
+    let getUpdates;
     while (true) {
-      const getUpdates = await this.bot.getUpdates();
+      if (!webhook) {
+        getUpdates = await this.bot.getUpdates();
+      } else {
+        getUpdates = await webhook;
+      }
       for (const update of getUpdates) {
         for (const [type, options] of Object.entries(messageTypeMap)) {
           const updateProperty: any = (update as ResponseApi)[

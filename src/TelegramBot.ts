@@ -1,12 +1,13 @@
 import { BaseClient } from "./BaseClient";
 import { CombinedClass } from "./helpers/CombinedClass";
-import { CallbackQuery, Message } from "@telegram.ts/types";
+import { CallbackQuery, Message, Update } from "@telegram.ts/types";
 import { Context } from "./Context";
 
 export class TelegramBot<F = Buffer> extends BaseClient<F> {
   token: string = "";
   intents?: string[] | number[] | number | null;
   baseUrl: string = "";
+  processUpdate: (webhook?: Update[] | undefined) => Promise<void>;
 
   constructor(
     token: string,
@@ -28,6 +29,8 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
      * @type {string}
      */
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
+
+    this.processUpdate = new CombinedClass<F>(this).processUpdate;
   }
 
   /**

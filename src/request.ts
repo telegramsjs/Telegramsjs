@@ -85,10 +85,10 @@ export class Request extends EventEmitter {
       this.last_object = updates[0];
       this.offset = updates[updates.length - 1].update_id + 1;
     }
-    
+
     if (updates.length > 0) {
       const res = updates[0];
-      this.emit('update', res);
+      this.emit("update", res);
     }
 
     return Array.isArray(updates) ? updates : [];
