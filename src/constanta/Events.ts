@@ -17,6 +17,7 @@ type Events = {
   Ready: string;
   Collected: string;
   Interval: string;
+  Update: string;
 };
 
 export const Events: Events = {
@@ -38,4 +39,5 @@ export const Events: Events = {
   Ready: "ready",
   Collected: "collected",
   Interval: "interval",
+  Update: "update"
 };

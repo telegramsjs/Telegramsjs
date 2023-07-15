@@ -7,7 +7,6 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
   token: string = "";
   intents?: string[] | number[] | number | null;
   baseUrl: string = "";
-  session?: any;
 
   constructor(
     token: string,
@@ -138,26 +137,6 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
         }
       });
     }
-  }
-
-  /**
-   * Sets the session property.
-   * ```ts
-   * import { Collection, Context } from "telegramsjs";
-   *
-   * bot.on('message', (message: Message & Context) => {
-   *  bot.session.set('session1', message.from);
-   * })
-   *
-   *
-   * bot.use(new Collection<string, any>());
-   * ```
-   *
-   * @param {any} params - The parameters to set the session.
-   * @returns {void}
-   */
-  public use(params: any): void {
-    this.session = params;
   }
 
   /**
