@@ -26,6 +26,7 @@ class TelegramApiError extends Error {
         }
         super(message.description);
         this.name = `TelegramApiError[${(_e = error.error_code) !== null && _e !== void 0 ? _e : 0}]`;
+        this.parameters = error.parameters;
         this.method = method;
         this.code = (_f = error.error_code) !== null && _f !== void 0 ? _f : 0;
         this.ok = error.ok;

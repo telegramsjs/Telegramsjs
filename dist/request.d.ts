@@ -1,11 +1,12 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { Update } from "@telegram.ts/types";
+import { Update, ResponseParameters } from "@telegram.ts/types";
 type TelegramApiResponse = {
+    ok?: boolean;
     error_code?: number;
     description?: string;
-    ok?: boolean;
     result?: any;
+    parameters?: ResponseParameters;
 };
 /**
  * Represents a request object for making requests to the Telegram Bot API.

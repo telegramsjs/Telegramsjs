@@ -8,6 +8,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
   intents?: string[] | number[] | number | null;
   baseUrl: string = "";
   processUpdate: (webhook?: Update[] | undefined) => Promise<void>;
+  session: any;
 
   constructor(
     token: string,
@@ -168,6 +169,10 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
         callback(message);
       }
     });
+  }
+  
+  public use(session: any): void {
+    this.session = session;
   }
 
   /**

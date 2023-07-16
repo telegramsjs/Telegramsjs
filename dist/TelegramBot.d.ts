@@ -1,14 +1,13 @@
 /// <reference types="node" />
 import { BaseClient } from "./BaseClient";
-import { CombinedClass } from "./helpers/CombinedClass";
-import { CallbackQuery, Message } from "@telegram.ts/types";
+import { CallbackQuery, Message, Update } from "@telegram.ts/types";
 import { Context } from "./Context";
 export declare class TelegramBot<F = Buffer> extends BaseClient<F> {
     token: string;
     intents?: string[] | number[] | number | null;
     baseUrl: string;
-    session?: any;
-    updatesProcess?: CombinedClass<F>;
+    processUpdate: (webhook?: Update[] | undefined) => Promise<void>;
+    session: any;
     constructor(token: string, options?: {
         intents?: string[] | number[] | number | null;
         session?: any;
@@ -73,22 +72,24 @@ export declare class TelegramBot<F = Buffer> extends BaseClient<F> {
      */
     action(data: string | string[], callback: (callbackQuery: CallbackQuery & Context<F>) => void, answer?: boolean): void;
     /**
-     * Sets the session property.
+     * Registers a callback function to be executed when a message is received
+     * that includes the specified text.
      * ```ts
-     * import { Collection, Context } from "telegramsjs";
+     * import { TelegramBot } from "telegramsjs"
      *
-     * bot.on('message', (message: Message & Context) => {
-     *  bot.session.set('session1', message.from);
-     * })
+     * const bot = new TelegramBot('BOT_TOKEN');
      *
+     * bot.hears('hi', (ctx) => ctx.reply('hi!'));
      *
-     * bot.use(new Collection<string, any>());
+     * bot.login()
      * ```
-     *
-     * @param {any} params - The parameters to set the session.
-     * @returns {void}
+     * @param {string | string[]} text - The text to match in the received messages.
+     * @param {(message: (Message.TextMessage & Context<F>)) => void} callback - The callback function to be executed when a matching message is received.
+     * It receives the matched message object as a parameter.
+     * @returns void
      */
-    use(params: any): void;
+    hears(text: string, callback: (message: Message.TextMessage & Context<F>) => void): void;
+    use(session: any): void;
     /**
      * The function that starts the whole process.
      * ```ts

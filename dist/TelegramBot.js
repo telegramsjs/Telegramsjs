@@ -27,6 +27,7 @@ class TelegramBot extends BaseClient_1.BaseClient {
          * @type {string}
          */
         this.baseUrl = `https://api.telegram.org/bot${this.token}`;
+        this.processUpdate = new CombinedClass_1.CombinedClass(this).processUpdate;
     }
     /**
      * Defines a command handler.
@@ -130,23 +131,31 @@ class TelegramBot extends BaseClient_1.BaseClient {
         }
     }
     /**
-     * Sets the session property.
+     * Registers a callback function to be executed when a message is received
+     * that includes the specified text.
      * ```ts
-     * import { Collection, Context } from "telegramsjs";
+     * import { TelegramBot } from "telegramsjs"
      *
-     * bot.on('message', (message: Message & Context) => {
-     *  bot.session.set('session1', message.from);
-     * })
+     * const bot = new TelegramBot('BOT_TOKEN');
      *
+     * bot.hears('hi', (ctx) => ctx.reply('hi!'));
      *
-     * bot.use(new Collection<string, any>());
+     * bot.login()
      * ```
-     *
-     * @param {any} params - The parameters to set the session.
-     * @returns {void}
+     * @param {string | string[]} text - The text to match in the received messages.
+     * @param {(message: (Message.TextMessage & Context<F>)) => void} callback - The callback function to be executed when a matching message is received.
+     * It receives the matched message object as a parameter.
+     * @returns void
      */
-    use(params) {
-        this.session = params;
+    hears(text, callback) {
+        this.on("message", (message) => {
+            if (message.text.includes(text)) {
+                callback(message);
+            }
+        });
+    }
+    use(session) {
+        this.session = session;
     }
     /**
      * The function that starts the whole process.

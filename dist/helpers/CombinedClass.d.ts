@@ -1,4 +1,5 @@
 import { TelegramBot } from "../TelegramBot";
+import { MessageCollector } from "../collection/MessageCollector";
 import { Message, Chat, User, InlineQuery, ChosenInlineResult, CallbackQuery, ShippingQuery, PreCheckoutQuery, Poll, PollAnswer, ChatMemberUpdated, ChatJoinRequest, Update, InlineQueryResult, InlineQueryResultsButton, BotCommand, ChatFromGetChat, ChatInviteLink, ChatMember, ChatMemberAdministrator, ChatMemberOwner, ChatPermissions, File, ForumTopic, ForceReply, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove, MessageEntity, MessageId, ParseMode, StickerSet, PassportElementError, LabeledPrice, ShippingOption, MenuButton, InputMediaAudio, InputMediaDocument, InputMediaPhoto, InputMediaVideo, InputMedia, InputSticker } from "@telegram.ts/types";
 type ResponseApi = {
     update_id?: number;
@@ -774,7 +775,8 @@ declare class CombinedClass<F> {
      * @see https://core.telegram.org/bots/api#leavechat
      */
     leave(): Promise<boolean>;
-    processUpdate(): Promise<void>;
+    messageCollector(filter?: Function, time?: number, max?: number): MessageCollector;
+    processUpdate(webhook?: Update[]): Promise<void>;
 }
 export { CombinedClass };
 //# sourceMappingURL=CombinedClass.d.ts.map
