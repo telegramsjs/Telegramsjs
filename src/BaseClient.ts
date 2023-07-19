@@ -820,7 +820,7 @@ export class BaseClient<F> extends Request {
 
   /** Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects. */
   async getChatAdministrators(
-    chatId: number | string
+    chatId: number | string,
   ): Promise<Array<ChatMemberOwner | ChatMemberAdministrator>> {
     const method = "getChatAdministrators";
     const response = await this.request(method, {
@@ -1095,7 +1095,7 @@ export class BaseClient<F> extends Request {
 
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   async getMyShortDescription(
-    languageCode?: string
+    languageCode?: string,
   ): Promise<BotShortDescription> {
     const method = "getMyShortDescription";
     const response = await this.request(method, {
@@ -1135,7 +1135,7 @@ export class BaseClient<F> extends Request {
 
   /** Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on success. */
   async getMyDefaultAdministratorRights(
-    forChannels: boolean
+    forChannels: boolean,
   ): Promise<ChatAdministratorRights> {
     const method = "getMyDefaultAdministratorRights";
     const response = await this.request(method, {
@@ -1544,6 +1544,35 @@ export class BaseClient<F> extends Request {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message.GameMessage> {
     const method = "sendGame";
+    const response = await this.request(method, params);
+    return response.result;
+  }
+
+  /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */
+  async setGameScore(params: {
+    user_id: number;
+    score: number;
+    force?: boolean;
+    disable_edit_message?: boolean;
+    chat_id?: number;
+    message_id?: number;
+    inline_message_id?: string;
+  }): Promise<(Update.Edited & Message.GameMessage) | true> {
+    const method = "setGameScore";
+    const response = await this.request(method, params);
+    return response.result;
+  }
+
+  /** Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of GameHighScore objects.
+
+  This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change. */
+  async getGameHighScores(params: {
+    user_id: number;
+    chat_id?: number;
+    message_id?: number;
+    inline_message_id?: string;
+  }): Promise<GameHighScore[]> {
+    const method = "getGameHighScores";
     const response = await this.request(method, params);
     return response.result;
   }

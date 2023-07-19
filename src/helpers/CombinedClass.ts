@@ -384,7 +384,7 @@ class CombinedClass<F> {
       entities?: MessageEntity[];
       disable_web_page_preview?: boolean;
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ) {
     return this.bot.editMessageText({
       chat_id: this.chat?.id,
@@ -404,7 +404,7 @@ class CombinedClass<F> {
       parse_mode?: ParseMode;
       caption_entities?: MessageEntity[];
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ) {
     return this.bot.editMessageCaption({
       chat_id: this.chat?.id,
@@ -463,7 +463,7 @@ class CombinedClass<F> {
       heading?: number;
       proximity_alert_radius?: number;
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ) {
     return this.bot.stopMessageLiveLocation({
       chat_id: this.chat?.id,
@@ -493,7 +493,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendMessage({
       chat_id: this.chat.id,
@@ -566,7 +566,7 @@ class CombinedClass<F> {
     args?: {
       until_date?: number;
       revoke_messages?: boolean;
-    }
+    },
   ) {
     return this.bot.banChatMember({
       chat_id: this.chat.id,
@@ -626,7 +626,7 @@ class CombinedClass<F> {
       can_invite_users?: boolean;
       can_pin_messages?: boolean;
       can_manage_topics?: boolean;
-    }
+    },
   ) {
     return this.bot.promoteChatMember({
       chat_id: this.chat.id,
@@ -725,7 +725,7 @@ class CombinedClass<F> {
    */
   setChatPermissions(
     permissions: ChatPermissions,
-    use_independent_chat_permissions?: boolean
+    use_independent_chat_permissions?: boolean,
   ) {
     return this.bot.setChatPermissions({
       chat_id: this.chat.id,
@@ -787,7 +787,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendPhoto({
       chat_id: this.chat.id,
@@ -812,7 +812,7 @@ class CombinedClass<F> {
       protect_content?: boolean;
       reply_to_message_id?: number;
       allow_sending_without_reply?: boolean;
-    }
+    },
   ) {
     return this.bot.sendMediaGroup({
       chat_id: this.chat.id,
@@ -844,7 +844,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendAudio({
       chat_id: this.chat.id,
@@ -896,7 +896,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendDocument({
       chat_id: this.chat.id,
@@ -922,7 +922,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendSticker({
       chat_id: this.chat.id,
@@ -950,7 +950,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendVideo({
       chat_id: this.chat.id,
@@ -983,7 +983,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendAnimation({
       chat_id: this.chat.id,
@@ -1011,7 +1011,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendVideoNote({
       chat_id: this.chat.id,
@@ -1070,7 +1070,7 @@ class CombinedClass<F> {
       reply_to_message_id?: number;
       allow_sending_without_reply?: boolean;
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ) {
     return this.bot.sendGame({
       chat_id: this.chat.id,
@@ -1102,7 +1102,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendVoice({
       chat_id: this.chat.id,
@@ -1138,7 +1138,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendPoll({
       chat_id: this.chat.id,
@@ -1179,7 +1179,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendLocation({
       chat_id: this.chat.id,
@@ -1212,7 +1212,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendVenue({
       chat_id: this.chat.id,
@@ -1243,7 +1243,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendContact({
       chat_id: this.chat.id,
@@ -1491,7 +1491,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.reply(text, {
       parse_mode: "Markdown",
@@ -1517,7 +1517,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.reply(text, {
       parse_mode: "MarkdownV2",
@@ -1543,7 +1543,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.reply(text, {
       parse_mode: "HTML",
@@ -1577,7 +1577,7 @@ class CombinedClass<F> {
       disable_notification?: boolean;
       protect_content?: boolean;
       message_id: number;
-    }
+    },
   ) {
     const message = this.getMessageFromAnySource;
     return this.bot.forwardMessage({
@@ -1607,7 +1607,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     const message = this.getMessageFromAnySource;
     return this.bot.copyMessage({
@@ -1676,6 +1676,44 @@ class CombinedClass<F> {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#setgamescore
+   */
+  setGameScore(
+    userId: number,
+    score: number,
+    args?: {
+      force?: boolean;
+      disable_edit_message?: boolean;
+      chat_id?: number;
+      message_id?: number;
+      inline_message_id?: string;
+    },
+  ) {
+    return this.bot.setGameScore({
+      user_id: userId,
+      score,
+      ...args,
+    });
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#getgamehighscores
+   */
+  async getGameHighScores(
+    userId: number,
+    args?: {
+      chat_id?: number;
+      message_id?: number;
+      inline_message_id?: string;
+    },
+  ) {
+    return this.bot.getGameHighScores({
+      user_id: userId,
+      ...args,
+    });
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#sendmessage
    */
   reply(
@@ -1694,7 +1732,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendMessage({
       text: text,
@@ -1723,7 +1761,7 @@ class CombinedClass<F> {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ) {
     return this.bot.sendMessage({
       text: text,
@@ -1742,7 +1780,7 @@ class CombinedClass<F> {
   messageCollector(
     filter?: Function,
     time?: number,
-    max?: number
+    max?: number,
   ): MessageCollector {
     const message = new MessageCollector({
       chatId: this.chat.id,
@@ -1788,7 +1826,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.send(text, args),
               leave: () => this.leave(),
             });
@@ -1811,7 +1849,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.reply(text, args),
               answerInlineQuery: (args: {
                 results: readonly InlineQueryResult[];
@@ -1843,7 +1881,7 @@ class CombinedClass<F> {
                   entities?: MessageEntity[];
                   disable_web_page_preview?: boolean;
                   reply_markup?: InlineKeyboardMarkup;
-                }
+                },
               ) => this.editMessageText(text, args),
               editMessageCaption: (
                 caption?: string,
@@ -1851,11 +1889,11 @@ class CombinedClass<F> {
                   parse_mode?: ParseMode;
                   caption_entities?: MessageEntity[];
                   reply_markup?: InlineKeyboardMarkup;
-                }
+                },
               ) => this.editMessageCaption(caption, args),
               editMessageMedia: (
                 media: InputMedia<F>,
-                reply_markup?: InlineKeyboardMarkup
+                reply_markup?: InlineKeyboardMarkup,
               ) => this.editMessageMedia(media, reply_markup),
               editMessageReplyMarkup: (markup?: InlineKeyboardMarkup) =>
                 this.editMessageReplyMarkup(markup),
@@ -1869,7 +1907,7 @@ class CombinedClass<F> {
                   heading?: number;
                   proximity_alert_radius?: number;
                   reply_markup?: InlineKeyboardMarkup;
-                }
+                },
               ) => this.stopMessageLiveLocation(latitude, longitude, args),
               sendMessage: (
                 text: string,
@@ -1886,7 +1924,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendMessage(text, args),
               getChat: () => this.getChat(),
               exportChatInviteLink: () => this.exportChatInviteLink(),
@@ -1910,7 +1948,7 @@ class CombinedClass<F> {
                 args?: {
                   until_date?: number;
                   revoke_messages?: boolean;
-                }
+                },
               ) => this.banChatMember(userId, args),
               kickChatMember: () => this.kickChatMember,
               unbanChatMember: (userId: number, onlyIfBanned?: boolean) =>
@@ -1936,7 +1974,7 @@ class CombinedClass<F> {
                   can_invite_users?: boolean;
                   can_pin_messages?: boolean;
                   can_manage_topics?: boolean;
-                }
+                },
               ) => this.promoteChatMember(userId, args),
               setChatAdministratorCustomTitle: (args: {
                 user_id: number;
@@ -1949,7 +1987,7 @@ class CombinedClass<F> {
                 this.setChatDescription(description),
               pinChatMessage: (
                 messageId: number,
-                disableNotification?: boolean
+                disableNotification?: boolean,
               ) => this.pinChatMessage(messageId, disableNotification),
               unpinChatMessage: (messageId: number) =>
                 this.unpinChatMessage(messageId),
@@ -1957,17 +1995,17 @@ class CombinedClass<F> {
               leaveChat: () => this.leaveChat(),
               setChatPermissions: (
                 permissions: ChatPermissions,
-                use_independent_chat_permissions?: boolean
+                use_independent_chat_permissions?: boolean,
               ) =>
                 this.setChatPermissions(
                   permissions,
-                  use_independent_chat_permissions
+                  use_independent_chat_permissions,
                 ),
               getChatAdministrators: () => this.getChatAdministrators(),
               getChatMember: (userId: number) => this.getChatMember(userId),
               getChatMembersCount: () => this.getChatMembersCount(),
               setPassportDataErrors: (
-                errors: readonly PassportElementError[]
+                errors: readonly PassportElementError[],
               ) => this.setPassportDataErrors(errors),
               sendPhoto: (
                 photo: F | string,
@@ -1985,7 +2023,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendPhoto(photo, args),
               sendMediaGroup: (
                 media: ReadonlyArray<
@@ -1999,7 +2037,7 @@ class CombinedClass<F> {
                   protect_content?: boolean;
                   reply_to_message_id?: number;
                   allow_sending_without_reply?: boolean;
-                }
+                },
               ) => this.sendMediaGroup(media, args),
               sendAudio: (
                 audio: F | string,
@@ -2020,7 +2058,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendAudio(audio, args),
               sendDice: (args?: {
                 emoji?: string;
@@ -2051,7 +2089,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendDocument(document, args),
               sendSticker: (
                 sticker: F | string,
@@ -2066,7 +2104,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendSticker(sticker, args),
               sendVideo: (
                 video: F | string,
@@ -2083,7 +2121,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendVideo(video, args),
               sendAnimation: (
                 animation: F | string,
@@ -2105,7 +2143,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendAnimation(animation, args),
               sendVideoNote: (
                 videoNote: F | string,
@@ -2122,7 +2160,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendVideoNote(videoNote, args),
               sendInvoice: (args: {
                 title: string;
@@ -2160,7 +2198,7 @@ class CombinedClass<F> {
                   reply_to_message_id?: number;
                   allow_sending_without_reply?: boolean;
                   reply_markup?: InlineKeyboardMarkup;
-                }
+                },
               ) => this.sendGame(gameShortName, args),
               sendVoice: (
                 voice: F | string,
@@ -2181,7 +2219,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendVoice(voice, args),
               sendPoll: (
                 options: readonly string[],
@@ -2206,7 +2244,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendPoll(options, args),
               stopPoll: (args: {
                 message_id: number;
@@ -2230,7 +2268,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendLocation(latitude, longitude, args),
               sendVenue: (
                 latitude: number,
@@ -2251,7 +2289,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendVenue(latitude, longitude, title, address, args),
               sendContact: (
                 phoneNumber: string,
@@ -2268,7 +2306,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.sendContact(phoneNumber, firstName, args),
               getStickerSet: (name: string) => this.getStickerSet(name),
               setChatStickerSet: (stickerSetName: string) =>
@@ -2343,7 +2381,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.replyWithMarkdown(text, args),
               replyWithMarkdownV2: (
                 text: string,
@@ -2360,7 +2398,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.replyWithMarkdownV2(text, args),
               replyWithHTML: (
                 text: string,
@@ -2377,7 +2415,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.replyWithHTML(text, args),
               deleteMessage: (messageId?: number) =>
                 this.deleteMessage(messageId),
@@ -2387,7 +2425,7 @@ class CombinedClass<F> {
                   disable_notification?: boolean;
                   protect_content?: boolean;
                   message_id: number;
-                }
+                },
               ) => this.forwardMessage(chatId, args),
               copyMessage: (
                 chatId: string | number,
@@ -2405,7 +2443,7 @@ class CombinedClass<F> {
                     | ReplyKeyboardMarkup
                     | ReplyKeyboardRemove
                     | ForceReply;
-                }
+                },
               ) => this.copyMessage(chatId, args),
               approveChatJoinRequest: (userId: number) =>
                 this.approveChatJoinRequest(userId),
@@ -2418,10 +2456,29 @@ class CombinedClass<F> {
               setChatMenuButton: (menuButton?: MenuButton) =>
                 this.setChatMenuButton(menuButton),
               getChatMenuButton: () => this.getChatMenuButton(),
+              setGameScore: (
+                userId: number,
+                score: number,
+                args?: {
+                  force?: boolean;
+                  disable_edit_message?: boolean;
+                  chat_id?: number;
+                  message_id?: number;
+                  inline_message_id?: string;
+                },
+              ) => this.setGameScore(userId, score, args),
+              getGameHighScores: (
+                userId: number,
+                args?: {
+                  chat_id?: number;
+                  message_id?: number;
+                  inline_message_id?: string;
+                },
+              ) => this.getGameHighScores(userId, args),
               messageCollector: (
                 filter?: Function,
                 time?: number,
-                max?: number
+                max?: number,
               ) => this.messageCollector(filter, time, max),
             };
             this.bot.emit(options.event, message);

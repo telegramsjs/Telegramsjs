@@ -92,7 +92,7 @@ export type Context<F = Buffer> = {
       entities?: MessageEntity[];
       disable_web_page_preview?: boolean;
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ): Promise<
     | boolean
     | (Update.Edited &
@@ -109,26 +109,26 @@ export type Context<F = Buffer> = {
       parse_mode?: ParseMode;
       caption_entities?: MessageEntity[];
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ): Promise<boolean | (Update.Edited & Message.CaptionableMessage)>;
   /**
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
   editMessageMedia(
     media: InputMedia<F>,
-    reply_markup?: InlineKeyboardMarkup
+    reply_markup?: InlineKeyboardMarkup,
   ): Promise<boolean | (Update.Edited & Message)>;
   /**
    * @see https://core.telegram.org/bots/api#editmessagereplymarkup
    */
   editMessageReplyMarkup(
-    markup?: InlineKeyboardMarkup
+    markup?: InlineKeyboardMarkup,
   ): Promise<boolean | (Update.Edited & Message)>;
   /**
    * @see https://core.telegram.org/bots/api#editmessagelivelocation
    */
   editMessageLiveLocation(
-    replyMarkup?: InlineKeyboardMarkup
+    replyMarkup?: InlineKeyboardMarkup,
   ): Promise<boolean | (Update.Edited & Message)>;
   /**
    * @see https://core.telegram.org/bots/api#stopmessagelivelocation
@@ -141,7 +141,7 @@ export type Context<F = Buffer> = {
       heading?: number;
       proximity_alert_radius?: number;
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ): Promise<
     | boolean
     | (Update.Edited &
@@ -167,7 +167,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.TextMessage>;
   /**
    * @see https://core.telegram.org/bots/api#getchat
@@ -208,7 +208,7 @@ export type Context<F = Buffer> = {
     args?: {
       until_date?: number;
       revoke_messages?: boolean;
-    }
+    },
   ): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#kickchatmember
@@ -220,7 +220,7 @@ export type Context<F = Buffer> = {
           until_date?: number | undefined;
           revoke_messages?: boolean | undefined;
         }
-      | undefined
+      | undefined,
   ) => Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#unbanchatmember
@@ -253,7 +253,7 @@ export type Context<F = Buffer> = {
       can_invite_users?: boolean;
       can_pin_messages?: boolean;
       can_manage_topics?: boolean;
-    }
+    },
   ): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#setchatadministratorcustomtitle
@@ -283,7 +283,7 @@ export type Context<F = Buffer> = {
    */
   pinChatMessage(
     messageId: number,
-    disableNotification?: boolean
+    disableNotification?: boolean,
   ): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#unpinchatmessage
@@ -302,7 +302,7 @@ export type Context<F = Buffer> = {
    */
   setChatPermissions(
     permissions: ChatPermissions,
-    use_independent_chat_permissions?: boolean
+    use_independent_chat_permissions?: boolean,
   ): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#getchatadministrators
@@ -322,7 +322,7 @@ export type Context<F = Buffer> = {
    * @see https://core.telegram.org/bots/api#setpassportdataerrors
    */
   setPassportDataErrors(
-    errors: readonly PassportElementError[]
+    errors: readonly PassportElementError[],
   ): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#sendphoto
@@ -343,7 +343,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.PhotoMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendmediagroup
@@ -360,7 +360,7 @@ export type Context<F = Buffer> = {
       protect_content?: boolean;
       reply_to_message_id?: number;
       allow_sending_without_reply?: boolean;
-    }
+    },
   ): Promise<
     (
       | Message.PhotoMessage
@@ -391,7 +391,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.AudioMessage>;
   /**
    * @see https://core.telegram.org/bots/api#senddice
@@ -428,7 +428,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.DocumentMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendsticker
@@ -446,7 +446,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.StickerMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendvideo
@@ -466,7 +466,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.VideoMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendanimation
@@ -491,7 +491,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.AnimationMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendvideonote
@@ -511,7 +511,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.VideoNoteMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendinvoice
@@ -555,7 +555,7 @@ export type Context<F = Buffer> = {
       reply_to_message_id?: number;
       allow_sending_without_reply?: boolean;
       reply_markup?: InlineKeyboardMarkup;
-    }
+    },
   ): Promise<Message.GameMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendvoice
@@ -579,7 +579,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.VoiceMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendpoll
@@ -607,7 +607,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.PollMessage>;
   /**
    * @see https://core.telegram.org/bots/api#stoppoll
@@ -637,7 +637,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.LocationMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendvenue
@@ -661,7 +661,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.VenueMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendcontact
@@ -681,7 +681,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.ContactMessage>;
   /**
    * @see https://core.telegram.org/bots/api#getstickerset
@@ -819,7 +819,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.TextMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendmessage
@@ -839,7 +839,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.TextMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendmessage
@@ -859,7 +859,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.TextMessage>;
   /**
    * @see https://core.telegram.org/bots/api#deletemessage
@@ -874,7 +874,7 @@ export type Context<F = Buffer> = {
       disable_notification?: boolean;
       protect_content?: boolean;
       message_id: number;
-    }
+    },
   ): Promise<Message>;
   /**
    * @see https://core.telegram.org/bots/api#copymessage
@@ -895,7 +895,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<MessageId>;
   /**
    * @see https://core.telegram.org/bots/api#approvechatjoinrequest
@@ -922,6 +922,37 @@ export type Context<F = Buffer> = {
    */
   getChatMenuButton(): Promise<MenuButton>;
   /**
+   * @see https://core.telegram.org/bots/api#setgamescore
+   */
+  setGameScore(
+    userId: number,
+    score: number,
+    args?: {
+      force?: boolean;
+      disable_edit_message?: boolean;
+      chat_id?: number;
+      message_id?: number;
+      inline_message_id?: string;
+    },
+  ): Promise<
+    | true
+    | (Update.Edited &
+        Message.CommonMessage & {
+          game: import("@telegram.ts/types").Game;
+        })
+  >;
+  /**
+   * @see https://core.telegram.org/bots/api#getgamehighscores
+   */
+  getGameHighScores(
+    userId: number,
+    args?: {
+      chat_id?: number;
+      message_id?: number;
+      inline_message_id?: string;
+    },
+  ): Promise<GameHighScore[]>;
+  /**
    * @see https://core.telegram.org/bots/api#sendmessage
    */
   reply(
@@ -940,7 +971,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.TextMessage>;
   /**
    * @see https://core.telegram.org/bots/api#sendmessage
@@ -961,7 +992,7 @@ export type Context<F = Buffer> = {
         | ReplyKeyboardMarkup
         | ReplyKeyboardRemove
         | ForceReply;
-    }
+    },
   ): Promise<Message.TextMessage>;
   /**
    * @see https://core.telegram.org/bots/api#leavechat
@@ -971,6 +1002,6 @@ export type Context<F = Buffer> = {
   messageCollector(
     filter?: Function,
     time?: number,
-    max?: number
+    max?: number,
   ): MessageCollector;
 };
