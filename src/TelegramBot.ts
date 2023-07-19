@@ -15,7 +15,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
     options: {
       intents?: string[] | number[] | number | null;
       session?: any;
-    } = {}
+    } = {},
   ) {
     super(token, options.intents || null);
 
@@ -66,23 +66,28 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
     command: string | string[],
     callback: (
       message: Message.TextMessage & Context<F>,
-      args?: string[]
-    ) => void
+      args?: string[],
+    ) => void,
+    typeChannel: "private" | "group" | "supergroup" | "channel" | false = false,
   ): void {
     if (typeof command === "string") {
       this.on("message", (message) => {
-        const args = message.text.split?.(" ");
-        const text = message.text;
-        if (text && text.startsWith(`/${command}`)) {
-          callback(message, args);
+        if (typeChannel === message.chat.type || typeChannel === false) {
+          const args = message.text.split?.(" ");
+          const text = message.text;
+          if (text && text.startsWith(`/${command}`)) {
+            callback(message, args);
+          }
         }
       });
     } else if (Array.isArray(command)) {
       this.on("message", (message) => {
-        const args = message.text.split?.(" ");
-        const text = message.text;
-        if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
-          callback(message, args);
+        if (typeChannel === message.chat.type || typeChannel === false) {
+          const args = message.text.split?.(" ");
+          const text = message.text;
+          if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
+            callback(message, args);
+          }
         }
       });
     }
@@ -120,7 +125,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
   public action(
     data: string | string[],
     callback: (callbackQuery: CallbackQuery & Context<F>) => void,
-    answer: boolean = false
+    answer: boolean = false,
   ): void {
     if (typeof data === "string") {
       this.on("callback_query", (ctx) => {
@@ -162,7 +167,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    */
   public hears(
     text: string,
-    callback: (message: Message.TextMessage & Context<F>) => void
+    callback: (message: Message.TextMessage & Context<F>) => void,
   ): void {
     this.on("message", (message: Message.TextMessage & Context<F>) => {
       if (message.text.includes(text)) {
@@ -170,7 +175,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
       }
     });
   }
-  
+
   public use(session: any): void {
     this.session = session;
   }
