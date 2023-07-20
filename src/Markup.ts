@@ -110,7 +110,7 @@ export class Markup {
       return buttons.map((row) =>
         Array.isArray(row)
           ? row.filter((button: Button) => !button.hide)
-          : [row]
+          : [row],
       );
     }
     const wrapFn =
@@ -152,6 +152,12 @@ export class Markup {
     };
   }
 
+  public text(text: string): Button {
+    return {
+      text,
+    };
+  }
+
   public static contactRequest(text: string): Button {
     return {
       text,
@@ -159,7 +165,21 @@ export class Markup {
     };
   }
 
+  public contactRequest(text: string): Button {
+    return {
+      text,
+      request_contact: true,
+    };
+  }
+
   public static locationRequest(text: string): Button {
+    return {
+      text,
+      request_location: true,
+    };
+  }
+
+  public locationRequest(text: string): Button {
     return {
       text,
       request_location: true,
@@ -175,10 +195,33 @@ export class Markup {
     };
   }
 
+  public pollRequest(text: string, type: string): Button {
+    return {
+      text,
+      request_poll: {
+        type,
+      },
+    };
+  }
+
   public static userRequest(
     text: string,
     request_id: string,
-    user_is_premium: boolean
+    user_is_premium: boolean,
+  ): Button {
+    return {
+      text,
+      request_user: {
+        request_id,
+        user_is_premium,
+      },
+    };
+  }
+
+  public userRequest(
+    text: string,
+    request_id: string,
+    user_is_premium: boolean,
   ): Button {
     return {
       text,
@@ -199,11 +242,32 @@ export class Markup {
     };
   }
 
+  public botRequest(text: string, request_id: string): Button {
+    return {
+      text,
+      request_user: {
+        request_id,
+        user_is_bot: true,
+      },
+    };
+  }
+
   public static groupRequest(
     text: string,
     request_id: string,
-    args: any
+    args: any,
   ): Button {
+    return {
+      text,
+      request_chat: {
+        request_id,
+        chat_is_channel: false,
+        ...args,
+      },
+    };
+  }
+
+  public groupRequest(text: string, request_id: string, args: any): Button {
     return {
       text,
       request_chat: {
@@ -217,8 +281,19 @@ export class Markup {
   public static channelRequest(
     text: string,
     request_id: string,
-    args: any
+    args: any,
   ): Button {
+    return {
+      text,
+      request_chat: {
+        request_id,
+        chat_is_channel: true,
+        ...args,
+      },
+    };
+  }
+
+  public channelRequest(text: string, request_id: string, args: any): Button {
     return {
       text,
       request_chat: {
@@ -236,7 +311,21 @@ export class Markup {
     };
   }
 
+  public url(text: string, url: string): Button {
+    return {
+      text,
+      url,
+    };
+  }
+
   public static callback(text: string, data: string): Button {
+    return {
+      text,
+      callback_data: data,
+    };
+  }
+
+  public callback(text: string, data: string): Button {
     return {
       text,
       callback_data: data,
@@ -250,7 +339,21 @@ export class Markup {
     };
   }
 
+  public switchToChat(text: string, value: string): Button {
+    return {
+      text,
+      switch_inline_query: value,
+    };
+  }
+
   public static switchToCurrentChat(text: string, value: string): Button {
+    return {
+      text,
+      switch_inline_query_current_chat: value,
+    };
+  }
+
+  public switchToCurrentChat(text: string, value: string): Button {
     return {
       text,
       switch_inline_query_current_chat: value,
@@ -264,6 +367,13 @@ export class Markup {
     };
   }
 
+  public game(text: string): Button {
+    return {
+      text,
+      callback_game: {},
+    };
+  }
+
   public static pay(text: string): Button {
     return {
       text,
@@ -271,7 +381,24 @@ export class Markup {
     };
   }
 
+  public pay(text: string): Button {
+    return {
+      text,
+      pay: true,
+    };
+  }
+
   public static login(text: string, url: string, opts = {}): Button {
+    return {
+      text,
+      login_url: {
+        ...opts,
+        url,
+      },
+    };
+  }
+
+  public login(text: string, url: string, opts = {}): Button {
     return {
       text,
       login_url: {
@@ -290,6 +417,15 @@ export class Markup {
     };
   }
 
+  public webApp(text: string, url: string): Button {
+    return {
+      text,
+      web_app: {
+        url,
+      },
+    };
+  }
+
   public getReplyMarkup(): string {
     return JSON.stringify(this.reply_markup);
   }
@@ -297,7 +433,7 @@ export class Markup {
   public static generateReplyMarkup(
     markups: Markup[],
     elevation: number = 5,
-    type: "keyboard" | "inline_keyboard" = "inline_keyboard"
+    type: "keyboard" | "inline_keyboard" = "inline_keyboard",
   ): ReplyMarkup {
     const replyMarkup = new Markup();
     const buttons = markups.map((markup) => markup.getReplyMarkup());

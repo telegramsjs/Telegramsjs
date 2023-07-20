@@ -271,6 +271,7 @@ class CombinedClass<F> {
       this.chatMember ??
       this.myChatMember ??
       this.chatJoinRequest ??
+      this.callbackQuery?.message ??
       this.updates
     )?.chat;
     if (!chat) {

@@ -147,7 +147,7 @@ test("Testing the `reduceRight` method - reduces the collection from right to le
 
   const concatenated = collection.reduceRight(
     (accumulator, value) => accumulator + value,
-    ""
+    "",
   );
   expect(concatenated).toBe("302010");
 });

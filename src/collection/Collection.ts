@@ -87,7 +87,7 @@ export class Collection<K, V> {
    */
   public forEach(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => void,
-    thisArg?: any
+    thisArg?: any,
   ): void {
     for (const [key, value] of this._items) {
       callbackFn.call(thisArg, value, key, this);
@@ -103,7 +103,7 @@ export class Collection<K, V> {
 
   public filter(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any
+    thisArg?: any,
   ): Collection<K, V> {
     const result = new Collection<K, V>();
     for (const [key, value] of this._items) {
@@ -124,7 +124,7 @@ export class Collection<K, V> {
    */
   public map<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U,
-    thisArg?: any
+    thisArg?: any,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -142,7 +142,7 @@ export class Collection<K, V> {
    */
   public some(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any
+    thisArg?: any,
   ): boolean {
     for (const [key, value] of this._items) {
       if (callbackFn.call(thisArg, value, key, this)) {
@@ -161,7 +161,7 @@ export class Collection<K, V> {
    */
   public every(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any
+    thisArg?: any,
   ): boolean {
     for (const [key, value] of this._items) {
       if (!callbackFn.call(thisArg, value, key, this)) {
@@ -181,9 +181,9 @@ export class Collection<K, V> {
       accumulator: any,
       value: V,
       key: K,
-      collection: Collection<K, V>
+      collection: Collection<K, V>,
     ) => any,
-    initialValue?: any
+    initialValue?: any,
   ): any {
     let accumulator = initialValue;
     for (const [key, value] of this._items) {
@@ -201,7 +201,7 @@ export class Collection<K, V> {
    */
   public find(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any
+    thisArg?: any,
   ): V | undefined {
     for (const [key, value] of this._items) {
       if (callbackFn.call(thisArg, value, key, this)) {
@@ -222,9 +222,9 @@ export class Collection<K, V> {
       accumulator: any,
       value: V,
       key: K,
-      collection: Collection<K, V>
+      collection: Collection<K, V>,
     ) => any,
-    initialValue?: any
+    initialValue?: any,
   ): any {
     const keys = Array.from(this._items.keys()).reverse();
     let accumulator = initialValue;
@@ -246,7 +246,7 @@ export class Collection<K, V> {
    */
   public flat<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U[],
-    thisArg?: any
+    thisArg?: any,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -282,7 +282,7 @@ export class Collection<K, V> {
    */
   public findKey(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any
+    thisArg?: any,
   ): K | undefined {
     for (const [key, value] of this._items) {
       if (callbackFn.call(thisArg, value, key, this)) {
@@ -316,7 +316,7 @@ export class Collection<K, V> {
    */
   public flatMap<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U[],
-    thisArg?: any
+    thisArg?: any,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -336,7 +336,7 @@ export class Collection<K, V> {
    */
   public mapValues<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U,
-    thisArg?: any
+    thisArg?: any,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -352,7 +352,7 @@ export class Collection<K, V> {
    */
   public defaultSort(): Collection<K, V> {
     const sortedEntries: Entry<K, V>[] = Array.from(this.entries()).sort(
-      (a, b) => String(a[0]).localeCompare(String(b[0]))
+      (a, b) => String(a[0]).localeCompare(String(b[0])),
     );
     return new Collection(sortedEntries);
   }
@@ -364,7 +364,7 @@ export class Collection<K, V> {
    */
   public sorted(compareFn: (a: K, b: K) => number): Collection<K, V> {
     const sortedEntries: Entry<K, V>[] = Array.from(this.entries()).sort(
-      (a, b) => compareFn(a[0], b[0])
+      (a, b) => compareFn(a[0], b[0]),
     );
     return new Collection(sortedEntries);
   }
@@ -389,7 +389,7 @@ export class Collection<K, V> {
    */
   public difference(collection: Collection<K, V>): Collection<K, V> {
     const diffEntries: Entry<K, V>[] = Array.from(this.entries()).filter(
-      ([key]) => !collection.has(key)
+      ([key]) => !collection.has(key),
     );
     return new Collection(diffEntries);
   }
@@ -429,7 +429,7 @@ export class Collection<K, V> {
    */
   public intersect(collection: Collection<K, V>): Collection<K, V> {
     const intersectEntries: Entry<K, V>[] = Array.from(this.entries()).filter(
-      ([key]) => collection.has(key)
+      ([key]) => collection.has(key),
     );
     return new Collection(intersectEntries);
   }
@@ -459,7 +459,7 @@ export class Collection<K, V> {
    * @returns {Collection} - The collection instance (for chaining).
    */
   public tap(
-    callbackFn: (value: V, key: K, collection: Collection<K, V>) => void
+    callbackFn: (value: V, key: K, collection: Collection<K, V>) => void,
   ): Collection<K, V> {
     for (const [key, value] of this._items) {
       callbackFn(value, key, this);
@@ -582,7 +582,7 @@ export class Collection<K, V> {
    */
   public partition(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any
+    thisArg?: any,
   ): GroupedValues<K, V>[] {
     const group1: GroupedValues<K, V> = { key: null as any, values: [] };
     const group2: GroupedValues<K, V> = { key: null as any, values: [] };
@@ -649,7 +649,7 @@ export class Collection<K, V> {
     for (let i = 0; i < values.length; i += size) {
       const chunkValues = values.slice(i, i + size);
       const chunk = new Collection(
-        chunkValues.map((value, index) => [index, value])
+        chunkValues.map((value, index) => [index, value]),
       );
       chunks.push(chunk);
     }

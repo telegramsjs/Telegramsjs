@@ -21,7 +21,7 @@ class TelegramApiError extends Error {
       ok: boolean;
       parameters?: ResponseParameters;
     },
-    method: string
+    method: string,
   ) {
     let message: {
       description: string;

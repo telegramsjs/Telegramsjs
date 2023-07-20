@@ -158,7 +158,7 @@ describe("codeBlock", () => {
     const code = 'function sayHello() {\n  console.log("Hello, world!");\n}';
     const result = codeBlock(code);
     expect(result).toBe(
-      '```\nfunction sayHello() {\n  console.log("Hello, world!");\n}\n```'
+      '```\nfunction sayHello() {\n  console.log("Hello, world!");\n}\n```',
     );
   });
 

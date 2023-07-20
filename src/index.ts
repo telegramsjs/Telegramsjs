@@ -34,7 +34,7 @@ import {
   checkUsername,
   extractUsername,
 } from "./Util";
-const version = "1.5.0";
+const version = "1.6.0";
 
 export {
   TelegramBot,
@@ -77,3 +77,4 @@ export {
 };
 
 export { Context } from "./Context";
+// export { CombinedClass } from "./helpers/CombinedClass";

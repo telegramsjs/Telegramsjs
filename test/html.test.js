@@ -110,7 +110,7 @@ describe("image", () => {
     const alt = "Example Image";
     const result = image(url, alt);
     expect(result).toBe(
-      '<img src="https://example.com/image.jpg" alt="Example Image">'
+      '<img src="https://example.com/image.jpg" alt="Example Image">',
     );
   });
 

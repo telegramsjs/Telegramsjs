@@ -1,7 +1,7 @@
 {
   "name": "telegramsjs",
   "description": "Telegramsjs is a lightweight Node.js library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as Telegraf.js or node-telegram-bot-api. The library has a syntax that is similar to Discord.js. This library provides a way to create Telegram bots with ease and flexibility.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "main": "./dist/index.js",
   "types": [
     "dist/BaseClient.d.ts",
@@ -38,26 +38,31 @@
     "LICENSE"
   ],
   "exports": {
-    ".": [{
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
+    ".": [
+      {
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
       "./dist/index.js"
     ],
-    "./markup": [{
-      "default": "./dist/Markup.js",
-      "types": "./dist/Markup.d.ts"
-    }],
-    "./html": [{
-      "default": "./dist/formatters/html.js",
-      "types": "./dist/formatters/html.d.ts"
-    },
+    "./markup": [
+      {
+        "default": "./dist/Markup.js",
+        "types": "./dist/Markup.d.ts"
+      }
+    ],
+    "./html": [
+      {
+        "default": "./dist/formatters/html.js",
+        "types": "./dist/formatters/html.d.ts"
+      },
       "./dist/formatters/html.js"
     ],
-    "./markdownv": [{
-      "default": "./dist/formatters/markdownv.js",
-      "types": "./dist/formatters/markdownv.d.ts"
-    },
+    "./markdownv": [
+      {
+        "default": "./dist/formatters/markdownv.js",
+        "types": "./dist/formatters/markdownv.d.ts"
+      },
       "./dist/formatters/markdownv.js"
     ],
     "./package.json": "./package.json"
@@ -84,7 +89,7 @@
     "querystring": "^0.2.1"
   },
   "devDependencies": {
-    "@telegram.ts/types": "^1.3.0",
+    "@telegram.ts/types": "^1.3.1",
     "@types/node": "^20.4.1"
   }
 }

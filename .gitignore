@@ -9,7 +9,7 @@ tg.ts
 .prettierrc
 untitled.txt
 docs.nojekyll
-docs/
-dist/
 index.ts
 test.js
+dist/
+docs/
