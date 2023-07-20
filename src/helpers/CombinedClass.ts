@@ -271,9 +271,8 @@ class CombinedClass<F> {
       this.chatMember ??
       this.myChatMember ??
       this.chatJoinRequest ??
-      this.callbackQuery?.message ??
       this.updates
-    )?.chat;
+    )?.chat ?? this.updates?.message?.chat;
     if (!chat) {
       throw new Error("Chat is not available");
     }
