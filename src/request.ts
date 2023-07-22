@@ -135,7 +135,7 @@ export class Request extends EventEmitter {
         };
       };
 
-      if (telegramError.response.data.error_code === 404) {
+      if (telegramError.response?.data?.error_code === 404) {
         telegramError.response.data.description =
           "Invalid token for Telegram bot";
       }

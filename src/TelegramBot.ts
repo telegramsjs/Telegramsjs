@@ -71,22 +71,22 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
     typeChannel: "private" | "group" | "supergroup" | "channel" | false = false,
   ): void {
     if (typeof command === "string") {
-      this.on("message", (message) => {
+      this.on("message", async (message) => {
         if (typeChannel === message.chat.type || typeChannel === false) {
           const args = message.text.split?.(" ");
           const text = message.text;
           if (text && text.startsWith(`/${command}`)) {
-            callback(message, args);
+            await callback(message, args);
           }
         }
       });
     } else if (Array.isArray(command)) {
-      this.on("message", (message) => {
+      this.on("message", async (message) => {
         if (typeChannel === message.chat.type || typeChannel === false) {
           const args = message.text.split?.(" ");
           const text = message.text;
           if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
-            callback(message, args);
+            await callback(message, args);
           }
         }
       });
@@ -128,21 +128,25 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
     answer: boolean = false,
   ): void {
     if (typeof data === "string") {
-      this.on("callback_query", (ctx) => {
+      this.on("callback_query", async (ctx) => {
         if (answer) {
-          ctx.answerCallbackQuery();
+          this.answerCallbackQuery({
+            callback_query_id: ctx.id
+          }).catch(err => console.log);
         }
         if (ctx.data === data) {
-          callback(ctx);
+          await callback(ctx);
         }
       });
     } else if (Array.isArray(data)) {
-      this.on("callback_query", (ctx) => {
+      this.on("callback_query", async (ctx) => {
         if (answer) {
-          ctx.answerCallbackQuery();
+          this.answerCallbackQuery({
+            callback_query_id: ctx.id
+          }).catch(err => console.log);;
         }
         if (data.some((d) => d === ctx.data)) {
-          callback(ctx);
+          await callback(ctx);
         }
       });
     }
