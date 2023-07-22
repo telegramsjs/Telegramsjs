@@ -193,7 +193,7 @@ class CombinedClass<F> {
   }
 
   get messageId(): number | undefined {
-    const messageId = this.updates.message_id;
+    const messageId = this.updates.message_id ?? this.updates.message?.message_id;
     return messageId;
   }
 
@@ -267,12 +267,13 @@ class CombinedClass<F> {
   }
 
   get chat(): Chat {
-    const chat = (
-      this.chatMember ??
-      this.myChatMember ??
-      this.chatJoinRequest ??
-      this.updates
-    )?.chat ?? this.updates?.message?.chat;
+    const chat =
+      (
+        this.chatMember ??
+        this.myChatMember ??
+        this.chatJoinRequest ??
+        this.updates
+      )?.chat ?? this.updates?.message?.chat;
     if (!chat) {
       throw new Error("Chat is not available");
     }

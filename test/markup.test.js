@@ -97,19 +97,10 @@ describe("Markup", () => {
     });
   });
 
-  describe("getReplyMarkup", () => {
-    it("should return the JSON string representation of reply_markup", () => {
-      const text = "Sample text";
-      markup.setText(text);
-      const json = JSON.stringify(markup.reply_markup);
-      expect(markup.getReplyMarkup()).toEqual(json);
-    });
-  });
-
   describe("static methods", () => {
     it("should create the correct Button object", () => {
-      const button = Markup.text("Button text", true);
-      expect(button).toEqual({ text: "Button text", hide: true });
+      const button = Markup.text("Button text");
+      expect(button).toEqual({ text: "Button text" });
     });
   });
 });

@@ -1,3 +1,24 @@
+import {
+  InlineKeyboardButton,
+  LoginUrl,
+  KeyboardButton,
+  ChatAdministratorRights,
+} from "@telegram.ts/types";
+
+interface Text {
+  text: string;
+}
+
+interface WrapOptions {
+  wrap?: (button: Button, index: number, currentRow: Button[]) => boolean;
+}
+
+interface ColumnsOptions {
+  columns: number;
+}
+
+type BuildKeyboard = WrapOptions & ColumnsOptions;
+
 interface ReplyMarkup {
   text?: string;
   selective?: boolean;
@@ -19,13 +40,19 @@ interface Button {
     type: string;
   };
   request_user?: {
-    request_id: string;
+    request_id: number;
     user_is_premium?: boolean;
     user_is_bot?: boolean;
   };
   request_chat?: {
-    request_id: string;
+    request_id: number;
     chat_is_channel: boolean;
+    chat_is_forum?: boolean;
+    chat_has_username?: boolean;
+    chat_is_created?: boolean;
+    user_administrator_rights?: ChatAdministratorRights;
+    bot_administrator_rights?: ChatAdministratorRights;
+    bot_is_member?: boolean;
   };
   url?: string;
   callback_data?: string;
@@ -35,6 +62,9 @@ interface Button {
   pay?: boolean;
   login_url?: {
     url: string;
+    forward_text?: string;
+    bot_username?: string;
+    request_write_access?: boolean;
   };
   web_app?: {
     url: string;
@@ -83,7 +113,7 @@ export class Markup {
     return this;
   }
 
-  public keyboard(buttons: Button[], options: any): this {
+  public keyboard(buttons: Button[], options?: WrapOptions): this {
     const keyboard = this.buildKeyboard(buttons, {
       columns: 1,
       ...options,
@@ -92,7 +122,7 @@ export class Markup {
     return this;
   }
 
-  public inlineKeyboard(buttons: Button[], options: any): this {
+  public inlineKeyboard(buttons: Button[], options?: WrapOptions): this {
     const inlineKeyboard = this.buildKeyboard(buttons, {
       columns: buttons.length,
       ...options,
@@ -101,11 +131,11 @@ export class Markup {
     return this;
   }
 
-  private buildKeyboard(buttons: Button[], options: any): Button[][] {
-    const result: Button[][] = [];
-    if (!Array.isArray(buttons)) {
-      return result;
+  private buildKeyboard(buttons: Button[], options: BuildKeyboard): Button[][] {
+    if (!Array.isArray(buttons) || buttons.length === 0) {
+      return [];
     }
+
     if (this.is2D(buttons)) {
       return buttons.map((row) =>
         Array.isArray(row)
@@ -113,28 +143,33 @@ export class Markup {
           : [row],
       );
     }
+
     const wrapFn =
-      options.wrap !== undefined
-        ? options.wrap
-        : (_btn: Button, _index: number, currentRow: Button[]) =>
-            currentRow.length >= options.columns;
+      options?.wrap ??
+      ((_btn: Button, _index: number, currentRow: Button[]) =>
+        currentRow.length >= (options?.columns ?? 1));
+
+    const result: Button[][] = [];
     let currentRow: Button[] = [];
-    let index = 0;
-    for (const btn of buttons.filter((button) => !button.hide)) {
-      if (wrapFn(btn, index, currentRow) && currentRow.length > 0) {
+
+    for (const button of buttons.filter((button) => !button.hide)) {
+      if (
+        wrapFn(button, currentRow.length, currentRow) &&
+        currentRow.length > 0
+      ) {
         result.push(currentRow);
         currentRow = [];
       }
-      currentRow.push(btn);
-      index++;
+      currentRow.push(button);
     }
     if (currentRow.length > 0) {
       result.push(currentRow);
     }
+
     return result;
   }
 
-  private is2D(array: any[]): boolean {
+  private is2D<T>(array: T[]): boolean {
     if (!Array.isArray(array)) {
       return false;
     }
@@ -145,57 +180,35 @@ export class Markup {
     }
     return true;
   }
-
-  public static text(text: string): Button {
+  
+  public static text(text: string): Text {
     return {
-      text,
+      text
     };
   }
 
-  public text(text: string): Button {
-    return {
-      text,
-    };
-  }
-
-  public static contactRequest(text: string): Button {
+  public static contactRequest(
+    text: string,
+  ): KeyboardButton.RequestContactButton & Text {
     return {
       text,
       request_contact: true,
     };
   }
 
-  public contactRequest(text: string): Button {
-    return {
-      text,
-      request_contact: true,
-    };
-  }
-
-  public static locationRequest(text: string): Button {
+  public static locationRequest(
+    text: string,
+  ): KeyboardButton.RequestLocationButton & Text {
     return {
       text,
       request_location: true,
     };
   }
 
-  public locationRequest(text: string): Button {
-    return {
-      text,
-      request_location: true,
-    };
-  }
-
-  public static pollRequest(text: string, type: string): Button {
-    return {
-      text,
-      request_poll: {
-        type,
-      },
-    };
-  }
-
-  public pollRequest(text: string, type: string): Button {
+  public static pollRequest(
+    text: string,
+    type?: "quiz" | "regular",
+  ): KeyboardButton.RequestPollButton & Text {
     return {
       text,
       request_poll: {
@@ -206,228 +219,121 @@ export class Markup {
 
   public static userRequest(
     text: string,
-    request_id: string,
-    user_is_premium: boolean,
-  ): Button {
+    request_id: number,
+    user_is_bot?: boolean,
+    user_is_premium?: boolean,
+  ): KeyboardButton.RequestUserButton & Text {
     return {
       text,
       request_user: {
         request_id,
+        user_is_bot,
         user_is_premium,
       },
     };
   }
 
-  public userRequest(
+  public static chatRequest(
     text: string,
-    request_id: string,
-    user_is_premium: boolean,
-  ): Button {
+    request_id: number,
+    chat_is_channel: boolean,
+    args: {
+      chat_is_forum?: boolean;
+      chat_has_username?: boolean;
+      chat_is_created?: boolean;
+      user_administrator_rights?: ChatAdministratorRights;
+      bot_administrator_rights?: ChatAdministratorRights;
+      bot_is_member?: boolean;
+    },
+  ): KeyboardButton.RequestChatButton & Text {
     return {
       text,
-      request_user: {
+      request_chat: {
         request_id,
-        user_is_premium,
+        chat_is_channel,
+        ...args,
       },
     };
   }
 
-  public static botRequest(text: string, request_id: string): Button {
-    return {
-      text,
-      request_user: {
-        request_id,
-        user_is_bot: true,
-      },
-    };
-  }
-
-  public botRequest(text: string, request_id: string): Button {
-    return {
-      text,
-      request_user: {
-        request_id,
-        user_is_bot: true,
-      },
-    };
-  }
-
-  public static groupRequest(
+  public static url(
     text: string,
-    request_id: string,
-    args: any,
-  ): Button {
-    return {
-      text,
-      request_chat: {
-        request_id,
-        chat_is_channel: false,
-        ...args,
-      },
-    };
-  }
-
-  public groupRequest(text: string, request_id: string, args: any): Button {
-    return {
-      text,
-      request_chat: {
-        request_id,
-        chat_is_channel: false,
-        ...args,
-      },
-    };
-  }
-
-  public static channelRequest(
-    text: string,
-    request_id: string,
-    args: any,
-  ): Button {
-    return {
-      text,
-      request_chat: {
-        request_id,
-        chat_is_channel: true,
-        ...args,
-      },
-    };
-  }
-
-  public channelRequest(text: string, request_id: string, args: any): Button {
-    return {
-      text,
-      request_chat: {
-        request_id,
-        chat_is_channel: true,
-        ...args,
-      },
-    };
-  }
-
-  public static url(text: string, url: string): Button {
+    url: string,
+  ): InlineKeyboardButton.UrlButton & Text {
     return {
       text,
       url,
     };
   }
 
-  public url(text: string, url: string): Button {
-    return {
-      text,
-      url,
-    };
-  }
-
-  public static callback(text: string, data: string): Button {
+  public static callback(
+    text: string,
+    data: string,
+  ): InlineKeyboardButton.CallbackButton & Text {
     return {
       text,
       callback_data: data,
     };
   }
 
-  public callback(text: string, data: string): Button {
-    return {
-      text,
-      callback_data: data,
-    };
-  }
-
-  public static switchToChat(text: string, value: string): Button {
+  public static switchToChat(
+    text: string,
+    value: string,
+  ): InlineKeyboardButton.SwitchInlineButton & Text {
     return {
       text,
       switch_inline_query: value,
     };
   }
 
-  public switchToChat(text: string, value: string): Button {
-    return {
-      text,
-      switch_inline_query: value,
-    };
-  }
-
-  public static switchToCurrentChat(text: string, value: string): Button {
+  public static switchToCurrentChat(
+    text: string,
+    value: string,
+  ): InlineKeyboardButton.SwitchInlineCurrentChatButton & Text {
     return {
       text,
       switch_inline_query_current_chat: value,
     };
   }
 
-  public switchToCurrentChat(text: string, value: string): Button {
-    return {
-      text,
-      switch_inline_query_current_chat: value,
-    };
-  }
-
-  public static game(text: string): Button {
+  public static game(text: string): InlineKeyboardButton.GameButton & Text {
     return {
       text,
       callback_game: {},
     };
   }
 
-  public game(text: string): Button {
-    return {
-      text,
-      callback_game: {},
-    };
-  }
-
-  public static pay(text: string): Button {
+  public static pay(text: string): InlineKeyboardButton.PayButton & Text {
     return {
       text,
       pay: true,
     };
   }
 
-  public pay(text: string): Button {
-    return {
-      text,
-      pay: true,
-    };
-  }
-
-  public static login(text: string, url: string, opts = {}): Button {
+  public static login(
+    text: string,
+    url: string,
+    args?: Pick<LoginUrl, "url">,
+  ): InlineKeyboardButton.LoginButton & Text {
     return {
       text,
       login_url: {
-        ...opts,
         url,
+        ...args,
       },
     };
   }
 
-  public login(text: string, url: string, opts = {}): Button {
-    return {
-      text,
-      login_url: {
-        ...opts,
-        url,
-      },
-    };
-  }
-
-  public static webApp(text: string, url: string): Button {
+  public static webApp(
+    text: string,
+    url: string,
+  ): InlineKeyboardButton.WebAppButton & Text {
     return {
       text,
       web_app: {
         url,
       },
     };
-  }
-
-  public webApp(text: string, url: string): Button {
-    return {
-      text,
-      web_app: {
-        url,
-      },
-    };
-  }
-
-  public getReplyMarkup(): string {
-    return JSON.stringify(this.reply_markup);
   }
 
   public static generateReplyMarkup(
@@ -436,7 +342,7 @@ export class Markup {
     type: "keyboard" | "inline_keyboard" = "inline_keyboard",
   ): ReplyMarkup {
     const replyMarkup = new Markup();
-    const buttons = markups.map((markup) => markup.getReplyMarkup());
+    const buttons = markups.map((markup) => markup.reply_markup);
     const keyboard = [];
     let row = [];
     for (const button of buttons) {
