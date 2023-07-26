@@ -1,6 +1,7 @@
 import { TelegramBot } from "../TelegramBot";
-import { ParameterError } from "../errorcollection";
 import { MessageCollector } from "../collection/MessageCollector";
+import { Context } from "../Context";
+import util from "../Util";
 import {
   Message,
   Chat,
@@ -141,33 +142,12 @@ const messageTypeMap: MessageTypeMap = {
   },
 };
 
-type botInfo = {
-  id: number;
-  is_bot: boolean;
-  first_name: string;
-  username: string;
-  can_join_groups: boolean;
-  can_read_all_group_messages: boolean;
-  supports_inline_queries: boolean;
-  setCommands: Function;
-  getCommands: Function;
-  deleteCommands: Function;
-  setDescription: Function;
-  getDescription: Function;
-  setShortDescription: Function;
-  getShortDescription: Function;
-  getName: Function;
-  setName: Function;
-};
-
 class CombinedClass<F> {
   bot: TelegramBot<F>;
   updates!: ResponseApi;
-  botInfo?: botInfo;
 
-  constructor(bot: TelegramBot<F>, botInfo?: botInfo) {
+  constructor(bot: TelegramBot<F>) {
     this.bot = bot;
-    this.botInfo = botInfo;
   }
 
   get getThreadId() {
@@ -187,14 +167,28 @@ class CombinedClass<F> {
     );
   }
 
-  get me(): string | undefined {
-    const me = this.botInfo?.username;
-    return me;
+  get messageId(): number | undefined {
+    const messageId =
+      this.updates.message_id ?? this.updates.message?.message_id;
+    return messageId;
   }
 
-  get messageId(): number | undefined {
-    const messageId = this.updates.message_id ?? this.updates.message?.message_id;
-    return messageId;
+  get from() {
+    const from = (
+      this.callbackQuery ??
+      this.inlineQuery ??
+      this.shippingQuery ??
+      this.preCheckoutQuery ??
+      this.chosenInlineResult ??
+      this.chatMember ??
+      this.myChatMember ??
+      this.chatJoinRequest ??
+      this.getMessageFromAnySource
+    )?.from;
+    if (!from) {
+      throw new Error("From is not available");
+    }
+    return from;
   }
 
   get editedMessage():
@@ -280,42 +274,10 @@ class CombinedClass<F> {
     return chat;
   }
 
-  get senderChat() {
-    const senderChat = this.updates?.sender_chat;
-    return senderChat;
-  }
-
-  get from() {
-    const from = (
-      this.callbackQuery ??
-      this.inlineQuery ??
-      this.shippingQuery ??
-      this.preCheckoutQuery ??
-      this.chosenInlineResult ??
-      this.chatMember ??
-      this.myChatMember ??
-      this.chatJoinRequest ??
-      this.getMessageFromAnySource
-    )?.from;
-    if (!from) {
-      throw new Error("From is not available");
-    }
-    return from;
-  }
-
   get inlineMessageId() {
     const inlineMessageId = (this.callbackQuery ?? this.chosenInlineResult)
       ?.inline_message_id;
-    if (!inlineMessageId) {
-      throw new Error("inlineMessageId is not available");
-    }
     return inlineMessageId;
-  }
-
-  get passportData() {
-    if (this.updates == null) return undefined;
-    if (!("passport_data" in this.updates)) return undefined;
-    return this.updates?.passport_data;
   }
 
   /**
@@ -1810,7 +1772,7 @@ class CombinedClass<F> {
           ];
           this.updates = updateProperty as ResponseApi;
           if (updateProperty) {
-            const chat: any = Object.assign({}, updateProperty.chat, {
+            const chat: unknown = Object.assign({}, updateProperty.chat, {
               send: (
                 text: string,
                 args?: {
@@ -1831,10 +1793,11 @@ class CombinedClass<F> {
               ) => this.send(text, args),
               leave: () => this.leave(),
             });
-            const message: any = {
+            const message: Context<F> = {
               ...updateProperty,
               chat,
               telegram: this.bot,
+              util: util,
               reply: (
                 text: string,
                 args?: {

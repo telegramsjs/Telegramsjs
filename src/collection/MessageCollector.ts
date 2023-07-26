@@ -9,7 +9,7 @@ export class MessageCollector extends EventEmitter {
   filter: Function;
   time: number;
   max?: number;
-  collectedMessages: any[];
+  collectedMessages: string[];
   interval: NodeJS.Timeout | null;
   countCollector: number;
 
@@ -58,7 +58,7 @@ export class MessageCollector extends EventEmitter {
   }): void {
     if (!(message.chat.id === this.chatId && this.filter(message))) return;
     this.countCollector = (this.countCollector || 0) + 1;
-    this.collectedMessages.push(message.text ?? message.caption);
+    this.collectedMessages.push((message.text ?? message.caption) as string);
     this.emit("collected", {
       count: this.countCollector,
       collectedMessages: this.collectedMessages,
@@ -81,7 +81,7 @@ export class MessageCollector extends EventEmitter {
    * Returns the collected messages.
    * @returns {Array} The collected messages.
    */
-  collected(): any[] {
+  collected(): string[] {
     return this.collectedMessages;
   }
 

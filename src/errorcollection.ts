@@ -40,16 +40,16 @@ class TelegramApiError extends Error {
     } else if (typeof error === "string") {
       message.description = error;
     } else {
-      message.description = error.description || "unknown error";
+      message.description = error?.description || "unknown error";
     }
 
     super(message.description);
 
-    this.name = `TelegramApiError[${error.error_code ?? 0}]`;
-    this.parameters = error.parameters;
+    this.name = `TelegramApiError[${error?.error_code ?? 404}]`;
+    this.parameters = error?.parameters;
     this.method = method;
-    this.code = error.error_code ?? 0;
-    this.ok = error.ok;
+    this.code = error?.error_code ?? 404;
+    this.ok = error?.ok;
   }
 }
 
@@ -95,54 +95,4 @@ class IntentsError extends Error {
   }
 }
 
-/**
- * Custom error class for errors related to function parameters
- * @extends Error
- */
-class ParameterError extends Error {
-  /**
-   * Creates a new instance of the ParameterError class
-   * @param {string} error - The error message
-   */
-  constructor(error: string) {
-    super(error);
-  }
-}
-
-/**
- * Custom error class for a collection of errors
- * @extends Error
- */
-class ErrorTable extends Error {
-  /**
-   * Creates a new instance of the ErrorTable class
-   * @param {string} error - The error message
-   */
-  constructor(error: string) {
-    super(error);
-  }
-}
-
-/**
- * Custom error class for a collection of errors
- * @extends Error
- */
-class ErrorExtension extends Error {
-  /**
-   * Creates a new instance of the ErrorExtension class
-   * @param {string} error - The error message
-   */
-  constructor(error: string) {
-    super(error);
-  }
-}
-
-export {
-  TelegramApiError,
-  EventError,
-  IntentsError,
-  BitFieldError,
-  ParameterError,
-  ErrorTable,
-  ErrorExtension,
-};
+export { TelegramApiError, EventError, IntentsError, BitFieldError };

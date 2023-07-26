@@ -131,8 +131,8 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
       this.on("callback_query", async (ctx) => {
         if (answer) {
           this.answerCallbackQuery({
-            callback_query_id: ctx.id
-          }).catch(err => console.log);
+            callback_query_id: ctx.id,
+          }).catch((err) => console.log);
         }
         if (ctx.data === data) {
           await callback(ctx);
@@ -142,8 +142,8 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
       this.on("callback_query", async (ctx) => {
         if (answer) {
           this.answerCallbackQuery({
-            callback_query_id: ctx.id
-          }).catch(err => console.log);;
+            callback_query_id: ctx.id,
+          }).catch((err) => console.log);
         }
         if (data.some((d) => d === ctx.data)) {
           await callback(ctx);

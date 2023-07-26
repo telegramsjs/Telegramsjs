@@ -180,10 +180,10 @@ export class Markup {
     }
     return true;
   }
-  
+
   public static text(text: string): Text {
     return {
-      text
+      text,
     };
   }
 

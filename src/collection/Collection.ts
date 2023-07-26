@@ -87,7 +87,7 @@ export class Collection<K, V> {
    */
   public forEach(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => void,
-    thisArg?: any,
+    thisArg?: unknown,
   ): void {
     for (const [key, value] of this._items) {
       callbackFn.call(thisArg, value, key, this);
@@ -103,7 +103,7 @@ export class Collection<K, V> {
 
   public filter(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any,
+    thisArg?: unknown,
   ): Collection<K, V> {
     const result = new Collection<K, V>();
     for (const [key, value] of this._items) {
@@ -124,7 +124,7 @@ export class Collection<K, V> {
    */
   public map<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U,
-    thisArg?: any,
+    thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -142,7 +142,7 @@ export class Collection<K, V> {
    */
   public some(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any,
+    thisArg?: unknown,
   ): boolean {
     for (const [key, value] of this._items) {
       if (callbackFn.call(thisArg, value, key, this)) {
@@ -161,7 +161,7 @@ export class Collection<K, V> {
    */
   public every(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any,
+    thisArg?: unknown,
   ): boolean {
     for (const [key, value] of this._items) {
       if (!callbackFn.call(thisArg, value, key, this)) {
@@ -176,16 +176,16 @@ export class Collection<K, V> {
    * @param {*} initialValue - Value to use as the first argument to the first call of the callback
    * @returns {*} - The reduced value
    */
-  public reduce(
+  public reduce<U>(
     callbackFn: (
-      accumulator: any,
+      accumulator: U,
       value: V,
       key: K,
       collection: Collection<K, V>,
-    ) => any,
-    initialValue?: any,
-  ): any {
-    let accumulator = initialValue;
+    ) => U,
+    initialValue?: U,
+  ): U {
+    let accumulator: U = initialValue as U;
     for (const [key, value] of this._items) {
       accumulator = callbackFn(accumulator, value, key, this);
     }
@@ -201,7 +201,7 @@ export class Collection<K, V> {
    */
   public find(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any,
+    thisArg?: unknown,
   ): V | undefined {
     for (const [key, value] of this._items) {
       if (callbackFn.call(thisArg, value, key, this)) {
@@ -217,17 +217,17 @@ export class Collection<K, V> {
    * @param {*} initialValue - Value to use as the first argument to the first call of the callback
    * @returns {*} - The reduced value
    */
-  public reduceRight(
+  public reduceRight<U>(
     callbackFn: (
-      accumulator: any,
+      accumulator: U,
       value: V,
       key: K,
       collection: Collection<K, V>,
-    ) => any,
-    initialValue?: any,
-  ): any {
+    ) => U,
+    initialValue?: U,
+  ): U {
     const keys = Array.from(this._items.keys()).reverse();
-    let accumulator = initialValue;
+    let accumulator: U = initialValue as U;
 
     for (const key of keys) {
       const value = this._items.get(key);
@@ -246,7 +246,7 @@ export class Collection<K, V> {
    */
   public flat<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U[],
-    thisArg?: any,
+    thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -282,7 +282,7 @@ export class Collection<K, V> {
    */
   public findKey(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any,
+    thisArg?: unknown,
   ): K | undefined {
     for (const [key, value] of this._items) {
       if (callbackFn.call(thisArg, value, key, this)) {
@@ -316,7 +316,7 @@ export class Collection<K, V> {
    */
   public flatMap<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U[],
-    thisArg?: any,
+    thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -336,7 +336,7 @@ export class Collection<K, V> {
    */
   public mapValues<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U,
-    thisArg?: any,
+    thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
     for (const [key, value] of this._items) {
@@ -488,7 +488,7 @@ export class Collection<K, V> {
    */
   public at(index: number): V | undefined {
     const values = this.toArray();
-    return values[index];
+    return index >= 0 ? values[index] : values[values.length + index];
   }
 
   /**
@@ -582,10 +582,16 @@ export class Collection<K, V> {
    */
   public partition(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
-    thisArg?: any,
+    thisArg?: unknown,
   ): GroupedValues<K, V>[] {
-    const group1: GroupedValues<K, V> = { key: null as any, values: [] };
-    const group2: GroupedValues<K, V> = { key: null as any, values: [] };
+    const group1: GroupedValues<K, V> = {
+      key: null as unknown as K,
+      values: [],
+    };
+    const group2: GroupedValues<K, V> = {
+      key: null as unknown as K,
+      values: [],
+    };
     for (const [key, value] of this.entries()) {
       const group = callbackFn.call(thisArg, value, key, this)
         ? group1
@@ -643,7 +649,7 @@ export class Collection<K, V> {
    * @param {number} size - the amount by which this class will be divided
    * @return {array} - returns an array with new collections
    */
-  public chunk(size: number): any[] {
+  public chunk(size: number): [number, V][] {
     const chunks = [];
     const values = this.toArray();
     for (let i = 0; i < values.length; i += size) {
@@ -651,7 +657,7 @@ export class Collection<K, V> {
       const chunk = new Collection(
         chunkValues.map((value, index) => [index, value]),
       );
-      chunks.push(chunk);
+      chunks.push(...chunk);
     }
     return chunks;
   }
@@ -718,13 +724,10 @@ export class Collection<K, V> {
    * Returns an object that contains all the elements of the collection as properties of the keys.
    * @returns An object containing the elements of the collection.
    */
-
-  public toJSON(): {
-    [key: string]: V;
-  } {
+  public toJSON(): { [key: string]: V } {
     const json: { [key: string]: V } = {};
     for (const [key, value] of this._items) {
-      json[key as any] = value;
+      json[String(key)] = value;
     }
     return json;
   }

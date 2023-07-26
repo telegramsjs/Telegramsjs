@@ -34,7 +34,7 @@ import {
   checkUsername,
   extractUsername,
 } from "./Util";
-const version = "1.6.7";
+const version = "1.7.0";
 
 export {
   TelegramBot,

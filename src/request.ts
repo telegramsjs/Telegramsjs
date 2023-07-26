@@ -21,7 +21,6 @@ function reform(reformText: any): any {
       }
     }
   }
-
   return reformText;
 }
 
@@ -140,7 +139,7 @@ export class Request extends EventEmitter {
           "Invalid token for Telegram bot";
       }
 
-      throw new TelegramApiError(telegramError.response.data, method);
+      throw new TelegramApiError(telegramError.response?.data, method);
     }
   }
 

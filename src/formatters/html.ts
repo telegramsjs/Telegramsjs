@@ -1,150 +1,95 @@
-import { ParameterError } from "../errorcollection";
-
 /**
- * Creates bold text
- *
- * @param {string} text - The text to be formatted as bold
- * @throws {ParameterError} If the `text` parameter is missing
- * @returns {string} The input text formatted as bold
+ * Returns the input text wrapped in bold tags.
+ * @param {string} text - The text to be formatted.
+ * @returns {string} The input text enclosed in <b> tags.
  */
 export function bold(text: string): string {
-  if (!text) {
-    throw new ParameterError("missing required argument: text");
-  }
   return `<b>${text}</b>`;
 }
 
 /**
- * Creates italic text
- *
- * @param {string} text - The text to be formatted as italic
- * @throws {ParameterError} If the `text` parameter is missing
- * @returns {string} The input text formatted as italic
+ * Returns the input text wrapped in italic tags.
+ * @param {string} text - The text to be formatted.
+ * @returns {string} The input text enclosed in <i> tags.
  */
 export function italic(text: string): string {
-  if (!text) {
-    throw new ParameterError("missing required argument: text");
-  }
   return `<i>${text}</i>`;
 }
 
 /**
- * Creates underlined text
- *
- * @param {string} text - The text to be formatted as underlined
- * @throws {ParameterError} If the `text` parameter is missing
- * @returns {string} The input text formatted as underlined
+ * Returns the input text wrapped in underline tags.
+ * @param {string} text - The text to be formatted.
+ * @returns {string} The input text enclosed in <u> tags.
  */
 export function underline(text: string): string {
-  if (!text) {
-    throw new ParameterError("missing required argument: text");
-  }
   return `<u>${text}</u>`;
 }
 
 /**
- * Creates strikethrough text
- *
- * @param {string} text - The text to be formatted as strikethrough
- * @throws {ParameterError} If the `text` parameter is missing
- * @returns {string} The input text formatted as strikethrough
+ * Returns the input text wrapped in strikethrough tags.
+ * @param {string} text - The text to be formatted.
+ * @returns {string} The input text enclosed in <s> tags.
  */
 export function strikethrough(text: string): string {
-  if (!text) {
-    throw new ParameterError("missing required argument: text");
-  }
   return `<s>${text}</s>`;
 }
 
 /**
- * Creates inline code
- *
- * @param {string} text - The code to be formatted as inline code
- * @throws {ParameterError} If the `text` parameter is missing
- * @returns {string} The input code formatted as inline code
+ * Returns the input text wrapped in a spoiler span with appropriate class.
+ * @param {string} text - The text to be formatted as a spoiler.
+ * @returns {string} The input text enclosed in a <span> with the 'tg-spoiler' class.
  */
-export function code(text: string): string {
-  if (!text) {
-    throw new ParameterError("missing required argument: text");
-  }
-  return `<code>${text}</code>`;
+export function spoiler(text: string): string {
+  return `<span class="tg-spoiler">${text}</span>`;
 }
 
 /**
- * Creates a hyperlink
- *
- * @param {string} text - The text to be used as the hyperlink's anchor text
- * @param {string} url - The URL that the hyperlink should point to
- * @throws {ParameterError} If either the `text` or `url` parameter is missing
- * @returns {string} An HTML hyperlink element with the specified text and URL
+ * Returns a hyperlink with the provided URL and link text.
+ * @param {string} text - The text to be used as the link's anchor text.
+ * @param {string} url - The URL to link to.
+ * @returns {string} The formatted hyperlink with the given URL and link text.
  */
 export function link(text: string, url: string): string {
-  if (!text) {
-    throw new ParameterError("missing required argument: text");
-  }
-  if (!url) {
-    throw new ParameterError("missing required argument: url");
-  }
   return `<a href="${url}">${text}</a>`;
 }
 
 /**
- * Creates an image element
- *
- * @param {string} url - The URL of the image
- * @param {string} alt - The alternate text to be displayed if the image cannot be loaded
- * @throws {ParameterError} If the `url` parameter is missing
- * @returns {string} An HTML image element with the specified URL and alternate text
+ * Returns the emoji with the given ID and text.
+ * @param {string} emojiId - The ID of the emoji.
+ * @param {string} emoji - The text representation of the emoji.
+ * @returns {string} The formatted emoji with the provided ID.
  */
-export function image(url: string, alt: string): string {
-  if (!url) {
-    throw new ParameterError("missing required argument: url");
-  }
-  return `<img src="${url}" alt="${alt}">`;
+export function emoji(emojiId: string, emoji: string): string {
+  return `<tg-emoji emoji-id="${emojiId}">${emoji}</tg-emoji>`;
 }
 
 /**
- * Creates a paragraph element
- *
- * @param {string} text - The text to be wrapped in a paragraph element
- * @throws {ParameterError} If the `text` parameter is missing
- * @returns {string} An HTML paragraph element containing the input text
+ * Returns the input code wrapped in a code tag for inline code styling.
+ * @param {string} code - The code to be formatted as inline code.
+ * @returns {string} The input code enclosed in <code> tags.
  */
-export function paragraph(text: string): string {
-  if (!text) {
-    throw new ParameterError("missing required argument: text");
-  }
-  return `${text}\n\n`;
+export function inlineCode(code: string): string {
+  return `<code>${code}</code>`;
 }
 
 /**
- * Creates a list element
- *
- * @param {string[]} items - The list items to be included in the list
- * @param {boolean} [ordered=false] - Whether the list should be ordered (default: false)
- * @throws {ParameterError} If the `items` parameter is missing
- * @returns {string} An HTML list element containing the specified list items
+ * Returns the input code wrapped in a pre tag for pre-formatted code block.
+ * @param {string} code - The code to be formatted as a pre-formatted code block.
+ * @returns {string} The input code enclosed in <pre> tags.
  */
-export function list(items: any[], ordered: boolean = false): string {
-  if (!items) {
-    throw new ParameterError("missing required argument: items");
-  }
-  const tag = ordered ? "1." : "*";
-  const listItems = items.map((item) => `${tag} ${item}`).join("\n");
-  return `${listItems}\n\n`;
+export function preFormattedCode(code: string): string {
+  return `<pre>${code}</pre>`;
 }
 
 /**
- * Creates a code block element
- *
- * @param {string} code - The code to be displayed in the code block
- * @param {string} [language=''] - The programming language of the code (default: '')
- * @throws {ParameterError} If the `code` parameter is missing
- * @returns {string} An HTML code block element containing
- **/
-export function codeBlock(code: string, language: string = ""): string {
-  if (!code) {
-    throw new ParameterError("missing required argument: code");
-  }
+ * Returns the input code wrapped in a pre tag with language class for syntax highlighting.
+ * @param {string} code - The code to be formatted as a pre-formatted code block.
+ * @param {string} language - The language for syntax highlighting (e.g., "javascript", "python").
+ * @returns {string} The input code enclosed in <pre><code class="language-${language}"> tags.
+ */
+export function preFormattedCodeWithLanguage(
+  code: string,
+  language: string,
+): string {
   return `<pre><code class="language-${language}">${code}</code></pre>`;
 }

@@ -250,3 +250,24 @@ export {
   checkUsername,
   extractUsername,
 };
+
+export default {
+  checkMessageLinks,
+  extractUserMentions,
+  extractHashtags,
+  checkLocation,
+  checkUserMentions,
+  checkHashtags,
+  checkPhoneNumber,
+  extractUserIdFromLink,
+  checkGroupOrChannel,
+  checkEmoji,
+  checkSticker,
+  extractUsernameFromLink,
+  checkBot,
+  checkChannel,
+  checkLink,
+  checkGroup,
+  checkUsername,
+  extractUsername,
+};
