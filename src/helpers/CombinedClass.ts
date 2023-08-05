@@ -68,6 +68,7 @@ type MessageTypeMap = {
 };
 
 type ResponseApi = {
+  id?: string;
   update_id?: number;
   message_id?: number;
   message?: Message & Update.NonChannel;
@@ -158,13 +159,7 @@ class CombinedClass<F> {
   }
 
   get getMessageFromAnySource() {
-    return (
-      this.editedMessage ??
-      this.callbackQuery?.message ??
-      this.channelPost ??
-      this.editedChannelPost ??
-      this.updates
-    );
+    return this.updates;
   }
 
   get messageId(): number | undefined {
@@ -174,100 +169,16 @@ class CombinedClass<F> {
   }
 
   get from() {
-    const from = (
-      this.callbackQuery ??
-      this.inlineQuery ??
-      this.shippingQuery ??
-      this.preCheckoutQuery ??
-      this.chosenInlineResult ??
-      this.chatMember ??
-      this.myChatMember ??
-      this.chatJoinRequest ??
-      this.getMessageFromAnySource
-    )?.from;
+    const from = this.updates.from ?? this.updates.message?.from;
     if (!from) {
       throw new Error("From is not available");
     }
     return from;
   }
 
-  get editedMessage():
-    | (Message & Update.Edited & Update.NonChannel)
-    | undefined {
-    const editedMessage = this.updates?.edited_message;
-    return editedMessage;
-  }
-
-  get inlineQuery(): InlineQuery | undefined {
-    const inlineQuery = this.updates?.inline_query;
-    return inlineQuery;
-  }
-
-  get shippingQuery(): ShippingQuery | undefined {
-    const shippingQuery = this.updates?.shipping_query;
-    return shippingQuery;
-  }
-
-  get preCheckoutQuery(): PreCheckoutQuery | undefined {
-    const preCheckoutQuery = this.updates?.pre_checkout_query;
-    return preCheckoutQuery;
-  }
-
-  get chosenInlineResult(): ChosenInlineResult | undefined {
-    const chosenInlineResult = this.updates?.chosen_inline_result;
-    return chosenInlineResult;
-  }
-
-  get channelPost(): (Message & Update.Channel) | undefined {
-    const channelPost = this.updates?.channel_post;
-    return channelPost;
-  }
-
-  get editedChannelPost():
-    | (Message & Update.Edited & Update.Channel)
-    | undefined {
-    const editedChannelPost = this.updates?.edited_channel_post;
-    return editedChannelPost;
-  }
-
-  get callbackQuery(): CallbackQuery | undefined {
-    const callbackQuery = this.updates?.callback_query;
-    return callbackQuery;
-  }
-
-  get poll(): Poll | undefined {
-    const poll = this.updates?.poll;
-    return poll;
-  }
-
-  get pollAnswer(): PollAnswer | undefined {
-    const pollAnswer = this.updates?.poll_answer;
-    return pollAnswer;
-  }
-
-  get myChatMember(): ChatMemberUpdated | undefined {
-    const myChatMember = this.updates?.my_chat_member;
-    return myChatMember;
-  }
-
-  get chatMember(): ChatMemberUpdated | undefined {
-    const chatMember = this.updates?.chat_member;
-    return chatMember;
-  }
-
-  get chatJoinRequest(): ChatJoinRequest | undefined {
-    const chatJoinRequest = this.updates?.chat_join_request;
-    return chatJoinRequest;
-  }
-
   get chat(): Chat {
     const chat =
-      (
-        this.chatMember ??
-        this.myChatMember ??
-        this.chatJoinRequest ??
-        this.updates
-      )?.chat ?? this.updates?.message?.chat;
+      (this.updates as any)?.chat ?? (this.updates as any)?.message?.chat;
     if (!chat) {
       throw new Error("Chat is not available");
     }
@@ -275,8 +186,7 @@ class CombinedClass<F> {
   }
 
   get inlineMessageId() {
-    const inlineMessageId = (this.callbackQuery ?? this.chosenInlineResult)
-      ?.inline_message_id;
+    const inlineMessageId = (this.updates as any)?.inline_message_id;
     return inlineMessageId;
   }
 
@@ -292,7 +202,7 @@ class CombinedClass<F> {
     button?: InlineQueryResultsButton;
   }) {
     return this.bot.answerInlineQuery({
-      inline_query_id: this.inlineQuery?.id as string,
+      inline_query_id: this.updates?.id as string,
       ...args,
     });
   }
@@ -307,7 +217,7 @@ class CombinedClass<F> {
     cache_time?: number;
   }) {
     return this.bot.answerCallbackQuery({
-      callback_query_id: this.callbackQuery?.id as string,
+      callback_query_id: this.updates?.id as string,
       ...args,
     });
   }
@@ -321,7 +231,7 @@ class CombinedClass<F> {
     error_message?: string;
   }) {
     return this.bot.answerShippingQuery({
-      shipping_query_id: this.shippingQuery?.id as string,
+      shipping_query_id: this.updates?.id as string,
       ...args,
     });
   }
@@ -331,7 +241,7 @@ class CombinedClass<F> {
    */
   answerPreCheckoutQuery(args: { ok: boolean; error_message?: string }) {
     return this.bot.answerPreCheckoutQuery({
-      pre_checkout_query_id: this.preCheckoutQuery?.id as string,
+      pre_checkout_query_id: this.updates?.id as string,
       ...args,
     });
   }
@@ -351,7 +261,7 @@ class CombinedClass<F> {
   ) {
     return this.bot.editMessageText({
       chat_id: this.chat?.id,
-      message_id: this.callbackQuery?.message?.message_id,
+      message_id: this.updates?.message?.message_id,
       inline_message_id: this.inlineMessageId,
       text: text,
       ...args,
@@ -371,7 +281,7 @@ class CombinedClass<F> {
   ) {
     return this.bot.editMessageCaption({
       chat_id: this.chat?.id,
-      message_id: this.callbackQuery?.message?.message_id,
+      message_id: this.updates?.message?.message_id,
       inline_message_id: this.inlineMessageId,
       caption: caption,
       ...args,
@@ -384,7 +294,7 @@ class CombinedClass<F> {
   editMessageMedia(media: InputMedia<F>, reply_markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageMedia({
       chat_id: this.chat?.id,
-      message_id: this.callbackQuery?.message?.message_id,
+      message_id: this.updates?.message?.message_id,
       inline_message_id: this.inlineMessageId,
       media: media,
       reply_markup,
@@ -397,7 +307,7 @@ class CombinedClass<F> {
   editMessageReplyMarkup(markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageReplyMarkup({
       chat_id: this.chat?.id,
-      message_id: this.callbackQuery?.message?.message_id,
+      message_id: this.updates?.message?.message_id,
       inline_message_id: this.inlineMessageId,
       reply_markup: markup,
     });
@@ -409,7 +319,7 @@ class CombinedClass<F> {
   editMessageLiveLocation(replyMarkup?: InlineKeyboardMarkup) {
     return this.bot.editMessageLiveLocation({
       chat_id: this.chat?.id,
-      message_id: this.callbackQuery?.message?.message_id,
+      message_id: this.updates?.message?.message_id,
       inline_message_id: this.inlineMessageId,
       reply_markup: replyMarkup,
     });
@@ -430,7 +340,7 @@ class CombinedClass<F> {
   ) {
     return this.bot.stopMessageLiveLocation({
       chat_id: this.chat?.id,
-      message_id: this.callbackQuery?.message?.message_id,
+      message_id: this.updates?.message?.message_id,
       inline_message_id: this.inlineMessageId,
       latitude,
       longitude,

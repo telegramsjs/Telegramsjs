@@ -1,21 +1,4 @@
-type IntentBits = {
-  Message: number;
-  EditedMessage: number;
-  ChannelPost: number;
-  EditedChannelPost: number;
-  InlineQuery: number;
-  ChosenInlineResult: number;
-  CallbackQuery: number;
-  ShippingQuery: number;
-  PreCheckoutQuery: number;
-  Poll: number;
-  PollAnswer: number;
-  MyChatMember: number;
-  ChatMember: number;
-  ChatJoinRequest: number;
-};
-
-export const IntentBits: IntentBits = {
+export const IntentBits = {
   Message: 1 << 0,
   EditedMessage: 1 << 1,
   ChannelPost: 1 << 2,

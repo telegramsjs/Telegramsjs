@@ -13,7 +13,7 @@ type TelegramApiResponse = {
   parameters?: ResponseParameters;
 };
 
-function reform(reformText: any): any {
+function reform(reformText: { [key: string]: any }) {
   if (typeof reformText === "object" && reformText !== null) {
     for (const key in reformText) {
       if (typeof reformText[key] === "object") {
@@ -134,12 +134,13 @@ export class Request extends EventEmitter {
         };
       };
 
-      if (telegramError.response?.data?.error_code === 404) {
-        telegramError.response.data.description =
-          "Invalid token for Telegram bot";
+      const dataRes = telegramError.response?.data;
+      const dataError = dataRes?.error_code;
+      if (dataError === 404) {
+        dataRes.description = "Invalid token for Telegram bot";
       }
 
-      throw new TelegramApiError(telegramError.response?.data, method);
+      throw new TelegramApiError(dataRes, method, params);
     }
   }
 
@@ -159,7 +160,7 @@ export class Request extends EventEmitter {
    */
   async ping(): Promise<number> {
     const startTime = Date.now();
-    const response = await this.request("getMe", {});
+    const response = await this.request("getMe");
     const endTime = Date.now();
     const latency = endTime - startTime;
     return latency;

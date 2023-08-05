@@ -34,7 +34,7 @@ const bot = new TelegramBot("BOT_TOKEN");
 
 function isCommand(ctx: Context): boolean {
   return (
-    message.entities?.[0]?.type === "bot_command" && message.text.at(0) === "/"
+    ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/"
   );
 }
 
@@ -66,7 +66,7 @@ bot.on("message", (ctx) => {
   bot.session.counter = bot.session.counter || 0;
   bot.session.counter++;
   ctx.replyWithMarkdownV2(
-    `Counter updated, new value: \`${bot.session.counter}\``
+    `Counter updated, new value: \`${bot.session.counter}\``,
   );
 });
 
@@ -79,7 +79,7 @@ bot.command("start", (ctx) => {
 
 bot.command("remove", (ctx) => {
   ctx.replyWithMarkdownV2(
-    `Removing session from database: \`${bot.session.counter}\``
+    `Removing session from database: \`${bot.session.counter}\``,
   );
   bot.session = null;
 });
@@ -89,7 +89,7 @@ bot.command("stats", (ctx) => {
     ? `@${ctx.from.username}`
     : ctx.from.first_name;
   ctx.replyWithMarkdownV2(
-    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`
+    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`,
   );
 });
 
@@ -105,7 +105,7 @@ const bot = new TelegramBot("BOT_TOKEN");
 
 function isCommand(ctx) {
   return (
-    message.entities?.[0]?.type === "bot_command" && message.text.at(0) === "/"
+    ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/"
   );
 }
 
@@ -137,7 +137,7 @@ bot.on("message", (ctx) => {
   bot.session.counter = bot.session.counter || 0;
   bot.session.counter++;
   ctx.replyWithMarkdownV2(
-    `Counter updated, new value: \`${bot.session.counter}\``
+    `Counter updated, new value: \`${bot.session.counter}\``,
   );
 });
 
@@ -150,7 +150,7 @@ bot.command("start", (ctx) => {
 
 bot.command("remove", (ctx) => {
   ctx.replyWithMarkdownV2(
-    `Removing session from database: \`${bot.session.counter}\``
+    `Removing session from database: \`${bot.session.counter}\``,
   );
   bot.session = null;
 });
@@ -160,7 +160,7 @@ bot.command("stats", (ctx) => {
     ? `@${ctx.from.username}`
     : ctx.from.first_name;
   ctx.replyWithMarkdownV2(
-    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`
+    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`,
   );
 });
 
@@ -173,7 +173,7 @@ bot.login();
 
 ## 📖 Documentation
 
-For more information and detailed documentation, please visit the [Telegramsjs Documentation](https://telegramsjs.surge.sh).
+For more information and detailed documentation, please visit the [Telegramsjs Documentation](https://docs-telegramsjs.surge.sh/).
 
 ## 🎒 Contributions
 

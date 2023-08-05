@@ -1,24 +1,4 @@
-type EntityType = {
-  Mention: string;
-  Hashtag: string;
-  Cashtag: string;
-  BotCommand: string;
-  URL: string;
-  Email: string;
-  PhoneNumber: string;
-  Bold: string;
-  Italic: string;
-  Underline: string;
-  Strikethrough: string;
-  Spoiler: string;
-  Code: string;
-  Pre: string;
-  TextLink: string;
-  TextMention: string;
-  CustomEmoji: string;
-};
-
-export const EntityType: EntityType = {
+export const EntityType = {
   Mention: "mention",
   Hashtag: "hashtag",
   Cashtag: "cashtag",

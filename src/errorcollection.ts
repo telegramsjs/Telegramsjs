@@ -7,6 +7,7 @@ class TelegramApiError extends Error {
   ok: boolean;
   method: string;
   parameters?: ResponseParameters;
+  params?: object;
 
   /**
    * Constructs a new TelegramApiError object.
@@ -22,34 +23,28 @@ class TelegramApiError extends Error {
       parameters?: ResponseParameters;
     },
     method: string,
+    params?: object,
   ) {
-    let message: {
-      description: string;
-    } = {
-      description: "",
-    };
+    let message = { description: "unknown error" };
 
-    if (error?.error_code !== undefined) {
-      message.description = (
-        error.description
-          ?.replace("Bad Request: ", "")
-          ?.replace("can't parse entities:", "")
-          ?.replace("Conflict: ", "")
-          ?.replace("can't parse BotCommand: ", "") || ""
-      ).toLowerCase();
-    } else if (typeof error === "string") {
+    if (typeof error === "string") {
       message.description = error;
-    } else {
-      message.description = error?.description || "unknown error";
+    }
+    if (error?.description) {
+      const errorDescription = error.description?.split(":")?.[1];
+      if (errorDescription) {
+        message.description = errorDescription[1].toLocaleLowerCase();
+      }
+      message.description = error.description;
     }
 
     super(message.description);
 
     this.name = `TelegramApiError[${error?.error_code ?? 404}]`;
-    this.parameters = error?.parameters;
+    this.parameters = error?.parameters ?? params;
     this.method = method;
     this.code = error?.error_code ?? 404;
-    this.ok = error?.ok;
+    this.ok = error?.ok ?? false;
   }
 }
 

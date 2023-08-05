@@ -1,19 +1,6 @@
-type ChatPermission = {
-  CanSendOtherMessages: string;
-  CanAddWebPagePreviews: string;
-  CanSendMessages: string;
-  CanSendAudios: string;
-  CanSendDocuments: string;
-  CanSendPhotos: string;
-  CanSendVideos: string;
-  CanSendVideoNotes: string;
-  CanSendVoiceNotes: string;
-  CanSendPolls: string;
-};
-
-export const ChatPermission: ChatPermission = {
-  CanSendOtherMessages: "can_send_other_messages",
-  CanAddWebPagePreviews: "can_add_web_page_previews",
+export const ChatPermission: {
+  [key: string]: string;
+} = {
   CanSendMessages: "can_send_messages",
   CanSendAudios: "can_send_audios",
   CanSendDocuments: "can_send_documents",
@@ -22,4 +9,10 @@ export const ChatPermission: ChatPermission = {
   CanSendVideoNotes: "can_send_video_notes",
   CanSendVoiceNotes: "can_send_voice_notes",
   CanSendPolls: "can_send_polls",
+  CanSendOtherMessages: "can_send_other_messages",
+  CanAddWebPagePreviews: "can_add_web_page_previews",
+  CanChangeInfo: "can_change_info",
+  CanInviteUsers: "can_invite_users",
+  CanPinMessages: "can_pin_messages",
+  CanManageTopics: "can_manage_topics",
 };

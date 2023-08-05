@@ -170,6 +170,7 @@ export class Collection<K, V> {
     }
     return true;
   }
+
   /**
    * Applies a function against an accumulator and each element in the collection to reduce it to a single value.
    * @param {function} callbackFn - Function to execute on each element in the collection
@@ -529,7 +530,7 @@ export class Collection<K, V> {
    */
   public keyAt(index: number): K | undefined {
     const keys = this.keyArray();
-    return keys[index];
+    return index >= 0 ? keys[index] : keys[keys.length + index];
   }
 
   /**
@@ -685,10 +686,14 @@ export class Collection<K, V> {
    * @returns {Collection<K, V>} A new Collection with the updated value.
    */
 
-  public with(index: number, value: V): Collection<K, V> {
+  public with(index: number, value: V): Collection<K, V> | undefined {
     const entries: Entry<K, V>[] = Array.from(this._items.entries());
-    if (index >= 0 && index < entries.length) {
+    if (index >= 0) {
+      if (!entries[index]) return;
       entries[index][1] = value;
+    } else {
+      if (!entries[entries.length + index]) return;
+      entries[entries.length + index][1] = value;
     }
     return new Collection(entries);
   }
@@ -720,6 +725,7 @@ export class Collection<K, V> {
     const entries = Array.from(this.entries()).slice(start, end);
     return new Collection(entries);
   }
+
   /**
    * Returns an object that contains all the elements of the collection as properties of the keys.
    * @returns An object containing the elements of the collection.

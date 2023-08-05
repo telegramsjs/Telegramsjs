@@ -1,17 +1,4 @@
-type GroupPermission = {
-  CanManageChat: string;
-  CanChangeInfo: string;
-  CanDeleteMessages: string;
-  CanInviteUsers: string;
-  CanRestrictMembers: string;
-  CanPinMessages: string;
-  CanManageTopics: string;
-  CanPromoteMembers: string;
-  CanManageVideoChats: string;
-  CanManageVoiceChats: string;
-};
-
-export const GroupPermission: GroupPermission = {
+export const GroupPermission = {
   CanManageChat: "can_manage_chat",
   CanChangeInfo: "can_change_info",
   CanDeleteMessages: "can_delete_messages",

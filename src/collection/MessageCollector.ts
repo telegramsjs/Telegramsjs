@@ -43,7 +43,7 @@ export class MessageCollector extends EventEmitter {
      * @type {NodeJS.Timeout}
      */
     this.interval = setInterval(() => {
-      this.emit("interval");
+      this.emit("interval", this);
     }, this.time);
   }
 
@@ -125,7 +125,7 @@ export class MessageCollector extends EventEmitter {
       this.time = time;
       clearInterval(this.interval!);
       this.interval = setInterval(() => {
-        this.emit("interval");
+        this.emit("interval", this);
       }, this.time);
       return true;
     }
@@ -157,7 +157,7 @@ export class MessageCollector extends EventEmitter {
    * Stops the message collector.
    */
   stop(): void {
-    this.emit("end");
+    this.emit("end", this);
     clearInterval(this.interval!);
     this.removeAllListeners();
   }

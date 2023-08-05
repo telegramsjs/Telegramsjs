@@ -1,6 +1,6 @@
-import { Request } from "./request.js";
+import { Request } from "./request";
 import axios from "axios";
-import { TelegramApiError } from "./errorcollection.js";
+import { TelegramApiError } from "./errorcollection";
 import {
   Message,
   Chat,
@@ -1338,11 +1338,11 @@ export class BaseClient<F> extends Request {
   }
 
   /** Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success. */
-  async setStickerEmoji(params: {
+  async setStickerEmojiList(params: {
     sticker: string;
     emoji_list: string[];
   }): Promise<boolean> {
-    const method = "setStickerEmoji";
+    const method = "setStickerEmojiList";
     const response = await this.request(method, params);
     return response.result;
   }

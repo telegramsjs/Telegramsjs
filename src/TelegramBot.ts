@@ -2,6 +2,7 @@ import { BaseClient } from "./BaseClient";
 import { CombinedClass } from "./helpers/CombinedClass";
 import { CallbackQuery, Message, Update } from "@telegram.ts/types";
 import { Context } from "./Context";
+import isRegex from "is-regex";
 
 export class TelegramBot<F = Buffer> extends BaseClient<F> {
   token: string = "";
@@ -63,7 +64,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * @param {(message: (Message.TextMessage & Context<F>), args?: string[]) => void} callback - The callback function to handle the command.
    */
   public command(
-    command: string | string[],
+    command: string | string[] | RegExp,
     callback: (
       message: Message.TextMessage & Context<F>,
       args?: string[],
@@ -86,6 +87,16 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
           const args = message.text.split?.(" ");
           const text = message.text;
           if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
+            await callback(message, args);
+          }
+        }
+      });
+    } else if (isRegex(command)) {
+      this.on("message", async (message) => {
+        if (typeChannel === message.chat.type || typeChannel === false) {
+          const args = message.text.split?.(" ");
+          const text = message.text;
+          if (text && command.test(text)) {
             await callback(message, args);
           }
         }
@@ -161,6 +172,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * const bot = new TelegramBot('BOT_TOKEN');
    *
    * bot.hears('hi', (ctx) => ctx.reply('hi!'));
+   * bot.hears(['help', 'start'] => ctx.reply('helpers!'))
    *
    * bot.login()
    * ```
@@ -170,12 +182,22 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * @returns void
    */
   public hears(
-    text: string,
+    text: string | string[] | RegExp,
     callback: (message: Message.TextMessage & Context<F>) => void,
   ): void {
-    this.on("message", (message: Message.TextMessage & Context<F>) => {
-      if (message.text.includes(text)) {
-        callback(message);
+    this.on("message", async (message: Message.TextMessage & Context<F>) => {
+      if (typeof text === "string") {
+        if (message.text.includes(text)) {
+          await callback(message);
+        }
+      } else if (Array.isArray(text)) {
+        if (text.some((d) => text.includes(d))) {
+          await callback(message);
+        }
+      } else if (isRegex(text)) {
+        if (text.test(message.text)) {
+          await callback(message);
+        }
       }
     });
   }
@@ -208,10 +230,10 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
           this.emit("ready", res);
         })
         .catch((err) => {
-          console.log(err);
+          throw err;
         });
     })();
 
-    updatesProcess.processUpdate();
+    await updatesProcess.processUpdate();
   }
 }
