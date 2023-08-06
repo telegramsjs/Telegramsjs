@@ -31,11 +31,12 @@ class TelegramApiError extends Error {
       message.description = error;
     }
     if (error?.description) {
-      const errorDescription = error.description?.split(":")?.[1];
+      const errorDescription = error.description.split(":")[1];
       if (errorDescription) {
-        message.description = errorDescription[1].toLocaleLowerCase();
+        message.description = errorDescription.trimStart().toLocaleLowerCase();
+      } else {
+        message.description = error.description;
       }
-      message.description = error.description;
     }
 
     super(message.description);

@@ -60,7 +60,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    *   message.reply(`${username}, wrote on dislike 🫠`, true);
    * });
    * ```
-   * @param {string | string[]} command - The command string or an array of command strings.
+   * @param {string | string[] | RegExp} command - The command string or an array of command strings.
    * @param {(message: (Message.TextMessage & Context<F>), args?: string[]) => void} callback - The callback function to handle the command.
    */
   public command(
@@ -71,37 +71,21 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
     ) => void,
     typeChannel: "private" | "group" | "supergroup" | "channel" | false = false,
   ): void {
-    if (typeof command === "string") {
-      this.on("message", async (message) => {
-        if (typeChannel === message.chat.type || typeChannel === false) {
-          const args = message.text.split?.(" ");
-          const text = message.text;
-          if (text && text.startsWith(`/${command}`)) {
-            await callback(message, args);
-          }
+    this.on("message", async (message: Message.TextMessage & Context<F>) => {
+      if (typeChannel === message.chat.type || typeChannel === false) {
+        const args = message?.text.split(" ");
+        const text = message.text;
+
+        if (
+          (typeof command === "string" && text.startsWith(`/${command}`)) ||
+          (Array.isArray(command) &&
+            command.some((cmd) => text.startsWith(`/${cmd}`))) ||
+          (isRegex(command) && command.test(text))
+        ) {
+          await callback(message, args);
         }
-      });
-    } else if (Array.isArray(command)) {
-      this.on("message", async (message) => {
-        if (typeChannel === message.chat.type || typeChannel === false) {
-          const args = message.text.split?.(" ");
-          const text = message.text;
-          if (text && command.some((cmd) => text.startsWith(`/${cmd}`))) {
-            await callback(message, args);
-          }
-        }
-      });
-    } else if (isRegex(command)) {
-      this.on("message", async (message) => {
-        if (typeChannel === message.chat.type || typeChannel === false) {
-          const args = message.text.split?.(" ");
-          const text = message.text;
-          if (text && command.test(text)) {
-            await callback(message, args);
-          }
-        }
-      });
-    }
+      }
+    });
   }
 
   /**
@@ -129,38 +113,28 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    *   ctx.reply(`${username}, clicked on dislike 🫠`);
    * }, true);
    * ```
-   * @param {string | string[]} data - The action data string or an array of action data strings.
+   * @param {string | string[] | RegExp} data - The action data string or an array of action data strings.
    * @param {(callbackQuery: (CallbackQuery & Context<F>)) => void} callback - The callback function to handle the action.
    * @param {boolean} [answer=false] - Whether to answer the action.
    */
   public action(
-    data: string | string[],
+    data: string | string[] | RegExp,
     callback: (callbackQuery: CallbackQuery & Context<F>) => void,
     answer: boolean = false,
   ): void {
-    if (typeof data === "string") {
-      this.on("callback_query", async (ctx) => {
-        if (answer) {
-          this.answerCallbackQuery({
-            callback_query_id: ctx.id,
-          }).catch((err) => console.log);
-        }
-        if (ctx.data === data) {
-          await callback(ctx);
-        }
-      });
-    } else if (Array.isArray(data)) {
-      this.on("callback_query", async (ctx) => {
-        if (answer) {
-          this.answerCallbackQuery({
-            callback_query_id: ctx.id,
-          }).catch((err) => console.log);
-        }
-        if (data.some((d) => d === ctx.data)) {
-          await callback(ctx);
-        }
-      });
-    }
+    this.on("callback_query", async (ctx: CallbackQuery & Context<F>) => {
+      if (answer) {
+        ctx.answerCallbackQuery().catch(() => console.log);
+      }
+
+      if (
+        (typeof data === "string" && ctx.data === data) ||
+        (Array.isArray(data) && data.some((d) => d === ctx.data)) ||
+        (isRegex(data) && data.test(ctx.data as string))
+      ) {
+        await callback(ctx);
+      }
+    });
   }
 
   /**
@@ -176,32 +150,37 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    *
    * bot.login()
    * ```
-   * @param {string | string[]} text - The text to match in the received messages.
-   * @param {(message: (Message.TextMessage & Context<F>)) => void} callback - The callback function to be executed when a matching message is received.
+   * @param {string | string[] | RegExp} text - The text to match in the received messages.
+   * @param {(message: (Message.TextMessage & Context<F>, args[])) => void} callback - The callback function to be executed when a matching message is received.
    * It receives the matched message object as a parameter.
    * @returns void
    */
   public hears(
     text: string | string[] | RegExp,
-    callback: (message: Message.TextMessage & Context<F>) => void,
+    callback: (
+      message: Message.TextMessage & Context<F>,
+      args?: string[],
+    ) => void,
   ): void {
     this.on("message", async (message: Message.TextMessage & Context<F>) => {
-      if (typeof text === "string") {
-        if (message.text.includes(text)) {
-          await callback(message);
-        }
-      } else if (Array.isArray(text)) {
-        if (text.some((d) => text.includes(d))) {
-          await callback(message);
-        }
-      } else if (isRegex(text)) {
-        if (text.test(message.text)) {
-          await callback(message);
-        }
+      const args = message?.text.split(" ");
+
+      if (
+        (typeof text === "string" && message.text.includes(text)) ||
+        (Array.isArray(text) && text.some((d) => message.text.includes(d))) ||
+        (isRegex(text) && text.test(message.text))
+      ) {
+        await callback(message, args);
       }
     });
   }
 
+  /**
+   * Use this function to set a session for the Telegram bot. The "use"
+   * function assigns the provided session object to the bot instance,
+   * allowing you to use session data and manage user interactions across different requests.
+   * @param {any} session - The session object to be used by the bot
+   */
   public use(session: any): void {
     this.session = session;
   }
