@@ -1,15 +1,6 @@
 node_modules/
-example/
-documentation.md
-index.js
 package-lock.json
-.txt
-.error
-tg.ts
 .prettierrc
 untitled.txt
-docs.nojekyll
 index.ts
-test.js
 dist/
-docs/
