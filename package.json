@@ -6,6 +6,11 @@
   "engines": {
     "node": ">=14"
   },
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "test": "jest test/",
+    "tab-align": "prettier --write src/"
+  },
   "types": [
     "dist/BaseClient.d.ts",
     "dist/IntentsBitField.d.ts",
