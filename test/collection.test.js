@@ -571,9 +571,9 @@ test("Testing the `chunk` method - splits the collection into subcollections of 
   const result = collection.chunk(1);
 
   expect(result).toEqual([
-    new Collection([[0, "value1"]]),
-    new Collection([[0, "value2"]]),
-    new Collection([[0, "value3"]]),
+    [0, "value1"],
+    [0, "value2"],
+    [0, "value3"],
   ]);
 });
 
