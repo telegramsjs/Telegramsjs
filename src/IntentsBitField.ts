@@ -1,6 +1,6 @@
-import { BitFieldError } from "./errorcollection";
-import { IntentBits } from "./constanta/IntentBits";
-import { TelegramIntentBits } from "./constanta/TelegramIntentBits";
+import { BitFieldError } from "./errorcollection.js";
+import { IntentBits } from "./constanta/IntentBits.js";
+import { TelegramIntentBits } from "./constanta/TelegramIntentBits.js";
 
 /**
  * @class IntentsBitField

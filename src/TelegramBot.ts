@@ -1,7 +1,7 @@
-import { BaseClient } from "./BaseClient";
-import { CombinedClass } from "./helpers/CombinedClass";
+import { BaseClient } from "./BaseClient.js";
+import { CombinedClass } from "./helpers/CombinedClass.js";
 import { CallbackQuery, Message, Update } from "@telegram.ts/types";
-import { Context } from "./Context";
+import { Context } from "./Context.js";
 import isRegex from "is-regex";
 
 export class TelegramBot<F = Buffer> extends BaseClient<F> {

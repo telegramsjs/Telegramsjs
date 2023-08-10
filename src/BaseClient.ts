@@ -1,6 +1,6 @@
-import { Request } from "./request";
 import axios from "axios";
-import { TelegramApiError } from "./errorcollection";
+import { Request } from "./request.js";
+import { TelegramApiError } from "./errorcollection.js";
 import {
   Message,
   Chat,
@@ -70,11 +70,53 @@ export class BaseClient<F> extends Request {
     super(token, intents);
   }
 
+  /** Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
+
+  If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
+
+  Notes
+  1. You will not be able to receive updates using getUpdates for as long as an outgoing webhook is set up.
+  2. To use a self-signed certificate, you need to upload your public key certificate using certificate parameter. Please upload as InputFile, sending a String will not work.
+  3. Ports currently supported for Webhooks: 443, 80, 88, 8443.
+
+  If you're having any trouble setting up webhooks, please check out this amazing guide to webhooks. */
+  async setWebhook(params: {
+    url: string;
+    certificate?: F;
+    ip_address?: string;
+    max_connections?: number;
+    allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
+    drop_pending_updates?: boolean;
+    secret_token?: string;
+  }): Promise<true> {
+    const method = "getMe";
+    const response = await this.request(method, params);
+    return response.result;
+  }
+
   /*
    * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
    */
   async getMe(): Promise<UserFromGetMe> {
     const method = "getMe";
+    const response = await this.request(method);
+    return response.result;
+  }
+
+  /**
+   * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters
+   */
+  async logOut(): Promise<true> {
+    const method = "logOut";
+    const response = await this.request(method);
+    return response.result;
+  }
+
+  /**
+   * Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success. Requires no parameters.
+   */
+  async close(): Promise<true> {
+    const method = "close";
     const response = await this.request(method);
     return response.result;
   }

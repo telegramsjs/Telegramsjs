@@ -1,19 +1,13 @@
-import { TelegramBot } from "./TelegramBot";
-import { BaseClient } from "./BaseClient";
-import { Collection } from "./collection/Collection";
-import { Markup } from "./Markup";
-import { MessageCollector } from "./collection/MessageCollector";
-import { Events } from "./constanta/Events";
-import { ChatActionType } from "./constanta/ChatActionType";
-import { EntityType } from "./constanta/EntityType";
-import { ChatPermission } from "./constanta/ChatPermission";
-import { GroupPermission } from "./constanta/GroupPermission";
-import { GroupStatus } from "./constanta/GroupStatus";
-import { DocumentTypes } from "./constanta/DocumentTypes";
-import { IntentsBitField, decodeIntents } from "./IntentsBitField";
-import { IntentBits } from "./constanta/IntentBits";
-import { TelegramIntentBits } from "./constanta/TelegramIntentBits";
-import { html, markdownv } from "./formatters/index";
+import { TelegramBot } from "./TelegramBot.js";
+import { BaseClient } from "./BaseClient.js";
+import { Collection } from "./collection/Collection.js";
+import { Markup } from "./Markup.js";
+import { MessageCollector } from "./collection/MessageCollector.js";
+import { IntentsBitField, decodeIntents } from "./IntentsBitField.js";
+import { IntentBits } from "./constanta/IntentBits.js";
+import { TelegramIntentBits } from "./constanta/TelegramIntentBits.js";
+import * as html from "./formatters/html.js";
+import * as markdownv from "./formatters/markdownv.js"
 import {
   checkMessageLinks,
   extractUserMentions,
@@ -33,8 +27,8 @@ import {
   checkGroup,
   checkUsername,
   extractUsername,
-} from "./Util";
-const version = "1.7.3";
+} from "./Util.js";
+const version = "1.7.4";
 
 export {
   TelegramBot,
@@ -42,13 +36,6 @@ export {
   Collection,
   Markup,
   MessageCollector,
-  Events,
-  ChatActionType,
-  EntityType,
-  ChatPermission,
-  GroupPermission,
-  GroupStatus,
-  DocumentTypes,
   IntentsBitField,
   decodeIntents,
   IntentBits,
@@ -76,5 +63,5 @@ export {
   version,
 };
 
-export { Context } from "./Context";
-// export { CombinedClass } from "./helpers/CombinedClass";
+export { Context } from "./Context.js";
+// export { CombinedClass } from "./helpers/CombinedClass.js";

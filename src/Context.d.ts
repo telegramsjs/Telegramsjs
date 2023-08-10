@@ -1,4 +1,4 @@
-import { MessageCollector } from "../collection/MessageCollector";
+import { MessageCollector } from "../collection/MessageCollector.js";
 import {
   Message,
   Chat,
@@ -43,7 +43,7 @@ import {
   InputMedia,
   InputSticker,
 } from "@telegram.ts/types";
-import { TelegramBot } from "./TelegramBot";
+import { TelegramBot } from "./TelegramBot.js";
 
 export type Context<F = Buffer> = {
   telegram: TelegramBot<F>;
@@ -802,6 +802,30 @@ export type Context<F = Buffer> = {
    */
   setMyCommands(commands: readonly BotCommand[]): Promise<boolean>;
   /**
+   * @see https://core.telegram.org/bots/api#setmydescription
+   */
+  setMyDescription(description: string): Promise<boolean>;
+  /**
+   * @see https://core.telegram.org/bots/api#getmydescription
+   */
+  getMyDescription(): Promise<BotDescription>;
+  /**
+   * @see https://core.telegram.org/bots/api#setmyshortdescription
+   */
+  setMyShortDescription(short_description: string): Promise<boolean>;
+  /**
+   * @see https://core.telegram.org/bots/api#getmyshortdescription
+   */
+  getMyShortDescription(): Promise<BotShortDescription>;
+  /**
+   * @see https://core.telegram.org/bots/api#setmyname
+   */
+  setMyName(name: string): Promise<boolean>;
+  /**
+   * @see https://core.telegram.org/bots/api#getmyname
+   */
+  getMyName(): Promise<BotName>;
+  /**
    * @see https://core.telegram.org/bots/api#sendmessage
    */
   replyWithMarkdown(
@@ -1003,5 +1027,6 @@ export type Context<F = Buffer> = {
     filter?: Function,
     time?: number,
     max?: number,
+    caption?: boolean,
   ): MessageCollector;
 };

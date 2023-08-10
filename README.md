@@ -33,9 +33,7 @@ import { UserFromGetMe, Message } from "@telegram.ts/types";
 const bot = new TelegramBot("BOT_TOKEN");
 
 function isCommand(ctx: Context): boolean {
-  return (
-    ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/"
-  );
+  return ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/";
 }
 
 bot.on("ready", async (client: UserFromGetMe) => {
@@ -104,9 +102,7 @@ const { TelegramBot, Context } = require("telegramsjs");
 const bot = new TelegramBot("BOT_TOKEN");
 
 function isCommand(ctx) {
-  return (
-    ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/"
-  );
+  return ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/";
 }
 
 bot.on("ready", async (client) => {

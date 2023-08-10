@@ -1,7 +1,7 @@
-import { TelegramBot } from "../TelegramBot";
-import { MessageCollector } from "../collection/MessageCollector";
-import { Context } from "../Context";
-import util from "../Util";
+import { TelegramBot } from "../TelegramBot.js";
+import { MessageCollector } from "../collection/MessageCollector.js";
+import { Context } from "../Context.js";
+import util from "../Util.js";
 import {
   Message,
   Chat,
@@ -153,8 +153,8 @@ class CombinedClass<F> {
 
   get getThreadId() {
     const msg = this.getMessageFromAnySource;
-    return this.updates?.is_topic_message
-      ? this.updates?.message_thread_id
+    return this.updates.is_topic_message
+      ? this.updates.message_thread_id
       : undefined;
   }
 
@@ -162,10 +162,10 @@ class CombinedClass<F> {
     return this.updates;
   }
 
-  get messageId(): number | undefined {
+  get messageId(): number {
     const messageId =
       this.updates.message_id ?? this.updates.message?.message_id;
-    return messageId;
+    return messageId as number;
   }
 
   get from() {
@@ -178,7 +178,7 @@ class CombinedClass<F> {
 
   get chat(): Chat {
     const chat =
-      (this.updates as any)?.chat ?? (this.updates as any)?.message?.chat;
+      (this.updates as any)?.chat ?? (this.updates as any)?.message.chat;
     if (!chat) {
       throw new Error("Chat is not available");
     }
@@ -280,8 +280,8 @@ class CombinedClass<F> {
     },
   ) {
     return this.bot.editMessageCaption({
-      chat_id: this.chat?.id,
-      message_id: this.updates?.message?.message_id,
+      chat_id: this.chat.id,
+      message_id: this.messageId,
       inline_message_id: this.inlineMessageId,
       caption: caption,
       ...args,
@@ -293,8 +293,8 @@ class CombinedClass<F> {
    */
   editMessageMedia(media: InputMedia<F>, reply_markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageMedia({
-      chat_id: this.chat?.id,
-      message_id: this.updates?.message?.message_id,
+      chat_id: this.chat.id,
+      message_id: this.messageId,
       inline_message_id: this.inlineMessageId,
       media: media,
       reply_markup,
@@ -306,8 +306,8 @@ class CombinedClass<F> {
    */
   editMessageReplyMarkup(markup?: InlineKeyboardMarkup) {
     return this.bot.editMessageReplyMarkup({
-      chat_id: this.chat?.id,
-      message_id: this.updates?.message?.message_id,
+      chat_id: this.chat.id,
+      message_id: this.messageId,
       inline_message_id: this.inlineMessageId,
       reply_markup: markup,
     });
@@ -318,8 +318,8 @@ class CombinedClass<F> {
    */
   editMessageLiveLocation(replyMarkup?: InlineKeyboardMarkup) {
     return this.bot.editMessageLiveLocation({
-      chat_id: this.chat?.id,
-      message_id: this.updates?.message?.message_id,
+      chat_id: this.chat.id,
+      message_id: this.messageId,
       inline_message_id: this.inlineMessageId,
       reply_markup: replyMarkup,
     });
@@ -339,8 +339,8 @@ class CombinedClass<F> {
     },
   ) {
     return this.bot.stopMessageLiveLocation({
-      chat_id: this.chat?.id,
-      message_id: this.updates?.message?.message_id,
+      chat_id: this.chat.id,
+      message_id: this.messageId,
       inline_message_id: this.inlineMessageId,
       latitude,
       longitude,
@@ -1347,6 +1347,54 @@ class CombinedClass<F> {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#setmydescription
+   */
+  setMyDescription(description: string) {
+    return this.bot.setMyDescription({
+      description,
+    });
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#getmydescription
+   */
+  getMyDescription() {
+    return this.bot.getMyDescription();
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#setmyshortdescription
+   */
+  setMyShortDescription(short_description: string) {
+    return this.bot.setMyShortDescription({
+      short_description,
+    });
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#getmyshortdescription
+   */
+  getMyShortDescription() {
+    return this.bot.getMyShortDescription();
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#setmyname
+   */
+  setMyName(name: string) {
+    return this.bot.setMyName({
+      name,
+    });
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#getmyname
+   */
+  getMyName() {
+    return this.bot.getMyName();
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#sendmessage
    */
   replyWithMarkdown(
@@ -1434,10 +1482,9 @@ class CombinedClass<F> {
         message_id: messageId,
       });
     }
-    const message = this.getMessageFromAnySource;
     return this.bot.deleteMessage({
       chat_id: this.chat.id,
-      message_id: message.message_id as number,
+      message_id: this.messageId,
     });
   }
 
@@ -1452,11 +1499,10 @@ class CombinedClass<F> {
       message_id: number;
     },
   ) {
-    const message = this.getMessageFromAnySource;
     return this.bot.forwardMessage({
       chat_id: chatId,
-      message_thread_id: message.chat?.id,
-      from_chat_id: message.message_id as number,
+      message_thread_id: this.chat.id,
+      from_chat_id: this.messageId,
       ...args,
     });
   }
@@ -1482,11 +1528,10 @@ class CombinedClass<F> {
         | ForceReply;
     },
   ) {
-    const message = this.getMessageFromAnySource;
     return this.bot.copyMessage({
       chat_id: chatId,
-      message_thread_id: message.chat?.id as number,
-      from_chat_id: message.message_id as number,
+      message_thread_id: this.chat.id,
+      from_chat_id: this.messageId,
       ...args,
     });
   }
@@ -1654,14 +1699,16 @@ class CombinedClass<F> {
     filter?: Function,
     time?: number,
     max?: number,
+    caption?: boolean,
   ): MessageCollector {
     const message = new MessageCollector({
       chatId: this.chat.id,
       filter,
       time,
       max,
+      caption,
     });
-    this.bot.on("message", (ctx: Message) => {
+    this.bot.on("message", (ctx: Message.TextMessage) => {
       message.handleMessage(ctx);
     });
     return message;

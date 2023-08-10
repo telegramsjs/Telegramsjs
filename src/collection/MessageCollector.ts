@@ -6,11 +6,12 @@ import { EventEmitter } from "events";
  */
 export class MessageCollector extends EventEmitter {
   chatId: number;
-  filter: Function;
+  filter: Function = () => true;
   time: number;
-  max?: number;
+  max: number | undefined;
+  caption: boolean = true;
   collectedMessages: string[];
-  interval: NodeJS.Timeout | null;
+  interval: NodeJS.Timeout | null = null;
   countCollector: number;
 
   /**
@@ -20,19 +21,22 @@ export class MessageCollector extends EventEmitter {
    * @param {Function} [options.filter] - The filter function to determine which messages to collect (optional, default: () => true).
    * @param {number} [options.time] - The duration in milliseconds for the collector to run (optional, default: 60000).
    * @param {number} [options.max] - The maximum number of messages to collect (optional).
+   * @param {boolean} [options.caption] - Only text message (optional).
    */
   constructor(options: {
     chatId: number;
     filter?: Function;
     time?: number;
     max?: number;
+    caption?: boolean;
   }) {
     super();
-    const { chatId, filter, time, max } = options;
+    const { chatId, filter, time, max, caption } = options;
     this.chatId = chatId;
     this.filter = filter || (() => true);
     this.time = time || 60000;
     this.max = max;
+    this.caption = caption || true;
     this.collectedMessages = [];
     this.interval = null;
     this.countCollector = 0;
@@ -58,7 +62,10 @@ export class MessageCollector extends EventEmitter {
   }): void {
     if (!(message.chat.id === this.chatId && this.filter(message))) return;
     this.countCollector = (this.countCollector || 0) + 1;
-    this.collectedMessages.push((message.text ?? message.caption) as string);
+    const collectedMessageType = this.caption
+      ? message.text ?? message.caption
+      : message.text;
+    this.collectedMessages.push(collectedMessageType as string);
     this.emit("collected", {
       count: this.countCollector,
       collectedMessages: this.collectedMessages,
@@ -143,6 +150,14 @@ export class MessageCollector extends EventEmitter {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Changes the type, i.e. whether the bot can track `caption`
+   * @param {boolean} caption - can track caption?
+   */
+  setCaption(caption: boolean): void {
+    this.caption = caption;
   }
 
   /**

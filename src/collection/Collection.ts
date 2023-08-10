@@ -60,6 +60,71 @@ export class Collection<K, V> {
   }
 
   /**
+   * Checks if keys exist and their corresponding values satisfy a condition.
+   *
+   * @template K - The type of keys.
+   * @param {K[]} keys - An array of keys to check.
+   * @param {boolean} [isEnabled=false] - Enables the check condition.
+   * @returns {Record<K, boolean> | boolean} - An object containing keys and their existence status, or a boolean if isEnabled is true.
+   */
+  public hasKeys(
+    keys: K[],
+    isEnabled: boolean = false,
+  ): Record<string, boolean> | boolean {
+    let result: Record<string, boolean> | boolean = {};
+
+    for (const key of keys) {
+      const has = this.has(key);
+
+      if (isEnabled) {
+        if (!has) {
+          result = true;
+          break;
+        } else {
+          result[String(key)] = has;
+        }
+      } else {
+        result[String(key)] = has;
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Checks if values exist and their corresponding keys satisfy a condition.
+   *
+   * @template V - The type of values.
+   * @param {V[]} values - An array of values to check.
+   * @param {boolean} [isEnabled=false] - Enables the check condition.
+   * @returns {Record<string, boolean> | boolean} - An object containing values and their existence status, or a boolean if isEnabled is true.
+   */
+  public hasValues(
+    values: V[],
+    isEnabled = false,
+  ): Record<string, boolean> | boolean {
+    let result: Record<string, boolean> | boolean = {};
+
+    for (const value of values) {
+      const key = this.keyOf(value);
+      const hasKey = this.has(key as K);
+
+      if (isEnabled) {
+        if (!hasKey) {
+          result = true;
+          break;
+        } else {
+          result[String(value)] = hasKey;
+        }
+      } else {
+        result[String(value)] = hasKey;
+      }
+    }
+
+    return result;
+  }
+
+  /**
    * Remove the key-value pair associated with the given key.
    * @param {*} key - The key to remove.
    * @returns {boolean} - True if the key-value pair was removed, false if the key was not in the collection.

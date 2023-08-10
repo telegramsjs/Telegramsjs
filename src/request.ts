@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as querystring from "querystring";
-import { TelegramApiError, IntentsError } from "./errorcollection";
+import { TelegramApiError, IntentsError } from "./errorcollection.js";
 import { EventEmitter } from "events";
-import { decodeIntents, IntentsBitField } from "./IntentsBitField";
+import { decodeIntents, IntentsBitField } from "./IntentsBitField.js";
 import { Update, ResponseParameters } from "@telegram.ts/types";
 
 type TelegramApiResponse = {
