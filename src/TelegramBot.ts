@@ -1,6 +1,12 @@
 import { BaseClient } from "./BaseClient.js";
 import { CombinedClass } from "./helpers/CombinedClass.js";
-import { CallbackQuery, Message, Update } from "@telegram.ts/types";
+import {
+  CallbackQuery,
+  Message,
+  Update,
+  UserFromGetMe,
+} from "@telegram.ts/types";
+import { TextCaptionContextMessage } from "./collection/MessageCollector.js";
 import { Context } from "./Context.js";
 import isRegex from "is-regex";
 
@@ -72,8 +78,10 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
     typeChannel: "private" | "group" | "supergroup" | "channel" | false = false,
   ): void {
     this.on("message", async (message: Message.TextMessage & Context<F>) => {
+      if (!message.text) return;
+
       if (typeChannel === message.chat.type || typeChannel === false) {
-        const args = message?.text.split(" ");
+        const args = message.text.split(/\s+/);
         const text = message.text;
 
         if (
@@ -151,25 +159,26 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * bot.login()
    * ```
    * @param {string | string[] | RegExp} text - The text to match in the received messages.
-   * @param {(message: (Message.TextMessage & Context<F>, args[])) => void} callback - The callback function to be executed when a matching message is received.
+   * @param {(message: (TextCaptionContextMessage<F>, args: string[])) => void} callback - The callback function to be executed when a matching message is received.
+   * @param {boolean} [caption=true] - track, text only?
    * It receives the matched message object as a parameter.
    * @returns void
    */
   public hears(
     text: string | string[] | RegExp,
-    callback: (
-      message: Message.TextMessage & Context<F>,
-      args?: string[],
-    ) => void,
+    callback: (message: TextCaptionContextMessage<F>, args: string[]) => void,
+    caption: boolean = true,
   ): void {
-    this.on("message", async (message: Message.TextMessage & Context<F>) => {
-      const args = message?.text.split(" ");
+    this.on("message", async (message: TextCaptionContextMessage<F>) => {
+      if (!caption && message.caption) return;
+      const content = (message.text || message.caption) as string;
 
       if (
-        (typeof text === "string" && message.text.includes(text)) ||
-        (Array.isArray(text) && text.some((d) => message.text.includes(d))) ||
-        (isRegex(text) && text.test(message.text))
+        (typeof text === "string" && content.includes(text)) ||
+        (Array.isArray(text) && text.some((d) => content.includes(d))) ||
+        (isRegex(text) && text.test(content))
       ) {
+        const args = content.split(/\s+/);
         await callback(message, args);
       }
     });
@@ -205,7 +214,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
 
     (async () => {
       this.getMe()
-        .then((res) => {
+        .then((res: UserFromGetMe) => {
           this.emit("ready", res);
         })
         .catch((err) => {

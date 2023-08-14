@@ -1,5 +1,9 @@
 import { TelegramBot } from "../TelegramBot.js";
-import { MessageCollector } from "../collection/MessageCollector.js";
+import {
+  MessageCollector,
+  MessageFilter,
+  TextCaptionContextMessage,
+} from "../collection/MessageCollector.js";
 import { Context } from "../Context.js";
 import util from "../Util.js";
 import {
@@ -1696,19 +1700,19 @@ class CombinedClass<F> {
   }
 
   messageCollector(
-    filter?: Function,
+    filter?: MessageFilter<F>,
     time?: number,
     max?: number,
     caption?: boolean,
-  ): MessageCollector {
-    const message = new MessageCollector({
+  ): MessageCollector<F> {
+    const message = new MessageCollector<F>({
       chatId: this.chat.id,
       filter,
       time,
       max,
       caption,
     });
-    this.bot.on("message", (ctx: Message.TextMessage) => {
+    this.bot.on("message", (ctx: TextCaptionContextMessage<F>) => {
       message.handleMessage(ctx);
     });
     return message;
@@ -2397,7 +2401,7 @@ class CombinedClass<F> {
                 },
               ) => this.getGameHighScores(userId, args),
               messageCollector: (
-                filter?: Function,
+                filter?: MessageFilter<F>,
                 time?: number,
                 max?: number,
               ) => this.messageCollector(filter, time, max),

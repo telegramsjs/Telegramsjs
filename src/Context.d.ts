@@ -1,4 +1,7 @@
-import { MessageCollector } from "../collection/MessageCollector.js";
+import {
+  MessageCollector,
+  MessageFilter,
+} from "../collection/MessageCollector.js";
 import {
   Message,
   Chat,
@@ -1024,9 +1027,9 @@ export type Context<F = Buffer> = {
   leave(): Promise<boolean>;
 
   messageCollector(
-    filter?: Function,
+    filter?: MessageFilter<F>,
     time?: number,
     max?: number,
     caption?: boolean,
-  ): MessageCollector;
+  ): MessageCollector<F>;
 };

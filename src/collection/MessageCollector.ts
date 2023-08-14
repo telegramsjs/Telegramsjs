@@ -1,12 +1,22 @@
 import { EventEmitter } from "events";
+import { Message } from "@telegram.ts/types";
+import { Context } from "../Context.js";
+
+export type TextCaptionContextMessage<F> = Message.TextMessage &
+  Message.CaptionableMessage &
+  Context<F>;
+
+export interface MessageFilter<F> {
+  (message: TextCaptionContextMessage<F>): boolean;
+}
 
 /**
  * Represents a message collector.
  * @extends EventEmitter
  */
-export class MessageCollector extends EventEmitter {
+export class MessageCollector<F> extends EventEmitter {
   chatId: number;
-  filter: Function = () => true;
+  filter: MessageFilter<F>;
   time: number;
   max: number | undefined;
   caption: boolean = true;
@@ -18,14 +28,14 @@ export class MessageCollector extends EventEmitter {
    * Creates a new MessageCollector.
    * @param {Object} options - The options for the collector.
    * @param {number} options.chatId - The ID of the chat to collect messages from.
-   * @param {Function} [options.filter] - The filter function to determine which messages to collect (optional, default: () => true).
+   * @param {(Message.TextMessage & Context<F>) => boolean} [options.filter] - The filter function to determine which messages to collect (optional, default: () => true).
    * @param {number} [options.time] - The duration in milliseconds for the collector to run (optional, default: 60000).
    * @param {number} [options.max] - The maximum number of messages to collect (optional).
    * @param {boolean} [options.caption] - Only text message (optional).
    */
   constructor(options: {
     chatId: number;
-    filter?: Function;
+    filter?: MessageFilter<F>;
     time?: number;
     max?: number;
     caption?: boolean;
@@ -55,11 +65,7 @@ export class MessageCollector extends EventEmitter {
    * Handles a new message received by the collector.
    * @param {object} message - The message object.
    */
-  handleMessage(message: {
-    chat: { id: number };
-    text?: string;
-    caption?: string;
-  }): void {
+  handleMessage(message: TextCaptionContextMessage<F>): void {
     if (!(message.chat.id === this.chatId && this.filter(message))) return;
     this.countCollector = (this.countCollector || 0) + 1;
     const collectedMessageType = this.caption
@@ -111,10 +117,10 @@ export class MessageCollector extends EventEmitter {
 
   /**
    * Sets a new filter function for the collector.
-   * @param {Function} filter - The new filter function.
+   * @param {MessageFilter<F>} filter - The new filter function.
    * @returns {boolean} `true` if the filter function is set successfully, `false` otherwise.
    */
-  setFilter(filter: Function): boolean {
+  setFilter(filter: MessageFilter<F>): boolean {
     if (typeof filter === "function") {
       this.filter = filter;
       return true;
