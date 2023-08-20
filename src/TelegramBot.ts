@@ -1,44 +1,36 @@
-import { BaseClient } from "./BaseClient.js";
-import { CombinedClass } from "./helpers/CombinedClass.js";
+import { BaseClient } from "./BaseClient";
+import { Combined } from "./helpers/Combined";
 import {
   CallbackQuery,
+  InlineQuery,
+  ChosenInlineResult,
   Message,
   Update,
   UserFromGetMe,
 } from "@telegram.ts/types";
-import { TextCaptionContextMessage } from "./collection/MessageCollector.js";
-import { Context } from "./Context.js";
+import { TextCaptionContextMessage } from "./collection/MessageCollector";
+import { Context } from "./Context";
+import { AllowedUpdates } from "./request";
 import isRegex from "is-regex";
 
-export class TelegramBot<F = Buffer> extends BaseClient<F> {
-  token: string = "";
-  intents?: string[] | number[] | number | null;
-  baseUrl: string = "";
-  processUpdate: (webhook?: Update[] | undefined) => Promise<void>;
+class TelegramBot<F = Buffer> extends BaseClient<F> {
+  token: string;
   session: any;
 
   constructor(
     token: string,
     options: {
-      intents?: string[] | number[] | number | null;
+      intents?: AllowedUpdates;
       session?: any;
     } = {},
   ) {
-    super(token, options.intents || null);
+    super(token, options.intents);
 
     /**
      * The Telegram Bot API token.
      * @type {string}
      */
     this.token = token;
-
-    /**
-     * The base URL for the Telegram Bot API.
-     * @type {string}
-     */
-    this.baseUrl = `https://api.telegram.org/bot${this.token}`;
-
-    this.processUpdate = new CombinedClass<F>(this).processUpdate;
   }
 
   /**
@@ -63,13 +55,13 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * // Register a command handler for the "/dislike" command with interactive answer
    * bot.command("dislike", (message, args) => {
    *   const username = message.from.first_name;
-   *   message.reply(`${username}, wrote on dislike 🫠`, true);
+   *   message.reply(`${username}, wrote on dislike 🫠`);
    * });
    * ```
    * @param {string | string[] | RegExp} command - The command string or an array of command strings.
    * @param {(message: (Message.TextMessage & Context<F>), args?: string[]) => void} callback - The callback function to handle the command.
    */
-  public command(
+  command(
     command: string | string[] | RegExp,
     callback: (
       message: Message.TextMessage & Context<F>,
@@ -125,21 +117,20 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * @param {(callbackQuery: (CallbackQuery & Context<F>)) => void} callback - The callback function to handle the action.
    * @param {boolean} [answer=false] - Whether to answer the action.
    */
-  public action(
+  action(
     data: string | string[] | RegExp,
     callback: (callbackQuery: CallbackQuery & Context<F>) => void,
     answer: boolean = false,
   ): void {
     this.on("callback_query", async (ctx: CallbackQuery & Context<F>) => {
-      if (answer) {
-        ctx.answerCallbackQuery().catch(() => console.log);
-      }
-
       if (
         (typeof data === "string" && ctx.data === data) ||
         (Array.isArray(data) && data.some((d) => d === ctx.data)) ||
         (isRegex(data) && data.test(ctx.data as string))
       ) {
+        if (answer) {
+          ctx.answerCallbackQuery().catch(() => console.log);
+        }
         await callback(ctx);
       }
     });
@@ -149,14 +140,11 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * Registers a callback function to be executed when a message is received
    * that includes the specified text.
    * ```ts
-   * import { TelegramBot } from "telegramsjs"
-   *
-   * const bot = new TelegramBot('BOT_TOKEN');
-   *
    * bot.hears('hi', (ctx) => ctx.reply('hi!'));
-   * bot.hears(['help', 'start'] => ctx.reply('helpers!'))
    *
-   * bot.login()
+   * bot.hears(['help', 'start'], (ctx) => ctx.reply('helpers!'));
+   *
+   * bot.hears(/marmok/, (ctx) => ctx.reply("Hi marmok!"));
    * ```
    * @param {string | string[] | RegExp} text - The text to match in the received messages.
    * @param {(message: (TextCaptionContextMessage<F>, args: string[])) => void} callback - The callback function to be executed when a matching message is received.
@@ -164,7 +152,7 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * It receives the matched message object as a parameter.
    * @returns void
    */
-  public hears(
+  hears(
     text: string | string[] | RegExp,
     callback: (message: TextCaptionContextMessage<F>, args: string[]) => void,
     caption: boolean = true,
@@ -185,12 +173,65 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
   }
 
   /**
+   * Registers a callback function to be executed when an inline query matches the specified text.
+   * ```ts
+   * // Example usage for matching a single text
+   * bot.inlineQuery('search', (ctx) => {
+   *   // Your callback logic here
+   * });
+   *
+   * // Example usage for matching multiple texts using an array
+   * bot.inlineQuery(['help', 'info'], (ctx) => {
+   *   // Your callback logic here
+   * });
+   *
+   * // Example usage for matching using a regular expression
+   * bot.inlineQuery(/^start/, async (ctx) => {
+   *   const query = ctx.query;
+   *
+   * // Your logic to generate results based on the query
+   * const results = [
+   *  {
+   *     type: 'article',
+   *     id: '1',
+   *     title: 'Result 1',
+   *    input_message_content: {
+   *       message_text: 'This is result 1'
+   *     }
+   *   },
+   *   // Add more results as needed
+   * ];
+   *
+   * await ctx.answerInlineQuery({ results: results });
+   * });
+   * ```
+   * @param {string | string[] | RegExp} text - The text or patterns to match in the inline query.
+   * @param {(inlineQuery: InlineQuery & Context<F>) => void} callback - The callback function to be executed when a matching inline query is received.
+   * It receives the matched inline query object as a parameter.
+   * @returns void
+   */
+  inlineQuery(
+    text: string | string[] | RegExp,
+    callback: (inlineQuery: InlineQuery & Context<F>) => void,
+  ) {
+    this.on("inline_query", async (ctx: InlineQuery & Context<F>) => {
+      if (
+        (typeof text === "string" && ctx.query === text) ||
+        (Array.isArray(text) && text.some((d) => d === ctx.query)) ||
+        (isRegex(text) && text.test(ctx.query))
+      ) {
+        await callback(ctx);
+      }
+    });
+  }
+
+  /**
    * Use this function to set a session for the Telegram bot. The "use"
    * function assigns the provided session object to the bot instance,
    * allowing you to use session data and manage user interactions across different requests.
    * @param {any} session - The session object to be used by the bot
    */
-  public use(session: any): void {
+  use(session: any): void {
     this.session = session;
   }
 
@@ -209,8 +250,8 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
    * bot.login()
    * ```
    */
-  public async login(): Promise<void> {
-    const updatesProcess = new CombinedClass<F>(this);
+  async login(): Promise<void> {
+    const updatesProcess = new Combined<F>(this);
 
     (async () => {
       this.getMe()
@@ -225,3 +266,5 @@ export class TelegramBot<F = Buffer> extends BaseClient<F> {
     await updatesProcess.processUpdate();
   }
 }
+
+export { TelegramBot };

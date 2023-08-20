@@ -1,27 +1,25 @@
 import { EventEmitter } from "events";
 import { Message } from "@telegram.ts/types";
-import { Context } from "../Context.js";
+import { Context } from "../Context";
 
-export type TextCaptionContextMessage<F> = Message.TextMessage &
+type TextCaptionContextMessage<F> = Message.TextMessage &
   Message.CaptionableMessage &
   Context<F>;
 
-export interface MessageFilter<F> {
-  (message: TextCaptionContextMessage<F>): boolean;
-}
+type MessageFilter<F> = (message: TextCaptionContextMessage<F>) => boolean;
 
 /**
  * Represents a message collector.
  * @extends EventEmitter
  */
-export class MessageCollector<F> extends EventEmitter {
+class MessageCollector<F> extends EventEmitter {
   chatId: number;
   filter: MessageFilter<F>;
   time: number;
   max: number | undefined;
-  caption: boolean = true;
+  caption: boolean;
   collectedMessages: string[];
-  interval: NodeJS.Timeout | null = null;
+  interval: NodeJS.Timeout | null;
   countCollector: number;
 
   /**
@@ -183,3 +181,5 @@ export class MessageCollector<F> extends EventEmitter {
     this.removeAllListeners();
   }
 }
+
+export { TextCaptionContextMessage, MessageFilter, MessageCollector };

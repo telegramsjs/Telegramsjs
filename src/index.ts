@@ -1,13 +1,11 @@
-export { TelegramBot } from "./TelegramBot.js";
-export { BaseClient } from "./BaseClient.js";
-export { Collection } from "./collection/Collection.js";
-export { Markup } from "./Markup.js";
-export { MessageCollector } from "./collection/MessageCollector.js";
-export { IntentsBitField, decodeIntents } from "./IntentsBitField.js";
-export { IntentBits } from "./constanta/IntentBits.js";
-export { TelegramIntentBits } from "./constanta/TelegramIntentBits.js";
-export * as html from "./formatters/html.js";
-export * as markdownv from "./formatters/markdownv.js"
+export { TelegramBot } from "./TelegramBot";
+export { BaseClient } from "./BaseClient";
+export { Collection } from "./collection/Collection";
+export { Markup } from "./Markup";
+export { MenuBuilder } from "./markup/MenuBuilder"
+export { MessageCollector } from "./collection/MessageCollector";
+export * as html from "./formatters/html";
+export * as markdownv from "./formatters/markdownv"
 export {
   checkMessageLinks,
   extractUserMentions,
@@ -27,6 +25,6 @@ export {
   checkGroup,
   checkUsername,
   extractUsername,
-} from "./Util.js";
-export { Context } from "./Context.js";
-export const version = "1.7.5";
+} from "./Util";
+export { Context } from "./Context";
+export const version = "2.0.0";

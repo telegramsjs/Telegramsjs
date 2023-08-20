@@ -17,7 +17,7 @@ const {
   checkGroup,
   checkUsername,
   extractUsername,
-} = require("../dist/index");
+} = require("../dist/cjs/index");
 
 describe("Message Functions", () => {
   test("checkMessageLinks should detect links in a message", () => {

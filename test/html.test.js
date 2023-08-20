@@ -9,7 +9,7 @@ const {
   inlineCode,
   preFormattedCode,
   preFormattedCodeWithLanguage,
-} = require("../dist/index").html;
+} = require("../dist/cjs/index").html;
 
 describe("Text formatting functions", () => {
   test("bold()", () => {

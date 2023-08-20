@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Request } from "./request.js";
-import { TelegramApiError } from "./errorcollection.js";
+import { Request, AllowedUpdates } from "./request";
+import { TelegramApiError } from "./errorcollection";
 import {
   Message,
   Chat,
@@ -58,15 +58,13 @@ import {
   InputSticker,
 } from "@telegram.ts/types";
 
-export class BaseClient<F> extends Request {
-  token: string = "";
-  intents?: string[] | number[] | number | null;
+class BaseClient<F> extends Request {
   /**
    * Creat method Telegram Api
    * @param {string} token - The Telegram Bot API token.
-   * @param {string[] | number[] | number | null} [intents=null] - The client intents.
+   * @param {AllowedUpdates} [intents=undefined] - The client intents.
    */
-  constructor(token: string, intents?: string[] | number[] | number | null) {
+  constructor(token: string, intents?: AllowedUpdates) {
     super(token, intents);
   }
 
@@ -600,7 +598,7 @@ export class BaseClient<F> extends Request {
       const downloadError = error as {
         message: string;
       };
-      throw new Error(`Failed to download file: ${downloadError.message}`);
+      throw Error(`Failed to download file: ${downloadError.message}`);
     }
   }
 
@@ -1028,6 +1026,19 @@ export class BaseClient<F> extends Request {
   /** Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
   async unhideGeneralForumTopic(chatId: string | number): Promise<boolean> {
     const method = "unhideGeneralForumTopic";
+    const response = await this.request(method, {
+      chat_id: chatId,
+    });
+
+    return response.result;
+  }
+
+  /** Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
+   */
+  async unpinAllGeneralForumTopicMessages(
+    chatId: string | number,
+  ): Promise<boolean> {
+    const method = "unpinAllGeneralForumTopicMessages";
     const response = await this.request(method, {
       chat_id: chatId,
     });
@@ -1638,3 +1649,5 @@ export class BaseClient<F> extends Request {
     return response.result;
   }
 }
+
+export { BaseClient };

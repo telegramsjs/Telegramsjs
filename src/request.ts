@@ -1,8 +1,7 @@
 import axios from "axios";
-import * as querystring from "querystring";
-import { TelegramApiError, IntentsError } from "./errorcollection.js";
+import querystring from "querystring";
+import { TelegramApiError } from "./errorcollection";
 import { EventEmitter } from "events";
-import { decodeIntents, IntentsBitField } from "./IntentsBitField.js";
 import { Update, ResponseParameters } from "@telegram.ts/types";
 
 type TelegramApiResponse = {
@@ -12,6 +11,8 @@ type TelegramApiResponse = {
   result?: any;
   parameters?: ResponseParameters;
 };
+
+type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
 
 function reform(reformText: { [key: string]: any }) {
   if (typeof reformText === "object" && reformText !== null) {
@@ -28,11 +29,11 @@ function reform(reformText: { [key: string]: any }) {
  * Represents a request object for making requests to the Telegram Bot API.
  * @extends EventEmitter
  */
-export class Request extends EventEmitter {
+class Request extends EventEmitter {
   token: string;
   baseUrl: string;
   offset: number;
-  intents?: string[] | number[] | number | null;
+  intents?: AllowedUpdates;
   startTime: number = Date.now();
   update_id?: number;
   last_object?: Update;
@@ -40,23 +41,13 @@ export class Request extends EventEmitter {
   /**
    * Constructs a new Request object.
    * @param {string} [token] - The API token for the bot.
-   * @param {string[] | number[] | number | null} [intents] - The types of updates the bot is interested in.
+   * @param {AllowedUpdates} [intents] - The types of updates the bot is interested in.
    */
-  constructor(token: string, intents?: string[] | number[] | number | null) {
+  constructor(token: string, intents?: AllowedUpdates) {
     super();
     this.token = token;
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
     this.offset = 0;
-
-    if (typeof intents === "number") {
-      this.intents = decodeIntents(new IntentsBitField(intents));
-    } else if (Array.isArray(intents) && intents.length > 0) {
-      this.intents = intents;
-    } else if (intents && typeof intents === "object") {
-      this.intents = decodeIntents(new IntentsBitField(intents[0] as number));
-    } else {
-      this.intents = null;
-    }
   }
 
   /**
@@ -70,10 +61,10 @@ export class Request extends EventEmitter {
     this.startTime = Date.now();
     const params: {
       offset: number;
-      allowed_updates?: string[] | number[] | number | null;
+      allowed_updates?: AllowedUpdates;
     } = {
       offset: this.offset,
-      allowed_updates: this.intents,
+      allowed_updates: this.intents ?? [],
     };
 
     const response = await this.request("getUpdates", params);
@@ -182,3 +173,5 @@ export class Request extends EventEmitter {
     return this.last_object;
   }
 }
+
+export { AllowedUpdates, Request };

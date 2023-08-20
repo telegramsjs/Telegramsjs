@@ -3,7 +3,7 @@
  * @param {string} text - The text to be formatted.
  * @returns {string} The input text enclosed in <b> tags.
  */
-export function bold(text: string): string {
+function bold(text: string): string {
   return `<b>${text}</b>`;
 }
 
@@ -12,7 +12,7 @@ export function bold(text: string): string {
  * @param {string} text - The text to be formatted.
  * @returns {string} The input text enclosed in <i> tags.
  */
-export function italic(text: string): string {
+function italic(text: string): string {
   return `<i>${text}</i>`;
 }
 
@@ -21,7 +21,7 @@ export function italic(text: string): string {
  * @param {string} text - The text to be formatted.
  * @returns {string} The input text enclosed in <u> tags.
  */
-export function underline(text: string): string {
+function underline(text: string): string {
   return `<u>${text}</u>`;
 }
 
@@ -30,7 +30,7 @@ export function underline(text: string): string {
  * @param {string} text - The text to be formatted.
  * @returns {string} The input text enclosed in <s> tags.
  */
-export function strikethrough(text: string): string {
+function strikethrough(text: string): string {
   return `<s>${text}</s>`;
 }
 
@@ -39,7 +39,7 @@ export function strikethrough(text: string): string {
  * @param {string} text - The text to be formatted as a spoiler.
  * @returns {string} The input text enclosed in a <span> with the 'tg-spoiler' class.
  */
-export function spoiler(text: string): string {
+function spoiler(text: string): string {
   return `<span class="tg-spoiler">${text}</span>`;
 }
 
@@ -49,7 +49,7 @@ export function spoiler(text: string): string {
  * @param {string} url - The URL to link to.
  * @returns {string} The formatted hyperlink with the given URL and link text.
  */
-export function link(text: string, url: string): string {
+function link(text: string, url: string): string {
   return `<a href="${url}">${text}</a>`;
 }
 
@@ -59,7 +59,7 @@ export function link(text: string, url: string): string {
  * @param {string} emoji - The text representation of the emoji.
  * @returns {string} The formatted emoji with the provided ID.
  */
-export function emoji(emojiId: string, emoji: string): string {
+function emoji(emojiId: string, emoji: string): string {
   return `<tg-emoji emoji-id="${emojiId}">${emoji}</tg-emoji>`;
 }
 
@@ -68,7 +68,7 @@ export function emoji(emojiId: string, emoji: string): string {
  * @param {string} code - The code to be formatted as inline code.
  * @returns {string} The input code enclosed in <code> tags.
  */
-export function inlineCode(code: string): string {
+function inlineCode(code: string): string {
   return `<code>${code}</code>`;
 }
 
@@ -77,7 +77,7 @@ export function inlineCode(code: string): string {
  * @param {string} code - The code to be formatted as a pre-formatted code block.
  * @returns {string} The input code enclosed in <pre> tags.
  */
-export function preFormattedCode(code: string): string {
+function preFormattedCode(code: string): string {
   return `<pre>${code}</pre>`;
 }
 
@@ -87,9 +87,19 @@ export function preFormattedCode(code: string): string {
  * @param {string} language - The language for syntax highlighting (e.g., "javascript", "python").
  * @returns {string} The input code enclosed in <pre><code class="language-${language}"> tags.
  */
-export function preFormattedCodeWithLanguage(
-  code: string,
-  language: string,
-): string {
+function preFormattedCodeWithLanguage(code: string, language: string): string {
   return `<pre><code class="language-${language}">${code}</code></pre>`;
 }
+
+export {
+  bold,
+  italic,
+  underline,
+  strikethrough,
+  spoiler,
+  link,
+  emoji,
+  inlineCode,
+  preFormattedCode,
+  preFormattedCodeWithLanguage,
+};

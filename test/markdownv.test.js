@@ -7,7 +7,7 @@ const {
   inlineCode,
   codeBlock,
   codeBlockWithLanguage,
-} = require("../dist/index").markdownv;
+} = require("../dist/cjs/index").markdownv;
 
 describe("Text formatting functions", () => {
   test("bold()", () => {

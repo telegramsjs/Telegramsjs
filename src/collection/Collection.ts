@@ -9,7 +9,7 @@ type GroupedValues<K, V> = {
   values: V[];
 };
 
-export class Collection<K, V> {
+class Collection<K, V> {
   /**
    * The underlying map that stores the key-value pairs.
    */
@@ -18,7 +18,7 @@ export class Collection<K, V> {
   /**
    * The number of key-value pairs in the collection.
    */
-  public size: number;
+  size: number;
 
   /**
    * Create a new Collection instance.
@@ -34,7 +34,7 @@ export class Collection<K, V> {
    * @param {*} key - The key to look up.
    * @returns {*} - The value associated with the key, or undefined if the key is not in the collection.
    */
-  public get(key: K): V | undefined {
+  get(key: K): V | undefined {
     return this._items.get(key);
   }
 
@@ -44,7 +44,7 @@ export class Collection<K, V> {
    * @param {*} value - The value to associate with the key.
    * @returns {Collection} - The collection instance (for chaining).
    */
-  public set(key: K, value: V): Collection<K, V> {
+  set(key: K, value: V): Collection<K, V> {
     this._items.set(key, value);
     this.size = this._items.size;
     return this;
@@ -55,7 +55,7 @@ export class Collection<K, V> {
    * @param {*} key - The key to look for.
    * @returns {boolean} - True if the collection contains the key, false otherwise.
    */
-  public has(key: K): boolean {
+  has(key: K): boolean {
     return this._items.has(key);
   }
 
@@ -67,7 +67,7 @@ export class Collection<K, V> {
    * @param {boolean} [isEnabled=false] - Enables the check condition.
    * @returns {Record<K, boolean> | boolean} - An object containing keys and their existence status, or a boolean if isEnabled is true.
    */
-  public hasKeys(
+  hasKeys(
     keys: K[],
     isEnabled: boolean = false,
   ): Record<string, boolean> | boolean {
@@ -99,10 +99,7 @@ export class Collection<K, V> {
    * @param {boolean} [isEnabled=false] - Enables the check condition.
    * @returns {Record<string, boolean> | boolean} - An object containing values and their existence status, or a boolean if isEnabled is true.
    */
-  public hasValues(
-    values: V[],
-    isEnabled = false,
-  ): Record<string, boolean> | boolean {
+  hasValues(values: V[], isEnabled = false): Record<string, boolean> | boolean {
     let result: Record<string, boolean> | boolean = {};
 
     for (const value of values) {
@@ -129,7 +126,7 @@ export class Collection<K, V> {
    * @param {*} key - The key to remove.
    * @returns {boolean} - True if the key-value pair was removed, false if the key was not in the collection.
    */
-  public delete(key: K): boolean {
+  delete(key: K): boolean {
     const deleted: boolean = this._items.delete(key);
     if (deleted) {
       this.size = this._items.size;
@@ -140,7 +137,7 @@ export class Collection<K, V> {
   /**
    * Remove all key-value pairs from the collection.
    */
-  public clear(): void {
+  clear(): void {
     this._items.clear();
     this.size = 0;
   }
@@ -150,7 +147,7 @@ export class Collection<K, V> {
    * @param {Function} callbackFn - The function to call for each pair. It should take three arguments: the value, the key, and the collection instance.
    * @param {*} [thisArg] - An optional value to use as `this` when calling the function.
    */
-  public forEach(
+  forEach(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => void,
     thisArg?: unknown,
   ): void {
@@ -166,7 +163,7 @@ export class Collection<K, V> {
    * @returns {Collection} - A new Collection instance containing the filtered key-value pairs.
    */
 
-  public filter(
+  filter(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): Collection<K, V> {
@@ -187,7 +184,7 @@ export class Collection<K, V> {
    * @param {object} thisArg - Object to use as 'this' when executing the callback
    * @returns {Collection} - A new collection with the results of calling the callback on each element
    */
-  public map<U>(
+  map<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U,
     thisArg?: unknown,
   ): Collection<K, U> {
@@ -205,7 +202,7 @@ export class Collection<K, V> {
    * @param {object} thisArg - Object to use as 'this' when executing the callback
    * @returns {boolean} - True if at least one element passes the test, false otherwise
    */
-  public some(
+  some(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): boolean {
@@ -224,7 +221,7 @@ export class Collection<K, V> {
    * @param {object} thisArg - Object to use as 'this' when executing the callback
    * @returns {boolean} - True if all elements pass the test, false otherwise
    */
-  public every(
+  every(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): boolean {
@@ -242,7 +239,7 @@ export class Collection<K, V> {
    * @param {*} initialValue - Value to use as the first argument to the first call of the callback
    * @returns {*} - The reduced value
    */
-  public reduce<U>(
+  reduce<U>(
     callbackFn: (
       accumulator: U,
       value: V,
@@ -265,7 +262,7 @@ export class Collection<K, V> {
    * @param {object} thisArg - Object to use as 'this' when executing the callback
    * @returns {*} - The value of the first element that passes the test, or undefined if no element passes the test
    */
-  public find(
+  find(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): V | undefined {
@@ -283,7 +280,7 @@ export class Collection<K, V> {
    * @param {*} initialValue - Value to use as the first argument to the first call of the callback
    * @returns {*} - The reduced value
    */
-  public reduceRight<U>(
+  reduceRight<U>(
     callbackFn: (
       accumulator: U,
       value: V,
@@ -310,7 +307,7 @@ export class Collection<K, V> {
    * @param {*} [thisArg] - An optional value to use as `this` when calling the function.
    * @returns {Collection} - A new Collection instance with the flattened mapped values.
    */
-  public flat<U>(
+  flat<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U[],
     thisArg?: unknown,
   ): Collection<K, U> {
@@ -327,7 +324,7 @@ export class Collection<K, V> {
   /**
    * @returns an iterator that contains all the keys of the collection's elements.
    */
-  public keys(): IterableIterator<K> {
+  keys(): IterableIterator<K> {
     return this._items.keys();
   }
 
@@ -335,7 +332,7 @@ export class Collection<K, V> {
    * @returns an iterator that contains all the values of the elements in the collection.
    */
 
-  public values(): IterableIterator<V> {
+  values(): IterableIterator<V> {
     return this._items.values();
   }
 
@@ -346,7 +343,7 @@ export class Collection<K, V> {
    * @param {object} thisArg - Object to use as 'this' when executing the callback
    * @returns {*} - The key of the first element that passes the test, or undefined if no element passes the test
    */
-  public findKey(
+  findKey(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): K | undefined {
@@ -361,7 +358,7 @@ export class Collection<K, V> {
    * Returns an array containing all the values of the collection in insertion order.
    * @returns {Array} - An array containing all the values of the collection in insertion order
    */
-  public toArray(): V[] {
+  toArray(): V[] {
     return [...this._items.values()];
   }
 
@@ -370,7 +367,7 @@ export class Collection<K, V> {
    *
    * @returns {Array} - An array containing all the keys of the collection in insertion order
    */
-  public keyArray(): K[] {
+  keyArray(): K[] {
     return [...this._items.keys()];
   }
 
@@ -380,7 +377,7 @@ export class Collection<K, V> {
    * @param {*} [thisArg] - An optional value to use as `this` when calling the function.
    * @returns {Collection} - A new Collection instance with the flattened mapped values.
    */
-  public flatMap<U>(
+  flatMap<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U[],
     thisArg?: unknown,
   ): Collection<K, U> {
@@ -400,7 +397,7 @@ export class Collection<K, V> {
    * @param {*} [thisArg] - An optional value to use as `this` when calling the function.
    * @returns {Collection} - A new Collection instance with the mapped values.
    */
-  public mapValues<U>(
+  mapValues<U>(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => U,
     thisArg?: unknown,
   ): Collection<K, U> {
@@ -416,7 +413,7 @@ export class Collection<K, V> {
    * Sorts the collection by keys in ascending order.
    * @returns {Collection} - A new sorted Collection instance.
    */
-  public defaultSort(): Collection<K, V> {
+  defaultSort(): Collection<K, V> {
     const sortedEntries: Entry<K, V>[] = Array.from(this.entries()).sort(
       (a, b) => String(a[0]).localeCompare(String(b[0])),
     );
@@ -428,7 +425,7 @@ export class Collection<K, V> {
    * @param {Function} compareFn - The comparison function to use for sorting.
    * @returns {Collection} - A new sorted Collection instance.
    */
-  public sorted(compareFn: (a: K, b: K) => number): Collection<K, V> {
+  sorted(compareFn: (a: K, b: K) => number): Collection<K, V> {
     const sortedEntries: Entry<K, V>[] = Array.from(this.entries()).sort(
       (a, b) => compareFn(a[0], b[0]),
     );
@@ -440,7 +437,7 @@ export class Collection<K, V> {
    * @param {Collection} collection - The collection to combine with.
    * @returns {Collection} - A new combined Collection instance.
    */
-  public combineEntries(collection: Collection<K, V>): Collection<K, V> {
+  combineEntries(collection: Collection<K, V>): Collection<K, V> {
     const combinedEntries: Entry<K, V>[] = [
       ...this.entries(),
       ...collection.entries(),
@@ -453,7 +450,7 @@ export class Collection<K, V> {
    * @param {Collection} collection - The collection to subtract.
    * @returns {Collection} - A new Collection instance containing the difference.
    */
-  public difference(collection: Collection<K, V>): Collection<K, V> {
+  difference(collection: Collection<K, V>): Collection<K, V> {
     const diffEntries: Entry<K, V>[] = Array.from(this.entries()).filter(
       ([key]) => !collection.has(key),
     );
@@ -465,7 +462,7 @@ export class Collection<K, V> {
    * @param {Collection} collection - The collection to subtract.
    * @returns {Collection} - The modified Collection instance (for chaining).
    */
-  public subtract(collection: Collection<K, V>): Collection<K, V> {
+  subtract(collection: Collection<K, V>): Collection<K, V> {
     for (const [key] of collection.entries()) {
       this.delete(key);
     }
@@ -477,7 +474,7 @@ export class Collection<K, V> {
    * @param {K[]} keys - An array of keys to include in the subset.
    * @returns {Collection<K, V>} - A new Collection instance containing the subset of items.
    */
-  public subset(keys: K[]): Collection<K, V> {
+  subset(keys: K[]): Collection<K, V> {
     const subsetCollection = new Collection<K, V>();
     for (const key of keys) {
       const value = this.get(key);
@@ -493,7 +490,7 @@ export class Collection<K, V> {
    * @param {Collection} collection - The collection to intersect.
    * @returns {Collection} - A new Collection instance containing the intersection.
    */
-  public intersect(collection: Collection<K, V>): Collection<K, V> {
+  intersect(collection: Collection<K, V>): Collection<K, V> {
     const intersectEntries: Entry<K, V>[] = Array.from(this.entries()).filter(
       ([key]) => collection.has(key),
     );
@@ -505,7 +502,7 @@ export class Collection<K, V> {
    * @param {Collection} collection - The collection to compare.
    * @returns {boolean} - True if the collections are equal, false otherwise.
    */
-  public equals(collection: Collection<K, V>): boolean {
+  equals(collection: Collection<K, V>): boolean {
     if (this.size !== collection.size) {
       return false;
     }
@@ -524,7 +521,7 @@ export class Collection<K, V> {
    * @param {Function} callbackFn - The function to perform on each value.
    * @returns {Collection} - The collection instance (for chaining).
    */
-  public tap(
+  tap(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => void,
   ): Collection<K, V> {
     for (const [key, value] of this._items) {
@@ -538,7 +535,7 @@ export class Collection<K, V> {
    * Retrieve a random value from the collection.
    * @returns {V | undefined} - A random value from the collection, or undefined if the collection is empty.
    */
-  public random(): V | undefined {
+  random(): V | undefined {
     const values = this.toArray();
     if (values.length === 0) {
       return undefined;
@@ -552,7 +549,7 @@ export class Collection<K, V> {
    * @param {number} index - The index of the value to retrieve.
    * @returns {V | undefined} - The value at the specified index, or undefined if the index is out of range.
    */
-  public at(index: number): V | undefined {
+  at(index: number): V | undefined {
     const values = this.toArray();
     return index >= 0 ? values[index] : values[values.length + index];
   }
@@ -561,7 +558,7 @@ export class Collection<K, V> {
    * Retrieve the last key in the collection.
    * @returns {K | undefined} - The last key in the collection, or undefined if the collection is empty.
    */
-  public lastKey(): K | undefined {
+  lastKey(): K | undefined {
     const keys = this.keyArray();
     return keys[keys.length - 1];
   }
@@ -570,7 +567,7 @@ export class Collection<K, V> {
    * Retrieve the last value in the collection.
    * @returns {V | undefined} - The last value in the collection, or undefined if the collection is empty.
    */
-  public last(): V | undefined {
+  last(): V | undefined {
     const values = this.toArray();
     return values[values.length - 1];
   }
@@ -581,7 +578,7 @@ export class Collection<K, V> {
    * @param {V} value - The value to associate with the key if it does not exist.
    * @returns {Collection} - The collection instance (for chaining).
    */
-  public ensure(key: K, value: V): Collection<K, V> {
+  ensure(key: K, value: V): Collection<K, V> {
     if (!this.has(key)) {
       this.set(key, value);
     }
@@ -593,7 +590,7 @@ export class Collection<K, V> {
    * @param {number} index - The index of the key to retrieve.
    * @returns {K | undefined} - The key at the specified index, or undefined if the index is out of range.
    */
-  public keyAt(index: number): K | undefined {
+  keyAt(index: number): K | undefined {
     const keys = this.keyArray();
     return index >= 0 ? keys[index] : keys[keys.length + index];
   }
@@ -603,7 +600,7 @@ export class Collection<K, V> {
    * @returns {K | undefined} - A random key from the collection, or undefined if the collection is empty.
    */
 
-  public randomKey(): K | undefined {
+  randomKey(): K | undefined {
     const keys = this.keyArray();
     if (keys.length === 0) return undefined;
     const randomIndex = Math.floor(Math.random() * keys.length);
@@ -614,7 +611,7 @@ export class Collection<K, V> {
    * Create a new collection with the key-value pairs reversed.
    * @returns {Collection<V, K>} - A new Collection instance with the key-value pairs reversed.
    */
-  public reverse(): Collection<V, K> {
+  reverse(): Collection<V, K> {
     const reversedCollection = new Collection<V, K>();
     for (const [key, value] of this.entries()) {
       reversedCollection.set(value, key);
@@ -626,7 +623,7 @@ export class Collection<K, V> {
    * Create a new collection with all duplicate values removed.
    * @returns {Collection<K, V>} - A new Collection instance with all duplicate values removed.
    */
-  public sweep(): Collection<K, V> {
+  sweep(): Collection<K, V> {
     const uniqueValues = new Set<V>();
     const sweptCollection = new Collection<K, V>();
 
@@ -646,7 +643,7 @@ export class Collection<K, V> {
    * @param {*} [thisArg] - An optional value to use as `this` when calling the function.
    * @returns {GroupedValues<K, V>[]} - An array of two `GroupedValues` objects representing the partitioned groups.
    */
-  public partition(
+  partition(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): GroupedValues<K, V>[] {
@@ -673,7 +670,7 @@ export class Collection<K, V> {
    * Returns a new Iterator object that contains the [key, value] pairs for each element in the collection.
    * @returns {Iterator} - A new Iterator object containing the [key, value] pairs for each element in the collection
    */
-  public entries(): IterableIterator<[K, V]> {
+  entries(): IterableIterator<[K, V]> {
     return this._items.entries();
   }
 
@@ -681,7 +678,7 @@ export class Collection<K, V> {
    * @returns - an array that contains all the values of the elements of the collection, grouped by keys
    */
 
-  public toArrayByKey(): GroupedValues<K, V>[] {
+  toArrayByKey(): GroupedValues<K, V>[] {
     const result: GroupedValues<K, V>[] = [];
 
     for (const key of this.keys()) {
@@ -696,7 +693,7 @@ export class Collection<K, V> {
    * @returns {this} - returns class (this)
    */
 
-  public merge(collection: Collection<K, V>): this {
+  merge(collection: Collection<K, V>): this {
     for (const [key, value] of collection.entries()) {
       this.set(key, value);
     }
@@ -706,7 +703,7 @@ export class Collection<K, V> {
   /**
    * Creates a copy of this collection.
    */
-  public clone(): Collection<K, V> {
+  clone(): Collection<K, V> {
     return new Collection(Array.from(this.entries()));
   }
 
@@ -715,7 +712,7 @@ export class Collection<K, V> {
    * @param {number} size - the amount by which this class will be divided
    * @return {array} - returns an array with new collections
    */
-  public chunk(size: number): [number, V][] {
+  chunk(size: number): [number, V][] {
     const chunks = [];
     const values = this.toArray();
     for (let i = 0; i < values.length; i += size) {
@@ -734,7 +731,7 @@ export class Collection<K, V> {
    * @return {K | undefined} - returns the first key corresponding to the specified value in the collection
    */
 
-  public keyOf(value: V): K | undefined {
+  keyOf(value: V): K | undefined {
     for (const [key, val] of this.entries()) {
       if (Object.is(val, value)) {
         return key;
@@ -751,7 +748,7 @@ export class Collection<K, V> {
    * @returns {Collection<K, V>} A new Collection with the updated value.
    */
 
-  public with(index: number, value: V): Collection<K, V> | undefined {
+  with(index: number, value: V): Collection<K, V> | undefined {
     const entries: Entry<K, V>[] = Array.from(this._items.entries());
     if (index >= 0) {
       if (!entries[index]) return;
@@ -767,7 +764,7 @@ export class Collection<K, V> {
    * @returns an instance of the Map class that contains all the elements of the given collection
    */
 
-  public toMap(): Map<K, V> {
+  toMap(): Map<K, V> {
     return new Map(this.entries());
   }
 
@@ -775,7 +772,7 @@ export class Collection<K, V> {
    * Returns a new Collection instance with the key-value pairs in reversed order.
    * @returns {Collection} - A new Collection instance with the reversed key-value pairs.
    */
-  public toReversed(): Collection<K, V> {
+  toReversed(): Collection<K, V> {
     const entries = Array.from(this.entries()).reverse();
     return new Collection(entries);
   }
@@ -786,7 +783,7 @@ export class Collection<K, V> {
    * @param {number} end - The end index.
    * @returns {Collection} - A new Collection instance with the specified subset of key-value pairs.
    */
-  public toSplised(start: number, end: number): Collection<K, V> {
+  toSplised(start: number, end: number): Collection<K, V> {
     const entries = Array.from(this.entries()).slice(start, end);
     return new Collection(entries);
   }
@@ -795,7 +792,7 @@ export class Collection<K, V> {
    * Returns an object that contains all the elements of the collection as properties of the keys.
    * @returns An object containing the elements of the collection.
    */
-  public toJSON(): { [key: string]: V } {
+  toJSON(): { [key: string]: V } {
     const json: { [key: string]: V } = {};
     for (const [key, value] of this._items) {
       json[String(key)] = value;
@@ -807,7 +804,9 @@ export class Collection<K, V> {
    * Returns a new Iterator object that contains the [key, value] pairs for each element in the collection.
    * @returns {IterableIterator<Array>} An iterator object that can be used to iterate over the key-value pairs of the Collection.
    */
-  public *[Symbol.iterator](): IterableIterator<[K, V]> {
+  *[Symbol.iterator](): IterableIterator<[K, V]> {
     yield* this._items.entries();
   }
 }
+
+export { Collection };

@@ -1,4 +1,4 @@
-const { Markup } = require("../dist/index");
+const { Markup } = require("../dist/cjs/index");
 
 describe("Markup", () => {
   let markup;

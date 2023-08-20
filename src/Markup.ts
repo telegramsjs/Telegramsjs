@@ -71,50 +71,50 @@ interface Button {
   };
 }
 
-export class Markup {
-  private reply_markup: ReplyMarkup;
+class Markup {
+  reply_markup: ReplyMarkup;
 
   constructor() {
     this.reply_markup = {};
   }
 
-  public setText(text: string): this {
+  setText(text: string): this {
     this.reply_markup.text = text;
     return this;
   }
 
-  public selective(value = true): this {
+  selective(value = true): this {
     this.reply_markup.selective = value;
     return this;
   }
 
-  public placeholder(placeholder: string): this {
+  placeholder(placeholder: string): this {
     this.reply_markup.input_field_placeholder = placeholder;
     return this;
   }
 
-  public resize(value = true): this {
+  resize(value = true): this {
     this.reply_markup.resize_keyboard = value;
     return this;
   }
 
-  public oneTime(value = true): this {
+  oneTime(value = true): this {
     this.reply_markup.one_time_keyboard = value;
     return this;
   }
 
-  public removeKeyboard(): this {
+  removeKeyboard(): this {
     this.reply_markup.remove_keyboard = true;
     return this;
   }
 
-  public forceReply(): this {
+  forceReply(): this {
     this.reply_markup.force_reply = true;
     return this;
   }
 
-  public keyboard(buttons: Button[], options?: WrapOptions): this {
-    const keyboard = this.buildKeyboard(buttons, {
+  keyboard(buttons: Button[], options?: WrapOptions): this {
+    const keyboard = buildKeyboard(buttons, {
       columns: 1,
       ...options,
     });
@@ -122,8 +122,8 @@ export class Markup {
     return this;
   }
 
-  public inlineKeyboard(buttons: Button[], options?: WrapOptions): this {
-    const inlineKeyboard = this.buildKeyboard(buttons, {
+  inlineKeyboard(buttons: Button[], options?: WrapOptions): this {
+    const inlineKeyboard = buildKeyboard(buttons, {
       columns: buttons.length,
       ...options,
     });
@@ -131,63 +131,13 @@ export class Markup {
     return this;
   }
 
-  private buildKeyboard(buttons: Button[], options: BuildKeyboard): Button[][] {
-    if (!Array.isArray(buttons) || buttons.length === 0) {
-      return [];
-    }
-
-    if (this.is2D(buttons)) {
-      return buttons.map((row) =>
-        Array.isArray(row)
-          ? row.filter((button: Button) => !button.hide)
-          : [row],
-      );
-    }
-
-    const wrapFn =
-      options?.wrap ??
-      ((_btn: Button, _index: number, currentRow: Button[]) =>
-        currentRow.length >= (options?.columns ?? 1));
-
-    const result: Button[][] = [];
-    let currentRow: Button[] = [];
-
-    for (const button of buttons.filter((button) => !button.hide)) {
-      if (
-        wrapFn(button, currentRow.length, currentRow) &&
-        currentRow.length > 0
-      ) {
-        result.push(currentRow);
-        currentRow = [];
-      }
-      currentRow.push(button);
-    }
-    if (currentRow.length > 0) {
-      result.push(currentRow);
-    }
-
-    return result;
-  }
-
-  private is2D<T>(array: T[]): boolean {
-    if (!Array.isArray(array)) {
-      return false;
-    }
-    for (let i = 0; i < array.length; i++) {
-      if (!Array.isArray(array[i])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public static text(text: string): Text {
+  static text(text: string): Text {
     return {
       text,
     };
   }
 
-  public static contactRequest(
+  static contactRequest(
     text: string,
   ): KeyboardButton.RequestContactButton & Text {
     return {
@@ -196,7 +146,7 @@ export class Markup {
     };
   }
 
-  public static locationRequest(
+  static locationRequest(
     text: string,
   ): KeyboardButton.RequestLocationButton & Text {
     return {
@@ -205,7 +155,7 @@ export class Markup {
     };
   }
 
-  public static pollRequest(
+  static pollRequest(
     text: string,
     type?: "quiz" | "regular",
   ): KeyboardButton.RequestPollButton & Text {
@@ -217,7 +167,7 @@ export class Markup {
     };
   }
 
-  public static userRequest(
+  static userRequest(
     text: string,
     request_id: number,
     user_is_bot?: boolean,
@@ -233,7 +183,7 @@ export class Markup {
     };
   }
 
-  public static chatRequest(
+  static chatRequest(
     text: string,
     request_id: number,
     chat_is_channel: boolean,
@@ -256,17 +206,14 @@ export class Markup {
     };
   }
 
-  public static url(
-    text: string,
-    url: string,
-  ): InlineKeyboardButton.UrlButton & Text {
+  static url(text: string, url: string): InlineKeyboardButton.UrlButton & Text {
     return {
       text,
       url,
     };
   }
 
-  public static callback(
+  static callback(
     text: string,
     data: string,
   ): InlineKeyboardButton.CallbackButton & Text {
@@ -276,7 +223,7 @@ export class Markup {
     };
   }
 
-  public static switchToChat(
+  static switchToChat(
     text: string,
     value: string,
   ): InlineKeyboardButton.SwitchInlineButton & Text {
@@ -286,7 +233,7 @@ export class Markup {
     };
   }
 
-  public static switchToCurrentChat(
+  static switchToCurrentChat(
     text: string,
     value: string,
   ): InlineKeyboardButton.SwitchInlineCurrentChatButton & Text {
@@ -296,21 +243,21 @@ export class Markup {
     };
   }
 
-  public static game(text: string): InlineKeyboardButton.GameButton & Text {
+  static game(text: string): InlineKeyboardButton.GameButton & Text {
     return {
       text,
       callback_game: {},
     };
   }
 
-  public static pay(text: string): InlineKeyboardButton.PayButton & Text {
+  static pay(text: string): InlineKeyboardButton.PayButton & Text {
     return {
       text,
       pay: true,
     };
   }
 
-  public static login(
+  static login(
     text: string,
     url: string,
     args?: Pick<LoginUrl, "url">,
@@ -324,7 +271,7 @@ export class Markup {
     };
   }
 
-  public static webApp(
+  static webApp(
     text: string,
     url: string,
   ): InlineKeyboardButton.WebAppButton & Text {
@@ -336,7 +283,7 @@ export class Markup {
     };
   }
 
-  public static generateReplyMarkup(
+  static generateReplyMarkup(
     markups: Markup[],
     elevation: number = 5,
     type: "keyboard" | "inline_keyboard" = "inline_keyboard",
@@ -363,3 +310,53 @@ export class Markup {
     return replyMarkup.reply_markup;
   }
 }
+
+function is2D<T>(array: T[]): boolean {
+  if (!Array.isArray(array)) {
+    return false;
+  }
+  for (let i = 0; i < array.length; i++) {
+    if (!Array.isArray(array[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function buildKeyboard(buttons: Button[], options: BuildKeyboard): Button[][] {
+  if (!Array.isArray(buttons) || buttons.length === 0) {
+    return [];
+  }
+
+  if (is2D(buttons)) {
+    return buttons.map((row) =>
+      Array.isArray(row) ? row.filter((button: Button) => !button.hide) : [row],
+    );
+  }
+
+  const wrapFn =
+    options?.wrap ??
+    ((_btn: Button, _index: number, currentRow: Button[]) =>
+      currentRow.length >= (options?.columns ?? 1));
+
+  const result: Button[][] = [];
+  let currentRow: Button[] = [];
+
+  for (const button of buttons.filter((button) => !button.hide)) {
+    if (
+      wrapFn(button, currentRow.length, currentRow) &&
+      currentRow.length > 0
+    ) {
+      result.push(currentRow);
+      currentRow = [];
+    }
+    currentRow.push(button);
+  }
+  if (currentRow.length > 0) {
+    result.push(currentRow);
+  }
+
+  return result;
+}
+
+export { Markup };

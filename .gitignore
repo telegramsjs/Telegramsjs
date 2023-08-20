@@ -3,4 +3,6 @@ package-lock.json
 .prettierrc
 untitled.txt
 index.ts
+index.js
+yarn.lock
 dist/

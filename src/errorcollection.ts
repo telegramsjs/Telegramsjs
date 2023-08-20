@@ -63,32 +63,4 @@ class EventError extends Error {
   }
 }
 
-/**
- * Custom error class for errors related to bit fields
- * @extends Error
- */
-class BitFieldError extends Error {
-  /**
-   * Creates a new instance of the BitFieldError class
-   * @param {string} error - The error message
-   */
-  constructor(error: string) {
-    super(error);
-  }
-}
-
-/**
- * Custom error class for errors related to intents
- * @extends Error
- */
-class IntentsError extends Error {
-  /**
-   * Creates a new instance of the IntentsError class
-   * @param {string} error - The error message
-   */
-  constructor(error: string) {
-    super(error);
-  }
-}
-
-export { TelegramApiError, EventError, IntentsError, BitFieldError };
+export { TelegramApiError, EventError };

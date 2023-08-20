@@ -1,7 +1,7 @@
 import {
   MessageCollector,
   MessageFilter,
-} from "../collection/MessageCollector.js";
+} from "../collection/MessageCollector";
 import {
   Message,
   Chat,
@@ -46,9 +46,9 @@ import {
   InputMedia,
   InputSticker,
 } from "@telegram.ts/types";
-import { TelegramBot } from "./TelegramBot.js";
+import { TelegramBot } from "./TelegramBot";
 
-export type Context<F = Buffer> = {
+type Context<F = Buffer> = {
   telegram: TelegramBot<F>;
   /**
    * @see https://core.telegram.org/bots/api#answerinlinequery
@@ -756,6 +756,10 @@ export type Context<F = Buffer> = {
    */
   unhideGeneralForumTopic(): Promise<boolean>;
   /**
+   * @see https://core.telegram.org/bots/api#unpinallgeneralforumtopicmessages
+   */
+  unpinAllGeneralForumTopicMessages(): Promise<boolean>;
+  /**
    * @see https://core.telegram.org/bots/api#setstickerpositioninset
    */
   setStickerPositionInSet(sticker: string, position: number): Promise<boolean>;
@@ -1033,3 +1037,5 @@ export type Context<F = Buffer> = {
     caption?: boolean,
   ): MessageCollector<F>;
 };
+
+export { Context };
