@@ -1386,9 +1386,9 @@ class Combined<F> {
   /**
    * @see https://core.telegram.org/bots/api#setmyshortdescription
    */
-  setMyShortDescription(short_description: string) {
+  setMyShortDescription(shortDescription: string) {
     return this.telegram.setMyShortDescription({
-      short_description,
+      short_description: shortDescription,
     });
   }
 
@@ -2310,6 +2310,13 @@ class Combined<F> {
               getMyCommands: () => this.getMyCommands(),
               setMyCommands: (commands: readonly BotCommand[]) =>
                 this.setMyCommands(commands),
+              setMyDescription: (description: string) =>
+                this.setMyDescription(description),
+              getMyDescription: () => this.getMyDescription(),
+              setMyShortDescription: (shortDescription: string) =>
+                this.setMyShortDescription(shortDescription),
+              setMyName: (name: string) => this.setMyName(name),
+              getMyName: () => this.getMyName(),
               replyWithMarkdown: (
                 text: string,
                 args?: {

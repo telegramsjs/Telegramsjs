@@ -14,15 +14,20 @@ type TelegramApiResponse = {
 
 type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
 
-function reform(reformText: { [key: string]: any }) {
-  if (typeof reformText === "object" && reformText !== null) {
-    for (const key in reformText) {
-      if (typeof reformText[key] === "object") {
-        reformText[key] = JSON.stringify(reformText[key]);
-      }
+function reform(reformText: any) {
+  const paramsType = typeof reformText;
+  if (paramsType !== "object") return reformText;
+  for (const key in reformText) {
+    if (typeof reformText[key] === "object") {
+      reformText[key] = JSON.stringify(reformText[key]);
     }
   }
   return reformText;
+}
+
+function hasProperties(obj: object | undefined): boolean {
+  if (!obj) return false;
+  return Object.keys(obj).length > 0;
 }
 
 /**
@@ -33,7 +38,7 @@ class Request extends EventEmitter {
   token: string;
   baseUrl: string;
   offset: number;
-  intents?: AllowedUpdates;
+  allowed_updates?: AllowedUpdates;
   startTime: number = Date.now();
   update_id?: number;
   last_object?: Update;
@@ -41,9 +46,9 @@ class Request extends EventEmitter {
   /**
    * Constructs a new Request object.
    * @param {string} [token] - The API token for the bot.
-   * @param {AllowedUpdates} [intents] - The types of updates the bot is interested in.
+   * @param {AllowedUpdates} [allowed_updates] - The types of updates the bot is interested in.
    */
-  constructor(token: string, intents?: AllowedUpdates) {
+  constructor(token: string, allowed_updates?: AllowedUpdates) {
     super();
     this.token = token;
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
@@ -64,7 +69,7 @@ class Request extends EventEmitter {
       allowed_updates?: AllowedUpdates;
     } = {
       offset: this.offset,
-      allowed_updates: this.intents ?? [],
+      allowed_updates: this.allowed_updates ?? [],
     };
 
     const response = await this.request("getUpdates", params);
@@ -95,7 +100,7 @@ class Request extends EventEmitter {
     const url = `${this.baseUrl}/${method}`;
 
     let paramsType: string | undefined;
-    if (params) {
+    if (hasProperties(params)) {
       const reforms = reform(params);
       const formattedParams: Record<string, string> = reforms as Record<
         string,

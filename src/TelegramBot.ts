@@ -15,16 +15,16 @@ import isRegex from "is-regex";
 
 class TelegramBot<F = Buffer> extends BaseClient<F> {
   token: string;
-  session: any;
+  session: unknown;
 
   constructor(
     token: string,
     options: {
-      intents?: AllowedUpdates;
-      session?: any;
+      allowed_updates?: AllowedUpdates;
+      session?: unknown;
     } = {},
   ) {
-    super(token, options.intents);
+    super(token, options.allowed_updates);
 
     /**
      * The Telegram Bot API token.

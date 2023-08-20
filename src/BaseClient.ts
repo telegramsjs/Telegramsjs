@@ -62,10 +62,10 @@ class BaseClient<F> extends Request {
   /**
    * Creat method Telegram Api
    * @param {string} token - The Telegram Bot API token.
-   * @param {AllowedUpdates} [intents=undefined] - The client intents.
+   * @param {AllowedUpdates} [allowed_updates=undefined] - The client allowed_updates.
    */
-  constructor(token: string, intents?: AllowedUpdates) {
-    super(token, intents);
+  constructor(token: string, allowed_updates?: AllowedUpdates) {
+    super(token, allowed_updates);
   }
 
   /** Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
