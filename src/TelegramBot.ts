@@ -15,8 +15,14 @@ import isRegex from "is-regex";
 
 class TelegramBot<F = Buffer> extends BaseClient<F> {
   token: string;
-  session: unknown;
+  session: unknown = {};
 
+  /**
+   * Constructs a new TelegramBot object.
+   * @param {string} token - The API token for the bot.
+   * @param {AllowedUpdates} [options.allowed_updates=AllowedUpdates] - The types of updates the bot is interested in.
+   * @param {unknown} [session=object] - The session object to be used by the bot
+   */
   constructor(
     token: string,
     options: {
@@ -69,23 +75,24 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
     ) => void,
     typeChannel: "private" | "group" | "supergroup" | "channel" | false = false,
   ): void {
-    this.on("message", async (message: Message.TextMessage & Context<F>) => {
-      if (!message.text) return;
+    this.on(
+      "message:text",
+      async (message: Message.TextMessage & Context<F>) => {
+        if (typeChannel === message.chat.type || typeChannel === false) {
+          const args = message.text.split(/\s+/);
+          const text = message.text;
 
-      if (typeChannel === message.chat.type || typeChannel === false) {
-        const args = message.text.split(/\s+/);
-        const text = message.text;
-
-        if (
-          (typeof command === "string" && text.startsWith(`/${command}`)) ||
-          (Array.isArray(command) &&
-            command.some((cmd) => text.startsWith(`/${cmd}`))) ||
-          (isRegex(command) && command.test(text))
-        ) {
-          await callback(message, args);
+          if (
+            (typeof command === "string" && text.startsWith(`/${command}`)) ||
+            (Array.isArray(command) &&
+              command.some((cmd) => text.startsWith(`/${cmd}`))) ||
+            (isRegex(command) && command.test(text))
+          ) {
+            await callback(message, args);
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   /**
@@ -122,7 +129,7 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
     callback: (callbackQuery: CallbackQuery & Context<F>) => void,
     answer: boolean = false,
   ): void {
-    this.on("callback_query", async (ctx: CallbackQuery & Context<F>) => {
+    this.on("callback_query:data", async (ctx: CallbackQuery & Context<F>) => {
       if (
         (typeof data === "string" && ctx.data === data) ||
         (Array.isArray(data) && data.some((d) => d === ctx.data)) ||
@@ -229,9 +236,9 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
    * Use this function to set a session for the Telegram bot. The "use"
    * function assigns the provided session object to the bot instance,
    * allowing you to use session data and manage user interactions across different requests.
-   * @param {any} session - The session object to be used by the bot
+   * @param {unknown} [session=object] - The session object to be used by the bot
    */
-  use(session: any): void {
+  use(session: unknown = {}): void {
     this.session = session;
   }
 

@@ -110,7 +110,7 @@ const messageTypeMap: MessageTypeMap = {
     properties: [
       {
         name: "text",
-        event: "text",
+        event: "message:text",
       },
     ],
   },
@@ -135,6 +135,12 @@ const messageTypeMap: MessageTypeMap = {
   },
   callback_query: {
     event: "callback_query",
+    properties: [
+      {
+        name: "data",
+        event: "callback_query:data",
+      },
+    ],
   },
   shipping_query: {
     event: "shipping_query",
@@ -168,14 +174,9 @@ class Combined<F> {
   }
 
   get getThreadId() {
-    const msg = this.getMessageFromAnySource;
     return this.updates.is_topic_message
       ? this.updates.message_thread_id
       : undefined;
-  }
-
-  get getMessageFromAnySource() {
-    return this.updates;
   }
 
   get messageId(): number {

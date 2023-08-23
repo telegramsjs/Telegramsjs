@@ -1,7 +1,8 @@
 import axios from "axios";
 import querystring from "querystring";
-import { TelegramApiError } from "./errorcollection";
 import { EventEmitter } from "events";
+import { TelegramApiError } from "./errorcollection";
+import { Context } from "./Context";
 import { Update, ResponseParameters } from "@telegram.ts/types";
 
 type TelegramApiResponse = {
@@ -45,8 +46,8 @@ class Request extends EventEmitter {
 
   /**
    * Constructs a new Request object.
-   * @param {string} [token] - The API token for the bot.
-   * @param {AllowedUpdates} [allowed_updates] - The types of updates the bot is interested in.
+   * @param {string} token - The API token for the bot.
+   * @param {AllowedUpdates} [allowed_updates=AllowedUpdates] - The types of updates the bot is interested in.
    */
   constructor(token: string, allowed_updates?: AllowedUpdates) {
     super();
@@ -131,8 +132,8 @@ class Request extends EventEmitter {
       };
 
       const dataRes = telegramError.response?.data;
-      const dataError = dataRes?.error_code;
-      if (dataError === 404) {
+      const codeError = dataRes?.error_code;
+      if (codeError === 404) {
         dataRes.description = "Invalid token for Telegram bot";
       }
 

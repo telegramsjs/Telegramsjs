@@ -183,11 +183,12 @@ class MenuBuilder<F> {
 
     for (const item of this.rows) {
       if (!item.callback) continue;
+      if (!this.identifier) throw Error("specify the parameter 'identifier'");
       if (!this.telegram?.on)
-        throw Error("You need to specify the second parameter: bot");
+        throw Error("you need to specify the second parameter 'bot'");
       const callback = item.callback;
       this.telegram.on(
-        "callback_query",
+        "callback_query:data",
         async (ctx: CallbackQuery & Context<F>) => {
           if (ctx.data === item.callback_data) {
             await callback(ctx);
