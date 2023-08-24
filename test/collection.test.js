@@ -1,4 +1,4 @@
-const { Collection } = require("../dist/cjs/index");
+const { Collection } = require("../dist/index");
 
 test("Testing the `get` method - retrieve the value associated with the given key", () => {
   const collection = new Collection();
@@ -6,8 +6,11 @@ test("Testing the `get` method - retrieve the value associated with the given ke
   collection.set("key2", "value2");
   collection.set("key3", "value3");
 
-  const res = collection.get("key3");
-  expect(res).toBe("value3");
+  const res1 = collection.get("key3");
+  expect(res1).toBe("value3");
+
+  const res2 = collection.get("key4");
+  expect(res2).toBe(undefined);
 });
 
 test("Testing the `set` method - associate the given value with the given key", () => {
@@ -32,15 +35,50 @@ test("Testing the `has` method - check whether the collection contains a given k
   expect(res2).toBe(false);
 });
 
+test("hasKeys - Checks if keys exist and their corresponding values satisfy a condition", () => {
+  const collection = new Collection();
+  collection.set("key1", "value1");
+  collection.set("key2", "value2");
+  collection.set("key3", "value3");
+
+  const res1 = collection.hasKeys(["key1", "key3", "key4"]);
+  expect(res1).toEqual({ key1: true, key3: true, key4: false });
+
+  const res2 = collection.hasKeys(["key1", "key4"], true);
+  expect(res2).toEqual(true);
+
+  const res3 = collection.hasKeys([]);
+  expect(res3).toEqual({});
+});
+
+test("Testing the `hasValues` method - Checks if values exist and their corresponding keys satisfy a condition", () => {
+  const collection = new Collection();
+  collection.set("key1", "value1");
+  collection.set("key2", "value2");
+  collection.set("key3", "value3");
+
+  const res1 = collection.hasValues(["value1", "value4"]);
+  expect(res1).toEqual({ value1: true, value4: false });
+
+  const res2 = collection.hasValues(["value1", "value4"], true);
+  expect(res2).toEqual(true);
+
+  const res3 = collection.hasValues([]);
+  expect(res3).toEqual({});
+});
+
 test("Testing the `delete` method - remove the key-value pair associated with the given key", () => {
   const collection = new Collection();
   collection.set("key1", "value1");
   collection.set("key2", "value2");
   collection.set("key3", "value3");
-  collection.delete("key3");
-  const res = collection.get("key3");
 
-  expect(res).toBe(undefined);
+  const res1 = collection.get("key3");
+  expect(res1).toBe("value3");
+
+  collection.delete("key3");
+  const res2 = collection.get("key3");
+  expect(res2).toBe(undefined);
 });
 
 test("Testing the `clear` method - remove all key-value pairs from the collection", () => {
@@ -373,6 +411,7 @@ test("Testing the `at` method - retrieves the value at the specified index", () 
   expect(collection.at(0)).toBe(10);
   expect(collection.at(1)).toBe(20);
   expect(collection.at(2)).toBe(30);
+  expect(collection.at(-1)).toBe(30);
   expect(collection.at(3)).toBeUndefined();
 });
 
@@ -415,6 +454,7 @@ test("Testing the `keyAt` method - retrieves the key at the specified index", ()
   expect(collection.keyAt(0)).toBe("key1");
   expect(collection.keyAt(1)).toBe("key2");
   expect(collection.keyAt(2)).toBe("key3");
+  expect(collection.keyAt(-1)).toBe("key3");
   expect(collection.keyAt(3)).toBeUndefined();
 });
 
@@ -546,9 +586,11 @@ test("Testing the `with` method - returns a new collection with the replaced val
   collection.set("key2", "value2");
   collection.set("key3", "value3");
 
-  const res = collection.with(1, "new ♥");
+  const res1 = collection.with(0, "new ♥");
+  const res2 = collection.with(-1, "value");
 
-  expect(res.toArray()[1] === collection.toArray()[1]).toBe(false);
+  expect(res1.get("key1")).toBe("new ♥");
+  expect(res2.get("key3")).toBe("value");
 });
 
 test("Testing the `toReversed` method - returns a new Collection instance with key-value pairs in reverse order", () => {

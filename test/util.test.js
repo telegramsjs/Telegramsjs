@@ -17,25 +17,34 @@ const {
   checkGroup,
   checkUsername,
   extractUsername,
-} = require("../dist/cjs/index");
+} = require("../dist/index");
 
 describe("Message Functions", () => {
   test("checkMessageLinks should detect links in a message", () => {
-    const message = "Check out this website: https://example.com";
-    const result = checkMessageLinks(message);
-    expect(result).toBe(true);
+    const messageTrue = "Check out this website: https://google.com";
+    const messageFalse = "Chech out this discord: @user";
+    const result1 = checkMessageLinks(messageTrue);
+    const result2 = checkMessageLinks(messageFalse);
+    expect(result1).toBe(true);
+    expect(result2).toBe(false);
   });
 
   test("extractUserMentions should extract user mentions from a message", () => {
-    const message = "Hey @john and @jane, how are you?";
-    const result = extractUserMentions(message);
-    expect(result).toEqual(["@john", "@jane"]);
+    const messageMentions = "Hey @john and @jane, how are you?";
+    const messageNoMentions = "Are you really human?";
+    const result1 = extractUserMentions(messageMentions);
+    const result2 = extractUserMentions(messageNoMentions);
+    expect(result1).toEqual(["@john", "@jane"]);
+    expect(result2).toEqual([]);
   });
 
   test("extractHashtags should extract hashtags from a message", () => {
-    const message = "This post is about #programming and #coding";
-    const result = extractHashtags(message);
-    expect(result).toEqual(["#programming", "#coding"]);
+    const messageHashtag = "This post is about #programming and #coding";
+    const messageNoHashtag = "This post does not contain hashtags";
+    const result1 = extractHashtags(messageHashtag);
+    const result2 = extractHashtags(messageNoHashtag);
+    expect(result1).toEqual(["#programming", "#coding"]);
+    expect(result2).toEqual([]);
   });
 
   test("checkLocation should validate a location object", () => {
@@ -48,15 +57,25 @@ describe("Message Functions", () => {
   });
 
   test("checkUserMentions should detect user mentions in a message", () => {
-    const message = "Hey @john, did you see @jane's message?";
-    const result = checkUserMentions(message);
-    expect(result).toBe(true);
+    const mentionMessage = "Hey @john, did you see @jane's message?";
+    const nonMentionMessage = "Hello there!";
+
+    const mentionResult = checkUserMentions(mentionMessage);
+    const nonMentionResult = checkUserMentions(nonMentionMessage);
+
+    expect(mentionResult).toBe(true);
+    expect(nonMentionResult).toBe(false);
   });
 
   test("checkHashtags should detect hashtags in a message", () => {
-    const message = "I love #coding and #programming";
-    const result = checkHashtags(message);
-    expect(result).toBe(true);
+    const hashtagMessage = "I love #coding and #programming";
+    const nonHashtagMessage = "Hello there!";
+
+    const hashtagResult = checkHashtags(hashtagMessage);
+    const nonHashtagResult = checkHashtags(nonHashtagMessage);
+
+    expect(hashtagResult).toBe(true);
+    expect(nonHashtagResult).toBe(false);
   });
 });
 
@@ -77,9 +96,17 @@ describe("Telegram Functions", () => {
   });
 
   test("checkGroupOrChannel should detect group or channel links in a message", () => {
-    const message = "Join our group: https://t.me/joinchat/group123";
-    const result = checkGroupOrChannel(message);
-    expect(result).toBe(true);
+    const groupOrChannelMessage =
+      "Join our group: https://t.me/joinchat/group123";
+    const nonGroupOrChannelMessage = "Hello there!";
+
+    const groupOrChannelResult = checkGroupOrChannel(groupOrChannelMessage);
+    const nonGroupOrChannelResult = checkGroupOrChannel(
+      nonGroupOrChannelMessage,
+    );
+
+    expect(groupOrChannelResult).toBe(true);
+    expect(nonGroupOrChannelResult).toBe(false);
   });
 
   test("checkEmoji should check if a message contains only emoji characters", () => {
@@ -107,27 +134,41 @@ describe("Telegram Functions", () => {
   });
 
   test("checkBot should check if a message contains a Telegram bot username", () => {
-    const message = "Hey @mytelegram_bot, how are you?";
-    const result = checkBot(message);
-    expect(result).toBe(true);
+    const botMessage = "Hey @mytelegram_bot, how are you?";
+    const nonBotMessage = "Hello there!";
+
+    const botResult = checkBot(botMessage);
+    const nonBotResult = checkBot(nonBotMessage);
+
+    expect(botResult).toBe(true);
+    expect(nonBotResult).toBe(false);
   });
 
   test("checkChannel should check if a message contains a Telegram channel link", () => {
-    const message = "Join our channel: https://t.me/mychannel";
-    const result = checkChannel(message);
-    expect(result).toBe(true);
+    const messageTrue = "Join our channel: https://t.me/mychannel";
+    const messageFalse = "Join our channel: https://user";
+    const result1 = checkChannel(messageTrue);
+    const result2 = checkChannel(messageFalse);
+    expect(result1).toBe(true);
+    expect(result2).toBe(false);
   });
 
   test("checkLink should check if a message contains a Telegram link", () => {
-    const message = "Check out this link: https://t.me/mychannel";
-    const result = checkLink(message);
-    expect(result).toBe(true);
+    const messageTrue = "Check out this link: https://t.me/mychannel";
+    const messageFalse = "Check out this link: https://t.me";
+    const result1 = checkLink(messageTrue);
+    const result2 = checkLink(messageFalse);
+    expect(result1).toBe(true);
+    expect(result2).toBe(false);
   });
 
   test("checkGroup should check if a message contains a Telegram group link", () => {
-    const message = "Join our group: https://t.me/joinchat/group123";
-    const result = checkGroup(message);
-    expect(result).toBe(true);
+    const messageTrue = "Join our group: https://t.me/joinchat/group123";
+    const messageFalse = "Join our group: https://google.com";
+    const result1 = checkGroup(messageTrue);
+    const result2 = checkGroup(messageFalse);
+    expect(result1).toBe(true);
+    expect(result2).toBe(false);
   });
 
   test("checkUsername should validate a Telegram username", () => {
@@ -140,8 +181,11 @@ describe("Telegram Functions", () => {
   });
 
   test("extractUsername should extract the username from a Telegram link", () => {
-    const link = "https://t.me/johndoe";
-    const result = extractUsername(link);
-    expect(result).toBe("johndoe");
+    const linkTrue = "https://t.me/johndoe";
+    const linkFalse = "https://google.com/johndoe";
+    const result1 = extractUsername(linkTrue);
+    const result2 = extractUsername(linkFalse);
+    expect(result1).toBe("johndoe");
+    expect(result2).toBe(null);
   });
 });

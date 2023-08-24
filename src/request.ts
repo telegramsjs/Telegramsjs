@@ -26,8 +26,8 @@ function reform(reformText: any) {
   return reformText;
 }
 
-function hasProperties(obj: object | undefined): boolean {
-  if (!obj) return false;
+function hasProperties(obj: object): boolean {
+  if (typeof obj !== "object") return false;
   return Object.keys(obj).length > 0;
 }
 
@@ -97,7 +97,7 @@ class Request extends EventEmitter {
    * @param {object} params - The parameters to include in the API call.
    * @returns {Promise.<TelegramApiResponse>} The response from the API call.
    */
-  async request(method: string, params?: object): Promise<TelegramApiResponse> {
+  async request(method: string, params = {}): Promise<TelegramApiResponse> {
     const url = `${this.baseUrl}/${method}`;
 
     let paramsType: string | undefined;
