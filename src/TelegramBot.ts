@@ -20,17 +20,21 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
   /**
    * Constructs a new TelegramBot object.
    * @param {string} token - The API token for the bot.
+   * @param {number} [options.limit=100] - Limits the number of updates to be retrieved. Values between 1-100 are accepted.
+   * @param {number} [options.timeout=0] - Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
    * @param {AllowedUpdates} [options.allowed_updates=AllowedUpdates] - The types of updates the bot is interested in.
    * @param {unknown} [session=object] - The session object to be used by the bot
    */
   constructor(
     token: string,
     options: {
+      limit?: number;
+      timeout?: number;
       allowed_updates?: AllowedUpdates;
       session?: unknown;
     } = {},
   ) {
-    super(token, options.allowed_updates);
+    super(token, options);
 
     /**
      * The Telegram Bot API token.

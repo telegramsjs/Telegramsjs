@@ -38,22 +38,38 @@ function hasProperties(obj: object): boolean {
 class Request extends EventEmitter {
   token: string;
   baseUrl: string;
-  offset: number;
-  allowed_updates?: AllowedUpdates;
   startTime: number = Date.now();
   update_id?: number;
   last_object?: Update;
+  /** getUpdates **/
+  offset: number;
+  allowed_updates: AllowedUpdates;
+  limit: number;
+  timeout: number;
 
   /**
    * Constructs a new Request object.
    * @param {string} token - The API token for the bot.
-   * @param {AllowedUpdates} [allowed_updates=AllowedUpdates] - The types of updates the bot is interested in.
+   * @param {number} [options.limit=100] - Limits the number of updates to be retrieved. Values between 1-100 are accepted.
+   * @param {number} [options.timeout=0] - Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
+   * @param {AllowedUpdates} [options.allowed_updates=AllowedUpdates] - The types of updates the bot is interested in.
    */
-  constructor(token: string, allowed_updates?: AllowedUpdates) {
+  constructor(
+    token: string,
+    options: {
+      limit?: number;
+      timeout?: number;
+      allowed_updates?: AllowedUpdates;
+    },
+  ) {
     super();
     this.token = token;
     this.baseUrl = `https://api.telegram.org/bot${this.token}`;
     this.offset = 0;
+    /** Options **/
+    this.limit = options.limit ?? 100;
+    this.timeout = options.timeout ?? 0;
+    this.allowed_updates = options.allowed_updates ?? [];
   }
 
   /**
@@ -65,12 +81,11 @@ class Request extends EventEmitter {
    */
   async getUpdates(): Promise<Update[]> {
     this.startTime = Date.now();
-    const params: {
-      offset: number;
-      allowed_updates?: AllowedUpdates;
-    } = {
+    const params = {
       offset: this.offset,
-      allowed_updates: this.allowed_updates ?? [],
+      limit: this.limit,
+      timeout: this.timeout,
+      allowed_updates: this.allowed_updates,
     };
 
     const response = await this.request("getUpdates", params);

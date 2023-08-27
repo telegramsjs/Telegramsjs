@@ -62,10 +62,19 @@ class BaseClient<F> extends Request {
   /**
    * Creat method Telegram Api
    * @param {string} token - The Telegram Bot API token.
-   * @param {AllowedUpdates} [allowed_updates=undefined] - The client allowed_updates.
+   * @param {number} [options.limit=100] - Limits the number of updates to be retrieved. Values between 1-100 are accepted.
+   * @param {number} [options.timeout=0] - Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
+   * @param {AllowedUpdates} [options.allowed_updates=AllowedUpdates] - The types of updates the bot is interested in.
    */
-  constructor(token: string, allowed_updates?: AllowedUpdates) {
-    super(token, allowed_updates);
+  constructor(
+    token: string,
+    options: {
+      limit?: number;
+      timeout?: number;
+      allowed_updates?: AllowedUpdates;
+    } = {},
+  ) {
+    super(token, options);
   }
 
   /** Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
