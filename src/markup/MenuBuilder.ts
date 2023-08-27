@@ -6,10 +6,11 @@ type MenuFunction<F> = (callbackQuery: CallbackQuery & Context<F>) => void;
 
 type Rows<F> = {
   type: string;
+  url?: string;
   text?: string;
+  answer?: boolean;
   callback?: MenuFunction<F>;
   callback_data?: string;
-  url?: string;
 }[];
 
 interface CallbackMarkup {
@@ -18,30 +19,36 @@ interface CallbackMarkup {
 }
 
 interface URLMarkup {
-  text: string;
   url: string;
+  text: string;
 }
 
 interface URLAndCallbackMarkup {
-  text: string;
   url: string;
+  text: string;
   callback_data?: string;
 }
 
 class MenuBuilder<F> {
-  identifier?: string;
   rows: Rows<F>;
   telegram?: TelegramBot<F>;
+  identifier?: string;
+  answer?: boolean;
 
   /**
    * Creates an instance of MenuBuilder.
    * @param {string} [identifier] - An identifier for the menu.
    * @param {TelegramBot<F>} [bot] - The Telegram bot instance.
    */
-  constructor(identifier?: string, bot?: TelegramBot<F>) {
+  constructor(
+    identifier?: string,
+    bot?: TelegramBot<F>,
+    options: { answer?: boolean } = {},
+  ) {
     this.identifier = identifier;
     this.telegram = bot;
     this.rows = [];
+    this.answer = options.answer ?? false;
   }
 
   /**
@@ -67,12 +74,14 @@ class MenuBuilder<F> {
    * ```
    * @param {string} text - The text for the button.
    * @param {MenuFunction<F>} callback - The callback function for the button.
+   * @param {boolean} [answer=false] - Whether to answer the action.
    * @returns {this} The current MenuBuilder instance.
    */
-  text(text: string, callback: MenuFunction<F>): this {
+  text(text: string, callback: MenuFunction<F>, answer: boolean = false): this {
     this.rows.push({
       type: "text",
       text,
+      answer,
       callback,
       callback_data: `menu_${this.identifier}_${text}`,
     });
@@ -177,10 +186,6 @@ class MenuBuilder<F> {
       }
     }
 
-    if (currentRow.length > 0) {
-      buttons.push([...currentRow]);
-    }
-
     for (const item of this.rows) {
       if (!item.callback) continue;
       if (!this.identifier) throw Error("specify the parameter 'identifier'");
@@ -191,10 +196,17 @@ class MenuBuilder<F> {
         "callback_query:data",
         async (ctx: CallbackQuery & Context<F>) => {
           if (ctx.data === item.callback_data) {
+            if (item.answer || this.answer) {
+              await ctx.answerCallbackQuery();
+            }
             await callback(ctx);
           }
         },
       );
+    }
+
+    if (currentRow.length > 0) {
+      buttons.push([...currentRow]);
     }
 
     return { inline_keyboard: buttons };
