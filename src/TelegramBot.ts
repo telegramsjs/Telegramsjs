@@ -240,10 +240,18 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
    * Use this function to set a session for the Telegram bot. The "use"
    * function assigns the provided session object to the bot instance,
    * allowing you to use session data and manage user interactions across different requests.
-   * @param {unknown} [session=object] - The session object to be used by the bot
+   * @param {session} [session=object] - The session object to be used by the bot
+   * @param {combine} [combine=boolean] - this parameter is responsible for combining previous sessions
    */
-  use(session: unknown = {}): void {
-    this.session = session;
+  use<T>(session: T, combine: boolean = true): void {
+    if (combine) {
+      this.session = {
+        ...(this.session as T),
+        ...session,
+      };
+      return;
+    }
+    this.session = session || {};
   }
 
   /**
