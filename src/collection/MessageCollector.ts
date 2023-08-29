@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { Message } from "@telegram.ts/types";
-import { Context } from "../Context";
+import { Context } from "../context";
 
 type TextCaptionContextMessage<F> = Message.TextMessage &
   Message.CaptionableMessage &

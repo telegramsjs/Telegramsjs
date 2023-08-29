@@ -1,6 +1,6 @@
-import { TelegramBot } from "../TelegramBot";
+import { TelegramBot } from "../client";
 import { CallbackQuery } from "@telegram.ts/types";
-import { Context } from "../Context";
+import { Context } from "../context";
 
 type MenuFunction<F> = (callbackQuery: CallbackQuery & Context<F>) => void;
 

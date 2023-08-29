@@ -1,8 +1,7 @@
 import axios from "axios";
 import querystring from "querystring";
 import { EventEmitter } from "events";
-import { TelegramApiError } from "./errorcollection";
-import { Context } from "./Context";
+import { TelegramApiError } from "./error";
 import { Update, ResponseParameters } from "@telegram.ts/types";
 
 type TelegramApiResponse = {

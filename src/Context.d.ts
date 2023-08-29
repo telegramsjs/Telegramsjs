@@ -46,7 +46,7 @@ import {
   InputMedia,
   InputSticker,
 } from "@telegram.ts/types";
-import { TelegramBot } from "./TelegramBot";
+import { TelegramBot } from "./client";
 
 type Context<F = Buffer> = {
   telegram: TelegramBot<F>;

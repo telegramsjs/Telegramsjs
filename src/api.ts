@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Request, AllowedUpdates } from "./request";
-import { TelegramApiError } from "./errorcollection";
 import {
   Message,
   Chat,
@@ -58,7 +57,7 @@ import {
   InputSticker,
 } from "@telegram.ts/types";
 
-class BaseClient<F> extends Request {
+class Api<F> extends Request {
   /**
    * Creat method Telegram Api
    * @param {string} token - The Telegram Bot API token.
@@ -1659,4 +1658,4 @@ class BaseClient<F> extends Request {
   }
 }
 
-export { BaseClient };
+export { Api };

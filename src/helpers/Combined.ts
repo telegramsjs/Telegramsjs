@@ -1,12 +1,12 @@
-import { TelegramBot } from "../TelegramBot";
+import { TelegramBot } from "../client";
 import {
   MessageCollector,
   MessageFilter,
   TextCaptionContextMessage,
 } from "../collection/MessageCollector";
-import { Context } from "../Context";
+import { Context } from "../context";
 import { Methods } from "./Methods";
-import util from "../Util";
+import util from "../util";
 import {
   Message,
   Chat,

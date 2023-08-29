@@ -1,4 +1,4 @@
-import { BaseClient } from "./BaseClient";
+import { Api } from "./api";
 import { Combined } from "./helpers/Combined";
 import {
   CallbackQuery,
@@ -9,13 +9,14 @@ import {
   UserFromGetMe,
 } from "@telegram.ts/types";
 import { TextCaptionContextMessage } from "./collection/MessageCollector";
-import { Context } from "./Context";
+import { Context } from "./context";
 import { AllowedUpdates } from "./request";
 import isRegex from "is-regex";
 
-class TelegramBot<F = Buffer> extends BaseClient<F> {
+class TelegramBot<F = Buffer> extends Api<F> {
   token: string;
   session: unknown = {};
+  updatesProcess: Combined<F>;
 
   /**
    * Constructs a new TelegramBot object.
@@ -41,6 +42,9 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
      * @type {string}
      */
     this.token = token;
+
+    /** Staring bot **/
+    this.updatesProcess = new Combined<F>(this);
   }
 
   /**
@@ -70,6 +74,7 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
    * ```
    * @param {string | string[] | RegExp} command - The command string or an array of command strings.
    * @param {(message: (Message.TextMessage & Context<F>), args?: string[]) => void} callback - The callback function to handle the command.
+   * @param {string | boolean} [typeChannel=false] - In what type of channels to watch command
    */
   command(
     command: string | string[] | RegExp,
@@ -270,19 +275,13 @@ class TelegramBot<F = Buffer> extends BaseClient<F> {
    * ```
    */
   async login(): Promise<void> {
-    const updatesProcess = new Combined<F>(this);
-
-    (async () => {
-      this.getMe()
-        .then((res: UserFromGetMe) => {
-          this.emit("ready", res);
-        })
-        .catch((err) => {
-          throw err;
-        });
-    })();
-
-    await updatesProcess.processUpdate();
+    try {
+      const response = await this.getMe();
+      this.emit("ready", response);
+      await this.updatesProcess.processUpdate();
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

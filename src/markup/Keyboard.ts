@@ -7,24 +7,24 @@ type KeyboardOptions = {
   remove_keyboard?: boolean;
 };
 
-class MenuKeyboardBuilder {
-  private buttons: string[][] = [[]];
-  private isOneTime: boolean = false;
-  private isResize: boolean = false;
-  private placeholderText: string | undefined;
-  private isSelective: boolean | undefined;
-  private isRemoveKeyboard: boolean = false;
+class Keyboard {
+  public buttons: string[][] = [[]];
+  public isOneTime: boolean = false;
+  public isResize: boolean = false;
+  public placeholderText: string | undefined;
+  public isSelective: boolean | undefined;
+  public isRemoveKeyboard: boolean = false;
 
   /**
    * Adds buttons to the current row of the keyboard.
    * ```ts
-   * const menu1 = new MenuKeyboardBuilder()
+   * const menu1 = new Keyboard()
    * .keyboard("🥇")
    * .keyboard("🥈")
    * .keyboard("🥉")
    * .build()
    *
-   * const menu2 = new MenuKeyboardBuilder()
+   * const menu2 = new Keyboard()
    * .keyboard(["🥇", "🥈", "🥉"])
    * .build()
    *
@@ -35,7 +35,7 @@ class MenuKeyboardBuilder {
    * });
    * ```
    * @param {string | string[]} buttons - An array of button labels to be added.
-   * @returns The instance of the MenuKeyboardBuilder.
+   * @returns The instance of the Keyboard.
    */
   keyboard(buttons: string | string[]): this {
     if (Array.isArray(buttons)) {
@@ -49,7 +49,7 @@ class MenuKeyboardBuilder {
   /**
    * Creates a new row in the keyboard for arranging buttons.
    * ```ts
-   * const menu = new MenuKeyboardBuilder()
+   * const menu = new Keyboard()
    * .keyboard("🥇").row()
    * .keyboard("🥈").row()
    * .keyboard("🥉")
@@ -62,7 +62,7 @@ class MenuKeyboardBuilder {
    *  });
    * });
    * ```
-   * @returns {MenuKeyboardBuilder} - The instance of the MenuKeyboardBuilder.
+   * @returns {Keyboard} - The instance of the Keyboard.
    */
   row(): this {
     this.buttons.push([]);
@@ -71,7 +71,7 @@ class MenuKeyboardBuilder {
 
   /**
    * Sorts buttons in each row alphabetically.
-   * @returns {MenuKeyboardBuilder} - The instance of the MenuKeyboardBuilder.
+   * @returns {Keyboard} - The instance of the Keyboard.
    */
   sort(): this {
     this.buttons = this.buttons.map((row) => row.sort());
@@ -81,7 +81,7 @@ class MenuKeyboardBuilder {
   /**
    * Sets whether the keyboard should be removed after use.
    * @param {value} [boolean=true] - A boolean indicating whether to remove the keyboard.
-   * @returns {MenuKeyboardBuilder} - The instance of the MenuKeyboardBuilder.
+   * @returns {Keyboard} - The instance of the Keyboard.
    */
   removeKeyboard(value: boolean = true): this {
     this.isRemoveKeyboard = value;
@@ -91,7 +91,7 @@ class MenuKeyboardBuilder {
   /**
    * Sets whether the keyboard is one-time use.
    * @param {value} [boolean=true] - A boolean indicating whether the keyboard is one-time use.
-   * @returns {MenuKeyboardBuilder} - The instance of the MenuKeyboardBuilder.
+   * @returns {Keyboard} - The instance of the Keyboard.
    */
   oneTime(value: boolean = true): this {
     this.isOneTime = value;
@@ -101,7 +101,7 @@ class MenuKeyboardBuilder {
   /**
    * Sets whether the keyboard should be resizable.
    * @param {value} [boolean=true] - A boolean indicating whether the keyboard should be resizable.
-   * @returns {MenuKeyboardBuilder} - The instance of the MenuKeyboardBuilder.
+   * @returns {Keyboard} - The instance of the Keyboard.
    */
   resize(value: boolean = true): this {
     this.isResize = value;
@@ -111,7 +111,7 @@ class MenuKeyboardBuilder {
   /**
    * Sets the placeholder text for the input field.
    * @param {text} string - The placeholder text to be displayed.
-   * @returns The instance of the MenuKeyboardBuilder.
+   * @returns The instance of the Keyboard.
    */
   placeholder(text: string): this {
     this.placeholderText = text;
@@ -121,7 +121,7 @@ class MenuKeyboardBuilder {
   /**
    * Sets whether the keyboard is selective.
    * @param {value} [boolean=true] - A boolean indicating whether the keyboard is selective.
-   * @returns {MenuKeyboardBuilder} The instance of the MenuKeyboardBuilder.
+   * @returns {Keyboard} The instance of the Keyboard.
    */
   selective(value: boolean = true): this {
     this.isSelective = value;
@@ -151,4 +151,4 @@ class MenuKeyboardBuilder {
   }
 }
 
-export { MenuKeyboardBuilder };
+export { Keyboard };
