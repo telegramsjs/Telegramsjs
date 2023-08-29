@@ -214,18 +214,6 @@ type Context<F = Buffer> = {
     },
   ): Promise<boolean>;
   /**
-   * @see https://core.telegram.org/bots/api#kickchatmember
-   */
-  get kickChatMember(): (
-    userId: number,
-    args?:
-      | {
-          until_date?: number | undefined;
-          revoke_messages?: boolean | undefined;
-        }
-      | undefined,
-  ) => Promise<boolean>;
-  /**
    * @see https://core.telegram.org/bots/api#unbanchatmember
    */
   unbanChatMember(userId: number, onlyIfBanned?: boolean): Promise<boolean>;

@@ -384,9 +384,7 @@ class Combined<F> {
         | ForceReply;
     },
   ) {
-    return this.telegram.sendMessage({
-      chat_id: this.chat.id,
-      text,
+    return this.telegram.sendMessage(this.chat.id, text, {
       message_thread_id: this.getThreadId,
       ...args,
     });
@@ -441,10 +439,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#revokechatinvitelink
    */
   revokeChatInviteLink(invite_link: string) {
-    return this.telegram.revokeChatInviteLink({
-      chat_id: this.chat.id,
-      invite_link,
-    });
+    return this.telegram.revokeChatInviteLink(invite_link, this.chat.id);
   }
 
   /**
@@ -462,13 +457,6 @@ class Combined<F> {
       user_id: userId,
       ...args,
     });
-  }
-
-  /**
-   * @see https://core.telegram.org/bots/api#kickchatmember
-   */
-  get kickChatMember() {
-    return this.banChatMember;
   }
 
   /**
@@ -541,10 +529,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setchatphoto
    */
   setChatPhoto(photo: F) {
-    return this.telegram.setChatPhoto({
-      chat_id: this.chat.id,
-      photo,
-    });
+    return this.telegram.setChatPhoto(this.chat.id, photo);
   }
 
   /**
@@ -558,20 +543,14 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setchattitle
    */
   setChatTitle(title: string) {
-    return this.telegram.setChatTitle({
-      chat_id: this.chat.id,
-      title,
-    });
+    return this.telegram.setChatTitle(this.chat.id, title);
   }
 
   /**
    * @see https://core.telegram.org/bots/api#setchatdescription
    */
   setChatDescription(description: string) {
-    return this.telegram.setChatDescription({
-      chat_id: this.chat.id,
-      description,
-    });
+    return this.telegram.setChatDescription(this.chat.id, description);
   }
 
   /**
@@ -589,10 +568,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#unpinchatmessage
    */
   unpinChatMessage(messageId: number) {
-    return this.telegram.unpinChatMessage({
-      chat_id: this.chat.id,
-      message_id: messageId,
-    });
+    return this.telegram.unpinChatMessage(this.chat.id, messageId);
   }
 
   /**
@@ -634,10 +610,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#getchatmember
    */
   getChatMember(userId: number) {
-    return this.telegram.getChatMember({
-      chat_id: this.chat.id,
-      user_id: userId,
-    });
+    return this.telegram.getChatMember(this.chat.id, userId);
   }
 
   /**
@@ -651,10 +624,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setpassportdataerrors
    */
   setPassportDataErrors(errors: readonly PassportElementError[]) {
-    return this.telegram.setPassportDataErrors({
-      user_id: this.from.id,
-      errors,
-    });
+    return this.telegram.setPassportDataErrors(this.from.id, errors);
   }
 
   /**
@@ -1154,10 +1124,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setchatstickerset
    */
   setChatStickerSet(stickerSetName: string) {
-    return this.telegram.setChatStickerSet({
-      chat_id: this.chat.id,
-      sticker_set_name: stickerSetName,
-    });
+    return this.telegram.setChatStickerSet(stickerSetName, this.chat.id);
   }
 
   /**
@@ -1202,50 +1169,47 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#closeforumtopic
    */
   closeForumTopic() {
-    return this.telegram.closeForumTopic({
-      chat_id: this.chat.id,
-      message_thread_id: this.updates.message_thread_id,
-    });
+    return this.telegram.closeForumTopic(
+      this.chat.id,
+      this.updates.message_thread_id,
+    );
   }
 
   /**
    * @see https://core.telegram.org/bots/api#reopenforumtopic
    */
   reopenForumTopic() {
-    return this.telegram.reopenForumTopic({
-      chat_id: this.chat.id,
-      message_thread_id: this.updates.message_thread_id,
-    });
+    return this.telegram.reopenForumTopic(
+      this.chat.id,
+      this.updates.message_thread_id,
+    );
   }
 
   /**
    * @see https://core.telegram.org/bots/api#deleteforumtopic
    */
   deleteForumTopic() {
-    return this.telegram.deleteForumTopic({
-      chat_id: this.chat.id,
-      message_thread_id: this.updates.message_thread_id,
-    });
+    return this.telegram.deleteForumTopic(
+      this.chat.id,
+      this.updates.message_thread_id,
+    );
   }
 
   /**
    * @see https://core.telegram.org/bots/api#unpinallforumtopicmessages
    */
   unpinAllForumTopicMessages() {
-    return this.telegram.unpinAllForumTopicMessages({
-      chat_id: this.chat.id,
-      message_thread_id: this.updates.message_thread_id,
-    });
+    return this.telegram.unpinAllForumTopicMessages(
+      this.chat.id,
+      this.updates.message_thread_id,
+    );
   }
 
   /**
    * @see https://core.telegram.org/bots/api#editgeneralforumtopic
    */
   editGeneralForumTopic(name: string) {
-    return this.telegram.editGeneralForumTopic({
-      chat_id: this.chat.id,
-      name,
-    });
+    return this.telegram.editGeneralForumTopic(this.chat.id, name);
   }
 
   /**
@@ -1286,10 +1250,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setstickerpositioninset
    */
   setStickerPositionInSet(sticker: string, position: number) {
-    return this.telegram.setStickerPositionInSet({
-      sticker,
-      position,
-    });
+    return this.telegram.setStickerPositionInSet(sticker, position);
   }
 
   /**
@@ -1363,18 +1324,14 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setmycommands
    */
   setMyCommands(commands: readonly BotCommand[]) {
-    return this.telegram.setMyCommands({
-      commands,
-    });
+    return this.telegram.setMyCommands({ commands });
   }
 
   /**
    * @see https://core.telegram.org/bots/api#setmydescription
    */
   setMyDescription(description: string) {
-    return this.telegram.setMyDescription({
-      description,
-    });
+    return this.telegram.setMyDescription(description);
   }
 
   /**
@@ -1388,9 +1345,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setmyshortdescription
    */
   setMyShortDescription(shortDescription: string) {
-    return this.telegram.setMyShortDescription({
-      short_description: shortDescription,
-    });
+    return this.telegram.setMyShortDescription(shortDescription);
   }
 
   /**
@@ -1404,9 +1359,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#setmyname
    */
   setMyName(name: string) {
-    return this.telegram.setMyName({
-      name,
-    });
+    return this.telegram.setMyName(name);
   }
 
   /**
@@ -1499,15 +1452,9 @@ class Combined<F> {
    */
   deleteMessage(messageId?: number) {
     if (typeof messageId !== "undefined") {
-      return this.telegram.deleteMessage({
-        chat_id: this.chat.id,
-        message_id: messageId,
-      });
+      return this.telegram.deleteMessage(this.chat.id, messageId);
     }
-    return this.telegram.deleteMessage({
-      chat_id: this.chat.id,
-      message_id: this.messageId,
-    });
+    return this.telegram.deleteMessage(this.chat.id, this.messageId);
   }
 
   /**
@@ -1562,50 +1509,35 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#approvechatjoinrequest
    */
   approveChatJoinRequest(userId: number) {
-    return this.telegram.approveChatJoinRequest({
-      chat_id: this.chat.id,
-      user_id: userId,
-    });
+    return this.telegram.approveChatJoinRequest(this.chat.id, userId);
   }
 
   /**
    * @see https://core.telegram.org/bots/api#declinechatjoinrequest
    */
   declineChatJoinRequest(userId: number) {
-    return this.telegram.declineChatJoinRequest({
-      chat_id: this.chat.id,
-      user_id: userId,
-    });
+    return this.telegram.declineChatJoinRequest(this.chat.id, userId);
   }
 
   /**
    * @see https://core.telegram.org/bots/api#banchatsenderchat
    */
   banChatSenderChat(senderChatId: number) {
-    return this.telegram.banChatSenderChat({
-      chat_id: this.chat.id,
-      sender_chat_id: senderChatId,
-    });
+    return this.telegram.banChatSenderChat(this.chat.id, senderChatId);
   }
 
   /**
    * @see https://core.telegram.org/bots/api#unbanchatsenderchat
    */
   unbanChatSenderChat(senderChatId: number) {
-    return this.telegram.unbanChatSenderChat({
-      chat_id: this.chat.id,
-      sender_chat_id: senderChatId,
-    });
+    return this.telegram.unbanChatSenderChat(this.chat.id, senderChatId);
   }
 
   /**
    * @see https://core.telegram.org/bots/api#setchatmenubutton
    */
   setChatMenuButton(menuButton?: MenuButton) {
-    return this.telegram.setChatMenuButton({
-      chat_id: this.chat.id,
-      menu_button: menuButton,
-    });
+    return this.telegram.setChatMenuButton(this.chat.id, menuButton);
   }
 
   /**
@@ -1674,9 +1606,7 @@ class Combined<F> {
         | ForceReply;
     },
   ) {
-    return this.telegram.sendMessage({
-      text: text,
-      chat_id: this.chat.id,
+    return this.telegram.sendMessage(this.chat.id, text, {
       reply_to_message_id: this.messageId,
       ...args,
     });
@@ -1703,9 +1633,7 @@ class Combined<F> {
         | ForceReply;
     },
   ) {
-    return this.telegram.sendMessage({
-      text: text,
-      chat_id: this.chat.id,
+    return this.telegram.sendMessage(this.chat.id, text, {
       ...args,
     });
   }
@@ -1893,7 +1821,6 @@ class Combined<F> {
                   revoke_messages?: boolean;
                 },
               ) => this.banChatMember(userId, args),
-              kickChatMember: () => this.kickChatMember,
               unbanChatMember: (userId: number, onlyIfBanned?: boolean) =>
                 this.unbanChatMember(userId, onlyIfBanned),
               restrictChatMember: (args: {
