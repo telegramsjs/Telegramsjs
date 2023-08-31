@@ -28,6 +28,34 @@ type TelegramApiResponse = {
 
 type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
 
+type EventDataMap<F> = {
+  ready: UserFromGetMe;
+  message: Message & Context<F>;
+  "message:text": Message.TextMessage & Context<F>;
+  edited_message: Message & Context<F>;
+  edited_message_text: Message.TextMessage & Context<F>;
+  edited_message_caption: Message.CaptionableMessage & Context<F>;
+  channel_post: Message & Update.Channel & Context<F>;
+  edited_channel_post: Message & Update.Edited & Update.Channel & Context<F>;
+  edited_channel_post_text: Message.TextMessage &
+    Update.Edited &
+    Update.Channel &
+    Context<F>;
+  edited_channel_post_caption: Message.CaptionableMessage &
+    Update.Edited &
+    Update.Channel &
+    Context<F>;
+  inline_query: InlineQuery & Context<F>;
+  "callback_query:data": CallbackQuery & { data: string } & Context<F>;
+  shipping_query: ShippingQuery & Context<F>;
+  pre_checkout_query: PreCheckoutQuery & Context<F>;
+  poll: Poll & Context<F>;
+  poll_answer: PollAnswer & Context<F>;
+  chat_member: ChatMemberUpdated & Context<F>;
+  my_chat_member: ChatMemberUpdated & Context<F>;
+  chat_join_request: ChatJoinRequest & Context<F>;
+};
+
 function reformObjectToString(reformText: any) {
   const paramsType = typeof reformText;
   if (paramsType !== "object") return reformText;
@@ -85,81 +113,9 @@ class Request<F> extends EventEmitter {
     this.allowed_updates = options.allowed_updates ?? [];
   }
 
-  on(event: "ready", listener: (data: UserFromGetMe) => void): this;
-  on(event: "message", listener: (data: Message & Context<F>) => void): this;
-  on(
-    event: "message:text",
-    listener: (data: Message.TextMessage & Context<F>) => void,
-  ): this;
-  on(
-    event: "edited_message",
-    listener: (data: Message & Context<F>) => void,
-  ): this;
-  on(
-    event: "edited_message_text",
-    listener: (data: Message.TextMessage & Context<F>) => void,
-  ): this;
-  on(
-    event: "edited_message_caption",
-    listener: (data: Message.CaptionableMessage & Context<F>) => void,
-  ): this;
-  on(
-    event: "channel_post",
-    listener: (data: Message & Update.Channel & Context<F>) => void,
-  ): this;
-  on(
-    event: "edited_channel_post",
-    listener: (
-      data: Message & Update.Edited & Update.Channel & Context<F>,
-    ) => void,
-  ): this;
-  on(
-    event: "edited_channel_post_text",
-    listener: (
-      data: Message.TextMessage & Update.Edited & Update.Channel & Context<F>,
-    ) => void,
-  ): this;
-  on(
-    event: "edited_channel_post_text",
-    listener: (
-      data: Message.CaptionableMessage &
-        Update.Edited &
-        Update.Channel &
-        Context<F>,
-    ) => void,
-  ): this;
-  on(
-    event: "inline_query",
-    listener: (data: InlineQuery & Context<F>) => void,
-  ): this;
-  on(
-    event: "callback_query:data",
-    listener: (data: CallbackQuery & { data: string } & Context<F>) => void,
-  ): this;
-  on(
-    event: "shipping_query",
-    listener: (data: ShippingQuery & Context<F>) => void,
-  ): this;
-  on(
-    event: "pre_checkout_query",
-    listener: (data: PreCheckoutQuery & Context<F>) => void,
-  ): this;
-  on(event: "poll", listener: (data: Poll & Context<F>) => void): this;
-  on(
-    event: "poll_answer",
-    listener: (data: PollAnswer & Context<F>) => void,
-  ): this;
-  on(
-    event: "chat_member",
-    listener: (data: ChatMemberUpdated & Context<F>) => void,
-  ): this;
-  on(
-    event: "my_chat_member",
-    listener: (data: ChatMemberUpdated & Context<F>) => void,
-  ): this;
-  on(
-    event: "chat_join_request",
-    listener: (data: ChatJoinRequest & Context<F>) => void,
+  on<T extends keyof EventDataMap<F>>(
+    event: T,
+    listener: (data: EventDataMap<F>[T]) => void,
   ): this;
 
   on(

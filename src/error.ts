@@ -17,11 +17,11 @@ class TelegramApiError extends Error {
 
   constructor(
     error: {
-      error_code: number;
-      description: string;
-      ok: boolean;
+      error_code?: number;
+      description?: string;
+      ok?: boolean;
       parameters?: ResponseParameters;
-    },
+    } = {},
     method: string,
     params?: object,
   ) {
@@ -30,7 +30,7 @@ class TelegramApiError extends Error {
     if (typeof error === "string") {
       message.description = error;
     }
-    if (error?.description) {
+    if (error.description) {
       const errorDescription = error.description.split(":")[1];
       if (errorDescription) {
         message.description = errorDescription.trimStart().toLocaleLowerCase();
@@ -41,11 +41,11 @@ class TelegramApiError extends Error {
 
     super(message.description);
 
-    this.name = `TelegramApiError[${error?.error_code ?? 404}]`;
-    this.parameters = error?.parameters ?? params;
+    this.name = `TelegramApiError[${error.error_code ?? 404}]`;
+    this.parameters = error.parameters ?? params;
     this.method = method;
-    this.code = error?.error_code ?? 404;
-    this.ok = error?.ok ?? false;
+    this.code = error.error_code ?? 404;
+    this.ok = error.ok ?? false;
   }
 }
 
@@ -64,7 +64,7 @@ class EventError extends Error {
   constructor(description: string, event: unknown) {
     super(description);
 
-    this.name = `EventError[${typeof event}]`;
+    this.name = `EventError[${event}]`;
     this.eventName = event;
     this.eventType = typeof event;
   }
