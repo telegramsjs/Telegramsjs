@@ -79,6 +79,53 @@ class Keyboard {
   }
 
   /**
+   * Creates a KeyboardOptions object based on the provided parameters.
+   * ```ts
+   * const fromKeyboard = Keyboard.from([["a", "b"], ["c"]], {
+   *  isResize: true
+   * });
+   *
+   * bot.command("from", (ctx) => {
+   *  ctx.reply("From keyboard", {
+   *    reply_markup: fromKeyboard
+   *   });
+   * });
+   * ```
+   * @param buttons - An array of button arrays that define the keyboard layout.
+   * @param options - An object containing various keyboard options.
+   *   @property {boolean} isResize - Whether the keyboard should be resizable.
+   *   @property {boolean} isOneTime - Whether the keyboard should be shown only once.
+   *   @property {boolean} isSelective - Whether the keyboard should be selective for certain users.
+   *   @property {string} placeholderText - Placeholder text for the input field.
+   *   @property {boolean} isRemoveKeyboard - Whether the keyboard should be removed.
+   * @returns {KeyboardOptions} A KeyboardOptions object with the specified configuration.
+   */
+  static from(
+    buttons: string[][] = [[]],
+    options: {
+      isResize?: boolean;
+      isOneTime?: boolean;
+      isSelective?: boolean;
+      placeholderText?: string;
+      isRemoveKeyboard?: boolean;
+    } = {},
+  ): KeyboardOptions {
+    const keyboard: KeyboardOptions = {
+      keyboard: (buttons[0].length > 0 ? buttons : undefined) as string[][],
+      resize_keyboard: options.isResize ?? false,
+      one_time_keyboard: options.isOneTime ?? false,
+      remove_keyboard: options.isRemoveKeyboard ?? false,
+    };
+    if (options.isSelective !== undefined) {
+      keyboard.selective = options.isSelective;
+    }
+    if (options.placeholderText) {
+      keyboard.input_field_placeholder = options.placeholderText;
+    }
+    return keyboard;
+  }
+
+  /**
    * Sets whether the keyboard should be removed after use.
    * @param {value} [boolean=true] - A boolean indicating whether to remove the keyboard.
    * @returns {Keyboard} - The instance of the Keyboard.

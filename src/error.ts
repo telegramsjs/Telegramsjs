@@ -54,12 +54,19 @@ class TelegramApiError extends Error {
  * @extends Error
  */
 class EventError extends Error {
+  eventName: unknown;
+  eventType: unknown;
   /**
    * Creates a new instance of the EventError class
-   * @param {string} error - The error message
+   * @param {string} description - The error message
+   * @param {unknown} event - event name
    */
-  constructor(error: string) {
-    super(error);
+  constructor(description: string, event: unknown) {
+    super(description);
+
+    this.name = `EventError[${typeof event}]`;
+    this.eventName = event;
+    this.eventType = typeof event;
   }
 }
 

@@ -67,8 +67,8 @@ class MessageCollector<F> extends EventEmitter {
     if (!(message.chat.id === this.chatId && this.filter(message))) return;
     this.countCollector = (this.countCollector || 0) + 1;
     const collectedMessageType = this.caption
-      ? message.text ?? message.caption
-      : message.text;
+      ? message?.text ?? message?.caption
+      : message?.text;
     this.collectedMessages.push(collectedMessageType as string);
     this.emit("collected", {
       count: this.countCollector,

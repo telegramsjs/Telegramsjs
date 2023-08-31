@@ -170,10 +170,10 @@ class TelegramBot<F = Buffer> extends Api<F> {
    */
   hears(
     text: string | string[] | RegExp,
-    callback: (message: TextCaptionContextMessage<F>, args: string[]) => void,
+    callback: (message: Message, args: string[]) => void,
     caption: boolean = true,
   ): void {
-    this.on("message", async (message: TextCaptionContextMessage<F>) => {
+    this.on("message", async (message) => {
       if (!caption && message.caption) return;
       const content = (message.text || message.caption) as string;
 

@@ -57,7 +57,7 @@ import {
   InputSticker,
 } from "@telegram.ts/types";
 
-class Api<F> extends Request {
+class Api<F> extends Request<F> {
   /**
    * Creat method Telegram Api
    * @param {string} token - The Telegram Bot API token.
@@ -95,7 +95,7 @@ class Api<F> extends Request {
     drop_pending_updates?: boolean;
     secret_token?: string;
   }): Promise<true> {
-    const method = "getMe";
+    const method = "setWebhook";
     const response = await this.request(method, params);
     return response.result;
   }

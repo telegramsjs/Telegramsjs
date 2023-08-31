@@ -1,8 +1,22 @@
 import axios from "axios";
 import querystring from "querystring";
 import { EventEmitter } from "events";
-import { TelegramApiError } from "./error";
-import { Update, ResponseParameters } from "@telegram.ts/types";
+import { Context } from "./context";
+import { TelegramApiError, EventError } from "./error";
+import {
+  Update,
+  ResponseParameters,
+  UserFromGetMe,
+  Message,
+  CallbackQuery,
+  InlineQuery,
+  ShippingQuery,
+  PreCheckoutQuery,
+  Poll,
+  PollAnswer,
+  ChatMemberUpdated,
+  ChatJoinRequest,
+} from "@telegram.ts/types";
 
 type TelegramApiResponse = {
   ok?: boolean;
@@ -14,7 +28,7 @@ type TelegramApiResponse = {
 
 type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
 
-function reform(reformText: any) {
+function reformObjectToString(reformText: any) {
   const paramsType = typeof reformText;
   if (paramsType !== "object") return reformText;
   for (const key in reformText) {
@@ -34,7 +48,7 @@ function hasProperties(obj: object): boolean {
  * Represents a request object for making requests to the Telegram Bot API.
  * @extends EventEmitter
  */
-class Request extends EventEmitter {
+class Request<F> extends EventEmitter {
   token: string;
   baseUrl: string;
   startTime: number = Date.now();
@@ -69,6 +83,105 @@ class Request extends EventEmitter {
     this.limit = options.limit ?? 100;
     this.timeout = options.timeout ?? 0;
     this.allowed_updates = options.allowed_updates ?? [];
+  }
+
+  on(event: "ready", listener: (data: UserFromGetMe) => void): this;
+  on(event: "message", listener: (data: Message & Context<F>) => void): this;
+  on(
+    event: "message:text",
+    listener: (data: Message.TextMessage & Context<F>) => void,
+  ): this;
+  on(
+    event: "edited_message",
+    listener: (data: Message & Context<F>) => void,
+  ): this;
+  on(
+    event: "edited_message_text",
+    listener: (data: Message.TextMessage & Context<F>) => void,
+  ): this;
+  on(
+    event: "edited_message_caption",
+    listener: (data: Message.CaptionableMessage & Context<F>) => void,
+  ): this;
+  on(
+    event: "channel_post",
+    listener: (data: Message & Update.Channel & Context<F>) => void,
+  ): this;
+  on(
+    event: "edited_channel_post",
+    listener: (
+      data: Message & Update.Edited & Update.Channel & Context<F>,
+    ) => void,
+  ): this;
+  on(
+    event: "edited_channel_post_text",
+    listener: (
+      data: Message.TextMessage & Update.Edited & Update.Channel & Context<F>,
+    ) => void,
+  ): this;
+  on(
+    event: "edited_channel_post_text",
+    listener: (
+      data: Message.CaptionableMessage &
+        Update.Edited &
+        Update.Channel &
+        Context<F>,
+    ) => void,
+  ): this;
+  on(
+    event: "inline_query",
+    listener: (data: InlineQuery & Context<F>) => void,
+  ): this;
+  on(
+    event: "callback_query:data",
+    listener: (data: CallbackQuery & { data: string } & Context<F>) => void,
+  ): this;
+  on(
+    event: "shipping_query",
+    listener: (data: ShippingQuery & Context<F>) => void,
+  ): this;
+  on(
+    event: "pre_checkout_query",
+    listener: (data: PreCheckoutQuery & Context<F>) => void,
+  ): this;
+  on(event: "poll", listener: (data: Poll & Context<F>) => void): this;
+  on(
+    event: "poll_answer",
+    listener: (data: PollAnswer & Context<F>) => void,
+  ): this;
+  on(
+    event: "chat_member",
+    listener: (data: ChatMemberUpdated & Context<F>) => void,
+  ): this;
+  on(
+    event: "my_chat_member",
+    listener: (data: ChatMemberUpdated & Context<F>) => void,
+  ): this;
+  on(
+    event: "chat_join_request",
+    listener: (data: ChatJoinRequest & Context<F>) => void,
+  ): this;
+
+  on(
+    event: string | string[] | symbol,
+    listener: (...args: any[]) => void,
+  ): this {
+    if (typeof event === "string") {
+      super.on(event, listener);
+      return this;
+    } else if (Array.isArray(event)) {
+      for (const name of event) {
+        super.on(name, listener);
+      }
+      return this;
+    } else if (typeof event === "symbol") {
+      super.on(event, listener);
+      return this;
+    }
+    throw new EventError(
+      `Available types for the event parameter are: 'string', 'string[]', and 'symbol', but the provided type is: ${typeof event}`,
+      event,
+    );
   }
 
   /**
@@ -116,7 +229,7 @@ class Request extends EventEmitter {
 
     let paramsType: string | undefined;
     if (hasProperties(params)) {
-      const reforms = reform(params);
+      const reforms = reformObjectToString(params);
       const formattedParams: Record<string, string> = reforms as Record<
         string,
         string

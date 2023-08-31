@@ -5,7 +5,6 @@ import {
   TextCaptionContextMessage,
 } from "../collection/MessageCollector";
 import { Context } from "../context";
-import { Methods } from "./Methods";
 import util from "../util";
 import {
   Message,
@@ -1658,8 +1657,8 @@ class Combined<F> {
       max,
       caption,
     });
-    this.telegram.on("message", (ctx: TextCaptionContextMessage<F>) => {
-      message.handleMessage(ctx);
+    this.telegram.on("message", (ctx) => {
+      message.handleMessage(ctx as TextCaptionContextMessage<F>);
     });
     return message;
   }
