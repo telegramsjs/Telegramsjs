@@ -77,7 +77,7 @@ class Markup {
   constructor() {
     this.reply_markup = {};
   }
-  
+
   /**
    * Sets the text for the reply markup.
    * @param {string} text - The text to be displayed.
@@ -87,7 +87,7 @@ class Markup {
     this.reply_markup.text = text;
     return this;
   }
-  
+
   /**
    * Sets the 'selective' option for the reply markup.
    * @param {boolean} [value=true] - The value indicating selectiveness.
@@ -97,7 +97,7 @@ class Markup {
     this.reply_markup.selective = value;
     return this;
   }
-  
+
   /**
    * Sets the input field placeholder for the reply markup.
    * @param {string} placeholder - The placeholder text.
@@ -107,7 +107,7 @@ class Markup {
     this.reply_markup.input_field_placeholder = placeholder;
     return this;
   }
-  
+
   /**
    * Sets the 'resize_keyboard' option for the reply markup.
    * @param {boolean} [value=true] - The value indicating whether to resize the keyboard.
@@ -117,7 +117,7 @@ class Markup {
     this.reply_markup.resize_keyboard = value;
     return this;
   }
-  
+
   /**
    * Sets the 'one_time_keyboard' option for the reply markup.
    * @param {boolean} [value=true] - The value indicating whether it's a one-time keyboard.
@@ -127,7 +127,7 @@ class Markup {
     this.reply_markup.one_time_keyboard = value;
     return this;
   }
-  
+
   /**
    * Sets the 'remove_keyboard' option to remove the keyboard.
    * @returns The instance of the Markup class.
@@ -136,7 +136,7 @@ class Markup {
     this.reply_markup.remove_keyboard = true;
     return this;
   }
-  
+
   /**
    * Sets the 'force_reply' option for the reply markup.
    * @returns The instance of the Markup class.
@@ -145,7 +145,7 @@ class Markup {
     this.reply_markup.force_reply = true;
     return this;
   }
-  
+
   /**
    * Sets the keyboard buttons for the reply markup.
    * @param {Button[]} buttons - An array of buttons to be displayed.
@@ -160,13 +160,13 @@ class Markup {
     this.reply_markup.keyboard = keyboard;
     return this;
   }
-  
+
   /**
- * Sets up an inline keyboard with the specified buttons.
- * @param {Button[]} buttons - An array of buttons to be included in the inline keyboard.
- * @param {WrapOptions} [options] - Additional options for arranging the buttons.
- * @returns The instance of the Markup class.
- */
+   * Sets up an inline keyboard with the specified buttons.
+   * @param {Button[]} buttons - An array of buttons to be included in the inline keyboard.
+   * @param {WrapOptions} [options] - Additional options for arranging the buttons.
+   * @returns The instance of the Markup class.
+   */
   inlineKeyboard(buttons: Button[], options?: WrapOptions): this {
     const inlineKeyboard = buildKeyboard(buttons, {
       columns: buttons.length,
@@ -175,23 +175,23 @@ class Markup {
     this.reply_markup.inline_keyboard = inlineKeyboard;
     return this;
   }
-  
+
   /**
- * Creates a contact request button with the specified text.
- * @param {string} text - The text label for the button.
- * @returns The contact request button object.
- */
+   * Creates a contact request button with the specified text.
+   * @param {string} text - The text label for the button.
+   * @returns The contact request button object.
+   */
   static text(text: string): Text {
     return {
       text,
     };
   }
-  
+
   /**
- * Creates a contact request button with the specified text.
- * @param {string} text - The text label for the button.
- * @returns The contact request button object.
- */
+   * Creates a contact request button with the specified text.
+   * @param {string} text - The text label for the button.
+   * @returns The contact request button object.
+   */
   static contactRequest(
     text: string,
   ): KeyboardButton.RequestContactButton & Text {
@@ -200,12 +200,12 @@ class Markup {
       request_contact: true,
     };
   }
-  
+
   /**
- * Creates a location request button with the specified text.
- * @param {string} text - The text label for the button.
- * @returns The location request button object.
- */
+   * Creates a location request button with the specified text.
+   * @param {string} text - The text label for the button.
+   * @returns The location request button object.
+   */
   static locationRequest(
     text: string,
   ): KeyboardButton.RequestLocationButton & Text {
@@ -214,13 +214,13 @@ class Markup {
       request_location: true,
     };
   }
-  
+
   /**
- * Creates a poll request button with the specified text and type.
- * @param {string} text - The text label for the button.
- * @param {string} [type] - The type of poll request ("quiz" or "regular").
- * @returns The poll request button object.
- */
+   * Creates a poll request button with the specified text and type.
+   * @param {string} text - The text label for the button.
+   * @param {string} [type] - The type of poll request ("quiz" or "regular").
+   * @returns The poll request button object.
+   */
   static pollRequest(
     text: string,
     type?: "quiz" | "regular",
@@ -233,14 +233,14 @@ class Markup {
     };
   }
 
-/**
- * Creates a user request button with the specified text and optional parameters.
- * @param {string} text - The text label for the button.
- * @param {number} request_id - The request ID.
- * @param {boolean} [user_is_bot] - Indicates if the user is a bot .
- * @param {boolean} [user_is_premium] - Indicates if the user is premium .
- * @returns The user request button object.
- */
+  /**
+   * Creates a user request button with the specified text and optional parameters.
+   * @param {string} text - The text label for the button.
+   * @param {number} request_id - The request ID.
+   * @param {boolean} [user_is_bot] - Indicates if the user is a bot .
+   * @param {boolean} [user_is_premium] - Indicates if the user is premium .
+   * @returns The user request button object.
+   */
   static userRequest(
     text: string,
     request_id: number,
@@ -256,15 +256,15 @@ class Markup {
       },
     };
   }
-  
+
   /**
- * Creates a chat request button with the specified text, request ID, and additional arguments.
- * @param {string} text - The text label for the button.
- * @param {number} request_id - The request ID.
- * @param {boolean} chat_is_channel - Indicates if the chat is a channel.
- * @param {object} [args] - Additional arguments for the chat request.
- * @returns The chat request button object.
- */
+   * Creates a chat request button with the specified text, request ID, and additional arguments.
+   * @param {string} text - The text label for the button.
+   * @param {number} request_id - The request ID.
+   * @param {boolean} chat_is_channel - Indicates if the chat is a channel.
+   * @param {object} [args] - Additional arguments for the chat request.
+   * @returns The chat request button object.
+   */
   static chatRequest(
     text: string,
     request_id: number,
@@ -288,12 +288,12 @@ class Markup {
     };
   }
 
-/**
- * Creates a URL button with the specified text and URL.
- * @param {string} text - The text label for the button.
- * @param {string} url - The URL to be opened when the button is clicked.
- * @returns The URL button object.
- */
+  /**
+   * Creates a URL button with the specified text and URL.
+   * @param {string} text - The text label for the button.
+   * @param {string} url - The URL to be opened when the button is clicked.
+   * @returns The URL button object.
+   */
   static url(text: string, url: string): InlineKeyboardButton.UrlButton & Text {
     return {
       text,
@@ -301,12 +301,12 @@ class Markup {
     };
   }
 
-/**
- * Creates a callback button with the specified text and callback data.
- * @param {string} text - The text label for the button.
- * @param {string} data - The callback data to be sent when the button is clicked.
- * @returns The callback button object.
- */
+  /**
+   * Creates a callback button with the specified text and callback data.
+   * @param {string} text - The text label for the button.
+   * @param {string} data - The callback data to be sent when the button is clicked.
+   * @returns The callback button object.
+   */
   static callback(
     text: string,
     data: string,
@@ -316,13 +316,13 @@ class Markup {
       callback_data: data,
     };
   }
-  
+
   /**
- * Creates a button to switch to a chat and start inline query.
- * @param {string} text - The text label for the button.
- * @param {string} value - The query value for starting the inline query.
- * @returns The switch to chat button object.
- */
+   * Creates a button to switch to a chat and start inline query.
+   * @param {string} text - The text label for the button.
+   * @param {string} value - The query value for starting the inline query.
+   * @returns The switch to chat button object.
+   */
   static switchToChat(
     text: string,
     value: string,
@@ -332,13 +332,13 @@ class Markup {
       switch_inline_query: value,
     };
   }
-  
+
   /**
- * Creates a button to switch to the current chat and start inline query.
- * @param {string} text - The text label for the button.
- * @param {string} value - The query value for starting the inline query.
- * @returns The switch to current chat button object.
- */
+   * Creates a button to switch to the current chat and start inline query.
+   * @param {string} text - The text label for the button.
+   * @param {string} value - The query value for starting the inline query.
+   * @returns The switch to current chat button object.
+   */
   static switchToCurrentChat(
     text: string,
     value: string,
@@ -348,24 +348,24 @@ class Markup {
       switch_inline_query_current_chat: value,
     };
   }
-  
+
   /**
- * Creates a button for starting a game.
- * @param {string} text - The text label for the button.
- * @returns The game button object.
- */
+   * Creates a button for starting a game.
+   * @param {string} text - The text label for the button.
+   * @returns The game button object.
+   */
   static game(text: string): InlineKeyboardButton.GameButton & Text {
     return {
       text,
       callback_game: {},
     };
   }
-  
+
   /**
- * Creates a button for making a payment.
- * @param {string} text - The text label for the button.
- * @returns The pay button object.
- */
+   * Creates a button for making a payment.
+   * @param {string} text - The text label for the button.
+   * @returns The pay button object.
+   */
   static pay(text: string): InlineKeyboardButton.PayButton & Text {
     return {
       text,
@@ -373,13 +373,13 @@ class Markup {
     };
   }
 
-/**
- * Creates a login button with the specified text and URL.
- * @param {string} text - The text label for the button.
- * @param {string} url - The URL to be opened when the button is clicked.
- * @param {object} [args] - Additional arguments for the login URL .
- * @returns The login button object.
- */
+  /**
+   * Creates a login button with the specified text and URL.
+   * @param {string} text - The text label for the button.
+   * @param {string} url - The URL to be opened when the button is clicked.
+   * @param {object} [args] - Additional arguments for the login URL .
+   * @returns The login button object.
+   */
   static login(
     text: string,
     url: string,
@@ -393,13 +393,13 @@ class Markup {
       },
     };
   }
-  
+
   /**
- * Creates a web app button with the specified text and URL.
- * @param {string} text - The text label for the button.
- * @param {string} url - The URL to be opened when the button is clicked.
- * @returns The web app button object.
- */
+   * Creates a web app button with the specified text and URL.
+   * @param {string} text - The text label for the button.
+   * @param {string} url - The URL to be opened when the button is clicked.
+   * @returns The web app button object.
+   */
   static webApp(
     text: string,
     url: string,
@@ -411,7 +411,7 @@ class Markup {
       },
     };
   }
-  
+
   /**
    * Generates the reply markup based on an array of Markups, an elevation level, and a type.
    * @param {Markup[]} markups - An array of Markups to be used for generating the markup.

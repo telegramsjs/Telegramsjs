@@ -88,7 +88,7 @@ class Collection<K, V> {
       }
     }
 
-    return result;
+    return Object.keys(result).length > 0 ? result : false;
   }
 
   /**
@@ -118,7 +118,7 @@ class Collection<K, V> {
       }
     }
 
-    return result;
+    return Object.keys(result).length > 0 ? result : false;
   }
 
   /**
