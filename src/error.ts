@@ -6,7 +6,7 @@ class TelegramApiError extends Error {
   code: number;
   ok: boolean;
   method: string;
-  parameters?: ResponseParameters;
+  parameters?: ResponseParameters | object;
   params?: object;
 
   /**

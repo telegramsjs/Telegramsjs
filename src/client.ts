@@ -84,24 +84,21 @@ class TelegramBot<F = Buffer> extends Api<F> {
     ) => void,
     typeChannel: "private" | "group" | "supergroup" | "channel" | false = false,
   ): void {
-    this.on(
-      "message:text",
-      async (message: Message.TextMessage & Context<F>) => {
-        if (typeChannel === message.chat.type || typeChannel === false) {
-          const args = message.text.split(/\s+/);
-          const text = message.text;
+    this.on("message:text", async (message) => {
+      if (typeChannel === message.chat.type || typeChannel === false) {
+        const args = message.text.split(/\s+/);
+        const text = message.text;
 
-          if (
-            (typeof command === "string" && text.startsWith(`/${command}`)) ||
-            (Array.isArray(command) &&
-              command.some((cmd) => text.startsWith(`/${cmd}`))) ||
-            (isRegex(command) && command.test(text))
-          ) {
-            await callback(message, args);
-          }
+        if (
+          (typeof command === "string" && text.startsWith(`/${command}`)) ||
+          (Array.isArray(command) &&
+            command.some((cmd) => text.startsWith(`/${cmd}`))) ||
+          (isRegex(command) && command.test(text))
+        ) {
+          await callback(message, args);
         }
-      },
-    );
+      }
+    });
   }
 
   /**
@@ -138,7 +135,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
     callback: (callbackQuery: CallbackQuery & Context<F>) => void,
     answer: boolean = false,
   ): void {
-    this.on("callback_query:data", async (ctx: CallbackQuery & Context<F>) => {
+    this.on("callback_query:data", async (ctx) => {
       if (
         (typeof data === "string" && ctx.data === data) ||
         (Array.isArray(data) && data.some((d) => d === ctx.data)) ||
@@ -230,7 +227,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
     text: string | string[] | RegExp,
     callback: (inlineQuery: InlineQuery & Context<F>) => void,
   ) {
-    this.on("inline_query", async (ctx: InlineQuery & Context<F>) => {
+    this.on("inline_query", async (ctx) => {
       if (
         (typeof text === "string" && ctx.query === text) ||
         (Array.isArray(text) && text.some((d) => d === ctx.query)) ||

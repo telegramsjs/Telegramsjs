@@ -192,17 +192,14 @@ class MenuBuilder<F> {
       if (!this.telegram?.on)
         throw Error("you need to specify the second parameter 'bot'");
       const callback = item.callback;
-      this.telegram.on(
-        "callback_query:data",
-        async (ctx: CallbackQuery & Context<F>) => {
-          if (ctx.data === item.callback_data) {
-            if (item.answer || this.answer) {
-              await ctx.answerCallbackQuery();
-            }
-            await callback(ctx);
+      this.telegram.on("callback_query:data", async (ctx) => {
+        if (ctx.data === item.callback_data) {
+          if (item.answer || this.answer) {
+            await ctx.answerCallbackQuery();
           }
-        },
-      );
+          await callback(ctx);
+        }
+      });
     }
 
     if (currentRow.length > 0) {
