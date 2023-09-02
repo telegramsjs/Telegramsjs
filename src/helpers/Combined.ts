@@ -68,12 +68,7 @@ type MessageTypeMap = {
     event: string;
     textEvent?: string;
     captionEvent?: string;
-    properties?: [
-      {
-        name: string;
-        event: string;
-      },
-    ];
+    properties?: { name: string; event: string }[];
   };
 };
 
@@ -138,6 +133,10 @@ const messageTypeMap: MessageTypeMap = {
       {
         name: "data",
         event: "callback_query:data",
+      },
+      {
+        name: "game_short_name",
+        event: "callback_query:game_short_name",
       },
     ],
   },
@@ -1637,13 +1636,6 @@ class Combined<F> {
     });
   }
 
-  /**
-   * @see https://core.telegram.org/bots/api#leavechat
-   */
-  leave() {
-    return this.telegram.leaveChat(this.chat.id);
-  }
-
   messageCollector(
     filter?: MessageFilter<F>,
     time?: number,
@@ -1678,7 +1670,10 @@ class Combined<F> {
           ];
           this.updates = updateProperty as ResponseApi;
           if (updateProperty) {
-            const chat: unknown = Object.assign({}, updateProperty.chat, {
+            const message: Context<F> = {
+              ...updateProperty,
+              telegram: this.telegram,
+              util: util,
               send: (
                 text: string,
                 args?: {
@@ -1697,13 +1692,6 @@ class Combined<F> {
                     | ForceReply;
                 },
               ) => this.send(text, args),
-              leave: () => this.leave(),
-            });
-            const message: Context<F> = {
-              ...updateProperty,
-              chat,
-              telegram: this.telegram,
-              util: util,
               reply: (
                 text: string,
                 args?: {

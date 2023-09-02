@@ -89,9 +89,9 @@ class TelegramBot<F = Buffer> extends Api<F> {
         const text = message.text;
 
         if (
-          (typeof command === "string" && text.startsWith(`/${command}`)) ||
+          (typeof command === "string" && args[0] === `/${command}`) ||
           (Array.isArray(command) &&
-            command.some((cmd) => text.startsWith(`/${cmd}`))) ||
+            command.some((cmd) => args[0] === `/${cmd}`)) ||
           (isRegex(command) && command.test(text))
         ) {
           await callback(message, args);
@@ -127,12 +127,14 @@ class TelegramBot<F = Buffer> extends Api<F> {
    * }, true);
    * ```
    * @param {string | string[] | RegExp} data - The action data string or an array of action data strings.
-   * @param {(callbackQuery: (CallbackQuery & Context<F>)) => void} callback - The callback function to handle the action.
+   * @param {(callbackQuery: (CallbackQuery & { data: string; } & Context<F>)) => void} callback - The callback function to handle the action.
    * @param {boolean} [answer=false] - Whether to answer the action.
    */
   action(
     data: string | string[] | RegExp,
-    callback: (callbackQuery: CallbackQuery & Context<F>) => void,
+    callback: (
+      callbackQuery: CallbackQuery & { data: string } & Context<F>,
+    ) => void,
     answer: boolean = false,
   ): this {
     this.on("callback_query:data", async (ctx) => {
@@ -182,6 +184,42 @@ class TelegramBot<F = Buffer> extends Api<F> {
       ) {
         const args = content.split(/\s+/);
         await callback(message, args);
+      }
+    });
+    return this;
+  }
+  
+  /**
+   * Registers a callback function to be executed when a message is received containing a 'game' object. 
+   * ```ts
+   * bot.gameQuery("telegramsjs", (ctx) => {
+   *  ctx.answerCallbackQuery({ url: "link_game" });
+   * });
+   * 
+   * bot.gameQuery(["telegramsjs", "marmok"], (ctx) => {
+   *  ctx.answerCallbackQuery({ url: "link_game" });
+   * });
+   * 
+   * bot.gameQuery(/telegram/, (ctx) => {
+   *  ctx.answerCallbackQuery({ url: "link_game" });
+   * });
+   * ```
+   * @param {string | string[] | RegExp} game - The game data string or an array of game data strings.
+   * @param {(gameQuery: (CallbackQuery & { game_short_name: string; } & Context<F>)) => void} callback - The callback function to handle the action.
+  */
+  gameQuery(
+    game: string | string[] | RegExp,
+    callback: (
+      gameQuery: CallbackQuery & { game_short_name: string } & Context<F>,
+    ) => void,
+  ): this {
+    this.on("callback_query:game_short_name", async (ctx) => {
+      if (
+        (typeof game === "string" && game === ctx.game_short_name) ||
+        (Array.isArray(game) && game.some((g) => g === ctx.game_short_name)) ||
+        (isRegex(game) && game.test(ctx.game_short_name))
+      ) {
+        await callback(ctx);
       }
     });
     return this;
