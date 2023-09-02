@@ -8,7 +8,6 @@ import {
   Update,
   UserFromGetMe,
 } from "@telegram.ts/types";
-import { TextCaptionContextMessage } from "./collection/MessageCollector";
 import { Context } from "./context";
 import { AllowedUpdates } from "./request";
 import isRegex from "is-regex";
@@ -73,17 +72,17 @@ class TelegramBot<F = Buffer> extends Api<F> {
    * });
    * ```
    * @param {string | string[] | RegExp} command - The command string or an array of command strings.
-   * @param {(message: (Message.TextMessage & Context<F>), args?: string[]) => void} callback - The callback function to handle the command.
+   * @param {(message: (Message.TextMessage & Context<F>), args: string[]) => void} callback - The callback function to handle the command.
    * @param {string | boolean} [typeChannel=false] - In what type of channels to watch command
    */
   command(
     command: string | string[] | RegExp,
     callback: (
       message: Message.TextMessage & Context<F>,
-      args?: string[],
+      args: string[],
     ) => void,
     typeChannel: "private" | "group" | "supergroup" | "channel" | false = false,
-  ): void {
+  ): this {
     this.on("message:text", async (message) => {
       if (typeChannel === message.chat.type || typeChannel === false) {
         const args = message.text.split(/\s+/);
@@ -99,6 +98,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
         }
       }
     });
+    return this;
   }
 
   /**
@@ -134,12 +134,12 @@ class TelegramBot<F = Buffer> extends Api<F> {
     data: string | string[] | RegExp,
     callback: (callbackQuery: CallbackQuery & Context<F>) => void,
     answer: boolean = false,
-  ): void {
+  ): this {
     this.on("callback_query:data", async (ctx) => {
       if (
         (typeof data === "string" && ctx.data === data) ||
         (Array.isArray(data) && data.some((d) => d === ctx.data)) ||
-        (isRegex(data) && data.test(ctx.data as string))
+        (isRegex(data) && data.test(ctx.data))
       ) {
         if (answer) {
           ctx.answerCallbackQuery().catch(() => console.log);
@@ -147,6 +147,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
         await callback(ctx);
       }
     });
+    return this;
   }
 
   /**
@@ -160,16 +161,16 @@ class TelegramBot<F = Buffer> extends Api<F> {
    * bot.hears(/marmok/, (ctx) => ctx.reply("Hi marmok!"));
    * ```
    * @param {string | string[] | RegExp} text - The text to match in the received messages.
-   * @param {(message: (TextCaptionContextMessage<F>, args: string[])) => void} callback - The callback function to be executed when a matching message is received.
-   * @param {boolean} [caption=true] - track, text only?
+   * @param {(message: (Message & Context<F>, args: string[])) => void} callback - The callback function to be executed when a matching message is received.
+   * @param {boolean} [caption=false] - track, text only?
    * It receives the matched message object as a parameter.
    * @returns void
    */
   hears(
     text: string | string[] | RegExp,
     callback: (message: Message, args: string[]) => void,
-    caption: boolean = true,
-  ): void {
+    caption: boolean = false,
+  ): this {
     this.on("message", async (message) => {
       if (!caption && message.caption) return;
       const content = (message.text || message.caption) as string;
@@ -183,6 +184,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
         await callback(message, args);
       }
     });
+    return this;
   }
 
   /**
@@ -221,12 +223,11 @@ class TelegramBot<F = Buffer> extends Api<F> {
    * @param {string | string[] | RegExp} text - The text or patterns to match in the inline query.
    * @param {(inlineQuery: InlineQuery & Context<F>) => void} callback - The callback function to be executed when a matching inline query is received.
    * It receives the matched inline query object as a parameter.
-   * @returns void
    */
   inlineQuery(
     text: string | string[] | RegExp,
     callback: (inlineQuery: InlineQuery & Context<F>) => void,
-  ) {
+  ): this {
     this.on("inline_query", async (ctx) => {
       if (
         (typeof text === "string" && ctx.query === text) ||
@@ -236,6 +237,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
         await callback(ctx);
       }
     });
+    return this;
   }
 
   /**
@@ -243,9 +245,9 @@ class TelegramBot<F = Buffer> extends Api<F> {
    * function assigns the provided session object to the bot instance,
    * allowing you to use session data and manage user interactions across different requests.
    * @param {session} [session=object] - The session object to be used by the bot
-   * @param {combine} [combine=boolean] - this parameter is responsible for combining previous sessions
+   * @param {combine} [combine=false] - this parameter is responsible for combining previous sessions
    */
-  use<T>(session: T, combine: boolean = true): void {
+  use<T>(session: T, combine: boolean = false): void {
     if (combine) {
       this.session = {
         ...(this.session as T),

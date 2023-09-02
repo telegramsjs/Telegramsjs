@@ -143,9 +143,7 @@ class Api<F> extends Request<F> {
     return response.result;
   }
 
-  /*
-   * Use this method to send text messages. On success, the sent Message is returned.
-   */
+  /** Use this method to send text messages. On success, the sent Message is returned. */
   async sendMessage(
     chat_id: number | string,
     text: string,

@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rimraf dist/ && yarn commonjs && yarn declaration",
     "commonjs": "tsc --module commonjs --outDir ./dist/",
-    "declaration": "tsc --declaration --declarationDir ./dist/typing",
+    "declaration": "tsc --declaration --module commonjs --declarationDir ./dist/typing",
     "test": "jest test/",
     "tab-align": "prettier --write src/"
   },

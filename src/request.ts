@@ -29,6 +29,7 @@ type TelegramApiResponse = {
 type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
 
 type EventDataMap<F> = {
+  update: Update;
   ready: UserFromGetMe;
   message: Message & Context<F>;
   "message:text": Message.TextMessage & Context<F>;
@@ -46,7 +47,11 @@ type EventDataMap<F> = {
     Update.Channel &
     Context<F>;
   inline_query: InlineQuery & Context<F>;
+  callback_query: CallbackQuery & Context<F>;
   "callback_query:data": CallbackQuery & { data: string } & Context<F>;
+  "callback_query:game_short_name": CallbackQuery & {
+    game_short_name: string;
+  } & Context<F>;
   shipping_query: ShippingQuery & Context<F>;
   pre_checkout_query: PreCheckoutQuery & Context<F>;
   poll: Poll & Context<F>;
