@@ -188,25 +188,25 @@ class TelegramBot<F = Buffer> extends Api<F> {
     });
     return this;
   }
-  
+
   /**
-   * Registers a callback function to be executed when a message is received containing a 'game' object. 
+   * Registers a callback function to be executed when a message is received containing a 'game' object.
    * ```ts
    * bot.gameQuery("telegramsjs", (ctx) => {
    *  ctx.answerCallbackQuery({ url: "link_game" });
    * });
-   * 
+   *
    * bot.gameQuery(["telegramsjs", "marmok"], (ctx) => {
    *  ctx.answerCallbackQuery({ url: "link_game" });
    * });
-   * 
+   *
    * bot.gameQuery(/telegram/, (ctx) => {
    *  ctx.answerCallbackQuery({ url: "link_game" });
    * });
    * ```
    * @param {string | string[] | RegExp} game - The game data string or an array of game data strings.
    * @param {(gameQuery: (CallbackQuery & { game_short_name: string; } & Context<F>)) => void} callback - The callback function to handle the action.
-  */
+   */
   gameQuery(
     game: string | string[] | RegExp,
     callback: (

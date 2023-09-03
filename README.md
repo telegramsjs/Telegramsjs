@@ -28,15 +28,14 @@ To get started, create a new instance of the `TelegramBot` class by providing yo
 
 ```typescript
 import { TelegramBot, Context } from "telegramsjs";
-import { UserFromGetMe, Message } from "@telegram.ts/types";
 
 const bot = new TelegramBot("BOT_TOKEN");
 
 function isCommand(ctx: Context): boolean {
-  return ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/";
+  return ctx.entities?.[0].type === "bot_command" && ctx.text.at(0) === "/";
 }
 
-bot.on("ready", async (client: UserFromGetMe) => {
+bot.on("ready", async (client) => {
   bot.setMyCommands({
     commands: [
       {
@@ -97,7 +96,7 @@ bot.login();
 ### JavaScript Example
 
 ```javascript
-const { TelegramBot, Context } = require("telegramsjs");
+const { TelegramBot } = require("telegramsjs");
 
 const bot = new TelegramBot("BOT_TOKEN");
 

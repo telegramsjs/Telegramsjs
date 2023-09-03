@@ -118,13 +118,58 @@ class Request<F> extends EventEmitter {
     this.allowed_updates = options.allowed_updates ?? [];
   }
 
+  /**
+   * Register event listeners for the bot.
+   * ```ts
+   * bot.on("ready", client => {
+   *  console.log(`Starting ${client.username}`);
+   * });
+   *
+   * bot.on("message", message => {
+   *  message.reply(`Hello ${message.first_name}`);
+   * });
+   * ```
+   * @param event The event or an array of events to listen for.
+   * @param listener The callback function to be executed when the event(s) occur.
+   * @returns This instance of the bot for method chaining.
+   */
   on<T extends keyof EventDataMap<F>>(
     event: T,
     listener: (data: EventDataMap<F>[T]) => void,
   ): this;
 
+  /**
+   * Register event listeners for an array of events for the bot.
+   * ```ts
+   * bot.on(["message:text", "message:caption"], (ctx) => {
+   *  ctx.send("This handler is broken, it fires on 'text" and 'caption'");
+   * });
+   * ```
+   * @param event An array of events to listen for.
+   * @param listener The callback function to be executed when the events occur.
+   * @returns This instance of the bot for method chaining.
+   */
+  on<T extends keyof EventDataMap<F>>(
+    event: T[],
+    listener: (data: EventDataMap<F>[T]) => void,
+  ): this;
+
+  /**
+   * Register a generic event listener for the bot.
+   * @param event The event name as a string to listen for.
+   * @param listener The callback function to be executed when the event occurs.
+   * @returns This instance of the bot for method chaining.
+   */
+  on(event: string, listener: (...args: any[]) => void): this;
+
+  /**
+   * Register event listeners for either a single event, an array of events, or a generic event.
+   * @param {string | string[]} event The event(s) to listen for, either as a single event, an array of events, or a string.
+   * @param {(...args: any[]) => void} listener The callback function to be executed when the event(s) occur.
+   * @returns This instance of the bot for method chaining.
+   */
   on(
-    event: string | string[] | symbol,
+    event: string | keyof EventDataMap<F> | (keyof EventDataMap<F>)[],
     listener: (...args: any[]) => void,
   ): this {
     if (typeof event === "string") {
@@ -132,17 +177,20 @@ class Request<F> extends EventEmitter {
       return this;
     } else if (Array.isArray(event)) {
       for (const name of event) {
+        if (typeof name !== "string")
+          throw new EventError(
+            `In the array, you only need to specify the 'string' type and this type: ${typeof name}`,
+            name,
+          );
         super.on(name, listener);
       }
       return this;
-    } else if (typeof event === "symbol") {
-      super.on(event, listener);
-      return this;
+    } else {
+      throw new EventError(
+        `Available types for the event parameter are: 'string' and 'string[]', but the provided type is: ${typeof event}`,
+        event,
+      );
     }
-    throw new EventError(
-      `Available types for the event parameter are: 'string', 'string[]', and 'symbol', but the provided type is: ${typeof event}`,
-      event,
-    );
   }
 
   /**
@@ -253,7 +301,7 @@ class Request<F> extends EventEmitter {
 
   /**
    * Gets the last update ID received.
-   * @returns {number|null} The last update ID, or null if not available.
+   * @returns {number | null} The last update ID, or null if not available.
    */
   get updateId(): number | null {
     return this.update_id ?? null;
@@ -261,10 +309,10 @@ class Request<F> extends EventEmitter {
 
   /**
    * Gets the last object received.
-   * @returns {Update} The last received object.
+   * @returns {Update | null} The last received object.
    */
-  get lastObject(): Update | undefined {
-    return this.last_object;
+  get lastObject(): Update | null {
+    return this.last_object ?? null;
   }
 }
 
