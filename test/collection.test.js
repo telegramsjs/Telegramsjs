@@ -48,7 +48,7 @@ test("hasKeys - Checks if keys exist and their corresponding values satisfy a co
   expect(res2).toEqual(true);
 
   const res3 = collection.hasKeys([]);
-  expect(res3).toEqual({});
+  expect(res3).toEqual(false);
 });
 
 test("Testing the `hasValues` method - Checks if values exist and their corresponding keys satisfy a condition", () => {
@@ -64,7 +64,7 @@ test("Testing the `hasValues` method - Checks if values exist and their correspo
   expect(res2).toEqual(true);
 
   const res3 = collection.hasValues([]);
-  expect(res3).toEqual({});
+  expect(res3).toEqual(false);
 });
 
 test("Testing the `delete` method - remove the key-value pair associated with the given key", () => {

@@ -87,8 +87,11 @@ class Collection<K, V> {
         result[String(key)] = has;
       }
     }
-
-    return Object.keys(result).length > 0 ? result : false;
+    return typeof result === "boolean"
+      ? result
+      : Object.keys(result).length > 0
+      ? result
+      : false;
   }
 
   /**
@@ -118,7 +121,11 @@ class Collection<K, V> {
       }
     }
 
-    return Object.keys(result).length > 0 ? result : false;
+    return typeof result === "boolean"
+      ? result
+      : Object.keys(result).length > 0
+      ? result
+      : false;
   }
 
   /**
