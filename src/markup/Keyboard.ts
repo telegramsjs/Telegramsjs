@@ -8,13 +8,27 @@ type KeyboardOptions = {
 };
 
 class Keyboard {
-  public buttons: string[][] = [[]];
-  public isOneTime: boolean = false;
-  public isResize: boolean = false;
-  public placeholderText: string | undefined;
-  public isSelective: boolean | undefined;
-  public isRemoveKeyboard: boolean = false;
+  buttons: string[][] = [[]];
+  isOneTime: boolean = false;
+  isResize: boolean = false;
+  placeholderText: string | undefined;
+  isSelective: boolean | undefined;
+  isRemoveKeyboard: boolean | undefined = false;
 
+  constructor(
+    options: KeyboardOptions = {
+      keyboard: [[]],
+      one_time_keyboard: false,
+      resize_keyboard: false,
+    },
+  ) {
+    this.buttons = options.keyboard;
+    this.isResize = options.resize_keyboard;
+    this.isOneTime = options.one_time_keyboard;
+    this.isSelective = options.selective;
+    this.placeholderText = options.input_field_placeholder;
+    this.isRemoveKeyboard = options.remove_keyboard;
+  }
   /**
    * Adds buttons to the current row of the keyboard.
    * ```ts
@@ -93,34 +107,31 @@ class Keyboard {
    * ```
    * @param buttons - An array of button arrays that define the keyboard layout.
    * @param options - An object containing various keyboard options.
-   *   @property {boolean} isResize - Whether the keyboard should be resizable.
-   *   @property {boolean} isOneTime - Whether the keyboard should be shown only once.
-   *   @property {boolean} isSelective - Whether the keyboard should be selective for certain users.
-   *   @property {string} placeholderText - Placeholder text for the input field.
-   *   @property {boolean} isRemoveKeyboard - Whether the keyboard should be removed.
+   *   @property {boolean} resize_keyboard - Whether the keyboard should be resizable.
+   *   @property {boolean} one_time_keyboard - Whether the keyboard should be shown only once.
+   *   @property {boolean} selective - Whether the keyboard should be selective for certain users.
+   *   @property {string} input_field_placeholder - Placeholder text for the input field.
+   *   @property {boolean} remove_keyboard - Whether the keyboard should be removed.
    * @returns {KeyboardOptions} A KeyboardOptions object with the specified configuration.
    */
   static from(
     buttons: string[][] = [[]],
-    options: {
-      isResize?: boolean;
-      isOneTime?: boolean;
-      isSelective?: boolean;
-      placeholderText?: string;
-      isRemoveKeyboard?: boolean;
-    } = {},
+    options: Omit<KeyboardOptions, "keyboard"> = {
+      resize_keyboard: false,
+      one_time_keyboard: false,
+    },
   ): KeyboardOptions {
     const keyboard: KeyboardOptions = {
       keyboard: (buttons[0].length > 0 ? buttons : undefined) as string[][],
-      resize_keyboard: options.isResize ?? false,
-      one_time_keyboard: options.isOneTime ?? false,
-      remove_keyboard: options.isRemoveKeyboard ?? false,
+      resize_keyboard: options.resize_keyboard ?? false,
+      one_time_keyboard: options.one_time_keyboard ?? false,
+      remove_keyboard: options.remove_keyboard ?? false,
     };
-    if (options.isSelective !== undefined) {
-      keyboard.selective = options.isSelective;
+    if (options.selective !== undefined) {
+      keyboard.selective = options.selective;
     }
-    if (options.placeholderText) {
-      keyboard.input_field_placeholder = options.placeholderText;
+    if (options.input_field_placeholder) {
+      keyboard.input_field_placeholder = options.input_field_placeholder;
     }
     return keyboard;
   }
