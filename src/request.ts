@@ -26,6 +26,17 @@ type TelegramApiResponse = {
   parameters?: ResponseParameters;
 };
 
+type ResponseApiError = {
+  response: {
+    data: {
+      error_code: number;
+      description: string;
+      ok: boolean;
+      parameters?: ResponseParameters;
+    };
+  };
+};
+
 type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
 
 type EventDataMap<F> = {
@@ -197,7 +208,6 @@ class Request<F> extends EventEmitter {
    * Gets the updates from the Telegram Bot API.
    * @async
    * @returns {Promise.<Array.<Update>>} An array of updates.
-   * @throws {TelegramTokenError} When the token is invalid.
    * @throws {TelegramApiError} When an error occurs with the Telegram Bot API.
    */
   async getUpdates(): Promise<Update[]> {
@@ -219,8 +229,8 @@ class Request<F> extends EventEmitter {
     }
 
     if (updates.length > 0) {
-      const res = updates[0];
-      this.emit("update", res);
+      const result = updates[0];
+      this.emit("update", result);
     }
 
     return Array.isArray(updates) ? updates : [];
@@ -230,7 +240,7 @@ class Request<F> extends EventEmitter {
    * Makes a request to the Telegram Bot API.
    * @async
    * @param {string} method - The API method to call.
-   * @param {object} params - The parameters to include in the API call.
+   * @param {object} [params=object] - The parameters to include in the API call.
    * @returns {Promise.<TelegramApiResponse>} The response from the API call.
    */
   async request(method: string, params = {}): Promise<TelegramApiResponse> {
@@ -256,24 +266,13 @@ class Request<F> extends EventEmitter {
       const response = await axios.post(url, paramsType, options);
       return response.data;
     } catch (error) {
-      let telegramError = error as {
-        response: {
-          data: {
-            error_code: number;
-            description: string;
-            ok: boolean;
-            parameters?: ResponseParameters;
-          };
-        };
-      };
-
-      const dataRes = telegramError.response?.data;
-      const codeError = dataRes?.error_code;
+      const telegramError = error as ResponseApiError;
+      const dataResponse = telegramError.response?.data;
+      const codeError = dataResponse?.error_code;
       if (codeError === 404) {
-        dataRes.description = "Invalid token for Telegram bot";
+        dataResponse.description = "Invalid token for Telegram bot";
       }
-
-      throw new TelegramApiError(dataRes, method, params);
+      throw new TelegramApiError(dataResponse, method, params);
     }
   }
 

@@ -110,16 +110,12 @@ const messageTypeMap: MessageTypeMap = {
   },
   edited_message: {
     event: "edited_message",
-    textEvent: "edited_message_text",
-    captionEvent: "edited_message_caption",
   },
   channel_post: {
     event: "channel_post",
   },
   edited_channel_post: {
     event: "edited_channel_post",
-    textEvent: "edited_channel_post_text",
-    captionEvent: "edited_channel_post_caption",
   },
   inline_query: {
     event: "inline_query",
@@ -192,7 +188,7 @@ class Combined<F> {
   }
 
   get chat(): Chat {
-    const chat = this.updates?.chat ?? this.updates.message?.chat;
+    const chat = this.updates.chat ?? this.updates.message?.chat;
     if (!chat) {
       throw Error("Chat is not available");
     }

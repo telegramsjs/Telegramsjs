@@ -10,7 +10,7 @@
 
 ## ⚙️ Introduction
 
-`Telegramsjs` is a lightweight Node.js library for creating Telegram bots. It provides an easy-to-use and flexible framework for building bots without relying on third-party libraries such as `Telegraf.js` or `node-telegram-bot-api`. With a syntax similar to `Discord.js`, this library allows developers to create Telegram bots with ease and efficiency.
+`Telegramsjs` is a lightweight Node.js library for creating Telegram bots. It provides an easy-to-use and flexible framework for building bots without relying on third-party libraries such as `Telegraf.js` or `node-telegram-bot-api`. This library allows developers to create Telegram bots with ease and efficiency.
 
 ## ⚒️ Installation
 
@@ -27,12 +27,12 @@ To get started, create a new instance of the `TelegramBot` class by providing yo
 ### TypeScript Example
 
 ```typescript
-import { TelegramBot, Context } from "telegramsjs";
+import { TelegramBot, Message } from "telegramsjs";
 
 const bot = new TelegramBot("BOT_TOKEN");
 
-function isCommand(ctx: Context): boolean {
-  return ctx.entities?.[0].type === "bot_command" && ctx.text.at(0) === "/";
+function isCommand(ctx: Message): boolean {
+  return ctx.entities?.[0].type === "bot_command" && ctx.text[0] === "/";
 }
 
 bot.on("ready", async (client) => {
@@ -101,7 +101,7 @@ const { TelegramBot } = require("telegramsjs");
 const bot = new TelegramBot("BOT_TOKEN");
 
 function isCommand(ctx) {
-  return ctx.entities?.[0]?.type === "bot_command" && ctx.text.at(0) === "/";
+  return ctx.entities?.[0]?.type === "bot_command" && ctx.text[0] === "/";
 }
 
 bot.on("ready", async (client) => {
