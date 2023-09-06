@@ -188,11 +188,12 @@ class Request<F> extends EventEmitter {
       return this;
     } else if (Array.isArray(event)) {
       for (const name of event) {
-        if (typeof name !== "string")
+        if (typeof name !== "string") {
           throw new EventError(
             `In the array, you only need to specify the 'string' type and this type: ${typeof name}`,
             name,
           );
+        }
         super.on(name, listener);
       }
       return this;
