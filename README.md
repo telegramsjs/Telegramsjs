@@ -27,12 +27,26 @@ To get started, create a new instance of the `TelegramBot` class by providing yo
 ### TypeScript Example
 
 ```typescript
-import { TelegramBot, Message } from "telegramsjs";
+import { TelegramBot } from "./src/index";
+import { Message, User } from "@telegram.ts/types";
 
 const bot = new TelegramBot("BOT_TOKEN");
 
-function isCommand(ctx: Message): boolean {
-  return ctx.entities?.[0].type === "bot_command" && ctx.text[0] === "/";
+let session = { counter: 0 };
+
+function isCommand(ctx: Message) {
+  if (ctx.text) {
+    return ctx.entities?.[0].type === "bot_command" && ctx.text[0] === "/";
+  }
+  return false;
+}
+
+function isFromUser(ctx: unknown): ctx is User {
+  if (typeof ctx !== "object" || ctx === null) return false;
+  if ("first_name" in ctx) {
+    return true;
+  }
+  return false;
 }
 
 bot.on("ready", async (client) => {
@@ -56,37 +70,40 @@ bot.on("ready", async (client) => {
   console.log(`Starting ${client.username}`);
 });
 
-bot.use({});
-
 bot.on("message", (ctx) => {
   if (isCommand(ctx)) return;
-  bot.session.counter = bot.session.counter || 0;
-  bot.session.counter++;
+  session.counter = session.counter || 0;
+  session.counter++;
   ctx.replyWithMarkdownV2(
-    `Counter updated, new value: \`${bot.session.counter}\``,
+    `Counter updated, new value: \`${session.counter}\``,
   );
+  bot.use(session);
 });
 
 bot.command("start", (ctx) => {
-  const username = ctx.from.username
-    ? `@${ctx.from.username}`
-    : ctx.from.first_name;
+  const from = ctx.from;
+  if (!isFromUser(from)) return;
+  const username = from.username
+    ? `@${from.username}`
+    : from.first_name;
   ctx.replyWithMarkdown(`${username}, *thanks for using telegramsjs ❤️*`);
 });
 
 bot.command("remove", (ctx) => {
   ctx.replyWithMarkdownV2(
-    `Removing session from database: \`${bot.session.counter}\``,
+    `Removing session from database: \`${session.counter}\``,
   );
-  bot.session = null;
+  session.counter = 0;
 });
 
 bot.command("stats", (ctx) => {
-  const username = ctx.from.username
-    ? `@${ctx.from.username}`
-    : ctx.from.first_name;
+  const from = ctx.from;
+  if (!isFromUser(from)) return;
+  const username = from.username
+    ? `@${from.username}`
+    : from.first_name;
   ctx.replyWithMarkdownV2(
-    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`,
+    `Database has \`${session.counter}\` messages from ${username}`,
   );
 });
 
