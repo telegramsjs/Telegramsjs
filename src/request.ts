@@ -45,18 +45,7 @@ type EventDataMap<F> = {
   message: Message & Context<F>;
   "message:text": Message.TextMessage & Context<F>;
   edited_message: Message & Context<F>;
-  edited_message_text: Message.TextMessage & Context<F>;
-  edited_message_caption: Message.CaptionableMessage & Context<F>;
   channel_post: Message & Update.Channel & Context<F>;
-  edited_channel_post: Message & Update.Edited & Update.Channel & Context<F>;
-  edited_channel_post_text: Message.TextMessage &
-    Update.Edited &
-    Update.Channel &
-    Context<F>;
-  edited_channel_post_caption: Message.CaptionableMessage &
-    Update.Edited &
-    Update.Channel &
-    Context<F>;
   inline_query: InlineQuery & Context<F>;
   callback_query: CallbackQuery & Context<F>;
   "callback_query:data": CallbackQuery & { data: string } & Context<F>;
