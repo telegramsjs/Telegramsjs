@@ -27,7 +27,7 @@ To get started, create a new instance of the `TelegramBot` class by providing yo
 ### TypeScript Example
 
 ```typescript
-import { TelegramBot } from "./src/index";
+import { TelegramBot } from "telegramsjs";
 import { Message, User } from "@telegram.ts/types";
 
 const bot = new TelegramBot("BOT_TOKEN");
