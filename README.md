@@ -72,7 +72,6 @@ bot.on("ready", async (client) => {
 
 bot.on("message", (ctx) => {
   if (isCommand(ctx)) return;
-  session.counter = session.counter || 0;
   session.counter++;
   ctx.replyWithMarkdownV2(
     `Counter updated, new value: \`${session.counter}\``,
