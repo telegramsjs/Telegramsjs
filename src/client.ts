@@ -1,5 +1,5 @@
-import { Api } from "./api";
-import { Combined } from "./helpers/Combined";
+import { Api } from "./api.js";
+import { Combined } from "./helpers/Combined.js";
 import {
   CallbackQuery,
   InlineQuery,
@@ -8,8 +8,8 @@ import {
   Update,
   UserFromGetMe,
 } from "@telegram.ts/types";
-import { Context } from "./context";
-import { AllowedUpdates } from "./request";
+import { Context } from "./context.js";
+import { AllowedUpdates } from "./request.js";
 import isRegex from "is-regex";
 
 class TelegramBot<F = Buffer> extends Api<F> {

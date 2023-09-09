@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Request, AllowedUpdates } from "./request";
+import { Request, AllowedUpdates } from "./request.js";
 import {
   Message,
   Chat,
@@ -147,7 +147,7 @@ class Api<F> extends Request<F> {
   async sendMessage(
     chat_id: number | string,
     text: string,
-    params: {
+    params?: {
       message_thread_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];

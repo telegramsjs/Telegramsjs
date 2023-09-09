@@ -1,12 +1,12 @@
-export { TelegramBot } from "./client";
-export { Api } from "./api";
-export { Collection } from "./collection/Collection";
-export { Markup } from "./markup/Markup";
-export { MenuBuilder } from "./markup/MenuBuilder";
-export { Keyboard } from "./markup/Keyboard";
-export { MessageCollector } from "./collection/MessageCollector";
-export * as html from "./formatters/html";
-export * as markdownv from "./formatters/markdownv"
+export { TelegramBot } from "./client.js";
+export { Api } from "./api.js";
+export { Collection } from "./collection/Collection.js";
+export { Markup } from "./markup/Markup.js";
+export { MenuBuilder } from "./markup/MenuBuilder.js";
+export { Keyboard } from "./markup/Keyboard.js";
+export { MessageCollector } from "./collection/MessageCollector.js";
+export * as html from "./formatters/html.js";
+export * as markdownv from "./formatters/markdownv.js"
 export {
   checkMessageLinks,
   extractUserMentions,
@@ -26,6 +26,6 @@ export {
   checkGroup,
   checkUsername,
   extractUsername,
-} from "./util";
-export { Context } from "./context";
+} from "./util.js";
+export { Context } from "./context.js";
 export const version = "2.0.0";

@@ -30,80 +30,73 @@ To get started, create a new instance of the `TelegramBot` class by providing yo
 import { TelegramBot } from "telegramsjs";
 import { Message, User } from "@telegram.ts/types";
 
-const bot = new TelegramBot("BOT_TOKEN");
+const botToken = "BOT_TOKEN";
+const bot = new TelegramBot(botToken);
 
-let session = { counter: 0 };
+let sessionData = { messageCounter: 0 };
 
-function isCommand(ctx: Message) {
+function isBotCommand(ctx: Message) {
   if (ctx.text) {
-    return ctx.entities?.[0].type === "bot_command" && ctx.text[0] === "/";
+    const firstEntity = ctx.entities?.[0];
+    return firstEntity?.type === "bot_command" && ctx.text[0] === "/";
   }
   return false;
 }
 
-function isFromUser(ctx: unknown): ctx is User {
-  if (typeof ctx !== "object" || ctx === null) return false;
-  if ("first_name" in ctx) {
-    return true;
-  }
-  return false;
+function isUserContext(context: unknown): context is User {
+  if (typeof context !== "object" || context === null) return false;
+  return "first_name" in context;
 }
 
 bot.on("ready", async (client) => {
-  bot.setMyCommands({
-    commands: [
-      {
-        command: "/start",
-        description: "starting command",
-      },
-      {
-        command: "/remove",
-        description: "remove session",
-      },
-      {
-        command: "/stats",
-        description: "statistics session",
-      },
-    ],
-  });
+  const botCommands = [
+    {
+      command: "/start",
+      description: "Start command",
+    },
+    {
+      command: "/remove",
+      description: "Remove session",
+    },
+    {
+      command: "/stats",
+      description: "Session statistics",
+    },
+  ];
 
-  console.log(`Starting ${client.username}`);
+  bot.setMyCommands({ commands: botCommands });
+
+  console.log(`Bot ${client.username} is ready`);
 });
 
 bot.on("message", (ctx) => {
-  if (isCommand(ctx)) return;
-  session.counter++;
-  ctx.replyWithMarkdownV2(
-    `Counter updated, new value: \`${session.counter}\``,
-  );
-  bot.use(session);
+  if (isBotCommand(ctx)) return;
+  sessionData.messageCounter++;
+  const responseMessage = `Counter updated, new value: \`${sessionData.messageCounter}\``;
+  ctx.replyWithMarkdownV2(responseMessage);
+  bot.use(sessionData);
 });
 
 bot.command("start", (ctx) => {
-  const from = ctx.from;
-  if (!isFromUser(from)) return;
-  const username = from.username
-    ? `@${from.username}`
-    : from.first_name;
-  ctx.replyWithMarkdown(`${username}, *thanks for using telegramsjs ❤️*`);
+  const fromUser = ctx.from;
+  if (!isUserContext(fromUser)) return;
+  const username = fromUser.username ? `@${fromUser.username}` : fromUser.first_name;
+  const welcomeMessage = `${username}, *thanks for using telegramsjs ❤️*`;
+  ctx.replyWithMarkdown(welcomeMessage);
 });
 
 bot.command("remove", (ctx) => {
-  ctx.replyWithMarkdownV2(
-    `Removing session from database: \`${session.counter}\``,
-  );
-  session.counter = 0;
+  const resetMessage = `Removing session data: \`${sessionData.messageCounter}\``;
+  ctx.replyWithMarkdownV2(resetMessage);
+  sessionData.messageCounter = 0;
 });
 
 bot.command("stats", (ctx) => {
-  const from = ctx.from;
-  if (!isFromUser(from)) return;
-  const username = from.username
-    ? `@${from.username}`
-    : from.first_name;
-  ctx.replyWithMarkdownV2(
-    `Database has \`${session.counter}\` messages from ${username}`,
-  );
+  const fromUser = ctx.from;
+  if (!isUserContext(fromUser)) return;
+  const username = fromUser.username ? `@${fromUser.username}` : fromUser.first_name;
+  const statsMessage = `Database has \`${sessionData.messageCounter}\` messages from ${username}`;
+  ctx.replyWithMarkdownV2(statsMessage);
 });
 
 bot.login();
@@ -114,65 +107,67 @@ bot.login();
 ```javascript
 const { TelegramBot } = require("telegramsjs");
 
-const bot = new TelegramBot("BOT_TOKEN");
+const botToken = "BOT_TOKEN";
+const bot = new TelegramBot(botToken);
 
-function isCommand(ctx) {
-  return ctx.entities?.[0]?.type === "bot_command" && ctx.text[0] === "/";
+function isBotCommand(context) {
+  const firstEntity = context.entities?.[0];
+  return firstEntity?.type === "bot_command" && context.text[0] === "/";
 }
 
 bot.on("ready", async (client) => {
-  bot.setMyCommands({
-    commands: [
-      {
-        command: "/start",
-        description: "starting command",
-      },
-      {
-        command: "/remove",
-        description: "remove session",
-      },
-      {
-        command: "/stats",
-        description: "statistics session",
-      },
-    ],
-  });
+  const botCommands = [
+    {
+      command: "/start",
+      description: "Starting command",
+    },
+    {
+      command: "/remove",
+      description: "Remove session",
+    },
+    {
+      command: "/stats",
+      description: "Session statistics",
+    },
+  ];
 
-  console.log(`Starting ${client.username}`);
+  bot.setMyCommands({ commands: botCommands });
+
+  console.log(`Bot ${client.username} is ready`);
 });
 
-bot.use({});
+bot.session = {};
 
 bot.on("message", (ctx) => {
-  if (isCommand(ctx)) return;
+  if (isBotCommand(ctx)) return;
   bot.session.counter = bot.session.counter || 0;
   bot.session.counter++;
-  ctx.replyWithMarkdownV2(
-    `Counter updated, new value: \`${bot.session.counter}\``,
-  );
+  const responseMessage = `Counter updated, new value: \`${bot.session.counter}\``;
+  ctx.replyWithMarkdownV2(responseMessage);
 });
 
 bot.command("start", (ctx) => {
-  const username = ctx.from.username
-    ? `@${ctx.from.username}`
-    : ctx.from.first_name;
-  ctx.replyWithMarkdown(`${username}, *thanks for using telegramsjs ❤️*`);
+  const fromUser = ctx.from;
+  const username = fromUser.username
+    ? `@${fromUser.username}`
+    : fromUser.first_name;
+  const welcomeMessage = `${username}, *thanks for using telegramsjs ❤️*`;
+  ctx.replyWithMarkdown(welcomeMessage);
 });
 
 bot.command("remove", (ctx) => {
-  ctx.replyWithMarkdownV2(
-    `Removing session from database: \`${bot.session.counter}\``,
-  );
-  bot.session = null;
+  const resetMessage = `Removing session data: \`${bot.session.counter}\``;
+  ctx.replyWithMarkdownV2(resetMessage);
+  bot.session = {};
 });
 
 bot.command("stats", (ctx) => {
-  const username = ctx.from.username
-    ? `@${ctx.from.username}`
-    : ctx.from.first_name;
-  ctx.replyWithMarkdownV2(
-    `Database has \`${bot.session?.counter ?? 0}\` messages from ${username}`,
-  );
+  const fromUser = ctx.from;
+  const username = fromUser.username
+    ? `@${fromUser.username}`
+    : fromUser.first_name;
+  const statsMessage = `Database has \`${bot.session.counter ?? 0}\` messages from ${username}`;
+  ctx.replyWithMarkdownV2(statsMessage);
 });
 
 bot.login();
@@ -184,7 +179,7 @@ bot.login();
 
 ## 📖 Documentation
 
-For more information and detailed documentation, please visit the [Telegramsjs Documentation](https://docs-telegramsjs.surge.sh/).
+For more information and detailed documentation, please visit the [Telegramsjs Documentation v1](https://docs-telegramsjs.surge.sh/) [Telegramsjs Documentation v2](https://telegramsjs-dev.surge.sh/).
 
 ## 🎒 Contributions
 

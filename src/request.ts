@@ -1,8 +1,8 @@
 import axios from "axios";
 import querystring from "querystring";
 import { EventEmitter } from "events";
-import { Context } from "./context";
-import { TelegramApiError, EventError } from "./error";
+import { Context } from "./context.js";
+import { TelegramApiError, EventError } from "./error.js";
 import {
   Update,
   ResponseParameters,

@@ -1,7 +1,8 @@
+import { TelegramBot } from "./client.js";
 import {
   MessageCollector,
   MessageFilter,
-} from "../collection/MessageCollector";
+} from "../collection/MessageCollector.js";
 import {
   Message,
   Chat,
@@ -46,7 +47,6 @@ import {
   InputMedia,
   InputSticker,
 } from "@telegram.ts/types";
-import { TelegramBot } from "./client";
 
 type Context<F = Buffer> = {
   telegram: TelegramBot<F>;

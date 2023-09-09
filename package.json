@@ -1,20 +1,24 @@
 {
   "name": "telegramsjs",
   "description": "Telegramsjs is a lightweight Node.js library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as Telegraf.js or node-telegram-bot-api. This library provides a way to create Telegram bots with ease and flexibility.",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.3",
   "main": "./dist/index.js",
+  "types": "./dist/typing/index.d.ts",
   "engines": {
     "node": ">=14"
   },
+  "exports": {
+    "require": "./dist/cjs/index.js",
+    "import": "./dist/esm/index.mjs"
+  },
   "scripts": {
-    "build": "rimraf dist/ && yarn commonjs && yarn declaration",
-    "commonjs": "tsc --module commonjs --outDir ./dist/",
-    "esm": "tsc --module es2015 --outDir ./dist/esm",
+    "build": "rimraf dist/ && yarn commonjs && yarn esm && yarn declaration",
+    "commonjs": "tsc --module commonjs --outDir ./dist/cjs/",
+    "esm": "tsc --module es2015 --allowJs true --outDir ./dist/esm",
     "declaration": "tsc --declaration --module commonjs --declarationDir ./dist/typing",
     "test": "jest test/",
     "tab-align": "prettier --write src/"
   },
-  "types": "./dist/typing/index.d.ts",
   "license": "MIT",
   "files": [
     "./dist",
@@ -39,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/Sempai-07/telegramsjs/issues"
   },
-  "homepage": "https://docs-telegramsjs.surge.sh/",
+  "homepage": "https://telegramsjs-dev.surge.sh/",
   "dependencies": {
     "axios": "^1.4.0",
     "is-regex": "^1.1.4",

@@ -1,11 +1,11 @@
-import { TelegramBot } from "../client";
+import { TelegramBot } from "../client.js";
 import {
   MessageCollector,
   MessageFilter,
   TextCaptionContextMessage,
-} from "../collection/MessageCollector";
-import { Context } from "../context";
-import util from "../util";
+} from "../collection/MessageCollector.js";
+import { Context } from "../context.js";
+import util from "../util.js";
 import {
   Message,
   Chat,
