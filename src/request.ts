@@ -44,8 +44,16 @@ type EventDataMap<F> = {
   ready: UserFromGetMe;
   message: Message & Context<F>;
   "message:text": Message.TextMessage & Context<F>;
-  edited_message: Message & Context<F>;
+  "message:caption": Message & Message.CaptionableMessage & Context<F>;
+  edited_message: Message & Update.Edited & Context<F>;
+  "edited_message:text": Message.TextMessage & Update.Edited & Context<F>;
+  "edited_message:caption": Message.CaptionableMessage & Update.Edited & Context<F>;
   channel_post: Message & Update.Channel & Context<F>;
+  "channel_post:text": Message.TextMessage & Update.Channel & Context<F>;
+  "channel_post:caption": Message.CaptionableMessage & Update.Channel & Context<F>;
+  edited_channel_post: Message & Update.Edited & Update.Channel;
+  "edited_channel_post:text": Message.TextMessage & Update.Edited & Update.Channel;
+  "edited_channel_post:caption": Message.CaptionableMessage & Update.Edited & Update.Channel;
   inline_query: InlineQuery & Context<F>;
   callback_query: CallbackQuery & Context<F>;
   "callback_query:data": CallbackQuery & { data: string } & Context<F>;

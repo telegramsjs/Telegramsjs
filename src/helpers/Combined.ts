@@ -106,16 +106,50 @@ const messageTypeMap: MessageTypeMap = {
         name: "text",
         event: "message:text",
       },
+      {
+        name: "caption",
+        event: "message:caption"
+      },
     ],
   },
   edited_message: {
     event: "edited_message",
+    properties: [
+      {
+        name: "text",
+        event: "edited_message:text",
+      },
+      {
+        name: "caption",
+        event: "edited_message:caption",
+      },
+    ],
   },
   channel_post: {
     event: "channel_post",
+    properties: [
+      {
+        name: "text",
+        event: "channel_post:text",
+      },
+      {
+        name: "caption",
+        event: "channel_post:caption",
+      },
+    ],
   },
   edited_channel_post: {
     event: "edited_channel_post",
+    properties: [
+      {
+        name: "text",
+        event: "edited_channel_post:text",
+      },
+      {
+        name: "caption",
+        event: "edited_channel_post:caption",
+      },
+    ],
   },
   inline_query: {
     event: "inline_query",
