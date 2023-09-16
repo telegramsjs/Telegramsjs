@@ -28,4 +28,4 @@ export {
   extractUsername,
 } from "./util.js";
 export { Context } from "./context.js";
-export const version = "2.0.0";
+export const version = "2.0.1";

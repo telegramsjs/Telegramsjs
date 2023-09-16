@@ -170,7 +170,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
    */
   hears(
     text: string | string[] | RegExp,
-    callback: (message: Message, args: string[]) => void,
+    callback: (message: Message & Context<F>, args: string[]) => void,
     caption: boolean = false,
   ): this {
     this.on("message", async (message) => {
@@ -300,11 +300,10 @@ class TelegramBot<F = Buffer> extends Api<F> {
    * The function that starts the whole process.
    * ```ts
    * import { TelegramBot } from "telegramsjs";
-   * import { UserFromGetMe } from "@telegram.ts/types";
    *
    * const bot = new TelegramBot('BOT_TOKEN');
    *
-   * bot.on('ready', (user: UserFromGetMe) => {
+   * bot.on('ready', (user) => {
    *  console.log(`Bot ${user.username}`)
    * })
    *
