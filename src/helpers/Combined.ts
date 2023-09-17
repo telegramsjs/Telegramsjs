@@ -108,7 +108,7 @@ const messageTypeMap: MessageTypeMap = {
       },
       {
         name: "caption",
-        event: "message:caption"
+        event: "message:caption",
       },
     ],
   },

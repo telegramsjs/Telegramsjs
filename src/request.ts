@@ -47,13 +47,21 @@ type EventDataMap<F> = {
   "message:caption": Message & Message.CaptionableMessage & Context<F>;
   edited_message: Message & Update.Edited & Context<F>;
   "edited_message:text": Message.TextMessage & Update.Edited & Context<F>;
-  "edited_message:caption": Message.CaptionableMessage & Update.Edited & Context<F>;
+  "edited_message:caption": Message.CaptionableMessage &
+    Update.Edited &
+    Context<F>;
   channel_post: Message & Update.Channel & Context<F>;
   "channel_post:text": Message.TextMessage & Update.Channel & Context<F>;
-  "channel_post:caption": Message.CaptionableMessage & Update.Channel & Context<F>;
+  "channel_post:caption": Message.CaptionableMessage &
+    Update.Channel &
+    Context<F>;
   edited_channel_post: Message & Update.Edited & Update.Channel;
-  "edited_channel_post:text": Message.TextMessage & Update.Edited & Update.Channel;
-  "edited_channel_post:caption": Message.CaptionableMessage & Update.Edited & Update.Channel;
+  "edited_channel_post:text": Message.TextMessage &
+    Update.Edited &
+    Update.Channel;
+  "edited_channel_post:caption": Message.CaptionableMessage &
+    Update.Edited &
+    Update.Channel;
   inline_query: InlineQuery & Context<F>;
   callback_query: CallbackQuery & Context<F>;
   "callback_query:data": CallbackQuery & { data: string } & Context<F>;
@@ -81,7 +89,7 @@ function reformObjectToString(reformText: any) {
 }
 
 function hasProperties(obj: object): boolean {
-  if (typeof obj !== "object") return false;
+  if (typeof obj !== "object" || typeof obj === null) return false;
   return Object.keys(obj).length > 0;
 }
 
@@ -163,21 +171,13 @@ class Request<F> extends EventEmitter {
   ): this;
 
   /**
-   * Register a generic event listener for the bot.
-   * @param event The event name as a string to listen for.
-   * @param listener The callback function to be executed when the event occurs.
-   * @returns This instance of the bot for method chaining.
-   */
-  on(event: string, listener: (...args: any[]) => void): this;
-
-  /**
    * Register event listeners for either a single event, an array of events, or a generic event.
    * @param {string | string[]} event The event(s) to listen for, either as a single event, an array of events, or a string.
    * @param {(...args: any[]) => void} listener The callback function to be executed when the event(s) occur.
    * @returns This instance of the bot for method chaining.
    */
   on(
-    event: string | keyof EventDataMap<F> | (keyof EventDataMap<F>)[],
+    event: keyof EventDataMap<F> | (keyof EventDataMap<F>)[],
     listener: (...args: any[]) => void,
   ): this {
     if (typeof event === "string") {
@@ -267,8 +267,9 @@ class Request<F> extends EventEmitter {
       const telegramError = error as ResponseApiError;
       const dataResponse = telegramError.response?.data;
       const codeError = dataResponse?.error_code;
-      if (codeError === 404) {
-        dataResponse.description = "Invalid token for Telegram bot";
+      if (codeError === 404 || codeError === 401) {
+        dataResponse.description =
+          "the token provided for the Telegram bot is invalid";
       }
       throw new TelegramApiError(dataResponse, method, params);
     }
