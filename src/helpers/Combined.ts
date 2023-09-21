@@ -1679,8 +1679,8 @@ class Combined<F> {
       max,
       caption,
     });
-    this.telegram.on("message", (ctx) => {
-      message.handleMessage(ctx as TextCaptionContextMessage<F>);
+    this.telegram.on(["message:text", "message:caption"], async (ctx) => {
+      await message.handleMessage(ctx as TextCaptionContextMessage<F>);
     });
     return message;
   }
@@ -1693,8 +1693,8 @@ class Combined<F> {
       } else {
         getUpdates = await webhook;
       }
-      for (const update of getUpdates) {
-        for (const [type, options] of Object.entries(messageTypeMap)) {
+      for await (const update of getUpdates) {
+        for await (const [type, options] of Object.entries(messageTypeMap)) {
           const updateProperty: any = (update as ResponseApi)[
             type as keyof ResponseApi
           ];
@@ -2379,9 +2379,9 @@ class Combined<F> {
             };
             this.telegram.emit(options.event, message);
             const optionEvent = options.properties ? options.properties : [];
-            for (const prop of optionEvent) {
-              if (prop.event && updateProperty[prop.name]) {
-                this.telegram.emit(prop.event, message);
+            for await (const properties of optionEvent) {
+              if (properties.event && updateProperty[properties.name]) {
+                this.telegram.emit(properties.event, message);
               }
             }
 
