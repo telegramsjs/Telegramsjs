@@ -48,8 +48,9 @@ import {
   InputSticker,
 } from "@telegram.ts/types";
 
-type Context<F = Buffer> = {
+interface Context<F = Buffer> {
   telegram: TelegramBot<F>;
+
   /**
    * @see https://core.telegram.org/bots/api#answerinlinequery
    */
@@ -807,7 +808,7 @@ type Context<F = Buffer> = {
   /**
    * @see https://core.telegram.org/bots/api#setmyshortdescription
    */
-  setMyShortDescription(short_description: string): Promise<boolean>;
+  setMyShortDescription(shortDescription: string): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#getmyshortdescription
    */
@@ -1013,10 +1014,6 @@ type Context<F = Buffer> = {
         | ForceReply;
     },
   ): Promise<Message.TextMessage>;
-  /**
-   * @see https://core.telegram.org/bots/api#leavechat
-   */
-  leave(): Promise<boolean>;
 
   messageCollector(
     filter?: MessageFilter<F>,
@@ -1024,6 +1021,6 @@ type Context<F = Buffer> = {
     max?: number,
     caption?: boolean,
   ): MessageCollector<F>;
-};
+}
 
 export { Context };

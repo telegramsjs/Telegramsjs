@@ -63,16 +63,16 @@ import {
   InputSticker,
 } from "@telegram.ts/types";
 
-type MessageTypeMap = {
+interface MessageTypeMap {
   [key: string]: {
     event: string;
     textEvent?: string;
     captionEvent?: string;
     properties?: { name: string; event: string }[];
   };
-};
+}
 
-type ResponseApi = {
+interface ResponseApi {
   id?: string;
   update_id?: number;
   message_id?: number;
@@ -96,7 +96,7 @@ type ResponseApi = {
   sender_chat?: Chat;
   message_thread_id: number;
   is_topic_message: boolean;
-};
+}
 
 const messageTypeMap: MessageTypeMap = {
   message: {
@@ -522,8 +522,11 @@ class Combined<F> {
       is_anonymous?: boolean;
       can_manage_chat?: boolean;
       can_post_messages?: boolean;
+      can_post_stories?: boolean;
       can_edit_messages?: boolean;
+      can_edit_stories?: boolean;
       can_delete_messages?: boolean;
+      can_delete_stories?: boolean;
       can_manage_video_chats?: boolean;
       can_restrict_members?: boolean;
       can_promote_members?: boolean;

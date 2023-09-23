@@ -1,11 +1,11 @@
-type KeyboardOptions = {
+interface KeyboardOptions {
   keyboard: string[][];
   resize_keyboard: boolean;
   one_time_keyboard: boolean;
   selective?: boolean;
   input_field_placeholder?: string;
   remove_keyboard?: boolean;
-};
+}
 
 class Keyboard {
   buttons: string[][] = [[]];

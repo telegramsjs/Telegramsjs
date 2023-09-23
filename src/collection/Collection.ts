@@ -4,10 +4,10 @@
  */
 type Entry<K, V> = [K, V];
 
-type GroupedValues<K, V> = {
+interface GroupedValues<K, V> {
   key: K;
   values: V[];
-};
+}
 
 class Collection<K, V> {
   /**

@@ -16,17 +16,18 @@ import {
   PollAnswer,
   ChatMemberUpdated,
   ChatJoinRequest,
+  MessageEntity,
 } from "@telegram.ts/types";
 
-type TelegramApiResponse = {
+interface TelegramApiResponse {
   ok?: boolean;
   error_code?: number;
   description?: string;
   result?: any;
   parameters?: ResponseParameters;
-};
+}
 
-type ResponseApiError = {
+interface ResponseApiError {
   response: {
     data: {
       error_code: number;
@@ -35,31 +36,39 @@ type ResponseApiError = {
       parameters?: ResponseParameters;
     };
   };
-};
+}
+
+interface CaptionableMessage {
+  caption: string;
+  caption_entities?: MessageEntity[];
+}
 
 type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
 
-type EventDataMap<F> = {
+interface EventDataMap<F> {
   update: Update;
   ready: UserFromGetMe;
   message: Message & Context<F>;
   "message:text": Message.TextMessage & Context<F>;
-  "message:caption": Message & Message.CaptionableMessage & Context<F>;
+  "message:caption": Message & CaptionableMessage & Context<F>;
   edited_message: Message & Update.Edited & Context<F>;
   "edited_message:text": Message.TextMessage & Update.Edited & Context<F>;
-  "edited_message:caption": Message.CaptionableMessage &
+  "edited_message:caption": Message &
+    CaptionableMessage &
     Update.Edited &
     Context<F>;
   channel_post: Message & Update.Channel & Context<F>;
   "channel_post:text": Message.TextMessage & Update.Channel & Context<F>;
-  "channel_post:caption": Message.CaptionableMessage &
+  "channel_post:caption": Message &
+    CaptionableMessage &
     Update.Channel &
     Context<F>;
   edited_channel_post: Message & Update.Edited & Update.Channel;
   "edited_channel_post:text": Message.TextMessage &
     Update.Edited &
     Update.Channel;
-  "edited_channel_post:caption": Message.CaptionableMessage &
+  "edited_channel_post:caption": Message &
+    CaptionableMessage &
     Update.Edited &
     Update.Channel;
   inline_query: InlineQuery & Context<F>;
@@ -75,7 +84,7 @@ type EventDataMap<F> = {
   chat_member: ChatMemberUpdated & Context<F>;
   my_chat_member: ChatMemberUpdated & Context<F>;
   chat_join_request: ChatJoinRequest & Context<F>;
-};
+}
 
 function reformObjectToString(reformText: any) {
   const paramsType = typeof reformText;
