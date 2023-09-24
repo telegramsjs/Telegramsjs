@@ -202,15 +202,13 @@ class Combined<F> {
   }
 
   get getThreadId() {
-    return this.updates.is_topic_message
-      ? this.updates.message_thread_id
-      : undefined;
+    return (this.updates.message_thread_id ??
+      this.updates.message?.message_thread_id) as number;
   }
 
-  get messageId(): number {
-    const messageId =
-      this.updates.message_id ?? this.updates.message?.message_id;
-    return messageId as number;
+  get messageId() {
+    return (this.updates.message_id ??
+      this.updates.message?.message_id) as number;
   }
 
   get from() {
@@ -1855,8 +1853,11 @@ class Combined<F> {
                   is_anonymous?: boolean;
                   can_manage_chat?: boolean;
                   can_post_messages?: boolean;
+                  can_post_stories?: boolean;
                   can_edit_messages?: boolean;
+                  can_edit_stories?: boolean;
                   can_delete_messages?: boolean;
+                  can_delete_stories?: boolean;
                   can_manage_video_chats?: boolean;
                   can_restrict_members?: boolean;
                   can_promote_members?: boolean;
