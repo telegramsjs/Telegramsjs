@@ -77,7 +77,11 @@ class MenuBuilder<F> {
    * @param {boolean} [answer=false] - Whether to answer the action.
    * @returns {this} The current MenuBuilder instance.
    */
-  text(text: string, callback: MenuFunction<F>, answer: boolean = false): this {
+  text(
+    text: string,
+    callback?: MenuFunction<F>,
+    answer: boolean = false,
+  ): this {
     this.rows.push({
       type: "text",
       text,
