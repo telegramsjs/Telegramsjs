@@ -296,6 +296,13 @@ class TelegramBot<F = Buffer> extends Api<F> {
     this.session = session || {};
   }
 
+  /**
+   * stop the process of receiving from the Telegram server
+   * ```ts
+   * process.once('SIGINT', () => bot.disconnect())
+   * process.once('SIGTERM', () => bot.disconnect())
+   * ```
+   */
   disconnect() {
     this.#updatesProcess.stop();
   }
