@@ -62,6 +62,7 @@ import {
   InputMedia,
   InputSticker,
 } from "@telegram.ts/types";
+import { filter } from "../util.js";
 
 interface MessageTypeMap {
   [key: string]: {
@@ -1711,6 +1712,7 @@ class Combined<F> {
               ...updateProperty,
               telegram: this.telegram,
               util: util,
+              filter: (filterPath: string) => filter(this.updates, filterPath),
               send: (
                 text: string,
                 args?: {
