@@ -196,9 +196,14 @@ const messageTypeMap: MessageTypeMap = {
 class Combined<F> {
   telegram: TelegramBot<F>;
   updates!: ResponseApi;
+  #disconnect: boolean = false;
 
   constructor(bot: TelegramBot<F>) {
     this.telegram = bot;
+  }
+
+  stop() {
+    this.#disconnect = true;
   }
 
   get getThreadId() {
@@ -1600,7 +1605,7 @@ class Combined<F> {
   /**
    * @see https://core.telegram.org/bots/api#getgamehighscores
    */
-  async getGameHighScores(
+  getGameHighScores(
     userId: number,
     args?: {
       chat_id?: number;
@@ -1680,7 +1685,7 @@ class Combined<F> {
       max,
       caption,
     });
-    this.telegram.on(["message:text", "message:caption"], async (ctx) => {
+    this.telegram.on(["message:text", "message:caption"], async function (ctx) {
       await message.handleMessage(ctx as TextCaptionContextMessage<F>);
     });
     return message;
@@ -1689,6 +1694,7 @@ class Combined<F> {
   async processUpdate(webhook?: Update[]) {
     let getUpdates;
     while (true) {
+      if (this.#disconnect) break;
       if (!webhook) {
         getUpdates = await this.telegram.getUpdates();
       } else {

@@ -15,7 +15,7 @@ import isRegex from "is-regex";
 class TelegramBot<F = Buffer> extends Api<F> {
   token: string;
   session: unknown = {};
-  updatesProcess: Combined<F>;
+  #updatesProcess: Combined<F>;
 
   /**
    * Constructs a new TelegramBot object.
@@ -43,7 +43,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
     this.token = token;
 
     /** Staring bot **/
-    this.updatesProcess = new Combined<F>(this);
+    this.#updatesProcess = new Combined<F>(this);
   }
 
   /**
@@ -296,6 +296,10 @@ class TelegramBot<F = Buffer> extends Api<F> {
     this.session = session || {};
   }
 
+  disconnect() {
+    this.#updatesProcess.stop();
+  }
+
   /**
    * The function that starts the whole process.
    * ```ts
@@ -314,7 +318,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
     try {
       const response = await this.getMe();
       this.emit("ready", response);
-      await this.updatesProcess.processUpdate();
+      await this.#updatesProcess.processUpdate();
     } catch (error) {
       throw error;
     }

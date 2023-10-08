@@ -30,7 +30,7 @@ class TelegramApiError extends Error {
       message.description = error;
     }
 
-    if (error.description) {
+    if (error.description && typeof error.description === "string") {
       const errorDescription = error.description.split(":")[1];
       if (errorDescription) {
         message.description = errorDescription.trimStart().toLowerCase();

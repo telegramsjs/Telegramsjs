@@ -19,7 +19,7 @@ class MessageCollector<F> extends EventEmitter {
   max: number | undefined;
   caption: boolean;
   collectedMessages: string[];
-  interval: NodeJS.Timeout | null;
+  #interval: NodeJS.Timeout | null;
   countCollector: number;
 
   /**
@@ -46,7 +46,7 @@ class MessageCollector<F> extends EventEmitter {
     this.max = max;
     this.caption = caption || true;
     this.collectedMessages = [];
-    this.interval = null;
+    this.#interval = null;
     this.countCollector = 0;
 
     /**
@@ -54,7 +54,7 @@ class MessageCollector<F> extends EventEmitter {
      * @
      * @type {NodeJS.Timeout}
      */
-    this.interval = setInterval(() => {
+    this.#interval = setInterval(() => {
       this.emit("interval", this);
     }, this.time);
   }
@@ -134,8 +134,8 @@ class MessageCollector<F> extends EventEmitter {
   setTime(time: number): boolean {
     if (typeof time === "number" && time >= 0) {
       this.time = time;
-      clearInterval(this.interval!);
-      this.interval = setInterval(() => {
+      clearInterval(this.#interval!);
+      this.#interval = setInterval(() => {
         this.emit("interval", this);
       }, this.time);
       return true;
@@ -169,7 +169,7 @@ class MessageCollector<F> extends EventEmitter {
    * @returns {boolean} `true` if the collector is running, `false` otherwise.
    */
   isRunning(): boolean {
-    return !!this.interval;
+    return !!this.#interval;
   }
 
   /**
@@ -177,7 +177,7 @@ class MessageCollector<F> extends EventEmitter {
    */
   stop(): void {
     this.emit("end", this);
-    clearInterval(this.interval!);
+    clearInterval(this.#interval!);
     this.removeAllListeners();
   }
 }
