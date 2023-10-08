@@ -1024,6 +1024,13 @@ interface Context<F = Buffer> {
     max?: number,
     caption?: boolean,
   ): MessageCollector<F>;
+
+  /**
+   * Filters an object based on a specified path.
+   * @param {string} filterPath - The path to navigate within the object (e.g., "update:message:text").
+   * @returns {boolean} Returns true if the path exists within the object; otherwise, false.
+   */
+  filter(filterPath: string): boolean;
 }
 
 export { Context };

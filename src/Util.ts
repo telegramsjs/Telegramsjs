@@ -230,6 +230,29 @@ export function extractUsername(link: string): string | null {
   return null;
 }
 
+/**
+ * Filters an object based on a specified path.
+ *
+ * @param {unknown} update - The object to filter.
+ * @param {string} filterPath - The path to navigate within the object (e.g., "update:message:text").
+ * @returns {boolean} Returns true if the path exists within the object; otherwise, false.
+ */
+export function filter(update: unknown, filterPath: string): boolean {
+  const keys = filterPath.split(":");
+
+  let currentObj = update as { [key: string]: any };
+  if (typeof currentObj !== "object" || currentObj === null) return false;
+  for (const key of keys) {
+    if (key in currentObj) {
+      currentObj = currentObj[key];
+    } else {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export default {
   checkMessageLinks,
   extractUserMentions,

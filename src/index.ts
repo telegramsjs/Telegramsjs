@@ -26,6 +26,7 @@ export {
   checkGroup,
   checkUsername,
   extractUsername,
+  filter,
 } from "./util.js";
 export { Context } from "./context.js";
 export const version = "2.1.1";
