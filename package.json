@@ -15,7 +15,7 @@
     "build": "rimraf dist/ && yarn commonjs && yarn esm && yarn declaration",
     "commonjs": "tsc --target es6 --module commonjs --outDir ./dist/cjs/",
     "esm": "tsc --target es6 --module es2015 --allowJs true --outDir ./dist/esm",
-    "declaration": "tsc --declaration --module commonjs --declarationDir ./dist/typing",
+    "declaration": "tsc --target es6 --declaration --module commonjs --declarationDir ./dist/typing",
     "test": "jest test/",
     "tab-align": "prettier --write src/"
   },
