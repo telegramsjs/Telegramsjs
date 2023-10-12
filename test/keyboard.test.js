@@ -1,4 +1,4 @@
-const { Keyboard } = require("../dist/index");
+const { Keyboard } = require("../dist/cjs/src/index");
 
 describe("Keyboard options", () => {
   test("all options", () => {

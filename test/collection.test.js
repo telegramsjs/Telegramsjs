@@ -1,4 +1,4 @@
-const { Collection } = require("../dist/index");
+const { Collection } = require("../dist/cjs/src/index");
 
 test("Testing the `get` method - retrieve the value associated with the given key", () => {
   const collection = new Collection();

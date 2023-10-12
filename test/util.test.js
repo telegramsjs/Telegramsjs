@@ -17,7 +17,8 @@ const {
   checkGroup,
   checkUsername,
   extractUsername,
-} = require("../dist/index");
+  filter,
+} = require("../dist/cjs/src/index");
 
 describe("Message Functions", () => {
   test("checkMessageLinks should detect links in a message", () => {
@@ -187,5 +188,16 @@ describe("Telegram Functions", () => {
     const result2 = extractUsername(linkFalse);
     expect(result1).toBe("johndoe");
     expect(result2).toBe(null);
+  });
+  
+  test("filter - filters an object based on a specified path", () => {
+    const messageTextTrue = filter({
+      text: "string"
+    }, "text");
+    const messageTextFalse = filter({
+      caption: "string"
+    }, "message:text");
+    expect(messageTextTrue).toBe(true);
+    expect(messageTextFalse).toBe(false);
   });
 });
