@@ -232,12 +232,20 @@ export function extractUsername(link: string): string | null {
 
 /**
  * Filters an object based on a specified path.
- *
+ * ```ts
+ * const object = { text: "string", message: { text: "string" } };
+ * console.log(filter(object, "text")) // true
+ * console.log(filter(object, "message:text")) // true
+ * console.log(filter(object, "caption")) // false
+ * ```
  * @param {unknown} update - The object to filter.
  * @param {string} filterPath - The path to navigate within the object (e.g., "update:message:text").
  * @returns {boolean} Returns true if the path exists within the object; otherwise, false.
  */
-export function filter(update: unknown, filterPath: string): boolean {
+export function filter<T extends object>(
+  update: T,
+  filterPath: string,
+): boolean {
   const keys = filterPath.split(":");
 
   let currentObj = update as { [key: string]: any };
