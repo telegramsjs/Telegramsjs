@@ -1582,4 +1582,4 @@ class Combined<F> {
   }
 }
 
-export { Combined };
+export { Combined, ResponseApi };

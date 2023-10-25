@@ -1,5 +1,5 @@
 import { Api } from "./api.js";
-import { Combined } from "./helpers/Combined.js";
+import { Combined, type ResponseApi } from "./helpers/Combined.js";
 import {
   MessageCollector,
   MessageFilter,
@@ -488,9 +488,12 @@ class TelegramBot<F = Buffer> extends Api<F> {
         if (response?.length > 0) {
           for (const update of response) {
             for (const [type, options] of Object.entries(messageTypeMap)) {
-              const combined = new Combined<F>(this, update);
+              const updateProperty: any = (update as ResponseApi)[
+                type as keyof ResponseApi
+              ];
+              const combined = new Combined<F>(this, updateProperty);
               const message: Context<F> = {
-                ...update,
+                ...updateProperty,
                 telegram: this,
                 util: util,
                 filter: (filterPath: string) =>
@@ -1180,12 +1183,16 @@ class TelegramBot<F = Buffer> extends Api<F> {
               this.emit(options.event, message);
               const optionEvent = options.properties ? options.properties : [];
               for (const properties of optionEvent) {
-                if (properties.event && update[properties.name]) {
+                if (properties.event && updateProperty[properties.name]) {
                   this.emit(properties.event, message);
                 }
               }
 
-              if (type === "message" && update.reply_to_message) {
+              if (
+                type === "message" &&
+                (updateProperty?.reply_to_message ||
+                  updateProperty.message?.reply_to_message)
+              ) {
                 this.emit("reply_message", message);
               }
               this.offset = response[response.length - 1].update_id + 1;
@@ -1200,7 +1207,9 @@ class TelegramBot<F = Buffer> extends Api<F> {
   }
 
   async getUpdates() {
-    return (await this.request("getUpdates", { offset: this.offset, ...this.options }))?.result;
+    return (
+      await this.request("getUpdates", { offset: this.offset, ...this.options })
+    )?.result;
   }
 }
 

@@ -9,7 +9,7 @@
   },
   "exports": {
     "require": "./dist/cjs/src/index.js",
-    "import": "./dist/esm/src/index.mjs"
+    "import": "./dist/esm/src/index.js"
   },
   "scripts": {
     "build": "rm -rf dist/ && npm run commonjs && npm run esm && npm run declaration",
