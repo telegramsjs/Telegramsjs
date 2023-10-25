@@ -217,31 +217,31 @@ class Request<F> extends EventEmitter {
    * @returns {Promise.<Array.<Update>>} An array of updates.
    * @throws {TelegramApiError} When an error occurs with the Telegram Bot API.
    */
-  async getUpdates(): Promise<Update[]> {
-    this.startTime = Date.now();
-    const params = {
-      offset: this.offset,
-      limit: this.limit,
-      timeout: this.timeout,
-      allowed_updates: this.allowed_updates,
-    };
-
-    const response = await this.request("getUpdates", params);
-    const updates = response.result;
-
-    if (Array.isArray(updates) && updates.length > 0) {
-      this.update_id = updates[0].update_id + 1;
-      this.last_object = updates[0];
-      this.offset = updates[updates.length - 1].update_id + 1;
-    }
-
-    if (updates.length > 0) {
-      const result = updates[0];
-      this.emit("update", result);
-    }
-
-    return Array.isArray(updates) ? updates : [];
-  }
+  // async getUpdates(): Promise<Update[]> {
+  //     this.startTime = Date.now();
+  //     const params = {
+  //       offset: this.offset,
+  //       limit: this.limit,
+  //       timeout: this.timeout,
+  //       allowed_updates: this.allowed_updates,
+  //     };
+  //
+  //     const response = await this.request("getUpdates", params);
+  //     const updates = response.result;
+  //
+  //     if (Array.isArray(updates) && updates.length > 0) {
+  //       this.update_id = updates[0].update_id + 1;
+  //       this.last_object = updates[0];
+  //       this.offset = updates[updates.length - 1].update_id + 1;
+  //     }
+  //
+  //     if (updates.length > 0) {
+  //       const result = updates[0];
+  //       this.emit("update", result);
+  //     }
+  //
+  //     return Array.isArray(updates) ? updates : [];
+  //   }
 
   /**
    * Makes a request to the Telegram Bot API.
