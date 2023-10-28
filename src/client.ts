@@ -181,6 +181,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
   };
   session: unknown = {};
   #disconnect: boolean = false;
+  #getMe: UserFromGetMe = {} as UserFromGetMe;
   /**
    * Constructs a new TelegramBot object.
    * @param {string} token - The API token for the bot.
@@ -245,9 +246,15 @@ class TelegramBot<F = Buffer> extends Api<F> {
         const text = message.text;
 
         if (
-          (typeof command === "string" && args[0] === `/${command}`) ||
+          (typeof command === "string" &&
+            (args[0] === `/${command}` ||
+              args[0] === `/${command}@${this.#getMe.username}`)) ||
           (Array.isArray(command) &&
-            command.some((cmd) => args[0] === `/${cmd}`)) ||
+            command.some(
+              (cmd) =>
+                args[0] === `/${cmd}` ||
+                args[0] === `/${cmd}@${this.#getMe.username}`,
+            )) ||
           (isRegex(command) && command.test(text))
         ) {
           await callback(message, args);
@@ -480,6 +487,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
    */
   async login() {
     const response = await this.getMe();
+    this.#getMe = response;
     this.emit("ready", response);
     while (true) {
       if (this.#disconnect) break;
