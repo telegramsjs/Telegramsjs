@@ -804,10 +804,13 @@ class Api<F> extends Request<F> {
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatPhoto(chat_id: number | string, photo: F): Promise<boolean> {
     const method = "setChatPhoto";
-    const response = await this.request(method, {
-      chat_id,
-      photo,
-    });
+    const response = await this.request(
+      method,
+      {
+        chat_id,
+        photo,
+      },
+    );
     return response.result;
   }
 
@@ -1307,13 +1310,15 @@ class Api<F> extends Request<F> {
   }
 
   /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
-  async editMessageMedia(params: {
-    chat_id?: number | string;
-    message_id?: number;
-    inline_message_id?: string;
-    media: InputMedia<F>;
-    reply_markup?: InlineKeyboardMarkup;
-  }): Promise<(Update.Edited & Message) | boolean> {
+  async editMessageMedia(
+    params: {
+      chat_id?: number | string;
+      message_id?: number;
+      inline_message_id?: string;
+      media: InputMedia<F>;
+      reply_markup?: InlineKeyboardMarkup;
+    },
+  ): Promise<(Update.Edited & Message) | boolean> {
     const method = "editMessageMedia";
     const response = await this.request(method, params);
     return response.result;
@@ -1423,26 +1428,30 @@ class Api<F> extends Request<F> {
   }
 
   /** Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns True on success. */
-  async createNewStickerSet(params: {
-    user_id: number;
-    name: string;
-    title: string;
-    stickers: InputSticker<F>[];
-    sticker_format: "static" | "animated" | "video";
-    sticker_type?: "regular" | "mask" | "custom_emoji";
-    needs_repainting?: boolean;
-  }): Promise<boolean> {
+  async createNewStickerSet(
+    params: {
+      user_id: number;
+      name: string;
+      title: string;
+      stickers: InputSticker<F>[];
+      sticker_format: "static" | "animated" | "video";
+      sticker_type?: "regular" | "mask" | "custom_emoji";
+      needs_repainting?: boolean;
+    },
+  ): Promise<boolean> {
     const method = "createNewStickerSet";
     const response = await this.request(method, params);
     return response.result;
   }
 
   /** Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success. */
-  async addStickerToSet(params: {
-    user_id: number;
-    name: string;
-    sticker: InputSticker<F>;
-  }): Promise<boolean> {
+  async addStickerToSet(
+    params: {
+      user_id: number;
+      name: string;
+      sticker: InputSticker<F>;
+    },
+  ): Promise<boolean> {
     const method = "addStickerToSet";
     const response = await this.request(method, params);
 

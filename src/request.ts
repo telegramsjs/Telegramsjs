@@ -250,7 +250,10 @@ class Request<F> extends EventEmitter {
    * @param {object} [params=object] - The parameters to include in the API call.
    * @returns {Promise.<TelegramApiResponse>} The response from the API call.
    */
-  async request(method: string, params = {}): Promise<TelegramApiResponse> {
+  async request(
+    method: string,
+    params = {},
+  ): Promise<TelegramApiResponse> {
     const url = `${this.baseUrl}/${method}`;
 
     let paramsType: string | undefined;

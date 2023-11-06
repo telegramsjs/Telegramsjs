@@ -13,7 +13,7 @@ class Collection<K, V> {
   /**
    * The underlying map that stores the key-value pairs.
    */
-  #_items: Map<K, V>;
+  #items: Map<K, V>;
 
   /**
    * The number of key-value pairs in the collection.
@@ -25,8 +25,8 @@ class Collection<K, V> {
    * @param entries - An optional array of [key, value] pairs to add to the collection.
    */
   constructor(entries: readonly Entry<K, V>[] = []) {
-    this.#_items = new Map(entries);
-    this.size = this.#_items.size;
+    this.#items = new Map(entries);
+    this.size = this.#items.size;
   }
 
   /**
@@ -35,7 +35,7 @@ class Collection<K, V> {
    * @returns {*} - The value associated with the key, or undefined if the key is not in the collection.
    */
   get(key: K): V | undefined {
-    return this.#_items.get(key);
+    return this.#items.get(key);
   }
 
   /**
@@ -45,8 +45,8 @@ class Collection<K, V> {
    * @returns {Collection} - The collection instance (for chaining).
    */
   set(key: K, value: V): Collection<K, V> {
-    this.#_items.set(key, value);
-    this.size = this.#_items.size;
+    this.#items.set(key, value);
+    this.size = this.#items.size;
     return this;
   }
 
@@ -56,7 +56,7 @@ class Collection<K, V> {
    * @returns {boolean} - True if the collection contains the key, false otherwise.
    */
   has(key: K): boolean {
-    return this.#_items.has(key);
+    return this.#items.has(key);
   }
 
   /**
@@ -134,9 +134,9 @@ class Collection<K, V> {
    * @returns {boolean} - True if the key-value pair was removed, false if the key was not in the collection.
    */
   delete(key: K): boolean {
-    const deleted: boolean = this.#_items.delete(key);
+    const deleted: boolean = this.#items.delete(key);
     if (deleted) {
-      this.size = this.#_items.size;
+      this.size = this.#items.size;
     }
     return deleted;
   }
@@ -145,7 +145,7 @@ class Collection<K, V> {
    * Remove all key-value pairs from the collection.
    */
   clear(): void {
-    this.#_items.clear();
+    this.#items.clear();
     this.size = 0;
   }
 
@@ -158,7 +158,7 @@ class Collection<K, V> {
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => void,
     thisArg?: unknown,
   ): void {
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       callbackFn.call(thisArg, value, key, this);
     }
   }
@@ -175,7 +175,7 @@ class Collection<K, V> {
     thisArg?: unknown,
   ): Collection<K, V> {
     const result = new Collection<K, V>();
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       if (callbackFn.call(thisArg, value, key, this)) {
         result.set(key, value);
       }
@@ -196,7 +196,7 @@ class Collection<K, V> {
     thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       result.set(key, callbackFn.call(thisArg, value, key, this));
     }
     return result;
@@ -213,7 +213,7 @@ class Collection<K, V> {
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): boolean {
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       if (callbackFn.call(thisArg, value, key, this)) {
         return true;
       }
@@ -232,7 +232,7 @@ class Collection<K, V> {
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): boolean {
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       if (!callbackFn.call(thisArg, value, key, this)) {
         return false;
       }
@@ -256,7 +256,7 @@ class Collection<K, V> {
     initialValue?: U,
   ): U {
     let accumulator: U = initialValue as U;
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       accumulator = callbackFn(accumulator, value, key, this);
     }
     return accumulator;
@@ -273,7 +273,7 @@ class Collection<K, V> {
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): V | undefined {
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       if (callbackFn.call(thisArg, value, key, this)) {
         return value;
       }
@@ -296,11 +296,11 @@ class Collection<K, V> {
     ) => U,
     initialValue?: U,
   ): U {
-    const keys = Array.from(this.#_items.keys()).reverse();
+    const keys = Array.from(this.#items.keys()).reverse();
     let accumulator: U = initialValue as U;
 
     for (const key of keys) {
-      const value = this.#_items.get(key);
+      const value = this.#items.get(key);
       if (value !== undefined) {
         accumulator = callbackFn(accumulator, value, key, this);
       }
@@ -319,7 +319,7 @@ class Collection<K, V> {
     thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       const mappedValues = callbackFn.call(thisArg, value, key, this);
       for (const mappedValue of mappedValues) {
         result.set(key, mappedValue);
@@ -332,7 +332,7 @@ class Collection<K, V> {
    * @returns an iterator that contains all the keys of the collection's elements.
    */
   keys(): IterableIterator<K> {
-    return this.#_items.keys();
+    return this.#items.keys();
   }
 
   /**
@@ -340,7 +340,7 @@ class Collection<K, V> {
    */
 
   values(): IterableIterator<V> {
-    return this.#_items.values();
+    return this.#items.values();
   }
 
   /**
@@ -354,7 +354,7 @@ class Collection<K, V> {
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => boolean,
     thisArg?: unknown,
   ): K | undefined {
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       if (callbackFn.call(thisArg, value, key, this)) {
         return key;
       }
@@ -366,7 +366,7 @@ class Collection<K, V> {
    * @returns {Array} - An array containing all the values of the collection in insertion order
    */
   toArray(): V[] {
-    return [...this.#_items.values()];
+    return [...this.#items.values()];
   }
 
   /**
@@ -375,7 +375,7 @@ class Collection<K, V> {
    * @returns {Array} - An array containing all the keys of the collection in insertion order
    */
   keyArray(): K[] {
-    return [...this.#_items.keys()];
+    return [...this.#items.keys()];
   }
 
   /**
@@ -389,7 +389,7 @@ class Collection<K, V> {
     thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       const mappedValues = callbackFn.call(thisArg, value, key, this);
       for (const mappedValue of mappedValues) {
         result.set(key, mappedValue);
@@ -409,7 +409,7 @@ class Collection<K, V> {
     thisArg?: unknown,
   ): Collection<K, U> {
     const result = new Collection<K, U>();
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       const mappedValue = callbackFn.call(thisArg, value, key, this);
       result.set(key, mappedValue);
     }
@@ -514,7 +514,7 @@ class Collection<K, V> {
       return false;
     }
 
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       if (!collection.has(key) || !Object.is(value, collection.get(key))) {
         return false;
       }
@@ -531,7 +531,7 @@ class Collection<K, V> {
   tap(
     callbackFn: (value: V, key: K, collection: Collection<K, V>) => void,
   ): Collection<K, V> {
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       callbackFn(value, key, this);
     }
 
@@ -678,7 +678,7 @@ class Collection<K, V> {
    * @returns {Iterator} - A new Iterator object containing the [key, value] pairs for each element in the collection
    */
   entries(): IterableIterator<[K, V]> {
-    return this.#_items.entries();
+    return this.#items.entries();
   }
 
   /**
@@ -756,7 +756,7 @@ class Collection<K, V> {
    */
 
   with(index: number, value: V): Collection<K, V> | undefined {
-    const entries: Entry<K, V>[] = Array.from(this.#_items.entries());
+    const entries: Entry<K, V>[] = Array.from(this.#items.entries());
     if (index >= 0) {
       if (!entries[index]) return;
       entries[index][1] = value;
@@ -801,7 +801,7 @@ class Collection<K, V> {
    */
   toJSON(): { [key: string]: V } {
     const json: { [key: string]: V } = {};
-    for (const [key, value] of this.#_items) {
+    for (const [key, value] of this.#items) {
       json[String(key)] = value;
     }
     return json;
@@ -812,7 +812,7 @@ class Collection<K, V> {
    * @returns {IterableIterator<Array>} An iterator object that can be used to iterate over the key-value pairs of the Collection.
    */
   *[Symbol.iterator](): IterableIterator<[K, V]> {
-    yield* this.#_items.entries();
+    yield* this.#items.entries();
   }
 }
 

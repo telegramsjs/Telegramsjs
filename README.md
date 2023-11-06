@@ -80,7 +80,9 @@ bot.on("message", (ctx) => {
 bot.command("start", (ctx) => {
   const fromUser = ctx.from;
   if (!isUserContext(fromUser)) return;
-  const username = fromUser.username ? `@${fromUser.username}` : fromUser.first_name;
+  const username = fromUser.username
+    ? `@${fromUser.username}`
+    : fromUser.first_name;
   const welcomeMessage = `${username}, *thanks for using telegramsjs ❤️*`;
   ctx.replyWithMarkdown(welcomeMessage);
 });
@@ -94,7 +96,9 @@ bot.command("remove", (ctx) => {
 bot.command("stats", (ctx) => {
   const fromUser = ctx.from;
   if (!isUserContext(fromUser)) return;
-  const username = fromUser.username ? `@${fromUser.username}` : fromUser.first_name;
+  const username = fromUser.username
+    ? `@${fromUser.username}`
+    : fromUser.first_name;
   const statsMessage = `Database has \`${sessionData.messageCounter}\` messages from ${username}`;
   ctx.replyWithMarkdownV2(statsMessage);
 });
@@ -166,7 +170,9 @@ bot.command("stats", (ctx) => {
   const username = fromUser.username
     ? `@${fromUser.username}`
     : fromUser.first_name;
-  const statsMessage = `Database has \`${bot.session.counter ?? 0}\` messages from ${username}`;
+  const statsMessage = `Database has \`${
+    bot.session.counter ?? 0
+  }\` messages from ${username}`;
   ctx.replyWithMarkdownV2(statsMessage);
 });
 

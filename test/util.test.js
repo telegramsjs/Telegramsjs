@@ -189,14 +189,20 @@ describe("Telegram Functions", () => {
     expect(result1).toBe("johndoe");
     expect(result2).toBe(null);
   });
-  
+
   test("filter - filters an object based on a specified path", () => {
-    const messageTextTrue = filter({
-      text: "string"
-    }, "text");
-    const messageTextFalse = filter({
-      caption: "string"
-    }, "message:text");
+    const messageTextTrue = filter(
+      {
+        text: "string",
+      },
+      "text",
+    );
+    const messageTextFalse = filter(
+      {
+        caption: "string",
+      },
+      "message:text",
+    );
     expect(messageTextTrue).toBe(true);
     expect(messageTextFalse).toBe(false);
   });
