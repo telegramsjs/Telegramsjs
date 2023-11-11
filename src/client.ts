@@ -1,5 +1,6 @@
 import { Api } from "./api.js";
-import { Combined, type ResponseApi } from "./helpers/Combined.js";
+import { Combined, type ResponseApi } from "./core/Combined.js";
+import { AllowedUpdates } from "./core/ApiClient.js";
 import {
   MessageCollector,
   MessageFilter,
@@ -63,7 +64,6 @@ import {
 } from "@telegram.ts/types";
 import util, { filter } from "./util.js";
 import { Context } from "./context.js";
-import { AllowedUpdates } from "./request.js";
 import isRegex from "is-regex";
 
 interface MessageTypeMap {
@@ -173,15 +173,18 @@ const messageTypeMap: MessageTypeMap = {
 class TelegramBot<F = Buffer> extends Api<F> {
   // @ts-ignore
   offset: number | null;
+  // @ts-ignore
   options: {
     limit?: number;
     timeout?: number;
     allowed_updates?: AllowedUpdates;
     session?: unknown;
-  };
+  } = {};
   session: unknown = {};
   #disconnect: boolean = false;
   #getMe: UserFromGetMe = {} as UserFromGetMe;
+  last_object?: Update;
+  update_id?: number;
   /**
    * Constructs a new TelegramBot object.
    * @param {string} token - The API token for the bot.
@@ -248,12 +251,12 @@ class TelegramBot<F = Buffer> extends Api<F> {
         if (
           (typeof command === "string" &&
             (args[0] === `/${command}` ||
-              args[0] === `/${command}@${this.#getMe.username}`)) ||
+              args[0] === `/${command}@${this.#getMe?.username}`)) ||
           (Array.isArray(command) &&
             command.some(
               (cmd) =>
                 args[0] === `/${cmd}` ||
-                args[0] === `/${cmd}@${this.#getMe.username}`,
+                args[0] === `/${cmd}@${this.#getMe?.username}`,
             )) ||
           (isRegex(command) && command.test(text))
         ) {
@@ -495,6 +498,8 @@ class TelegramBot<F = Buffer> extends Api<F> {
         const response = await this.getUpdates();
         if (response?.length > 0) {
           for (const update of response) {
+            this.last_object = update;
+            this.update_id = update.update_id;
             for (const [type, options] of Object.entries(messageTypeMap)) {
               const updateProperty: any = (update as ResponseApi)[
                 type as keyof ResponseApi
@@ -1229,9 +1234,10 @@ class TelegramBot<F = Buffer> extends Api<F> {
   }
 
   async getUpdates() {
-    return (
-      await this.request("getUpdates", { offset: this.offset, ...this.options })
-    )?.result;
+    return await this.callApi("getUpdates", {
+      offset: this.offset,
+      ...this.options,
+    });
   }
 }
 
