@@ -131,6 +131,7 @@ const FORM_DATA_JSON_FIELDS = [
   "mask_position",
   "shipping_options",
   "errors",
+  "commands",
 ];
 
 /**
