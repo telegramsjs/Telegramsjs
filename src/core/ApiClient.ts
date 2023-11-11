@@ -1,3 +1,4 @@
+/* This class is based on telegraf.js!  */
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as https from "node:https";
