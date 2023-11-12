@@ -7,7 +7,7 @@ import { EventEmitter } from "node:events";
 import fetch, { Response, RequestInit } from "node-fetch";
 import { MultipartStream } from "./MultipartStream.js";
 import { TelegramApiError, EventError } from "../error.js";
-import { hasMedia, buildJSONConfig, buildFormDataConfig } from "./ApiMedia.js";
+import { hasMedia, buildJSONConfig, buildFormDataConfig, MediaPayload } from "./ApiMedia.js";
 import { Context } from "../context.js";
 import {
   Update,
@@ -262,4 +262,4 @@ class ApiClient<F> extends EventEmitter {
   }
 }
 
-export { ApiClient, ApiOptions, AllowedUpdates };
+export { ApiClient, ApiOptions, AllowedUpdates, MediaPayload };

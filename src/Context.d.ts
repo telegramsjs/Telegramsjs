@@ -119,7 +119,7 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
   editMessageMedia(
-    media: InputMedia<F>,
+    media: InputMedia<F> & MediaPayload,
     reply_markup?: InlineKeyboardMarkup,
   ): Promise<boolean | (Update.Edited & Message)>;
   /**
@@ -260,7 +260,7 @@ interface Context<F = Buffer> {
   /**
    * @see https://core.telegram.org/bots/api#setchatphoto
    */
-  setChatPhoto(photo: F): Promise<boolean>;
+  setChatPhoto(photo: MediaPayload): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#deletechatphoto
    */
@@ -323,7 +323,7 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#sendphoto
    */
   sendPhoto(
-    photo: F | string,
+    photo: MediaPayload | string,
     args?: {
       caption?: string;
       parse_mode?: ParseMode;
@@ -345,10 +345,11 @@ interface Context<F = Buffer> {
    */
   sendMediaGroup(
     media: ReadonlyArray<
-      | InputMediaAudio<F>
+      ( InputMediaAudio<F>
       | InputMediaDocument<F>
       | InputMediaPhoto<F>
       | InputMediaVideo<F>
+      ) & MediaPayload
     >,
     args?: {
       disable_notification?: boolean;
@@ -368,7 +369,7 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#sendaudio
    */
   sendAudio(
-    audio: F | string,
+    audio: MediaPayload | string,
     args?: {
       caption?: string;
       parse_mode?: ParseMode;
@@ -376,7 +377,7 @@ interface Context<F = Buffer> {
       duration?: number;
       performer?: string;
       title?: string;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -407,9 +408,9 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#senddocument
    */
   sendDocument(
-    document: F | string,
+    document: MediaPayload | string,
     args?: {
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       caption?: string;
       parse_mode?: ParseMode;
       caption_entities?: MessageEntity[];
@@ -429,7 +430,7 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#sendsticker
    */
   sendSticker(
-    sticker: F | string,
+    sticker: MediaPayload | string,
     args?: {
       emoji?: string;
       disable_notification?: boolean;
@@ -447,11 +448,11 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#sendvideo
    */
   sendVideo(
-    video: F | string,
+    video: MediaPayload | string,
     args?: {
       duration?: number;
       length?: number;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -467,12 +468,12 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#sendanimation
    */
   sendAnimation(
-    animation: F | string,
+    animation: MediaPayload | string,
     args?: {
       duration?: number;
       width?: number;
       height?: number;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       caption?: string;
       parse_mode?: ParseMode;
       caption_entities?: MessageEntity[];
@@ -492,11 +493,11 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#sendvideonote
    */
   sendVideoNote(
-    videoNote: F | string,
+    videoNote: MediaPayload | string,
     args?: {
       duration?: number;
       length?: number;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -556,7 +557,7 @@ interface Context<F = Buffer> {
    * @see https://core.telegram.org/bots/api#sendvoice
    */
   sendVoice(
-    voice: F | string,
+    voice: MediaPayload | string,
     args?: {
       caption?: string;
       parse_mode?: ParseMode;
@@ -564,7 +565,7 @@ interface Context<F = Buffer> {
       duration?: number;
       performer?: string;
       title?: string;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -761,7 +762,7 @@ interface Context<F = Buffer> {
   setStickerSetThumbnail(args: {
     name: string;
     user_id: number;
-    thumbnail?: F;
+    thumbnail?: MediaPayload;
   }): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#deletestickerfromset
@@ -772,7 +773,7 @@ interface Context<F = Buffer> {
    */
   uploadStickerFile(args: {
     sticker_format: "static" | "animated" | "video";
-    sticker: F;
+    sticker: MediaPayload;
   }): Promise<File>;
   /**
    * @see https://core.telegram.org/bots/api#createnewstickerset
@@ -780,7 +781,7 @@ interface Context<F = Buffer> {
   createNewStickerSet(args: {
     name: string;
     title: string;
-    stickers: InputSticker<F>[];
+    stickers: (InputSticker<F> & MediaPayload)[];
     sticker_format: "static" | "animated" | "video";
     sticker_type?: "regular" | "mask" | "custom_emoji";
     needs_repainting?: boolean;
@@ -790,7 +791,7 @@ interface Context<F = Buffer> {
    */
   addStickerToSet(args: {
     name: string;
-    sticker: InputSticker<F>;
+    sticker: InputSticker<F> & MediaPayload;
   }): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#getmycommands

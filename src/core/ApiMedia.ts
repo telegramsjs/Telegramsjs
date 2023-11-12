@@ -253,4 +253,4 @@ async function attachFormMedia(
   }
 }
 
-export { hasMedia, buildJSONConfig, buildFormDataConfig };
+export { hasMedia, buildJSONConfig, buildFormDataConfig, MediaPayload };

@@ -1,4 +1,5 @@
 import { TelegramBot } from "../client.js";
+import { MediaPayload } from "./ApiClient.js";
 import {
   MessageCollector,
   MessageFilter,
@@ -228,7 +229,7 @@ class Combined<F> {
   /**
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
-  editMessageMedia(media: InputMedia<F>, reply_markup?: InlineKeyboardMarkup) {
+  editMessageMedia(media: InputMedia<F> & MediaPayload, reply_markup?: InlineKeyboardMarkup) {
     return this.telegram.editMessageMedia({
       chat_id: this.chat.id,
       message_id: this.messageId,
@@ -452,7 +453,7 @@ class Combined<F> {
   /**
    * @see https://core.telegram.org/bots/api#setchatphoto
    */
-  setChatPhoto(photo: F) {
+  setChatPhoto(photo: MediaPayload) {
     return this.telegram.setChatPhoto(this.chat.id, photo);
   }
 
@@ -555,7 +556,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#sendphoto
    */
   sendPhoto(
-    photo: F | string,
+    photo: string | MediaPayload,
     args?: {
       caption?: string;
       parse_mode?: ParseMode;
@@ -585,10 +586,12 @@ class Combined<F> {
    */
   sendMediaGroup(
     media: ReadonlyArray<
-      | InputMediaAudio<F>
+      (
+        InputMediaAudio<F>
       | InputMediaDocument<F>
       | InputMediaPhoto<F>
       | InputMediaVideo<F>
+      ) & MediaPayload
     >,
     args?: {
       disable_notification?: boolean;
@@ -609,7 +612,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#sendaudio
    */
   sendAudio(
-    audio: F | string,
+    audio: string | MediaPayload,
     args?: {
       caption?: string;
       parse_mode?: ParseMode;
@@ -617,7 +620,7 @@ class Combined<F> {
       duration?: number;
       performer?: string;
       title?: string;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -663,9 +666,9 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#senddocument
    */
   sendDocument(
-    document: F | string,
+    document: string | MediaPayload,
     args?: {
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       caption?: string;
       parse_mode?: ParseMode;
       caption_entities?: MessageEntity[];
@@ -693,7 +696,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#sendsticker
    */
   sendSticker(
-    sticker: F | string,
+    sticker: string | MediaPayload,
     args?: {
       emoji?: string;
       disable_notification?: boolean;
@@ -719,11 +722,11 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#sendvideo
    */
   sendVideo(
-    video: F | string,
+    video: string | MediaPayload,
     args?: {
       duration?: number;
       length?: number;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -747,12 +750,12 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#sendanimation
    */
   sendAnimation(
-    animation: F | string,
+    animation: string | MediaPayload,
     args?: {
       duration?: number;
       width?: number;
       height?: number;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       caption?: string;
       parse_mode?: ParseMode;
       caption_entities?: MessageEntity[];
@@ -780,11 +783,11 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#sendvideonote
    */
   sendVideoNote(
-    videoNote: F | string,
+    videoNote: string | MediaPayload,
     args?: {
       duration?: number;
       length?: number;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -867,7 +870,7 @@ class Combined<F> {
    * @see https://core.telegram.org/bots/api#sendvoice
    */
   sendVoice(
-    voice: F | string,
+    voice: string | MediaPayload,
     args?: {
       caption?: string;
       parse_mode?: ParseMode;
@@ -875,7 +878,7 @@ class Combined<F> {
       duration?: number;
       performer?: string;
       title?: string;
-      thumbnail?: F;
+      thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
       reply_to_message_id?: number;
@@ -1183,7 +1186,7 @@ class Combined<F> {
   setStickerSetThumbnail(args: {
     name: string;
     user_id: number;
-    thumbnail?: F;
+    thumbnail?: MediaPayload;
   }) {
     return this.telegram.setStickerSetThumbnail({
       ...args,
@@ -1202,7 +1205,7 @@ class Combined<F> {
    */
   uploadStickerFile(args: {
     sticker_format: "static" | "animated" | "video";
-    sticker: F;
+    sticker: MediaPayload;
   }) {
     return this.telegram.uploadStickerFile({
       user_id: this.from.id,
@@ -1216,7 +1219,7 @@ class Combined<F> {
   createNewStickerSet(args: {
     name: string;
     title: string;
-    stickers: InputSticker<F>[];
+    stickers: (InputSticker<F> & MediaPayload)[];
     sticker_format: "static" | "animated" | "video";
     sticker_type?: "regular" | "mask" | "custom_emoji";
     needs_repainting?: boolean;
@@ -1230,7 +1233,7 @@ class Combined<F> {
   /**
    * @see https://core.telegram.org/bots/api#addstickertoset
    */
-  addStickerToSet(args: { name: string; sticker: InputSticker<F> }) {
+  addStickerToSet(args: { name: string; sticker: InputSticker<F> & MediaPayload }) {
     return this.telegram.addStickerToSet({
       user_id: this.from.id,
       ...args,

@@ -1,6 +1,6 @@
 import { Api } from "./api.js";
 import { Combined, type ResponseApi } from "./core/Combined.js";
-import { AllowedUpdates, ApiOptions } from "./core/ApiClient.js";
+import { AllowedUpdates, ApiOptions, MediaPayload } from "./core/ApiClient.js";
 import {
   MessageCollector,
   MessageFilter,
@@ -589,7 +589,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     },
                   ) => combined.editMessageCaption(caption, args),
                   editMessageMedia: (
-                    media: InputMedia<F>,
+                    media: InputMedia<F> & MediaPayload,
                     reply_markup?: InlineKeyboardMarkup,
                   ) => combined.editMessageMedia(media, reply_markup),
                   editMessageReplyMarkup: (markup?: InlineKeyboardMarkup) =>
@@ -681,7 +681,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     user_id: number;
                     custom_title: string;
                   }) => combined.setChatAdministratorCustomTitle(args),
-                  setChatPhoto: (photo: F) => combined.setChatPhoto(photo),
+                  setChatPhoto: (photo: MediaPayload) => combined.setChatPhoto(photo),
                   deleteChatPhoto: () => combined.deleteChatPhoto(),
                   setChatTitle: (title: string) => combined.setChatTitle(title),
                   setChatDescription: (description: string) =>
@@ -710,7 +710,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     errors: readonly PassportElementError[],
                   ) => combined.setPassportDataErrors(errors),
                   sendPhoto: (
-                    photo: F | string,
+                    photo: MediaPayload | string,
                     args?: {
                       caption?: string;
                       parse_mode?: ParseMode;
@@ -729,10 +729,11 @@ class TelegramBot<F = Buffer> extends Api<F> {
                   ) => combined.sendPhoto(photo, args),
                   sendMediaGroup: (
                     media: ReadonlyArray<
-                      | InputMediaAudio<F>
+                      ( InputMediaAudio<F>
                       | InputMediaDocument<F>
                       | InputMediaPhoto<F>
                       | InputMediaVideo<F>
+                      ) & MediaPayload
                     >,
                     args?: {
                       disable_notification?: boolean;
@@ -742,7 +743,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     },
                   ) => combined.sendMediaGroup(media, args),
                   sendAudio: (
-                    audio: F | string,
+                    audio: MediaPayload | string,
                     args?: {
                       caption?: string;
                       parse_mode?: ParseMode;
@@ -750,7 +751,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                       duration?: number;
                       performer?: string;
                       title?: string;
-                      thumbnail?: F;
+                      thumbnail?: MediaPayload;
                       disable_notification?: boolean;
                       protect_content?: boolean;
                       reply_to_message_id?: number;
@@ -775,9 +776,9 @@ class TelegramBot<F = Buffer> extends Api<F> {
                       | ForceReply;
                   }) => combined.sendDice(args),
                   sendDocument: (
-                    document: F | string,
+                    document: MediaPayload | string,
                     args?: {
-                      thumbnail?: F;
+                      thumbnail?: MediaPayload;
                       caption?: string;
                       parse_mode?: ParseMode;
                       caption_entities?: MessageEntity[];
@@ -794,7 +795,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     },
                   ) => combined.sendDocument(document, args),
                   sendSticker: (
-                    sticker: F | string,
+                    sticker: MediaPayload | string,
                     args?: {
                       emoji?: string;
                       disable_notification?: boolean;
@@ -809,11 +810,11 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     },
                   ) => combined.sendSticker(sticker, args),
                   sendVideo: (
-                    video: F | string,
+                    video: MediaPayload | string,
                     args?: {
                       duration?: number;
                       length?: number;
-                      thumbnail?: F;
+                      thumbnail?: MediaPayload;
                       disable_notification?: boolean;
                       protect_content?: boolean;
                       reply_to_message_id?: number;
@@ -826,12 +827,12 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     },
                   ) => combined.sendVideo(video, args),
                   sendAnimation: (
-                    animation: F | string,
+                    animation: MediaPayload | string,
                     args?: {
                       duration?: number;
                       width?: number;
                       height?: number;
-                      thumbnail?: F;
+                      thumbnail?: MediaPayload;
                       caption?: string;
                       parse_mode?: ParseMode;
                       caption_entities?: MessageEntity[];
@@ -848,11 +849,11 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     },
                   ) => combined.sendAnimation(animation, args),
                   sendVideoNote: (
-                    videoNote: F | string,
+                    videoNote: MediaPayload | string,
                     args?: {
                       duration?: number;
                       length?: number;
-                      thumbnail?: F;
+                      thumbnail?: MediaPayload;
                       disable_notification?: boolean;
                       protect_content?: boolean;
                       reply_to_message_id?: number;
@@ -903,7 +904,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     },
                   ) => combined.sendGame(gameShortName, args),
                   sendVoice: (
-                    voice: F | string,
+                    voice: MediaPayload | string,
                     args?: {
                       caption?: string;
                       parse_mode?: ParseMode;
@@ -911,7 +912,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
                       duration?: number;
                       performer?: string;
                       title?: string;
-                      thumbnail?: F;
+                      thumbnail?: MediaPayload;
                       disable_notification?: boolean;
                       protect_content?: boolean;
                       reply_to_message_id?: number;
@@ -1059,25 +1060,25 @@ class TelegramBot<F = Buffer> extends Api<F> {
                   setStickerSetThumbnail: (args: {
                     name: string;
                     user_id: number;
-                    thumbnail?: F;
+                    thumbnail?: MediaPayload;
                   }) => combined.setStickerSetThumbnail(args),
                   deleteStickerFromSet: (sticker: string) =>
                     combined.deleteStickerFromSet(sticker),
                   uploadStickerFile: (args: {
                     sticker_format: "static" | "animated" | "video";
-                    sticker: F;
+                    sticker: MediaPayload;
                   }) => combined.uploadStickerFile(args),
                   createNewStickerSet: (args: {
                     name: string;
                     title: string;
-                    stickers: InputSticker<F>[];
+                    stickers: (InputSticker<F> & MediaPayload)[];
                     sticker_format: "static" | "animated" | "video";
                     sticker_type?: "regular" | "mask" | "custom_emoji";
                     needs_repainting?: boolean;
                   }) => combined.createNewStickerSet(args),
                   addStickerToSet: (args: {
                     name: string;
-                    sticker: InputSticker<F>;
+                    sticker: InputSticker<F> & MediaPayload;
                   }) => combined.addStickerToSet(args),
                   getMyCommands: () => combined.getMyCommands(),
                   setMyCommands: (commands: readonly BotCommand[]) =>

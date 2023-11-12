@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { ApiClient, AllowedUpdates, ApiOptions } from "./core/ApiClient.js";
+import { ApiClient, AllowedUpdates, ApiOptions, MediaPayload } from "./core/ApiClient.js";
 import {
   Message,
   Chat,
@@ -112,7 +112,7 @@ class Api<F> extends ApiClient<F> {
   If you're having any trouble setting up webhooks, please check out this amazing guide to webhooks. */
   async setWebhook(params: {
     url: string;
-    certificate?: F;
+    certificate?: MediaPayload;
     ip_address?: string;
     max_connections?: number;
     allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
@@ -201,7 +201,7 @@ class Api<F> extends ApiClient<F> {
   async sendPhoto(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    photo: F | string;
+    photo: string | MediaPayload;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
@@ -228,14 +228,14 @@ class Api<F> extends ApiClient<F> {
   async sendAudio(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    audio: F | string;
+    audio: string | MediaPayload;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
     duration?: number;
     performer?: string;
     title?: string;
-    thumbnail?: F;
+    thumbnail?: MediaPayload;
     disable_notification?: boolean;
     protect_content?: boolean;
     reply_to_message_id?: number;
@@ -255,8 +255,8 @@ class Api<F> extends ApiClient<F> {
   async sendDocument(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    document: F | string;
-    thumbnail?: F;
+    document: string | MediaPayload;
+    thumbnail?: MediaPayload;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
@@ -280,11 +280,11 @@ class Api<F> extends ApiClient<F> {
   async sendVideo(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    video: F | string;
+    video: string | MediaPayload;
     duration?: number;
     width?: number;
     height?: number;
-    thumbnail?: F;
+    thumbnail?: MediaPayload;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
@@ -309,11 +309,11 @@ class Api<F> extends ApiClient<F> {
   async sendAnimation(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    animation: F | string;
+    animation: string | MediaPayload;
     duration?: number;
     width?: number;
     height?: number;
-    thumbnail?: F;
+    thumbnail?: MediaPayload;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
@@ -337,7 +337,7 @@ class Api<F> extends ApiClient<F> {
   async sendVoice(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    voice: F | string;
+    voice: string | MediaPayload;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
@@ -363,10 +363,10 @@ class Api<F> extends ApiClient<F> {
   async sendVideoNote(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    video_note: F | string;
+    video_note: string | MediaPayload;
     duration?: number;
     length?: number;
-    thumbnail?: F;
+    thumbnail?: MediaPayload;
     disable_notification?: boolean;
     protect_content?: boolean;
     reply_to_message_id?: number;
@@ -387,10 +387,11 @@ class Api<F> extends ApiClient<F> {
     chat_id: number | string;
     message_thread_id?: number;
     media: ReadonlyArray<
-      | InputMediaAudio<F>
+      (InputMediaAudio<F>
       | InputMediaDocument<F>
       | InputMediaPhoto<F>
-      | InputMediaVideo<F>
+      | InputMediaVideo<F>)
+       & MediaPayload
     >;
     disable_notification?: boolean;
     protect_content?: boolean;
@@ -825,7 +826,7 @@ class Api<F> extends ApiClient<F> {
   }
 
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async setChatPhoto(chat_id: number | string, photo: F): Promise<boolean> {
+  async setChatPhoto(chat_id: number | string, photo: MediaPayload): Promise<boolean> {
     const method = "setChatPhoto";
     const response = await this.callApi(method, {
       chat_id,
@@ -1334,7 +1335,7 @@ class Api<F> extends ApiClient<F> {
     chat_id?: number | string;
     message_id?: number;
     inline_message_id?: string;
-    media: InputMedia<F>;
+    media: InputMedia<F> & MediaPayload;
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message) | boolean> {
     const method = "editMessageMedia";
@@ -1398,7 +1399,7 @@ class Api<F> extends ApiClient<F> {
   async sendSticker(params: {
     chat_id: number | string;
     message_thread_id?: number;
-    sticker: F | string;
+    sticker: string | MediaPayload;
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
@@ -1438,7 +1439,7 @@ class Api<F> extends ApiClient<F> {
   async uploadStickerFile(params: {
     user_id: number;
     sticker_format: "static" | "animated" | "video";
-    sticker: F;
+    sticker: MediaPayload;
   }): Promise<File> {
     const method = "uploadStickerFile";
     const response = await this.callApi(method, params);
@@ -1450,7 +1451,7 @@ class Api<F> extends ApiClient<F> {
     user_id: number;
     name: string;
     title: string;
-    stickers: InputSticker<F>[];
+    stickers: (InputSticker<F> & MediaPayload)[];
     sticker_format: "static" | "animated" | "video";
     sticker_type?: "regular" | "mask" | "custom_emoji";
     needs_repainting?: boolean;
@@ -1464,7 +1465,7 @@ class Api<F> extends ApiClient<F> {
   async addStickerToSet(params: {
     user_id: number;
     name: string;
-    sticker: InputSticker<F>;
+    sticker: InputSticker<F> & MediaPayload;
   }): Promise<boolean> {
     const method = "addStickerToSet";
     const response = await this.callApi(method, params);
@@ -1547,7 +1548,7 @@ class Api<F> extends ApiClient<F> {
   async setStickerSetThumbnail(params: {
     name: string;
     user_id: number;
-    thumbnail?: F | string;
+    thumbnail?: string | MediaPayload;
   }): Promise<boolean> {
     const method = "setStickerSetThumbnail";
     const response = await this.callApi(method, params);

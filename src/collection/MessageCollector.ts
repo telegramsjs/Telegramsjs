@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import { Message } from "@telegram.ts/types";
 import { Context } from "../context.js";
 
