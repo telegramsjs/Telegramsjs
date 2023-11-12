@@ -1,6 +1,6 @@
 import { Api } from "./api.js";
 import { Combined, type ResponseApi } from "./core/Combined.js";
-import { AllowedUpdates } from "./core/ApiClient.js";
+import { AllowedUpdates, ApiOptions } from "./core/ApiClient.js";
 import {
   MessageCollector,
   MessageFilter,
@@ -200,6 +200,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
       timeout?: number;
       allowed_updates?: AllowedUpdates;
       session?: unknown;
+      api?: ApiOptions;
     } = {},
   ) {
     super(token, options);

@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import ApiClient, { AllowedUpdates } from "./core/ApiClient.js";
+import { ApiClient, AllowedUpdates, ApiOptions } from "./core/ApiClient.js";
 import {
   Message,
   Chat,
@@ -74,9 +74,10 @@ class Api<F> extends ApiClient<F> {
       limit?: number;
       timeout?: number;
       allowed_updates?: AllowedUpdates;
+      api?: ApiOptions;
     } = {},
   ) {
-    super(token);
+    super(token, options?.api);
     this.token = token;
     this.data = options;
   }
