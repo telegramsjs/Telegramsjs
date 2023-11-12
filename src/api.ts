@@ -1,5 +1,10 @@
 import fetch from "node-fetch";
-import { ApiClient, AllowedUpdates, ApiOptions, MediaPayload } from "./core/ApiClient.js";
+import {
+  ApiClient,
+  AllowedUpdates,
+  ApiOptions,
+  MediaPayload,
+} from "./core/ApiClient.js";
 import {
   Message,
   Chat,
@@ -387,11 +392,13 @@ class Api<F> extends ApiClient<F> {
     chat_id: number | string;
     message_thread_id?: number;
     media: ReadonlyArray<
-      (InputMediaAudio<F>
-      | InputMediaDocument<F>
-      | InputMediaPhoto<F>
-      | InputMediaVideo<F>)
-       & MediaPayload
+      (
+        | InputMediaAudio<F>
+        | InputMediaDocument<F>
+        | InputMediaPhoto<F>
+        | InputMediaVideo<F>
+      ) &
+        MediaPayload
     >;
     disable_notification?: boolean;
     protect_content?: boolean;
@@ -826,7 +833,10 @@ class Api<F> extends ApiClient<F> {
   }
 
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async setChatPhoto(chat_id: number | string, photo: MediaPayload): Promise<boolean> {
+  async setChatPhoto(
+    chat_id: number | string,
+    photo: MediaPayload,
+  ): Promise<boolean> {
     const method = "setChatPhoto";
     const response = await this.callApi(method, {
       chat_id,

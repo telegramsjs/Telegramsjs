@@ -681,7 +681,8 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     user_id: number;
                     custom_title: string;
                   }) => combined.setChatAdministratorCustomTitle(args),
-                  setChatPhoto: (photo: MediaPayload) => combined.setChatPhoto(photo),
+                  setChatPhoto: (photo: MediaPayload) =>
+                    combined.setChatPhoto(photo),
                   deleteChatPhoto: () => combined.deleteChatPhoto(),
                   setChatTitle: (title: string) => combined.setChatTitle(title),
                   setChatDescription: (description: string) =>
@@ -729,11 +730,13 @@ class TelegramBot<F = Buffer> extends Api<F> {
                   ) => combined.sendPhoto(photo, args),
                   sendMediaGroup: (
                     media: ReadonlyArray<
-                      ( InputMediaAudio<F>
-                      | InputMediaDocument<F>
-                      | InputMediaPhoto<F>
-                      | InputMediaVideo<F>
-                      ) & MediaPayload
+                      (
+                        | InputMediaAudio<F>
+                        | InputMediaDocument<F>
+                        | InputMediaPhoto<F>
+                        | InputMediaVideo<F>
+                      ) &
+                        MediaPayload
                     >,
                     args?: {
                       disable_notification?: boolean;

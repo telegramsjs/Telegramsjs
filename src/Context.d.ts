@@ -345,11 +345,13 @@ interface Context<F = Buffer> {
    */
   sendMediaGroup(
     media: ReadonlyArray<
-      ( InputMediaAudio<F>
-      | InputMediaDocument<F>
-      | InputMediaPhoto<F>
-      | InputMediaVideo<F>
-      ) & MediaPayload
+      (
+        | InputMediaAudio<F>
+        | InputMediaDocument<F>
+        | InputMediaPhoto<F>
+        | InputMediaVideo<F>
+      ) &
+        MediaPayload
     >,
     args?: {
       disable_notification?: boolean;

@@ -229,7 +229,10 @@ class Combined<F> {
   /**
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
-  editMessageMedia(media: InputMedia<F> & MediaPayload, reply_markup?: InlineKeyboardMarkup) {
+  editMessageMedia(
+    media: InputMedia<F> & MediaPayload,
+    reply_markup?: InlineKeyboardMarkup,
+  ) {
     return this.telegram.editMessageMedia({
       chat_id: this.chat.id,
       message_id: this.messageId,
@@ -587,11 +590,12 @@ class Combined<F> {
   sendMediaGroup(
     media: ReadonlyArray<
       (
-        InputMediaAudio<F>
-      | InputMediaDocument<F>
-      | InputMediaPhoto<F>
-      | InputMediaVideo<F>
-      ) & MediaPayload
+        | InputMediaAudio<F>
+        | InputMediaDocument<F>
+        | InputMediaPhoto<F>
+        | InputMediaVideo<F>
+      ) &
+        MediaPayload
     >,
     args?: {
       disable_notification?: boolean;
@@ -1233,7 +1237,10 @@ class Combined<F> {
   /**
    * @see https://core.telegram.org/bots/api#addstickertoset
    */
-  addStickerToSet(args: { name: string; sticker: InputSticker<F> & MediaPayload }) {
+  addStickerToSet(args: {
+    name: string;
+    sticker: InputSticker<F> & MediaPayload;
+  }) {
     return this.telegram.addStickerToSet({
       user_id: this.from.id,
       ...args,
