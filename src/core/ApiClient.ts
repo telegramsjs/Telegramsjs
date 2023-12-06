@@ -117,7 +117,8 @@ class ApiClient<F> extends EventEmitter {
     this.token = token;
     this.options = options;
   }
-
+  
+  on(event: string | string[], listener: (...data: any[]) => void): this;
   /**
    * Register event listeners for the bot.
    * ```ts
@@ -134,7 +135,7 @@ class ApiClient<F> extends EventEmitter {
    * @returns This instance of the bot for method chaining.
    */
   on<T extends keyof EventDataMap<F>>(
-    event: T,
+    event: T | string,
     listener: (data: EventDataMap<F>[T]) => void,
   ): this;
 
@@ -150,7 +151,7 @@ class ApiClient<F> extends EventEmitter {
    * @returns This instance of the bot for method chaining.
    */
   on<T extends keyof EventDataMap<F>>(
-    event: T[],
+    event: T[] | string[],
     listener: (data: EventDataMap<F>[T]) => void,
   ): this;
 
@@ -161,7 +162,7 @@ class ApiClient<F> extends EventEmitter {
    * @returns This instance of the bot for method chaining.
    */
   on(
-    event: keyof EventDataMap<F> | (keyof EventDataMap<F>)[],
+    event: string | string[] | keyof EventDataMap<F> | (keyof EventDataMap<F>)[],
     listener: (...args: any[]) => void,
   ): this {
     if (typeof event === "string") {
@@ -202,7 +203,7 @@ class ApiClient<F> extends EventEmitter {
    */
   async ping(): Promise<number> {
     const startTime = Date.now();
-    const response = await this.callApi("getMe");
+    const response = await this.makeApiCall("getMe");
     const endTime = Date.now();
     const latency = endTime - startTime;
     return latency;
@@ -215,9 +216,10 @@ class ApiClient<F> extends EventEmitter {
    * @returns {Promise<any>} - A Promise that resolves with the API response.
    * @throws {TelegramApiError} - Throws an error if the bot token is missing or the API response is not successful.
    */
-  async callApi(method: string, requestData: any = {}): Promise<any> {
+  async makeApiCall(method: string, requestData: any = {}): Promise<any> {
     const defaultOptions = this.options;
     const authToken = this.token;
+    this.emit("debug", `Before API call for method: ${method}`);
 
     const sanitizedData = Object.keys(requestData)
       .filter(
@@ -232,7 +234,7 @@ class ApiClient<F> extends EventEmitter {
           description: "Bot Token is required",
           ok: false,
         },
-        "callApi",
+        "makeApiCall",
       );
     }
 
@@ -259,7 +261,7 @@ class ApiClient<F> extends EventEmitter {
       if (!responseData.ok) {
         throw new TelegramApiError(responseData, method, requestData);
       }
-
+      this.emit("debug", `After API call for method: ${method}, Response: ${JSON.stringify(responseData)}`);
       return responseData.result;
     } catch (error) {
       throw error;
@@ -267,4 +269,4 @@ class ApiClient<F> extends EventEmitter {
   }
 }
 
-export { ApiClient, ApiOptions, AllowedUpdates, MediaPayload };
+export { ApiClient, ApiOptions, AllowedUpdates, MediaPayload, EventDataMap };

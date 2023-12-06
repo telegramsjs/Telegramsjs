@@ -1239,7 +1239,7 @@ class TelegramBot<F = Buffer> extends Api<F> {
   }
 
   async getUpdates() {
-    return await this.callApi("getUpdates", {
+    return await this.makeApiCall("getUpdates", {
       offset: this.offset,
       ...this.options,
     });

@@ -5,6 +5,7 @@ export { Markup } from "./markup/Markup.js";
 export { MenuBuilder } from "./markup/MenuBuilder.js";
 export { Keyboard } from "./markup/Keyboard.js";
 export { MessageCollector } from "./collection/MessageCollector.js";
+export { type EventDataMap } from "./core/ApiClient.js";
 export * as html from "./formatters/html.js";
 export * as markdownv from "./formatters/markdownv.js"
 export {

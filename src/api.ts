@@ -94,7 +94,7 @@ class Api<F> extends ApiClient<F> {
     allowed_updates?: AllowedUpdates;
   }) {
     const method = "getUpdates";
-    const response = await this.callApi(
+    const response = await this.makeApiCall(
       method,
       params ?? {
         limit: this.data.limit,
@@ -125,7 +125,7 @@ class Api<F> extends ApiClient<F> {
     secret_token?: string;
   }): Promise<true> {
     const method = "setWebhook";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -134,7 +134,7 @@ class Api<F> extends ApiClient<F> {
    */
   async getMe(): Promise<UserFromGetMe> {
     const method = "getMe";
-    const response = await this.callApi(method);
+    const response = await this.makeApiCall(method);
     return response;
   }
 
@@ -143,7 +143,7 @@ class Api<F> extends ApiClient<F> {
    */
   async logOut(): Promise<true> {
     const method = "logOut";
-    const response = await this.callApi(method);
+    const response = await this.makeApiCall(method);
     return response;
   }
 
@@ -152,14 +152,14 @@ class Api<F> extends ApiClient<F> {
    */
   async close(): Promise<true> {
     const method = "close";
-    const response = await this.callApi(method);
+    const response = await this.makeApiCall(method);
     return response;
   }
 
   /** Use this method to remove webhook integration if you decide to switch back to getUpdates. Returns True on success. */
   async deleteWebhook(drop_pending_updates?: boolean): Promise<boolean> {
     const method = "deleteWebhook";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       drop_pending_updates,
     });
     return response;
@@ -168,7 +168,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty. */
   async getWebhookInfo(): Promise<WebhookInfo> {
     const method = "getWebhookInfo";
-    const response = await this.callApi(method);
+    const response = await this.makeApiCall(method);
     return response;
   }
 
@@ -193,7 +193,7 @@ class Api<F> extends ApiClient<F> {
     },
   ): Promise<Message.TextMessage> {
     const method = "sendMessage";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       text,
       ...params,
@@ -222,7 +222,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.PhotoMessage> {
     const method = "sendPhoto";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
 
     return response;
   }
@@ -252,7 +252,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.AudioMessage> {
     const method = "sendAudio";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -277,7 +277,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.DocumentMessage> {
     const method = "sendDocument";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -306,7 +306,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.VideoMessage> {
     const method = "sendVideo";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -334,7 +334,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.AnimationMessage> {
     const method = "sendAnimation";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -358,7 +358,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.VoiceMessage> {
     const method = "sendVoice";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -383,7 +383,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.VideoNoteMessage> {
     const method = "sendVideoNote";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -413,7 +413,7 @@ class Api<F> extends ApiClient<F> {
     >
   > {
     const method = "sendMediaGroup";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -438,7 +438,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.LocationMessage> {
     const method = "sendLocation";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -465,7 +465,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.VenueMessage> {
     const method = "sendVenue";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -479,7 +479,7 @@ class Api<F> extends ApiClient<F> {
     message_id: number;
   }): Promise<Message> {
     const method = "forwardMessage";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -503,7 +503,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<MessageId> {
     const method = "copyMessage";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -526,7 +526,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.ContactMessage> {
     const method = "sendContact";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -557,7 +557,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.PollMessage> {
     const method = "sendPoll";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -577,7 +577,7 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.DiceMessage> {
     const method = "sendDice";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -603,7 +603,7 @@ class Api<F> extends ApiClient<F> {
     message_thread_id?: number;
   }): Promise<boolean> {
     const method = "sendChatAction";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -614,7 +614,7 @@ class Api<F> extends ApiClient<F> {
     limit?: number;
   }): Promise<UserProfilePhotos> {
     const method = "getUserProfilePhotos";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -623,7 +623,7 @@ class Api<F> extends ApiClient<F> {
   Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
   async getFile(file_id: string): Promise<File> {
     const method = "getFile";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       file_id,
     });
 
@@ -653,7 +653,7 @@ class Api<F> extends ApiClient<F> {
     revoke_messages?: boolean;
   }): Promise<boolean> {
     const method = "banChatMember";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -664,7 +664,7 @@ class Api<F> extends ApiClient<F> {
     only_if_banned?: boolean;
   }): Promise<boolean> {
     const method = "unbanChatMember";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -677,7 +677,7 @@ class Api<F> extends ApiClient<F> {
     until_date?: number;
   }): Promise<boolean> {
     const method = "restrictChatMember";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -702,7 +702,7 @@ class Api<F> extends ApiClient<F> {
     can_manage_topics?: boolean;
   }): Promise<boolean> {
     const method = "promoteChatMember";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -713,7 +713,7 @@ class Api<F> extends ApiClient<F> {
     custom_title: string;
   }): Promise<boolean> {
     const method = "setChatAdministratorCustomTitle";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -723,7 +723,7 @@ class Api<F> extends ApiClient<F> {
     sender_chat_id: number,
   ): Promise<boolean> {
     const method = "banChatMember";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       sender_chat_id,
     });
@@ -736,7 +736,7 @@ class Api<F> extends ApiClient<F> {
     sender_chat_id: number,
   ): Promise<boolean> {
     const method = "unbanChatMember";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       sender_chat_id,
     });
@@ -750,7 +750,7 @@ class Api<F> extends ApiClient<F> {
     use_independent_chat_permissions?: boolean;
   }): Promise<boolean> {
     const method = "setChatPermissions";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -759,7 +759,7 @@ class Api<F> extends ApiClient<F> {
   Note: Each administrator in a chat generates their own invite links. Bots can't use invite links generated by other administrators. If you want your bot to work with invite links, it will need to generate its own link using exportChatInviteLink or by calling the getChat method. If your bot needs to generate a new primary invite link replacing its previous one, use exportChatInviteLink again. */
   async exportChatInviteLink(chat_id?: number | string): Promise<string> {
     const method = "exportChatInviteLink";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
 
@@ -775,7 +775,7 @@ class Api<F> extends ApiClient<F> {
     creates_join_request?: boolean;
   }): Promise<ChatInviteLink> {
     const method = "createChatInviteLink";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -789,7 +789,7 @@ class Api<F> extends ApiClient<F> {
     creates_join_request?: boolean;
   }): Promise<ChatInviteLink> {
     const method = "editChatInviteLink";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -799,7 +799,7 @@ class Api<F> extends ApiClient<F> {
     chat_id?: number | string,
   ): Promise<ChatInviteLink> {
     const method = "revokeChatInviteLink";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       invite_link,
       chat_id,
     });
@@ -812,7 +812,7 @@ class Api<F> extends ApiClient<F> {
     chat_id?: number | string,
   ): Promise<boolean> {
     const method = "approveChatJoinRequest";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       user_id,
       chat_id,
     });
@@ -825,7 +825,7 @@ class Api<F> extends ApiClient<F> {
     user_id: number,
   ): Promise<boolean> {
     const method = "declineChatJoinRequest";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       user_id,
     });
@@ -838,7 +838,7 @@ class Api<F> extends ApiClient<F> {
     photo: MediaPayload,
   ): Promise<boolean> {
     const method = "setChatPhoto";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       photo,
     });
@@ -848,7 +848,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async deleteChatPhoto(chat_id: number | string): Promise<boolean> {
     const method = "deleteChatPhoto";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -860,7 +860,7 @@ class Api<F> extends ApiClient<F> {
     title: string,
   ): Promise<boolean> {
     const method = "setChatTitle";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       title,
     });
@@ -873,7 +873,7 @@ class Api<F> extends ApiClient<F> {
     description?: string,
   ): Promise<boolean> {
     const method = "setChatDescription";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       description,
     });
@@ -887,7 +887,7 @@ class Api<F> extends ApiClient<F> {
     disable_notification?: boolean;
   }): Promise<boolean> {
     const method = "pinChatMessage";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -897,7 +897,7 @@ class Api<F> extends ApiClient<F> {
     message_id?: number,
   ): Promise<boolean> {
     const method = "unpinChatMessage";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       message_id,
     });
@@ -907,7 +907,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
   async unpinAllChatMessages(chat_id: number | string): Promise<boolean> {
     const method = "unpinAllChatMessages";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -916,7 +916,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method for your bot to leave a group, supergroup or channel. Returns True on success. */
   async leaveChat(chat_id: number | string): Promise<boolean> {
     const method = "leaveChat";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -925,7 +925,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success. */
   async getChat(chat_id: number | string): Promise<ChatFromGetChat> {
     const method = "getChat";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -936,7 +936,7 @@ class Api<F> extends ApiClient<F> {
     chat_id: number | string,
   ): Promise<Array<ChatMemberOwner | ChatMemberAdministrator>> {
     const method = "getChatAdministrators";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -945,7 +945,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get the number of members in a chat. Returns Int on success. */
   async getChatMemberCount(chat_id: number | string): Promise<number> {
     const method = "getChatMemberCount";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -957,7 +957,7 @@ class Api<F> extends ApiClient<F> {
     user_id: number,
   ): Promise<ChatMember> {
     const method = "getChatMember";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       user_id,
     });
@@ -970,7 +970,7 @@ class Api<F> extends ApiClient<F> {
     chat_id?: number | string,
   ): Promise<boolean> {
     const method = "setChatStickerSet";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       sticker_set_name,
       chat_id,
     });
@@ -980,7 +980,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method. Returns True on success. */
   async deleteChatStickerSet(chat_id?: number | string): Promise<boolean> {
     const method = "deleteChatStickerSet";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -989,7 +989,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects. */
   async getForumTopicIconStickers(): Promise<Sticker[]> {
     const method = "getForumTopicIconStickers";
-    const response = await this.callApi(method);
+    const response = await this.makeApiCall(method);
     return response;
   }
 
@@ -1007,7 +1007,7 @@ class Api<F> extends ApiClient<F> {
     icon_custom_emoji_id?: string;
   }): Promise<ForumTopic> {
     const method = "createForumTopic";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1019,7 +1019,7 @@ class Api<F> extends ApiClient<F> {
     icon_custom_emoji_id?: string;
   }): Promise<boolean> {
     const method = "editForumTopic";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1029,7 +1029,7 @@ class Api<F> extends ApiClient<F> {
     message_thread_id: number,
   ): Promise<boolean> {
     const method = "closeForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       message_thread_id,
     });
@@ -1042,7 +1042,7 @@ class Api<F> extends ApiClient<F> {
     message_thread_id: number,
   ): Promise<boolean> {
     const method = "reopenForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       message_thread_id,
     });
@@ -1055,7 +1055,7 @@ class Api<F> extends ApiClient<F> {
     message_thread_id: number,
   ): Promise<boolean> {
     const method = "deleteForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       message_thread_id,
     });
@@ -1068,7 +1068,7 @@ class Api<F> extends ApiClient<F> {
     message_thread_id: number,
   ): Promise<boolean> {
     const method = "unpinAllForumTopicMessages";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       message_thread_id,
     });
@@ -1081,7 +1081,7 @@ class Api<F> extends ApiClient<F> {
     name: string,
   ): Promise<boolean> {
     const method = "editGeneralForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       name,
     });
@@ -1091,7 +1091,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
   async closeGeneralForumTopic(chat_id: number | string): Promise<boolean> {
     const method = "closeGeneralForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -1100,7 +1100,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success. */
   async reopenGeneralForumTopic(chat_id: number | string): Promise<boolean> {
     const method = "reopenGeneralForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
 
@@ -1110,7 +1110,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success. */
   async hideGeneralForumTopic(chat_id: number | string): Promise<boolean> {
     const method = "hideGeneralForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
 
@@ -1120,7 +1120,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
   async unhideGeneralForumTopic(chat_id: string | number): Promise<boolean> {
     const method = "unhideGeneralForumTopic";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
 
@@ -1133,7 +1133,7 @@ class Api<F> extends ApiClient<F> {
     chat_id: string | number,
   ): Promise<boolean> {
     const method = "unpinAllGeneralForumTopicMessages";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
 
@@ -1151,7 +1151,7 @@ class Api<F> extends ApiClient<F> {
     cache_time?: number;
   }): Promise<boolean> {
     const method = "answerCallbackQuery";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
 
     return response;
   }
@@ -1163,7 +1163,7 @@ class Api<F> extends ApiClient<F> {
     language_code?: string;
   }): Promise<boolean> {
     const method = "setMyCommands";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1173,7 +1173,7 @@ class Api<F> extends ApiClient<F> {
     language_code?: string,
   ): Promise<boolean> {
     const method = "deleteMyCommands";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       scope,
       language_code,
     });
@@ -1187,7 +1187,7 @@ class Api<F> extends ApiClient<F> {
     language_code?: string,
   ): Promise<BotCommand[]> {
     const method = "getMyCommands";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       scope,
       language_code,
     });
@@ -1198,7 +1198,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to change the bot's name. Returns True on success. */
   async setMyName(name?: string, language_code?: string): Promise<boolean> {
     const method = "setMyName";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       name,
       language_code,
     });
@@ -1209,7 +1209,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
   async getMyName(language_code?: string): Promise<BotName> {
     const method = "getMyName";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       language_code,
     });
 
@@ -1222,7 +1222,7 @@ class Api<F> extends ApiClient<F> {
     language_code?: string,
   ): Promise<boolean> {
     const method = "setMyDescription";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       description,
       language_code,
     });
@@ -1233,7 +1233,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
   async getMyDescription(language_code?: string): Promise<BotDescription> {
     const method = "getMyDescription";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       language_code,
     });
     return response;
@@ -1245,7 +1245,7 @@ class Api<F> extends ApiClient<F> {
     language_code?: string,
   ): Promise<boolean> {
     const method = "setMyShortDescription";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       short_description,
       language_code,
     });
@@ -1257,7 +1257,7 @@ class Api<F> extends ApiClient<F> {
     language_code?: string,
   ): Promise<BotShortDescription> {
     const method = "getMyShortDescription";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       language_code,
     });
     return response;
@@ -1269,7 +1269,7 @@ class Api<F> extends ApiClient<F> {
     menu_button?: MenuButton,
   ): Promise<boolean> {
     const method = "setChatMenuButton";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       menu_button,
     });
@@ -1279,7 +1279,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns MenuButton on success. */
   async getChatMenuButton(chat_id?: number | string): Promise<MenuButton> {
     const method = "getChatMenuButton";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
     });
     return response;
@@ -1291,7 +1291,7 @@ class Api<F> extends ApiClient<F> {
     for_channels?: boolean,
   ): Promise<boolean> {
     const method = "setMyDefaultAdministratorRights";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       rights,
       for_channels,
     });
@@ -1303,7 +1303,7 @@ class Api<F> extends ApiClient<F> {
     for_channels: boolean,
   ): Promise<ChatAdministratorRights> {
     const method = "getMyDefaultAdministratorRights";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       for_channels,
     });
     return response;
@@ -1321,7 +1321,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message.TextMessage) | boolean> {
     const method = "editMessageText";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1336,7 +1336,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message.CaptionableMessage) | boolean> {
     const method = "editMessageCaption";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1349,7 +1349,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message) | boolean> {
     const method = "editMessageMedia";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1361,7 +1361,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message) | boolean> {
     const method = "editMessageLiveLocation";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1378,7 +1378,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message.LocationMessage) | boolean> {
     const method = "stopMessageLiveLocation";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1390,7 +1390,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message) | boolean> {
     const method = "editMessageReplyMarkup";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1401,7 +1401,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Poll> {
     const method = "stopPoll";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1422,14 +1422,14 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<Message.StickerMessage> {
     const method = "sendSticker";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
   /** Use this method to get a sticker set. On success, a StickerSet object is returned. */
   async getStickerSet(name: string): Promise<StickerSet> {
     const method = "getStickerSet";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       name,
     });
     return response;
@@ -1438,7 +1438,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects. */
   async getCustomEmojiStickers(custom_emoji_ids: string[]): Promise<Sticker[]> {
     const method = "getCustomEmojiStickers";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       custom_emoji_ids,
     });
 
@@ -1452,7 +1452,7 @@ class Api<F> extends ApiClient<F> {
     sticker: MediaPayload;
   }): Promise<File> {
     const method = "uploadStickerFile";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1467,7 +1467,7 @@ class Api<F> extends ApiClient<F> {
     needs_repainting?: boolean;
   }): Promise<boolean> {
     const method = "createNewStickerSet";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1478,7 +1478,7 @@ class Api<F> extends ApiClient<F> {
     sticker: InputSticker<F> & MediaPayload;
   }): Promise<boolean> {
     const method = "addStickerToSet";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
 
     return response;
   }
@@ -1489,7 +1489,7 @@ class Api<F> extends ApiClient<F> {
     position: number,
   ): Promise<boolean> {
     const method = "setStickerPositionInSet";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       sticker,
       position,
     });
@@ -1499,7 +1499,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to delete a sticker from a set created by the bot. Returns True on success. */
   async deleteStickerFromSet(sticker: string): Promise<boolean> {
     const method = "deleteStickerFromSet";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       sticker,
     });
     return response;
@@ -1511,7 +1511,7 @@ class Api<F> extends ApiClient<F> {
     emoji_list: string[],
   ): Promise<boolean> {
     const method = "setStickerEmojiList";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       sticker,
       emoji_list,
     });
@@ -1524,7 +1524,7 @@ class Api<F> extends ApiClient<F> {
     keywords?: string[],
   ): Promise<boolean> {
     const method = "setStickerKeywords";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       sticker,
       keywords,
     });
@@ -1537,7 +1537,7 @@ class Api<F> extends ApiClient<F> {
     mask_position?: MaskPosition,
   ): Promise<boolean> {
     const method = "setStickerMaskPosition";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       sticker,
       mask_position,
     });
@@ -1547,7 +1547,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to set the title of a created sticker set. Returns True on success. */
   async setStickerSetTitle(name: string, title: string): Promise<boolean> {
     const method = "setStickerSetTitle";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       name,
       title,
     });
@@ -1561,7 +1561,7 @@ class Api<F> extends ApiClient<F> {
     thumbnail?: string | MediaPayload;
   }): Promise<boolean> {
     const method = "setStickerSetThumbnail";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1571,7 +1571,7 @@ class Api<F> extends ApiClient<F> {
     custom_emoji_id?: string,
   ): Promise<boolean> {
     const method = "setCustomEmojiStickerSetThumbnail";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       name,
       custom_emoji_id,
     });
@@ -1581,7 +1581,7 @@ class Api<F> extends ApiClient<F> {
   /** Use this method to delete a sticker set that was created by the bot. Returns True on success. */
   async deleteStickerSet(name: string): Promise<boolean> {
     const method = "deleteStickerSet";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       name,
     });
     return response;
@@ -1599,7 +1599,7 @@ class Api<F> extends ApiClient<F> {
     button?: InlineQueryResultsButton;
   }): Promise<boolean> {
     const method = "answerInlineQuery";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1609,7 +1609,7 @@ class Api<F> extends ApiClient<F> {
     result: InlineQueryResult,
   ): Promise<SentWebAppMessage> {
     const method = "answerWebAppQuery";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       web_app_query_id,
       result,
     });
@@ -1648,7 +1648,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message.InvoiceMessage> {
     const method = "sendInvoice";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1676,7 +1676,7 @@ class Api<F> extends ApiClient<F> {
     is_flexible?: boolean;
   }): Promise<string> {
     const method = "createInvoiceLink";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1688,7 +1688,7 @@ class Api<F> extends ApiClient<F> {
     error_message?: string;
   }): Promise<boolean> {
     const method = "answerShippingQuery";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1699,7 +1699,7 @@ class Api<F> extends ApiClient<F> {
     error_message?: string;
   }): Promise<boolean> {
     const method = "answerPreCheckoutQuery";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1711,7 +1711,7 @@ class Api<F> extends ApiClient<F> {
     errors: readonly PassportElementError[],
   ): Promise<boolean> {
     const method = "setPassportDataErrors";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       user_id,
       errors,
     });
@@ -1730,7 +1730,7 @@ class Api<F> extends ApiClient<F> {
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message.GameMessage> {
     const method = "sendGame";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1745,7 +1745,7 @@ class Api<F> extends ApiClient<F> {
     inline_message_id?: string;
   }): Promise<(Update.Edited & Message.GameMessage) | true> {
     const method = "setGameScore";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1759,7 +1759,7 @@ class Api<F> extends ApiClient<F> {
     inline_message_id?: string;
   }): Promise<GameHighScore[]> {
     const method = "getGameHighScores";
-    const response = await this.callApi(method, params);
+    const response = await this.makeApiCall(method, params);
     return response;
   }
 
@@ -1778,7 +1778,7 @@ class Api<F> extends ApiClient<F> {
     message_id: number,
   ): Promise<boolean> {
     const method = "deleteMessage";
-    const response = await this.callApi(method, {
+    const response = await this.makeApiCall(method, {
       chat_id,
       message_id,
     });
