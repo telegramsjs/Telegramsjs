@@ -53,6 +53,15 @@ function inlineCode(text: string): string {
 }
 
 /**
+ * Returns the input to blockquote.
+ * @param {string} text - The text to be formatted as a blockquote block.
+ * @returns {string} The input text enclosed in backticks to represent blockquote formatting.
+ */
+function blockquote(text: string): string {
+  return `> ${text}`;
+}
+
+/**
  * Formats the input text as a pre-formatted code block without specifying the language.
  * @param {string} text - The code or text to be displayed as a pre-formatted code block.
  * @returns {string} The input text enclosed in triple backticks to represent a pre-formatted code block.
@@ -78,6 +87,7 @@ export {
   strikethrough,
   spoiler,
   inlineCode,
+  blockquote,
   codeBlock,
   codeBlockWithLanguage,
 };

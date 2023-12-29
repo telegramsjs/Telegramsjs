@@ -46,6 +46,7 @@ import {
   SentWebAppMessage,
   Sticker,
   StickerSet,
+  ReactionType,
   PassportElementError,
   LabeledPrice,
   ShippingOption,
@@ -60,6 +61,9 @@ import {
   InputMediaVideo,
   InputMedia,
   InputSticker,
+  ReplyParameters,
+  LinkPreviewOptions,
+  UserChatBoosts,
 } from "@telegram.ts/types";
 
 class Api<F> extends ApiClient<F> {
@@ -180,11 +184,10 @@ class Api<F> extends ApiClient<F> {
       message_thread_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -213,8 +216,7 @@ class Api<F> extends ApiClient<F> {
     has_spoiler?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -243,8 +245,7 @@ class Api<F> extends ApiClient<F> {
     thumbnail?: MediaPayload;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -268,8 +269,7 @@ class Api<F> extends ApiClient<F> {
     disable_content_type_detection?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -297,8 +297,7 @@ class Api<F> extends ApiClient<F> {
     supports_streaming?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -325,8 +324,7 @@ class Api<F> extends ApiClient<F> {
     has_spoiler?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -349,8 +347,7 @@ class Api<F> extends ApiClient<F> {
     duration?: number;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -374,8 +371,7 @@ class Api<F> extends ApiClient<F> {
     thumbnail?: MediaPayload;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -402,8 +398,7 @@ class Api<F> extends ApiClient<F> {
     >;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
   }): Promise<
     Array<
       | Message.AudioMessage
@@ -429,8 +424,7 @@ class Api<F> extends ApiClient<F> {
     proximity_alert_radius?: number;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -456,8 +450,7 @@ class Api<F> extends ApiClient<F> {
     google_place_type?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -483,6 +476,20 @@ class Api<F> extends ApiClient<F> {
     return response;
   }
 
+  /** Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned. */
+  async forwardMessages(params: {
+    chat_id: number | string;
+    message_thread_id?: number;
+    from_chat_id: number | string;
+    message_ids: number[];
+    disable_notification?: boolean;
+    protect_content?: boolean;
+  }): Promise<MessageId[]> {
+    const method = "forwardMessages";
+    const response = await this.makeApiCall(method, params);
+    return response;
+  }
+
   /** Use this method to copy messages of any kind. Service messages and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success. */
   async copyMessage(params: {
     chat_id: number | string;
@@ -494,8 +501,7 @@ class Api<F> extends ApiClient<F> {
     caption_entities?: MessageEntity[];
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -503,6 +509,21 @@ class Api<F> extends ApiClient<F> {
       | ForceReply;
   }): Promise<MessageId> {
     const method = "copyMessage";
+    const response = await this.makeApiCall(method, params);
+    return response;
+  }
+
+  /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
+  async copyMessages(params: {
+    chat_id: number | string;
+    message_thread_id?: number;
+    from_chat_id: number | string;
+    message_ids: number[];
+    disable_notification?: boolean;
+    protect_content?: boolean;
+    remove_caption?: boolean;
+  }): Promise<MessageId[]> {
+    const method = "copyMessages";
     const response = await this.makeApiCall(method, params);
     return response;
   }
@@ -517,8 +538,7 @@ class Api<F> extends ApiClient<F> {
     vcard?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -548,8 +568,7 @@ class Api<F> extends ApiClient<F> {
     is_closed?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -568,8 +587,7 @@ class Api<F> extends ApiClient<F> {
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -603,6 +621,18 @@ class Api<F> extends ApiClient<F> {
     message_thread_id?: number;
   }): Promise<boolean> {
     const method = "sendChatAction";
+    const response = await this.makeApiCall(method, params);
+    return response;
+  }
+
+  /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success */
+  async setMessageReaction(params: {
+    chat_id: number | string;
+    message_id: number;
+    reaction?: ReactionType[];
+    is_big?: boolean;
+  }): Promise<boolean> {
+    const method = "setMessageReaction";
     const response = await this.makeApiCall(method, params);
     return response;
   }
@@ -947,6 +977,19 @@ class Api<F> extends ApiClient<F> {
     const method = "getChatMemberCount";
     const response = await this.makeApiCall(method, {
       chat_id,
+    });
+    return response;
+  }
+
+  /** Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object. */
+  async getUserChatBoosts(
+    chat_id: number | string,
+    user_id: number,
+  ): Promise<UserChatBoosts> {
+    const method = "getUserChatBoosts";
+    const response = await this.makeApiCall(method, {
+      chat_id,
+      user_id,
     });
     return response;
   }
@@ -1317,7 +1360,7 @@ class Api<F> extends ApiClient<F> {
     text: string;
     parse_mode?: ParseMode;
     entities?: MessageEntity[];
-    disable_web_page_preview?: boolean;
+    link_preview_options?: LinkPreviewOptions;
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<(Update.Edited & Message.TextMessage) | boolean> {
     const method = "editMessageText";
@@ -1413,8 +1456,7 @@ class Api<F> extends ApiClient<F> {
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -1643,8 +1685,7 @@ class Api<F> extends ApiClient<F> {
     is_flexible?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message.InvoiceMessage> {
     const method = "sendInvoice";
@@ -1725,8 +1766,7 @@ class Api<F> extends ApiClient<F> {
     game_short_name: string;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message.GameMessage> {
     const method = "sendGame";
@@ -1781,6 +1821,19 @@ class Api<F> extends ApiClient<F> {
     const response = await this.makeApiCall(method, {
       chat_id,
       message_id,
+    });
+    return response;
+  }
+
+  /** Use this method to delete multiple messages simultaneously. Returns True on success. */
+  async deleteMessages(
+    chat_id: number | string,
+    message_ids: number[],
+  ): Promise<true> {
+    const method = "deleteMessages";
+    const response = await this.makeApiCall(method, {
+      chat_id,
+      message_ids,
     });
     return response;
   }

@@ -60,6 +60,8 @@ import {
   InputMediaVideo,
   InputMedia,
   InputSticker,
+  ReplyParameters,
+  LinkPreviewOptions,
 } from "@telegram.ts/types";
 
 interface ResponseApi {
@@ -193,7 +195,7 @@ class Combined<F> {
       message_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       reply_markup?: InlineKeyboardMarkup;
     },
   ) {
@@ -297,11 +299,10 @@ class Combined<F> {
     args?: {
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -567,8 +568,7 @@ class Combined<F> {
       has_spoiler?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -600,8 +600,7 @@ class Combined<F> {
     args?: {
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
     },
   ) {
     return this.telegram.sendMediaGroup({
@@ -627,8 +626,7 @@ class Combined<F> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -651,8 +649,7 @@ class Combined<F> {
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -679,8 +676,7 @@ class Combined<F> {
       disable_content_type_detection?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -705,8 +701,7 @@ class Combined<F> {
       emoji?: string;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -733,8 +728,7 @@ class Combined<F> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -766,8 +760,7 @@ class Combined<F> {
       has_spoiler?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -794,8 +787,7 @@ class Combined<F> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -838,8 +830,7 @@ class Combined<F> {
     is_flexible?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup;
   }) {
     return this.telegram.sendInvoice({
@@ -857,8 +848,7 @@ class Combined<F> {
     args?: {
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?: InlineKeyboardMarkup;
     },
   ) {
@@ -885,8 +875,7 @@ class Combined<F> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -921,8 +910,7 @@ class Combined<F> {
       is_closed?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -962,8 +950,7 @@ class Combined<F> {
       proximity_alert_radius?: number;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -995,8 +982,7 @@ class Combined<F> {
       google_place_type?: string;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1026,8 +1012,7 @@ class Combined<F> {
       vcard?: string;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1311,11 +1296,10 @@ class Combined<F> {
     args?: {
       message_thread_id?: number;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1337,11 +1321,10 @@ class Combined<F> {
     args?: {
       message_thread_id?: number;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1363,11 +1346,10 @@ class Combined<F> {
     args?: {
       message_thread_id?: number;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1422,8 +1404,7 @@ class Combined<F> {
       caption_entities?: MessageEntity[];
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1528,11 +1509,10 @@ class Combined<F> {
       message_thread_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1541,7 +1521,7 @@ class Combined<F> {
     },
   ) {
     return this.telegram.sendMessage(this.chat.id, text, {
-      reply_to_message_id: this.messageId,
+      reply_parameters: { message_id: this.messageId },
       ...args,
     });
   }
@@ -1555,11 +1535,10 @@ class Combined<F> {
       message_thread_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup

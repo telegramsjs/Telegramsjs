@@ -19,6 +19,8 @@ import {
   ResponseParameters,
   UserFromGetMe,
   Message,
+  MessageReactionUpdated,
+  MessageReactionCountUpdated,
   CallbackQuery,
   InlineQuery,
   ShippingQuery,
@@ -28,6 +30,8 @@ import {
   ChatMemberUpdated,
   ChatJoinRequest,
   MessageEntity,
+  ChatBoostUpdated,
+  ChatBoostRemoved,
 } from "@telegram.ts/types";
 
 export const defaultOptions = {
@@ -63,6 +67,8 @@ interface EventDataMap<F> {
   message: Message & Context<F>;
   "message:text": Message.TextMessage & Context<F>;
   "message:caption": Message & CaptionableMessage & Context<F>;
+  message_reaction: MessageReactionUpdated & Context<F>;
+  message_reaction_count: MessageReactionCountUpdated & Context<F>;
   edited_message: Message & Update.Edited & Context<F>;
   "edited_message:text": Message.TextMessage & Update.Edited & Context<F>;
   "edited_message:caption": Message &
@@ -96,6 +102,8 @@ interface EventDataMap<F> {
   chat_member: ChatMemberUpdated & Context<F>;
   my_chat_member: ChatMemberUpdated & Context<F>;
   chat_join_request: ChatJoinRequest & Context<F>;
+  chat_boost: ChatBoostUpdated & Context<F>;
+  removed_chat_boost: ChatBoostRemoved & Context<F>;
 }
 
 type AllowedUpdates = ReadonlyArray<Exclude<keyof Update, "update_id">>;
@@ -117,7 +125,7 @@ class ApiClient<F> extends EventEmitter {
     this.token = token;
     this.options = options;
   }
-  
+
   on(event: string | string[], listener: (...data: any[]) => void): this;
   /**
    * Register event listeners for the bot.
@@ -162,7 +170,11 @@ class ApiClient<F> extends EventEmitter {
    * @returns This instance of the bot for method chaining.
    */
   on(
-    event: string | string[] | keyof EventDataMap<F> | (keyof EventDataMap<F>)[],
+    event:
+      | string
+      | string[]
+      | keyof EventDataMap<F>
+      | (keyof EventDataMap<F>)[],
     listener: (...args: any[]) => void,
   ): this {
     if (typeof event === "string") {
@@ -261,7 +273,12 @@ class ApiClient<F> extends EventEmitter {
       if (!responseData.ok) {
         throw new TelegramApiError(responseData, method, requestData);
       }
-      this.emit("debug", `After API call for method: ${method}, Response: ${JSON.stringify(responseData)}`);
+      this.emit(
+        "debug",
+        `After API call for method: ${method}, Response: ${JSON.stringify(
+          responseData,
+        )}`,
+      );
       return responseData.result;
     } catch (error) {
       throw error;

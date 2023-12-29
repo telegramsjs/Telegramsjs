@@ -246,10 +246,10 @@ class Markup {
     request_id: number,
     user_is_bot?: boolean,
     user_is_premium?: boolean,
-  ): KeyboardButton.RequestUserButton & Text {
+  ): KeyboardButton.RequestUsersButton & Text {
     return {
       text,
-      request_user: {
+      request_users: {
         request_id,
         user_is_bot,
         user_is_premium,

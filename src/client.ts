@@ -115,6 +115,12 @@ const messageTypeMap: MessageTypeMap = {
       },
     ],
   },
+  message_reaction: {
+    event: "message_reaction",
+  },
+  message_reaction_count: {
+    event: "message_reaction_count",
+  },
   edited_channel_post: {
     event: "edited_channel_post",
     properties: [
@@ -167,6 +173,12 @@ const messageTypeMap: MessageTypeMap = {
   },
   chat_join_request: {
     event: "chat_join_request",
+  },
+  chat_boost: {
+    event: "chat_boost",
+  },
+  removed_chat_boost: {
+    event: "removed_chat_boost",
   },
 };
 

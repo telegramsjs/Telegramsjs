@@ -82,6 +82,15 @@ function preFormattedCode(code: string): string {
 }
 
 /**
+ * Returns the input to blockquote.
+ * @param {string} text - The text to be formatted as a blockquote block.
+ * @returns {string} The input text enclosed in <blockquote> tags.
+ */
+function blockquote(text: string): string {
+  return `<blockquote>${text}</blockquote>`;
+}
+
+/**
  * Returns the input code wrapped in a pre tag with language class for syntax highlighting.
  * @param {string} code - The code to be formatted as a pre-formatted code block.
  * @param {string} language - The language for syntax highlighting (e.g., "javascript", "python").
@@ -100,6 +109,7 @@ export {
   link,
   emoji,
   inlineCode,
+  blockquote,
   preFormattedCode,
   preFormattedCodeWithLanguage,
 };

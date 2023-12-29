@@ -1,8 +1,9 @@
 import { TelegramBot } from "./client.js";
+import { MediaPayload } from "./core/ApiClient.js";
 import {
   MessageCollector,
   MessageFilter,
-} from "../collection/MessageCollector.js";
+} from "./collection/MessageCollector.js";
 import {
   Message,
   Chat,
@@ -46,6 +47,12 @@ import {
   InputMediaVideo,
   InputMedia,
   InputSticker,
+  GameHighScore,
+  BotShortDescription,
+  BotDescription,
+  BotName,
+  ReplyParameters,
+  LinkPreviewOptions,
 } from "@telegram.ts/types";
 
 interface Context<F = Buffer> {
@@ -94,7 +101,7 @@ interface Context<F = Buffer> {
       message_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       reply_markup?: InlineKeyboardMarkup;
     },
   ): Promise<
@@ -161,11 +168,10 @@ interface Context<F = Buffer> {
     args?: {
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -331,8 +337,7 @@ interface Context<F = Buffer> {
       has_spoiler?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -356,8 +361,7 @@ interface Context<F = Buffer> {
     args?: {
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
     },
   ): Promise<
     (
@@ -382,8 +386,7 @@ interface Context<F = Buffer> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -398,8 +401,7 @@ interface Context<F = Buffer> {
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -419,8 +421,7 @@ interface Context<F = Buffer> {
       disable_content_type_detection?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -437,8 +438,7 @@ interface Context<F = Buffer> {
       emoji?: string;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -457,8 +457,7 @@ interface Context<F = Buffer> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -482,8 +481,7 @@ interface Context<F = Buffer> {
       has_spoiler?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -502,8 +500,7 @@ interface Context<F = Buffer> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -538,8 +535,7 @@ interface Context<F = Buffer> {
     is_flexible?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
-    reply_to_message_id?: number;
-    allow_sending_without_reply?: boolean;
+    reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message.InvoiceMessage>;
   /**
@@ -550,8 +546,7 @@ interface Context<F = Buffer> {
     args?: {
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?: InlineKeyboardMarkup;
     },
   ): Promise<Message.GameMessage>;
@@ -570,8 +565,7 @@ interface Context<F = Buffer> {
       thumbnail?: MediaPayload;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -598,8 +592,7 @@ interface Context<F = Buffer> {
       is_closed?: boolean;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -628,8 +621,7 @@ interface Context<F = Buffer> {
       proximity_alert_radius?: number;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -652,8 +644,7 @@ interface Context<F = Buffer> {
       google_place_type?: string;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -672,8 +663,7 @@ interface Context<F = Buffer> {
       vcard?: string;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -835,11 +825,10 @@ interface Context<F = Buffer> {
     args?: {
       message_thread_id?: number;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -855,11 +844,10 @@ interface Context<F = Buffer> {
     args?: {
       message_thread_id?: number;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -875,11 +863,10 @@ interface Context<F = Buffer> {
     args?: {
       message_thread_id?: number;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -914,8 +901,7 @@ interface Context<F = Buffer> {
       caption_entities?: MessageEntity[];
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -987,11 +973,10 @@ interface Context<F = Buffer> {
       message_thread_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup
@@ -1008,11 +993,10 @@ interface Context<F = Buffer> {
       message_thread_id?: number;
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
-      disable_web_page_preview?: boolean;
+      link_preview_options?: LinkPreviewOptions;
       disable_notification?: boolean;
       protect_content?: boolean;
-      reply_to_message_id?: number;
-      allow_sending_without_reply?: boolean;
+      reply_parameters?: ReplyParameters;
       reply_markup?:
         | InlineKeyboardMarkup
         | ReplyKeyboardMarkup

@@ -90,8 +90,8 @@ class Collection<K, V> {
     return typeof result === "boolean"
       ? result
       : Object.keys(result).length > 0
-      ? result
-      : false;
+        ? result
+        : false;
   }
 
   /**
@@ -124,8 +124,8 @@ class Collection<K, V> {
     return typeof result === "boolean"
       ? result
       : Object.keys(result).length > 0
-      ? result
-      : false;
+        ? result
+        : false;
   }
 
   /**
