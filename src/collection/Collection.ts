@@ -16,17 +16,11 @@ class Collection<K, V> {
   #items: Map<K, V>;
 
   /**
-   * The number of key-value pairs in the collection.
-   */
-  size: number;
-
-  /**
    * Create a new Collection instance.
    * @param entries - An optional array of [key, value] pairs to add to the collection.
    */
   constructor(entries: readonly Entry<K, V>[] = []) {
     this.#items = new Map(entries);
-    this.size = this.#items.size;
   }
 
   /**
@@ -46,7 +40,6 @@ class Collection<K, V> {
    */
   set(key: K, value: V): Collection<K, V> {
     this.#items.set(key, value);
-    this.size = this.#items.size;
     return this;
   }
 
@@ -134,10 +127,7 @@ class Collection<K, V> {
    * @returns {boolean} - True if the key-value pair was removed, false if the key was not in the collection.
    */
   delete(key: K): boolean {
-    const deleted: boolean = this.#items.delete(key);
-    if (deleted) {
-      this.size = this.#items.size;
-    }
+    const deleted = this.#items.delete(key);
     return deleted;
   }
 
@@ -146,7 +136,6 @@ class Collection<K, V> {
    */
   clear(): void {
     this.#items.clear();
-    this.size = 0;
   }
 
   /**
@@ -444,12 +433,14 @@ class Collection<K, V> {
    * @param {Collection} collection - The collection to combine with.
    * @returns {Collection} - A new combined Collection instance.
    */
-  combineEntries(collection: Collection<K, V>): Collection<K, V> {
-    const combinedEntries: Entry<K, V>[] = [
+  combineEntries<Key, Value>(
+    collection: Collection<Key, Value>,
+  ): Collection<Key | K, Value | V> {
+    const combinedEntries: Entry<Key | K, Value | V>[] = [
       ...this.entries(),
       ...collection.entries(),
     ];
-    return new Collection(combinedEntries);
+    return new Collection(combinedEntries as [Key | K, Value | V][]);
   }
 
   /**
@@ -457,23 +448,13 @@ class Collection<K, V> {
    * @param {Collection} collection - The collection to subtract.
    * @returns {Collection} - A new Collection instance containing the difference.
    */
-  difference(collection: Collection<K, V>): Collection<K, V> {
-    const diffEntries: Entry<K, V>[] = Array.from(this.entries()).filter(
-      ([key]) => !collection.has(key),
-    );
+  difference<Key, Value>(
+    collection: Collection<Key, Value>,
+  ): Collection<Key | K, Value | V> {
+    const diffEntries: Entry<Key | K, Value | V>[] = Array.from(
+      this.entries() as unknown as Collection<Key | K, Value | V>,
+    ).filter(([key]) => !collection.has(key as unknown as Key));
     return new Collection(diffEntries);
-  }
-
-  /**
-   * Subtracts the elements of the given collection from this collection.
-   * @param {Collection} collection - The collection to subtract.
-   * @returns {Collection} - The modified Collection instance (for chaining).
-   */
-  subtract(collection: Collection<K, V>): Collection<K, V> {
-    for (const [key] of collection.entries()) {
-      this.delete(key);
-    }
-    return this;
   }
 
   /**
@@ -497,10 +478,12 @@ class Collection<K, V> {
    * @param {Collection} collection - The collection to intersect.
    * @returns {Collection} - A new Collection instance containing the intersection.
    */
-  intersect(collection: Collection<K, V>): Collection<K, V> {
-    const intersectEntries: Entry<K, V>[] = Array.from(this.entries()).filter(
-      ([key]) => collection.has(key),
-    );
+  intersect<Key, Value>(
+    collection: Collection<Key, Value>,
+  ): Collection<Key | K, Value | V> {
+    const intersectEntries: Entry<Key | K, Value | V>[] = Array.from(
+      this.entries() as unknown as Collection<Key, Value>,
+    ).filter(([key]) => collection.has(key));
     return new Collection(intersectEntries);
   }
 
@@ -509,12 +492,13 @@ class Collection<K, V> {
    * @param {Collection} collection - The collection to compare.
    * @returns {boolean} - True if the collections are equal, false otherwise.
    */
-  equals(collection: Collection<K, V>): boolean {
+  equals<Key, Value>(collection: Collection<Key, Value>): boolean {
     if (this.size !== collection.size) {
       return false;
     }
 
-    for (const [key, value] of this.#items) {
+    const items = this.#items as unknown as Collection<Key, Value>;
+    for (const [key, value] of items) {
       if (!collection.has(key) || !Object.is(value, collection.get(key))) {
         return false;
       }
@@ -696,18 +680,6 @@ class Collection<K, V> {
   }
 
   /**
-   * concatenates the given collection with another collection
-   * @returns {this} - returns class (this)
-   */
-
-  merge(collection: Collection<K, V>): this {
-    for (const [key, value] of collection.entries()) {
-      this.set(key, value);
-    }
-    return this;
-  }
-
-  /**
    * Creates a copy of this collection.
    */
   clone(): Collection<K, V> {
@@ -805,6 +777,13 @@ class Collection<K, V> {
       json[String(key)] = value;
     }
     return json;
+  }
+
+  /**
+   * @returns The number of key-value pairs in the collection.
+   */
+  get size() {
+    return this.#items.size;
   }
 
   /**
