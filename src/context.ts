@@ -53,11 +53,23 @@ import {
   BotName,
   ReplyParameters,
   LinkPreviewOptions,
+  ReactionType,
+  ReactionTypeEmoji,
+  ReactionTypeCustomEmoji,
 } from "@telegram.ts/types";
 
 interface Context<F = Buffer> {
   telegram: TelegramBot<F>;
 
+  isOldReaction(
+    emojis?: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][] | string,
+    is_custom_emoji?: boolean,
+  ): boolean;
+
+  isNewReaction(
+    emojis?: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][] | string,
+    is_custom_emoji?: boolean,
+  ): boolean;
   /**
    * @see https://core.telegram.org/bots/api#answerinlinequery
    */
@@ -964,6 +976,16 @@ interface Context<F = Buffer> {
       inline_message_id?: string;
     },
   ): Promise<GameHighScore[]>;
+  /**
+   * @see https://core.telegram.org/bots/api#setmessagereaction
+   */
+  react(
+    emoji: ReactionTypeEmoji["emoji"] | string,
+    custom_emoji?: boolean,
+    is_big?: boolean,
+    chat_id?: number | string,
+    message_id?: number,
+  ): Promise<boolean>;
   /**
    * @see https://core.telegram.org/bots/api#sendmessage
    */

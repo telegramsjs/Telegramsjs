@@ -28,6 +28,7 @@ import {
   ChatMember,
   ChatMemberAdministrator,
   ChatMemberOwner,
+  ReactionType,
   ChatPermissions,
   File,
   ForumTopic,
@@ -62,6 +63,8 @@ import {
   InputSticker,
   ReplyParameters,
   LinkPreviewOptions,
+  ReactionTypeEmoji,
+  ReactionTypeCustomEmoji,
 } from "@telegram.ts/types";
 
 interface ResponseApi {
@@ -88,6 +91,88 @@ interface ResponseApi {
   sender_chat?: Chat;
   message_thread_id: number;
   is_topic_message: boolean;
+  old_reaction: ReactionType[];
+  new_reaction: ReactionType[];
+}
+
+const onlyEmiji = [
+  "👍",
+  "👎",
+  "❤",
+  "🔥",
+  "🥰",
+  "👏",
+  "😁",
+  "🤔",
+  "🤯",
+  "😱",
+  "🤬",
+  "😢",
+  "🎉",
+  "🤩",
+  "🤮",
+  "💩",
+  "🙏",
+  "👌",
+  "🕊",
+  "🤡",
+  "🥱",
+  "🥴",
+  "😍",
+  "🐳",
+  "❤‍🔥",
+  "🌚",
+  "🌭",
+  "💯",
+  "🤣",
+  "⚡",
+  "🍌",
+  "🏆",
+  "💔",
+  "🤨",
+  "😐",
+  "🍓",
+  "🍾",
+  "💋",
+  "🖕",
+  "😈",
+  "😴",
+  "😭",
+  "🤓",
+  "👻",
+  "👨‍💻",
+  "👀",
+  "🎃",
+  "🙈",
+  "😇",
+  "😨",
+  "🤝",
+  "✍",
+  "🤗",
+  "🫡",
+  "🎅",
+  "🎄",
+  "☃",
+  "💅",
+  "🤪",
+  "🗿",
+  "🆒",
+  "💘",
+  "🙉",
+  "🦄",
+  "😘",
+  "💊",
+  "🙊",
+  "😎",
+  "👾",
+  "🤷‍♂",
+  "🤷",
+  "🤷‍♀",
+  "😡",
+];
+
+function isReactionTypeEmoji(reaction: any): reaction is ReactionTypeEmoji {
+  return reaction?.type === "emoji" && onlyEmiji.includes(reaction?.emoji);
 }
 
 class Combined<F> {
@@ -128,6 +213,70 @@ class Combined<F> {
   get inlineMessageId() {
     const inlineMessageId = (this.updates as any)?.inline_message_id;
     return inlineMessageId;
+  }
+
+  isOldReaction(
+    emojis?: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][] | string,
+    is_custom_emoji?: boolean,
+  ) {
+    const oldReaction = this.updates
+      .old_reaction as unknown as (ReactionTypeEmoji &
+      ReactionTypeCustomEmoji)[];
+    if (!oldReaction) return false;
+    if (!emojis) {
+      return oldReaction.length > 0;
+    }
+    if (Array.isArray(emojis)) {
+      return (
+        oldReaction.length > 0 &&
+        oldReaction.findIndex(({ emoji, custom_emoji }) =>
+          !is_custom_emoji
+            ? emojis.includes(emoji)
+            : emojis.includes(custom_emoji),
+        ) !== -1
+      );
+    }
+    if (typeof emojis === "string") {
+      return (
+        oldReaction.length > 0 &&
+        oldReaction.findIndex(({ emoji, custom_emoji }) =>
+          !is_custom_emoji ? emoji === emojis : custom_emoji === emojis,
+        ) !== -1
+      );
+    }
+    return false;
+  }
+
+  isNewReaction(
+    emojis?: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][] | string,
+    is_custom_emoji?: boolean,
+  ) {
+    const newReaction = this.updates
+      .new_reaction as unknown as (ReactionTypeEmoji &
+      ReactionTypeCustomEmoji)[];
+    if (!newReaction) return false;
+    if (!emojis) {
+      return newReaction.length > 0;
+    }
+    if (Array.isArray(emojis)) {
+      return (
+        newReaction.length > 0 &&
+        newReaction.findIndex(({ emoji, custom_emoji }) =>
+          !is_custom_emoji
+            ? emojis.includes(emoji)
+            : emojis.includes(custom_emoji),
+        ) !== -1
+      );
+    }
+    if (typeof emojis === "string") {
+      return (
+        newReaction.length > 0 &&
+        newReaction.findIndex(({ emoji, custom_emoji }) =>
+          !is_custom_emoji ? emoji === emojis : custom_emoji === emojis,
+        ) !== -1
+      );
+    }
+    return false;
   }
 
   /**
@@ -1501,6 +1650,30 @@ class Combined<F> {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#setmessagereaction
+   */
+  react(
+    emoji: ReactionTypeEmoji["emoji"] | string,
+    custom_emoji?: boolean,
+    is_big?: boolean,
+    chat_id?: number | string,
+    message_id?: number,
+  ) {
+    const reaction = isReactionTypeEmoji({
+      emoji,
+      type: custom_emoji === true ? "custom_emoji" : "emoji",
+    })
+      ? { emoji, type: "emoji" }
+      : { custom_emoji: emoji, type: "custom_emoji" };
+    return this.telegram.setMessageReaction({
+      is_big,
+      reaction: [reaction as ReactionType],
+      chat_id: this.chat.id,
+      message_id: this.messageId,
+    });
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#sendmessage
    */
   reply(
@@ -1571,4 +1744,4 @@ class Combined<F> {
   }
 }
 
-export { Combined, ResponseApi };
+export { Combined, onlyEmiji, ResponseApi };

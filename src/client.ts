@@ -1,5 +1,5 @@
 import { Api } from "./api.js";
-import { Combined, type ResponseApi } from "./core/Combined.js";
+import { Combined, onlyEmiji, type ResponseApi } from "./core/Combined.js";
 import { AllowedUpdates, ApiOptions, MediaPayload } from "./core/ApiClient.js";
 import {
   MessageCollector,
@@ -61,6 +61,9 @@ import {
   InputMediaVideo,
   InputMedia,
   InputSticker,
+  ReactionType,
+  ReactionTypeEmoji,
+  MessageReactionUpdated,
 } from "@telegram.ts/types";
 import util, { filter } from "./util.js";
 import { Context } from "./context.js";
@@ -181,6 +184,17 @@ const messageTypeMap: MessageTypeMap = {
     event: "removed_chat_boost",
   },
 };
+
+function checkReaction(
+  emoji: ReactionTypeEmoji["emoji"],
+  reactions: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][],
+) {
+  if (Array.isArray(reactions)) {
+    return reactions.includes(emoji);
+  } else {
+    return emoji === reactions && onlyEmiji.includes(reactions);
+  }
+}
 
 class TelegramBot<F = Buffer> extends Api<F> {
   // @ts-ignore
@@ -326,6 +340,40 @@ class TelegramBot<F = Buffer> extends Api<F> {
           ctx.answerCallbackQuery().catch(() => console.log);
         }
         await callback(ctx);
+      }
+    });
+    return this;
+  }
+
+  /**
+   * Listens for message reactions and triggers a callback when a specified reaction occurs.
+   * @param reactions - The reaction or reactions to listen for.
+   * @param callback - The callback function to trigger when the reaction occurs.
+   * @param newReaction - Optional flag to indicate whether to trigger on new reactions. Default is "all".
+   * @returns This instance for chaining.
+   */
+  reaction(
+    reactions: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][],
+    callback: (reaction: MessageReactionUpdated & Context<F>) => void,
+    newReaction: "all" | "newReaction" | "oldReaction" = "all",
+  ) {
+    this.on("message_reaction", async (reaction) => {
+      const newReactionIndex = reaction.new_reaction.findIndex(
+        (emoji: ReactionTypeEmoji) => checkReaction(emoji.emoji, reactions),
+      );
+      const oldReactionIndex = reaction.old_reaction.findIndex(
+        (emoji: ReactionTypeEmoji) => checkReaction(emoji.emoji, reactions),
+      );
+
+      if (newReaction === "newReaction" && newReactionIndex !== -1) {
+        await callback(reaction);
+      } else if (newReaction === "oldReaction" && oldReactionIndex !== -1) {
+        await callback(reaction);
+      } else if (
+        newReaction === "all" &&
+        (newReactionIndex !== 1 || oldReactionIndex !== -1)
+      ) {
+        await callback(reaction);
       }
     });
     return this;
@@ -1105,6 +1153,34 @@ class TelegramBot<F = Buffer> extends Api<F> {
                     combined.setMyShortDescription(shortDescription),
                   setMyName: (name: string) => combined.setMyName(name),
                   getMyName: () => combined.getMyName(),
+                  react: (
+                    emoji: ReactionTypeEmoji["emoji"] | string,
+                    custom_emoji?: boolean,
+                    is_big?: boolean,
+                    chat_id?: number | string,
+                    message_id?: number,
+                  ) =>
+                    combined.react(
+                      emoji,
+                      custom_emoji,
+                      is_big,
+                      chat_id,
+                      message_id,
+                    ),
+                  isOldReaction: (
+                    emojis?:
+                      | ReactionTypeEmoji["emoji"]
+                      | ReactionTypeEmoji["emoji"][]
+                      | string,
+                    is_custom_emoji?: boolean,
+                  ) => combined.isOldReaction(emojis, is_custom_emoji),
+                  isNewReaction: (
+                    emojis?:
+                      | ReactionTypeEmoji["emoji"]
+                      | ReactionTypeEmoji["emoji"][]
+                      | string,
+                    is_custom_emoji?: boolean,
+                  ) => combined.isNewReaction(emojis, is_custom_emoji),
                   replyWithMarkdown: (
                     text: string,
                     args?: {
