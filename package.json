@@ -1,22 +1,15 @@
 {
   "name": "telegramsjs",
   "description": "Telegramsjs is a lightweight Node.js library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as Telegraf.js or node-telegram-bot-api. This library provides a way to create Telegram bots with ease and flexibility.",
-  "version": "2.8.2",
-  "main": "./dist/cjs/src/index.js",
-  "types": "./dist/cjs/src/index.d.ts",
+  "version": "3.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "engines": {
     "node": ">=14"
   },
   "exports": {
-    "require": "./dist/cjs/src/index.js",
-    "import": "./dist/esm/src/index.js"
-  },
-  "scripts": {
-    "build": "rm -rf dist/ && npm run commonjs && npm run esm",
-    "commonjs": "tsc --target es2019 --module commonjs --outDir ./dist/cjs/ --declaration --declarationDir ./dist/cjs/",
-    "esm": "tsc --target es2019 --module es2015 --allowJs true --outDir ./dist/esm --declaration --declarationDir ./dist/esm/",
-    "test": "jest test/",
-    "tab-align": "prettier --write src/"
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs"
   },
   "license": "MIT",
   "files": [
@@ -30,6 +23,7 @@
     "typescript",
     "telegram",
     "library",
+    "sempai-07",
     "telegramapi",
     "api",
     "bot"
@@ -37,21 +31,19 @@
   "author": "Sempai<zadmanthegreat@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Sempai-07/Telegramsjs"
+    "url": "https://github.com/Sempai-07/telegramsjs"
   },
   "bugs": {
     "url": "https://github.com/Sempai-07/telegramsjs/issues"
   },
   "homepage": "https://telegramsjs-dev.surge.sh/",
   "dependencies": {
-    "is-regex": "^1.1.4",
     "node-fetch": "^2.2.0",
     "sandwich-stream": "^2.0.2",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@telegram.ts/types": "^1.6.0",
-    "@types/is-regex": "^1.0.2",
+    "@telegram.ts/types": "^1.7.0",
     "@types/node": "18.16.1",
     "@types/node-fetch": "^2.6.9"
   }
