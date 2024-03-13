@@ -1,7 +1,7 @@
-import fetch from "node-fetch";
 import { Media } from "./media";
 import { Agent } from "node:https";
 import { ManagerEvents } from "./events";
+import fetch, { FetchError } from "node-fetch";
 import { HTTPResponseError } from "./util/HTTPResponseError";
 import type { RequestFailt, RequestSuccess } from "./types";
 
@@ -69,7 +69,11 @@ class ApiRequest extends ManagerEvents {
 
       return response.result;
     } catch (err) {
-      throw new HTTPResponseError(err as RequestFailt);
+      const error =
+        err instanceof FetchError
+          ? { description: `${err}`, error_code: err.code }
+          : err;
+      throw new HTTPResponseError(error as RequestFailt);
     }
   }
 }

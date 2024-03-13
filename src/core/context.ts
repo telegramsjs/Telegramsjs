@@ -1,5 +1,5 @@
 import type { Api } from "../api";
-import { Reaction, Entities } from "./helpres";
+import { Reaction, Entities } from "./structures";
 import type { UnionKeys, UpdateReturn, MethodParameters } from "./types";
 import type {
   Update,
@@ -29,7 +29,8 @@ class Context {
       webAppData: this.webAppData,
       reactions: undefined,
       assert: this.assert.bind(this),
-      entities: () => void 0,
+      entities: this.entities,
+      has: this.has.bind(this),
       answerInlineQuery: this.answerInlineQuery.bind(this),
       answerCallbackQuery: this.answerCallbackQuery.bind(this),
       getUserChatBoosts: this.getUserChatBoosts.bind(this),
@@ -83,7 +84,6 @@ class Context {
       sendQuiz: this.sendQuiz.bind(this),
       stopPoll: this.stopPoll.bind(this),
       sendChatAction: this.sendChatAction.bind(this),
-      persistentChatAction: this.persistentChatAction.bind(this),
       react: this.react.bind(this),
       sendLocation: this.sendLocation.bind(this),
       sendVenue: this.sendVenue.bind(this),
@@ -348,7 +348,17 @@ class Context {
     }
   }
 
-  entities() {}
+  get entities() {
+    const text = this.msg?.text || this.msg?.caption || "";
+    const entities = this.msg?.entities || [];
+    return new Entities(text, entities);
+  }
+
+  has() {}
+
+  //   has(check: UpdateReturn, ctx: this): check is (typeof ctx)["updates"] {
+  //     return check && ctx && ctx.updates && ctx.updates[check];
+  //   }
 
   answerInlineQuery(
     args: Omit<MethodParameters["answerInlineQuery"], "inline_query_id">,

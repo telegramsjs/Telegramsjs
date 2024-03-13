@@ -20,9 +20,11 @@ type UpdateReturn = Omit<Update, "update_id">[keyof Omit<Update, "update_id">];
 
 type UnionKeys<T> = T extends unknown ? keyof T : never;
 
+type Awaitable<V> = PromiseLike<V> | V;
+
 interface RequestFailt {
   ok: false;
-  error_code: number;
+  error_code: string | number;
   description: string;
   parameters?: {
     retry_after?: number;
@@ -40,6 +42,7 @@ export {
   MethodParameters,
   MethodsReturnType,
   UnionKeys,
+  Awaitable,
   RequestFailt,
   RequestSuccess,
   UpdateReturn,

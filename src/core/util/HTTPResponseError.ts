@@ -1,8 +1,8 @@
 import type { RequestFailt } from "../types";
 
 class HTTPResponseError extends Error {
-  error_code: number;
   description: string;
+  error_code: string | number;
   parameters: RequestFailt["parameters"];
 
   constructor(response: RequestFailt) {

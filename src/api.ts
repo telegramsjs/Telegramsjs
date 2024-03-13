@@ -127,7 +127,6 @@ class Api extends ApiRequest {
   }
 
   /** Use this method to send video messages. On success, the sent Message is returned.
-  As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. */ /** Use this method to send video messages. On success, the sent Message is returned.
   As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. */
   async sendVideoNote(params: MethodParameters["sendVideoNote"]) {
     return await this.request<MethodsReturnType["sendVideoNote"]>(
