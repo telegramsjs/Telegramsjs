@@ -1,0 +1,3 @@
+class ReactionCollector {}
+
+export { ReactionCollector };
