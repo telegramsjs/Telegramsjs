@@ -16,7 +16,7 @@ type SearchEntityType =
   | "blockquote"
   | "code";
 
-interface SearchResult {
+interface ISearchResult {
   result: { index: number; offset: number; length: number; search: string }[];
   hasEntities: () => boolean;
 }
@@ -27,63 +27,63 @@ class Entities {
     private readonly entities: MessageEntity[],
   ) {}
 
-  get mention(): SearchResult {
+  get mention(): ISearchResult {
     return this.searchEntity("mention");
   }
 
-  get hashtag(): SearchResult {
+  get hashtag(): ISearchResult {
     return this.searchEntity("hashtag");
   }
 
-  get cashtag(): SearchResult {
+  get cashtag(): ISearchResult {
     return this.searchEntity("cashtag");
   }
 
-  get botCommand(): SearchResult {
+  get botCommand(): ISearchResult {
     return this.searchEntity("bot_command");
   }
 
-  get url(): SearchResult {
+  get url(): ISearchResult {
     return this.searchEntity("url");
   }
 
-  get email(): SearchResult {
+  get email(): ISearchResult {
     return this.searchEntity("email");
   }
 
-  get phoneNumber(): SearchResult {
+  get phoneNumber(): ISearchResult {
     return this.searchEntity("phone_number");
   }
 
-  get bold(): SearchResult {
+  get bold(): ISearchResult {
     return this.searchEntity("bold");
   }
 
-  get italic(): SearchResult {
+  get italic(): ISearchResult {
     return this.searchEntity("italic");
   }
 
-  get underline(): SearchResult {
+  get underline(): ISearchResult {
     return this.searchEntity("underline");
   }
 
-  get strikethrough(): SearchResult {
+  get strikethrough(): ISearchResult {
     return this.searchEntity("strikethrough");
   }
 
-  get spoiler(): SearchResult {
+  get spoiler(): ISearchResult {
     return this.searchEntity("spoiler");
   }
 
-  get blockquote(): SearchResult {
+  get blockquote(): ISearchResult {
     return this.searchEntity("blockquote");
   }
 
-  get code(): SearchResult {
+  get code(): ISearchResult {
     return this.searchEntity("code");
   }
 
-  searchEntity(searchType: SearchEntityType): SearchResult {
+  searchEntity(searchType: SearchEntityType): ISearchResult {
     const entities: {
       index: number;
       offset: number;
@@ -114,4 +114,4 @@ class Entities {
   }
 }
 
-export { Entities, SearchEntityType, SearchResult };
+export { Entities, SearchEntityType, ISearchResult };

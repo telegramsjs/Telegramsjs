@@ -5,7 +5,7 @@ import { Buffer } from "node:buffer";
 import type { Agent } from "node:https";
 import { MultipartStream } from "./util/MultipartStream";
 
-interface ApiConfig {
+interface IApiConfig {
   method: string;
   compress: boolean;
   headers: { [key: string]: string };
@@ -69,7 +69,7 @@ class Media {
     });
   }
 
-  buildJSONConfig(payload: Record<string, any>): ApiConfig {
+  buildJSONConfig(payload: Record<string, any>): IApiConfig {
     return {
       method: "POST",
       compress: true,
@@ -84,7 +84,7 @@ class Media {
   async buildFormDataConfig(
     apiPayload: Record<string, any>,
     agent: Agent,
-  ): Promise<ApiConfig> {
+  ): Promise<IApiConfig> {
     Object.keys(this.formDataJsonFields).map((fieldName) => {
       const fieldValue = apiPayload[fieldName];
       if (fieldValue && typeof fieldValue !== "string") {
@@ -195,4 +195,4 @@ class Media {
   }
 }
 
-export { Media, ApiConfig };
+export { Media, IApiConfig };

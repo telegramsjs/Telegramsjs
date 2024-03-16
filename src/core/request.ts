@@ -3,9 +3,9 @@ import { Agent } from "node:https";
 import { ManagerEvents } from "./events";
 import fetch, { FetchError } from "node-fetch";
 import { HTTPResponseError } from "./util/HTTPResponseError";
-import type { RequestFailt, RequestSuccess } from "./types";
+import type { IRequestFailt, IRequestSuccess } from "./types";
 
-interface RateLimit {
+interface IRateLimit {
   method: string;
   date: Date;
   datestamp: number;
@@ -48,7 +48,7 @@ class ApiRequest extends ManagerEvents {
       const apiUrl = `https://api.telegram.org/bot${this.authToken}/${method}`;
       const config = await this.transferDataToServer(options);
       const request = await fetch(apiUrl, config);
-      const response: RequestSuccess<T> | RequestFailt = await request.json();
+      const response: IRequestSuccess<T> | IRequestFailt = await request.json();
 
       if (!response.ok) {
         if (response.parameters?.retry_after) {
@@ -73,9 +73,9 @@ class ApiRequest extends ManagerEvents {
         err instanceof FetchError
           ? { description: `${err}`, error_code: err.code }
           : err;
-      throw new HTTPResponseError(error as RequestFailt);
+      throw new HTTPResponseError(error as IRequestFailt);
     }
   }
 }
 
-export { ApiRequest, RateLimit };
+export { ApiRequest, IRateLimit };

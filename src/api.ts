@@ -1,6 +1,6 @@
-import fetch from "node-fetch";
 import type { ReadStream } from "node:fs";
 import { ApiRequest } from "./core/request";
+import { InputFile } from "./core/structures/file";
 import type { MethodsReturnType, MethodParameters } from "./core/types";
 
 class Api extends ApiRequest {
@@ -247,21 +247,13 @@ class Api extends ApiRequest {
 
   Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
   async getFile(file_id: string) {
-    return await this.request<MethodsReturnType["getFile"]>("getFile", {
-      file_id,
-    });
-  }
-
-  async downloadFile(filePath: string) {
-    const fileUrl = `https://api.telegram.org/file/bot${this.authToken}/${filePath}`;
-
-    try {
-      const response = await fetch(fileUrl);
-      const arrayBuffer = await response.arrayBuffer();
-      return Buffer.from(arrayBuffer);
-    } catch (err) {
-      throw Error(`Failed to download file: ${err}`);
-    }
+    const response = await this.request<MethodsReturnType["getFile"]>(
+      "getFile",
+      {
+        file_id,
+      },
+    );
+    return new InputFile(response, this);
   }
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */

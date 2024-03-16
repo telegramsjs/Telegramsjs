@@ -1,0 +1,3 @@
+class InlineKeyboardCollector {}
+
+export { InlineKeyboardCollector };

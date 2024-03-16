@@ -2,13 +2,17 @@ import { Api } from "./api";
 import { Context } from "./core/context";
 import type { Update } from "@telegram.ts/types";
 import type { MethodParameters } from "./core/types";
-import { defaultParameters } from "./core/util/constants";
-import { type EventKeysFunctions, eventAvaliableUpdates } from "./core/events";
+import { TelegramTypeError, DefaultParameters } from "./core/util";
+import { type EventKeysFunctions, EventAvaliableUpdates } from "./core/events";
 
 class TelegramBot extends Api {
   offset: number = 0;
   #connect: boolean = true;
+  
   constructor(authToken: string) {
+    if (!authToken) {
+      throw new TelegramTypeError("Specify a token to receive updates from Telegram");
+    }
     super(authToken);
   }
 
@@ -21,7 +25,7 @@ class TelegramBot extends Api {
     }
   }
 
-  async login(options: MethodParameters["getUpdates"] = defaultParameters) {
+  async login(options: MethodParameters["getUpdates"] = DefaultParameters) {
     this.getMe()
       .then((res) => {
         this.emit("ready", res);
@@ -30,13 +34,10 @@ class TelegramBot extends Api {
         throw err;
       });
     while (this.#connect) {
-      const offset = this.offset;
-      const updates = await this.getUpdates({ ...options, offset }).catch(
-        () => [],
-      );
+      const updates = await this.getUpdates({ ...options, offset: this.offset });
 
       for (const update of updates) {
-        for (const [type, options] of Object.entries(eventAvaliableUpdates)) {
+        for (const [type, options] of Object.entries(EventAvaliableUpdates)) {
           const updateProperty = update as any;
 
           if (updateProperty[options.event]) {

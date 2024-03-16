@@ -1,9 +1,9 @@
 import { EventEmitter } from "node:events";
 import type { Context } from "./context";
-import type { RateLimit } from "./request";
+import type { IRateLimit } from "./request";
 import type { Update, UserFromGetMe } from "@telegram.ts/types";
 
-const eventAvaliableUpdates = {
+const EventAvaliableUpdates = {
   message: {
     event: "message",
     properties: [
@@ -110,10 +110,10 @@ const eventAvaliableUpdates = {
   },
 };
 
-interface EventFunctions {
+interface IEventFunctions {
   ready: (data: UserFromGetMe) => void;
   update: (data: Update) => void;
-  rate_limit: (data: RateLimit) => void;
+  rate_limit: (data: IRateLimit) => void;
   disconnect: () => void;
   message: (data: Update["message"] & Context) => void;
   edited_message: (data: Update["edited_message"] & Context) => void;
@@ -139,16 +139,16 @@ interface EventFunctions {
   removed_chat_boost: (data: Update["removed_chat_boost"] & Context) => void;
 }
 
-type EventKeysFunctions = keyof EventFunctions;
+type EventKeysFunctions = keyof IEventFunctions;
 
 class ManagerEvents extends EventEmitter {
   constructor() {
     super();
   }
 
-  on<T extends keyof EventFunctions>(
+  on<T extends keyof IEventFunctions>(
     event: T,
-    listener: EventFunctions[T],
+    listener: IEventFunctions[T],
   ): this;
 
   on(event: string, listener: (...data: any[]) => void) {
@@ -156,9 +156,9 @@ class ManagerEvents extends EventEmitter {
     return this;
   }
 
-  once<T extends keyof EventFunctions>(
+  once<T extends keyof IEventFunctions>(
     event: T,
-    listener: EventFunctions[T],
+    listener: IEventFunctions[T],
   ): this;
 
   once(event: string, listener: (...data: any[]) => void) {
@@ -166,7 +166,7 @@ class ManagerEvents extends EventEmitter {
     return this;
   }
 
-  emit<T extends keyof EventFunctions>(event: T, data?: any): boolean;
+  emit<T extends keyof IEventFunctions>(event: T, data?: any): boolean;
 
   emit(event: string, data?: any) {
     return super.emit(event, data);
@@ -186,9 +186,9 @@ class ManagerEvents extends EventEmitter {
     }
   }
 
-  off<T extends keyof EventFunctions>(
+  off<T extends keyof IEventFunctions>(
     event: T,
-    listener: EventFunctions[T],
+    listener: IEventFunctions[T],
   ): this;
 
   off(event: string, listener: (...data: any[]) => void) {
@@ -199,7 +199,7 @@ class ManagerEvents extends EventEmitter {
 
 export {
   ManagerEvents,
-  eventAvaliableUpdates,
-  type EventFunctions,
-  type EventKeysFunctions,
+  EventAvaliableUpdates,
+  IEventFunctions,
+  EventKeysFunctions,
 };

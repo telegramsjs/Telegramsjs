@@ -22,7 +22,7 @@ type UnionKeys<T> = T extends unknown ? keyof T : never;
 
 type Awaitable<V> = PromiseLike<V> | V;
 
-interface RequestFailt {
+interface IRequestFailt {
   ok: false;
   error_code: string | number;
   description: string;
@@ -32,7 +32,7 @@ interface RequestFailt {
   };
 }
 
-interface RequestSuccess<T> {
+interface IRequestSuccess<T> {
   ok: true;
   result: T;
 }
@@ -43,7 +43,7 @@ export {
   MethodsReturnType,
   UnionKeys,
   Awaitable,
-  RequestFailt,
-  RequestSuccess,
+  IRequestFailt,
+  IRequestSuccess,
   UpdateReturn,
 };

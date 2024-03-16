@@ -4,11 +4,11 @@ import { TelegramBot } from "../../../client";
 import { Collection } from "@telegram.ts/collection";
 import { setTimeout, clearTimeout } from "node:timers";
 
-interface CollectorOptions<EventCtx, Collected = EventCtx> {
+interface ICollectorOptions<EventCtx, Collected> {
   dispose?: boolean;
   filter?: (
-    data: EventCtx,
-    collected: Collection<number, Collected>,
+    data: Collected,
+    collected: Collection<EventCtx, Collected>,
   ) => boolean | Promise<boolean>;
   idle?: number;
   max?: number;
@@ -16,23 +16,23 @@ interface CollectorOptions<EventCtx, Collected = EventCtx> {
   time?: number;
 }
 
-interface CollectorEvent<K, V> {
-  collect: (data: V, collect: Collection<number, V>) => void;
+interface ICollectorEvent<K, V> {
+  collect: (data: V, collect: Collection<K, V>) => void;
   ignore: (data: V) => void;
-  dispose: (data: V, collect: Collection<number, V>) => void;
+  dispose: (data: V, collect: Collection<K, V>) => void;
   end: (collected: Collection<K, V>, reason: string) => void;
 }
 
-abstract class Collector<K extends number, V> extends EventEmitter {
+abstract class Collector<K, V> extends EventEmitter {
   isEnded: boolean = false;
-  filter: Required<CollectorOptions<V>>["filter"];
+  filter: Required<ICollectorOptions<K, V>>["filter"];
   collected: Collection<K, V> = new Collection();
   lastCollectedTimestamp: number | Date | null = null;
   private _timeout: NodeJS.Timeout | null = null;
   private _idleTimeout: NodeJS.Timeout | null = null;
   private _endReason: string | null = null;
 
-  constructor(public readonly options: CollectorOptions<V>) {
+  constructor(public readonly options: ICollectorOptions<K, V>) {
     super();
     this.handleCollect = this.handleCollect.bind(this);
     this.handleDispose = this.handleDispose.bind(this);
@@ -57,9 +57,11 @@ abstract class Collector<K extends number, V> extends EventEmitter {
     }
   }
 
-  on<T extends keyof CollectorEvent<K, V>>(
+  on(event: string, listener: (...data: any[]) => void): this;
+
+  on<T extends keyof ICollectorEvent<K, V>>(
     event: T,
-    listener: CollectorEvent<K, V>[T],
+    listener: ICollectorEvent<K, V>[T],
   ): this;
 
   on(event: string, listener: (...data: any[]) => void) {
@@ -67,9 +69,11 @@ abstract class Collector<K extends number, V> extends EventEmitter {
     return this;
   }
 
-  once<T extends keyof CollectorEvent<K, V>>(
+  once(event: string, listener: (...data: any[]) => void): this;
+
+  once<T extends keyof ICollectorEvent<K, V>>(
     event: T,
-    listener: CollectorEvent<K, V>[T],
+    listener: ICollectorEvent<K, V>[T],
   ): this;
 
   once(event: string, listener: (...data: any[]) => void) {
@@ -189,16 +193,16 @@ abstract class Collector<K extends number, V> extends EventEmitter {
     return Boolean(reason);
   }
 
-  async *[Symbol.asyncIterator](): AsyncGenerator<[V, Collection<number, V>]> {
+  async *[Symbol.asyncIterator](): AsyncGenerator<[V, Collection<K, V>]> {
     const queue: unknown[] = [];
-    const onCollect = (data: V, collected: Collection<number, V>) =>
+    const onCollect = (data: V, collected: Collection<K, V>) =>
       queue.push(data, collected);
     this.on("collect", onCollect);
 
     try {
       while (queue.length || !this.isEnded) {
         if (queue.length) {
-          yield queue.shift() as [V, Collection<number, V>];
+          yield queue.shift() as [V, Collection<K, V>];
         } else {
           await new Promise((resolve) => {
             const tick = () => {
@@ -220,9 +224,9 @@ abstract class Collector<K extends number, V> extends EventEmitter {
     return this._endReason;
   }
 
-  abstract collect(msg: V): Awaitable<K | null>;
+  abstract collect(msg: unknown): Awaitable<K | null>;
 
-  abstract dispose(msg: V): K | null;
+  abstract dispose(msg: unknown): K | null;
 }
 
-export { Collector, CollectorOptions };
+export { Collector, ICollectorEvent, ICollectorOptions };

@@ -8,7 +8,7 @@ import type {
   ReactionTypeEmoji,
 } from "@telegram.ts/types";
 
-interface ReactionCollection {
+interface IReactionCollection {
   userId: number | undefined;
   react: {
     emoji: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][];
@@ -16,9 +16,9 @@ interface ReactionCollection {
   };
   onCallback: (
     data: Update["message_reaction"] & Context,
-    collection: Collection<string, ReactionCollection>,
+    collection: Collection<string, IReactionCollection>,
   ) => unknown;
-  onError?: (data: Collection<string, ReactionCollection>) => unknown;
+  onError?: (data: Collection<string, IReactionCollection>) => unknown;
   timeout: number;
   filter?: (data: Update["message_reaction"] & Context) => unknown;
   data: Update["message_reaction"] & Context;
@@ -36,14 +36,15 @@ class Reaction {
     };
     onCallback: (
       data: Update["message_reaction"] & Context,
-      collection: Collection<string, ReactionCollection>,
+      collection: Collection<string, IReactionCollection>,
     ) => unknown;
-    onError?: (data: Collection<string, ReactionCollection>) => unknown;
+    onError?: (data: Collection<string, IReactionCollection>) => unknown;
     count?: number;
     timeout?: number;
     filter?: (data: Update["message_reaction"] & Context) => boolean;
   }): Promise<unknown> {
-    const collection: Collection<string, ReactionCollection> = new Collection();
+    const collection: Collection<string, IReactionCollection> =
+      new Collection();
     const {
       react,
       onCallback,

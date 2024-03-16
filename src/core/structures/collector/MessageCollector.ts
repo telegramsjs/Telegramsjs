@@ -2,7 +2,7 @@ import type { Context } from "../../context";
 import { TelegramBot } from "../../../client";
 import type { Chat } from "@telegram.ts/types";
 import { Collection } from "@telegram.ts/collection";
-import { Collector, CollectorOptions } from "./Collector";
+import { Collector, ICollectorOptions } from "./Collector";
 
 type Msg = Omit<Context["msg"], "callbackQuery">;
 
@@ -15,7 +15,7 @@ class MessageCollector extends Collector<number, MsgContext> {
   constructor(
     public readonly telegram: TelegramBot,
     public readonly message: Msg,
-    public readonly options: CollectorOptions<MsgContext> = {},
+    public readonly options: ICollectorOptions<number, MsgContext> = {},
   ) {
     super(options);
     this.channel = message.chat;
@@ -41,15 +41,16 @@ class MessageCollector extends Collector<number, MsgContext> {
   }
 
   get endReason(): string | null {
-    if (this.options.max && this.collected.size >= this.options.max) {
+    const { max, maxProcessed } = this.options;
+
+    if (max && this.collected.size >= max) {
       return "limit";
     }
-    if (
-      this.options.maxProcessed &&
-      this.received === this.options.maxProcessed
-    ) {
+
+    if (maxProcessed && this.received === maxProcessed) {
       return "processedLimit";
     }
+
     return super.endReason;
   }
 }
