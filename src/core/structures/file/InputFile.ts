@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import fsp from "node:fs/promises";
 import { Api } from "../../../api";
 import { File } from "@telegram.ts/types";
-import { TelegramError, TelegramTypeError } from "../../util"; 
+import { TelegramError, TelegramTypeError } from "../../util";
 
 class InputFile {
   file_id: string;
@@ -80,7 +80,9 @@ class InputFile {
       return;
     }
 
-    throw new TelegramTypeError("The specified incorrect file write type is available: stream | promise");
+    throw new TelegramTypeError(
+      "The specified incorrect file write type is available: stream | promise",
+    );
   }
 }
 

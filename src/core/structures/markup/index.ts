@@ -1,2 +1,2 @@
 export * from "./Keyboard";
-export * from "./InlineKeyboard"
+export * from "./InlineKeyboard";

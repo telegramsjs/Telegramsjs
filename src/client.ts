@@ -8,10 +8,12 @@ import { type EventKeysFunctions, EventAvaliableUpdates } from "./core/events";
 class TelegramBot extends Api {
   offset: number = 0;
   #connect: boolean = true;
-  
+
   constructor(authToken: string) {
     if (!authToken) {
-      throw new TelegramTypeError("Specify a token to receive updates from Telegram");
+      throw new TelegramTypeError(
+        "Specify a token to receive updates from Telegram",
+      );
     }
     super(authToken);
   }
@@ -34,7 +36,10 @@ class TelegramBot extends Api {
         throw err;
       });
     while (this.#connect) {
-      const updates = await this.getUpdates({ ...options, offset: this.offset });
+      const updates = await this.getUpdates({
+        ...options,
+        offset: this.offset,
+      });
 
       for (const update of updates) {
         for (const [type, options] of Object.entries(EventAvaliableUpdates)) {
