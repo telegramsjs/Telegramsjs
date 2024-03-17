@@ -241,6 +241,8 @@ class Context {
       "editedMessage",
       "channelPost",
       "editedChannelPost",
+      "messageReaction",
+      "messageReactionCount",
       "callbackQuery",
     ];
     for (const method of messageKeys) {
@@ -263,6 +265,8 @@ class Context {
       "editedMessage",
       "channelPost",
       "editedChannelPost",
+      "messageReaction",
+      "messageReactionCount",
       "callbackQuery",
     ];
     for (const method of messageKeys) {
@@ -309,7 +313,6 @@ class Context {
     const possibleUsers = [
       this.msg,
       this.messageReaction,
-      this.messageReactionCount,
       this.chatJoinRequest,
       this.chatMember,
       this.myChatMember,
@@ -317,8 +320,11 @@ class Context {
     ];
 
     for (const user of possibleUsers) {
-      if (typeof user === "object" && user !== null && "from" in user) {
+      if (typeof user !== "object" && !user) continue;
+      if ("from" in user) {
         return user.from as User;
+      } else if ("user" in user) {
+        return user.user as User;
       }
     }
 
@@ -354,7 +360,6 @@ class Context {
   }
 
   get reactions() {
-    this.assert(this.messageReaction, "reactions");
     return Reaction.reactions(this.messageReaction);
   }
 

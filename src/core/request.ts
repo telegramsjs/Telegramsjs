@@ -44,37 +44,28 @@ class ApiRequest extends ManagerEvents {
     method: string,
     options: Record<string, unknown> = {},
   ): Promise<T> {
-    try {
-      const apiUrl = `https://api.telegram.org/bot${this.authToken}/${method}`;
-      const config = await this.transferDataToServer(options);
-      const request = await fetch(apiUrl, config);
-      const response: IRequestSuccess<T> | IRequestFailt = await request.json();
+    const apiUrl = `https://api.telegram.org/bot${this.authToken}/${method}`;
+    const config = await this.transferDataToServer(options);
+    const request = await fetch(apiUrl, config);
+    const response: IRequestSuccess<T> | IRequestFailt = await request.json();
 
-      if (!response.ok) {
-        if (response.parameters?.retry_after) {
-          this.emit("rate_limit", {
-            method,
-            date: new Date(),
-            datestamp: Date.now(),
-            parameters: options,
-            error_code: response.error_code,
-            description: response.description,
-            retry_after: response.parameters.retry_after,
-            migrate_to_chat_id: response.parameters?.migrate_to_chat_id,
-          });
-          return {} as T;
-        }
-        throw new HTTPResponseError(response);
+    if (!response.ok) {
+      if (response.parameters?.retry_after) {
+        this.emit("rate_limit", {
+          method,
+          date: new Date(),
+          datestamp: Date.now(),
+          parameters: options,
+          error_code: response.error_code,
+          description: response.description,
+          retry_after: response.parameters.retry_after,
+          migrate_to_chat_id: response.parameters?.migrate_to_chat_id,
+        });
       }
-
-      return response.result;
-    } catch (err) {
-      const error =
-        err instanceof FetchError
-          ? { description: `${err}`, error_code: err.code }
-          : err;
-      throw new HTTPResponseError(error as IRequestFailt);
+      throw new HTTPResponseError(response, request);
     }
+
+    return response.result;
   }
 }
 

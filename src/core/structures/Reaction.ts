@@ -29,7 +29,7 @@ interface IReactionCollection {
 class Reaction {
   constructor(public readonly api: Api) {}
 
-  static reactions(messageReaction: MessageReactionUpdated): {
+  static reactions(messageReaction?: MessageReactionUpdated): {
     emoji: string[];
     emojiAdded: string[];
     emojiKept: string[];
@@ -44,24 +44,24 @@ class Reaction {
       new_reaction: [],
     };
 
-    const isEmoji = (reaction: ReactionType): reaction is ReactionTypeEmoji =>
-      reaction.type === "emoji";
-    const isCustomEmoji = (
-      reaction: ReactionType,
-    ): reaction is ReactionTypeCustomEmoji => reaction.type === "custom_emoji";
+    function isEmoji(reaction: ReactionType[]) {
+      const reactionTypeEmojis = reaction.filter(
+        (react) => react.type === "emoji",
+      ) as ReactionTypeEmoji[];
+      return reactionTypeEmojis.map((react) => react.emoji);
+    }
 
-    const emoji = new_reaction
-      .filter(isEmoji)
-      .map((reaction) => reaction.emoji);
-    const customEmoji = new_reaction
-      .filter(isCustomEmoji)
-      .map((reaction) => reaction.custom_emoji);
-    const emojiRemoved = old_reaction
-      .filter(isEmoji)
-      .map((reaction) => reaction.emoji);
-    const customEmojiRemoved = old_reaction
-      .filter(isCustomEmoji)
-      .map((reaction) => reaction.custom_emoji);
+    function isCustomEmoji(reaction: ReactionType[]) {
+      const reactionTypeCustomEmojis = reaction.filter(
+        (react) => react.type === "custom_emoji",
+      ) as ReactionTypeCustomEmoji[];
+      return reactionTypeCustomEmojis.map((react) => react.custom_emoji);
+    }
+
+    const emoji = isEmoji(new_reaction);
+    const customEmoji = isCustomEmoji(new_reaction);
+    const emojiRemoved = isEmoji(old_reaction);
+    const customEmojiRemoved = isCustomEmoji(old_reaction);
 
     const emojiAdded = emoji.filter(
       (emojiItem) => !emojiRemoved.includes(emojiItem),

@@ -1,15 +1,19 @@
-class TelegramError extends Error {
+class BaseError extends Error {
   constructor(description: string) {
     super(description);
-    Error.captureStackTrace?.(this, TelegramError);
   }
 }
 
-class TelegramTypeError extends TypeError {
+class TelegramError extends BaseError {
   constructor(description: string) {
     super(description);
-    Error.captureStackTrace?.(this, TelegramTypeError);
   }
 }
 
-export { TelegramError, TelegramTypeError };
+class TelegramTypeError extends BaseError {
+  constructor(description: string) {
+    super(description);
+  }
+}
+
+export { BaseError, TelegramError, TelegramTypeError };
