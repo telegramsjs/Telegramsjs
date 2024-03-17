@@ -1,6 +1,13 @@
-import type { Api } from "../api";
-import { Reaction, Entities } from "./structures";
+import { TelegramTypeError } from "./util";
+import type { TelegramBot } from "../client";
 import type { UnionKeys, UpdateReturn, MethodParameters } from "./types";
+import {
+  Reaction,
+  Entities,
+  MessageCollector,
+  ReactionCollector,
+  InlineKeyboardCollector,
+} from "./structures";
 import type {
   Update,
   Message,
@@ -14,7 +21,7 @@ import type {
 
 class Context {
   constructor(
-    public readonly api: Api,
+    public readonly api: TelegramBot,
     public readonly update: Update,
     public readonly updates: UpdateReturn,
   ) {
@@ -27,10 +34,15 @@ class Context {
       inlineMessageId: this.inlineMessageId,
       passportData: this.passportData,
       webAppData: this.webAppData,
-      reactions: undefined,
       assert: this.assert.bind(this),
+      reactions: this.reactions,
       entities: this.entities,
       has: this.has.bind(this),
+      awaitReaction: this.awaitReaction.bind(this),
+      createMessageCollector: this.createMessageCollector.bind(this),
+      createReactionCollector: this.createReactionCollector.bind(this),
+      createInlineKeyboardCollector:
+        this.createInlineKeyboardCollector.bind(this),
       answerInlineQuery: this.answerInlineQuery.bind(this),
       answerCallbackQuery: this.answerCallbackQuery.bind(this),
       getUserChatBoosts: this.getUserChatBoosts.bind(this),
@@ -233,6 +245,10 @@ class Context {
     ];
     for (const method of messageKeys) {
       if (!this[method]) continue;
+      if (method === "callbackQuery") {
+        const thisMethod = (this as any)[method];
+        return ("message" in thisMethod && thisMethod.message) as Message;
+      }
       return {
         ...this[method],
       } as Message;
@@ -252,6 +268,10 @@ class Context {
     for (const method of messageKeys) {
       if (!this[method]) continue;
       const obj = this[method];
+      if (method === "callbackQuery") {
+        const thisMethod = obj as any;
+        return "message" in thisMethod && thisMethod.message.message_id;
+      }
       if (typeof obj === "object" && obj !== null && "message_id" in obj) {
         return obj.message_id as number;
       }
@@ -334,7 +354,8 @@ class Context {
   }
 
   get reactions() {
-    return undefined;
+    this.assert(this.messageReaction, "reactions");
+    return Reaction.reactions(this.messageReaction);
   }
 
   assert<T extends string | number | object>(
@@ -342,7 +363,7 @@ class Context {
     method: string,
   ): asserts value is T {
     if (value === undefined) {
-      throw new TypeError(
+      throw new TelegramTypeError(
         `"${method}" isn't available for "${this.updateType}"`,
       );
     }
@@ -356,9 +377,23 @@ class Context {
 
   has() {}
 
-  //   has(check: UpdateReturn, ctx: this): check is (typeof ctx)["updates"] {
-  //     return check && ctx && ctx.updates && ctx.updates[check];
-  //   }
+  awaitReaction(options: MethodParameters<Reaction>["awaitReaction"]) {
+    return new Reaction(this.api).awaitReaction(options);
+  }
+
+  createMessageCollector(options: MessageCollector["options"]) {
+    this.assert(this.msg, "createMessageCollector");
+    return new MessageCollector(this.api, this.msg, options);
+  }
+
+  createReactionCollector(options: ReactionCollector["options"]) {
+    this.assert(this.msg, "createMessageCollector");
+    return new ReactionCollector(this.api, this.msg, options);
+  }
+
+  createInlineKeyboardCollector(options: InlineKeyboardCollector["options"]) {
+    return new InlineKeyboardCollector(this.api, options);
+  }
 
   answerInlineQuery(
     args: Omit<MethodParameters["answerInlineQuery"], "inline_query_id">,

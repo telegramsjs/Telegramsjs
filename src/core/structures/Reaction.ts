@@ -6,6 +6,8 @@ import type {
   Update,
   ReactionType,
   ReactionTypeEmoji,
+  ReactionTypeCustomEmoji,
+  MessageReactionUpdated,
 } from "@telegram.ts/types";
 
 interface IReactionCollection {
@@ -27,7 +29,65 @@ interface IReactionCollection {
 class Reaction {
   constructor(public readonly api: Api) {}
 
-  reactions() {}
+  static reactions(messageReaction: MessageReactionUpdated): {
+    emoji: string[];
+    emojiAdded: string[];
+    emojiKept: string[];
+    emojiRemoved: string[];
+    customEmoji: string[];
+    customEmojiAdded: string[];
+    customEmojiKept: string[];
+    customEmojiRemoved: string[];
+  } {
+    const { old_reaction, new_reaction } = messageReaction || {
+      old_reaction: [],
+      new_reaction: [],
+    };
+
+    const isEmoji = (reaction: ReactionType): reaction is ReactionTypeEmoji =>
+      reaction.type === "emoji";
+    const isCustomEmoji = (
+      reaction: ReactionType,
+    ): reaction is ReactionTypeCustomEmoji => reaction.type === "custom_emoji";
+
+    const emoji = new_reaction
+      .filter(isEmoji)
+      .map((reaction) => reaction.emoji);
+    const customEmoji = new_reaction
+      .filter(isCustomEmoji)
+      .map((reaction) => reaction.custom_emoji);
+    const emojiRemoved = old_reaction
+      .filter(isEmoji)
+      .map((reaction) => reaction.emoji);
+    const customEmojiRemoved = old_reaction
+      .filter(isCustomEmoji)
+      .map((reaction) => reaction.custom_emoji);
+
+    const emojiAdded = emoji.filter(
+      (emojiItem) => !emojiRemoved.includes(emojiItem),
+    );
+    const customEmojiAdded = customEmoji.filter(
+      (emojiItem) => !customEmojiRemoved.includes(emojiItem),
+    );
+
+    const emojiKept = emoji.filter((emojiItem) =>
+      emojiRemoved.includes(emojiItem),
+    );
+    const customEmojiKept = customEmoji.filter((emojiItem) =>
+      customEmojiRemoved.includes(emojiItem),
+    );
+
+    return {
+      emoji,
+      emojiAdded,
+      emojiKept,
+      emojiRemoved,
+      customEmoji,
+      customEmojiAdded,
+      customEmojiKept,
+      customEmojiRemoved,
+    };
+  }
 
   async awaitReaction(options: {
     react: {
@@ -115,4 +175,4 @@ class Reaction {
   }
 }
 
-export { Reaction };
+export { Reaction, IReactionCollection };

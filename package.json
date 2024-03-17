@@ -38,13 +38,13 @@
   },
   "homepage": "https://telegramsjs-dev.surge.sh/",
   "dependencies": {
-    "node-fetch": "^2.2.0",
+    "node-fetch": "^2.7.0",
     "sandwich-stream": "^2.0.2",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@telegram.ts/types": "^1.7.0",
     "@types/node": "18.16.1",
-    "@types/node-fetch": "^2.6.9"
+    "@types/node-fetch": "^2.6.11"
   }
 }

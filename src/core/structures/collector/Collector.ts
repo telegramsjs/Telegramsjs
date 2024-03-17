@@ -1,6 +1,7 @@
 import { EventEmitter } from "node:events";
 import type { Awaitable } from "../../types";
 import { TelegramBot } from "../../../client";
+import { TelegramTypeError } from "../../util/";
 import { Collection } from "@telegram.ts/collection";
 import { setTimeout, clearTimeout } from "node:timers";
 
@@ -40,8 +41,8 @@ abstract class Collector<K, V> extends EventEmitter {
     options.max = options.max || 10;
     options.time = options.time || 60000;
 
-    if (typeof options.filter !== "function") {
-      throw new TypeError("Supplied options.filter is not a Function");
+    if (typeof options.filter !== "function" && options.filter !== undefined) {
+      throw new TelegramTypeError("Supplied options.filter is not a Function");
     }
 
     this.filter = options.filter || (() => true);

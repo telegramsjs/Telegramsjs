@@ -1,5 +1,5 @@
 import type { Context } from "../../context";
-import { TelegramBot } from "../../../client";
+import type { TelegramBot } from "../../../client";
 import { Collection } from "@telegram.ts/collection";
 import {
   Collector,
@@ -17,25 +17,31 @@ import type {
 
 type Msg = Omit<Context["msg"], "callbackQuery">;
 
-type MsgReact = Msg & Context;
+type MessageReactions = Msg & Context;
 
-type ReactContext = MessageReactionUpdated & Context;
+type ReactCollectorContext = MessageReactionUpdated & Context;
 
 interface IReactionEventCollector
-  extends ICollectorEvent<string, ReactContext> {
-  user: (data: Collection<number, ReactContext[] | ReactContext>) => void;
-  create: (data: ReactContext) => void;
+  extends ICollectorEvent<string, ReactCollectorContext> {
+  user: (
+    data: Collection<number, ReactCollectorContext[] | ReactCollectorContext>,
+  ) => void;
+  create: (data: ReactCollectorContext) => void;
 }
 
-class ReactionCollector extends Collector<string, ReactContext> {
+class ReactionCollector extends Collector<string, ReactCollectorContext> {
   channel: Chat;
   received: number = 0;
-  users: Collection<number, ReactContext[] | ReactContext> = new Collection();
+  users: Collection<number, ReactCollectorContext[] | ReactCollectorContext> =
+    new Collection();
 
   constructor(
     public readonly telegram: TelegramBot,
-    public readonly reaction: MsgReact,
-    public readonly options: ICollectorOptions<string, ReactContext> = {},
+    public readonly reaction: Msg,
+    public readonly options: ICollectorOptions<
+      string,
+      ReactCollectorContext
+    > = {},
   ) {
     super(options);
     this.channel = reaction.chat;
@@ -64,7 +70,7 @@ class ReactionCollector extends Collector<string, ReactContext> {
     return this;
   }
 
-  collect(reaction: ReactContext): string | null {
+  collect(reaction: ReactCollectorContext): string | null {
     const { chat, new_reaction, old_reaction } = reaction;
 
     const isReactionInCorrectChat = this.channel.id === chat.id;
@@ -81,7 +87,7 @@ class ReactionCollector extends Collector<string, ReactContext> {
     return ReactionCollector.getKeyFromReaction(new_reaction || old_reaction);
   }
 
-  dispose(reaction: ReactContext): string | null {
+  dispose(reaction: ReactCollectorContext): string | null {
     const { chat, new_reaction, old_reaction } = reaction;
 
     const isReactionInCorrectChat = this.channel.id === chat.id;
@@ -95,7 +101,7 @@ class ReactionCollector extends Collector<string, ReactContext> {
     }
   }
 
-  handleUsers(reaction: ReactContext) {
+  handleUsers(reaction: ReactCollectorContext) {
     if (!reaction.user?.id) return;
     if (!this.users.has(reaction.user.id)) {
       if (this.users.size === 0) {
@@ -145,4 +151,4 @@ class ReactionCollector extends Collector<string, ReactContext> {
   }
 }
 
-export { ReactionCollector };
+export { ReactionCollector, ReactCollectorContext, IReactionEventCollector };

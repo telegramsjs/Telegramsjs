@@ -2,10 +2,8 @@ import type { ApiMethods as Methods, Update } from "@telegram.ts/types";
 
 type ApiMethodParameters<T> = T extends (...args: infer P) => any ? P : never;
 
-type MethodParameters = {
-  [K in keyof Methods]: Methods[K] extends Function
-    ? ApiMethodParameters<Methods[K]>[0]
-    : never;
+type MethodParameters<M = Methods> = {
+  [K in keyof M]: M[K] extends Function ? ApiMethodParameters<M[K]>[0] : never;
 };
 
 type ApiMethods = {

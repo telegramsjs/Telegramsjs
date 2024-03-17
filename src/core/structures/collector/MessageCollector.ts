@@ -2,20 +2,23 @@ import type { Context } from "../../context";
 import { TelegramBot } from "../../../client";
 import type { Chat } from "@telegram.ts/types";
 import { Collection } from "@telegram.ts/collection";
-import { Collector, ICollectorOptions } from "./Collector";
+import { Collector, type ICollectorOptions } from "./Collector";
 
 type Msg = Omit<Context["msg"], "callbackQuery">;
 
-type MsgContext = Msg & Context;
+type MsgCollectorContext = Msg & Context;
 
-class MessageCollector extends Collector<number, MsgContext> {
+class MessageCollector extends Collector<number, MsgCollectorContext> {
   channel: Chat;
   received: number = 0;
 
   constructor(
     public readonly telegram: TelegramBot,
     public readonly message: Msg,
-    public readonly options: ICollectorOptions<number, MsgContext> = {},
+    public readonly options: ICollectorOptions<
+      number,
+      MsgCollectorContext
+    > = {},
   ) {
     super(options);
     this.channel = message.chat;
@@ -30,13 +33,13 @@ class MessageCollector extends Collector<number, MsgContext> {
     });
   }
 
-  collect(message: MsgContext): number | null {
+  collect(message: MsgCollectorContext): number | null {
     if (message.chat.id !== this.channel.id) return null;
     this.received++;
     return message.message_id;
   }
 
-  dispose(message: MsgContext): number | null {
+  dispose(message: MsgCollectorContext): number | null {
     return message.chat.id === this.channel.id ? message.message_id : null;
   }
 
@@ -55,4 +58,4 @@ class MessageCollector extends Collector<number, MsgContext> {
   }
 }
 
-export { MessageCollector };
+export { MessageCollector, MsgCollectorContext };

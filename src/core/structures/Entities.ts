@@ -27,7 +27,7 @@ class Entities {
     private readonly entities: MessageEntity[],
   ) {}
 
-  get mention(): ISearchResult {
+  public get mention(): ISearchResult {
     return this.searchEntity("mention");
   }
 
