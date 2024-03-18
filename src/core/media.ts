@@ -1,16 +1,21 @@
 import fs from "node:fs";
-import fetch from "node-fetch";
 import crypto from "node:crypto";
+import type { URL } from "node:url";
 import { Buffer } from "node:buffer";
 import type { Agent } from "node:https";
+import fetch, {
+  type RequestInit,
+  type BodyInit,
+  type HeadersInit,
+} from "node-fetch";
 import { MultipartStream } from "./util/MultipartStream";
 
 interface IApiConfig {
   method: string;
   compress: boolean;
-  headers: { [key: string]: string };
-  body: string | MultipartStream;
-  agent?: Agent;
+  headers: HeadersInit;
+  body: MultipartStream | BodyInit;
+  agent?: RequestInit["agent"];
 }
 
 async function fileExists(filePath: string) {
@@ -69,7 +74,10 @@ class Media {
     });
   }
 
-  buildJSONConfig(payload: Record<string, any>): IApiConfig {
+  buildJSONConfig(
+    payload: Record<string, any>,
+    requestOptions: RequestInit,
+  ): IApiConfig {
     return {
       method: "POST",
       compress: true,
@@ -78,12 +86,13 @@ class Media {
         connection: "keep-alive",
       },
       body: JSON.stringify(payload),
+      ...requestOptions,
     };
   }
 
   async buildFormDataConfig(
     apiPayload: Record<string, any>,
-    agent: Agent,
+    requestOptions: RequestInit,
   ): Promise<IApiConfig> {
     Object.keys(this.formDataJsonFields).map((fieldName) => {
       const fieldValue = apiPayload[fieldName];
@@ -102,7 +111,7 @@ class Media {
             formData,
             fieldName,
             apiPayload[fieldName],
-            agent,
+            requestOptions.agent,
           ),
       ),
     );
@@ -115,6 +124,7 @@ class Media {
         connection: "keep-alive",
       },
       body: formData,
+      ...requestOptions,
     };
   }
 
@@ -122,7 +132,7 @@ class Media {
     form: MultipartStream,
     id: string,
     value: any,
-    agent: Agent,
+    agent: RequestInit["agent"],
   ) {
     if (!value) return;
 
@@ -174,7 +184,7 @@ class Media {
     form: MultipartStream,
     media: string | Buffer | fs.ReadStream,
     id: string,
-    agent: Agent,
+    agent: RequestInit["agent"],
   ) {
     const filename = `${id}.${this.extensions[id] || "text"}`;
 

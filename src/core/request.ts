@@ -1,7 +1,7 @@
 import { Media } from "./media";
 import { Agent } from "node:https";
 import { ManagerEvents } from "./events";
-import fetch, { FetchError } from "node-fetch";
+import fetch, { RequestInit } from "node-fetch";
 import { HTTPResponseError } from "./util/HTTPResponseError";
 import type { IRequestFailt, IRequestSuccess } from "./types";
 
@@ -18,26 +18,23 @@ interface IRateLimit {
 
 class ApiRequest extends ManagerEvents {
   media: Media = new Media();
-  defaultOptions = {
-    apiRoot: "https://api.telegram.org",
-    webhookReply: false,
-    agent: new Agent({
-      keepAlive: true,
-      keepAliveMsecs: 10000,
-    }),
-  };
 
-  constructor(public readonly authToken: string) {
+  constructor(
+    public readonly authToken: string,
+    public readonly requestOptions: RequestInit = {
+      agent: new Agent({
+        keepAlive: true,
+        keepAliveMsecs: 10000,
+      }),
+    },
+  ) {
     super();
   }
 
   async transferDataToServer(options: Record<string, unknown>) {
     if (this.media.hasMedia(options)) {
-      return await this.media.buildFormDataConfig(
-        options,
-        this.defaultOptions.agent,
-      );
-    } else return this.media.buildJSONConfig(options);
+      return await this.media.buildFormDataConfig(options, this.requestOptions);
+    } else return this.media.buildJSONConfig(options, this.requestOptions);
   }
 
   async request<T>(

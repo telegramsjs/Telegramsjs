@@ -1,5 +1,6 @@
 import { Api } from "./api";
 import { Context } from "./core/context";
+import type { RequestInit } from "node-fetch";
 import type { Update } from "@telegram.ts/types";
 import type { MethodParameters } from "./core/types";
 import { TelegramTypeError, DefaultParameters } from "./core/util";
@@ -9,13 +10,13 @@ class TelegramBot extends Api {
   offset: number = 0;
   #connect: boolean = true;
 
-  constructor(authToken: string) {
+  constructor(authToken: string, requestOptions?: RequestInit) {
     if (!authToken) {
       throw new TelegramTypeError(
         "Specify a token to receive updates from Telegram",
       );
     }
-    super(authToken);
+    super(authToken, requestOptions);
   }
 
   disconnect(connect?: boolean) {

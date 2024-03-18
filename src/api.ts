@@ -1,11 +1,15 @@
 import type { ReadStream } from "node:fs";
 import { ApiRequest } from "./core/request";
+import type { RequestInit } from "node-fetch";
 import { InputFile } from "./core/structures/file";
 import type { MethodsReturnType, MethodParameters } from "./core/types";
 
 class Api extends ApiRequest {
-  constructor(public readonly authToken: string) {
-    super(authToken);
+  constructor(
+    public readonly authToken: string,
+    requestOptions?: RequestInit,
+  ) {
+    super(authToken, requestOptions);
   }
 
   /** Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects */
