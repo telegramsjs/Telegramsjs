@@ -241,6 +241,12 @@ class TelegramBot extends Api {
   blockquote() {}
   code() {}
 
+  disconnect() {
+    this.polling?.close();
+    this.webhook?.close();
+    this.emit("disconnect", this);
+  }
+
   async login(options: ILoginOptions = { polling: DefaultParameters }) {
     this.getMe()
       .then((res) => {

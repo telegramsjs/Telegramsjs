@@ -1,6 +1,7 @@
-import { EventEmitter } from "node:events";
 import type { Context } from "./context";
+import { EventEmitter } from "node:events";
 import type { IRateLimit } from "./request";
+import type { TelegramBot } from "../client";
 import type {
   Update,
   Message,
@@ -90,7 +91,7 @@ interface IEventFunctions {
   ready: (data: UserFromGetMe) => void;
   update: (data: Update) => void;
   rate_limit: (data: IRateLimit) => void;
-  disconnect: () => void;
+  disconnect: (data: TelegramBot) => void;
   message: (data: Update["message"] & Context) => void;
   "message:text": (
     data: Update["message"] & Message.TextMessage & Context,

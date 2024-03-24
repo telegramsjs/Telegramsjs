@@ -3,6 +3,7 @@ import type { TelegramBot, ILoginOptions } from "../../client";
 
 class Polling {
   offset: number = 0;
+  #connect: boolean = true;
 
   constructor(
     public readonly tg: TelegramBot,
@@ -10,7 +11,7 @@ class Polling {
   ) {}
 
   async startPolling() {
-    while (true) {
+    while (this.#connect) {
       const updates = await this.tg.getUpdates({
         ...this.options,
         offset: this.offset,
@@ -20,6 +21,10 @@ class Polling {
         this.offset = offset;
       }
     }
+  }
+
+  close() {
+    this.#connect = false;
   }
 }
 

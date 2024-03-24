@@ -88,9 +88,6 @@ class Webhook {
           for await (const chunk of request) body += String(chunk);
           update = JSON.parse(body);
         }
-        if (response?.writableEnded === false) {
-          response.end();
-        }
       } catch (err) {
         response.writeHead(415).end();
         return;
@@ -105,6 +102,10 @@ class Webhook {
           response: ServerResponse,
         ) => callback(request, response)
       : callback;
+  }
+
+  close() {
+    this.webhookServer?.close();
   }
 }
 
