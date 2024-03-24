@@ -28,7 +28,7 @@ npm install telegramsjs
 // esm/ts module
 import { TelegramBot } from "telegramsjs";
 // cjs module
-// const { TelegramBot } = require("telegramsjs");
+const { TelegramBot } = require("telegramsjs");
 
 const bot = new TelegramBot(process.env.BOT_TOKEN);
 
@@ -48,7 +48,7 @@ process.once("SIGTERM", () => bot.disconnect("SIGTERM"));
 // esm/ts module
 import { TelegramBot, InlineKeyboard } from "telegramsjs";
 // cjs module
-// const { TelegramBot, InlineKeyboard } = require("telegramsjs");
+const { TelegramBot, InlineKeyboard } = require("telegramsjs");
 
 const bot = new TelegramBot(process.env.BOT_TOKEN);
 
@@ -84,7 +84,7 @@ process.once("SIGTERM", () => bot.disconnect("SIGTERM"));
 // esm/ts module
 import { TelegramBot, InlineKeyboard } from "telegramsjs";
 // cjs module
-// const { TelegramBot, InlineKeyboard } = require("telegramsjs");
+const { TelegramBot, InlineKeyboard } = require("telegramsjs");
 
 const bot = new TelegramBot(process.env.BOT_TOKEN);
 
@@ -94,7 +94,7 @@ bot.reaction("❤️", (ctx) => ctx.reply("Like! ❤️"), "newReaction");
 bot.hears('hi', (ctx) => ctx.reply("Hey there"))
 
 bot.login({
-  webhook?: {
+  webhook: {
     url: string;
     port?: number;
     host?: string;
