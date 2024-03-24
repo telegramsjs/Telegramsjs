@@ -91,7 +91,7 @@ interface IEventFunctions {
   ready: (data: UserFromGetMe) => void;
   update: (data: Update) => void;
   rate_limit: (data: IRateLimit) => void;
-  disconnect: (data: TelegramBot) => void;
+  disconnect: (data: TelegramBot & { reason?: string }) => void;
   message: (data: Update["message"] & Context) => void;
   "message:text": (
     data: Update["message"] & Message.TextMessage & Context,

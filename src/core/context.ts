@@ -22,10 +22,10 @@ import type {
 class Context {
   constructor(
     public readonly api: TelegramBot,
-    public readonly update: Update,
-    public readonly updates: UpdateReturn,
+    private readonly update: Update,
+    private readonly updates: UpdateReturn,
   ) {
-    // @ts-ignore
+    // @ts-ignorel
     return {
       ...updates,
       api,
@@ -34,10 +34,8 @@ class Context {
       inlineMessageId: this.inlineMessageId,
       passportData: this.passportData,
       webAppData: this.webAppData,
-      assert: this.assert.bind(this),
       reactions: this.reactions,
       entities: this.entities,
-      has: this.has.bind(this),
       awaitReaction: this.awaitReaction.bind(this),
       createMessageCollector: this.createMessageCollector.bind(this),
       createReactionCollector: this.createReactionCollector.bind(this),
@@ -376,11 +374,9 @@ class Context {
 
   get entities() {
     const text = this.msg?.text || this.msg?.caption || "";
-    const entities = this.msg?.entities || [];
+    const entities = this.msg?.entities || this.msg?.caption_entities || [];
     return new Entities(text, entities);
   }
-
-  has() {}
 
   awaitReaction(options: MethodParameters<Reaction>["awaitReaction"]) {
     return new Reaction(this.api).awaitReaction(options);

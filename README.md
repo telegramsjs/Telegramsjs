@@ -22,166 +22,94 @@ npm install telegramsjs
 
 ## 📙 Usage
 
-To get started, create a new instance of the `TelegramBot` class by providing your Telegram bot token:
+### Example
 
-### TypeScript Example
-
-```typescript
+```ts
+// esm/ts module
 import { TelegramBot } from "telegramsjs";
-import { Message, User } from "@telegram.ts/types";
+// cjs module
+// const { TelegramBot } = require("telegramsjs");
 
-const botToken = "BOT_TOKEN";
-const bot = new TelegramBot(botToken);
+const bot = new TelegramBot(process.env.BOT_TOKEN);
 
-let sessionData = { messageCounter: 0 };
+bot.start((ctx) => ctx.reply("Welcome"));
+bot.help((ctx) => ctx.reply("Send me a sticker"));
+bot.reaction("❤️", (ctx) => ctx.reply("Like! ❤️"));
+bot.hears("hi", (ctx) => ctx.reply("Hey there"));
 
-function isBotCommand(ctx: Message) {
-  if (ctx.text) {
-    const firstEntity = ctx.entities?.[0];
-    return firstEntity?.type === "bot_command" && ctx.text[0] === "/";
+bot.login();
+
+// Enable graceful stop
+process.once("SIGINT", () => bot.disconnect("SIGINT"));
+process.once("SIGTERM", () => bot.disconnect("SIGTERM"));
+```
+
+```ts
+// esm/ts module
+import { TelegramBot, InlineKeyboard } from "telegramsjs";
+// cjs module
+// const { TelegramBot, InlineKeyboard } = require("telegramsjs");
+
+const bot = new TelegramBot(process.env.BOT_TOKEN);
+
+bot.command("user", async (ctx) => {
+  const inline_keyboard = new InlineKeyboard()
+    .text("Like!", "like_callback_poll")
+    .row()
+    .text("Dislike!", "dislike_callback_poll");
+
+  await ctx.reply("Developer 🙈", {
+    reply_markup: inline_keyboard,
+  });
+});
+
+bot.action(/callback_poll/, async (ctx) => {
+  const text =
+    ctx.data.split("_")[0] === "like"
+      ? "Thank you for like! ❤️"
+      : "Thank you, I will try! ❤️";
+  await ctx.editMessageText(text);
+});
+
+bot.login();
+
+// Enable graceful stop
+process.once("SIGINT", () => bot.disconnect("SIGINT"));
+process.once("SIGTERM", () => bot.disconnect("SIGTERM"));
+```
+
+### Webhook
+
+```ts
+// esm/ts module
+import { TelegramBot, InlineKeyboard } from "telegramsjs";
+// cjs module
+// const { TelegramBot, InlineKeyboard } = require("telegramsjs");
+
+const bot = new TelegramBot(process.env.BOT_TOKEN);
+
+bot.start((ctx) => ctx.reply("Welcome"));
+bot.help((ctx) => ctx.reply("Send me a sticker"));
+bot.reaction("❤️", (ctx) => ctx.reply("Like! ❤️"), "newReaction");
+bot.hears('hi', (ctx) => ctx.reply("Hey there"))
+
+bot.login({
+  webhook?: {
+    url: string;
+    port?: number;
+    host?: string;
+    path?: string;
+    certificate?: Buffer | ReadStream | string;
+    ip_address?: string;
+    max_connections?: number;
+    tlsOptions?: TlsOptions;
+    requestCallback?: RequestListener;
+    allowed_updates?: MethodParameters["setWebhook"]["allowed_updates"];
+    drop_pending_updates?: boolean;
+    secret_token?: string;
   }
-  return false;
-}
-
-function isUserContext(context: unknown): context is User {
-  if (typeof context !== "object" || context === null) return false;
-  return "first_name" in context;
-}
-
-bot.on("ready", async (client) => {
-  const botCommands = [
-    {
-      command: "/start",
-      description: "Start command",
-    },
-    {
-      command: "/remove",
-      description: "Remove session",
-    },
-    {
-      command: "/stats",
-      description: "Session statistics",
-    },
-  ];
-
-  bot.setMyCommands({ commands: botCommands });
-
-  console.log(`Bot ${client.username} is ready`);
 });
-
-bot.on("message", (ctx) => {
-  if (isBotCommand(ctx)) return;
-  sessionData.messageCounter++;
-  const responseMessage = `Counter updated, new value: \`${sessionData.messageCounter}\``;
-  ctx.replyWithMarkdownV2(responseMessage);
-  bot.use(sessionData);
-});
-
-bot.command("start", (ctx) => {
-  const fromUser = ctx.from;
-  if (!isUserContext(fromUser)) return;
-  const username = fromUser.username
-    ? `@${fromUser.username}`
-    : fromUser.first_name;
-  const welcomeMessage = `${username}, *thanks for using telegramsjs ❤️*`;
-  ctx.replyWithMarkdown(welcomeMessage);
-});
-
-bot.command("remove", (ctx) => {
-  const resetMessage = `Removing session data: \`${sessionData.messageCounter}\``;
-  ctx.replyWithMarkdownV2(resetMessage);
-  sessionData.messageCounter = 0;
-});
-
-bot.command("stats", (ctx) => {
-  const fromUser = ctx.from;
-  if (!isUserContext(fromUser)) return;
-  const username = fromUser.username
-    ? `@${fromUser.username}`
-    : fromUser.first_name;
-  const statsMessage = `Database has \`${sessionData.messageCounter}\` messages from ${username}`;
-  ctx.replyWithMarkdownV2(statsMessage);
-});
-
-bot.login();
 ```
-
-### JavaScript Example
-
-```javascript
-const { TelegramBot } = require("telegramsjs");
-
-const botToken = "BOT_TOKEN";
-const bot = new TelegramBot(botToken);
-
-function isBotCommand(context) {
-  const firstEntity = context.entities?.[0];
-  return firstEntity?.type === "bot_command" && context.text[0] === "/";
-}
-
-bot.on("ready", async (client) => {
-  const botCommands = [
-    {
-      command: "/start",
-      description: "Starting command",
-    },
-    {
-      command: "/remove",
-      description: "Remove session",
-    },
-    {
-      command: "/stats",
-      description: "Session statistics",
-    },
-  ];
-
-  bot.setMyCommands({ commands: botCommands });
-
-  console.log(`Bot @${client.username} is ready`);
-});
-
-bot.session = {};
-
-bot.on("message", (ctx) => {
-  if (isBotCommand(ctx)) return;
-  bot.session.counter = bot.session.counter || 0;
-  bot.session.counter++;
-  const responseMessage = `Counter updated, new value: \`${bot.session.counter}\``;
-  ctx.replyWithMarkdownV2(responseMessage);
-});
-
-bot.command("start", (ctx) => {
-  const fromUser = ctx.from;
-  const username = fromUser.username
-    ? `@${fromUser.username}`
-    : fromUser.first_name;
-  const welcomeMessage = `${username}, *thanks for using telegramsjs ❤️*`;
-  ctx.replyWithMarkdown(welcomeMessage);
-});
-
-bot.command("remove", (ctx) => {
-  const resetMessage = `Removing session data: \`${bot.session.counter}\``;
-  ctx.replyWithMarkdownV2(resetMessage);
-  bot.session = {};
-});
-
-bot.command("stats", (ctx) => {
-  const fromUser = ctx.from;
-  const username = fromUser.username
-    ? `@${fromUser.username}`
-    : fromUser.first_name;
-  const statsMessage = `Database has \`${
-    bot.session.counter ?? 0
-  }\` messages from ${username}`;
-  ctx.replyWithMarkdownV2(statsMessage);
-});
-
-bot.login();
-```
-
-## 🎃 Conclusion
-
-`Telegramsjs` provides a simple and flexible way to create Telegram bots using Node.js. With its easy-to-use syntax and event-driven architecture, it is an excellent choice for developers who want to build bots quickly and efficiently.
 
 ## 📖 Documentation
 
