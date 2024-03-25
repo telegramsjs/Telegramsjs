@@ -17,8 +17,10 @@ type SearchEntityType =
   | "code";
 
 interface ISearchResult {
-  result: { index: number; offset: number; length: number; search: string }[];
-  hasEntities: () => boolean;
+  index: number;
+  offset: number;
+  length: number;
+  search: string;
 }
 
 class Entities {
@@ -27,63 +29,63 @@ class Entities {
     private readonly entities: MessageEntity[],
   ) {}
 
-  get mention(): ISearchResult {
+  get mention(): ISearchResult[] {
     return this.searchEntity("mention");
   }
 
-  get hashtag(): ISearchResult {
+  get hashtag(): ISearchResult[] {
     return this.searchEntity("hashtag");
   }
 
-  get cashtag(): ISearchResult {
+  get cashtag(): ISearchResult[] {
     return this.searchEntity("cashtag");
   }
 
-  get botCommand(): ISearchResult {
+  get botCommand(): ISearchResult[] {
     return this.searchEntity("bot_command");
   }
 
-  get url(): ISearchResult {
+  get url(): ISearchResult[] {
     return this.searchEntity("url");
   }
 
-  get email(): ISearchResult {
+  get email(): ISearchResult[] {
     return this.searchEntity("email");
   }
 
-  get phoneNumber(): ISearchResult {
+  get phoneNumber(): ISearchResult[] {
     return this.searchEntity("phone_number");
   }
 
-  get bold(): ISearchResult {
+  get bold(): ISearchResult[] {
     return this.searchEntity("bold");
   }
 
-  get italic(): ISearchResult {
+  get italic(): ISearchResult[] {
     return this.searchEntity("italic");
   }
 
-  get underline(): ISearchResult {
+  get underline(): ISearchResult[] {
     return this.searchEntity("underline");
   }
 
-  get strikethrough(): ISearchResult {
+  get strikethrough(): ISearchResult[] {
     return this.searchEntity("strikethrough");
   }
 
-  get spoiler(): ISearchResult {
+  get spoiler(): ISearchResult[] {
     return this.searchEntity("spoiler");
   }
 
-  get blockquote(): ISearchResult {
+  get blockquote(): ISearchResult[] {
     return this.searchEntity("blockquote");
   }
 
-  get code(): ISearchResult {
+  get code(): ISearchResult[] {
     return this.searchEntity("code");
   }
 
-  private searchEntity(searchType: SearchEntityType): ISearchResult {
+  private searchEntity(searchType: SearchEntityType): ISearchResult[] {
     const entities: {
       index: number;
       offset: number;
@@ -101,10 +103,7 @@ class Entities {
         });
       }
     });
-    return {
-      result: entities,
-      hasEntities: () => entities.length > 0,
-    };
+    return entities;
   }
 
   *[Symbol.iterator](): IterableIterator<[string, MessageEntity[]]> {

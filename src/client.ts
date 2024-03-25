@@ -7,10 +7,18 @@ import type { Buffer } from "node:buffer";
 import type { RequestInit } from "node-fetch";
 import { Webhook, Polling } from "./core/client/";
 import type { MethodParameters } from "./core/types";
+import type { ISearchResult } from "./core/structures/";
 import type { ServerResponse, RequestListener } from "node:http";
 import { TelegramTypeError, DefaultParameters } from "./core/util";
-import type { Update, Message, ReactionTypeEmoji } from "@telegram.ts/types";
 import { type EventKeysFunctions, EventAvaliableUpdates } from "./core/events";
+import type {
+  Update,
+  Message,
+  UserFromGetMe,
+  ReactionTypeEmoji,
+} from "@telegram.ts/types";
+
+type ContextHandler = (Update["channel_post"] | Update["message"]) & Context;
 
 interface ILoginOptions {
   polling?: {
@@ -39,6 +47,7 @@ interface ILoginOptions {
 class TelegramBot extends Api {
   webhook?: Webhook;
   polling?: Polling;
+  botInfo: UserFromGetMe = {} as UserFromGetMe;
 
   constructor(authToken: string, requestOptions?: RequestInit) {
     if (!authToken) {
@@ -61,12 +70,12 @@ class TelegramBot extends Api {
         },
     ) => void,
   ) {
-    this.on("message:text", (ctx) => {
+    this.on("message:text", async (ctx) => {
       const cmdMessage = ctx.entities.botCommand;
       const cmdName =
-        cmdMessage.hasEntities() &&
-        cmdMessage.result[0].index === 0 &&
-        cmdMessage.result[0].search;
+        cmdMessage.length > 0 &&
+        cmdMessage[0].index === 0 &&
+        cmdMessage[0].search;
       if (typeof cmdName !== "string" || cmdName === "") return;
 
       const callbackContext = Object.assign(ctx, {
@@ -75,15 +84,25 @@ class TelegramBot extends Api {
         payload: ctx.text.split(/\s+/).join(" "),
       });
 
-      if (typeof name === "string" && cmdName === `/${name}`) {
-        callback(callbackContext);
+      if (
+        typeof name === "string" &&
+        (cmdName === `/${name}` ||
+          cmdName === `/${name}@${this.botInfo.username}`)
+      ) {
+        await callback(callbackContext);
       } else if (Array.isArray(name)) {
-        if (name.some((commandName) => cmdName === `/${commandName}`)) {
-          callback(callbackContext);
+        if (
+          name.some(
+            (commandName) =>
+              cmdName === `/${commandName}` ||
+              cmdName === `/${commandName}@${this.botInfo.username}`,
+          )
+        ) {
+          await callback(callbackContext);
         }
       } else if (isRegExp(name)) {
         if (name.test(cmdName)) {
-          callback(callbackContext);
+          await callback(callbackContext);
         }
       }
     });
@@ -96,16 +115,16 @@ class TelegramBot extends Api {
       ctx: Update["callback_query"] & { data: string } & Context,
     ) => void,
   ) {
-    this.on("callback_query:data", (ctx) => {
+    this.on("callback_query:data", async (ctx) => {
       if (typeof name === "string" && ctx.data === name) {
-        callback(ctx);
+        await callback(ctx);
       } else if (Array.isArray(name)) {
         if (name.some((actionData) => ctx.data === actionData)) {
-          callback(ctx);
+          await callback(ctx);
         }
       } else if (isRegExp(name)) {
         if (name.test(ctx.data)) {
-          callback(ctx);
+          await callback(ctx);
         }
       }
     });
@@ -163,14 +182,14 @@ class TelegramBot extends Api {
       const args = content.split(/\s+/);
 
       if (typeof name === "string" && ctx.text.includes(name)) {
-        callback(ctx, args);
+        await callback(ctx, args);
       } else if (Array.isArray(name)) {
         if (name.some((search) => ctx.text.includes(search))) {
-          callback(ctx, args);
+          await callback(ctx, args);
         }
       } else if (isRegExp(name)) {
         if (name.test(ctx.text)) {
-          callback(ctx, args);
+          await callback(ctx, args);
         }
       }
     });
@@ -193,14 +212,14 @@ class TelegramBot extends Api {
       });
 
       if (typeof name === "string" && gameShortName.includes(name)) {
-        callback(callbackQueryGame);
+        await callback(callbackQueryGame);
       } else if (Array.isArray(name)) {
         if (name.some((game) => gameShortName.includes(game))) {
-          callback(callbackQueryGame);
+          await callback(callbackQueryGame);
         }
       } else if (isRegExp(name)) {
         if (name.test(gameShortName)) {
-          callback(callbackQueryGame);
+          await callback(callbackQueryGame);
         }
       }
     });
@@ -213,33 +232,121 @@ class TelegramBot extends Api {
   ) {
     this.on("inline_query", async (ctx) => {
       if (typeof name === "string" && ctx.query.includes(name)) {
-        callback(ctx);
+        await callback(ctx);
       } else if (Array.isArray(name)) {
         if (name.some((search) => ctx.query.includes(search))) {
-          callback(ctx);
+          await callback(ctx);
         }
       } else if (isRegExp(name)) {
         if (name.test(ctx.query)) {
-          callback(ctx);
+          await callback(ctx);
         }
       }
     });
     return this;
   }
 
-  mention() {}
-  hashtag() {}
-  cashtag() {}
-  url() {}
-  email() {}
-  phoneNumber() {}
-  bold() {}
-  italic() {}
-  underline() {}
-  strikethrough() {}
-  spoiler() {}
-  blockquote() {}
-  code() {}
+  start(
+    callback: (ctx: Update["message"] & Message.TextMessage & Context) => void,
+  ) {
+    this.on("message:text", async (ctx) => {
+      const [cmd] = ctx.text.split(/\s+/);
+      if (!["/start", `/start@${this.botInfo.username}`].includes(cmd)) return;
+      await callback(ctx);
+    });
+  }
+
+  help(
+    callback: (ctx: Update["message"] & Message.TextMessage & Context) => void,
+  ) {
+    this.on("message:text", async (ctx) => {
+      const [cmd] = ctx.text.split(/\s+/);
+      if (!["/help", `/help@${this.botInfo.username}`].includes(cmd)) return;
+      await callback(ctx);
+    });
+  }
+
+  settings(
+    callback: (ctx: Update["message"] & Message.TextMessage & Context) => void,
+  ) {
+    this.on("message:text", async (ctx) => {
+      const [cmd] = ctx.text.split(/\s+/);
+      if (!["/settings", `/settings@${this.botInfo.username}`].includes(cmd))
+        return;
+      await callback(ctx);
+    });
+  }
+
+  textLink(
+    link: string | string[] | RegExp,
+    callback: (ctx: ContextHandler) => void,
+  ) {
+    const textLinkHandler = async (ctx: ContextHandler) => {
+      await this.handleText(ctx, ctx.entities.url, link, callback);
+    };
+    this.on("message", textLinkHandler);
+    this.on("channel_post", textLinkHandler);
+  }
+
+  textMention(
+    mention: string | string[] | RegExp,
+    callback: (ctx: ContextHandler) => void,
+  ) {
+    const textMentionHandler = async (ctx: ContextHandler) => {
+      await this.handleText(ctx, ctx.entities.mention, mention, callback);
+    };
+    this.on("message", textMentionHandler);
+    this.on("channel_post", textMentionHandler);
+  }
+
+  textEmail(
+    email: string | string[] | RegExp,
+    callback: (ctx: ContextHandler) => void,
+  ) {
+    const textEmailHandler = async (ctx: ContextHandler) => {
+      await this.handleText(ctx, ctx.entities.email, email, callback);
+    };
+    this.on("message", textEmailHandler);
+    this.on("channel_post", textEmailHandler);
+  }
+
+  textHashtag(
+    hashtag: string | string[] | RegExp,
+    callback: (ctx: ContextHandler) => void,
+  ) {
+    const textHashtagHandler = async (ctx: ContextHandler) => {
+      await this.handleText(ctx, ctx.entities.hashtag, hashtag, callback);
+    };
+    this.on("message", textHashtagHandler);
+    this.on("channel_post", textHashtagHandler);
+  }
+
+  textCashtag(
+    cashtag: string | string[] | RegExp,
+    callback: (ctx: ContextHandler) => void,
+  ) {
+    const textCashtagHandler = async (ctx: ContextHandler) => {
+      await this.handleText(ctx, ctx.entities.cashtag, cashtag, callback);
+    };
+    this.on("message", textCashtagHandler);
+    this.on("channel_post", textCashtagHandler);
+  }
+
+  textPhoneNumber(
+    phoneNumber: string | string[] | RegExp,
+    callback: (ctx: ContextHandler) => void,
+  ) {
+    const textPhoneNumberHandler = async (ctx: ContextHandler) => {
+      await this.handleText(
+        ctx,
+        ctx.entities.phoneNumber,
+        phoneNumber,
+        callback,
+      );
+    };
+    this.on("message", textPhoneNumberHandler);
+    this.on("channel_post", textPhoneNumberHandler);
+  }
 
   disconnect(reason?: string) {
     this.polling?.close();
@@ -248,13 +355,13 @@ class TelegramBot extends Api {
   }
 
   async login(options: ILoginOptions = { polling: DefaultParameters }) {
-    this.getMe()
-      .then((res) => {
-        this.emit("ready", res);
-      })
-      .catch((err) => {
-        throw err;
-      });
+    try {
+      const botInfo = await this.getMe();
+      this.emit("ready", botInfo);
+      this.botInfo = botInfo;
+    } catch (err) {
+      throw err;
+    }
     if (options.polling) {
       this.polling = new Polling(this, options.polling);
       await this.deleteWebhook(options.polling?.drop_pending_updates);
@@ -277,6 +384,28 @@ class TelegramBot extends Api {
       return;
     }
   }
+
+  private async handleText(
+    ctx: ContextHandler,
+    entities: ISearchResult[],
+    target: string | string[] | RegExp,
+    callback: (ctx: ContextHandler) => void,
+  ) {
+    if (!entities || entities.length === 0) return;
+
+    const targets = Array.isArray(target) ? target : [target];
+    const searches = entities.map((entity) => entity.search);
+
+    if (typeof target === "string") {
+      if (!searches.some((search) => search === target)) return;
+    } else if (Array.isArray(target)) {
+      if (!target.some((t) => searches.find((s) => s === t))) return;
+    } else if (isRegExp(target)) {
+      if (!searches.some((search) => target.test(search))) return;
+    }
+
+    await callback(ctx);
+  }
 }
 
-export { TelegramBot, ILoginOptions };
+export { TelegramBot, ILoginOptions, ContextHandler };
