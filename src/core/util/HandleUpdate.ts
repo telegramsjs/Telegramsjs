@@ -1,4 +1,4 @@
-import { Context } from "../context";
+import { ApiContext } from "../context";
 import type { ServerResponse } from "node:http";
 import type { TelegramBot } from "../../client";
 import type { Update } from "@telegram.ts/types";
@@ -15,7 +15,7 @@ function handleUpdate(
 
       if (updateProperty[options.event]) {
         telegram.emit("update", update);
-        const context = new Context(
+        const context = new ApiContext(
           telegram,
           update,
           updateProperty[options.event],

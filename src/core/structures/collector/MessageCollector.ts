@@ -1,10 +1,10 @@
-import type { Context } from "../../context";
 import { TelegramBot } from "../../../client";
 import type { Chat } from "@telegram.ts/types";
 import { Collection } from "@telegram.ts/collection";
+import type { ApiContext, Context } from "../../context";
 import { Collector, type ICollectorOptions } from "./Collector";
 
-type Msg = Omit<Context["msg"], "callbackQuery">;
+type Msg = Omit<ApiContext["msg"], "callbackQuery">;
 
 type MsgCollectorContext = Msg & Context;
 

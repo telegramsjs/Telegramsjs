@@ -1,6 +1,6 @@
-import type { Context } from "../../context";
 import type { TelegramBot } from "../../../client";
 import { Collection } from "@telegram.ts/collection";
+import type { ApiContext, Context } from "../../context";
 import {
   Collector,
   type ICollectorEvent,
@@ -15,7 +15,7 @@ import type {
   MessageReactionUpdated,
 } from "@telegram.ts/types";
 
-type Msg = Omit<Context["msg"], "callbackQuery">;
+type Msg = Omit<ApiContext["msg"], "callbackQuery">;
 
 type MessageReactions = Msg & Context;
 

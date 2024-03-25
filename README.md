@@ -109,6 +109,10 @@ bot.login({
     secret_token?: string;
   }
 });
+
+// Enable graceful stop
+process.once("SIGINT", () => bot.disconnect("SIGINT"));
+process.once("SIGTERM", () => bot.disconnect("SIGTERM"));
 ```
 
 ## 📖 Documentation

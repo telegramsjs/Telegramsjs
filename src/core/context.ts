@@ -19,7 +19,7 @@ import type {
   InlineKeyboardMarkup,
 } from "@telegram.ts/types";
 
-class Context {
+class ApiContext {
   constructor(
     public readonly api: TelegramBot,
     private readonly update: Update,
@@ -1278,9 +1278,34 @@ class Context {
   }
 }
 
-function getThreadId(ctx: Context) {
+function getThreadId(ctx: ApiContext) {
   const { is_topic_message, message_thread_id } = ctx.msg;
   return is_topic_message ? message_thread_id : undefined;
 }
 
-export { Context };
+type Context = Omit<
+  ApiContext,
+  | "message"
+  | "editedMessage"
+  | "inlineQuery"
+  | "shippingQuery"
+  | "preCheckoutQuery"
+  | "chosenInlineResult"
+  | "channelPost"
+  | "editedChannelPost"
+  | "messageReaction"
+  | "messageReactionCount"
+  | "callbackQuery"
+  | "poll"
+  | "pollAnswer"
+  | "myChatMember"
+  | "chatMember"
+  | "chatJoinRequest"
+  | "chatBoost"
+  | "removedChatBoost"
+  | "msg"
+  | "senderChat"
+  | "assert"
+>;
+
+export { ApiContext, Context };
