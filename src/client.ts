@@ -138,7 +138,7 @@ class TelegramBot extends Api {
   ) {
     this.on("message_reaction", async (reaction) => {
       const newReactionIndex = reaction.reactions.emojiAdded.findIndex(
-        (added) => {
+        (added: string | string[]) => {
           if (typeof reactions === "string") {
             return added.includes(reactions);
           } else if (Array.isArray(reactions)) {
@@ -147,7 +147,7 @@ class TelegramBot extends Api {
         },
       );
       const oldReactionIndex = reaction.reactions.emojiRemoved.findIndex(
-        (remove) => {
+        (remove: string | string[]) => {
           if (typeof reactions === "string") {
             return remove.includes(reactions);
           } else if (Array.isArray(reactions)) {

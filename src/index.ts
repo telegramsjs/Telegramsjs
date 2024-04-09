@@ -1,4 +1,5 @@
 export * from "./api";
+export * from "./core";
 export * from "./client";
 export * from "./core/util/";
 export * from "./core/client/";

@@ -132,54 +132,54 @@ class ManagerEvents extends EventEmitter {
     super();
   }
 
+  on(event: string, listener: (...data: any[]) => void): this;
+
   on<T extends keyof IEventFunctions>(
     event: T,
     listener: IEventFunctions[T],
   ): this;
 
-  on(event: string, listener: (...data: any[]) => void) {
+  on(event: string, listener: (...data: any[]) => void): this {
     super.on(event, listener);
     return this;
   }
+
+  once(event: string, listener: (...args: any[]) => void): this;
 
   once<T extends keyof IEventFunctions>(
     event: T,
     listener: IEventFunctions[T],
   ): this;
 
-  once(event: string, listener: (...data: any[]) => void) {
+  once(event: string, listener: (...data: any[]) => void): this {
     super.once(event, listener);
     return this;
   }
 
-  emit<T extends keyof IEventFunctions>(event: T, data?: any): boolean;
-
-  emit(event: string, data?: any) {
-    return super.emit(event, data);
-  }
-
-  incrementMaxListeners() {
-    const maxListeners = this.getMaxListeners();
-    if (maxListeners !== 0) {
-      this.setMaxListeners(maxListeners + 1);
-    }
-  }
-
-  decrementMaxListeners() {
-    const maxListeners = this.getMaxListeners();
-    if (maxListeners !== 0) {
-      this.setMaxListeners(maxListeners - 1);
-    }
-  }
+  off(event: string, listener: (...args: any[]) => void): this;
 
   off<T extends keyof IEventFunctions>(
     event: T,
     listener: IEventFunctions[T],
   ): this;
 
-  off(event: string, listener: (...data: any[]) => void) {
+  off(event: string, listener: (...data: any[]) => void): this {
     super.off(event, listener);
     return this;
+  }
+
+  incrementMaxListeners(): void {
+    const maxListeners = this.getMaxListeners();
+    if (maxListeners !== 0) {
+      this.setMaxListeners(maxListeners + 1);
+    }
+  }
+
+  decrementMaxListeners(): void {
+    const maxListeners = this.getMaxListeners();
+    if (maxListeners !== 0) {
+      this.setMaxListeners(maxListeners - 1);
+    }
   }
 }
 
