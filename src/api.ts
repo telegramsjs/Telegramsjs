@@ -475,6 +475,14 @@ class Api extends ApiRequest {
     );
   }
 
+  /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
+  async getBusinessConnection(business_connection_id: string) {
+    return await this.request<MethodsReturnType["getBusinessConnection"]>(
+      "getBusinessConnection",
+      { business_connection_id },
+    );
+  }
+
   /** Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success. */
   async getChatMember(chat_id: number | string, user_id: number) {
     return await this.request<MethodsReturnType["getChatMember"]>(
@@ -833,6 +841,14 @@ class Api extends ApiRequest {
   async addStickerToSet(params: MethodParameters["addStickerToSet"]) {
     return await this.request<MethodsReturnType["addStickerToSet"]>(
       "addStickerToSet",
+      params,
+    );
+  }
+
+  /** Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success. */
+  async replaceStickerInSet(params: MethodParameters["replaceStickerInSet"]) {
+    return await this.request<MethodsReturnType["replaceStickerInSet"]>(
+      "replaceStickerInSet",
       params,
     );
   }

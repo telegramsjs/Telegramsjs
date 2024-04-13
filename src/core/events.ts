@@ -38,6 +38,18 @@ const EventAvaliableUpdates = {
   edited_channel_post: {
     event: "edited_channel_post",
   },
+  business_connection: {
+    event: "business_connection",
+  },
+  business_message: {
+    event: "business_message",
+  },
+  edited_business_message: {
+    event: "edited_business_message",
+  },
+  deleted_business_messages: {
+    event: "deleted_business_messages",
+  },
   inline_query: {
     event: "inline_query",
   },
@@ -106,6 +118,14 @@ interface IEventFunctions {
     data: Update["message_reaction_count"] & Context,
   ) => void;
   edited_channel_post: (data: Update["edited_channel_post"] & Context) => void;
+  business_connection: (data: Update["business_connection"] & Context) => void;
+  business_message: (data: Update["business_message"] & Context) => void;
+  edited_business_message: (
+    data: Update["edited_business_message"] & Context,
+  ) => void;
+  deleted_business_messages: (
+    data: Update["deleted_business_messages"] & Context,
+  ) => void;
   inline_query: (data: Update["inline_query"] & Context) => void;
   chosen_inline_result: (
     data: Update["chosen_inline_result"] & Context,
