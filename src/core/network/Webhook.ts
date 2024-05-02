@@ -31,7 +31,7 @@ class Webhook {
   };
 
   constructor(
-    public readonly tg: TelegramBot,
+    public readonly telegram: TelegramBot,
     public readonly path: string = "/",
     public readonly secretToken: string = "",
   ) {}
@@ -66,7 +66,7 @@ class Webhook {
       if (
         !this.webhookFilter(request, {
           path: this.path,
-          token: this.tg.authToken,
+          token: this.telegram.authToken,
           secretToken: this.secretToken,
         })
       ) {
@@ -93,7 +93,7 @@ class Webhook {
         return;
       }
 
-      await handleUpdate(this.tg, [update], response);
+      await handleUpdate(this.telegram, [update], response);
     };
 
     return requestCallback

@@ -2,7 +2,7 @@ export * from "./api";
 export * from "./core";
 export * from "./client";
 export * from "./core/util/";
-export * from "./core/client/";
+export * from "./core/network/";
 export * from "./core/structures/";
 export * from "@telegram.ts/emoji";
 export * from "@telegram.ts/formatters";

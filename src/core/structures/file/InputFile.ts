@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import fetch from "node-fetch";
-import fsp from "node:fs/promises";
 import { Api } from "../../../api";
 import { File } from "@telegram.ts/types";
 import { TelegramError, TelegramTypeError } from "../../util";
@@ -12,7 +11,7 @@ class InputFile {
   file_path: string | null;
 
   constructor(
-    file: File,
+    private readonly file: File,
     public readonly telegram: Api,
   ) {
     const { file_id, file_unique_id, file_size, file_path } = file;
@@ -20,6 +19,10 @@ class InputFile {
     this.file_unique_id = file_unique_id;
     this.file_size = file_size || null;
     this.file_path = file_path || null;
+  }
+
+  get fileUrl() {
+    return `https://api.telegram.org/file/bot${this.telegram.authToken}/${this.file_path}`;
   }
 
   async downloadFile(filePath: string) {
@@ -68,7 +71,7 @@ class InputFile {
 
     if (writeType === "promise") {
       const fileData = await this.downloadFile(this.file_path);
-      await fsp.writeFile(path, fileData, options);
+      await fs.promises.writeFile(path, fileData, options);
       return;
     }
 

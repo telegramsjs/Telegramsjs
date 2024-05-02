@@ -1,11 +1,11 @@
 import { Api } from "./api";
 import { isRegExp } from "node:util";
 import { Context } from "./core/context";
+import type { Buffer } from "node:buffer";
 import type { ReadStream } from "node:fs";
 import type { TlsOptions } from "node:tls";
-import type { Buffer } from "node:buffer";
 import type { RequestInit } from "node-fetch";
-import { Webhook, Polling } from "./core/client/";
+import { Webhook, Polling } from "./core/network/";
 import type { MethodParameters } from "./core/types";
 import type { ISearchResult } from "./core/structures/";
 import type { ServerResponse, RequestListener } from "node:http";
@@ -349,6 +349,10 @@ class TelegramBot extends Api {
   }
 
   disconnect(reason?: string) {
+    if (!this.polling && !this.webhook) {
+      throw new TelegramTypeError("Bot is not running!");
+    }
+
     this.polling?.close();
     this.webhook?.close();
     this.emit("disconnect", Object.assign(this, { reason }));

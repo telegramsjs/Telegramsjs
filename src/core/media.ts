@@ -1,8 +1,8 @@
-import fs from "node:fs";
 import crypto from "node:crypto";
 import type { URL } from "node:url";
 import { Buffer } from "node:buffer";
 import type { Agent } from "node:https";
+import fs, { type ReadStream } from "node:fs";
 import fetch, {
   type RequestInit,
   type BodyInit,
@@ -182,7 +182,7 @@ class Media {
 
   async attachFormMedia(
     form: MultipartStream,
-    media: string | Buffer | fs.ReadStream,
+    media: string | Buffer | ReadStream,
     id: string,
     agent: RequestInit["agent"],
   ) {

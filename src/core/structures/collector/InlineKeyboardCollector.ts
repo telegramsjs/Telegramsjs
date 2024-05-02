@@ -1,7 +1,7 @@
 import type { Context } from "../../context";
 import { TelegramBot } from "../../../client";
-import type { CallbackQuery } from "@telegram.ts/types";
 import { Collection } from "@telegram.ts/collection";
+import type { CallbackQuery } from "@telegram.ts/types";
 import { Collector, ICollectorOptions } from "./Collector";
 
 type InlineCollectorContext = CallbackQuery & Context;

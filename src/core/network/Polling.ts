@@ -6,17 +6,17 @@ class Polling {
   #connect: boolean = true;
 
   constructor(
-    public readonly tg: TelegramBot,
+    public readonly telegram: TelegramBot,
     public readonly options: ILoginOptions["polling"],
   ) {}
 
   async startPolling() {
     while (this.#connect) {
-      const updates = await this.tg.getUpdates({
+      const updates = await this.telegram.getUpdates({
         ...this.options,
         offset: this.offset,
       });
-      const offset = handleUpdate(this.tg, updates);
+      const offset = handleUpdate(this.telegram, updates);
       if (offset) {
         this.offset = offset;
       }

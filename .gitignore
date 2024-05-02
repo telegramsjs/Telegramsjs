@@ -1,9 +1,7 @@
 node_modules/
 package-lock.json
 .prettierrc
-untitled.txt
-index.ts
-index.js
-yarn.lock
-test.ts
+/storage/index.ts
+/storage/index.js
 dist/
+oldsrc/
