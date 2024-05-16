@@ -17,6 +17,7 @@ import type {
   ReactionTypeEmoji,
   MenuButton,
   InlineKeyboardMarkup,
+  InputPollOption,
 } from "@telegram.ts/types";
 
 class ApiContext {
@@ -851,7 +852,7 @@ class ApiContext {
 
   sendPoll(
     question: string,
-    options: readonly string[],
+    options: InputPollOption[],
     args?: Omit<MethodParameters["sendPoll"], "question" | "options">,
   ) {
     this.assert(this.chat, "sendPoll");
@@ -866,7 +867,7 @@ class ApiContext {
 
   sendQuiz(
     question: string,
-    options: readonly string[],
+    options: InputPollOption[],
     args?: Omit<Partial<MethodParameters["sendPoll"]>, "question" | "type">,
   ) {
     this.assert(this.chat, "sendQuiz");
