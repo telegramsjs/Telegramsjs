@@ -49,6 +49,11 @@ class TelegramBot extends Api {
   polling?: Polling;
   botInfo: UserFromGetMe = {} as UserFromGetMe;
 
+  /**
+   * Creates an instance of TelegramBot.
+   * @param authToken - The bot's authentication token.
+   * @param requestOptions - Optional request options for fetch.
+   */
   constructor(authToken: string, requestOptions?: RequestInit) {
     if (!authToken) {
       throw new TelegramTypeError(
@@ -58,6 +63,12 @@ class TelegramBot extends Api {
     super(authToken, requestOptions);
   }
 
+  /**
+   * Registers a command handler.
+   * @param name - The command name(s) or pattern.
+   * @param callback - The callback function to handle the command.
+   * @returns The TelegramBot instance.
+   */
   command(
     name: string | string[] | RegExp,
     callback: (
@@ -109,6 +120,12 @@ class TelegramBot extends Api {
     return this;
   }
 
+  /**
+   * Registers an action handler for callback queries.
+   * @param name - The action name(s) or pattern.
+   * @param callback - The callback function to handle the action.
+   * @returns The TelegramBot instance.
+   */
   action(
     name: string | string[] | RegExp,
     callback: (
@@ -131,6 +148,13 @@ class TelegramBot extends Api {
     return this;
   }
 
+  /**
+   * Registers a reaction handler.
+   * @param reactions - The reaction emoji(s) or pattern.
+   * @param callback - The callback function to handle the reaction.
+   * @param reactionType - The type of reaction to handle (default is "all").
+   * @returns The TelegramBot instance.
+   */
   reaction(
     reactions: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][],
     callback: (reaction: Update["message_reaction"] & Context) => void,
@@ -170,6 +194,12 @@ class TelegramBot extends Api {
     return this;
   }
 
+  /**
+   * Registers a handler for text messages that match a pattern.
+   * @param text - The text or pattern to match.
+   * @param callback - The callback function to handle the message.
+   * @returns The TelegramBot instance.
+   */
   hears(
     text: string | string[] | RegExp,
     callback: (
@@ -196,6 +226,12 @@ class TelegramBot extends Api {
     return this;
   }
 
+  /**
+   * Registers a handler for game queries.
+   * @param game - The game name or pattern to match.
+   * @param callback - The callback function to handle the game query.
+   * @returns The TelegramBot instance.
+   */
   gameQuery(
     game: string | string[] | RegExp,
     callback: (
@@ -226,6 +262,12 @@ class TelegramBot extends Api {
     return this;
   }
 
+  /**
+   * Registers a handler for inline queries.
+   * @param text - The text or pattern to match.
+   * @param callback - The callback function to handle the inline query.
+   * @returns The TelegramBot instance.
+   */
   inlineQuery(
     text: string | string[] | RegExp,
     callback: (inlineQuery: Update["inline_query"] & Context) => void,
@@ -246,6 +288,10 @@ class TelegramBot extends Api {
     return this;
   }
 
+  /**
+   * Registers a handler for the /start command.
+   * @param callback - The callback function to handle the /start command.
+   */
   start(
     callback: (ctx: Update["message"] & Message.TextMessage & Context) => void,
   ) {
@@ -256,6 +302,10 @@ class TelegramBot extends Api {
     });
   }
 
+  /**
+   * Registers a handler for the /help command.
+   * @param callback - The callback function to handle the /help command.
+   */
   help(
     callback: (ctx: Update["message"] & Message.TextMessage & Context) => void,
   ) {
@@ -266,6 +316,10 @@ class TelegramBot extends Api {
     });
   }
 
+  /**
+   * Registers a handler for the /settings command.
+   * @param callback - The callback function to handle the /settings command.
+   */
   settings(
     callback: (ctx: Update["message"] & Message.TextMessage & Context) => void,
   ) {
@@ -277,6 +331,11 @@ class TelegramBot extends Api {
     });
   }
 
+  /**
+   * Registers a handler for text messages containing specific links.
+   * @param link - The link(s) or pattern to match.
+   * @param callback - The callback function to handle the link.
+   */
   textLink(
     link: string | string[] | RegExp,
     callback: (ctx: ContextHandler) => void,
@@ -288,6 +347,11 @@ class TelegramBot extends Api {
     this.on("channel_post", textLinkHandler);
   }
 
+  /**
+   * Registers a handler for text messages containing specific mentions.
+   * @param mention - The mention(s) or pattern to match.
+   * @param callback - The callback function to handle the mention.
+   */
   textMention(
     mention: string | string[] | RegExp,
     callback: (ctx: ContextHandler) => void,
@@ -299,6 +363,11 @@ class TelegramBot extends Api {
     this.on("channel_post", textMentionHandler);
   }
 
+  /**
+   * Registers a handler for text messages containing specific emails.
+   * @param email - The email(s) or pattern to match.
+   * @param callback - The callback function to handle the email.
+   */
   textEmail(
     email: string | string[] | RegExp,
     callback: (ctx: ContextHandler) => void,
@@ -310,6 +379,11 @@ class TelegramBot extends Api {
     this.on("channel_post", textEmailHandler);
   }
 
+  /**
+   * Registers a handler for text messages containing specific hashtags.
+   * @param hashtag - The hashtag(s) or pattern to match.
+   * @param callback - The callback function to handle the hashtag.
+   */
   textHashtag(
     hashtag: string | string[] | RegExp,
     callback: (ctx: ContextHandler) => void,
@@ -321,6 +395,11 @@ class TelegramBot extends Api {
     this.on("channel_post", textHashtagHandler);
   }
 
+  /**
+   * Registers a handler for text messages containing specific cashtags.
+   * @param cashtag - The cashtag(s) or pattern to match.
+   * @param callback - The callback function to handle the cashtag.
+   */
   textCashtag(
     cashtag: string | string[] | RegExp,
     callback: (ctx: ContextHandler) => void,
@@ -332,6 +411,11 @@ class TelegramBot extends Api {
     this.on("channel_post", textCashtagHandler);
   }
 
+  /**
+   * Registers a handler for text messages containing specific phone numbers.
+   * @param phoneNumber - The phone number(s) or pattern to match.
+   * @param callback - The callback function to handle the phone number.
+   */
   textPhoneNumber(
     phoneNumber: string | string[] | RegExp,
     callback: (ctx: ContextHandler) => void,
@@ -348,6 +432,10 @@ class TelegramBot extends Api {
     this.on("channel_post", textPhoneNumberHandler);
   }
 
+  /**
+   * Disconnects the bot from polling or webhook.
+   * @param reason - Optional reason for disconnecting.
+   */
   disconnect(reason?: string) {
     if (!this.polling && !this.webhook) {
       throw new TelegramTypeError("Bot is not running!");
@@ -358,6 +446,10 @@ class TelegramBot extends Api {
     this.emit("disconnect", Object.assign(this, { reason }));
   }
 
+  /**
+   * Logs in the bot and starts polling or webhook based on options.
+   * @param options - Options for login, including polling or webhook configuration.
+   */
   async login(options: ILoginOptions = { polling: DefaultParameters }) {
     try {
       const botInfo = await this.getMe();
@@ -389,6 +481,13 @@ class TelegramBot extends Api {
     }
   }
 
+  /**
+   * Handles text entities and triggers the callback if a match is found.
+   * @param ctx - The context handler.
+   * @param entities - The entities to search within.
+   * @param target - The target pattern to match.
+   * @param callback - The callback function to trigger on match.
+   */
   private async handleText(
     ctx: ContextHandler,
     entities: ISearchResult[],

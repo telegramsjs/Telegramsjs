@@ -4,6 +4,13 @@ import type { TelegramBot } from "../../client";
 import type { Update } from "@telegram.ts/types";
 import { type EventKeysFunctions, EventAvaliableUpdates } from "../events";
 
+/**
+ * Handles incoming updates and emits corresponding events.
+ * @param telegram - The TelegramBot instance.
+ * @param updates - An array of updates to handle.
+ * @param webhookResponse - The server response if the updates were received via webhook.
+ * @returns The ID of the next update to handle.
+ */
 function handleUpdate(
   telegram: TelegramBot,
   updates: Update[],

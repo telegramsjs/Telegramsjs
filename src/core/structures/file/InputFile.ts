@@ -1,15 +1,38 @@
 import fs from "node:fs";
 import fetch from "node-fetch";
-import { Api } from "../../../api";
-import { File } from "@telegram.ts/types";
+import type { Api } from "../../../api";
+import type { File } from "@telegram.ts/types";
 import { TelegramError, TelegramTypeError } from "../../util";
 
+/**
+ * Represents a file input for interacting with the Telegram API.
+ */
 class InputFile {
+  /**
+   * The unique identifier for this file.
+   */
   file_id: string;
+
+  /**
+   * The unique identifier for this file, which is supposed to be consistent across different bots.
+   */
   file_unique_id: string;
+
+  /**
+   * The size of the file in bytes, if available.
+   */
   file_size: number | null;
+
+  /**
+   * The path to the file on the Telegram server, if available.
+   */
   file_path: string | null;
 
+  /**
+   * Creates an instance of InputFile.
+   * @param file - The file object from the Telegram API.
+   * @param telegram - The Telegram API client instance.
+   */
   constructor(
     private readonly file: File,
     public readonly telegram: Api,
@@ -21,11 +44,21 @@ class InputFile {
     this.file_path = file_path || null;
   }
 
+  /**
+   * Gets the URL to access the file on the Telegram server.
+   * @returns The file URL.
+   */
   get fileUrl() {
     return `https://api.telegram.org/file/bot${this.telegram.authToken}/${this.file_path}`;
   }
 
-  async downloadFile(filePath: string) {
+  /**
+   * Downloads the file from the Telegram server.
+   * @param filePath - The path of the file on the Telegram server.
+   * @returns A promise that resolves with the file data as a Buffer.
+   * @throws {TelegramError} If the file download fails.
+   */
+  async downloadFile(filePath: string): Promise<Buffer> {
     const fileUrl = `https://api.telegram.org/file/bot${this.telegram.authToken}/${filePath}`;
 
     try {
@@ -37,6 +70,14 @@ class InputFile {
     }
   }
 
+  /**
+   * Writes the file to the specified path.
+   * @param path - The path where the file should be written.
+   * @param writeType - The type of write operation ("promise" or "stream").
+   * @param options - Additional options for writing the file.
+   * @returns A promise that resolves when the file has been written.
+   * @throws {TelegramTypeError} If the file path is not available or the write type is incorrect.
+   */
   async writeFile(
     path: string,
     writeType: "promise",
@@ -47,6 +88,14 @@ class InputFile {
     },
   ): Promise<void>;
 
+  /**
+   * Writes the file to the specified path using a stream.
+   * @param path - The path where the file should be written.
+   * @param writeType - The type of write operation ("stream").
+   * @param options - Additional options for writing the file.
+   * @returns A promise that resolves when the file has been written.
+   * @throws {TelegramTypeError} If the file path is not available or the write type is incorrect.
+   */
   async writeFile(
     path: string,
     writeType: "stream",

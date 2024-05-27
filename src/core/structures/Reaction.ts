@@ -10,25 +10,49 @@ import type {
   MessageReactionUpdated,
 } from "@telegram.ts/types";
 
+/**
+ * Represents the configuration for awaiting reactions.
+ */
 interface IReactionCollection {
+  /** The user ID associated with the reaction. */
   userId: number | undefined;
+  /** The reaction details. */
   react: {
+    /** The emoji or emojis to react to. */
     emoji: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][];
+    /** The type of reaction to listen for: "new", "old", or "both". */
     reactionType: "new" | "old" | "both";
   };
+  /** The callback function when a reaction is received. */
   onCallback: (
     data: Update["message_reaction"] & Context,
     collection: Collection<string, IReactionCollection>,
   ) => unknown;
+  /** The optional error callback function. */
   onError?: (data: Collection<string, IReactionCollection>) => unknown;
+  /** The timeout duration in milliseconds. */
   timeout: number;
+  /** The optional filter function to apply before invoking the callback. */
   filter?: (data: Update["message_reaction"] & Context) => unknown;
+  /** The reaction data and context. */
   data: Update["message_reaction"] & Context;
 }
 
+/**
+ * A class for handling message reactions.
+ */
 class Reaction {
+  /**
+   * Creates an instance of Reaction.
+   * @param api - The Telegram API instance.
+   */
   constructor(public readonly api: Api) {}
 
+  /**
+   * Retrieves information about reactions to a message.
+   * @param messageReaction - The message reaction object.
+   * @returns Information about the reactions.
+   */
   static reactions(messageReaction?: MessageReactionUpdated): {
     emoji: string[];
     emojiAdded: string[];
@@ -39,11 +63,6 @@ class Reaction {
     customEmojiKept: string[];
     customEmojiRemoved: string[];
   } {
-    const { old_reaction, new_reaction } = messageReaction || {
-      old_reaction: [],
-      new_reaction: [],
-    };
-
     function isEmoji(reaction: ReactionType[]) {
       const reactionTypeEmojis = reaction.filter(
         (react) => react.type === "emoji",
@@ -57,6 +76,11 @@ class Reaction {
       ) as ReactionTypeCustomEmoji[];
       return reactionTypeCustomEmojis.map((react) => react.custom_emoji);
     }
+
+    const { old_reaction, new_reaction } = messageReaction || {
+      old_reaction: [],
+      new_reaction: [],
+    };
 
     const emoji = isEmoji(new_reaction);
     const customEmoji = isCustomEmoji(new_reaction);
@@ -89,18 +113,31 @@ class Reaction {
     };
   }
 
+  /**
+   * Waits for reactions to a message.
+   * @param options - The options for waiting for reactions.
+   * @returns A promise that resolves when the desired reactions are received.
+   */
   async awaitReaction(options: {
+    /** The reaction configuration. */
     react: {
+      /** The emoji or emojis to wait for. */
       emoji: ReactionTypeEmoji["emoji"] | ReactionTypeEmoji["emoji"][];
+      /** The type of reaction to wait for: "new", "old", or "both". */
       reactionType?: "new" | "old" | "both";
     };
+    /** The callback function when reactions are received. */
     onCallback: (
       data: Update["message_reaction"] & Context,
       collection: Collection<string, IReactionCollection>,
     ) => unknown;
+    /** The optional error callback function. */
     onError?: (data: Collection<string, IReactionCollection>) => unknown;
+    /** The number of reactions to wait for. */
     count?: number;
+    /** The timeout duration in milliseconds. */
     timeout?: number;
+    /** The optional filter function to apply before invoking the callback. */
     filter?: (data: Update["message_reaction"] & Context) => boolean;
   }): Promise<unknown> {
     const collection: Collection<string, IReactionCollection> =

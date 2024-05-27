@@ -5,6 +5,9 @@ import { TelegramTypeError } from "../../util/";
 import { Collection } from "@telegram.ts/collection";
 import { setTimeout, clearTimeout } from "node:timers";
 
+/**
+ * Interface representing the options for the collector.
+ */
 interface ICollectorOptions<EventCtx, Collected> {
   dispose?: boolean;
   filter?: (
@@ -17,6 +20,9 @@ interface ICollectorOptions<EventCtx, Collected> {
   time?: number;
 }
 
+/**
+ * Interface representing the events for the collector.
+ */
 interface ICollectorEvent<K, V> {
   collect: (data: V, collect: Collection<K, V>) => void;
   ignore: (data: V) => void;
@@ -24,15 +30,38 @@ interface ICollectorEvent<K, V> {
   end: (collected: Collection<K, V>, reason: string) => void;
 }
 
+/**
+ * Abstract class representing a generic collector.
+ */
 abstract class Collector<K, V> extends EventEmitter {
+  /**
+   * Indicates whether the collector has ended.
+   */
   isEnded: boolean = false;
+
+  /**
+   * Filter function to determine if data should be collected.
+   */
   filter: Required<ICollectorOptions<K, V>>["filter"];
+
+  /**
+   * Collection of collected data.
+   */
   collected: Collection<K, V> = new Collection();
+
+  /**
+   * Timestamp of the last collected item.
+   */
   lastCollectedTimestamp: number | Date | null = null;
+
   private _timeout: NodeJS.Timeout | null = null;
   private _idleTimeout: NodeJS.Timeout | null = null;
   private _endReason: string | null = null;
 
+  /**
+   * Creates an instance of Collector.
+   * @param options - The options for the collector.
+   */
   constructor(public readonly options: ICollectorOptions<K, V>) {
     super();
     this.handleCollect = this.handleCollect.bind(this);
@@ -82,10 +111,17 @@ abstract class Collector<K, V> extends EventEmitter {
     return this;
   }
 
+  /**
+   * Gets the timestamp of the last collected item.
+   */
   get lastCollectedAt(): number | null | Date {
     return this.lastCollectedTimestamp && new Date(this.lastCollectedTimestamp);
   }
 
+  /**
+   * Handles the collection of a new item.
+   * @param msg - The item to collect.
+   */
   async handleCollect(msg: V): Promise<void> {
     const collectedId = await this.collect(msg);
     if (collectedId) {
@@ -110,6 +146,10 @@ abstract class Collector<K, V> extends EventEmitter {
     this.checkEnd();
   }
 
+  /**
+   * Handles the disposal of an item.
+   * @param msg - The item to dispose.
+   */
   async handleDispose(msg: V): Promise<void> {
     if (!this.options.dispose) return;
 
@@ -126,6 +166,9 @@ abstract class Collector<K, V> extends EventEmitter {
     this.checkEnd();
   }
 
+  /**
+   * Returns a promise that resolves with the next collected item.
+   */
   get next(): Promise<V> {
     return new Promise((resolve, reject) => {
       if (this.isEnded) {
@@ -153,6 +196,10 @@ abstract class Collector<K, V> extends EventEmitter {
     });
   }
 
+  /**
+   * Stops the collector.
+   * @param reason - The reason for stopping the collector.
+   */
   stop(reason = "user"): void {
     if (this.isEnded) return;
 
@@ -171,6 +218,10 @@ abstract class Collector<K, V> extends EventEmitter {
     this.emit("end", this.collected, reason);
   }
 
+  /**
+   * Resets the timer for the collector.
+   * @param param0 - An object containing new time and idle values.
+   */
   resetTimer({ time, idle }: { time?: number; idle?: number } = {}): void {
     if (this._timeout) {
       clearTimeout(this._timeout);
@@ -188,12 +239,19 @@ abstract class Collector<K, V> extends EventEmitter {
     }
   }
 
+  /**
+   * Checks if the collector should end based on the options.
+   * @returns True if the collector should end, false otherwise.
+   */
   checkEnd(): boolean {
     const reason = this.endReason;
     if (reason) this.stop(reason);
     return Boolean(reason);
   }
 
+  /**
+   * Async generator for iterating over collected items.
+   */
   async *[Symbol.asyncIterator](): AsyncGenerator<[V, Collection<K, V>]> {
     const queue: unknown[] = [];
     const onCollect = (data: V, collected: Collection<K, V>) =>
@@ -221,12 +279,25 @@ abstract class Collector<K, V> extends EventEmitter {
     }
   }
 
+  /**
+   * Gets the reason for ending the collector.
+   */
   get endReason(): string | null {
     return this._endReason;
   }
 
+  /**
+   * Abstract method to collect an item.
+   * @param msg - The item to collect.
+   * @returns The key of the collected item or null.
+   */
   abstract collect(msg: unknown): Awaitable<K | null>;
 
+  /**
+   * Abstract method to dispose of an item.
+   * @param msg - The item to dispose.
+   * @returns The key of the disposed item or null.
+   */
   abstract dispose(msg: unknown): K | null;
 }
 

@@ -10,6 +10,9 @@ import fetch, {
 } from "node-fetch";
 import { MultipartStream } from "./util/MultipartStream";
 
+/**
+ * Configuration object for API requests.
+ */
 interface IApiConfig {
   method: string;
   compress: boolean;
@@ -18,16 +21,27 @@ interface IApiConfig {
   agent?: RequestInit["agent"];
 }
 
+/**
+ * Checks if a file exists.
+ * @param filePath - The path to the file.
+ * @returns A Promise resolving to true if the file exists, otherwise false.
+ */
 async function fileExists(filePath: string) {
   try {
     await fs.promises.access(filePath, fs.constants.F_OK);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
 
+/**
+ * Utility class for handling media-related operations.
+ */
 class Media {
+  /**
+   * File extensions for various media types.
+   */
   readonly extensions: Record<string, string> = {
     audio: "mp3",
     photo: "jpg",
@@ -38,6 +52,9 @@ class Media {
     voice: "ogg",
   };
 
+  /**
+   * Fields in JSON payload that require special treatment when sent as form data.
+   */
   readonly formDataJsonFields: string[] = [
     "results",
     "reply_markup",
@@ -47,6 +64,9 @@ class Media {
     "commands",
   ];
 
+  /**
+   * Media parameters that can be sent as form data.
+   */
   readonly sourceParametersMedia: string[] = [
     "sticker",
     "media",
@@ -59,6 +79,11 @@ class Media {
     "video_note",
   ];
 
+  /**
+   * Checks if the payload contains any media.
+   * @param payload - The payload to check.
+   * @returns True if the payload contains media, otherwise false.
+   */
   hasMedia(payload: Record<string, any>) {
     return Object.keys(payload).some((key) => {
       if (this.sourceParametersMedia.includes(key)) {
@@ -74,6 +99,12 @@ class Media {
     });
   }
 
+  /**
+   * Builds the JSON configuration for the API request.
+   * @param payload - The payload to send.
+   * @param requestOptions - Options for the request.
+   * @returns The JSON configuration object.
+   */
   buildJSONConfig(
     payload: Record<string, any>,
     requestOptions: RequestInit,
@@ -90,6 +121,12 @@ class Media {
     };
   }
 
+  /**
+   * Builds the multipart/form-data configuration for the API request.
+   * @param apiPayload - The payload to send.
+   * @param requestOptions - Options for the request.
+   * @returns A Promise resolving to the multipart/form-data configuration object.
+   */
   async buildFormDataConfig(
     apiPayload: Record<string, any>,
     requestOptions: RequestInit,
@@ -128,6 +165,13 @@ class Media {
     };
   }
 
+  /**
+   * Attaches a form value to the multipart/form-data.
+   * @param form - The multipart form.
+   * @param id - The field ID.
+   * @param value - The value to attach.
+   * @param agent - The request agent.
+   */
   async attachFormValue(
     form: MultipartStream,
     id: string,
@@ -180,6 +224,13 @@ class Media {
     await this.attachFormMedia(form, value, id, agent);
   }
 
+  /**
+   * Attaches media to the multipart/form-data.
+   * @param form - The multipart form.
+   * @param media - The media to attach.
+   * @param id - The ID of the media.
+   * @param agent - The request agent.
+   */
   async attachFormMedia(
     form: MultipartStream,
     media: string | Buffer | ReadStream,

@@ -11,8 +11,21 @@ import http, {
   type RequestListener,
 } from "node:http";
 
+/**
+ * Class representing a webhook mechanism for a Telegram bot.
+ */
 class Webhook {
+  /**
+   * The HTTP or HTTPS server instance used for the webhook.
+   */
   webhookServer?: http.Server | https.Server;
+
+  /**
+   * Function to filter incoming requests to the webhook.
+   * @param request - The incoming HTTP request.
+   * @param options - The options containing the path, token, and optional secret token.
+   * @returns True if the request passes the filter, false otherwise.
+   */
   webhookFilter = (
     request: IncomingMessage & { body?: Update },
     options: { path: string; token: string; secretToken?: string },
@@ -22,7 +35,7 @@ class Webhook {
         return true;
       } else {
         const token = request.headers["x-telegram-bot-api-secret-token"];
-        if (safeCompare(options.secretToken, options.token)) {
+        if (safeCompare(options.secretToken, token as string)) {
           return true;
         }
       }
@@ -30,12 +43,22 @@ class Webhook {
     return false;
   };
 
+  /**
+   * Creates an instance of Webhook.
+   * @param telegram - The Telegram bot instance.
+   * @param path - The webhook path. Default is "/".
+   * @param secretToken - The optional secret token for validating requests.
+   */
   constructor(
     public readonly telegram: TelegramBot,
     public readonly path: string = "/",
     public readonly secretToken: string = "",
   ) {}
 
+  /**
+   * Starts the webhook server to listen for incoming updates from the Telegram bot.
+   * @param options - The options for configuring the webhook server, including TLS options, port, host, and a request callback.
+   */
   async startWebhook(
     options: {
       tlsOptions?: TlsOptions;
@@ -58,6 +81,11 @@ class Webhook {
     this.webhookServer.listen(port, host);
   }
 
+  /**
+   * Creates a callback function for handling incoming webhook requests.
+   * @param requestCallback - An optional custom request callback.
+   * @returns A function to handle incoming webhook requests.
+   */
   async createWebhookCallback(requestCallback?: RequestListener) {
     const callback: RequestListener = async (
       request: IncomingMessage & { body?: Update },
@@ -104,6 +132,9 @@ class Webhook {
       : callback;
   }
 
+  /**
+   * Stops the webhook server.
+   */
   close() {
     this.webhookServer?.close();
   }

@@ -147,13 +147,29 @@ interface IEventFunctions {
 
 type EventKeysFunctions = keyof IEventFunctions;
 
+/**
+ * Custom event manager class extending EventEmitter.
+ * Manages event registration, listener addition, and removal.
+ */
 class ManagerEvents extends EventEmitter {
   constructor() {
     super();
   }
 
+  /**
+   * Adds a listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   on(event: string, listener: (...data: any[]) => void): this;
 
+  /**
+   * Adds a typed listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   on<T extends keyof IEventFunctions>(
     event: T,
     listener: IEventFunctions[T],
@@ -164,8 +180,20 @@ class ManagerEvents extends EventEmitter {
     return this;
   }
 
+  /**
+   * Adds a one-time listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   once(event: string, listener: (...args: any[]) => void): this;
 
+  /**
+   * Adds a typed one-time listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   once<T extends keyof IEventFunctions>(
     event: T,
     listener: IEventFunctions[T],
@@ -176,8 +204,20 @@ class ManagerEvents extends EventEmitter {
     return this;
   }
 
+  /**
+   * Removes a listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   off(event: string, listener: (...args: any[]) => void): this;
 
+  /**
+   * Removes a typed listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   off<T extends keyof IEventFunctions>(
     event: T,
     listener: IEventFunctions[T],
@@ -188,6 +228,9 @@ class ManagerEvents extends EventEmitter {
     return this;
   }
 
+  /**
+   * Increments the maximum number of listeners.
+   */
   incrementMaxListeners(): void {
     const maxListeners = this.getMaxListeners();
     if (maxListeners !== 0) {
@@ -195,6 +238,9 @@ class ManagerEvents extends EventEmitter {
     }
   }
 
+  /**
+   * Decrements the maximum number of listeners.
+   */
   decrementMaxListeners(): void {
     const maxListeners = this.getMaxListeners();
     if (maxListeners !== 0) {

@@ -5,6 +5,11 @@ import { InputFile } from "./core/structures/file";
 import type { MethodsReturnType, MethodParameters } from "./core/types";
 
 class Api extends ApiRequest {
+  /**
+   * Creates an instance of Api.
+   * @param authToken - The bot's authentication token.
+   * @param requestOptions - Optional request options for fetch.
+   */
   constructor(
     public readonly authToken: string,
     requestOptions?: RequestInit,

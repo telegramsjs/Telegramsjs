@@ -21,20 +21,52 @@ type MessageReactions = Msg & Context;
 
 type ReactCollectorContext = MessageReactionUpdated & Context;
 
+/**
+ * Interface for reaction event collector.
+ */
 interface IReactionEventCollector
   extends ICollectorEvent<string, ReactCollectorContext> {
+  /**
+   * Event emitted when a user reacts.
+   * @param data - The collection of user reactions.
+   */
   user: (
     data: Collection<number, ReactCollectorContext[] | ReactCollectorContext>,
   ) => void;
+
+  /**
+   * Event emitted when a reaction is created.
+   * @param data - The reaction context.
+   */
   create: (data: ReactCollectorContext) => void;
 }
 
+/**
+ * Collector class for handling message reactions in a specific chat.
+ */
 class ReactionCollector extends Collector<string, ReactCollectorContext> {
+  /**
+   * The chat in which reactions are being collected.
+   */
   channel: Chat;
+
+  /**
+   * The number of received reactions.
+   */
   received: number = 0;
+
+  /**
+   * Collection of users and their reactions.
+   */
   users: Collection<number, ReactCollectorContext[] | ReactCollectorContext> =
     new Collection();
 
+  /**
+   * Creates an instance of ReactionCollector.
+   * @param telegram - The TelegramBot instance.
+   * @param reaction - The initial message context.
+   * @param options - The options for the collector.
+   */
   constructor(
     public readonly telegram: TelegramBot,
     public readonly reaction: Msg,
@@ -54,6 +86,12 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     });
   }
 
+  /**
+   * Registers an event listener for reaction events.
+   * @param event - The event name.
+   * @param listener - The event listener.
+   * @returns The current instance of ReactionCollector.
+   */
   on<K extends keyof IReactionEventCollector>(
     event: K,
     listener: IReactionEventCollector[K],
@@ -62,6 +100,12 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     return this;
   }
 
+  /**
+   * Registers a one-time event listener for reaction events.
+   * @param event - The event name.
+   * @param listener - The event listener.
+   * @returns The current instance of ReactionCollector.
+   */
   once<K extends keyof IReactionEventCollector>(
     event: K,
     listener: IReactionEventCollector[K],
@@ -70,6 +114,11 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     return this;
   }
 
+  /**
+   * Collects a reaction.
+   * @param reaction - The reaction context.
+   * @returns The key of the reaction or null.
+   */
   collect(reaction: ReactCollectorContext): string | null {
     const { chat, new_reaction, old_reaction } = reaction;
 
@@ -87,6 +136,11 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     return ReactionCollector.getKeyFromReaction(new_reaction || old_reaction);
   }
 
+  /**
+   * Disposes of a reaction.
+   * @param reaction - The reaction context.
+   * @returns The key of the reaction or null.
+   */
   dispose(reaction: ReactCollectorContext): string | null {
     const { chat, new_reaction, old_reaction } = reaction;
 
@@ -101,6 +155,10 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     }
   }
 
+  /**
+   * Handles users' reactions.
+   * @param reaction - The reaction context.
+   */
   handleUsers(reaction: ReactCollectorContext) {
     if (!reaction.user?.id) return;
     if (!this.users.has(reaction.user.id)) {
@@ -120,6 +178,10 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     return;
   }
 
+  /**
+   * Gets the reason for ending the collector.
+   * @returns The reason for ending the collector or null.
+   */
   get endReason(): string | null {
     const { max, maxProcessed } = this.options;
 
@@ -134,6 +196,11 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     return super.endReason;
   }
 
+  /**
+   * Gets the key from a reaction.
+   * @param reaction - The reaction types.
+   * @returns The key of the reaction or null.
+   */
   static getKeyFromReaction(reaction: ReactionType[]): string | null {
     if (!Array.isArray(reaction) || reaction.length === 0) {
       return null;
