@@ -991,6 +991,14 @@ class Api extends ApiRequest {
       params,
     );
   }
+  
+  /** Refunds a successful payment in Telegram Stars. Returns True on success */
+  async refundStarPayment(userId: number, telegramPaymentChargeId: string) {
+    return await this.request<MethodsReturnType["refundStarPayment"]>("refundStarPayment", {
+      user_id: userId,
+      telegram_payment_charge_id: telegramPaymentChargeId,
+    })
+  }
 
   /** Refunds a successful payment in Telegram Stars. Returns True on success */
   async refundStarPayment(userId: number, telegramPaymentChargeId: string) {
