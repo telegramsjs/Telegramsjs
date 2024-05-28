@@ -991,13 +991,16 @@ class Api extends ApiRequest {
       params,
     );
   }
-  
+
   /** Refunds a successful payment in Telegram Stars. Returns True on success */
   async refundStarPayment(userId: number, telegramPaymentChargeId: string) {
-    return await this.request<MethodsReturnType["refundStarPayment"]>("refundStarPayment", {
-      user_id: userId,
-      telegram_payment_charge_id: telegramPaymentChargeId,
-    })
+    return await this.request<MethodsReturnType["refundStarPayment"]>(
+      "refundStarPayment",
+      {
+        user_id: userId,
+        telegram_payment_charge_id: telegramPaymentChargeId,
+      },
+    );
   }
 
   /** Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
