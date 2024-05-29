@@ -1,7 +1,4 @@
-node_modules/
-package-lock.json
-.prettierrc
-/storage/index.ts
-/storage/index.js
 dist/
-oldsrc/
+node_modules/
+.prettierrc
+package-lock.json
