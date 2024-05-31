@@ -211,14 +211,14 @@ class TelegramBot extends Api {
       const content = ctx.text;
       const args = content.split(/\s+/);
 
-      if (typeof name === "string" && ctx.text.includes(name)) {
+      if (typeof text === "string" && ctx.text.includes(text)) {
         await callback(ctx, args);
-      } else if (Array.isArray(name)) {
-        if (name.some((search) => ctx.text.includes(search))) {
+      } else if (Array.isArray(text)) {
+        if (text.some((search) => ctx.text.includes(search))) {
           await callback(ctx, args);
         }
-      } else if (isRegExp(name)) {
-        if (name.test(ctx.text)) {
+      } else if (isRegExp(text)) {
+        if (text.test(ctx.text)) {
           await callback(ctx, args);
         }
       }
