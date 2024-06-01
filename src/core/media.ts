@@ -180,11 +180,20 @@ class Media {
   ) {
     if (!value) return;
 
-    if (
-      (typeof value === "string" && value.startsWith("https://")) ||
-      typeof value === "boolean" ||
-      typeof value === "number"
-    ) {
+    if (typeof value === "string") {
+      if (await fileExists(value)) {
+        await this.attachFormMedia(form, value, id, agent);
+        return;
+      } else {
+        form.addPart({
+          headers: { "content-disposition": `form-data; name="${id}"` },
+          body: `${value}`,
+        });
+        return;
+      }
+    }
+
+    if (typeof value === "boolean" || typeof value === "number") {
       form.addPart({
         headers: { "content-disposition": `form-data; name="${id}"` },
         body: `${value}`,
@@ -192,7 +201,7 @@ class Media {
       return;
     }
 
-    if (id === "thumb") {
+    if (id === "thumb" || id === "thumbnail") {
       const attachmentId = crypto.randomBytes(16).toString("hex");
       await this.attachFormMedia(form, value, attachmentId, agent);
       form.addPart({
@@ -205,6 +214,7 @@ class Media {
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {
+          console.log(item);
           if (typeof item.media !== "object") {
             return item;
           }
@@ -237,7 +247,7 @@ class Media {
     id: string,
     agent: RequestInit["agent"],
   ) {
-    const filename = `${id}.${this.extensions[id] || "text"}`;
+    const filename = `${id}.${this.extensions[id] || "txt"}`;
 
     if (typeof media === "string") {
       if (await fileExists(media)) {
