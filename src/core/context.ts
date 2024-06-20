@@ -4,6 +4,7 @@ import type { UnionKeys, UpdateReturn, MethodParameters } from "./types";
 import {
   Reaction,
   Entities,
+  Message as MessageHandler,
   MessageCollector,
   ReactionCollector,
   InlineKeyboardCollector,
@@ -37,6 +38,7 @@ class ApiContext {
       webAppData: this.webAppData,
       reactions: this.reactions,
       entities: this.entities,
+      awaitMessage: this.awaitMessage.bind(this),
       awaitReaction: this.awaitReaction.bind(this),
       createMessageCollector: this.createMessageCollector.bind(this),
       createReactionCollector: this.createReactionCollector.bind(this),
@@ -377,6 +379,10 @@ class ApiContext {
     const text = this.msg?.text || this.msg?.caption || "";
     const entities = this.msg?.entities || this.msg?.caption_entities || [];
     return new Entities(text, entities);
+  }
+
+  awaitMessage(options: MethodParameters<MessageHandler>["awaitMessage"]) {
+    return new MessageHandler(this.api).awaitMessage(options);
   }
 
   awaitReaction(options: MethodParameters<Reaction>["awaitReaction"]) {

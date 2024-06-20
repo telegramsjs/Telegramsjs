@@ -182,7 +182,18 @@ class Media {
 
     if (typeof value === "string") {
       if (await fileExists(value)) {
-        await this.attachFormMedia(form, value, id, agent);
+        await this.attachFormMedia(form, value, id);
+        return;
+      } else if (id === "thumbnail" && value.startsWith("http")) {
+        const attachmentId = crypto.randomBytes(16).toString("hex");
+        const response = await fetch(value, { agent });
+        value = Buffer.from(await response.arrayBuffer());
+
+        await this.attachFormMedia(form, value, attachmentId);
+        form.addPart({
+          headers: { "content-disposition": `form-data; name="${id}"` },
+          body: `attach://${attachmentId}`,
+        });
         return;
       } else {
         form.addPart({
@@ -201,9 +212,10 @@ class Media {
       return;
     }
 
-    if (id === "thumb" || id === "thumbnail") {
+    if (id === "thumbnail") {
       const attachmentId = crypto.randomBytes(16).toString("hex");
-      await this.attachFormMedia(form, value, attachmentId, agent);
+
+      await this.attachFormMedia(form, value, attachmentId);
       form.addPart({
         headers: { "content-disposition": `form-data; name="${id}"` },
         body: `attach://${attachmentId}`,
@@ -219,7 +231,7 @@ class Media {
             return item;
           }
           const attachmentId = crypto.randomBytes(16).toString("hex");
-          await this.attachFormMedia(form, item.media, attachmentId, agent);
+          await this.attachFormMedia(form, item.media, attachmentId);
           return { ...item, media: `attach://${attachmentId}` };
         }),
       );
@@ -231,7 +243,7 @@ class Media {
       return;
     }
 
-    await this.attachFormMedia(form, value, id, agent);
+    await this.attachFormMedia(form, value, id);
   }
 
   /**
@@ -239,13 +251,11 @@ class Media {
    * @param form - The multipart form.
    * @param media - The media to attach.
    * @param id - The ID of the media.
-   * @param agent - The request agent.
    */
   async attachFormMedia(
     form: MultipartStream,
     media: string | Buffer | ReadStream,
     id: string,
-    agent: RequestInit["agent"],
   ) {
     const filename = `${id}.${this.extensions[id] || "txt"}`;
 

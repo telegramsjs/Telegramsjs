@@ -992,6 +992,17 @@ class Api extends ApiRequest {
     );
   }
 
+  /** Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object. */
+  async getStarTransactions(offset?: number, limit?: number) {
+    return await this.request<MethodsReturnType["getStarTransactions"]>(
+      "getStarTransactions",
+      {
+        offset,
+        limit,
+      },
+    );
+  }
+
   /** Refunds a successful payment in Telegram Stars. Returns True on success */
   async refundStarPayment(userId: number, telegramPaymentChargeId: string) {
     return await this.request<MethodsReturnType["refundStarPayment"]>(
