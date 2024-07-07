@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@telegram.ts/types": "^1.11.0",
+    "@types/node": "^18.19.39",
+    "@types/node-fetch": "^2.6.11"
+  },
+  "dependencies": {
+    "@telegram.ts/collection": "^1.1.0",
+    "node-fetch": "^2.7.0",
+    "safe-compare": "^1.1.4",
+    "sandwich-stream": "^2.0.2",
+    "tslib": "^2.6.3"
+  }
+}
