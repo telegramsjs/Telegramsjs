@@ -1,42 +1,48 @@
+const { Permissions } = require("../../util/Permissions");
+
 class ChatAdministratorRights {
   constructor(data) {
     this.anonymous = data.is_anonymous;
 
-    this.canManageChat = data.can_manage_chat;
+    const permissions = {};
 
-    this.canDeleteMessages = data.can_delete_messages;
+    permissions.manageChat = data.can_manage_chat;
 
-    this.canManageVideoChats = data.can_manage_video_chats;
+    permissions.deleteMessages = data.can_delete_messages;
 
-    this.canRestrictMembers = data.can_restrict_members;
+    permissions.manageVideoChats = data.can_manage_video_chats;
 
-    this.canPromoteMembers = data.can_promote_members;
+    permissions.restrictMembers = data.can_restrict_members;
 
-    this.canChangeInfo = data.can_change_info;
+    permissions.promoteMembers = data.can_promote_members;
 
-    this.canInviteUsers = data.can_invite_users;
+    permissions.changeInfo = data.can_change_info;
 
-    this.canPostStories = data.can_post_stories;
+    permissions.inviteUsers = data.can_invite_users;
 
-    this.canEditStories = data.can_edit_stories;
+    permissions.postStories = data.can_post_stories;
 
-    this.canDeleteStories = data.can_delete_stories;
+    permissions.editStories = data.can_edit_stories;
+
+    permissions.deleteStories = data.can_delete_stories;
 
     if ("can_post_messages" in data) {
-      this.canPostMessages = data.can_post_messages;
+      permissions.postMessages = data.can_post_messages;
     }
 
     if ("can_edit_messages" in data) {
-      this.canEditMessages = data.can_edit_messages;
+      permissions.editMessages = data.can_edit_messages;
     }
 
     if ("can_pin_messages" in data) {
-      this.canPinMessages = data.can_pin_messages;
+      permissions.pinMessages = data.can_pin_messages;
     }
 
     if ("can_manage_topics" in data) {
-      this.canManageTopics = data.can_manage_topics;
+      permissions.manageTopics = data.can_manage_topics;
     }
+
+    this.permissions = new Permissions(permissions);
   }
 }
 

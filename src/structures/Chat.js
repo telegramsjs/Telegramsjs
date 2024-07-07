@@ -34,7 +34,7 @@ class Chat extends Base {
     }
 
     if ("is_forum" in data) {
-      this.forum = data.forum;
+      this.forum = data.is_forum;
     }
   }
 
@@ -85,6 +85,123 @@ class Chat extends Base {
       chat_id: this.id,
       only_if_banned: onlyIfBanned,
     });
+  }
+
+  leave() {
+    return this.client.leaveChat(this.id);
+  }
+
+  getAdmins() {
+    return this.client.getChatAdministrators(this.id);
+  }
+
+  membersCount() {
+    return this.client.getChatMemberCount(this.id);
+  }
+
+  setStickerSet(name) {
+    return this.client.setChatStickerSet(this.id, name);
+  }
+
+  deleteStickerSet() {
+    return this.client.deleteChatStickerSet(this.id);
+  }
+
+  setMenuButton(menuButton) {
+    return this.client.deleteChatStickerSet(this.id, menuButton);
+  }
+
+  createForumTopic(name, options = {}) {
+    return this.client.createForumTopic({
+      name,
+      chat_id: this.id,
+      ...options,
+    });
+  }
+
+  editGeneralForumTopic(name) {
+    return this.client.editGeneralForumTopic(this.id, name);
+  }
+
+  closeGeneralForumTopic() {
+    return this.client.closeGeneralForumTopic(this.id);
+  }
+
+  reopenGeneralForumTopic() {
+    return this.client.reopenGeneralForumTopic(this.id);
+  }
+
+  hideGeneralForumTopic() {
+    return this.client.hideGeneralForumTopic(this.id);
+  }
+
+  unhideGeneralForumTopic() {
+    return this.client.unhideGeneralForumTopic(this.id);
+  }
+
+  unpinAllGeneralForumTopicMessages() {
+    return this.client.unpinAllGeneralForumTopicMessages(this.id);
+  }
+
+  setPermissions(perms, useIndependentChatPermissions) {
+    const permissions = new Permissions(perms);
+
+    return thsi.client.setChatPermissions({
+      chat_id: this.id,
+      permissions: permissions.toObject(),
+      use_independent_chat_permissions: useIndependentChatPermissions,
+    });
+  }
+
+  createInvite(options = {}) {
+    return this.client.exportChatInviteLink({
+      chat_id: this.id,
+      ...options,
+    });
+  }
+
+  editInvite(inviteLink, options = {}) {
+    return this.client.editChatInviteLink({
+      chat_id: this.id,
+      invite_link: inviteLink,
+      ...options,
+    });
+  }
+
+  revokeInvite(inviteLink) {
+    return this.client.revokeChatInviteLink(this.id, inviteLink);
+  }
+
+  setPhoto(photo) {
+    return this.client.setChatPhoto(this.id, photo);
+  }
+
+  deletePhoto() {
+    return this.client.deleteChatPhoto(this.id);
+  }
+
+  setTitle(title) {
+    return this.client.setChatTitle(this.id, title);
+  }
+
+  setDescription(description) {
+    return this.client.setChatDescription(this.id, description);
+  }
+
+  pinMessage(messageId, disableNotification) {
+    return this.client.pinChatMessage({
+      chat_id: this.id,
+      message_id: messageId,
+      disable_notification: disableNotification,
+    });
+  }
+
+  unpinMessage(messageId) {
+    return this.client.unpinChatMessage(this.id, messageId);
+  }
+
+  unpinAllMessages(messageId) {
+    return this.client.unpinAllChatMessages(this.id);
   }
 
   sendPhoto(photo, options = {}) {

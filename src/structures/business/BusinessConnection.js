@@ -13,7 +13,7 @@ class BusinessConnection extends Base {
 
     this.createdTimestamp = data.date;
 
-    this.canReply = data.can_reply;
+    this.replyed = data.can_reply;
 
     this.enabled = data.is_enabled;
   }

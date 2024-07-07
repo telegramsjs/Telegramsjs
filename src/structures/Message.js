@@ -28,6 +28,7 @@ const { VideoChatScheduled } = require("./VideoChatScheduled");
 const {
   VideoChatParticipantsInvited,
 } = require("./VideoChatParticipantsInvited");
+const { ForumTopic } = require("./forum/ForumTopic");
 const { TextQuote } = require("./TextQuote");
 
 class Message extends Base {
@@ -153,6 +154,14 @@ class Message extends Base {
     }
 
     if ("is_topic_message" in data) {
+      if ("chat" in this && "threadId" in this) {
+        this.forum = new ForumTopic(
+          this.client,
+          this.threadId,
+          this.chat?.id,
+          {},
+        );
+      }
       this.inTopic = data.is_topic_message;
     }
 
@@ -278,32 +287,19 @@ class Message extends Base {
     }
 
     if ("forum_topic_created" in data) {
-      const forumTopicCreated = {
-        name: data.forum_topic_created.name,
-        iconColor: data.forum_topic_created.icon_color,
-      };
-
-      if ("icon_custom_emoji_id" in data.forum_topic_created) {
-        forumTopicCreated.iconEmojiId =
-          data.forum_topic_created.icon_custom_emoji_id;
-      }
-
-      this.forumCreated = new ForumTopicCreated(data.forum_topic_created);
+      this.forumCreated = new ForumTopic(
+        this.client,
+        this.threadId,
+        this.chat?.id,
+        data.forum_topic_created,
+      );
     }
 
     if ("forum_topic_edited" in data) {
-      const forumTopicEdited = {};
-
-      if ("name" in data.forum_topic_edited) {
-        forumTopicCreated.name = data.forum_topic_edited.name;
-      }
-
-      if ("icon_custom_emoji_id" in data.forum_topic_created) {
-        forumTopicCreated.iconEmojiId =
-          data.forum_topic_created.icon_custom_emoji_id;
-      }
-
-      this.forumEdited = new ForumTopicEdited(data.forum_topic_edited);
+      this.forumEdited = new ForumTopicEdited(
+        this.client,
+        data.forum_topic_edited,
+      );
     }
 
     if ("forum_topic_closed" in data) {
@@ -461,6 +457,33 @@ class Message extends Base {
   edit(text, options = {}) {
     return this.client.editMessageText({
       text,
+      chat_id: this.chat.id,
+      message_id: this.id,
+      ...options,
+    });
+  }
+
+  editCaption(caption, options = {}) {
+    return this.client.editMessageCaption({
+      caption,
+      chat_id: this.chat.id,
+      message_id: this.id,
+      ...options,
+    });
+  }
+
+  editMedia(media, options = {}) {
+    return this.client.editMessageMedia({
+      media,
+      chat_id: this.chat.id,
+      message_id: this.id,
+      ...options,
+    });
+  }
+
+  editReplyMarkup(replyMarkup, options = {}) {
+    return this.client.editMessageReplyMarkup({
+      media,
       chat_id: this.chat.id,
       message_id: this.id,
       ...options,

@@ -4,21 +4,6 @@ type PermissionResolvable =
   | Permissions
   | Array<string | number | Permissions>;
 
-function toSnakeCase(str: string) {
-  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-}
-
-function convertKeysToSnakeCase(obj: Record<string, boolean>) {
-  const newObj: Record<string, boolean> = {};
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const snakeCaseKey = toSnakeCase(key);
-      newObj[snakeCaseKey] = obj[key];
-    }
-  }
-  return newObj;
-}
-
 class Permissions {
   private allowed: Set<string>;
   private denied: Set<string>;
@@ -82,24 +67,18 @@ class Permissions {
     ) as string;
   }
 
-  toObject(permission?: Record<string, boolean>): Record<string, boolean> {
+  toApiFormat() {}
+
+  toObject(): Record<string, boolean> {
     const flags: Record<string, boolean> = {};
 
-    if (!permission) {
-      for (const flag of Array.from(this.allowed).map((flag) =>
-        toSnakeCase(flag),
-      )) {
-        flags[flag] = true;
-      }
-      for (const flag of Array.from(this.denied).map((flag) =>
-        toSnakeCase(flag),
-      )) {
-        flags[flag] = false;
-      }
-      return flags;
+    for (const flag of Array.from(this.allowed)) {
+      flags[flag] = true;
     }
-
-    return convertKeysToSnakeCase(flags);
+    for (const flag of Array.from(this.denied)) {
+      flags[flag] = false;
+    }
+    return flags;
   }
 
   private _patch(data: Record<string, boolean>): void {
@@ -115,19 +94,26 @@ class Permissions {
   }
 
   static Flags: Record<string, number> = {
-    canPostMessages: 1,
-    canSendMessages: 2,
-    canSendMediaMessages: 3,
-    canSendPolls: 4,
-    canSendOtherMessages: 5,
-    canAddWebPagePreviews: 6,
-    canInviteUsers: 7,
-    canPinMessages: 8,
-    canEditMessages: 9,
-    canDeleteMessages: 10,
-    canRestrictMembers: 11,
-    canPromoteMembers: 12,
-    canChangeInfo: 13,
+    changeInfo: 1,
+    postMessages: 2,
+    editMessages: 3,
+    deleteMessages: 4,
+    inviteUsers: 5,
+    restrictMembers: 6,
+    pinMessages: 7,
+    promoteMembers: 8,
+    sendMessages: 9,
+    sendMediaMessages: 10,
+    sendPolls: 11,
+    sendOtherMessages: 12,
+    addWebPagePreviews: 13,
+    manageVoiceChats: 14,
+    beEdited: 15,
+    manageChat: 16,
+    postStories: 17,
+    editStories: 18,
+    deleteStories: 19,
+    manageTopics: 20,
   };
 }
 

@@ -224,7 +224,7 @@ class ChatFullInfo extends Chat {
     }
 
     if ("can_set_sticker_set" in data) {
-      this.canSetStickerSet = data.can_set_sticker_set;
+      this.setStickerSet = data.can_set_sticker_set;
     }
 
     if ("custom_emoji_sticker_set_name" in data) {

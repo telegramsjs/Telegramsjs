@@ -5,7 +5,7 @@ class User extends Base {
     super(client, data);
 
     this.id = data.id;
-    this.bot = Boolean(data.bot);
+    this.bot = Boolean(data.is_bot);
     this.firstName = data.first_name;
     this._patch(data);
   }

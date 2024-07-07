@@ -1,10 +1,12 @@
-class ForumTopic {
-  constructor(data) {
-    this.id = data.message_thread_id;
+const { Forum } = require("./Forum");
 
-    this.name = data.name;
+class ForumTopic extends Forum {
+  constructor(client, threadId, chatId, data) {
+    super(client, data.message_thread_id || threadId, chatId, data);
 
-    this.iconColor = data.icon_color;
+    this.name = data.name || null;
+
+    this.iconColor = data.icon_color || null;
 
     if ("icon_custom_emoji_id" in data) {
       this.iconEmojiId = data.icon_custom_emoji_id;

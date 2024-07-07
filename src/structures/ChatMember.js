@@ -32,105 +32,109 @@ class ChatMember extends Base {
       this.isMember = data.is_member;
     }
 
+    const permissions = {};
+
     if ("can_be_edited" in data) {
-      this.canBeEdited = data.can_be_edited;
+      permissions.beEdited = data.can_be_edited;
     }
 
     if ("can_manage_chat" in data) {
-      this.canManageChat = data.can_manage_chat;
+      permissions.manageChat = data.can_manage_chat;
     }
 
     if ("can_delete_messages" in data) {
-      this.canDeleteMessages = data.can_delete_messages;
+      permissions.deleteMessages = data.can_delete_messages;
     }
 
     if ("can_manage_video_chats" in data) {
-      this.canManageVideoChats = data.can_manage_video_chats;
+      permissions.manageVideoChats = data.can_manage_video_chats;
     }
 
     if ("can_restrict_members" in data) {
-      this.canRestrictMembers = data.can_restrict_members;
+      permissions.restrictMembers = data.can_restrict_members;
     }
 
     if ("can_promote_members" in data) {
-      this.canPromoteMembers = data.can_promote_members;
+      permissions.promoteMembers = data.can_promote_members;
     }
 
     if ("can_change_info" in data) {
-      this.canChangeInfo = data.can_change_info;
+      permissions.changeInfo = data.can_change_info;
     }
 
     if ("can_invite_users" in data) {
-      this.canInviteUsers = data.can_invite_users;
+      permissions.inviteUsers = data.can_invite_users;
     }
 
     if ("can_post_stories" in data) {
-      this.canPostStories = data.can_post_stories;
+      permissions.postStories = data.can_post_stories;
     }
 
     if ("can_edit_stories" in data) {
-      this.canEditStories = data.can_edit_stories;
+      permissions.editStories = data.can_edit_stories;
     }
 
     if ("can_delete_stories" in data) {
-      this.canDeleteStories = data.can_delete_stories;
+      permissions.deleteStories = data.can_delete_stories;
     }
 
     if ("can_post_messages" in data) {
-      this.canPostMessages = data.can_post_messages;
+      permissions.postMessages = data.can_post_messages;
     }
 
     if ("can_edit_messages" in data) {
-      this.canEditMessages = data.can_edit_messages;
+      permissions.editMessages = data.can_edit_messages;
     }
 
     if ("can_pin_messages" in data) {
-      this.canPinMessages = data.can_pin_messages;
+      permissions.pinMessages = data.can_pin_messages;
     }
 
     if ("can_manage_topics" in data) {
-      this.canManageTopics = data.can_manage_topics;
+      permissions.manageTopics = data.can_manage_topics;
     }
 
     if ("can_send_messages" in data) {
-      this.canSendMessages = data.can_send_messages;
+      permissions.sendMessages = data.can_send_messages;
     }
 
     if ("can_send_audios" in data) {
-      this.canSendAudios = data.can_send_audios;
+      permissions.sendAudios = data.can_send_audios;
     }
 
     if ("can_send_documents" in data) {
-      this.canSendDocuments = data.can_send_documents;
+      permissions.sendDocuments = data.can_send_documents;
     }
 
     if ("can_send_photos" in data) {
-      this.canSendPhotos = data.can_send_photos;
+      permissions.sendPhotos = data.can_send_photos;
     }
 
     if ("can_send_videos" in data) {
-      this.canSendVideos = data.can_send_videos;
+      permissions.sendVideos = data.can_send_videos;
     }
 
     if ("can_send_video_notes" in data) {
-      this.canSendVideoNotes = data.can_send_video_notes;
+      permissions.sendVideoNotes = data.can_send_video_notes;
     }
 
     if ("can_send_voice_notes" in data) {
-      this.canSendVoiceNotes = data.can_send_voice_notes;
+      permissions.sendVoiceNotes = data.can_send_voice_notes;
     }
 
     if ("can_send_polls" in data) {
-      this.canSendPolls = data.can_send_polls;
+      permissions.sendPolls = data.can_send_polls;
     }
 
     if ("can_send_other_messages" in data) {
-      this.canSendOtherMessages = data.can_send_other_messages;
+      permissions.sendOtherMessages = data.can_send_other_messages;
     }
 
     if ("can_add_web_page_previews" in data) {
-      this.canAddWebPagePreviews = data.can_add_web_page_previews;
+      permissions.addWebPagePreviews = data.can_add_web_page_previews;
     }
+
+    this.permissions = new Permissions(permissions);
 
     if ("chat" in data) {
       this.chat = new Chat(this.client, data.chat);
