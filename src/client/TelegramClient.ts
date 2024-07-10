@@ -37,17 +37,27 @@ interface ILoginOptions {
   };
 }
 
+interface ClientOptions {
+  offset?: number;
+  requestOptions?: RequestInit;
+  messageCacheMaxSize?: number;
+  chatCacheMaxSize?: number;
+  memberCacheMaxSize?: number;
+  userCacheMaxSize?: number;
+}
+
 class TelegramClient extends BaseClient {
   public readonly polling: PollingClient;
   public readonly webhook: WebhookClient;
   public readonly worket: WorketClient;
+  public readyTimestamp: number | null = null;
   public user!: ClientUser;
 
   constructor(
     public readonly authToken: string,
-    requestOptions: RequestInit,
+    public readonly options: ClientOptions = {},
   ) {
-    super(authToken, requestOptions);
+    super(authToken, options);
 
     if (!authToken) {
       throw new TelegramError(
@@ -55,7 +65,7 @@ class TelegramClient extends BaseClient {
       );
     }
 
-    this.polling = new PollingClient(this);
+    this.polling = new PollingClient(this, options?.offset);
     this.webhook = new WebhookClient(this);
     this.worket = new WorketClient(this);
   }
@@ -67,7 +77,16 @@ class TelegramClient extends BaseClient {
     }
 
     if ("webhook" in options) {
-      await this.webhook.startWebhook(options.webhook);
+      if (typeof options.webhook?.url !== "string") {
+        throw new TelegramError("You did not specify the 'url' parameter");
+      }
+
+      await this.setWebhook(options.webhook);
+      await this.webhook.startWebhook(
+        options.webhook?.path,
+        options.webhook?.secret_token,
+        options.webhook,
+      );
       return;
     }
 
@@ -77,7 +96,8 @@ class TelegramClient extends BaseClient {
   destroy() {
     this.polling.close();
     this.webhook.close();
+    this.emit("disconnect", this);
   }
 }
 
-export { TelegramClient, ILoginOptions };
+export { TelegramClient, ClientOptions, ILoginOptions };

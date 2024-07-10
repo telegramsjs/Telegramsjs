@@ -1,6 +1,5 @@
 const { Base } = require("./Base");
 const { User } = require("./User");
-const { Chat } = require("./Chat");
 const { ChatInviteLink } = require("./chat/ChatInviteLink");
 const { Permissions } = require("../util/Permissions");
 
@@ -137,7 +136,7 @@ class ChatMember extends Base {
     this.permissions = new Permissions(permissions);
 
     if ("chat" in data) {
-      this.chat = new Chat(this.client, data.chat);
+      this.chat = this.client.chats._add(data.chat);
     }
 
     if ("from" in data) {
@@ -178,7 +177,7 @@ class ChatMember extends Base {
 
     return this.client.restrictChatMember({
       user_id: this.user.id,
-      permissions: permissions.toObject(persm),
+      permissions: permissions.toApiFormat(permissions.toObject()),
       ...options,
     });
   }
@@ -190,7 +189,7 @@ class ChatMember extends Base {
       chat_id: this.chatId,
       userId: this.user.id,
       is_anonymous: isAnonymous,
-      ...permissions.toObject(perms),
+      ...permissions.toApiFormat(permissions.toObject()),
     });
   }
 

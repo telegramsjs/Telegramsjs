@@ -14,52 +14,56 @@ class ClientUser extends User {
     }
   }
 
-  async setCommands(commands, score, language) {
-    return await this.client.setMyCommands({
+  fetch() {
+    return this.client.fetchApplication();
+  }
+
+  setCommands(commands, score, language) {
+    return this.client.setMyCommands({
       commands,
       score,
       language,
     });
   }
 
-  async getCommands(score, language) {
-    return await this.client.getMyCommands(score, language);
+  getCommands(score, language) {
+    return this.client.getMyCommands(score, language);
   }
 
-  async deleteCommands(score, language) {
-    return await this.client.deleteMyCommands(score, language);
+  deleteCommands(score, language) {
+    return this.client.deleteMyCommands(score, language);
   }
 
-  async setName(name, language) {
-    return await this.client.setMyName(name, language);
+  setName(name, language) {
+    return this.client.setMyName(name, language);
   }
 
-  async getName(language) {
-    return await this.client.getMyName(language);
+  getName(language) {
+    return this.client.getMyName(language);
   }
 
-  async setDescription(description, language) {
-    return await this.client.setMyDescription(description, language);
+  setDescription(description, language) {
+    return this.client.setMyDescription(description, language);
   }
 
-  async getDescription(language) {
-    return await this.client.getMyDescription(language);
+  getDescription(language) {
+    return this.client.getMyDescription(language);
   }
 
-  async setShortDescription(description, language) {
-    return await this.client.setMyShortDescription(description, language);
+  setShortDescription(description, language) {
+    return this.client.setMyShortDescription(description, language);
   }
 
-  async getShortDescription(language) {
-    return await this.client.getMyShortDescription(language);
+  getShortDescription(language) {
+    return this.client.getMyShortDescription(language);
   }
 
-  async setAdministratorRights(rights, forChannels) {
-    return await this.client.setMyAdministratorRights(rights, forChannels);
+  setAdministratorRights(rights, forChannels) {
+    return this.client.setMyAdministratorRights(rights, forChannels);
   }
 
-  async getAdministratorRigths(forChannels) {
-    return await this.client.getMyAdministratorRights(forChannels);
+  getAdministratorRigths(forChannels) {
+    return this.client.getMyAdministratorRights(forChannels);
   }
 }
 

@@ -28,9 +28,14 @@ const { VideoChatScheduled } = require("./VideoChatScheduled");
 const {
   VideoChatParticipantsInvited,
 } = require("./VideoChatParticipantsInvited");
+const { Forum } = require("./forum/Forum");
 const { ForumTopic } = require("./forum/ForumTopic");
 const { TextQuote } = require("./TextQuote");
 
+/**
+ * Represents a message on Discord.
+ * @extends {Base}
+ */
 class Message extends Base {
   constructor(client, data) {
     super(client, data);
@@ -46,11 +51,18 @@ class Message extends Base {
     }
 
     if ("from" in data) {
-      this.author = new User(this.client, data.from);
+      this.author = this.client.users._add(data.from);
     }
 
     if ("chat" in data) {
-      this.chat = new Chat(this.client, data.chat);
+      this.chat = this.client.chats._add(data.chat);
+
+      if (!this.chat.isPrivate()) {
+        this.member = this.chat.members._add(this.chat.id, true, {
+          id: data.from.id,
+          extras: [{ user: data.from }],
+        });
+      }
     }
 
     if ("text" in data) {
@@ -155,12 +167,7 @@ class Message extends Base {
 
     if ("is_topic_message" in data) {
       if ("chat" in this && "threadId" in this) {
-        this.forum = new ForumTopic(
-          this.client,
-          this.threadId,
-          this.chat?.id,
-          {},
-        );
+        this.forum = new Forum(this.client, this.threadId, this.chat.id);
       }
       this.inTopic = data.is_topic_message;
     }

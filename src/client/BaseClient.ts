@@ -2,6 +2,9 @@ import { EventEmitter } from "node:events";
 import type { ReadStream } from "node:fs";
 import type { RequestInit } from "node-fetch";
 import { ApiRequest } from "../rest/ApiRequest";
+import type { ClientOptions } from "./TelegramClient";
+import { UserManager } from "../managers/UserManager";
+import { ChatManager } from "../managers/ChatManager";
 import {
   Message,
   MenuButton,
@@ -24,9 +27,31 @@ import type { MethodsReturnType, MethodParameters } from "../types";
 
 class BaseClient extends EventEmitter {
   public readonly apiRequest: ApiRequest;
-  constructor(authToken: string, requestOptions: RequestInit) {
+  public readonly users: UserManager;
+  public readonly chats: ChatManager;
+
+  constructor(authToken: string, options?: ClientOptions) {
     super();
-    this.apiRequest = new ApiRequest(authToken, requestOptions);
+
+    this.apiRequest = new ApiRequest(authToken, options?.requestOptions);
+
+    this.users = new UserManager(this, options?.userCacheMaxSize);
+
+    this.chats = new ChatManager(this, options?.chatCacheMaxSize);
+  }
+
+  incrementMaxListeners() {
+    const maxListeners = this.getMaxListeners();
+    if (maxListeners !== 0) {
+      this.setMaxListeners(maxListeners + 1);
+    }
+  }
+
+  decrementMaxListeners() {
+    const maxListeners = this.getMaxListeners();
+    if (maxListeners !== 0) {
+      this.setMaxListeners(maxListeners - 1);
+    }
   }
 
   /** Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects */
@@ -98,14 +123,26 @@ class BaseClient extends EventEmitter {
   async sendMessage(params: MethodParameters["sendMessage"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendMessage"]>("sendMessage", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send photos. On success, the sent Message is returned. */
   async sendPhoto(params: MethodParameters["sendPhoto"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendPhoto"]>("sendPhoto", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -114,35 +151,65 @@ class BaseClient extends EventEmitter {
   async sendAudio(params: MethodParameters["sendAudio"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendAudio"]>("sendAudio", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
   async sendDocument(params: MethodParameters["sendDocument"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendDocument"]>("sendDocument", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future. */
   async sendVideo(params: MethodParameters["sendVideo"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendVideo"]>("sendVideo", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future. */
   async sendAnimation(params: MethodParameters["sendAnimation"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendAnimation"]>("sendAnimation", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
   async sendVoice(params: MethodParameters["sendVoice"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendVoice"]>("sendVoice", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send video messages. On success, the sent Message is returned.
@@ -150,7 +217,13 @@ class BaseClient extends EventEmitter {
   async sendVideoNote(params: MethodParameters["sendVideoNote"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendVideoNote"]>("sendVideoNote", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned. */
@@ -164,21 +237,39 @@ class BaseClient extends EventEmitter {
   async sendLocation(params: MethodParameters["sendLocation"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendLocation"]>("sendLocation", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
   async sendVenue(params: MethodParameters["sendVenue"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendVenue"]>("sendVenue", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to forward messages of any kind. Service messages can't be forwarded. On success, the sent Message is returned. */
   async forwardMessage(params: MethodParameters["forwardMessage"]) {
     return await this.apiRequest
       .get<MethodsReturnType["forwardMessage"]>("forwardMessage", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned. */
@@ -206,21 +297,39 @@ class BaseClient extends EventEmitter {
   async sendContact(params: MethodParameters["sendContact"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendContact"]>("sendContact", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send a native poll. On success, the sent Message is returned. */
   async sendPoll(params: MethodParameters["sendPoll"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendPoll"]>("sendPoll", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
   async sendDice(params: MethodParameters["sendDice"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendDice"]>("sendDice", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -765,7 +874,13 @@ class BaseClient extends EventEmitter {
   async editMessageText(params: MethodParameters["editMessageText"]) {
     return await this.apiRequest
       .get<MethodsReturnType["editMessageText"]>("editMessageText", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
@@ -774,14 +889,26 @@ class BaseClient extends EventEmitter {
       .get<
         MethodsReturnType["editMessageCaption"]
       >("editMessageCaption", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
   async editMessageMedia(params: MethodParameters["editMessageMedia"]) {
     return await this.apiRequest
       .get<MethodsReturnType["editMessageMedia"]>("editMessageMedia", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
@@ -814,21 +941,39 @@ class BaseClient extends EventEmitter {
       .get<
         MethodsReturnType["editMessageReplyMarkup"]
       >("editMessageReplyMarkup", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned. */
   async stopPoll(params: MethodParameters["stopPoll"]) {
     return await this.apiRequest
       .get<MethodsReturnType["stopPoll"]>("stopPoll", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned. */
   async sendSticker(params: MethodParameters["sendSticker"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendSticker"]>("sendSticker", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to get a sticker set. On success, a StickerSet object is returned. */
@@ -982,7 +1127,13 @@ class BaseClient extends EventEmitter {
   async sendInvoice(params: MethodParameters["sendInvoice"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendInvoice"]>("sendInvoice", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to create a link for an invoice. Returns the created invoice link as String on success. */
@@ -1047,7 +1198,13 @@ class BaseClient extends EventEmitter {
   async sendGame(params: MethodParameters["sendGame"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendGame"]>("sendGame", params)
-      .then((res) => new Message(this, res));
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
   }
 
   /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */

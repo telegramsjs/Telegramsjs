@@ -1,8 +1,8 @@
 const { Base } = require("../Base");
 
 class Forum extends Base {
-  constructor(client, threadId, chatId, data) {
-    super(client, data);
+  constructor(client, threadId, chatId) {
+    super(client, {});
 
     this.threadId = threadId || null;
 

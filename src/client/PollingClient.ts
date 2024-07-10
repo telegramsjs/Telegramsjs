@@ -1,14 +1,20 @@
 import type { TelegramClient, ILoginOptions } from "./TelegramClient";
 
 class PollingClient {
+  public offset: number;
   #isClosed: boolean = false;
-  public offset: number = 0;
 
-  constructor(public readonly client: TelegramClient) {}
+  constructor(
+    public readonly client: TelegramClient,
+    offset?: number,
+  ) {
+    this.offset = offset || 0;
+  }
 
   async startPolling(options: ILoginOptions["polling"] = {}) {
     await this.client.getMe().then((res) => {
       this.client.user = res;
+      this.client.readyTimestamp = Date.now();
       this.client.emit("ready", this.client);
     });
     await this.poll(options);

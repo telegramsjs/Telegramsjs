@@ -13,6 +13,21 @@ class Chat extends Base {
       writable: true,
     });
 
+    if (!this.isPrivate()) {
+      const { ChatMemberManager } = require("../managers/ChatMemberManager");
+      this.members = new ChatMemberManager(
+        client,
+        this.id,
+        client.options?.memberCacheMaxSize,
+      );
+    }
+
+    const { MessageManager } = require("../managers/MessageManager");
+    this.messages = new MessageManager(
+      client,
+      client.options?.messageCacheMaxSize,
+    );
+
     this._patch(data);
   }
 
@@ -52,6 +67,14 @@ class Chat extends Base {
 
   isPrivate() {
     return this[SymbolType] === "private";
+  }
+
+  me() {
+    return this.client.getChatMember(this.id, this.client.user.id);
+  }
+
+  fetch() {
+    return this.client.getChat(this.id);
   }
 
   send(text, options = {}) {
@@ -148,7 +171,7 @@ class Chat extends Base {
 
     return thsi.client.setChatPermissions({
       chat_id: this.id,
-      permissions: permissions.toObject(),
+      permissions: permissions.toApiFormat(permissions.toObject()),
       use_independent_chat_permissions: useIndependentChatPermissions,
     });
   }
