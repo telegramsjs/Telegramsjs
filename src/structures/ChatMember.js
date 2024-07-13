@@ -9,7 +9,7 @@ class ChatMember extends Base {
 
     this.chatId = chatId;
 
-    this.status = data.status;
+    this.status = data.status || null;
 
     this._patch(data);
   }

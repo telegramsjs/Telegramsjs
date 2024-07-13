@@ -31,11 +31,9 @@ const {
 const { Forum } = require("./forum/Forum");
 const { ForumTopic } = require("./forum/ForumTopic");
 const { TextQuote } = require("./TextQuote");
+const { MessageCollector } = require("../util/collector/MessageCollector");
+const { TelegramError } = require("../errors/TelegramError");
 
-/**
- * Represents a message on Discord.
- * @extends {Base}
- */
 class Message extends Base {
   constructor(client, data) {
     super(client, data);
@@ -55,7 +53,10 @@ class Message extends Base {
     }
 
     if ("chat" in data) {
-      this.chat = this.client.chats._add(data.chat);
+      this.chat = this.client.chats._add({
+        ...data.chat,
+        threadId: this.threadId,
+      });
 
       if (!this.chat.isPrivate()) {
         this.member = this.chat.members._add(this.chat.id, true, {
@@ -118,7 +119,10 @@ class Message extends Base {
     if ("story" in data) {
       const story = {
         id: data.story.id,
-        chat: new Chat(this.client, data.story.chat),
+        chat: new Chat(this.client, {
+          ...data.story.chat,
+          threadId: this.threadId,
+        }),
       };
       this.story = story;
     }
@@ -152,7 +156,10 @@ class Message extends Base {
     }
 
     if ("sender_chat" in data) {
-      this.senderChat = new Chat(this.client, data.sender_chat);
+      this.senderChat = new Chat(this.client, {
+        ...data.sender_chat,
+        threadId: this.threadId,
+      });
     }
 
     this.createdTimestamp = data.date;
@@ -172,16 +179,18 @@ class Message extends Base {
       this.inTopic = data.is_topic_message;
     }
 
+    if ("new_chat_member" in data) {
+      this.newChatMember = new User(this.client, data.new_chat_member);
+    }
+
     if ("new_chat_members" in data) {
       this.newChatMembers = data.new_chat_members.map(
         (user) => new User(this.client, user),
       );
     }
 
-    if ("left_chat_members" in data) {
-      this.leftChatMembers = data.new_chat_members.map(
-        (user) => new User(this.client, user),
-      );
+    if ("left_chat_member" in data) {
+      this.leftChatMember = new User(this.client, data.left_chat_member);
     }
 
     if ("new_chat_title" in data) {
@@ -433,7 +442,38 @@ class Message extends Base {
     }
   }
 
+  get isEdited() {
+    return Boolean(this.editedTimestamp);
+  }
+
+  get createdAt() {
+    return new Date(this.createdTimestamp);
+  }
+
+  get editedAt() {
+    return new Date(this.editedTimestamp);
+  }
+
+  createMessageCollector(options = {}) {
+    return new MessageCollector(this.client, this, options);
+  }
+
+  awaitMessage(options = {}) {
+    return new Promise((res, rej) => {
+      const collect = this.createMessageCollector(options);
+      collect.on("end", (collections, reason) => {
+        res([collections, reason]);
+      });
+    });
+  }
+
   reply(text, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.sendMessage({
       text,
       chat_id: this.chat.id,
@@ -446,6 +486,12 @@ class Message extends Base {
   }
 
   react(reaction, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     const react = [];
 
     if (typeof reaction === "string") {
@@ -462,6 +508,12 @@ class Message extends Base {
   }
 
   edit(text, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.editMessageText({
       text,
       chat_id: this.chat.id,
@@ -471,6 +523,12 @@ class Message extends Base {
   }
 
   editCaption(caption, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.editMessageCaption({
       caption,
       chat_id: this.chat.id,
@@ -480,6 +538,12 @@ class Message extends Base {
   }
 
   editMedia(media, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.editMessageMedia({
       media,
       chat_id: this.chat.id,
@@ -489,8 +553,14 @@ class Message extends Base {
   }
 
   editReplyMarkup(replyMarkup, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.editMessageReplyMarkup({
-      media,
+      reply_markup: replyMarkup,
       chat_id: this.chat.id,
       message_id: this.id,
       ...options,
@@ -498,6 +568,12 @@ class Message extends Base {
   }
 
   forward(chatId, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.forwardMessage({
       chat_id: chatId,
       message_thread_id: this.threadId,
@@ -508,6 +584,12 @@ class Message extends Base {
   }
 
   copy(chatId, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.copyMessage({
       chat_id: chatId,
       from_chat_id: this.chat.id,
@@ -517,6 +599,12 @@ class Message extends Base {
   }
 
   pin(notification = false) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.pinChatMessage({
       chat_id: this.chat.id,
       message_id: this.id,
@@ -525,14 +613,32 @@ class Message extends Base {
   }
 
   unpin() {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.unpinChatMessage(this.chat.id, this.id);
   }
 
   delete() {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.deleteMessage(this.chat.id, this.id);
   }
 
   editLiveLocation(latitude, longitude, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.editMessageLiveNotification({
       chat_id: this.chat.id,
       message_id: this.id,
@@ -543,19 +649,17 @@ class Message extends Base {
   }
 
   stopLiveLocation(options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     return this.client.stopMessageLiveLocation({
       chat_id: this.chat.id,
       message_id: this.id,
       ...options,
     });
-  }
-
-  get createdAt() {
-    return new Date(this.createdTimestamp);
-  }
-
-  get editedAt() {
-    return new Date(this.editedTimestamp);
   }
 }
 

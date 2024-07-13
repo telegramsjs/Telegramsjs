@@ -7,7 +7,7 @@ class ChatInviteLink extends Base {
 
     this.link = data.invite_link;
 
-    this.creator = new User(client, data.user);
+    this.creator = new User(client, data.creator);
 
     this.createsRequest = data.creates_join_request;
 

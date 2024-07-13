@@ -71,7 +71,7 @@ class Poll extends Base {
   }
 
   get closedAt() {
-    return this.closeTimestamp ? new Date(this.closeTimestamp) : null;
+    return new Date(this.closeTimestamp);
   }
 }
 

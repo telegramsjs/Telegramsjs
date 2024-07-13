@@ -50,6 +50,9 @@ class Chat extends Base {
 
     if ("is_forum" in data) {
       this.forum = data.is_forum;
+      if ("threadId" in data && data.threadId) {
+        this.threadId = data.threadId;
+      }
     }
   }
 
@@ -379,7 +382,7 @@ class Chat extends Base {
   }
 
   sendGame(gameShortName, options = {}) {
-    return this.client.sendAudio({
+    return this.client.sendGame({
       game_short_name: gameShortName,
       chat_id: this.id,
       message_thread_id: this.threadId,

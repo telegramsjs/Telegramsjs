@@ -21,20 +21,21 @@ class ChatMemberManager extends BaseManager {
       return new this.holds(this.client, data);
     }
 
-    for (const { user } of extras) {
+    for (const extra of extras) {
       const existing = this.cache.get(id);
       if (existing) {
         if (cache) {
-          existing._patch(user);
+          existing._patch(extra);
           if (cache) {
             this.cache.set(id, existing);
           }
-          continue;
+          return existing;
         }
         const clone = existing._clone();
-        clone._patch(user);
-        continue;
-      } else this.cache.set(id, new this.holds(this.client, this.chatId, user));
+        clone._patch(extra);
+        return clone;
+      } else
+        this.cache.set(id, new this.holds(this.client, this.chatId, extra));
     }
 
     return this.cache.get(id);

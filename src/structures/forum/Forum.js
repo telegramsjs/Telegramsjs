@@ -4,9 +4,9 @@ class Forum extends Base {
   constructor(client, threadId, chatId) {
     super(client, {});
 
-    this.threadId = threadId || null;
+    this.threadId = threadId;
 
-    this.chatId = chatId || null;
+    this.chatId = chatId;
   }
 
   edit(name, customEmojiId) {

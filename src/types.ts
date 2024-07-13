@@ -25,4 +25,15 @@ interface IRequestSuccess<T> {
   result: T;
 }
 
-export { MethodsReturnType, MethodParameters, IRequestFailt, IRequestSuccess };
+type Awaitable<V> = PromiseLike<V> | V;
+
+type PossiblyAsync<T> = T | Promise<T>;
+
+export {
+  MethodsReturnType,
+  MethodParameters,
+  IRequestFailt,
+  IRequestSuccess,
+  Awaitable,
+  PossiblyAsync,
+};

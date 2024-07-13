@@ -182,7 +182,6 @@ class MediaData {
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {
-          console.log(item);
           if (typeof item.media !== "object") {
             return item;
           }
