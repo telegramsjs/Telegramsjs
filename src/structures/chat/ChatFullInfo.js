@@ -1,11 +1,11 @@
-const { Base } = require("./Base");
+const { Base } = require("../Base");
 const { Chat } = require("./Chat");
-const { Photo } = require("./media/Photo");
-const { Location } = require("./Location");
-const { Sticker } = require("./media/Sticker");
-const { ReactionType } = require("./ReactionType");
-const { Message } = require("./Message");
-const { Permissions } = require("../util/Permissions");
+const { Photo } = require("../media/Photo");
+const { Location } = require("../misc/Location");
+const { Sticker } = require("../media/Sticker");
+const { ReactionType } = require("../misc/ReactionType");
+const { Message } = require("../message/Message");
+const { Permissions } = require("../../util/Permissions");
 
 class ChatFullInfo extends Chat {
   constructor(client, data) {

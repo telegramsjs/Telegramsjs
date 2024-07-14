@@ -1,5 +1,5 @@
 const { BaseManager } = require("./BaseManager");
-const { ChatMember } = require("../structures/ChatMember");
+const { ChatMember } = require("../structures/chat/ChatMember");
 
 let cacheWarningEmitted;
 

@@ -1,7 +1,7 @@
 const { BaseManager } = require("./BaseManager");
-const { User } = require("../structures/User");
-const { Message } = require("../structures/Message");
-const { ChatMember } = require("../structures/ChatMember");
+const { User } = require("../structures/misc/User");
+const { Message } = require("../structures/message/Message");
+const { ChatMember } = require("../structures/chat/ChatMember");
 
 class UserManager extends BaseManager {
   constructor(client, cacheSize) {

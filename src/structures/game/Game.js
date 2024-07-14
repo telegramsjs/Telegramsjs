@@ -1,7 +1,7 @@
-const { Base } = require("./Base");
-const { Photo } = require("./media/Photo");
-const { Animation } = require("./media/Animation");
-const { MessageEntities } = require("./MessageEntities");
+const { Base } = require("../Base");
+const { Photo } = require("../media/Photo");
+const { Animation } = require("../media/Animation");
+const { MessageEntities } = require("../message/MessageEntities");
 
 class Game extends Base {
   constructor(client, data) {

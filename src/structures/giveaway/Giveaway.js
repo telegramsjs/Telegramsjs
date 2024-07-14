@@ -1,5 +1,5 @@
-const { Base } = require("./Base");
-const { Chat } = require("./Chat");
+const { Base } = require("../Base");
+const { Chat } = require("../chat/Chat");
 
 class Giveaway extends Base {
   constructor(client, data) {

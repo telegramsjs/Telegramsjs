@@ -10,7 +10,7 @@ import { WebhookClient } from "./WebhookClient";
 import { WorketClient } from "./WorkerClient";
 import { TelegramError } from "../errors/TelegramError";
 import { DefaultParameters } from "../util/Constants";
-import type { ClientUser } from "../structures/ClientUser";
+import type { ClientUser } from "../structures/misc/ClientUser";
 import { ApiRequest } from "../rest/ApiRequest";
 
 interface ILoginOptions {

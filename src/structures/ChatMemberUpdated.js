@@ -1,7 +1,7 @@
 const { Base } = require("./Base");
-const { Chat } = require("./Chat");
-const { User } = require("./User");
-const { ChatMember } = require("./ChatMember");
+const { Chat } = require("./chat/Chat");
+const { User } = require("./misc/User");
+const { ChatMember } = require("./chat/ChatMember");
 const { ChatInviteLink } = require("./chat/ChatInviteLink");
 
 class ChatMemberUpdated extends Base {

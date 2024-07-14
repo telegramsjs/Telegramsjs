@@ -1,5 +1,5 @@
 const { Photo } = require("./Photo");
-const { InputFile } = require("../InputFile");
+const { InputFile } = require("../misc/InputFile");
 
 class Document extends InputFile {
   constructor(client, data) {

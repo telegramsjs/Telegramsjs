@@ -1,4 +1,4 @@
-const { MessageEntities } = require("./MessageEntities");
+const { MessageEntities } = require("../message/MessageEntities");
 
 class TextQuote {
   constructor(data) {

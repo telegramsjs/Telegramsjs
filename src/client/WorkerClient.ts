@@ -1,5 +1,5 @@
 import type { Update } from "@telegram.ts/types";
-import { Message } from "../structures/Message";
+import { Message } from "../structures/message/Message";
 import { Poll } from "../structures/media/Poll";
 import { PollAnswer } from "../structures/PollAnswer";
 import { InlineQuery } from "../structures/InlineQuery";

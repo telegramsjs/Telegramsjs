@@ -1,23 +1,23 @@
-const { Base } = require("./Base");
+const { Base } = require("../Base");
 const { LinkPreviewOptions } = require("./LinkPreviewOptions");
-const { Animation } = require("./media/Animation");
-const { Audio } = require("./media/Audio");
-const { Document } = require("./media/Document");
-const { Photo } = require("./media/Photo");
-const { Sticker } = require("./media/Sticker");
+const { Animation } = require("../media/Animation");
+const { Audio } = require("../media/Audio");
+const { Document } = require("../media/Document");
+const { Photo } = require("../media/Photo");
+const { Sticker } = require("../media/Sticker");
 const { Story } = require("./Story");
-const { Video } = require("./media/Video");
-const { VideoNote } = require("./media/VideoNote");
-const { Contact } = require("./media/Contact");
-const { Dice } = require("./media/Dice");
-const { Game } = require("./Game");
-const { Giveaway } = require("./Giveaway");
-const { GiveawayWinners } = require("./GiveawayWinners");
-const { Invoice } = require("./invoice/Invoice");
+const { Video } = require("../media/Video");
+const { VideoNote } = require("../media/VideoNote");
+const { Contact } = require("../media/Contact");
+const { Dice } = require("../media/Dice");
+const { Game } = require("../game/Game");
+const { Giveaway } = require("../giveaway/Giveaway");
+const { GiveawayWinners } = require("../giveaway/GiveawayWinners");
+const { Invoice } = require("../invoice/Invoice");
 const { Location } = require("./Location");
-const { Poll } = require("./media/Poll");
+const { Poll } = require("../media/Poll");
 const { Venue } = require("./Venue");
-const { MessageOrigin } = require("./MessageOrigin");
+const { MessageOrigin } = require("../message/MessageOrigin");
 
 class ExternalReplyInfo extends Base {
   constructor(client, data) {

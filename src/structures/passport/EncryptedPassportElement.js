@@ -1,6 +1,6 @@
 const { Base } = require("../Base");
 const { PassportFile } = require("./PassportFile");
-const { InputFile } = require("../InputFile");
+const { InputFile } = require("../misc/InputFile");
 
 class EncryptedPassportElement extends Base {
   constructor(client, data) {

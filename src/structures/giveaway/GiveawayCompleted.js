@@ -1,4 +1,4 @@
-const { Base } = require("./Base");
+const { Base } = require("../Base");
 
 class GiveawayCompleted extends Base {
   constructor(client, data) {
@@ -8,7 +8,7 @@ class GiveawayCompleted extends Base {
 
     this.prizeCount = data.unclaimed_prize_count;
 
-    const { Message } = require("./Message");
+    const { Message } = require("../message/Message");
     this.message = new Message(client, data.message);
   }
 }

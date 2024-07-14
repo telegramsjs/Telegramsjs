@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { User } = require("../User");
+const { User } = require("../misc/User");
 
 class ChatInviteLink extends Base {
   constructor(client, data) {

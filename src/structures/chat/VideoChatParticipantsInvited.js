@@ -1,5 +1,5 @@
-const { User } = require("./User");
-const { Base } = require("./Base");
+const { Base } = require("../Base");
+const { User } = require("../misc/User");
 
 class VideoChatParticipantsInvited extends Base {
   constructor(client, data) {

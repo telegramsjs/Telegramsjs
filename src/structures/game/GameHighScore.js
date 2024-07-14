@@ -1,5 +1,5 @@
-const { Base } = require("./Base");
-const { User } = require("./User");
+const { Base } = require("../Base");
+const { User } = require("../misc/User");
 
 class GameHighScore extends Base {
   constructor(client, data) {

@@ -1,6 +1,6 @@
 const { Base } = require("./Base");
-const { User } = require("./User");
-const { Chat } = require("./Chat");
+const { User } = require("./misc/User");
+const { Chat } = require("./chat/Chat");
 
 class PollAnswer extends Base {
   constructor(client, data) {

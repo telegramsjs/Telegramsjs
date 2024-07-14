@@ -1,5 +1,5 @@
-const { Base } = require("./Base");
-const { Photo } = require("./media/Photo");
+const { Base } = require("../Base");
+const { Photo } = require("../media/Photo");
 
 class UserProfilePhotos extends Base {
   constructor(client, data) {

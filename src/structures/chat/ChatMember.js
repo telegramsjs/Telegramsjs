@@ -1,7 +1,7 @@
-const { Base } = require("./Base");
-const { User } = require("./User");
-const { ChatInviteLink } = require("./chat/ChatInviteLink");
-const { Permissions } = require("../util/Permissions");
+const { Base } = require("../Base");
+const { User } = require("../misc/User");
+const { ChatInviteLink } = require("./ChatInviteLink");
+const { Permissions } = require("../../util/Permissions");
 
 class ChatMember extends Base {
   constructor(client, chatId, data) {

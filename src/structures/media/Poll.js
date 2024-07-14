@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { MessageEntities } = require("../MessageEntities");
+const { MessageEntities } = require("../message/MessageEntities");
 
 class Poll extends Base {
   constructor(client, data) {

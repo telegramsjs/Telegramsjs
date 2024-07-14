@@ -1,4 +1,4 @@
-const { Base } = require("./Base");
+const { Base } = require("../Base");
 
 class User extends Base {
   constructor(client, data) {

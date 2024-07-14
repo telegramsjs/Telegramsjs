@@ -1,6 +1,6 @@
 const { Base } = require("./Base");
-const { User } = require("./User");
-const { Location } = require("./Location");
+const { User } = require("./misc/User");
+const { Location } = require("./misc/Location");
 
 class InlineQuery extends Base {
   constructor(client, data) {

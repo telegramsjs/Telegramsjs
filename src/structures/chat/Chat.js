@@ -1,4 +1,4 @@
-const { Base } = require("./Base");
+const { Base } = require("../Base");
 
 const SymbolType = Symbol("SymbolType");
 
@@ -14,7 +14,7 @@ class Chat extends Base {
     });
 
     if (!this.isPrivate()) {
-      const { ChatMemberManager } = require("../managers/ChatMemberManager");
+      const { ChatMemberManager } = require("../../managers/ChatMemberManager");
       this.members = new ChatMemberManager(
         client,
         this.id,
@@ -22,7 +22,7 @@ class Chat extends Base {
       );
     }
 
-    const { MessageManager } = require("../managers/MessageManager");
+    const { MessageManager } = require("../../managers/MessageManager");
     this.messages = new MessageManager(
       client,
       client.options?.messageCacheMaxSize,

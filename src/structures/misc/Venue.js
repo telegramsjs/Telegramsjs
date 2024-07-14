@@ -1,4 +1,4 @@
-const { Base } = require("./Base");
+const { Base } = require("../Base");
 const { Location } = require("./Location");
 
 class Venue extends Base {

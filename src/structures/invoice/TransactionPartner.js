@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { User } = require("../User");
+const { User } = require("../misc/User");
 const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");
 
 class TransactionPartner extends Base {

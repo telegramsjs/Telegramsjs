@@ -1,6 +1,6 @@
 const { Base } = require("./Base");
-const { Chat } = require("./Chat");
-const { User } = require("./User");
+const { Chat } = require("./chat/Chat");
+const { User } = require("./misc/User");
 const { ChatInviteLink } = require("./chat/ChatInviteLink");
 
 class ChatJoinRequest extends Base {

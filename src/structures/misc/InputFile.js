@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const fetch = require("node-fetch");
-const { Base } = require("./Base");
-const { TelegramError } = require("../errors/TelegramError");
+const { Base } = require("../Base");
+const { TelegramError } = require("../../errors/TelegramError");
 
 class InputFile extends Base {
   constructor(client, data) {

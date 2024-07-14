@@ -1,6 +1,6 @@
 const { Base } = require("./Base");
-const { User } = require("./User");
-const { Message } = require("./Message");
+const { User } = require("./misc/User");
+const { Message } = require("./message/Message");
 
 class CallbackQuery extends Base {
   constructor(client, data) {

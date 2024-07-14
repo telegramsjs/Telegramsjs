@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { Chat } = require("../Chat");
+const { Chat } = require("../chat/Chat");
 
 class BusinessMessagesDeleted extends Base {
   constructor(client, data) {

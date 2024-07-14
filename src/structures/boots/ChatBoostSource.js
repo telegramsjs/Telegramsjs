@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { User } = require("../User");
+const { User } = require("../misc/User");
 
 class ChatBoostSource extends Base {
   constructor(client, data) {

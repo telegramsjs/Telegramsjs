@@ -1,7 +1,7 @@
 import { TelegramClient } from "../../client/TelegramClient";
-import type { Chat } from "../../structures/Chat";
+import type { Chat } from "../../structures/chat/Chat";
 import { Collection } from "@telegram.ts/collection";
-import type { Message } from "../../structures/Message";
+import type { Message } from "../../structures/message/Message";
 import { Collector, type ICollectorOptions } from "./Collector";
 
 /**

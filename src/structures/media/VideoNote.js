@@ -1,5 +1,5 @@
 const { Photo } = require("./Photo");
-const { InputFile } = require("../InputFile");
+const { InputFile } = require("../misc/InputFile");
 
 class VideoNote extends InputFile {
   constructor(client, data) {
