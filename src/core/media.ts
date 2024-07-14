@@ -38,7 +38,7 @@ async function fileExists(filePath: string) {
 /**
  * Utility class for handling media-related operations.
  */
-class Media {
+class MediaData {
   /**
    * File extensions for various media types.
    */
@@ -85,13 +85,13 @@ class Media {
    * @returns True if the payload contains media, otherwise false.
    */
   hasMedia(payload: Record<string, any>) {
-    return Object.keys(payload).some((key) => {
+    return Object.keys(payload).some((key): boolean => {
       if (this.sourceParametersMedia.includes(key)) {
         return true;
       }
       if (Array.isArray(payload[key])) {
         return payload[key].some(
-          (item: Record<string, any>) =>
+          (item: Record<string, any>): boolean =>
             typeof item === "object" && this.hasMedia(item),
         );
       }
@@ -276,4 +276,4 @@ class Media {
   }
 }
 
-export { Media, IApiConfig };
+export { MediaData, IApiConfig };

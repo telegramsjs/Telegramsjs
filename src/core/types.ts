@@ -20,6 +20,8 @@ type UnionKeys<T> = T extends unknown ? keyof T : never;
 
 type Awaitable<V> = PromiseLike<V> | V;
 
+type PossiblyAsync<T> = T | Promise<T>;
+
 interface IRequestFailt {
   ok: false;
   error_code: string | number;
@@ -40,6 +42,7 @@ export {
   MethodParameters,
   MethodsReturnType,
   UnionKeys,
+  PossiblyAsync,
   Awaitable,
   IRequestFailt,
   IRequestSuccess,

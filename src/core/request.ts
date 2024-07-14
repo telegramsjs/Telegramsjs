@@ -1,4 +1,4 @@
-import { Media } from "./media";
+import { MediaData } from "./media";
 import { Agent } from "node:https";
 import { ManagerEvents } from "./events";
 import fetch, { type RequestInit } from "node-fetch";
@@ -27,7 +27,7 @@ class ApiRequest extends ManagerEvents {
   /**
    * Media instance for handling media-related requests.
    */
-  media: Media = new Media();
+  media: MediaData = new MediaData();
 
   /**
    * Constructs a new ApiRequest instance.

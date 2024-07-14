@@ -67,6 +67,11 @@ class Webhook {
       requestCallback?: RequestListener;
     } = {},
   ) {
+    await this.telegram.getMe().then((me) => {
+      this.telegram.emit("ready", me);
+      this.telegram.botInfo = me;
+    });
+
     const { tlsOptions, port, host, requestCallback } = options;
     const webhookCallback = await this.createWebhookCallback(requestCallback);
     const serverOptions = tlsOptions != null ? tlsOptions : {};

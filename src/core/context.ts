@@ -84,6 +84,7 @@ class ApiContext {
       sendPhoto: this.sendPhoto.bind(this),
       sendMediaGroup: this.sendMediaGroup.bind(this),
       sendAudio: this.sendAudio.bind(this),
+      sendPaidMedia: this.sendPaidMedia.bind(this),
       sendDice: this.sendDice.bind(this),
       sendDocument: this.sendDocument.bind(this),
       sendSticker: this.sendSticker.bind(this),
@@ -253,8 +254,8 @@ class ApiContext {
         return ("message" in thisMethod && thisMethod.message) as Message;
       }
       return {
-        ...this[method],
-      } as Message;
+        ...(this[method] as unknown as Message),
+      };
     }
 
     return {} as Message;
@@ -732,13 +733,30 @@ class ApiContext {
 
   sendAudio(
     audio: MethodParameters["sendAudio"]["audio"],
-    args?: Omit<MethodParameters["sendAudio"], "media">,
+    args?: Omit<MethodParameters["sendAudio"], "audio">,
   ) {
     this.assert(this.chat, "sendAudio");
     return this.api.sendAudio({
       chat_id: this.chat.id,
       audio,
       message_thread_id: getThreadId(this),
+      ...args,
+    });
+  }
+
+  sendPaidMedia(
+    media: MethodParameters["sendPaidMedia"]["media"],
+    starCount: number,
+    args?: Omit<
+      MethodParameters["sendPaidMedia"],
+      "media" | "star_count" | "chat_id"
+    >,
+  ) {
+    this.assert(this.chat, "sendPaidMedia");
+    return this.api.sendPaidMedia({
+      chat_id: this.chat.id,
+      star_count: starCount,
+      media,
       ...args,
     });
   }

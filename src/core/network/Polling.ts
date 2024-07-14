@@ -31,6 +31,11 @@ class Polling {
    * The method continues to fetch updates as long as the connection flag is true.
    */
   async startPolling() {
+    await this.telegram.getMe().then((me) => {
+      this.telegram.emit("ready", me);
+      this.telegram.botInfo = me;
+    });
+
     while (this.#connect) {
       const updates = await this.telegram.getUpdates({
         ...this.options,

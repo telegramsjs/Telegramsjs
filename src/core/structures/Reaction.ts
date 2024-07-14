@@ -1,6 +1,6 @@
 import type { Api } from "../../api";
 import type { Context } from "../context";
-import type { UpdateReturn } from "../types";
+import type { UpdateReturn, PossiblyAsync } from "../types";
 import { Collection } from "@telegram.ts/collection";
 import type {
   Update,
@@ -27,13 +27,17 @@ interface IReactionCollection {
   onCallback: (
     data: Update["message_reaction"] & Context,
     collection: Collection<string, IReactionCollection>,
-  ) => unknown;
+  ) => PossiblyAsync<unknown>;
   /** The optional error callback function. */
-  onError?: (data: Collection<string, IReactionCollection>) => unknown;
+  onError?: (
+    data: Collection<string, IReactionCollection>,
+  ) => PossiblyAsync<unknown>;
   /** The timeout duration in milliseconds. */
   timeout: number;
   /** The optional filter function to apply before invoking the callback. */
-  filter?: (data: Update["message_reaction"] & Context) => unknown;
+  filter?: (
+    data: Update["message_reaction"] & Context,
+  ) => PossiblyAsync<unknown>;
   /** The reaction data and context. */
   data: Update["message_reaction"] & Context;
 }
@@ -130,15 +134,19 @@ class Reaction {
     onCallback: (
       data: Update["message_reaction"] & Context,
       collection: Collection<string, IReactionCollection>,
-    ) => unknown;
+    ) => PossiblyAsync<unknown>;
     /** The optional error callback function. */
-    onError?: (data: Collection<string, IReactionCollection>) => unknown;
+    onError?: (
+      data: Collection<string, IReactionCollection>,
+    ) => PossiblyAsync<unknown>;
     /** The number of reactions to wait for. */
     count?: number;
     /** The timeout duration in milliseconds. */
     timeout?: number;
     /** The optional filter function to apply before invoking the callback. */
-    filter?: (data: Update["message_reaction"] & Context) => boolean;
+    filter?: (
+      data: Update["message_reaction"] & Context,
+    ) => PossiblyAsync<boolean>;
   }): Promise<unknown> {
     const collection: Collection<string, IReactionCollection> =
       new Collection();
@@ -173,7 +181,7 @@ class Reaction {
         const allReactions = [...newReactions, ...oldReactions];
 
         if (allReactions.some((reaction) => reactions.includes(reaction))) {
-          if (!filter || (filter && filter(data))) {
+          if (!filter || (filter && (await filter(data)))) {
             collection.set(`${data.user?.id}_${Date.now()}`, {
               userId: data.user?.id,
               react: { ...react, reactionType },
@@ -198,11 +206,11 @@ class Reaction {
         }
       };
 
-      const timeoutHandler = setTimeout(() => {
+      const timeoutHandler = setTimeout(async () => {
         const elapsedTime = Date.now() - startTime;
         this.api.off("message_reaction", handler);
         if (onError) {
-          onError(collection);
+          await onError(collection);
         } else {
           reject(new Error(`Reaction not received within ${timeout} ms`));
         }

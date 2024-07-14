@@ -451,13 +451,6 @@ class TelegramBot extends Api {
    * @param options - Options for login, including polling or webhook configuration.
    */
   async login(options: ILoginOptions = { polling: DefaultParameters }) {
-    try {
-      const botInfo = await this.getMe();
-      this.emit("ready", botInfo);
-      this.botInfo = botInfo;
-    } catch (err) {
-      throw err;
-    }
     if (options.polling) {
       this.polling = new Polling(this, options.polling);
       await this.deleteWebhook(options.polling?.drop_pending_updates);
