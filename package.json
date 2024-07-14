@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@telegram.ts/types": "^1.11.0",
+    "@telegram.ts/types": "^1.12.0",
     "@types/node": "^18.19.39",
     "@types/node-fetch": "^2.6.11"
   },
