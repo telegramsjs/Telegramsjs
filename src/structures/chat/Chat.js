@@ -248,6 +248,15 @@ class Chat extends Base {
     });
   }
 
+  sendPaidMedia(media, starCount, options = {}) {
+    return this.client.sendPaidMedia({
+      media,
+      star_count: starCount,
+      chat_id: this.id,
+      ...options,
+    });
+  }
+
   sendDocument(document, options = {}) {
     return this.client.sendDocument({
       document,

@@ -10,6 +10,7 @@ const { Video } = require("../media/Video");
 const { VideoNote } = require("../media/VideoNote");
 const { Contact } = require("../media/Contact");
 const { Dice } = require("../media/Dice");
+const { PaidMediaInfo } = require("../media/paid/PaidMediaInfo");
 const { Game } = require("../game/Game");
 const { Giveaway } = require("../giveaway/Giveaway");
 const { GiveawayWinners } = require("../giveaway/GiveawayWinners");
@@ -106,6 +107,10 @@ class ExternalReplyInfo extends Base {
 
     if ("location" in data) {
       this.location = new Location(this.client, data.location);
+    }
+
+    if ("paid_media" in data) {
+      this.paidMedia = new PaidMediaInfo(this.client, data.paid_media);
     }
 
     if ("poll" in data) {

@@ -13,6 +13,7 @@ const { Sticker } = require("../media/Sticker");
 const { Video } = require("../media/Video");
 const { VideoNote } = require("../media/VideoNote");
 const { Voice } = require("../media/Voice");
+const { PaidMediaInfo } = require("../media/paid/PaidMediaInfo");
 const { SuccessfulPayment } = require("../invoice/SuccessfulPayment");
 const { Location } = require("../misc/Location");
 const { Venue } = require("../misc/Venue");
@@ -387,6 +388,10 @@ class Message extends Base {
 
     if ("location" in data) {
       this.location = new Location(this.client, data.location);
+    }
+
+    if ("paid_media" in data) {
+      this.paidMedia = new PaidMediaInfo(this.client, data.paid_media);
     }
 
     if ("animation" in data) {
