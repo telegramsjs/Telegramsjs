@@ -7,6 +7,19 @@ class ChatMemberManager extends BaseManager {
   constructor(client, chatId, cacheSize) {
     super(client, ChatMember, cacheSize);
 
+    client.on("chatMember", (ctx) => {
+      if (ctx.chat.id !== chatId) return;
+      if (!ctx.newMember?.user?.id) return;
+      if (cacheSize !== -1 && cacheSize < this.cache.size) {
+        if (this.cache.has(`${ctx.newMember.user.id}`)) {
+          this.cache.set(ctx.newMember.user.id, ctx.newMember);
+        }
+        return;
+      }
+
+      this.cache.set(ctx.newMember.user.id, ctx.newMember);
+    });
+
     Object.defineProperty(this, "chatId", { value: chatId });
   }
 
