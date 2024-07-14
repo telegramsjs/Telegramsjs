@@ -6,6 +6,8 @@ class TransactionPartner extends Base {
   constructor(client, data) {
     super(client, data);
 
+    this.type = data.type;
+
     this._patch(data);
   }
 
@@ -25,10 +27,6 @@ class TransactionPartner extends Base {
 
   isFragment() {
     return "withdrawal" in this && this.withdrawal;
-  }
-
-  isOther() {
-    return !this.isUser() && !this.isFragment();
   }
 }
 

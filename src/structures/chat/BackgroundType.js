@@ -1,5 +1,5 @@
-const {Document} = require("../media/Document");
-const {BackgroundFill} = require("./BackgroundFill");
+const { Document } = require("../media/Document");
+const { BackgroundFill } = require("./BackgroundFill");
 
 class BackgroundType {
   constructor(client, data) {

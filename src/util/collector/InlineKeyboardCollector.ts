@@ -1,3 +1,4 @@
+import { Events } from "../Constants";
 import { TelegramClient } from "../../client/TelegramClient";
 import { Collection } from "@telegram.ts/collection";
 import { Collector, ICollectorOptions } from "./Collector";
@@ -24,9 +25,9 @@ class InlineKeyboardCollector extends Collector<string, CallbackQuery> {
     super(options);
 
     client.incrementMaxListeners();
-    client.on("callback_query", this.handleCollect);
+    client.on(Events.CallbackQuery, this.handleCollect);
     this.once("end", () => {
-      client.off("callback_query", this.handleCollect);
+      client.off(Events.CallbackQuery, this.handleCollect);
       client.decrementMaxListeners();
     });
   }

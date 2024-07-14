@@ -1,5 +1,6 @@
-import type { TelegramClient } from "../../client/TelegramClient";
+import { Events } from "../Constants";
 import { Collection } from "@telegram.ts/collection";
+import type { TelegramClient } from "../../client/TelegramClient";
 import type {
   Emoji,
   CustomEmoji,
@@ -72,9 +73,9 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
     this.chat = reaction.chat;
 
     client.incrementMaxListeners();
-    client.on("messageReaction", this.handleCollect);
+    client.on(Events.MessageReaction, this.handleCollect);
     this.once("end", () => {
-      client.off("messageReaction", this.handleCollect);
+      client.off(Events.MessageReaction, this.handleCollect);
       client.decrementMaxListeners();
     });
   }

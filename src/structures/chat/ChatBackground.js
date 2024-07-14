@@ -1,4 +1,4 @@
-const {BackgroundType} = require("./BackgroundType");
+const { BackgroundType } = require("./BackgroundType");
 
 class ChatBackground {
   constructor(client, data) {

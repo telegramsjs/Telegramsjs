@@ -1,3 +1,4 @@
+import { Events } from "../util/Constants";
 import type { TelegramClient, ILoginOptions } from "./TelegramClient";
 
 class PollingClient {
@@ -15,7 +16,7 @@ class PollingClient {
     await this.client.getMe().then((res) => {
       this.client.user = res;
       this.client.readyTimestamp = Date.now();
-      this.client.emit("ready", this.client);
+      this.client.emit(Events.Ready, this.client);
     });
     await this.poll(options);
   }

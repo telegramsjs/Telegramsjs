@@ -160,6 +160,19 @@ class BaseClient extends EventEmitter {
       });
   }
 
+  /** Use this method to send paid media to channel chats. On success, the sent Message is returned. */
+  async sendPaidMedia(params: MethodParameters["sendPaidMedia"]) {
+    return await this.apiRequest
+      .get<MethodsReturnType["sendPaidMedia"]>("sendPaidMedia", params)
+      .then((res) => {
+        const message = new Message(this, res);
+        if ("chat" in message) {
+          message.chat.messages._add(res);
+        }
+        return message;
+      });
+  }
+
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
   async sendDocument(params: MethodParameters["sendDocument"]) {
     return await this.apiRequest

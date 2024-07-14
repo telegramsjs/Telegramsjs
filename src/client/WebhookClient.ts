@@ -2,6 +2,7 @@ import https from "node:https";
 // @ts-ignore
 import safeCompare from "safe-compare";
 import type { TlsOptions } from "node:tls";
+import { Events } from "../util/Constants";
 import type { Update } from "@telegram.ts/types";
 import type { TelegramClient } from "./TelegramClient";
 import { TelegramError } from "../errors/TelegramError";
@@ -46,7 +47,7 @@ class WebhookClient {
     await this.client.getMe().then((me) => {
       this.client.user = me;
       this.client.readyTimestamp = Date.now();
-      this.client.emit("ready", me);
+      this.client.emit(Events.Ready, me);
     });
 
     const { tlsOptions, port, host, requestCallback } = options;

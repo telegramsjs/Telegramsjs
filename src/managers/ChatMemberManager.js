@@ -1,3 +1,4 @@
+const { Events } = require("../util/Constants");
 const { BaseManager } = require("./BaseManager");
 const { ChatMember } = require("../structures/chat/ChatMember");
 
@@ -7,7 +8,7 @@ class ChatMemberManager extends BaseManager {
   constructor(client, chatId, cacheSize) {
     super(client, ChatMember, cacheSize);
 
-    client.on("chatMember", (ctx) => {
+    client.on(Events.ChatMember, (ctx) => {
       if (ctx.chat.id !== chatId) return;
       if (!ctx.newMember?.user?.id) return;
       if (cacheSize !== -1 && cacheSize < this.cache.size) {

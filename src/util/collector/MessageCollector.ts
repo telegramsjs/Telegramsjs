@@ -1,3 +1,4 @@
+import { Events } from "../Constants";
 import { TelegramClient } from "../../client/TelegramClient";
 import type { Chat } from "../../structures/chat/Chat";
 import { Collection } from "@telegram.ts/collection";
@@ -33,9 +34,9 @@ class MessageCollector extends Collector<number, Message> {
     this.chat = message.chat;
 
     client.incrementMaxListeners();
-    client.on("message", this.handleCollect);
+    client.on(Events.Message, this.handleCollect);
     this.once("end", () => {
-      client.off("message", this.handleCollect);
+      client.off(Events.Message, this.handleCollect);
       client.decrementMaxListeners();
     });
   }

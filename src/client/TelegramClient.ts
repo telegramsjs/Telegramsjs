@@ -8,10 +8,14 @@ import { BaseClient } from "./BaseClient";
 import { PollingClient } from "./PollingClient";
 import { WebhookClient } from "./WebhookClient";
 import { WorketClient } from "./WorkerClient";
-import { TelegramError } from "../errors/TelegramError";
-import { DefaultParameters } from "../util/Constants";
-import type { ClientUser } from "../structures/misc/ClientUser";
 import { ApiRequest } from "../rest/ApiRequest";
+import { TelegramError } from "../errors/TelegramError";
+import type { ClientUser } from "../structures/misc/ClientUser";
+import {
+  Events,
+  DefaultParameters,
+  DefaultClientParameters,
+} from "../util/Constants";
 
 interface ILoginOptions {
   polling?: {
@@ -57,7 +61,7 @@ class TelegramClient extends BaseClient {
     public readonly authToken: string,
     public readonly options: ClientOptions = {},
   ) {
-    super(authToken, options);
+    super(authToken, { ...DefaultClientParameters, ...options });
 
     if (!authToken) {
       throw new TelegramError(
@@ -96,7 +100,7 @@ class TelegramClient extends BaseClient {
   destroy() {
     this.polling.close();
     this.webhook.close();
-    this.emit("disconnect", this);
+    this.emit(Events.Disconnect, this);
   }
 }
 
