@@ -6,13 +6,13 @@ const { ReactionType } = require("./misc/ReactionType");
 class MessageReactionUpdated extends Base {
   /**
    * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").CallbackQuery} data - Data about the represents a change of a reaction on a message performed by a user
+   * @param {import("@telegram.ts/types").MessageReactionUpdated} data - Data about the represents a change of a reaction on a message performed by a user
    */
   constructor(client, data) {
     super(client);
 
     /** Unique identifier of the message inside the chat */
-    this.id = data.id;
+    this.id = data.message_id;
 
     /** The chat containing the message the user reacted to */
     this.chat = new Chat(this.client, data.chat);

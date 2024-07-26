@@ -194,7 +194,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * @param reaction - The reaction types.
    * @returns The key of the reaction or null.
    */
-  static getKeyFromReaction(reaction: ReactionType): string | null {
+  static getKeyFromReaction(reaction?: ReactionType): string | null {
     if (!reaction) {
       return null;
     }
