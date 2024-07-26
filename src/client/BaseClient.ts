@@ -24,13 +24,100 @@ import {
   StarTransactions,
   ChatInviteLink,
 } from "../structures/index";
-import type { MethodsReturnType, MethodParameters } from "../types";
+import type {
+  MethodsReturnType,
+  MethodParameters,
+  PossiblyAsync,
+} from "../types";
 
 interface EventHandlers {
-  ready: (telegram: typeof import("./TelegramClient").TelegramClient) => void;
+  ready: (
+    telegram: import("./TelegramClient").TelegramClient,
+  ) => PossiblyAsync<void>;
+  disconnect: (
+    telegram: import("./TelegramClient").TelegramClient,
+  ) => PossiblyAsync<void>;
   message: (
-    message: typeof import("../structures/message/Message").Message,
-  ) => void;
+    message: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  channelPost: (
+    message: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  businessMessage: (
+    message: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  businessConnection: (
+    message: import("../structures/message/BusinessConnection").BusinessConnection,
+  ) => PossiblyAsync<void>;
+  editedMessage: (
+    oldMessage: import("../structures/message/Message").Message | null,
+    newMessage: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  editedChannelPost: (
+    oldMessage: import("../structures/message/Message").Message | null,
+    newMessage: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  editedBusinessMessage: (
+    oldMessage: import("../structures/message/Message").Message | null,
+    newMessage: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  deletedBusinessMessages: (
+    message: import("../structures/message/BusinessMessagesDeleted").BusinessMessagesDeleted,
+  ) => PossiblyAsync<void>;
+  messageReaction: (
+    message: import("../structures/message/MessageReactionUpdated").MessageReactionUpdated,
+  ) => PossiblyAsync<void>;
+  messageReactionCount: (
+    message: import("../structures/message/MessageReactionCountUpdated").MessageReactionCountUpdated,
+  ) => PossiblyAsync<void>;
+  inlineQuery: (
+    inline: import("../structures/message/InlineQuery").InlineQuery,
+  ) => PossiblyAsync<void>;
+  chosenInlineResult: (
+    inlineResult: import("../structures/message/ChosenInlineResult").ChosenInlineResult,
+  ) => PossiblyAsync<void>;
+  callbackQuery: (
+    query: import("../structures/message/CallbackQuery").CallbackQuery,
+  ) => PossiblyAsync<void>;
+  shippingQuery: (
+    query: import("../structures/message/ShippingQuery").ShippingQuery,
+  ) => PossiblyAsync<void>;
+  preCheckoutQuery: (
+    checkoutQuery: import("../structures/message/PreCheckoutQuery").PreCheckoutQuery,
+  ) => PossiblyAsync<void>;
+  poll: (
+    poll: import("../structures/message/Poll").Poll,
+  ) => PossiblyAsync<void>;
+  pollAnswer: (
+    pollAnswer: import("../structures/message/PollAnswer").PollAnswer,
+  ) => PossiblyAsync<void>;
+  myChatMember: (
+    member: import("../structures/message/ChatMemberUpdated").ChatMemberUpdated,
+  ) => PossiblyAsync<void>;
+  chatMember: (
+    member: import("../structures/message/ChatMemberUpdated").ChatMemberUpdated,
+  ) => PossiblyAsync<void>;
+  chatCreate: (
+    message: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  chatMemberAdd: (
+    message: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  chatDelete: (
+    message: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  chatMemberRemove: (
+    message: import("../structures/message/Message").Message,
+  ) => PossiblyAsync<void>;
+  chatJoinRequest: (
+    joinRequest: import("../structures/message/ChatJoinRequest").ChatJoinRequest,
+  ) => PossiblyAsync<void>;
+  chatBoost: (
+    boostChat: import("../structures/message/ChatBoostUpdated").ChatBoostUpdated,
+  ) => PossiblyAsync<void>;
+  removedChatBoost: (
+    chatBoost: import("../structures/message/ChatBoostRemoved").ChatBoostRemoved,
+  ) => PossiblyAsync<void>;
 }
 
 class BaseClient extends EventEmitter {
