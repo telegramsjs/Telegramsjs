@@ -26,11 +26,11 @@ class WorketClient {
       "channel_post" in data ||
       "business_message" in data
     ) {
-      if ("new_chat_members" in (data?.message || {})) {
-        return this.onChatMemberAdd(data.message);
+      if ("new_chat_members" in (data.message || {})) {
+        return this.onChatMemberAdd(data.message!);
       }
-      if ("left_chat_member" in (data?.message || {})) {
-        return this.onChatMemberRemove(data.message);
+      if ("left_chat_member" in (data.message || {})) {
+        return this.onChatMemberRemove(data.message!);
       }
       return this.onMessage(
         data.message || data.channel_post || data.business_message,
@@ -103,16 +103,16 @@ class WorketClient {
       | Update["channel_post"]
       | Update["business_message"],
   ) {
+    if (!data) return;
     const message = new Message(this.client, data);
-
     if ("chat" in message) {
-      message.chat.messages._add(data);
+      message.chat?.messages._add(data);
     }
-
     this.client.emit("message", message);
   }
 
   onBusinessConnection(data: Update["business_connection"]) {
+    if (!data) return;
     this.client.emit(
       "businessConnection",
       new BusinessConnection(this.client, data),
@@ -125,14 +125,15 @@ class WorketClient {
       | Update["edited_channel_post"]
       | Update["edited_business_message"],
   ) {
+    if (!data) return;
     const newMessage = new Message(this.client, data);
     const oldMessage =
       newMessage.chat?.messages.cache.get(newMessage.id) || null;
-
     this.client.emit("messageUpdate", oldMessage, newMessage);
   }
 
   onDeletedBusinessMessages(data: Update["deleted_business_messages"]) {
+    if (!data) return;
     this.client.emit(
       "deletedBusinessMessages",
       new BusinessMessagesDeleted(this.client, data),
@@ -140,6 +141,7 @@ class WorketClient {
   }
 
   onMessageReaction(data: Update["message_reaction"]) {
+    if (!data) return;
     this.client.emit(
       "messageReaction",
       new MessageReactionUpdated(this.client, data),
@@ -147,6 +149,7 @@ class WorketClient {
   }
 
   onMessageReactionCount(data: Update["message_reaction_count"]) {
+    if (!data) return;
     this.client.emit(
       "messageReactionCount",
       new MessageReactionCountUpdated(this.client, data),
@@ -154,10 +157,12 @@ class WorketClient {
   }
 
   onInlineQuery(data: Update["inline_query"]) {
+    if (!data) return;
     this.client.emit("inlineQuery", new InlineQuery(this.client, data));
   }
 
   onChosenInlineResult(data: Update["chosen_inline_result"]) {
+    if (!data) return;
     this.client.emit(
       "chosenInlineResult",
       new ChosenInlineResult(this.client, data),
@@ -165,14 +170,17 @@ class WorketClient {
   }
 
   onCallbackQuery(data: Update["callback_query"]) {
+    if (!data) return;
     this.client.emit("callbackQuery", new CallbackQuery(this.client, data));
   }
 
   onShippingQuery(data: Update["shipping_query"]) {
+    if (!data) return;
     this.client.emit("shippingQuery", new ShippingQuery(this.client, data));
   }
 
   onPreCheckoutQuery(data: Update["pre_checkout_query"]) {
+    if (!data) return;
     this.client.emit(
       "preCheckoutQuery",
       new PreCheckoutQuery(this.client, data),
@@ -180,28 +188,31 @@ class WorketClient {
   }
 
   onPoll(data: Update["poll"]) {
+    if (!data) return;
     this.client.emit("poll", new Poll(this.client, data));
   }
 
   onPollAnswer(data: Update["poll_answer"]) {
+    if (!data) return;
     this.client.emit("pollAnswer", new PollAnswer(this.client, data));
   }
 
   onMyChatMember(data: Update["my_chat_member"]) {
+    if (!data) return;
     this.client.emit("myChatMember", new ChatMemberUpdated(this.client, data));
   }
 
   onChatMember(data: Update["chat_member"]) {
+    if (!data) return;
     this.client.emit("chatMember", new ChatMemberUpdated(this.client, data));
   }
 
   onChatMemberAdd(data: Update["message"]) {
+    if (!data) return;
     const message = new Message(this.client, data);
-
     if ("chat" in message) {
-      message.chat.messages._add(data);
+      message.chat?.messages._add(data);
     }
-
     if (
       message.newChatMembers?.findIndex(
         ({ id }: { id: number }) => id === this.client.user.id,
@@ -214,12 +225,11 @@ class WorketClient {
   }
 
   onChatMemberRemove(data: Update["message"]) {
+    if (!data) return;
     const message = new Message(this.client, data);
-
     if ("chat" in message) {
-      message.chat.messages._add(data);
+      message.chat?.messages._add(data);
     }
-
     if (message.leftChatMember?.id === this.client.user.id) {
       this.client.emit("chatDelete", message);
     } else {
@@ -228,14 +238,17 @@ class WorketClient {
   }
 
   onChatJoinRequest(data: Update["chat_join_request"]) {
+    if (!data) return;
     this.client.emit("chatJoinRequest", new ChatJoinRequest(this.client, data));
   }
 
   onChatBoost(data: Update["chat_boost"]) {
+    if (!data) return;
     this.client.emit("chatBoost", new ChatBoostUpdated(this.client, data));
   }
 
   onRemovedChatBoost(data: Update["removed_chat_boost"]) {
+    if (!data) return;
     this.client.emit(
       "removedChatBoost",
       new ChatBoostRemoved(this.client, data),
