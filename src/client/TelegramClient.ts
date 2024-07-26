@@ -74,6 +74,10 @@ class TelegramClient extends BaseClient {
     this.worket = new WorketClient(this);
   }
 
+  get uptime() {
+    return this.readyTimestamp && Date.now() - this.readyTimestamp;
+  }
+
   async login(options: ILoginOptions = { polling: DefaultParameters }) {
     if ("polling" in options) {
       await this.polling.startPolling(options.polling);
