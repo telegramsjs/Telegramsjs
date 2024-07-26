@@ -26,29 +26,14 @@ class MessageReactionCountUpdated extends Base {
     /** Unique message identifier inside the chat */
     this.id = data.message_id;
 
-    this._patch(data);
-  }
+    /** The chat containing the message */
+    this.chat = new Chat(client, data.chat);
 
-  _patch(data) {
-    /**
-     * The chat containing the message
-     * @type {Chat}
-     */
-    this.chat = new Chat(this.client, data.chat);
-
-    /**
-     * List of reactions that are present on the message
-     * @type {ReactionCount[]}
-     */
+    /** List of reactions that are present on the message */
     this.reactions = data.reactions.map((data) => new ReactionCount(data));
 
-    /**
-     * Date of the change in Unix time
-     * @type {number}
-     */
+    /** Date of the change in Unix time */
     this.createdTimestamp = data.date;
-
-    return data;
   }
 
   /**

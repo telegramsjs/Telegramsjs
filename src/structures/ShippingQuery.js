@@ -12,20 +12,10 @@ class ShippingQuery extends Base {
     /** Unique query identifier */
     this.id = data.id;
 
-    this._patch(data);
-  }
+    /**.User who sent the query */
+    this.author = new User(client, data.from);
 
-  _patch(data) {
-    /**
-     * User who sent the query
-     * @type {User}
-     */
-    this.author = new User(this.client, data.from);
-
-    /**
-     * Bot specified invoice payload
-     * @type {string}
-     */
+    /** Bot specified invoice payload.*/
     this.invoicePayload = data.invoice_payload;
 
     /**
@@ -51,8 +41,6 @@ class ShippingQuery extends Base {
      * @type {ShippingAddress}
      */
     this.shippingAddress = shippingAddress;
-
-    return data;
   }
 }
 

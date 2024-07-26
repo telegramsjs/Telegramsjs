@@ -13,29 +13,14 @@ class ChatBoostRemoved extends Base {
     /** Unique identifier of the boost */
     this.id = data.boost_id;
 
-    this._patch(data);
-  }
+    /** Chat which was boosted */
+    this.chat = new Chat(client, data.chat);
 
-  _patch(data) {
-    /**
-     * Chat which was boosted
-     * @type {Chat}
-     */
-    this.chat = new Chat(this.client, data.chat);
+    /** Source of the removed boost */
+    this.source = new ChatBoostSource(client, data.source);
 
-    /**
-     * Source of the removed boost
-     * @type {ChatBoostSource}
-     */
-    this.source = new ChatBoostSource(this.client, data.source);
-
-    /**
-     * Point in time (Unix timestamp) when the boost was removed
-     * @type {number}
-     */
+    /** Point in time (Unix timestamp) when the boost was removed */
     this.removedTimestamp = data.remove_date;
-
-    return data;
   }
 
   /**

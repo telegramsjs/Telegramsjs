@@ -17,55 +17,31 @@ class CallbackQuery extends Base {
     /** Unique identifier for this query */
     this.id = data.id;
 
-    this._patch(data);
-  }
-
-  _patch(data) {
-    /**
-     * Sender
-     * @type {User | undefined}
-     */
-    this.author = new User(this.client, data.from);
+    /** Sender */
+    this.author = new User(client, data.from);
 
     if ("message" in data) {
-      /**
-       * Message sent by the bot with the callback button that originated the query
-       * @type {Message | undefined}
-       */
-      this.message = new Message(this.client, data.message);
+      /** Message sent by the bot with the callback button that originated the query */
+      this.message = new Message(client, data.message);
     }
 
     if ("inline_message_id" in data) {
-      /**
-       * Identifier of the message sent via the bot in inline mode, that originated the query
-       * @type {number | undefined}
-       */
+      /** Identifier of the message sent via the bot in inline mode, that originated the query */
       this.inlineMessageId = data.inline_message_id;
     }
 
-    /**
-     * Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games
-     * @type {string}
-     */
+    /** Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games */
     this.chatInstance = data.chat_instance;
 
     if ("data" in data) {
-      /**
-       * Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data
-       * @type {string | undefined}
-       */
+      /** Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data */
       this.data = data.data;
     }
 
     if ("game_short_name" in data) {
-      /**
-       * Short name of a Game to be returned, serves as the unique identifier for the game
-       * @type {string | undefined}
-       */
+      /** Short name of a Game to be returned, serves as the unique identifier for the game */
       this.gameShortName = data.game_short_name;
     }
-
-    return data;
   }
 
   /**

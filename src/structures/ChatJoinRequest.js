@@ -14,44 +14,24 @@ class ChatJoinRequest extends Base {
     /** Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user. */
     this.userChatId = data.user_chat_id;
 
-    this._patch(data);
-  }
+    /** Chat to which the request was sent */
+    this.chat = new Chat(client, data.chat);
 
-  _patch(data) {
-    /**
-     * Chat to which the request was sent
-     * @type {Chat}
-     */
-    this.chat = new Chat(this.client, data.chat);
-
-    /**
-     * User that sent the join request
-     * @type {User}
-     */
-    this.author = new User(this.client, data.from);
+    /** User that sent the join request */
+    this.author = new User(client, data.from);
 
     if ("bio" in data) {
-      /**
-       * Bio of the user
-       * @type {string | undefined}
-       */
+      /** Bio of the user */
       this.bio = data.bio;
     }
 
     if ("invite_link" in data) {
-      /**
-       * Chat invite link that was used by the user to send the join request
-       * @type {ChatInviteLink}
-       */
-      this.inviteLink = new ChatInviteLink(this.client, data.invite_link);
+      /** Chat invite link that was used by the user to send the join request */
+      this.inviteLink = new ChatInviteLink(client, data.invite_link);
     }
-    /**
-     * Date the request was sent in Unix time
-     * @type {number}
-     */
-    this.createdTimestamp = data.date;
 
-    return data;
+    /** Date the request was sent in Unix time */
+    this.createdTimestamp = data.date;
   }
 
   /**

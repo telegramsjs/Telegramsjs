@@ -3,26 +3,18 @@ const { Chat } = require("./chat/Chat");
 const { ChatBoost } = require("./boots/ChatBoost");
 
 class ChatBoostUpdated extends Base {
+  /**
+   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("@telegram.ts/types").ChatBoostUpdated} data - Data about the represents a boost added to a chat or changed
+   */
   constructor(client, data) {
     super(client);
 
-    this._patch(data);
-  }
+    /** Chat which was boosted  */
+    this.chat = new Chat(client, data.chat);
 
-  _patch(data) {
-    /**
-     * Chat which was boosted
-     * @type {Chat}
-     */
-    this.chat = new Chat(this.client, data.chat);
-
-    /**
-     * Information about the chat boost
-     * @type {ChatBoost}
-     */
-    this.boost = new ChatBoost(this.client, data.boost);
-
-    return data;
+    /** Information about the chat boost */
+    this.boost = new ChatBoost(client, data.boost);
   }
 }
 

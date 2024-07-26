@@ -12,80 +12,46 @@ class ChatMemberUpdated extends Base {
   constructor(client, data) {
     super(client);
 
-    this._patch(data);
-  }
+    /** Chat the user belongs to */
+    this.chat = new Chat(client, data.chat);
 
-  _patch(data) {
-    /**
-     * Chat the user belongs to
-     * @param {Chat}
-     */
-    this.chat = new Chat(this.client, data.chat);
+    /** Performer of the action, which resulted in the change */
+    this.author = new User(client, data.from);
 
-    /**
-     * Performer of the action, which resulted in the change
-     * @type {User}
-     */
-    this.author = new User(this.client, data.from);
-
-    /**
-     * Date the change was done in Unix time
-     * @type {number}
-     */
+    /** Date the change was done in Unix time */
     this.createdTimestamp = data.date;
 
-    /**
-     * Previous information about the chat member
-     * @type {ChatMember}
-     */
-    this.oldMember = new ChatMember(
-      this.client,
-      this.chat.id,
-      data.old_chat_member,
-    );
+    /** Previous information about the chat member */
+    this.oldMember = new ChatMember(client, this.chat.id, data.old_chat_member);
 
     if (!this.chat.isPrivate()) {
-      /**
-       * New information about the chat member
-       * @type {ChatMember}
-       */
+      /** New information about the chat member */
       this.newMember = this.chat.members._add(this.chat.id, true, {
         id: data.new_chat_member.user.id,
         extras: [data.new_chat_member],
       });
     } else {
       this.newMember = new ChatMember(
-        this.client,
+        client,
         this.chat.id,
         data.new_chat_member,
       );
     }
 
     if ("invite_link" in data) {
-      /**
-       * Chat invite link, which was used by the user to join the chat; for joining by invite link events only
-       * @type {ChatInviteLink | undefined}
-       */
-      this.inviteLink = new ChatInviteLink(this.client, data.invite_link);
+      /** Chat invite link, which was used by the user to join the chat; for joining by invite link events only */
+      this.inviteLink = new ChatInviteLink(client, data.invite_link);
     }
 
     if ("via_join_request" in data) {
-      /**
-       * True, if the user joined the chat after sending a direct join request without using an invite link without using an invite link and being approved by an administrator
-       * @type {boolean | undefined}
-       */
+      /** True, if the user joined the chat after sending a direct join request without using an invite link without using an invite link and being approved by an administrator */
       this.viaJoinRequest = data.via_join_request;
     }
 
     if ("via_chat_folder_invite_link" in data) {
-      /**
-       * True, if the user joined the chat via a chat folder invite link
-       * @type {boolean | undefined}
-       */
+      /** True, if the user joined the chat via a chat folder invite link */
       this.viaInviteLink = data.via_chat_folder_invite_link;
     }
-
-    return data;
   }
 
   /**

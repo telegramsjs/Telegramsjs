@@ -13,45 +13,24 @@ class InlineQuery extends Base {
     /** Unique identifier for this query */
     this.id = data.id;
 
-    this._patch(data);
-  }
+    /** Sender */
+    this.author = new User(client, data.from);
 
-  _patch(data) {
-    /**
-     * Sender
-     * @type {User}
-     */
-    this.author = new User(this.client, data.from);
-
-    /**
-     * Text of the query (up to 256 characters)
-     * @type {string}
-     */
+    /** Text of the query (up to 256 characters) */
     this.query = data.query;
 
-    /**
-     * Offset of the results to be returned, can be controlled by the bot
-     * @type {number}
-     */
+    /**  Offset of the results to be returned, can be controlled by the bot */
     this.offset = data.offset;
 
     if ("chat_type" in data) {
-      /**
-       * Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
-       * @type {"sender" | import("@telegram.ts/types").Chat["type"]}
-       */
+      /** Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat */
       this.type = data.chat_type;
     }
 
     if ("location" in data) {
-      /**
-       * Sender location, only for bots that request user location
-       * @type {Location | undefined}
-       */
-      this.location = new Location(this.client, data.location);
+      /** Sender location, only for bots that request user location */
+      this.location = new Location(client, data.location);
     }
-
-    return data;
   }
 }
 

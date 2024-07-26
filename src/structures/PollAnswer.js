@@ -13,33 +13,18 @@ class PollAnswer extends Base {
     /** Unique poll identifier */
     this.id = data.poll_id;
 
-    this._patch(data);
-  }
-
-  _patch(data) {
     if ("voter_chat" in data) {
-      /**
-       * The chat that changed the answer to the poll, if the voter is anonymous
-       * @type {Chat | undefined}
-       */
-      this.voterChat = new Chat(this.client, data.voter_chat);
+      /** The chat that changed the answer to the poll, if the voter is anonymous */
+      this.voterChat = new Chat(client, data.voter_chat);
     }
 
     if ("user" in data) {
-      /**
-       * The user that changed the answer to the poll, if the voter isn't anonymous
-       * @type {User | undefined}
-       */
-      this.user = new User(this.client, data.user);
+      /** The user that changed the answer to the poll, if the voter isn't anonymous */
+      this.user = new User(client, data.user);
     }
 
-    /**
-     * 0-based identifiers of chosen answer options. May be empty if the vote was retracted
-     * @type {number[]}
-     */
+    /** 0-based identifiers of chosen answer options. May be empty if the vote was retracted */
     this.ids = data.option_ids;
-
-    return data;
   }
 }
 
