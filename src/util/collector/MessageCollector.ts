@@ -1,4 +1,5 @@
 import { Events } from "../Constants";
+import { TelegramError } from "../../errors/TelegramError";
 import { TelegramClient } from "../../client/TelegramClient";
 import type { Chat } from "../../structures/chat/Chat";
 import { Collection } from "@telegram.ts/collection";
@@ -31,6 +32,13 @@ class MessageCollector extends Collector<number, Message> {
     public readonly options: ICollectorOptions<number, Message> = {},
   ) {
     super(options);
+
+    if (!message.chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
+
     this.chat = message.chat;
 
     client.incrementMaxListeners();
@@ -47,7 +55,7 @@ class MessageCollector extends Collector<number, Message> {
    * @returns The ID of the message or null.
    */
   collect(message: Message): number | null {
-    if (message.chat.id !== this.chat.id) return null;
+    if (message.chat?.id !== this.chat.id) return null;
     this.received++;
     return message.id;
   }
@@ -58,7 +66,7 @@ class MessageCollector extends Collector<number, Message> {
    * @returns The ID of the message or null.
    */
   dispose(message: Message): number | null {
-    return message.chat.id === this.chat.id ? message.id : null;
+    return message.chat?.id === this.chat.id ? message.id : null;
   }
 
   /**
