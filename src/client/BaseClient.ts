@@ -47,7 +47,7 @@ interface EventHandlers {
     message: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
   businessConnection: (
-    message: import("../structures/message/BusinessConnection").BusinessConnection,
+    message: import("../structures/business/BusinessConnection").BusinessConnection,
   ) => PossiblyAsync<void>;
   editedMessage: (
     oldMessage: import("../structures/message/Message").Message | null,
@@ -62,40 +62,38 @@ interface EventHandlers {
     newMessage: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
   deletedBusinessMessages: (
-    message: import("../structures/message/BusinessMessagesDeleted").BusinessMessagesDeleted,
+    message: import("../structures/business/BusinessMessagesDeleted").BusinessMessagesDeleted,
   ) => PossiblyAsync<void>;
   messageReaction: (
-    message: import("../structures/message/MessageReactionUpdated").MessageReactionUpdated,
+    message: import("../structures/MessageReactionUpdated").MessageReactionUpdated,
   ) => PossiblyAsync<void>;
   messageReactionCount: (
-    message: import("../structures/message/MessageReactionCountUpdated").MessageReactionCountUpdated,
+    message: import("../structures/MessageReactionCountUpdated").MessageReactionCountUpdated,
   ) => PossiblyAsync<void>;
   inlineQuery: (
-    inline: import("../structures/message/InlineQuery").InlineQuery,
+    inline: import("../structures/InlineQuery").InlineQuery,
   ) => PossiblyAsync<void>;
   chosenInlineResult: (
-    inlineResult: import("../structures/message/ChosenInlineResult").ChosenInlineResult,
+    inlineResult: import("../structures/ChosenInlineResult").ChosenInlineResult,
   ) => PossiblyAsync<void>;
   callbackQuery: (
-    query: import("../structures/message/CallbackQuery").CallbackQuery,
+    query: import("../structures/CallbackQuery").CallbackQuery,
   ) => PossiblyAsync<void>;
   shippingQuery: (
-    query: import("../structures/message/ShippingQuery").ShippingQuery,
+    query: import("../structures/ShippingQuery").ShippingQuery,
   ) => PossiblyAsync<void>;
   preCheckoutQuery: (
-    checkoutQuery: import("../structures/message/PreCheckoutQuery").PreCheckoutQuery,
+    checkoutQuery: import("../structures/PreCheckoutQuery").PreCheckoutQuery,
   ) => PossiblyAsync<void>;
-  poll: (
-    poll: import("../structures/message/Poll").Poll,
-  ) => PossiblyAsync<void>;
+  poll: (poll: import("../structures/media/Poll").Poll) => PossiblyAsync<void>;
   pollAnswer: (
-    pollAnswer: import("../structures/message/PollAnswer").PollAnswer,
+    pollAnswer: import("../structures/PollAnswer").PollAnswer,
   ) => PossiblyAsync<void>;
   myChatMember: (
-    member: import("../structures/message/ChatMemberUpdated").ChatMemberUpdated,
+    member: import("../structures/ChatMemberUpdated").ChatMemberUpdated,
   ) => PossiblyAsync<void>;
   chatMember: (
-    member: import("../structures/message/ChatMemberUpdated").ChatMemberUpdated,
+    member: import("../structures/ChatMemberUpdated").ChatMemberUpdated,
   ) => PossiblyAsync<void>;
   chatCreate: (
     message: import("../structures/message/Message").Message,
@@ -110,13 +108,13 @@ interface EventHandlers {
     message: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
   chatJoinRequest: (
-    joinRequest: import("../structures/message/ChatJoinRequest").ChatJoinRequest,
+    joinRequest: import("../structures/ChatJoinRequest").ChatJoinRequest,
   ) => PossiblyAsync<void>;
   chatBoost: (
-    boostChat: import("../structures/message/ChatBoostUpdated").ChatBoostUpdated,
+    boostChat: import("../structures/ChatBoostUpdated").ChatBoostUpdated,
   ) => PossiblyAsync<void>;
   removedChatBoost: (
-    chatBoost: import("../structures/message/ChatBoostRemoved").ChatBoostRemoved,
+    chatBoost: import("../structures/ChatBoostRemoved").ChatBoostRemoved,
   ) => PossiblyAsync<void>;
 }
 
@@ -128,13 +126,31 @@ class BaseClient extends EventEmitter {
   constructor(authToken: string, options?: ClientOptions) {
     super();
 
+    /**
+     * The Rest manager of the client
+     */
     this.apiRequest = new ApiRequest(authToken, options?.requestOptions);
 
+    /**
+     * All of the objects that have been cached at any point, mapped by their ids
+     */
     this.users = new UserManager(this, options?.userCacheMaxSize);
 
+    /**
+     * All of the that the client is currently handling, mapped by their ids -
+     * as long as sharding isn't being used, this will be *every* channel in *every* chat the bot
+     * is a member of. Note that DM channels will not be initially cached, and thus not be present
+     * in the Manager without their explicit fetching or use.
+     */
     this.chats = new ChatManager(this, options?.chatCacheMaxSize);
   }
 
+  /**
+   * Adds a typed listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   on<T extends keyof EventHandlers>(event: T, listener: EventHandlers[T]): this;
 
   on(event: string, listener: (...data: any[]) => void) {
@@ -142,6 +158,12 @@ class BaseClient extends EventEmitter {
     return this;
   }
 
+  /**
+   * Adds a typed one-time listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The ManagerEvents instance.
+   */
   once<T extends keyof EventHandlers>(
     event: T,
     listener: EventHandlers[T],
@@ -152,6 +174,10 @@ class BaseClient extends EventEmitter {
     return this;
   }
 
+  /**
+   * Increments max listeners by one, if they are not zero.
+   * @return {void}
+   */
   incrementMaxListeners() {
     const maxListeners = this.getMaxListeners();
     if (maxListeners !== 0) {
@@ -159,6 +185,10 @@ class BaseClient extends EventEmitter {
     }
   }
 
+  /**
+   * Decrements max listeners by one, if they are not zero.
+   * @return {void}
+   */
   decrementMaxListeners() {
     const maxListeners = this.getMaxListeners();
     if (maxListeners !== 0) {
@@ -166,7 +196,11 @@ class BaseClient extends EventEmitter {
     }
   }
 
-  /** Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects */
+  /** Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects.
+
+  Notes
+  1. This method will not work if an outgoing webhook is set up.
+  2. In order to avoid getting duplicate updates, recalculate offset after each server response. */
   async getUpdates(params?: MethodParameters["getUpdates"]) {
     return await this.apiRequest.get<MethodsReturnType["getUpdates"]>(
       "getUpdates",
@@ -174,9 +208,9 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST get to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful get, we will give up after a reasonable amount of attempts. Returns True on success.
+  /** Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
 
-  If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the get will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
+  If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
 
   Notes
   1. You will not be able to receive updates using getUpdates for as long as an outgoing webhook is set up.
@@ -191,25 +225,19 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /*
-   * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
-   */
+  /** A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object. */
   async getMe() {
     return await this.apiRequest
       .get<MethodsReturnType["getMe"]>("getMe")
       .then((res) => new ClientUser(this, res));
   }
 
-  /**
-   * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters
-   */
+  /** Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters. */
   async logOut() {
     return await this.apiRequest.get<MethodsReturnType["logOut"]>("logOut");
   }
 
-  /**
-   * Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success. Requires no parameters.
-   */
+  /** Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success. Requires no parameters. */
   async close() {
     return await this.apiRequest.get<MethodsReturnType["close"]>("close");
   }
@@ -324,7 +352,7 @@ class BaseClient extends EventEmitter {
       });
   }
 
-  /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
+  /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
   async sendVoice(params: MethodParameters["sendVoice"]) {
     return await this.apiRequest
       .get<MethodsReturnType["sendVoice"]>("sendVoice", params)
@@ -384,7 +412,7 @@ class BaseClient extends EventEmitter {
       });
   }
 
-  /** Use this method to forward messages of any kind. Service messages can't be forwarded. On success, the sent Message is returned. */
+  /** Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned. */
   async forwardMessage(params: MethodParameters["forwardMessage"]) {
     return await this.apiRequest
       .get<MethodsReturnType["forwardMessage"]>("forwardMessage", params)
@@ -404,14 +432,14 @@ class BaseClient extends EventEmitter {
       .then((res) => res.map((msg) => new Message(this, res)));
   }
 
-  /** Use this method to copy messages of any kind. Service messages and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success. */
+  /** Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success. */
   async copyMessage(params: MethodParameters["copyMessage"]) {
     return await this.apiRequest
       .get<MethodsReturnType["copyMessage"]>("copyMessage", params)
       .then((res) => res.message_id);
   }
 
-  /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
+  /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
   async copyMessages(params: MethodParameters["copyMessages"]) {
     return await this.apiRequest
       .get<MethodsReturnType["copyMessages"]>("copyMessages", params)
@@ -459,7 +487,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
 
-  Example: The ImageBot needs some time to process a get and upload the image. Instead of sending a text message along the lines of "Retrieving image, please wait...", the bot may use sendChatAction with action = upload_photo. The user will see a "sending photo" status for the bot.
+  Example: The ImageBot needs some time to process a request and upload the image. Instead of sending a text message along the lines of "Retrieving image, please wait...", the bot may use sendChatAction with action = upload_photo. The user will see a "sending photo" status for the bot.
 
   We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive. */
   async sendChatAction(params: MethodParameters["sendChatAction"]) {
@@ -469,7 +497,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success */
+  /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
   async setMessageReaction(params: MethodParameters["setMessageReaction"]) {
     return await this.apiRequest.get<MethodsReturnType["setMessageReaction"]>(
       "setMessageReaction",
@@ -1003,7 +1031,7 @@ class BaseClient extends EventEmitter {
       .then((res) => new ChatAdministratorRights(res));
   }
 
-  /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
+  /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   async editMessageText(params: MethodParameters["editMessageText"]) {
     return await this.apiRequest
       .get<MethodsReturnType["editMessageText"]>("editMessageText", params)
@@ -1016,7 +1044,7 @@ class BaseClient extends EventEmitter {
       });
   }
 
-  /** Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
+  /** Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   async editMessageCaption(params: MethodParameters["editMessageCaption"]) {
     return await this.apiRequest
       .get<
@@ -1031,7 +1059,7 @@ class BaseClient extends EventEmitter {
       });
   }
 
-  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
+  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   async editMessageMedia(params: MethodParameters["editMessageMedia"]) {
     return await this.apiRequest
       .get<MethodsReturnType["editMessageMedia"]>("editMessageMedia", params)
@@ -1066,7 +1094,7 @@ class BaseClient extends EventEmitter {
       .then((res) => (typeof res === "boolean" ? res : new Message(this, res)));
   }
 
-  /** Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
+  /** Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   async editMessageReplyMarkup(
     params: MethodParameters["editMessageReplyMarkup"],
   ) {
