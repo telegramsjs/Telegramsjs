@@ -44,7 +44,10 @@ yarn add telegramsjs
 Afterwards we can create a quite simple example bot:
 
 ```js
+// ECMAscript/TypeScript
 import { TelegramClient } from "telegramsjs";
+// CommonJS
+const { TelegramClient } = require("telegramsjs");
 
 const client = new TelegramClient("TELEGRAM_BOT_TOKEN");
 
