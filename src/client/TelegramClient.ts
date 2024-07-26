@@ -17,6 +17,9 @@ import {
   DefaultClientParameters,
 } from "../util/Constants";
 
+/**
+ * Interface representing options for logging in.
+ */
 interface ILoginOptions {
   polling?: {
     offset?: number;
@@ -41,6 +44,9 @@ interface ILoginOptions {
   };
 }
 
+/**
+ * Interface representing client options.
+ */
 interface ClientOptions {
   offset?: number;
   requestOptions?: RequestInit;
@@ -50,13 +56,42 @@ interface ClientOptions {
   userCacheMaxSize?: number;
 }
 
+/**
+ * Represents a Telegram client for interacting with the Telegram API.
+ * @extends {BaseClient}
+ */
 class TelegramClient extends BaseClient {
+  /**
+   * The polling client for handling updates via long polling.
+   */
   public readonly polling: PollingClient;
+
+  /**
+   * The webhook client for handling updates via webhooks.
+   */
   public readonly webhook: WebhookClient;
+
+  /**
+   * The worket client for handling updates.
+   */
   public readonly worket: WorketClient;
+
+  /**
+   * The timestamp when the client became ready.
+   */
   public readyTimestamp: number | null = null;
+
+  /**
+   * The authenticated user associated with the client.
+   */
   public user!: ClientUser;
 
+  /**
+   * Creates an instance of TelegramClient.
+   * @param {string} authToken - The authentication token for the Telegram bot.
+   * @param {ClientOptions} [options={}] - Optional client parameters.
+   * @throws {TelegramError} If the authentication token is not specified.
+   */
   constructor(
     public readonly authToken: string,
     public readonly options: ClientOptions = {},
@@ -74,10 +109,19 @@ class TelegramClient extends BaseClient {
     this.worket = new WorketClient(this);
   }
 
+  /**
+   * Gets the client's uptime in milliseconds.
+   * @returns {number | null} The uptime in milliseconds, or null if the client is not ready.
+   */
   get uptime() {
     return this.readyTimestamp && Date.now() - this.readyTimestamp;
   }
 
+  /**
+   * Logs in to the Telegram API using the specified options.
+   * @param {ILoginOptions} [options={ polling: DefaultParameters }] - The login options.
+   * @throws {TelegramError} If invalid options are provided.
+   */
   async login(options: ILoginOptions = { polling: DefaultParameters }) {
     if ("polling" in options) {
       await this.polling.startPolling(options.polling);
@@ -101,6 +145,9 @@ class TelegramClient extends BaseClient {
     throw new TelegramError("Invalid options");
   }
 
+  /**
+   * Destroys the client, closing all connections.
+   */
   destroy() {
     this.polling.close();
     this.webhook.close();

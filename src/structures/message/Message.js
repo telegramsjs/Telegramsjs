@@ -63,7 +63,7 @@ class Message extends Base {
     if ("message_thread_id" in data) {
       /**
        * Unique identifier of a message thread or a forum topic to which the message belongs; for supergroups only
-       * @type {number | undefined}
+       * @type {number}
        */
       this.threadId = data.message_thread_id;
     }

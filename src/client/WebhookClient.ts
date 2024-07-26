@@ -12,9 +12,21 @@ import http, {
   type RequestListener,
 } from "node:http";
 
+/**
+ * Represents a client for handling Telegram updates using webhooks.
+ */
 class WebhookClient {
+  /**
+   * The HTTP or HTTPS server for handling webhook requests.
+   */
   webhookServer?: http.Server | https.Server;
 
+  /**
+   * Filters incoming webhook requests to verify their authenticity.
+   * @param {IncomingMessage & { body?: Update }} request - The incoming request.
+   * @param {{ path: string; token: string; secretToken?: string }} options - The options for filtering the request.
+   * @returns {boolean} Whether the request is valid.
+   */
   webhookFilter = (
     request: IncomingMessage & { body?: Update },
     options: { path: string; token: string; secretToken?: string },
@@ -32,8 +44,18 @@ class WebhookClient {
     return false;
   };
 
+  /**
+   * Creates an instance of WebhookClient.
+   * @param {TelegramClient} client - The Telegram client instance.
+   */
   constructor(public readonly client: TelegramClient) {}
 
+  /**
+   * Starts the webhook server to receive updates from Telegram.
+   * @param {string} [path="/"] - The path for the webhook endpoint.
+   * @param {string} [secretToken=""] - The secret token for verifying webhook requests.
+   * @param {{ tlsOptions?: TlsOptions; port?: number; host?: string; requestCallback?: RequestListener }} [options={}] - The options for the webhook server.
+   */
   async startWebhook(
     path: string = "/",
     secretToken: string = "",
@@ -67,6 +89,12 @@ class WebhookClient {
     this.webhookServer.listen(port, host);
   }
 
+  /**
+   * Creates a callback function for handling webhook requests.
+   * @param {RequestListener} [requestCallback] - The callback function to handle requests.
+   * @param {{ path?: string; secretToken?: string }} [options={}] - The options for creating the webhook callback.
+   * @returns {Promise<RequestListener>} The created callback function.
+   */
   async createWebhookCallback(
     requestCallback?: RequestListener,
     { path, secretToken }: { path?: string; secretToken?: string } = {},
@@ -116,6 +144,9 @@ class WebhookClient {
       : callback;
   }
 
+  /**
+   * Closes the webhook server.
+   */
   close() {
     this.webhookServer?.close();
   }

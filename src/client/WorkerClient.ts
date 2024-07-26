@@ -17,9 +17,20 @@ import { BusinessConnection } from "../structures/business/BusinessConnection";
 import { BusinessMessagesDeleted } from "../structures/business/BusinessMessagesDeleted";
 import type { TelegramClient } from "./TelegramClient";
 
+/**
+ * Handles incoming updates from the Telegram API and routes them to the appropriate event handlers.
+ */
 class WorketClient {
+  /**
+   * Creates an instance of WorketClient.
+   * @param client - The Telegram client instance.
+   */
   constructor(public readonly client: TelegramClient) {}
 
+  /**
+   * Processes an incoming update and emits the corresponding event.
+   * @param data - The update data received from Telegram.
+   */
   processUpdate(data: Update) {
     if (
       "message" in data ||
@@ -97,6 +108,10 @@ class WorketClient {
     }
   }
 
+  /**
+   * Handles new messages, channel posts, or business messages.
+   * @param data - The message data.
+   */
   onMessage(
     data:
       | Update["message"]
@@ -111,6 +126,10 @@ class WorketClient {
     this.client.emit("message", message);
   }
 
+  /**
+   * Handles new business connections.
+   * @param data - The business connection data.
+   */
   onBusinessConnection(data: Update["business_connection"]) {
     if (!data) return;
     this.client.emit(
@@ -119,6 +138,10 @@ class WorketClient {
     );
   }
 
+  /**
+   * Handles edited messages, channel posts, or business messages.
+   * @param data - The edited message data.
+   */
   onMessageEdit(
     data:
       | Update["edited_message"]
@@ -132,6 +155,10 @@ class WorketClient {
     this.client.emit("messageUpdate", oldMessage, newMessage);
   }
 
+  /**
+   * Handles deleted business messages.
+   * @param data - The deleted business messages data.
+   */
   onDeletedBusinessMessages(data: Update["deleted_business_messages"]) {
     if (!data) return;
     this.client.emit(
@@ -140,6 +167,10 @@ class WorketClient {
     );
   }
 
+  /**
+   * Handles reactions to messages.
+   * @param data - The message reaction data.
+   */
   onMessageReaction(data: Update["message_reaction"]) {
     if (!data) return;
     this.client.emit(
@@ -148,6 +179,10 @@ class WorketClient {
     );
   }
 
+  /**
+   * Handles updates to message reaction counts.
+   * @param data - The message reaction count data.
+   */
   onMessageReactionCount(data: Update["message_reaction_count"]) {
     if (!data) return;
     this.client.emit(
@@ -156,11 +191,19 @@ class WorketClient {
     );
   }
 
+  /**
+   * Handles incoming inline queries.
+   * @param data - The inline query data.
+   */
   onInlineQuery(data: Update["inline_query"]) {
     if (!data) return;
     this.client.emit("inlineQuery", new InlineQuery(this.client, data));
   }
 
+  /**
+   * Handles chosen inline results.
+   * @param data - The chosen inline result data.
+   */
   onChosenInlineResult(data: Update["chosen_inline_result"]) {
     if (!data) return;
     this.client.emit(
@@ -169,16 +212,28 @@ class WorketClient {
     );
   }
 
+  /**
+   * Handles incoming callback queries.
+   * @param data - The callback query data.
+   */
   onCallbackQuery(data: Update["callback_query"]) {
     if (!data) return;
     this.client.emit("callbackQuery", new CallbackQuery(this.client, data));
   }
 
+  /**
+   * Handles incoming shipping queries.
+   * @param data - The shipping query data.
+   */
   onShippingQuery(data: Update["shipping_query"]) {
     if (!data) return;
     this.client.emit("shippingQuery", new ShippingQuery(this.client, data));
   }
 
+  /**
+   * Handles pre-checkout queries.
+   * @param data - The pre-checkout query data.
+   */
   onPreCheckoutQuery(data: Update["pre_checkout_query"]) {
     if (!data) return;
     this.client.emit(
@@ -187,26 +242,46 @@ class WorketClient {
     );
   }
 
+  /**
+   * Handles new polls.
+   * @param data - The poll data.
+   */
   onPoll(data: Update["poll"]) {
     if (!data) return;
     this.client.emit("poll", new Poll(this.client, data));
   }
 
+  /**
+   * Handles new poll answers.
+   * @param data - The poll answer data.
+   */
   onPollAnswer(data: Update["poll_answer"]) {
     if (!data) return;
     this.client.emit("pollAnswer", new PollAnswer(this.client, data));
   }
 
+  /**
+   * Handles updates to the client's chat member status.
+   * @param data - The chat member update data.
+   */
   onMyChatMember(data: Update["my_chat_member"]) {
     if (!data) return;
     this.client.emit("myChatMember", new ChatMemberUpdated(this.client, data));
   }
 
+  /**
+   * Handles updates to chat members.
+   * @param data - The chat member update data.
+   */
   onChatMember(data: Update["chat_member"]) {
     if (!data) return;
     this.client.emit("chatMember", new ChatMemberUpdated(this.client, data));
   }
 
+  /**
+   * Handles new chat members being added.
+   * @param data - The message data containing new chat members.
+   */
   onChatMemberAdd(data: Update["message"]) {
     if (!data) return;
     const message = new Message(this.client, data);
@@ -224,6 +299,10 @@ class WorketClient {
     }
   }
 
+  /**
+   * Handles chat members being removed.
+   * @param data - The message data containing removed chat members.
+   */
   onChatMemberRemove(data: Update["message"]) {
     if (!data) return;
     const message = new Message(this.client, data);
@@ -237,16 +316,28 @@ class WorketClient {
     }
   }
 
+  /**
+   * Handles chat join requests.
+   * @param data - The chat join request data.
+   */
   onChatJoinRequest(data: Update["chat_join_request"]) {
     if (!data) return;
     this.client.emit("chatJoinRequest", new ChatJoinRequest(this.client, data));
   }
 
+  /**
+   * Handles updates to chat boosts.
+   * @param data - The chat boost update data.
+   */
   onChatBoost(data: Update["chat_boost"]) {
     if (!data) return;
     this.client.emit("chatBoost", new ChatBoostUpdated(this.client, data));
   }
 
+  /**
+   * Handles removed chat boosts.
+   * @param data - The removed chat boost data.
+   */
   onRemovedChatBoost(data: Update["removed_chat_boost"]) {
     if (!data) return;
     this.client.emit(

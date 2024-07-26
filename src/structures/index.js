@@ -18,7 +18,6 @@ module.exports.PollAnswer = require("./PollAnswer").PollAnswer;
 module.exports.PreCheckoutQuery =
   require("./PreCheckoutQuery").PreCheckoutQuery;
 module.exports.ShippingQuery = require("./ShippingQuery").ShippingQuery;
-module.exports.index = require("./index").index;
 module.exports.ChatBoost = require("./boots/ChatBoost").ChatBoost;
 module.exports.ChatBoostSource =
   require("./boots/ChatBoostSource").ChatBoostSource;
