@@ -5,6 +5,7 @@ import { ApiRequest } from "../rest/ApiRequest";
 import type { ClientOptions } from "./TelegramClient";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
+import { Permissions } from "../util/Permissions";
 import {
   Message,
   MenuButton,
@@ -25,6 +26,13 @@ import {
 } from "../structures/index";
 import type { MethodsReturnType, MethodParameters } from "../types";
 
+interface EventHandlers {
+  ready: (telegram: typeof import("./TelegramClient").TelegramClient) => void;
+  message: (
+    message: typeof import("../structures/message/Message").Message,
+  ) => void;
+}
+
 class BaseClient extends EventEmitter {
   public readonly apiRequest: ApiRequest;
   public readonly users: UserManager;
@@ -38,6 +46,23 @@ class BaseClient extends EventEmitter {
     this.users = new UserManager(this, options?.userCacheMaxSize);
 
     this.chats = new ChatManager(this, options?.chatCacheMaxSize);
+  }
+
+  on<T extends keyof EventHandlers>(event: T, listener: EventHandlers[T]): this;
+
+  on(event: string, listener: (...data: any[]) => void) {
+    super.on(event, listener);
+    return this;
+  }
+
+  once<T extends keyof EventHandlers>(
+    event: T,
+    listener: EventHandlers[T],
+  ): this;
+
+  once(event: string, listener: (...data: any[]) => void) {
+    super.on(event, listener);
+    return this;
   }
 
   incrementMaxListeners() {
@@ -125,7 +150,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendMessage"]>("sendMessage", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -138,7 +163,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendPhoto"]>("sendPhoto", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -153,7 +178,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendAudio"]>("sendAudio", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -166,7 +191,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendPaidMedia"]>("sendPaidMedia", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -179,7 +204,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendDocument"]>("sendDocument", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -192,7 +217,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVideo"]>("sendVideo", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -205,7 +230,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendAnimation"]>("sendAnimation", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -218,7 +243,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVoice"]>("sendVoice", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -232,7 +257,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVideoNote"]>("sendVideoNote", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -252,7 +277,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendLocation"]>("sendLocation", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -265,7 +290,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVenue"]>("sendVenue", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -278,7 +303,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["forwardMessage"]>("forwardMessage", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -312,7 +337,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendContact"]>("sendContact", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -325,7 +350,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendPoll"]>("sendPoll", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -338,7 +363,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendDice"]>("sendDice", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -455,9 +480,13 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success. */
   async setChatPermissions(params: MethodParameters["setChatPermissions"]) {
+    const permissions = new Permissions(params?.permissions || {});
     return await this.apiRequest.get<MethodsReturnType["setChatPermissions"]>(
       "setChatPermissions",
-      params,
+      {
+        ...params,
+        permissions: permissions.toApiFormat(permissions.toObject()),
+      },
     );
   }
 
@@ -869,9 +898,13 @@ class BaseClient extends EventEmitter {
     rights?: MethodParameters["setMyDefaultAdministratorRights"]["rights"],
     for_channels?: boolean,
   ) {
+    const permissions = new Permissions(rights || {});
     return await this.apiRequest.get<
       MethodsReturnType["setMyDefaultAdministratorRights"]
-    >("setMyDefaultAdministratorRights", { rights, for_channels });
+    >("setMyDefaultAdministratorRights", {
+      rights: permissions.toApiFormat(permissions.toObject()),
+      for_channels,
+    });
   }
 
   /** Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on success. */
@@ -889,7 +922,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["editMessageText"]>("editMessageText", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -904,7 +937,7 @@ class BaseClient extends EventEmitter {
       >("editMessageCaption", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -917,7 +950,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["editMessageMedia"]>("editMessageMedia", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -956,7 +989,7 @@ class BaseClient extends EventEmitter {
       >("editMessageReplyMarkup", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -969,7 +1002,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["stopPoll"]>("stopPoll", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -982,7 +1015,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendSticker"]>("sendSticker", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1142,7 +1175,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendInvoice"]>("sendInvoice", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1213,7 +1246,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendGame"]>("sendGame", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message) {
+        if ("chat" in message && "messages" in message.chat) {
           message.chat.messages._add(res);
         }
         return message;

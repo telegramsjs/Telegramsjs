@@ -1,11 +1,8 @@
 import { Events } from "../Constants";
 import { Collection } from "@telegram.ts/collection";
+import { ReactionType } from "../../structures/misc/ReactionType";
 import type { TelegramClient } from "../../client/TelegramClient";
-import type {
-  Emoji,
-  CustomEmoji,
-  MessageReactionUpdated,
-} from "../../structures/MessageReactionUpdated";
+import type { MessageReactionUpdated } from "../../structures/MessageReactionUpdated";
 import type { Chat } from "../../structures/chat/Chat";
 import {
   Collector,
@@ -197,7 +194,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * @param reaction - The reaction types.
    * @returns The key of the reaction or null.
    */
-  static getKeyFromReaction(reaction: Emoji | CustomEmoji): string | null {
+  static getKeyFromReaction(reaction: ReactionType): string | null {
     if (!reaction) {
       return null;
     }

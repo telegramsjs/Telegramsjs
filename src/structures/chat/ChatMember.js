@@ -3,33 +3,24 @@ const { User } = require("../misc/User");
 const { ChatInviteLink } = require("./ChatInviteLink");
 const { Permissions } = require("../../util/Permissions");
 
-class ChatMember extends Base {
-  constructor(client, chatId, data) {
-    super(client, data);
+/**
+ * @typedef {import("../../types").MethodParameters} MethodParameters
+ */
 
+class ChatMember extends Base {
+  /**
+   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {number} chatId - Identifier of the chat
+   * @param {import("@telegram.ts/types").ChatMember} data - Data about the contains information about one member of a chat
+   */
+  constructor(client, chatId, data) {
+    super(client);
+
+    /** Identifier of the chat */
     this.chatId = chatId;
 
+    /** The member's status in the chat */
     this.status = data.status || null;
-
-    this._patch(data);
-  }
-
-  _patch(data) {
-    if ("user" in data) {
-      this.user = new User(this.client, data.user);
-    }
-
-    if ("is_anonymous" in data) {
-      this.anonymous = data.is_anonymous;
-    }
-
-    if ("custom_title" in data) {
-      this.nickName = data.custom_title;
-    }
-
-    if ("is_member" in data) {
-      this.isMember = data.is_member;
-    }
 
     const permissions = {};
 
@@ -133,45 +124,141 @@ class ChatMember extends Base {
       permissions.addWebPagePreviews = data.can_add_web_page_previews;
     }
 
+    /** Represents the rights of an administrator in a chat */
     this.permissions = new Permissions(permissions);
 
+    this._patch(data);
+  }
+
+  _patch(data) {
+    if ("user" in data) {
+      /**
+       * Information about the user
+       * @type {User | undefined}
+        
+       */
+      this.user = new User(this.client, data.user);
+    }
+
+    if ("is_anonymous" in data) {
+      /**
+       * True, if the user's presence in the chat is hidden
+       * @type {boolean | undefined}
+        
+       */
+      this.anonymous = data.is_anonymous;
+    }
+
+    if ("custom_title" in data) {
+      /**
+       * Custom title for this user
+       * @type {string | undefined}
+        
+       */
+      this.nickName = data.custom_title;
+    }
+
+    if ("is_member" in data) {
+      /**
+       * True, if the user is a member of the chat at the moment of the request
+       * @type {boolean | undefined}
+        
+       */
+      this.isMember = data.is_member;
+    }
+
     if ("chat" in data) {
+      /**
+       * @typedef {import("./Chat").Chat} Chat
+      /**
+       
+       * Chat to which the request was sent
+       * @type {Chat | undefined}
+       */
       this.chat = this.client.chats._add(data.chat);
     }
 
     if ("from" in data) {
+      /**
+       * User that sent the join request
+       * @type {User | undefined}
+        
+       */
       this.author = new User(this.client, data.from);
     }
 
     if ("bio" in data) {
+      /**
+       * Bio of the user
+       * @type {string | undefined}
+        
+       */
       this.bio = data.bio;
     }
 
     if ("invite_link" in data) {
+      /**
+       * Chat invite link that was used by the user to send the join request
+       * @type {ChatInviteLink | undefined}
+        
+       */
       this.link = new ChatInviteLink(this.client, data.invite_link);
     }
 
     if ("date" in data) {
+      /**
+       * Date the request was sent in Unix time
+       * @type {number | undefined}
+        
+       */
       this.requestedTimestamp = data.date;
     }
 
     if ("user_chat_id" in data) {
+      /**
+       * Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user
+       * @type {number | undefined}
+        
+       */
       this.userChatId = data.user_chat_id;
     }
 
     if ("until_date" in data) {
+      /**
+       * Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
+       * @type {number | undefined}
+        
+       */
       this.restrictedTimestamp = data.until_date;
     }
+
+    return data;
   }
 
+  /**
+   * Date when restrictions will be lifted for this user
+   * @type {Date}
+    
+   */
   get restrictedAt() {
     return new Date(this.restrictedTimestamp);
   }
 
+  /**
+   * Date the request was sent
+   * @type {Date}
+    
+   */
   get requestedAt() {
     return new Date(this.requestedTimestamp);
   }
 
+  /**
+   * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
+   * @param {import("@telegram.ts/types").ChatPermissions} perms - An object for new user permissions
+   * @param {Omit<MethodParameters["restrictChatMember"], "user_id" | "permissions">} [options={}] - out parameters
+   * @return {Promise<true>} - Returns True on success.
+   */
   restrict(perms, options = {}) {
     const permissions = new Permissions();
 
@@ -182,6 +269,12 @@ class ChatMember extends Base {
     });
   }
 
+  /**
+   * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user.
+   * @param {import("@telegram.ts/types").ChatPermissions} persm - An object for new user permissions
+   * @param {boolean} [isAnonymous] - Pass True if the administrator's presence in the chat is hidden
+   * @return {Promise<true>} - Returns True on success.
+   */
   promote(persm, isAnonymous) {
     const permissions = new Permissions();
 
@@ -193,6 +286,11 @@ class ChatMember extends Base {
     });
   }
 
+  /**
+   * Use this method to set a custom title for an administrator in a supergroup promoted by the bot.
+   * @param {string} name - New custom title for the administrator; 0-16 characters, emoji are not allowed
+   * @return {Promise<true} - Returns True on success.
+   */
   setNikeName(name) {
     return this.client.setChatAdministratorCustomTitle({
       chat_id: this.chatId,

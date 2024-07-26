@@ -2,34 +2,6 @@ const { Base } = require("./Base");
 const { Chat } = require("./chat/Chat");
 const { User } = require("./misc/User");
 
-class Emoji {
-  constructor(emoji) {
-    this.emoji = emoji;
-  }
-
-  isEmoji() {
-    return true;
-  }
-
-  isCustomEmoji() {
-    return false;
-  }
-}
-
-class CustomEmoji {
-  constructor(custom) {
-    this.customEmoji = custom;
-  }
-
-  isEmoji() {
-    return false;
-  }
-
-  isCustomEmoji() {
-    return true;
-  }
-}
-
 class MessageReactionUpdated extends Base {
   constructor(client, data) {
     super(client, data);
@@ -65,6 +37,8 @@ class MessageReactionUpdated extends Base {
       }
       return new Emoji(data.emoji);
     });
+
+    return data;
   }
 
   get createdAt() {
@@ -123,4 +97,4 @@ class MessageReactionUpdated extends Base {
   }
 }
 
-module.exports = { MessageReactionUpdated, Emoji, CustomEmoji };
+module.exports = { MessageReactionUpdated };

@@ -1,7 +1,11 @@
 const { Permissions } = require("../../util/Permissions");
 
 class ChatAdministratorRights {
+  /**
+   * @param {import("@telegram.ts/types").ChatAdministratorRights} data - Data about the rights of administrator in a chat
+   */
   constructor(data) {
+    /** True, if the user's presence in the chat is hidden */
     this.anonymous = data.is_anonymous;
 
     const permissions = {};
@@ -42,6 +46,7 @@ class ChatAdministratorRights {
       permissions.manageTopics = data.can_manage_topics;
     }
 
+    /** Represents the rights of an administrator in a chat */
     this.permissions = new Permissions(permissions);
   }
 }

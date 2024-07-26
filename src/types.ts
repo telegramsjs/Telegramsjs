@@ -10,6 +10,8 @@ type MethodsReturnType = {
   [M in keyof Methods]: ReturnType<Methods[M]>;
 };
 
+type MsgWith<T, P extends keyof T> = Record<P, NonNullable<T[P]>>;
+
 interface IRequestFailt {
   ok: false;
   error_code: string | number;
@@ -30,6 +32,7 @@ type Awaitable<V> = PromiseLike<V> | V;
 type PossiblyAsync<T> = T | Promise<T>;
 
 export {
+  MsgWith,
   MethodsReturnType,
   MethodParameters,
   IRequestFailt,

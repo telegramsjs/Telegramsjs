@@ -290,14 +290,14 @@ abstract class Collector<K, V> extends EventEmitter {
    * @param msg - The item to collect.
    * @returns The key of the collected item or null.
    */
-  abstract collect(msg: unknown): Awaitable<K | null>;
+  abstract collect(msg: V): Awaitable<K | null>;
 
   /**
    * Abstract method to dispose of an item.
    * @param msg - The item to dispose.
    * @returns The key of the disposed item or null.
    */
-  abstract dispose(msg: unknown): K | null;
+  abstract dispose(msg: V): K | null;
 }
 
 export { Collector, ICollectorEvent, ICollectorOptions };
