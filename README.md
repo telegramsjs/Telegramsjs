@@ -48,7 +48,14 @@ import { TelegramClient } from "telegramsjs";
 
 const client = new TelegramClient("TELEGRAM_BOT_TOKEN");
 
-client.on("ready", ({ user }) => {
+client.on("ready", async ({ user }) => {
+  await user.setCommands([
+    {
+      command: "/start",
+      description: "Starting command",
+    },
+  ]);
+
   console.log(`Bot @${user.username} is the ready status!`);
 });
 
