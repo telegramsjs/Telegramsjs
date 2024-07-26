@@ -1,0 +1,80 @@
+<div align="center">
+  <h1>Telegramsjs</h1><br>
+  <img src="https://raw.githubusercontent.com/Sempai-07/Telegramsjs/main/docs/avatar.png"><br>
+
+[![Bot API](https://img.shields.io/badge/Bot%20API-v.7.7-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
+[![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
+[![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
+
+</div>
+
+## About
+
+`telegramsjs` is a powerful [Node.js](https://nodejs.org) module that allows you to easily interact with the
+[Telegram API](https://core.telegram.org/bots).
+
+- Object-oriented
+- Predictable abstractions
+- Performant
+- 100% coverage of the Telegram API
+
+## Installation
+
+```sh
+npm install telegramsjs
+yarn add telegramsjs
+```
+
+### Optional packages
+
+- **[@telegram.ts/collection](https://github.com/telegramsjs/collection)**: Collection utilities for `TelegramsJS`.
+- **[@telegram.ts/types](https://github.com/telegramsjs/types)**: `TypeScript` types for Telegram API objects.
+- **[@telegram.ts/emoji](https://github.com/telegramsjs/emoji)**: Emoji utilities for `TelegramsJS`.
+- **[@telegram.ts/formatters](https://github.com/telegramsjs/formatters)**: Formatters for text and messages in `TelegramsJS`.
+
+## Example usage
+
+Install telegramsjs:
+
+```sh
+npm install telegramsjs
+yarn add telegramsjs
+```
+
+Afterwards we can create a quite simple example bot:
+
+```js
+import { TelegramClient } from "telegramsjs";
+
+const client = new TelegramClient("TELEGRAM_BOT_TOKEN");
+
+client.on("ready", ({ user }) => {
+  console.log(`Bot @${user.username} is the ready status!`);
+});
+
+client.on("message", async (message) => {
+  if (message.content === "/start") {
+    return await message.reply(
+      `Hello ${message.author.username ? `@${message.author.username}` : message.author.firstName}!`,
+    );
+  }
+});
+
+client.login();
+```
+
+## Documentation
+
+For more information and detailed documentation, please visit the [Telegramsjs Documentation v1](https://docs-telegramsjs.surge.sh/) [Telegramsjs Documentation v2](https://telegramsjs-dev.surge.sh/). [Telegramsjs Documentation v3](https://telegramsjs.vercel.app/).
+
+## Contributions
+
+We welcome contributions to the development of `Telegramsjs`! If you have any ideas or suggestions, please visit the [Official Support Server](https://discord.gg/j8G7jhHMbs) or the [Official Telegram Channel](https://t.me/sempaika_telegrams_js).
+
+## Example
+
+For a comprehensive example of using the library, please refer to the GitHub page.
+
+## License
+
+`Telegramsjs` is available under the MIT license. For more information, please refer to the [LICENSE](https://github.com/Sempai-07/Telegramsjs/blob/main/LICENSE) file.
