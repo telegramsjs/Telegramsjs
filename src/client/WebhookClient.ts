@@ -23,9 +23,9 @@ class WebhookClient {
 
   /**
    * Filters incoming webhook requests to verify their authenticity.
-   * @param {IncomingMessage & { body?: Update }} request - The incoming request.
-   * @param {{ path: string; token: string; secretToken?: string }} options - The options for filtering the request.
-   * @returns {boolean} Whether the request is valid.
+   * @param request - The incoming request.
+   * @param options - The options for filtering the request.
+   * @returns Whether the request is valid.
    */
   webhookFilter = (
     request: IncomingMessage & { body?: Update },
@@ -46,15 +46,15 @@ class WebhookClient {
 
   /**
    * Creates an instance of WebhookClient.
-   * @param {TelegramClient} client - The Telegram client instance.
+   * @param client - The Telegram client instance.
    */
   constructor(public readonly client: TelegramClient) {}
 
   /**
    * Starts the webhook server to receive updates from Telegram.
-   * @param {string} [path="/"] - The path for the webhook endpoint.
-   * @param {string} [secretToken=""] - The secret token for verifying webhook requests.
-   * @param {{ tlsOptions?: TlsOptions; port?: number; host?: string; requestCallback?: RequestListener }} [options={}] - The options for the webhook server.
+   * @param path - The path for the webhook endpoint.
+   * @param secretToken - The secret token for verifying webhook requests.
+   * @param options - The options for the webhook server.
    */
   async startWebhook(
     path: string = "/",
@@ -91,9 +91,9 @@ class WebhookClient {
 
   /**
    * Creates a callback function for handling webhook requests.
-   * @param {RequestListener} [requestCallback] - The callback function to handle requests.
+   * @param requestCallback - The callback function to handle requests.
    * @param {{ path?: string; secretToken?: string }} [options={}] - The options for creating the webhook callback.
-   * @returns {Promise<RequestListener>} The created callback function.
+   * @returns The created callback function.
    */
   async createWebhookCallback(
     requestCallback?: RequestListener,
