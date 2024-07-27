@@ -76,7 +76,7 @@ class WebhookClient {
     await this.client.getMe().then((me) => {
       this.client.user = me;
       this.client.readyTimestamp = Date.now();
-      this.client.emit(Events.Ready, me);
+      this.client.emit(Events.Ready, this.client);
     });
 
     const { tlsOptions, port, host, requestCallback } = options;
