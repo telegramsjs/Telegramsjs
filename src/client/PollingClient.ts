@@ -57,7 +57,10 @@ class PollingClient {
       }
 
       for (const data of response) {
-        await this.client.worket.processUpdate(data);
+        const update = await this.client.worket.processUpdate(data);
+        if (update) {
+          this.client.updates.set(this.offset, update);
+        }
       }
     } catch (err) {
       throw err;

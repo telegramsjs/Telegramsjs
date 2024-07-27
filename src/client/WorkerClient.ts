@@ -119,11 +119,16 @@ class WorketClient {
       | Update["business_message"],
   ) {
     if (!data) return;
+
     const message = new Message(this.client, data);
+
     if ("chat" in message) {
       message.chat?.messages._add(data);
     }
+
     this.client.emit("message", message);
+
+    return message;
   }
 
   /**
@@ -132,10 +137,11 @@ class WorketClient {
    */
   onBusinessConnection(data: Update["business_connection"]) {
     if (!data) return;
-    this.client.emit(
-      "businessConnection",
-      new BusinessConnection(this.client, data),
-    );
+
+    const business = new BusinessConnection(this.client, data);
+    this.client.emit("businessConnection", business);
+
+    return business;
   }
 
   /**
@@ -147,12 +153,15 @@ class WorketClient {
       | Update["edited_message"]
       | Update["edited_channel_post"]
       | Update["edited_business_message"],
-  ) {
+  ): [Message | null, Message] | undefined {
     if (!data) return;
+
     const newMessage = new Message(this.client, data);
     const oldMessage =
       newMessage.chat?.messages.cache.get(newMessage.id) || null;
     this.client.emit("messageUpdate", oldMessage, newMessage);
+
+    return [oldMessage, newMessage];
   }
 
   /**
@@ -161,10 +170,11 @@ class WorketClient {
    */
   onDeletedBusinessMessages(data: Update["deleted_business_messages"]) {
     if (!data) return;
-    this.client.emit(
-      "deletedBusinessMessages",
-      new BusinessMessagesDeleted(this.client, data),
-    );
+
+    const businessMessage = new BusinessMessagesDeleted(this.client, data);
+    this.client.emit("deletedBusinessMessages", businessMessage);
+
+    return businessMessage;
   }
 
   /**
@@ -173,10 +183,11 @@ class WorketClient {
    */
   onMessageReaction(data: Update["message_reaction"]) {
     if (!data) return;
-    this.client.emit(
-      "messageReaction",
-      new MessageReactionUpdated(this.client, data),
-    );
+
+    const messageReaction = new MessageReactionUpdated(this.client, data);
+    this.client.emit("messageReaction", messageReaction);
+
+    return messageReaction;
   }
 
   /**
@@ -185,10 +196,11 @@ class WorketClient {
    */
   onMessageReactionCount(data: Update["message_reaction_count"]) {
     if (!data) return;
-    this.client.emit(
-      "messageReactionCount",
-      new MessageReactionCountUpdated(this.client, data),
-    );
+
+    const messageReaction = new MessageReactionCountUpdated(this.client, data);
+    this.client.emit("messageReactionCount", messageReaction);
+
+    return messageReaction;
   }
 
   /**
@@ -197,7 +209,11 @@ class WorketClient {
    */
   onInlineQuery(data: Update["inline_query"]) {
     if (!data) return;
-    this.client.emit("inlineQuery", new InlineQuery(this.client, data));
+
+    const inline = new InlineQuery(this.client, data);
+    this.client.emit("inlineQuery", inline);
+
+    return inline;
   }
 
   /**
@@ -206,10 +222,11 @@ class WorketClient {
    */
   onChosenInlineResult(data: Update["chosen_inline_result"]) {
     if (!data) return;
-    this.client.emit(
-      "chosenInlineResult",
-      new ChosenInlineResult(this.client, data),
-    );
+
+    const chosenInline = new ChosenInlineResult(this.client, data);
+    this.client.emit("chosenInlineResult", chosenInline);
+
+    return chosenInline;
   }
 
   /**
@@ -218,7 +235,11 @@ class WorketClient {
    */
   onCallbackQuery(data: Update["callback_query"]) {
     if (!data) return;
-    this.client.emit("callbackQuery", new CallbackQuery(this.client, data));
+
+    const callback = new CallbackQuery(this.client, data);
+    this.client.emit("callbackQuery", callback);
+
+    return callback;
   }
 
   /**
@@ -227,7 +248,11 @@ class WorketClient {
    */
   onShippingQuery(data: Update["shipping_query"]) {
     if (!data) return;
-    this.client.emit("shippingQuery", new ShippingQuery(this.client, data));
+
+    const shipping = new ShippingQuery(this.client, data);
+    this.client.emit("shippingQuery", shipping);
+
+    return shipping;
   }
 
   /**
@@ -236,10 +261,11 @@ class WorketClient {
    */
   onPreCheckoutQuery(data: Update["pre_checkout_query"]) {
     if (!data) return;
-    this.client.emit(
-      "preCheckoutQuery",
-      new PreCheckoutQuery(this.client, data),
-    );
+
+    const preCheckout = new PreCheckoutQuery(this.client, data);
+    this.client.emit("preCheckoutQuery", preCheckout);
+
+    return preCheckout;
   }
 
   /**
@@ -248,7 +274,11 @@ class WorketClient {
    */
   onPoll(data: Update["poll"]) {
     if (!data) return;
-    this.client.emit("poll", new Poll(this.client, data));
+
+    const poll = new Poll(this.client, data);
+    this.client.emit("poll", poll);
+
+    return poll;
   }
 
   /**
@@ -257,7 +287,11 @@ class WorketClient {
    */
   onPollAnswer(data: Update["poll_answer"]) {
     if (!data) return;
-    this.client.emit("pollAnswer", new PollAnswer(this.client, data));
+
+    const poll = new PollAnswer(this.client, data);
+    this.client.emit("pollAnswer", poll);
+
+    return poll;
   }
 
   /**
@@ -266,7 +300,11 @@ class WorketClient {
    */
   onMyChatMember(data: Update["my_chat_member"]) {
     if (!data) return;
-    this.client.emit("myChatMember", new ChatMemberUpdated(this.client, data));
+
+    const myChat = new ChatMemberUpdated(this.client, data);
+    this.client.emit("myChatMember", myChat);
+
+    return myChat;
   }
 
   /**
@@ -275,7 +313,11 @@ class WorketClient {
    */
   onChatMember(data: Update["chat_member"]) {
     if (!data) return;
-    this.client.emit("chatMember", new ChatMemberUpdated(this.client, data));
+
+    const chatMember = new ChatMemberUpdated(this.client, data);
+    this.client.emit("chatMember", chatMember);
+
+    return chatMember;
   }
 
   /**
@@ -284,18 +326,23 @@ class WorketClient {
    */
   onChatMemberAdd(data: Update["message"]) {
     if (!data) return;
+
     const message = new Message(this.client, data);
+
     if ("chat" in message) {
       message.chat?.messages._add(data);
     }
+
     if (
       message.newChatMembers?.findIndex(
         ({ id }: { id: number }) => id === this.client.user.id,
       ) !== -1
     ) {
       this.client.emit("chatCreate", message);
+      return message;
     } else {
       this.client.emit("chatMemberAdd", message);
+      return message;
     }
   }
 
@@ -305,14 +352,19 @@ class WorketClient {
    */
   onChatMemberRemove(data: Update["message"]) {
     if (!data) return;
+
     const message = new Message(this.client, data);
+
     if ("chat" in message) {
       message.chat?.messages._add(data);
     }
+
     if (message.leftChatMember?.id === this.client.user.id) {
       this.client.emit("chatDelete", message);
+      return message;
     } else {
       this.client.emit("chatMemberRemove", message);
+      return message;
     }
   }
 
@@ -322,7 +374,11 @@ class WorketClient {
    */
   onChatJoinRequest(data: Update["chat_join_request"]) {
     if (!data) return;
-    this.client.emit("chatJoinRequest", new ChatJoinRequest(this.client, data));
+
+    const chatJoin = new ChatJoinRequest(this.client, data);
+    this.client.emit("chatJoinRequest", chatJoin);
+
+    return chatJoin;
   }
 
   /**
@@ -331,7 +387,11 @@ class WorketClient {
    */
   onChatBoost(data: Update["chat_boost"]) {
     if (!data) return;
-    this.client.emit("chatBoost", new ChatBoostUpdated(this.client, data));
+
+    const chatBoost = new ChatBoostUpdated(this.client, data);
+    this.client.emit("chatBoost", chatBoost);
+
+    return chatBoost;
   }
 
   /**
@@ -340,10 +400,11 @@ class WorketClient {
    */
   onRemovedChatBoost(data: Update["removed_chat_boost"]) {
     if (!data) return;
-    this.client.emit(
-      "removedChatBoost",
-      new ChatBoostRemoved(this.client, data),
-    );
+
+    const chatBoost = new ChatBoostRemoved(this.client, data);
+    this.client.emit("removedChatBoost", chatBoost);
+
+    return chatBoost;
   }
 }
 

@@ -17,6 +17,11 @@ import http, {
  */
 class WebhookClient {
   /**
+   * The offset used to keep track of the latest updates.
+   */
+  public offset: number;
+
+  /**
    * The HTTP or HTTPS server for handling webhook requests.
    */
   webhookServer?: http.Server | https.Server;
@@ -48,7 +53,9 @@ class WebhookClient {
    * Creates an instance of WebhookClient.
    * @param client - The Telegram client instance.
    */
-  constructor(public readonly client: TelegramClient) {}
+  constructor(public readonly client: TelegramClient) {
+    this.offset = 0;
+  }
 
   /**
    * Starts the webhook server to receive updates from Telegram.
@@ -133,7 +140,14 @@ class WebhookClient {
         return;
       }
 
-      await this.client.worket.processUpdate(update);
+      if (update) {
+        this.offset = update.update_id + 1;
+      }
+
+      const res = await this.client.worket.processUpdate(update);
+      if (res) {
+        this.client.updates.set(this.offset, res);
+      }
     };
 
     return requestCallback

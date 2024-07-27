@@ -2,6 +2,7 @@ import { EventEmitter } from "node:events";
 import type { ReadStream } from "node:fs";
 import type { RequestInit } from "node-fetch";
 import { ApiRequest } from "../rest/ApiRequest";
+import { Collection } from "@telegram.ts/collection";
 import type { ClientOptions } from "./TelegramClient";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
@@ -118,10 +119,33 @@ interface EventHandlers {
   ) => PossiblyAsync<void>;
 }
 
+type EventHandlerParameters =
+  | import("../structures/message/Message").Message
+  | [
+      null | import("../structures/message/Message").Message,
+      import("../structures/message/Message").Message,
+    ]
+  | import("../structures/business/BusinessConnection").BusinessConnection
+  | import("../structures/business/BusinessMessagesDeleted").BusinessMessagesDeleted
+  | import("../structures/MessageReactionUpdated").MessageReactionUpdated
+  | import("../structures/MessageReactionCountUpdated").MessageReactionCountUpdated
+  | import("../structures/InlineQuery").InlineQuery
+  | import("../structures/ChosenInlineResult").ChosenInlineResult
+  | import("../structures/CallbackQuery").CallbackQuery
+  | import("../structures/ShippingQuery").ShippingQuery
+  | import("../structures/PreCheckoutQuery").PreCheckoutQuery
+  | import("../structures/media/Poll").Poll
+  | import("../structures/PollAnswer").PollAnswer
+  | import("../structures/ChatMemberUpdated").ChatMemberUpdated
+  | import("../structures/ChatJoinRequest").ChatJoinRequest
+  | import("../structures/ChatBoostUpdated").ChatBoostUpdated
+  | import("../structures/ChatBoostRemoved").ChatBoostRemoved;
+
 class BaseClient extends EventEmitter {
   public readonly apiRequest: ApiRequest;
   public readonly users: UserManager;
   public readonly chats: ChatManager;
+  public readonly updates: Collection<number, EventHandlerParameters>;
 
   constructor(authToken: string, options?: ClientOptions) {
     super();
@@ -143,6 +167,11 @@ class BaseClient extends EventEmitter {
      * in the Manager without their explicit fetching or use.
      */
     this.chats = new ChatManager(this, options?.chatCacheMaxSize);
+
+    /**
+     * The updates cache for polling/webhook
+     */
+    this.updates = new Collection();
   }
 
   /**
@@ -1410,4 +1439,4 @@ class BaseClient extends EventEmitter {
   }
 }
 
-export { BaseClient };
+export { BaseClient, EventHandlerParameters };
