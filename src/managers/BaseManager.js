@@ -4,12 +4,13 @@ const { Collection } = require("@telegram.ts/collection");
 let cacheWarningEmitted;
 
 /**
+ * @template T
  * Base class for managing a collection of data objects.
  */
 class BaseManager {
   /**
    * @param {import("../client/TelegramClient").TelegramClient} client - The client instance.
-   * @param {Function} holds - The class or function that the manager holds.
+   * @param {T} holds - The class or function that the manager holds.
    * @param {number} [cacheSize=-1] - The maximum size of the cache. Default is unlimited.
    */
   constructor(client, holds, cacheSize = -1) {
@@ -21,19 +22,19 @@ class BaseManager {
 
     /**
      * The collection used for caching data objects.
-     * @type {Collection<number | string, typeof holds>}
+     * @type {Collection<number | string, T>}
      */
     this.cache = new Collection();
   }
 
   /**
    * Adds or updates an entry in the cache.
-   * @param {Object} data - The data to be added or updated in the cache.
+   * @param {T} data - The data to be added or updated in the cache.
    * @param {boolean} [cache=true] - Whether to cache the data.
    * @param {Object} [options={}] - Additional options.
    * @param {string|number} [options.id] - The ID of the data.
    * @param {Array} [options.extras=[]] - Additional arguments to pass to the constructor.
-   * @returns {Object} - The cached or newly created entry.
+   * @returns {T} - The cached or newly created entry.
    */
   _add(data, cache = true, { id, extras = [] } = {}) {
     if (this.cacheSize !== -1 && this.cacheSize < this.cache.size) {
@@ -75,8 +76,8 @@ class BaseManager {
 
   /**
    * Resolves an entry from the cache.
-   * @param {string|number|Object} idOrInstance - The ID or instance to resolve.
-   * @returns {Object|null} - The resolved entry or null if not found.
+   * @param {string|number|T} idOrInstance - The ID or instance to resolve.
+   * @returns {T|null} - The resolved entry or null if not found.
    */
   resolve(idOrInstance) {
     if (idOrInstance instanceof this.holds) return idOrInstance;
@@ -88,7 +89,7 @@ class BaseManager {
 
   /**
    * Resolves the ID of an entry from the cache.
-   * @param {string|number|Object} idOrInstance - The ID or instance to resolve.
+   * @param {string|number|T} idOrInstance - The ID or instance to resolve.
    * @returns {string|number|null} - The resolved ID or null if not found.
    */
   resolveId(idOrInstance) {

@@ -3,7 +3,7 @@ const { Message } = require("../structures/message/Message");
 
 /**
  * Manages messages in the cache.
- * @extends {BaseManager}
+ * @extends {BaseManager<Message>}
  */
 class MessageManager extends BaseManager {
   /**

@@ -5,7 +5,7 @@ const { ChatMember } = require("../structures/chat/ChatMember");
 
 /**
  * Manages chat-related data.
- * @extends {BaseManager}
+ * @extends {BaseManager<Chat>}
  */
 class ChatManager extends BaseManager {
   /**

@@ -6,7 +6,7 @@ let cacheWarningEmitted;
 
 /**
  * Manages chat members for a specific chat.
- * @extends {BaseManager}
+ * @extends {BaseManager<ChatMember>}
  */
 class ChatMemberManager extends BaseManager {
   /**

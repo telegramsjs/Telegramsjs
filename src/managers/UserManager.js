@@ -5,7 +5,7 @@ const { ChatMember } = require("../structures/chat/ChatMember");
 
 /**
  * Manages users in the cache.
- * @extends {BaseManager}
+ * @extends {BaseManager<User>}
  */
 class UserManager extends BaseManager {
   /**
