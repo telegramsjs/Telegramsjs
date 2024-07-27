@@ -3,7 +3,7 @@ const { Photo } = require("../media/Photo");
 
 class ChatShared extends Chat {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ChatShared} data - Data about the contains information about a chat that was shared with the bot using a KeyboardButtonRequestChat button
    */
   constructor(client, data) {

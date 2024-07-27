@@ -1,18 +1,28 @@
+const ClientSymbol = Symbol("Client");
+
 /**
  * Represents a data model
  * @abstract
  */
 class Base {
   /**
+   * @public
    * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
    */
   constructor(client) {
     /**
      * The client that instantiated this
      * @type {import("../client/TelegramClient").TelegramClient}
-      
      */
-    Object.defineProperty(this, "client", { value: client });
+    Object.defineProperty(this, ClientSymbol, { value: client });
+  }
+
+  /**
+   * The client that instantiated this
+   * @type {import("../client/TelegramClient").TelegramClient}
+   */
+  get client() {
+    return this[ClientSymbol];
   }
 
   /**

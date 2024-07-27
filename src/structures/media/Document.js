@@ -3,7 +3,7 @@ const { InputFile } = require("../misc/InputFile");
 
 class Document extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Document} data - Data about the represents a general file (as opposed to photos, voice messages and audio files)
    */
   constructor(client, data) {

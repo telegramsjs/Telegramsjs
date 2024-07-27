@@ -4,7 +4,7 @@ const { User } = require("../misc/User");
 
 class GiveawayWinners extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").GiveawayWinners} data - Data about the represents a message about the completion of a giveaway with public winners
    */
   constructor(client, data) {

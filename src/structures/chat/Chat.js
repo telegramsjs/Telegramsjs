@@ -16,7 +16,7 @@ const SymbolType = Symbol("SymbolType");
 
 class Chat extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Chat & { threadId?: number }} data - Data about the represents a chat
    */
   constructor(client, data) {

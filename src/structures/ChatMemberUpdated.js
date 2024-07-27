@@ -6,7 +6,7 @@ const { ChatInviteLink } = require("./chat/ChatInviteLink");
 
 class ChatMemberUpdated extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ChatMemberUpdated} data - Data about the represents changes in the status of a chat member
    */
   constructor(client, data) {

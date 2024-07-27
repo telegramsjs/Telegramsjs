@@ -4,7 +4,7 @@ const { Location } = require("./misc/Location");
 
 class ChosenInlineResult extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ChosenInlineResult} data - Data about the Represents a result of an inline query that was chosen by the user and sent to their chat partner
    */
   constructor(client, data) {

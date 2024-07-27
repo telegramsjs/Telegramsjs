@@ -3,7 +3,7 @@ const { User } = require("../misc/User");
 
 class VideoChatParticipantsInvited extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").VideoChatParticipantsInvited} data - Data about the represents a service message about new members invited to a video chat
    */
   constructor(client, data) {

@@ -3,7 +3,7 @@ const { MessageEntities } = require("../message/MessageEntities");
 
 class Poll extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Poll} data - Data about the contains information about a poll
    */
   constructor(client, data) {

@@ -4,7 +4,7 @@ const { Location } = require("./misc/Location");
 
 class InlineQuery extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").InlineQuery} data - Data about the represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results
    */
   constructor(client, data) {

@@ -4,7 +4,7 @@ const { InputFile } = require("../misc/InputFile");
 
 class EncryptedPassportElement extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").EncryptedPassportElement} data - Data about the describes documents or other Telegram Passport elements shared with the bot by the user
    */
   constructor(client, data) {

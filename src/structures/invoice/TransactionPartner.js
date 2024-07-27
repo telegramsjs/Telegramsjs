@@ -4,7 +4,7 @@ const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");
 
 class TransactionPartner extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").TransactionPartner} data - Data about the describes the source of a transaction, or its recipient for outgoing transactions
    */
   constructor(client, data) {

@@ -21,6 +21,7 @@ import {
   GameHighScore,
   ClientUser,
   ChatMember,
+  Poll,
   Sticker,
   StarTransactions,
   ChatInviteLink,
@@ -294,7 +295,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendMessage"]>("sendMessage", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -307,7 +308,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendPhoto"]>("sendPhoto", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -322,7 +323,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendAudio"]>("sendAudio", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -335,7 +336,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendPaidMedia"]>("sendPaidMedia", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -348,7 +349,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendDocument"]>("sendDocument", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -361,7 +362,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVideo"]>("sendVideo", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -374,7 +375,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendAnimation"]>("sendAnimation", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -387,7 +388,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVoice"]>("sendVoice", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -401,7 +402,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVideoNote"]>("sendVideoNote", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -421,7 +422,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendLocation"]>("sendLocation", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -434,7 +435,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendVenue"]>("sendVenue", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -447,7 +448,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["forwardMessage"]>("forwardMessage", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -458,7 +459,7 @@ class BaseClient extends EventEmitter {
   async forwardMessages(params: MethodParameters["forwardMessages"]) {
     return await this.apiRequest
       .get<MethodsReturnType["forwardMessages"]>("forwardMessages", params)
-      .then((res) => res.map((msg) => new Message(this, res)));
+      .then((res) => res.map((msg) => msg.message_id));
   }
 
   /** Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success. */
@@ -481,7 +482,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendContact"]>("sendContact", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -494,7 +495,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendPoll"]>("sendPoll", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -507,7 +508,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendDice"]>("sendDice", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -624,7 +625,9 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success. */
   async setChatPermissions(params: MethodParameters["setChatPermissions"]) {
-    const permissions = new Permissions(params?.permissions || {});
+    const permissions = new Permissions(
+      (params?.permissions || {}) as Record<string, boolean>,
+    );
     return await this.apiRequest.get<MethodsReturnType["setChatPermissions"]>(
       "setChatPermissions",
       {
@@ -769,7 +772,7 @@ class BaseClient extends EventEmitter {
       .get<
         MethodsReturnType["getChatAdministrators"]
       >("getChatAdministrators", { chat_id })
-      .then((res) => res.map((user) => new ChatMember(this, user)));
+      .then((res) => res.map((user) => new ChatMember(this, chat_id, user)));
   }
 
   /** Use this method to get the number of members in a chat. Returns Int on success. */
@@ -836,7 +839,10 @@ class BaseClient extends EventEmitter {
   async createForumTopic(params: MethodParameters["createForumTopic"]) {
     return await this.apiRequest
       .get<MethodsReturnType["createForumTopic"]>("createForumTopic")
-      .then((res) => new ForumTopic(res));
+      .then(
+        (res) =>
+          new ForumTopic(this, res.message_thread_id, params.chat_id, res),
+      );
   }
 
   /** Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
@@ -1042,7 +1048,9 @@ class BaseClient extends EventEmitter {
     rights?: MethodParameters["setMyDefaultAdministratorRights"]["rights"],
     for_channels?: boolean,
   ) {
-    const permissions = new Permissions(rights || {});
+    const permissions = new Permissions(
+      (rights || {}) as Record<string, boolean>,
+    );
     return await this.apiRequest.get<
       MethodsReturnType["setMyDefaultAdministratorRights"]
     >("setMyDefaultAdministratorRights", {
@@ -1065,8 +1073,9 @@ class BaseClient extends EventEmitter {
     return await this.apiRequest
       .get<MethodsReturnType["editMessageText"]>("editMessageText", params)
       .then((res) => {
+        if (typeof res === "boolean") return res;
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1080,8 +1089,9 @@ class BaseClient extends EventEmitter {
         MethodsReturnType["editMessageCaption"]
       >("editMessageCaption", params)
       .then((res) => {
+        if (typeof res === "boolean") return res;
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1093,8 +1103,9 @@ class BaseClient extends EventEmitter {
     return await this.apiRequest
       .get<MethodsReturnType["editMessageMedia"]>("editMessageMedia", params)
       .then((res) => {
+        if (typeof res === "boolean") return res;
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1132,8 +1143,9 @@ class BaseClient extends EventEmitter {
         MethodsReturnType["editMessageReplyMarkup"]
       >("editMessageReplyMarkup", params)
       .then((res) => {
+        if (typeof res === "boolean") return res;
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1144,13 +1156,7 @@ class BaseClient extends EventEmitter {
   async stopPoll(params: MethodParameters["stopPoll"]) {
     return await this.apiRequest
       .get<MethodsReturnType["stopPoll"]>("stopPoll", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
-          message.chat.messages._add(res);
-        }
-        return message;
-      });
+      .then((res) => new Poll(this, res));
   }
 
   /** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned. */
@@ -1159,7 +1165,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendSticker"]>("sendSticker", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1319,7 +1325,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendInvoice"]>("sendInvoice", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;
@@ -1390,7 +1396,7 @@ class BaseClient extends EventEmitter {
       .get<MethodsReturnType["sendGame"]>("sendGame", params)
       .then((res) => {
         const message = new Message(this, res);
-        if ("chat" in message && "messages" in message.chat) {
+        if ("chat" in message && message.chat) {
           message.chat.messages._add(res);
         }
         return message;

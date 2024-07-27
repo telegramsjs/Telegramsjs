@@ -1,6 +1,6 @@
 class ReactionType {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ReactionType} data - Data about the describes the type of a reaction
    */
   constructor(data) {

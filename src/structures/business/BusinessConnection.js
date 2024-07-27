@@ -3,7 +3,7 @@ const { User } = require("../misc/User");
 
 class BusinessConnection extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").BusinessConnection} data - Data about the connection of the bot with a business account
    */
   constructor(client, data) {

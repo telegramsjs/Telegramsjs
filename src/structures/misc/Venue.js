@@ -3,7 +3,7 @@ const { Location } = require("./Location");
 
 class Venue extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Venue} data - Data about the represents a venue
    */
   constructor(client, data) {

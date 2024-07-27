@@ -3,7 +3,7 @@ const { User } = require("../misc/User");
 
 class GameHighScore extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").GameHighScore} data - Data about the represents one row of the high scores table for a game
    */
   constructor(client, data) {

@@ -47,7 +47,7 @@ const { TelegramError } = require("../../errors/TelegramError");
 
 class Message extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Message} data - Data about the message
    */
   constructor(client, data) {

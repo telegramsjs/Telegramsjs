@@ -3,7 +3,7 @@ const { Chat } = require("../chat/Chat");
 
 class Giveaway extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Giveaway} data - Data about the represents a message about a scheduled giveaway
    */
   constructor(client, data) {

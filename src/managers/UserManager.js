@@ -9,7 +9,7 @@ const { ChatMember } = require("../structures/chat/ChatMember");
  */
 class UserManager extends BaseManager {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client instance.
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client instance.
    * @param {number} [cacheSize=-1] - The maximum size of the cache. Default is unlimited.
    */
   constructor(client, cacheSize) {

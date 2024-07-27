@@ -2,7 +2,7 @@ const { SharedUser } = require("./SharedUser");
 
 class UsersShared {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").UsersShared} data - Data about the contains information about the user whose identifier was shared with the bot using a KeyboardButtonRequestUsers button
    */
   constructor(client, data) {

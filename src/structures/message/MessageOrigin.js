@@ -4,7 +4,7 @@ const { Chat } = require("../chat/Chat");
 
 class MessageOrigin extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").MessageOrigin} data - Data about the describes the origin of a message
    */
   constructor(client, data) {

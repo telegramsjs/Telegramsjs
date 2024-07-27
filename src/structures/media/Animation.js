@@ -3,7 +3,7 @@ const { InputFile } = require("../misc/InputFile");
 
 class Animation extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Animation} data - Data about the represents an animation file (GIF or H.264/MPEG-4 AVC video without sound)
    */
   constructor(client, data) {

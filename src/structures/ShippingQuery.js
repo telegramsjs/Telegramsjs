@@ -3,7 +3,7 @@ const { User } = require("./misc/User");
 
 class ShippingQuery extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ShippingQuery} data - Data about the contains information about an incoming shipping query
    */
   constructor(client, data) {

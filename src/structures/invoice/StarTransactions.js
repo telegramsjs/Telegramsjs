@@ -2,7 +2,7 @@ const { StarTransaction } = require("./StarTransaction");
 
 class StarTransactions {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").StarTransactions} data - Data about the contains a list of Telegram Star transactions
    */
   constructor(client, data) {

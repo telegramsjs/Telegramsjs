@@ -3,7 +3,7 @@ const { Photo } = require("../media/Photo");
 
 class SharedUser extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").SharedUser} data - Data about the contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button
    */
   constructor(client, data) {

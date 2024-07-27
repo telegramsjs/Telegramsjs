@@ -3,7 +3,7 @@ const { Chat } = require("../chat/Chat");
 
 class BusinessMessagesDeleted extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").BusinessMessagesDeleted} data - Data about the received when messages are deleted from a connected business account
    */
   constructor(client, data) {

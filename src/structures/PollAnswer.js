@@ -4,7 +4,7 @@ const { Chat } = require("./chat/Chat");
 
 class PollAnswer extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").PollAnswer} data - Data about the represents an answer of a user in a non-anonymous poll
    */
   constructor(client, data) {

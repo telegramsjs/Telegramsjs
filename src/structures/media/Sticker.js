@@ -3,7 +3,7 @@ const { InputFile } = require("../misc/InputFile");
 
 class Sticker extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Sticker} data - Data about the represents a sticker
    */
   constructor(client, data) {

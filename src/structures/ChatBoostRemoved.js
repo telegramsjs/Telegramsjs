@@ -4,7 +4,7 @@ const { ChatBoostSource } = require("./boots/ChatBoostSource");
 
 class ChatBoostRemoved extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ChatBoostRemoved} data - Data about the represents a boost removed from a chat
    */
   constructor(client, data) {

@@ -17,7 +17,7 @@ class ReactionCount {
 
 class MessageReactionCountUpdated extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").MessageReactionCountUpdated} data - Data about the represents reaction changes on a message with anonymous reactions
    */
   constructor(client, data) {

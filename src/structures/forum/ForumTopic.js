@@ -2,7 +2,7 @@ const { Forum } = require("./Forum");
 
 class ForumTopic extends Forum {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {number} threadId - Unique identifier of the forum topic
    * @param {number} chatId - Unique identifier for this chat
    * @param {import("@telegram.ts/types").ForumTopic | import("@telegram.ts/types").ForumTopicEdited} data - Unique identifier for this

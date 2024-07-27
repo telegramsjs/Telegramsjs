@@ -5,7 +5,7 @@ const { MessageEntities } = require("../message/MessageEntities");
 
 class Game extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Game} data - Data about the represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers
    */
   constructor(client, data) {

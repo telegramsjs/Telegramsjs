@@ -9,8 +9,8 @@ const { Permissions } = require("../../util/Permissions");
 
 class ChatMember extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
-   * @param {number} chatId - Identifier of the chat
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {string | number} chatId - Identifier of the chat
    * @param {import("@telegram.ts/types").ChatMember} data - Data about the contains information about one member of a chat
    */
   constructor(client, chatId, data) {

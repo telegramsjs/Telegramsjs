@@ -4,7 +4,7 @@ const { OrderInfo } = require("./invoice/OrderInfo");
 
 class PreCheckoutQuery extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").PreCheckoutQuery} data - Data about the contains information about an incoming pre-checkout query
    */
   constructor(client, data) {

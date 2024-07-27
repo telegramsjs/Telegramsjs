@@ -24,7 +24,7 @@ const { Chat } = require("../chat/Chat");
 
 class ExternalReplyInfo extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ExternalReplyInfo} data - Data about the contains information about a message that is being replied to, which may come from another chat or forum topic
    */
   constructor(client, data) {

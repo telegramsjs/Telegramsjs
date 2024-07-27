@@ -3,7 +3,7 @@ const { User } = require("../misc/User");
 
 class ChatBoostSource extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").ChatBoostSource} data - Data about the boost source
    */
   constructor(client, data) {

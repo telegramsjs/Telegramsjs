@@ -2,7 +2,7 @@ const { Base } = require("../Base");
 
 class Location extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Location} data - Data about the represents a point on the map
    */
   constructor(client, data) {

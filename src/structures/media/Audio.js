@@ -3,7 +3,7 @@ const { InputFile } = require("../misc/InputFile");
 
 class Audio extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Audio} data - Data about the represents an audio file to be treated as music by the Telegram clients
    */
   constructor(client, data) {

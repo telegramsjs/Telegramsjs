@@ -5,7 +5,7 @@ const { TelegramError } = require("../../errors/TelegramError");
 
 class InputFile extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").File} data - Data about the file object from the Telegram API
    */
   constructor(client, data) {

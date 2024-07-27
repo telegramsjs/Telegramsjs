@@ -2,7 +2,7 @@ const { InputFile } = require("../misc/InputFile");
 
 class Voice extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Voice} data - Data about the represents a voice note
    */
   constructor(client, data) {

@@ -2,7 +2,7 @@ const { EncryptedPassportElement } = require("./EncryptedPassportElement");
 
 class PassportData {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").PassportData} data - Data about the describes the user's Telegram Passport data shared with the bot
    */
   constructor(client, data) {

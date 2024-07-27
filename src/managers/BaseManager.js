@@ -2,6 +2,7 @@ const process = require("node:process");
 const { Collection } = require("@telegram.ts/collection");
 
 let cacheWarningEmitted;
+const ClientSymbol = Symbol("Client");
 
 /**
  * @template T
@@ -9,12 +10,12 @@ let cacheWarningEmitted;
  */
 class BaseManager {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client instance.
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client instance.
    * @param {T} holds - The class or function that the manager holds.
    * @param {number} [cacheSize=-1] - The maximum size of the cache. Default is unlimited.
    */
   constructor(client, holds, cacheSize = -1) {
-    Object.defineProperty(this, "client", { value: client });
+    Object.defineProperty(this, ClientSymbol, { value: client });
 
     Object.defineProperty(this, "holds", { value: holds });
 
@@ -25,6 +26,14 @@ class BaseManager {
      * @type {Collection<number | string, T>}
      */
     this.cache = new Collection();
+  }
+
+  /**
+   * The client that instantiated this
+   * @type {import("../client/TelegramClient").TelegramClient}
+   */
+  get client() {
+    return this[ClientSymbol];
   }
 
   /**

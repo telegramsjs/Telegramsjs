@@ -10,7 +10,7 @@ let cacheWarningEmitted;
  */
 class ChatMemberManager extends BaseManager {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client instance.
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client instance.
    * @param {number} chatId - The ID of the chat.
    * @param {number} [cacheSize=-1] - The maximum size of the cache. Default is unlimited.
    */

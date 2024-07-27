@@ -2,7 +2,7 @@ const { User } = require("./User");
 
 class ClientUser extends User {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").UserFromGetMe} data - Data about the represents a Telegram user or bot that was returned by `getMe`
    */
   constructor(client, data) {
@@ -144,7 +144,7 @@ class ClientUser extends User {
   /**
    * Use this method to get the current value of the bot's menu button in a private chat, or the default menu button.
    * @param {number} [chatId] - Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
-   * @return {Promise<import("./MenuButton").MenuButton} - Returns MenuButton on success.
+   * @return {Promise<import("./MenuButton").MenuButton>} - Returns MenuButton on success.
    */
   getMenuButton(chatId) {
     return this.client.getChatMenuButton(chatId);
