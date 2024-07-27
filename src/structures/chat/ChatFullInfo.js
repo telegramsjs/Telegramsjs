@@ -23,7 +23,6 @@ class ChatFullInfo extends Chat {
       /**
        * The title of the chat.
        * @type {string | undefined}
-        
        */
       this.title = data.title;
     }
@@ -32,7 +31,6 @@ class ChatFullInfo extends Chat {
       /**
        * The username of the chat.
        * @type {string | undefined}
-        
        */
       this.username = data.username;
     }
@@ -41,7 +39,6 @@ class ChatFullInfo extends Chat {
       /**
        * The first name of the user.
        * @type {string | undefined}
-        
        */
       this.firstName = data.first_name;
     }
@@ -50,7 +47,6 @@ class ChatFullInfo extends Chat {
       /**
        * The last name of the user.
        * @type {string | undefined}
-        
        */
       this.lastName = data.last_name;
     }
@@ -59,7 +55,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat is a forum.
        * @type {boolean | undefined}
-        
        */
       this.forum = data.is_forum;
     }
@@ -68,7 +63,6 @@ class ChatFullInfo extends Chat {
       /**
        * The accent color ID of the chat.
        * @type {number | undefined}
-        
        */
       this.accentColorId = data.accent_color_id;
     }
@@ -77,7 +71,6 @@ class ChatFullInfo extends Chat {
       /**
        * The maximum number of reactions allowed in the chat.
        * @type {number | undefined}
-        
        */
       this.maxReactionCount = data.max_reaction_count;
     }
@@ -86,7 +79,6 @@ class ChatFullInfo extends Chat {
       /**
        * The photo of the chat.
        * @type {{ smail: Photo, big: Photo } | undefined}
-        
        */
       this.photo = {
         smail: new Photo(this.client, {
@@ -104,7 +96,6 @@ class ChatFullInfo extends Chat {
       /**
        * The active usernames of the chat.
        * @type {string[] | undefined}
-        
        */
       this.activeUsernames = data.active_usernames;
     }
@@ -113,7 +104,6 @@ class ChatFullInfo extends Chat {
       /**
        * The birthdate of the chat.
        * @type {{ day: number, month: number, year?: number } | undefined}
-        
        */
       this.birthdate = {
         day: data.birthdate.day,
@@ -126,7 +116,6 @@ class ChatFullInfo extends Chat {
       /**
        * The business introduction of the chat.
        * @type {{ title?: string, message?: string, sticker?: Sticker } | undefined}
-        
        */
       this.businessIntro = {
         title: data.business_intro.title,
@@ -139,7 +128,6 @@ class ChatFullInfo extends Chat {
       /**
        * The business location of the chat.
        * @type {{ address: string, location?: Location } | undefined}
-        
        */
       this.businessLocation = {
         address: data.business_location.address,
@@ -150,8 +138,7 @@ class ChatFullInfo extends Chat {
     if ("business_opening_hours" in data) {
       /**
        * The business opening hours of the chat.
-       * @type {{ timeZone: string, hours: { opening: number, closing: number }[] } | undefined}
-        
+       * @type {undefined | { timeZone: string, hours: { opening: number, closing: number }[] }
        */
       this.businessOpeningHours = {
         timeZone: data.business_opening_hours.time_zone_name,
@@ -168,7 +155,6 @@ class ChatFullInfo extends Chat {
       /**
        * The personal chat associated with this chat.
        * @type {Chat | undefined}
-        
        */
       this.personalChat = new Chat(this.client, data.personal_chat);
     }
@@ -177,7 +163,6 @@ class ChatFullInfo extends Chat {
       /**
        * The available reactions in the chat.
        * @type {ReactionType[] | undefined}
-        
        */
       this.availableReactions = data.available_reactions.map(
         (react) => new ReactionType(react),
@@ -188,7 +173,6 @@ class ChatFullInfo extends Chat {
       /**
        * The custom emoji ID for the chat background.
        * @type {string | undefined}
-        
        */
       this.backgroundCustomEmojiId = data.background_custom_emoji_id;
     }
@@ -197,7 +181,6 @@ class ChatFullInfo extends Chat {
       /**
        * The profile accent color ID of the chat.
        * @type {number | undefined}
-        
        */
       this.profileAccentColorId = data.profile_accent_color_id;
     }
@@ -206,7 +189,6 @@ class ChatFullInfo extends Chat {
       /**
        * The custom emoji ID for the profile background.
        * @type {string | undefined}
-        
        */
       this.profileBackgroundCustomEmojiId =
         data.profile_background_custom_emoji_id;
@@ -216,7 +198,6 @@ class ChatFullInfo extends Chat {
       /**
        * The custom emoji ID for the emoji status.
        * @type {string | undefined}
-        
        */
       this.emojiStatusCustomEmojiId = data.emoji_status_custom_emoji_id;
     }
@@ -225,7 +206,6 @@ class ChatFullInfo extends Chat {
       /**
        * The expiration date for the emoji status.
        * @type {number | undefined}
-        
        */
       this.emojiStatusExpirationDate = data.emoji_status_expiration_date;
     }
@@ -234,7 +214,6 @@ class ChatFullInfo extends Chat {
       /**
        * The bio of the chat.
        * @type {string | undefined}
-        
        */
       this.bio = data.bio;
     }
@@ -243,7 +222,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat has private forwards.
        * @type {boolean | undefined}
-        
        */
       this.privateForwards = data.has_private_forwards;
     }
@@ -252,7 +230,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat has restricted voice and video messages.
        * @type {boolean | undefined}
-        
        */
       this.restrictedMediaMessages =
         data.has_restricted_voice_and_video_messages;
@@ -262,7 +239,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether users need to join to send messages in the chat.
        * @type {boolean | undefined}
-        
        */
       this.joinToSendMessages = data.join_to_send_messages;
     }
@@ -271,7 +247,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether users need to request to join the chat.
        * @type {boolean | undefined}
-        
        */
       this.joinByRequest = data.join_by_request;
     }
@@ -280,7 +255,6 @@ class ChatFullInfo extends Chat {
       /**
        * The description of the chat.
        * @type {string | undefined}
-        
        */
       this.description = data.description;
     }
@@ -289,7 +263,6 @@ class ChatFullInfo extends Chat {
       /**
        * The invite link for the chat.
        * @type {string | undefined}
-        
        */
       this.inviteLink = data.invite_link;
     }
@@ -298,7 +271,6 @@ class ChatFullInfo extends Chat {
       /**
        * The pinned message in the chat.
        * @type {Message | undefined}
-        
        */
       this.pinnedMessage = new Message(this.client, data.pinned_message);
     }
@@ -307,7 +279,6 @@ class ChatFullInfo extends Chat {
       /**
        * The permissions in the chat.
        * @type {Permissions | undefined}
-        
        */
       this.permissions = new Permissions(data.permissions);
     }
@@ -316,7 +287,6 @@ class ChatFullInfo extends Chat {
       /**
        * The slow mode delay in the chat.
        * @type {number | undefined}
-        
        */
       this.slowModeDelay = data.slow_mode_delay;
     }
@@ -325,7 +295,6 @@ class ChatFullInfo extends Chat {
       /**
        * The unrestrict boost count of the chat.
        * @type {number | undefined}
-        
        */
       this.unrestrictBoostCount = data.unrestrict_boost_count;
     }
@@ -334,7 +303,6 @@ class ChatFullInfo extends Chat {
       /**
        * The message auto delete time in the chat.
        * @type {number | undefined}
-        
        */
       this.messageAutoDeleteTime = data.message_auto_delete_time;
     }
@@ -343,7 +311,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat has aggressive anti-spam enabled.
        * @type {boolean | undefined}
-        
        */
       this.aggressiveAntiSpamEnabled = data.has_aggressive_anti_spam_enabled;
     }
@@ -352,7 +319,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat has hidden members.
        * @type {boolean | undefined}
-        
        */
       this.hiddenMembers = data.has_hidden_members;
     }
@@ -361,7 +327,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat has protected content.
        * @type {boolean | undefined}
-        
        */
       this.protectedContent = data.has_protected_content;
     }
@@ -370,7 +335,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat has visible history.
        * @type {boolean | undefined}
-        
        */
       this.visibleHistory = data.has_visible_history;
     }
@@ -379,7 +343,6 @@ class ChatFullInfo extends Chat {
       /**
        * The name of the sticker set in the chat.
        * @type {string | undefined}
-        
        */
       this.stickerSetName = data.sticker_set_name;
     }
@@ -388,7 +351,6 @@ class ChatFullInfo extends Chat {
       /**
        * Whether the chat can set a sticker set.
        * @type {boolean | undefined}
-        
        */
       this.setStickerSet = data.can_set_sticker_set;
     }
@@ -397,7 +359,6 @@ class ChatFullInfo extends Chat {
       /**
        * The name of the custom emoji sticker set in the chat.
        * @type {string | undefined}
-        
        */
       this.customEmojiStickerSetName = data.custom_emoji_sticker_set_name;
     }
@@ -406,7 +367,6 @@ class ChatFullInfo extends Chat {
       /**
        * The linked chat ID.
        * @type {number | undefined}
-        
        */
       this.linkedId = data.linked_chat_id;
     }
@@ -415,7 +375,6 @@ class ChatFullInfo extends Chat {
       /**
        * The location of the chat.
        * @type {Location | undefined}
-        
        */
       this.location = new Location(this.client, data.location);
     }
