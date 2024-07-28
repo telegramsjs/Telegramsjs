@@ -16,7 +16,7 @@ class ChatBoost {
     this.expirationedTimestamp = data.expiration_date;
 
     /** Source of the added boost */
-    this.source = new ChatBoost(client, data.source);
+    this.source = new ChatBoostSource(client, data.source);
   }
 
   /**
