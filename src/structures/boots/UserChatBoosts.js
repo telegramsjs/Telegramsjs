@@ -9,14 +9,12 @@ class UserChatBoosts {
     /**
      * The list of boosts added to the chat by the user
      * @type {ChatBoost[]}
-      
      */
     this.boosts = data.boosts.map((boost) => new ChatBoost(client, data));
 
     /**
      * The boost count added to the chat by the user
      * @type {number}
-      
      */
     this.count = data.boosts.length;
   }

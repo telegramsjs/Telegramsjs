@@ -76,9 +76,7 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @return {this is this & { username: string 
-     
-   }}
+   * @return {this is this & { username: string }}
    */
   isHiddenUser() {
     return Boolean("username" in this && this.username);

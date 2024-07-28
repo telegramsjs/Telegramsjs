@@ -7,7 +7,6 @@ class BackgroundFill {
       /**
        * The color of the background fill in the RGB24 format
        * @type {number | undefined}
-        
        */
       this.color = data.color;
     }
@@ -16,21 +15,18 @@ class BackgroundFill {
       /**
        * Top color of the gradient in the RGB24 format
        * @type {number | undefined}
-        
        */
       this.topColor = data.top_color;
 
       /**
        * Bottom color of the gradient in the RGB24 format
        * @type {number | undefined}
-        
        */
       this.bottomColor = data.bottom_color;
 
       /**
        * Clockwise rotation angle of the background fill in degrees; 0-359
        * @type {number | undefined}
-        
        */
       this.rotationAngle = data.rotation_angle;
     }
@@ -39,7 +35,6 @@ class BackgroundFill {
       /**
        * A list of the 3 or 4 base colors that are used to generate the freeform gradient in the RGB24 format
        * @type {number[] | undefined}
-        
        */
       this.colors = data.colors;
     }

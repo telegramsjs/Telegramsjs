@@ -12,7 +12,6 @@ class VideoChatParticipantsInvited extends Base {
     /**
      * New members that were invited to the video chat
      * @type {User[]}
-      
      */
     this.users = data.users.map((user) => new User(client, user));
   }

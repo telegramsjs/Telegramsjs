@@ -35,7 +35,6 @@ class StarTransaction {
   /**
    * Date the transaction was created in Unix time
    * @type {Date}
-    
    */
   get createdAt() {
     return new Date(this.createdTimestamp);

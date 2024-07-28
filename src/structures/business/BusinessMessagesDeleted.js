@@ -12,21 +12,18 @@ class BusinessMessagesDeleted extends Base {
     /**
      * Unique identifier of the business connection
      * @type {string}
-      
      */
     this.id = data.business_connection_id;
 
     /**
      * Information about a chat in the business account. The bot may not have access to the chat or the corresponding user
      * @type {import("@telegram.ts/types").Chat.PrivateChat}
-      
      */
     this.chat = new Chat(client, data.chat);
 
     /**
      * The list of identifiers of deleted messages in the chat of the business account
      * @type {number[]}
-      
      */
     this.ids = data.message_ids;
   }

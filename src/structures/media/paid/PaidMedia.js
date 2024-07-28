@@ -58,7 +58,7 @@ class PaidMedia extends Base {
   }
 
   /**
-   * @return {this & this & { video: undefined; photo: undefined }}
+   * @return {this & this & { video?: undefined; photo?: undefined }}
    */
   isPreview() {
     return !this.isPhoto() && !this.isVideo();

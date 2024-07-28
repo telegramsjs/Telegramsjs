@@ -27,7 +27,6 @@ class RevenueWithdrawalState {
   /**
    * Date the withdrawal was completed
    * @type {Date}
-    
    */
   get createdAt() {
     return new Date(this.createdTimestamp);

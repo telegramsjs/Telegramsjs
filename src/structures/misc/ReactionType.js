@@ -16,14 +16,14 @@ class ReactionType {
   }
 
   /**
-   * @return {this is this & { emoji: import("@telegram.ts/types").ReactionTypeEmoji["emoji"] }}
+   * @return {this is this & { emoji: import("@telegram.ts/types").ReactionTypeEmoji["emoji"]; customEmoji?: undefined }}
    */
   isEmoji() {
     return Boolean("emoji" in this && this.emoji);
   }
 
   /**
-   * @return {this is this & { customEmoji: string; }}
+   * @return {this is this & { customEmoji: string; emoji?: undefined }}
    */
   isCustomEmoji() {
     return Boolean("customEmoji" in this && this.customEmoji);

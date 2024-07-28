@@ -138,7 +138,7 @@ class ChatFullInfo extends Chat {
     if ("business_opening_hours" in data) {
       /**
        * The business opening hours of the chat.
-       * @type {undefined | { timeZone: string, hours: { opening: number, closing: number }[] }
+       * @type {undefined | { timeZone: string, hours: { opening: number, closing: number }[] } }
        */
       this.businessOpeningHours = {
         timeZone: data.business_opening_hours.time_zone_name,

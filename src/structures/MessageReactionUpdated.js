@@ -5,7 +5,7 @@ const { ReactionType } = require("./misc/ReactionType");
 
 class MessageReactionUpdated extends Base {
   /**
-   * @param {import("../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").MessageReactionUpdated} data - Data about the represents a change of a reaction on a message performed by a user
    */
   constructor(client, data) {

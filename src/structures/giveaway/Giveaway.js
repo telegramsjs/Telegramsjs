@@ -47,7 +47,6 @@ class Giveaway extends Base {
   /**
    * Point in time when winners of the giveaway will be selected
    * @type {Date}
-    
    */
   get selectedAt() {
     return new Date(this.selectedTimestamp);

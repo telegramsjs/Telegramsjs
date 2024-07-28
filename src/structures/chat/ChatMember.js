@@ -135,7 +135,6 @@ class ChatMember extends Base {
       /**
        * Information about the user
        * @type {User | undefined}
-        
        */
       this.user = new User(this.client, data.user);
     }
@@ -144,7 +143,6 @@ class ChatMember extends Base {
       /**
        * True, if the user's presence in the chat is hidden
        * @type {boolean | undefined}
-        
        */
       this.anonymous = data.is_anonymous;
     }
@@ -153,7 +151,6 @@ class ChatMember extends Base {
       /**
        * Custom title for this user
        * @type {string | undefined}
-        
        */
       this.nickName = data.custom_title;
     }
@@ -162,7 +159,6 @@ class ChatMember extends Base {
       /**
        * True, if the user is a member of the chat at the moment of the request
        * @type {boolean | undefined}
-        
        */
       this.isMember = data.is_member;
     }
@@ -182,7 +178,6 @@ class ChatMember extends Base {
       /**
        * User that sent the join request
        * @type {User | undefined}
-        
        */
       this.author = new User(this.client, data.from);
     }
@@ -191,7 +186,6 @@ class ChatMember extends Base {
       /**
        * Bio of the user
        * @type {string | undefined}
-        
        */
       this.bio = data.bio;
     }
@@ -200,7 +194,6 @@ class ChatMember extends Base {
       /**
        * Chat invite link that was used by the user to send the join request
        * @type {ChatInviteLink | undefined}
-        
        */
       this.link = new ChatInviteLink(this.client, data.invite_link);
     }
@@ -209,7 +202,6 @@ class ChatMember extends Base {
       /**
        * Date the request was sent in Unix time
        * @type {number | undefined}
-        
        */
       this.requestedTimestamp = data.date;
     }
@@ -218,7 +210,6 @@ class ChatMember extends Base {
       /**
        * Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user
        * @type {number | undefined}
-        
        */
       this.userChatId = data.user_chat_id;
     }
@@ -227,7 +218,6 @@ class ChatMember extends Base {
       /**
        * Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
        * @type {number | undefined}
-        
        */
       this.restrictedTimestamp = data.until_date;
     }
@@ -238,7 +228,6 @@ class ChatMember extends Base {
   /**
    * Date when restrictions will be lifted for this user
    * @type {Date}
-    
    */
   get restrictedAt() {
     return new Date(this.restrictedTimestamp);
@@ -247,7 +236,6 @@ class ChatMember extends Base {
   /**
    * Date the request was sent
    * @type {Date}
-    
    */
   get requestedAt() {
     return new Date(this.requestedTimestamp);
