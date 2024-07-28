@@ -189,7 +189,7 @@ class ExternalReplyInfo extends Base {
        * Message is an invoice for a payment, information about the invoice. More about payments
        * @type {Invoice | undefined}
        */
-      this.invoice = new Invoice(data.invoice);
+      this.invoice = new Invoice(this.client, data.invoice);
     }
 
     if ("location" in data) {

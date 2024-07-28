@@ -286,7 +286,7 @@ class BaseClient extends EventEmitter {
   async getWebhookInfo() {
     return await this.apiRequest
       .get<MethodsReturnType["getWebhookInfo"]>("getWebhookInfo")
-      .then((res) => new WebhookInfo(res));
+      .then((res) => new WebhookInfo(this, res));
   }
 
   /** Use this method to send text messages. On success, the sent Message is returned. */

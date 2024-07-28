@@ -52,6 +52,24 @@ class SharedUser extends Base {
   }
 
   /**
+   * Refunds a successful payment in Telegram Stars.
+   * @param {number} telegramPaymentId - Telegram payment identifier
+   * @return {Promise<true>} - Returns True on success.
+   */
+  refundStarPayment(telegramPaymentId) {
+    return this.client.refundStarPayment(this.id, telegramPaymentId);
+  }
+
+  /**
+   * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change).
+   * @param {readonly import("@telegram.ts/types").PassportElementError[]} errors - An array describing the errors
+   * @return {Promise<true>} - Returns True on success.
+   */
+  setPassportErrors(errors) {
+    return this.client.setPassportDataErrors(this.userId, errors);
+  }
+
+  /**
    * Use this method to get a list of profile pictures for a user.
    * @param {number} [offset=0] - Sequential number of the first photo to be returned. By default, all photos are returned
    * @param {number} [limit=100] - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100

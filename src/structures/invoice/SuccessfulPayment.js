@@ -1,10 +1,14 @@
+const { Base } = require("../Base");
 const { OrderInfo } = require("./OrderInfo");
 
-class SuccessfulPayment {
+class SuccessfulPayment extends Base {
   /**
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").SuccessfulPayment} data - Data about the contains basic information about a successful payment
    */
-  constructor(data) {
+  constructor(client, data) {
+    super(client);
+
     /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars */
     this.currency = data.currency;
 
@@ -29,6 +33,15 @@ class SuccessfulPayment {
 
     /** Provider payment identifier */
     this.providedPaymentId = data.provider_payment_charge_id;
+  }
+
+  /**
+   * Refunds a successful payment in Telegram Stars.
+   * @param {number} userId - Identifier of the user whose payment will be refunded
+   * @return {Promise<true>} - Returns True on success.
+   */
+  refundStarPayment(userId) {
+    return this.client.refundStarPayment(userId, this.telegramPaymentId);
   }
 }
 

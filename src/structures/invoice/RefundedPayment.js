@@ -1,8 +1,12 @@
-class RefundedPayment {
+const { Base } = require("../Base");
+
+class RefundedPayment extends Base {
   /**
    * @param {import("@telegram.ts/types").RefundedPayment} data - Data about the contains basic information about a refunded payment
    */
-  constructor(data) {
+  constructor(client, data) {
+    super(client);
+
     /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. Currently, always “XTR” */
     this.currency = data.currency;
 
@@ -19,6 +23,15 @@ class RefundedPayment {
       /** Provider payment identifier */
       this.providerChargeId = data.provider_payment_charge_id;
     }
+  }
+
+  /**
+   * Refunds a successful payment in Telegram Stars.
+   * @param {number} userId - Identifier of the user whose payment will be refunded
+   * @return {Promise<true>} - Returns True on success.
+   */
+  refundStarPayment(userId) {
+    return this.client.refundStarPayment(userId, this.telegramChargeId);
   }
 }
 

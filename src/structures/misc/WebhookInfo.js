@@ -1,8 +1,13 @@
-class WebhookInfo {
+const { Base } = require("../Base");
+
+class WebhookInfo extends Base {
   /**
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").WebhookInfo} data - Data about the describes the current status of a webhook
    */
-  constructor(data) {
+  constructor(client, data) {
+    super(client);
+
     if ("url" in data) {
       /** Webhook URL, may be empty if webhook is not set up */
       this.url = data.url;
@@ -41,6 +46,15 @@ class WebhookInfo {
 
     /** A list of update types the bot is subscribed to. Defaults to all update types except chat_member */
     this.allowedUpdates = data.allowed_updates || [];
+  }
+
+  /**
+   * Use this method to remove webhook integration if you decide to switch back to getUpdates.
+   * @param {boolean} [dropPendingUpdates] - Pass True to drop all pending updates
+   * @return {Promise<true>} - Returns True on success.
+   */
+  delete(dropPendingUpdates) {
+    return this.client.deleteWebhook(dropPendingUpdates);
   }
 
   /**

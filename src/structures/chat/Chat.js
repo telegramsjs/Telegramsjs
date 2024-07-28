@@ -1,4 +1,5 @@
 const { Base } = require("../Base");
+const { MessageCollector } = require("../../util/collector/MessageCollector");
 
 /**
  * @typedef {import("node:fs").ReadStream} ReadStream
@@ -151,6 +152,36 @@ class Chat extends Base {
    */
   fetch(force = true) {
     return this.client.chats.fetch(this.id, { force });
+  }
+
+  /**
+   * @param {import("../../util/collector/Collector").ICollectorOptions<number, Message>} [options={}] - message collector options
+   * @return {import("../../util/collector/MessageCollector").MessageCollector}
+   */
+  createMessageCollector(options = {}) {
+    return new MessageCollector(this.client, { chat: this }, options);
+  }
+
+  /**
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, Message>} AwaitMessagesOptions
+   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
+   */
+
+  /**
+   * @param {AwaitMessagesOptions} [options={}] - message collector options
+   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message> | [import("@telegram.ts/collection").Collection<number, Message>, string]>}
+   */
+  awaitMessages(options = {}) {
+    return new Promise((resolve, reject) => {
+      const collector = this.createMessageCollector(options);
+      collector.once("end", (collection, reason) => {
+        if (options.errors?.includes(reason)) {
+          reject([collection, reason]);
+        } else {
+          resolve(collection);
+        }
+      });
+    });
   }
 
   /**

@@ -434,7 +434,10 @@ class Message extends Base {
        * Message is a service message about a successful payment, information about the payment. More about payments
        * @type {SuccessfulPayment | undefined}
        */
-      this.successfulPayment = new SuccessfulPayment(data.successful_payment);
+      this.successfulPayment = new SuccessfulPayment(
+        this.client,
+        data.successful_payment,
+      );
     }
 
     if ("refunded_payment" in data) {
@@ -442,7 +445,10 @@ class Message extends Base {
        * Message is a service message about a refunded payment, information about the payment. More about payments
        * @type {RefundedPayment | undefined}
        */
-      this.refundedPayment = new RefundedPayment(data.refunded_payment);
+      this.refundedPayment = new RefundedPayment(
+        this.client,
+        data.refunded_payment,
+      );
     }
 
     if ("users_shared" in data) {
@@ -875,10 +881,33 @@ class Message extends Base {
    * @return {Promise<[import("@telegram.ts/collection").Collection<number, Message>, string]>}
    */
   awaitMessage(options = {}) {
-    return new Promise((res, rej) => {
+    const _options = { ...options, max: 1 };
+    return new Promise((resolve, reject) => {
+      const collect = this.createMessageCollector(_options);
+      collect.on("end", (collections, reason) => {
+        resolve([collections, reason]);
+      });
+    });
+  }
+
+  /**
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, Message>} AwaitMessagesOptions
+   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
+   */
+
+  /**
+   * @param {AwaitMessagesOptions} [options={}] - message collector options
+   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message> | [import("@telegram.ts/collection").Collection<number, Message>, string]>}
+   */
+  awaitMessages(options = {}) {
+    return new Promise((resolve, reject) => {
       const collect = this.createMessageCollector(options);
       collect.on("end", (collections, reason) => {
-        res([collections, reason]);
+        if (options.errors?.includes(reason)) {
+          reject([collection, reason]);
+        } else {
+          resolve(collection);
+        }
       });
     });
   }
@@ -896,10 +925,10 @@ class Message extends Base {
    * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
    */
   awaitReaction(options = {}) {
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
       const collect = this.createReactionCollector(options);
       collect.on("end", (collections, reason) => {
-        res([collections, reason]);
+        resolve([collections, reason]);
       });
     });
   }
