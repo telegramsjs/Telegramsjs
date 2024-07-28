@@ -8,7 +8,7 @@ class StarTransactions {
   constructor(client, data) {
     /** The list of transactions */
     this.transactions = data.transactions.map(
-      (transaction) => new StarTransaction(client, data),
+      (transaction) => new StarTransaction(client, transaction),
     );
   }
 }
