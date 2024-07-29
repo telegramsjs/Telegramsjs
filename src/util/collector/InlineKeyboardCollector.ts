@@ -1,6 +1,5 @@
 import { Events } from "../Constants";
 import { TelegramClient } from "../../client/TelegramClient";
-import { Collection } from "@telegram.ts/collection";
 import { Collector, ICollectorOptions } from "./Collector";
 import type { CallbackQuery } from "../../structures/CallbackQuery";
 
@@ -20,7 +19,10 @@ class InlineKeyboardCollector extends Collector<string, CallbackQuery> {
    */
   constructor(
     public readonly client: TelegramClient,
-    public readonly options: ICollectorOptions<string, CallbackQuery> = {},
+    public override readonly options: ICollectorOptions<
+      string,
+      CallbackQuery
+    > = {},
   ) {
     super(options);
 
@@ -55,7 +57,7 @@ class InlineKeyboardCollector extends Collector<string, CallbackQuery> {
    * Gets the reason for ending the collector.
    * @returns The reason for ending the collector or null.
    */
-  get endReason(): string | null {
+  override get endReason(): string | null {
     const { max, maxProcessed } = this.options;
 
     if (max && this.collected.size >= max) {

@@ -32,11 +32,11 @@ type Awaitable<V> = PromiseLike<V> | V;
 type PossiblyAsync<T> = T | Promise<T>;
 
 export {
-  MsgWith,
-  MethodsReturnType,
-  MethodParameters,
-  IRequestFailt,
-  IRequestSuccess,
-  Awaitable,
-  PossiblyAsync,
+  type MsgWith,
+  type MethodsReturnType,
+  type MethodParameters,
+  type IRequestFailt,
+  type IRequestSuccess,
+  type Awaitable,
+  type PossiblyAsync,
 };

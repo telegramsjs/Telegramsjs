@@ -86,26 +86,26 @@ abstract class Collector<K, V> extends EventEmitter {
     }
   }
 
-  on(event: string, listener: (...data: any[]) => void): this;
+  override on(event: string, listener: (...data: any[]) => void): this;
 
-  on<T extends keyof ICollectorEvent<K, V>>(
+  override on<T extends keyof ICollectorEvent<K, V>>(
     event: T,
     listener: ICollectorEvent<K, V>[T],
   ): this;
 
-  on(event: string, listener: (...data: any[]) => void) {
+  override on(event: string, listener: (...data: any[]) => void) {
     super.on(event, listener);
     return this;
   }
 
-  once(event: string, listener: (...data: any[]) => void): this;
+  override once(event: string, listener: (...data: any[]) => void): this;
 
-  once<T extends keyof ICollectorEvent<K, V>>(
+  override once<T extends keyof ICollectorEvent<K, V>>(
     event: T,
     listener: ICollectorEvent<K, V>[T],
   ): this;
 
-  once(event: string, listener: (...data: any[]) => void) {
+  override once(event: string, listener: (...data: any[]) => void) {
     super.once(event, listener);
     return this;
   }
@@ -300,4 +300,4 @@ abstract class Collector<K, V> extends EventEmitter {
   abstract dispose(msg: V): K | null;
 }
 
-export { Collector, ICollectorEvent, ICollectorOptions };
+export { Collector, type ICollectorEvent, type ICollectorOptions };

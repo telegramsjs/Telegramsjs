@@ -13,9 +13,9 @@ class TelegramError extends Error {
    */
   constructor(description: string, code?: number | string) {
     super(description);
-    this.code = code;
     this.name = "TelegramError";
     this.description = description;
+    if (code) this.code = code;
     Error.captureStackTrace?.(this, TelegramError);
   }
 }

@@ -52,8 +52,11 @@ class PollingClient {
         offset: this.offset,
       });
 
-      if (response.length) {
-        this.offset = response[response.length - 1].update_id + 1;
+      if (response.length > 0) {
+        const lastItem = response[response.length - 1];
+        if (lastItem) {
+          this.offset = lastItem.update_id + 1;
+        }
       }
 
       for (const data of response) {

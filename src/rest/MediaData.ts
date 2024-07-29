@@ -1,7 +1,5 @@
 import crypto from "node:crypto";
-import type { URL } from "node:url";
 import { Buffer } from "node:buffer";
-import type { Agent } from "node:https";
 import fs, { type ReadStream } from "node:fs";
 import fetch, {
   type RequestInit,
@@ -21,7 +19,7 @@ interface IApiConfig {
   agent?: RequestInit["agent"];
 }
 
-async function fileExists(filePath: string) {
+async function fileExists(filePath: string): Promise<boolean> {
   try {
     await fs.promises.access(filePath, fs.constants.F_OK);
     return true;
@@ -36,7 +34,6 @@ async function fileExists(filePath: string) {
 class MediaData {
   /**
    * Mapping of media type extensions.
-   * @readonly
    */
   readonly extensions: Record<string, string> = {
     audio: "mp3",
@@ -50,7 +47,6 @@ class MediaData {
 
   /**
    * Fields in the form data that should be JSON-encoded.
-   * @readonly
    */
   readonly formDataJsonFields: string[] = [
     "results",
@@ -63,7 +59,6 @@ class MediaData {
 
   /**
    * Parameters that can contain media data.
-   * @readonly
    */
   readonly sourceParametersMedia: string[] = [
     "sticker",
@@ -105,17 +100,16 @@ class MediaData {
    */
   buildJSONConfig(
     payload: Record<string, any>,
-    requestOptions: RequestInit,
+    requestOptions: RequestInit = {},
   ): IApiConfig {
     return {
-      method: "POST",
-      compress: true,
-      headers: {
+      method: requestOptions.method ?? "POST",
+      compress: requestOptions.compress ?? true,
+      headers: requestOptions.headers ?? {
         "content-type": "application/json",
         connection: "keep-alive",
       },
-      body: JSON.stringify(payload),
-      ...requestOptions,
+      body: JSON.stringify(payload) as BodyInit,
     };
   }
 
@@ -127,9 +121,9 @@ class MediaData {
    */
   async buildFormDataConfig(
     apiPayload: Record<string, any>,
-    requestOptions: RequestInit,
+    requestOptions: RequestInit = {},
   ): Promise<IApiConfig> {
-    Object.keys(this.formDataJsonFields).map((fieldName) => {
+    Object.keys(apiPayload).forEach((fieldName) => {
       const fieldValue = apiPayload[fieldName];
       if (fieldValue && typeof fieldValue !== "string") {
         apiPayload[fieldName] = JSON.stringify(fieldValue);
@@ -139,7 +133,7 @@ class MediaData {
     const boundary = crypto.randomBytes(32).toString("hex");
     const formData = new MultipartStream(boundary);
 
-    const tasks = await Promise.all(
+    await Promise.all(
       Object.keys(apiPayload).map(
         async (fieldName) =>
           await this.attachFormValue(
@@ -152,14 +146,13 @@ class MediaData {
     );
 
     return {
-      method: "POST",
-      compress: true,
-      headers: {
+      method: requestOptions.method ?? "POST",
+      compress: requestOptions.compress ?? true,
+      headers: requestOptions.headers ?? {
         "content-type": `multipart/form-data; boundary=${boundary}`,
         connection: "keep-alive",
       },
-      body: formData,
-      ...requestOptions,
+      body: formData as MultipartStream,
     };
   }
 
@@ -273,4 +266,4 @@ class MediaData {
   }
 }
 
-export { MediaData, IApiConfig };
+export { MediaData, type IApiConfig };

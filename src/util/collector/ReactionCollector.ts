@@ -61,7 +61,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
   constructor(
     public readonly client: TelegramClient,
     public readonly reaction: MessageReactionUpdated,
-    public readonly options: ICollectorOptions<
+    public override readonly options: ICollectorOptions<
       string,
       MessageReactionUpdated
     > = {},
@@ -83,7 +83,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * @param listener - The event listener.
    * @returns The current instance of ReactionCollector.
    */
-  on<K extends keyof IReactionEventCollector>(
+  override on<K extends keyof IReactionEventCollector>(
     event: K,
     listener: IReactionEventCollector[K],
   ): this {
@@ -97,7 +97,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * @param listener - The event listener.
    * @returns The current instance of ReactionCollector.
    */
-  once<K extends keyof IReactionEventCollector>(
+  override once<K extends keyof IReactionEventCollector>(
     event: K,
     listener: IReactionEventCollector[K],
   ): this {
@@ -175,7 +175,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * Gets the reason for ending the collector.
    * @returns The reason for ending the collector or null.
    */
-  get endReason(): string | null {
+  override get endReason(): string | null {
     const { max, maxProcessed } = this.options;
 
     if (max && this.collected.size >= max) {
@@ -209,4 +209,4 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
   }
 }
 
-export { ReactionCollector, IReactionEventCollector };
+export { ReactionCollector, type IReactionEventCollector };

@@ -211,4 +211,4 @@ type PermissionResolvable =
   | Permissions
   | Array<string | number | Permissions>;
 
-export { Permissions, PermissionResolvable };
+export { Permissions, type PermissionResolvable };

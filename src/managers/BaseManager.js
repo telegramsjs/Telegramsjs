@@ -38,8 +38,7 @@ class BaseManager {
 
   /**
    * Adds or updates an entry in the cache.
-   * @template Data
-   * @param {Data} data - The data to be added or updated in the cache.
+   * @param {any} data - The data to be added or updated in the cache.
    * @param {boolean} [cache=true] - Whether to cache the data.
    * @param {Object} [options={}] - Additional options.
    * @param {string|number} [options.id] - The ID of the data.

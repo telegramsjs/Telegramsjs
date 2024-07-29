@@ -106,6 +106,7 @@ class WorketClient {
     if ("removed_chat_boost" in data) {
       return this.onRemovedChatBoost(data.removed_chat_boost);
     }
+    return;
   }
 
   /**

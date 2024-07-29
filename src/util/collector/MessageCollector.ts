@@ -2,7 +2,6 @@ import { Events } from "../Constants";
 import { TelegramError } from "../../errors/TelegramError";
 import { TelegramClient } from "../../client/TelegramClient";
 import type { Chat } from "../../structures/chat/Chat";
-import { Collection } from "@telegram.ts/collection";
 import type { Message } from "../../structures/message/Message";
 import { Collector, type ICollectorOptions } from "./Collector";
 
@@ -29,7 +28,7 @@ class MessageCollector extends Collector<number, Message> {
   constructor(
     public readonly client: TelegramClient,
     public readonly message: Message,
-    public readonly options: ICollectorOptions<number, Message> = {},
+    public override readonly options: ICollectorOptions<number, Message> = {},
   ) {
     super(options);
 
@@ -73,7 +72,7 @@ class MessageCollector extends Collector<number, Message> {
    * Gets the reason for ending the collector.
    * @returns The reason for ending the collector or null.
    */
-  get endReason(): string | null {
+  override get endReason(): string | null {
     const { max, maxProcessed } = this.options;
 
     if (max && this.collected.size >= max) {

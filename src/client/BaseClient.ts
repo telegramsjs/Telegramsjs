@@ -1,6 +1,5 @@
-import { EventEmitter } from "node:events";
 import type { ReadStream } from "node:fs";
-import type { RequestInit } from "node-fetch";
+import { EventEmitter } from "node:events";
 import { ApiRequest } from "../rest/ApiRequest";
 import { Collection } from "@telegram.ts/collection";
 import type { ClientOptions } from "./TelegramClient";
@@ -181,9 +180,12 @@ class BaseClient extends EventEmitter {
    * @param listener - The listener function.
    * @returns The ManagerEvents instance.
    */
-  on<T extends keyof EventHandlers>(event: T, listener: EventHandlers[T]): this;
+  override on<T extends keyof EventHandlers>(
+    event: T,
+    listener: EventHandlers[T],
+  ): this;
 
-  on(event: string, listener: (...data: any[]) => void) {
+  override on(event: string, listener: (...data: any[]) => void) {
     super.on(event, listener);
     return this;
   }
@@ -194,12 +196,12 @@ class BaseClient extends EventEmitter {
    * @param listener - The listener function.
    * @returns The ManagerEvents instance.
    */
-  once<T extends keyof EventHandlers>(
+  override once<T extends keyof EventHandlers>(
     event: T,
     listener: EventHandlers[T],
   ): this;
 
-  once(event: string, listener: (...data: any[]) => void) {
+  override once(event: string, listener: (...data: any[]) => void) {
     super.on(event, listener);
     return this;
   }
@@ -1445,4 +1447,4 @@ class BaseClient extends EventEmitter {
   }
 }
 
-export { BaseClient, EventHandlerParameters };
+export { BaseClient, type EventHandlerParameters };

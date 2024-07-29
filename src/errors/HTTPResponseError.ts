@@ -7,7 +7,7 @@ import type { Response, Headers } from "node-fetch";
  * Extends the base `TelegramError` class to include specific details about the error response.
  */
 class HTTPResponseError extends TelegramError {
-  public description: string;
+  public override description: string;
   public parameters: IRequestFailt["parameters"];
   #request?: Response;
 
@@ -22,7 +22,7 @@ class HTTPResponseError extends TelegramError {
     this.code = error_code;
     this.description = description;
     this.parameters = parameters;
-    this.#request = request;
+    if (request) this.#request = request;
   }
 
   /**

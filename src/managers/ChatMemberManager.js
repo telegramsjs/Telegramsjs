@@ -35,7 +35,7 @@ class ChatMemberManager extends BaseManager {
 
   /**
    * Adds data to the cache or updates an existing entry.
-   * @param {Object} data - The data to add or update.
+   * @param {import("@telegram.ts/types").ChatMember} data - The data to add or update.
    * @param {boolean} [cache=true] - Whether to cache the data.
    * @param {Object} [options={}] - Additional options.
    * @param {string|number} [options.id] - The ID of the entry.

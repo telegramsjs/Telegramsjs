@@ -2,13 +2,12 @@ import type { Buffer } from "node:buffer";
 import type { ReadStream } from "node:fs";
 import type { TlsOptions } from "node:tls";
 import type { RequestInit } from "node-fetch";
-import type { ServerResponse, RequestListener } from "node:http";
+import type { RequestListener } from "node:http";
 import type { Update } from "@telegram.ts/types";
 import { BaseClient } from "./BaseClient";
 import { PollingClient } from "./PollingClient";
 import { WebhookClient } from "./WebhookClient";
 import { WorketClient } from "./WorkerClient";
-import { ApiRequest } from "../rest/ApiRequest";
 import { TelegramError } from "../errors/TelegramError";
 import type { ClientUser } from "../structures/misc/ClientUser";
 import {
@@ -155,4 +154,4 @@ class TelegramClient extends BaseClient {
   }
 }
 
-export { TelegramClient, ClientOptions, ILoginOptions };
+export { TelegramClient, type ClientOptions, type ILoginOptions };

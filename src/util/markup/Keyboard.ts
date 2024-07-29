@@ -12,22 +12,22 @@ class Keyboard {
   /**
    * Indicates whether the keyboard is persistent.
    */
-  public is_persistent?: boolean;
+  public is_persistent: boolean = false;
 
   /**
    * Indicates whether the keyboard is selective.
    */
-  public selective?: boolean;
+  public selective: boolean = false;
 
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  public one_time_keyboard?: boolean;
+  public one_time_keyboard: boolean = false;
 
   /**
    * Indicates whether the keyboard should be resized.
    */
-  public resize_keyboard?: boolean;
+  public resize_keyboard: boolean = false;
 
   /**
    * The placeholder text for the input field.
@@ -196,7 +196,7 @@ class Keyboard {
    */
   static requestPoll(
     text: string,
-    type?: KeyboardButtonPollType["type"],
+    type: KeyboardButtonPollType["type"] = "regular",
   ): KeyboardButton.RequestPollButton {
     return { text, request_poll: { type } };
   }
@@ -281,7 +281,9 @@ class Keyboard {
     clone.selective = this.selective;
     clone.one_time_keyboard = this.one_time_keyboard;
     clone.resize_keyboard = this.resize_keyboard;
-    clone.input_field_placeholder = this.input_field_placeholder;
+    if (this.input_field_placeholder) {
+      clone.input_field_placeholder = this.input_field_placeholder;
+    }
     return clone;
   }
 
