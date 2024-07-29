@@ -242,6 +242,81 @@ class ChatMember extends Base {
   }
 
   /**
+   * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
+   * @param {Omit<MethodParameters["kickChatMember"], "user_id" | "chat_id">} [options={}]
+   * @return {Promise<true>} - Returns True on success.
+   */
+  kick(options = {}) {
+    if (!this.user) {
+      throw new TelegramError(
+        "Could not find the user where this message came from in the cache!",
+      );
+    }
+
+    return this.client.kickChatMember({
+      user_id: this.user.id,
+      chat_id: this.chatId,
+      ...options,
+    });
+  }
+
+  /**
+   * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
+   * @param {Omit<MethodParameters["banChatMember"], "user_id" | "chat_id">} [options={}]
+   * @return {Promise<true>} - Returns True on success.
+   */
+  ban(options = {}) {
+    if (!this.user) {
+      throw new TelegramError(
+        "Could not find the user where this message came from in the cache!",
+      );
+    }
+
+    return this.client.banChatMember({
+      user_id: this.user.id,
+      chat_id: this.chatId,
+      ...options,
+    });
+  }
+
+  /**
+   * Use this method to unban a previously banned user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't want this, use the parameter only_if_banned.
+   * @param {boolean} [onlyIfBanned] - Do nothing if the user is not banned
+   * @return {Promise<true>} - Returns True on success.
+   */
+  unban(onlyIfBanned) {
+    if (!this.user) {
+      throw new TelegramError(
+        "Could not find the user where this message came from in the cache!",
+      );
+    }
+
+    return this.client.banChatMember({
+      user_id: this.user.id,
+      chat_id: this.chatId,
+      only_if_banned: onlyIfBanned,
+    });
+  }
+
+  /**
+   * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights.
+   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @return {Promise<true>} - Returns True on success.
+   */
+  banSenderChat(senderChatId) {
+    return this.client.banChatSenderChat(this.chatId, senderChatId);
+  }
+
+  /**
+   * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights.
+   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @return {Promise<true>} - Returns True on success.
+   */
+  unbanSenderChat(senderChatId) {
+    return this.client.unbanChatSenderChat(this.chatId, senderChatId);
+  }
+
+  /**
    * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
    * @param {import("@telegram.ts/types").ChatPermissions} perms - An object for new user permissions
    * @param {Omit<MethodParameters["restrictChatMember"], "user_id" | "permissions">} [options={}] - out parameters

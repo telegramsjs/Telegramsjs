@@ -1,6 +1,10 @@
 const { Base } = require("./Base");
 const { User } = require("./misc/User");
 
+/**
+ * @typedef {import("../types").MethodParameters} MethodParameters
+ */
+
 class ShippingQuery extends Base {
   /**
    * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
@@ -41,6 +45,20 @@ class ShippingQuery extends Base {
      * @type {ShippingAddress}
      */
     this.shippingAddress = shippingAddress;
+  }
+
+  /**
+   * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries.
+   * @param {boolean} ok - Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)
+   * @param {Omit<MethodParameters["answerShippingQuery"], "shipping_query_id" | "ok">} [options={}] - out parameters
+   * @return {Promise<true>} - On success, True is returned.
+   */
+  answerQuery(ok, options = {}) {
+    return this.client.answerShippingQuery({
+      shipping_query_id: this.id,
+      ok,
+      ...options,
+    });
   }
 }
 

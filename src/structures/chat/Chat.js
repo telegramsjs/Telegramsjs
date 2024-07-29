@@ -1,5 +1,8 @@
 const { Base } = require("../Base");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
+const {
+  InlineKeyboardCollector,
+} = require("../../util/collector/InlineKeyboardCollector");
 
 /**
  * @typedef {import("node:fs").ReadStream} ReadStream
@@ -185,6 +188,14 @@ class Chat extends Base {
   }
 
   /**
+   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
+   * @return {InlineKeyboardCollector}
+   */
+  createMessageComponentCollector(options = {}) {
+    return new InlineKeyboardCollector(this.client, options);
+  }
+
+  /**
    * Use this method to send text messages.
    * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chat_id">} [options={}] - out parameters
@@ -239,6 +250,24 @@ class Chat extends Base {
       chat_id: this.id,
       only_if_banned: onlyIfBanned,
     });
+  }
+
+  /**
+   * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights.
+   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @return {Promise<true>} - Returns True on success.
+   */
+  banSenderChat(senderChatId) {
+    return this.client.banChatSenderChat(this.id, senderChatId);
+  }
+
+  /**
+   * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights.
+   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @return {Promise<true>} - Returns True on success.
+   */
+  unbanSenderChat(senderChatId) {
+    return this.client.unbanChatSenderChat(this.id, senderChatId);
   }
 
   /**

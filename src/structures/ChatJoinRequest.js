@@ -35,6 +35,22 @@ class ChatJoinRequest extends Base {
   }
 
   /**
+   * Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right.
+   * @return {Promise<true>} Returns True on success.
+   */
+  approveJoinRequest() {
+    return this.client.approveChatJoinRequest(this.chat.id, this.author.id);
+  }
+
+  /**
+   * Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right.
+   * @return {Promise<true>} - Returns True on success.
+   */
+  declineJoinRequest() {
+    return this.client.declineChatJoinRequest(this.chat.id, this.author.id);
+  }
+
+  /**
    * Date the request was sent
    * @type {Date}
    */

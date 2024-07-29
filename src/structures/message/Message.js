@@ -39,6 +39,9 @@ const { TextQuote } = require("../misc/TextQuote");
 const { PassportData } = require("../passport/PassportData");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
 const { ReactionCollector } = require("../../util/collector/ReactionCollector");
+const {
+  InlineKeyboardCollector,
+} = require("../../util/collector/InlineKeyboardCollector");
 const { TelegramError } = require("../../errors/TelegramError");
 
 /**
@@ -934,6 +937,14 @@ class Message extends Base {
   }
 
   /**
+   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
+   * @return {InlineKeyboardCollector}
+   */
+  createMessageComponentCollector(options = {}) {
+    return new InlineKeyboardCollector(this.client, options);
+  }
+
+  /*
    * Reply to the current message
    * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chat_id" | "message_thread_id">} [options={}] - out parameters

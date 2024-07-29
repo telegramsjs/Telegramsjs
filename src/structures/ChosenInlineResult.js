@@ -2,6 +2,10 @@ const { Base } = require("./Base");
 const { User } = require("./misc/User");
 const { Location } = require("./misc/Location");
 
+/**
+ * @typedef {import("../types").MethodParameters} MethodParameters
+ */
+
 class ChosenInlineResult extends Base {
   /**
    * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
@@ -26,6 +30,20 @@ class ChosenInlineResult extends Base {
 
     /** Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message */
     this.inlineMessageId = data.inline_message_id;
+  }
+
+  /**
+   * Use this method to send answers to an inline query.
+   * @param {readonly import("@telegram.ts/types").InlineQueryResult[]} results - An array of results for the inline query
+   * @param {Omit<MethodParameters["answerInlineQuery"], "inline_query_id" | "results">} [options={}] - out parameters
+   * @return {Promise<true>} - On success, True is returned.
+   */
+  answerQuery(results, options = {}) {
+    return this.client.answerInlineQuery({
+      inline_query_id: this.id,
+      results,
+      ...options,
+    });
   }
 }
 
