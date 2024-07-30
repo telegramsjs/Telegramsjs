@@ -1,4 +1,4 @@
-const { Permissions } = require("../../util/Permissions");
+const { ChatPermissions } = require("../../util/ChatPermissions");
 
 class ChatAdministratorRights {
   /**
@@ -47,7 +47,7 @@ class ChatAdministratorRights {
     }
 
     /** Represents the rights of an administrator in a chat */
-    this.permissions = new Permissions(permissions);
+    this.permissions = new ChatPermissions(permissions);
   }
 }
 

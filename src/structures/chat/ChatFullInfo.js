@@ -5,7 +5,7 @@ const { Location } = require("../misc/Location");
 const { Sticker } = require("../media/Sticker");
 const { ReactionType } = require("../misc/ReactionType");
 const { Message } = require("../message/Message");
-const { Permissions } = require("../../util/Permissions");
+const { ChatPermissions } = require("../../util/ChatPermissions");
 
 class ChatFullInfo extends Chat {
   /**
@@ -278,9 +278,9 @@ class ChatFullInfo extends Chat {
     if ("permissions" in data) {
       /**
        * The permissions in the chat.
-       * @type {Permissions | undefined}
+       * @type {ChatPermissions | undefined}
        */
-      this.permissions = new Permissions(data.permissions);
+      this.permissions = new ChatPermissions(data.permissions);
     }
 
     if ("slow_mode_delay" in data) {

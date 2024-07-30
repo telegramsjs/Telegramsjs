@@ -3,6 +3,7 @@ const { MessageCollector } = require("../../util/collector/MessageCollector");
 const {
   InlineKeyboardCollector,
 } = require("../../util/collector/InlineKeyboardCollector");
+const { UserPermissions } = require("../../util/UserPermissions");
 
 /**
  * @typedef {import("node:fs").ReadStream} ReadStream
@@ -155,6 +156,33 @@ class Chat extends Base {
    */
   fetch(force = true) {
     return this.client.chats.fetch(this.id, { force });
+  }
+
+  /**
+   * Retrieves the permissions of a specific member in the chat.
+   * @param {import("./ChatMember").ChatMember|string|number} member - The member object to check permissions for.
+   * @param {boolean} [checkAdmin] - A flag to check if the member is an admin or creator.
+   * @returns {UserPermissions|null} The permissions object of the member or null if not available.
+   */
+  memberPermissions(member, checkAdmin) {
+    if (member?.status === null || this.isPrivate()) {
+      return null;
+    }
+
+    if (checkAdmin && member?.status === "creator") {
+      return new UserPermissions(UserPermissions.Flags);
+    }
+
+    const cacheMember = this.members.resolve(member);
+
+    if (cacheMember && cacheMember.permissions) {
+      if (Object.keys(cacheMember.permissions).length === 0) {
+        return this.memberPermissions(chatMember, checkAdmin);
+      }
+      return cacheMember.permissions;
+    }
+
+    return null;
   }
 
   /**
@@ -385,7 +413,7 @@ class Chat extends Base {
 
   /**
    * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights.
-   * @param {import("@telegram.ts/types").ChatAdministratorRights} perms - An object for new default chat permissions
+   * @param {import("../../util/ChatPermissions").ChatPermissionFlags} perms - An object for new default chat permissions
    * @param {boolean} [useIndependentChatPermissions] - Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission
    * @return {Promise<true>} - Returns True on success.
    */

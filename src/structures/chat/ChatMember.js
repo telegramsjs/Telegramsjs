@@ -1,7 +1,7 @@
 const { Base } = require("../Base");
 const { User } = require("../misc/User");
 const { ChatInviteLink } = require("./ChatInviteLink");
-const { Permissions } = require("../../util/Permissions");
+const { UserPermissions } = require("../../util/UserPermissions");
 
 /**
  * @typedef {import("../../types").MethodParameters} MethodParameters
@@ -125,7 +125,9 @@ class ChatMember extends Base {
     }
 
     /** Represents the rights of an administrator in a chat */
-    this.permissions = new Permissions(permissions);
+    this.permissions = new UserPermissions(
+      this.status === "creator" ? UserPermissions.Flags : permissions,
+    );
 
     this._patch(data);
   }
@@ -242,6 +244,21 @@ class ChatMember extends Base {
   }
 
   /**
+   * Retrieves the permissions of the current member in a specific chat.
+   * @param {ChatMember|string|number} channel - The identifier of the chat channel.
+   * @returns {UserPermissions|null} The permissions object of the user in the chat or null if not available.
+   */
+  permissionsIn(channel) {
+    const chat = this.client.chats.resolve(channel);
+
+    if (!chat || chat.isPrivate() || !chat.members) {
+      return null;
+    }
+
+    return chat.members.resolve(this)?.permissions || null;
+  }
+
+  /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {Omit<MethodParameters["kickChatMember"], "user_id" | "chat_id">} [options={}]
    * @return {Promise<true>} - Returns True on success.
@@ -318,34 +335,30 @@ class ChatMember extends Base {
 
   /**
    * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
-   * @param {import("@telegram.ts/types").ChatPermissions} perms - An object for new user permissions
+   * @param {import("../../util/ChatPermissions").ChatPermissionFlags} perms - An object for new user permissions
    * @param {Omit<MethodParameters["restrictChatMember"], "user_id" | "permissions">} [options={}] - out parameters
    * @return {Promise<true>} - Returns True on success.
    */
   restrict(perms, options = {}) {
-    const permissions = new Permissions();
-
     return this.client.restrictChatMember({
       user_id: this.user.id,
-      permissions: permissions.toApiFormat(permissions.toObject()),
+      permissions: perms,
       ...options,
     });
   }
 
   /**
    * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user.
-   * @param {import("@telegram.ts/types").ChatPermissions} persm - An object for new user permissions
+   * @param {import("../../util/ChatPermissions").ChatPermissionFlags} persm - An object for new user permissions
    * @param {boolean} [isAnonymous] - Pass True if the administrator's presence in the chat is hidden
    * @return {Promise<true>} - Returns True on success.
    */
   promote(persm, isAnonymous) {
-    const permissions = new Permissions();
-
     return this.client.promoteChatMember({
       chat_id: this.chatId,
       userId: this.user.id,
       is_anonymous: isAnonymous,
-      ...permissions.toApiFormat(permissions.toObject()),
+      permissions: persm,
     });
   }
 

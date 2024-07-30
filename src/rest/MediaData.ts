@@ -1,5 +1,5 @@
-import crypto from "node:crypto";
 import { Buffer } from "node:buffer";
+import { randomBytes } from "node:crypto";
 import fs, { type ReadStream } from "node:fs";
 import fetch, {
   type RequestInit,
@@ -123,14 +123,14 @@ class MediaData {
     apiPayload: Record<string, any>,
     requestOptions: RequestInit = {},
   ): Promise<IApiConfig> {
-    Object.keys(apiPayload).forEach((fieldName) => {
+    Object.keys(this.formDataJsonFields).map((fieldName) => {
       const fieldValue = apiPayload[fieldName];
       if (fieldValue && typeof fieldValue !== "string") {
         apiPayload[fieldName] = JSON.stringify(fieldValue);
       }
     });
 
-    const boundary = crypto.randomBytes(32).toString("hex");
+    const boundary = randomBytes(32).toString("hex");
     const formData = new MultipartStream(boundary);
 
     await Promise.all(
@@ -176,7 +176,7 @@ class MediaData {
         await this.attachFormMedia(form, value, id);
         return;
       } else if (id === "thumbnail" && value.startsWith("http")) {
-        const attachmentId = crypto.randomBytes(16).toString("hex");
+        const attachmentId = randomBytes(16).toString("hex");
         const response = await fetch(value, { agent });
         value = Buffer.from(await response.arrayBuffer());
 
@@ -204,7 +204,7 @@ class MediaData {
     }
 
     if (id === "thumbnail") {
-      const attachmentId = crypto.randomBytes(16).toString("hex");
+      const attachmentId = randomBytes(16).toString("hex");
 
       await this.attachFormMedia(form, value, attachmentId);
       form.addPart({
@@ -220,7 +220,7 @@ class MediaData {
           if (typeof item.media !== "object") {
             return item;
           }
-          const attachmentId = crypto.randomBytes(16).toString("hex");
+          const attachmentId = randomBytes(16).toString("hex");
           await this.attachFormMedia(form, item.media, attachmentId);
           return { ...item, media: `attach://${attachmentId}` };
         }),

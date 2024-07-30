@@ -5,7 +5,6 @@ import { Collection } from "@telegram.ts/collection";
 import type { ClientOptions } from "./TelegramClient";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
-import { Permissions } from "../util/Permissions";
 import {
   Message,
   MenuButton,
@@ -25,6 +24,11 @@ import {
   StarTransactions,
   ChatInviteLink,
 } from "../structures/index";
+import {
+  ChatPermissions,
+  type ChatPermissionFlags,
+} from "../util/ChatPermissions";
+import { toApiFormat } from "../util/ApiPermissions";
 import type {
   MethodsReturnType,
   MethodParameters,
@@ -585,18 +589,29 @@ class BaseClient extends EventEmitter {
   }
 
   /** Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success. */
-  async restrictChatMember(params: MethodParameters["restrictChatMember"]) {
+  async restrictChatMember(
+    params: Omit<MethodParameters["restrictChatMember"], "permissions"> & {
+      permissions: ChatPermissionFlags;
+    },
+  ) {
+    const permissions = new ChatPermissions(params.permissions);
     return await this.apiRequest.get<MethodsReturnType["restrictChatMember"]>(
       "restrictChatMember",
-      params,
+      { ...params, permissions: toApiFormat(permissions.toObject()) },
     );
   }
 
   /** Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user. Returns True on success. */
-  async promoteChatMember(params: MethodParameters["promoteChatMember"]) {
+  async promoteChatMember(
+    params: Omit<
+      MethodParameters["promoteChatMember"],
+      keyof ChatPermissionFlags
+    > & { permissions: ChatPermissionFlags },
+  ) {
+    const permissions = new ChatPermissions(params.permissions);
     return await this.apiRequest.get<MethodsReturnType["promoteChatMember"]>(
       "promoteChatMember",
-      params,
+      { ...params, ...toApiFormat(permissions.toObject()) },
     );
   }
 
@@ -626,15 +641,17 @@ class BaseClient extends EventEmitter {
   }
 
   /** Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success. */
-  async setChatPermissions(params: MethodParameters["setChatPermissions"]) {
-    const permissions = new Permissions(
-      (params?.permissions || {}) as Record<string, boolean>,
-    );
+  async setChatPermissions(
+    params: Omit<MethodParameters["setChatPermissions"], "permissions"> & {
+      permissions?: ChatPermissionFlags;
+    },
+  ) {
+    const permissions = new ChatPermissions(params.permissions);
     return await this.apiRequest.get<MethodsReturnType["setChatPermissions"]>(
       "setChatPermissions",
       {
         ...params,
-        permissions: permissions.toApiFormat(permissions.toObject()),
+        permissions: toApiFormat(permissions.toObject()),
       },
     );
   }
@@ -1047,16 +1064,16 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success. */
   async setMyDefaultAdministratorRights(
-    rights?: MethodParameters["setMyDefaultAdministratorRights"]["rights"],
+    rights?: ChatPermissionFlags,
     for_channels?: boolean,
   ) {
-    const permissions = new Permissions(
-      (rights || {}) as Record<string, boolean>,
+    const permissions = new ChatPermissions(
+      (rights || {}) as ChatPermissionFlags,
     );
     return await this.apiRequest.get<
       MethodsReturnType["setMyDefaultAdministratorRights"]
     >("setMyDefaultAdministratorRights", {
-      rights: permissions.toApiFormat(permissions.toObject()),
+      rights: toApiFormat(permissions.toObject()),
       for_channels,
     });
   }
