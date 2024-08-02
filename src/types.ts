@@ -1,13 +1,18 @@
+import type { ApiMethods } from "./client/interfaces/Methods";
 import type { ApiMethods as Methods } from "@telegram.ts/types";
 
 type ApiMethodParameters<T> = T extends (...args: infer P) => any ? P : never;
 
-type MethodParameters<M = Methods> = {
+type MethodParameters<M = ApiMethods> = {
   [K in keyof M]: M[K] extends Function ? ApiMethodParameters<M[K]>[0] : never;
 };
 
-type MethodsReturnType = {
+type MethodsApiReturnType = {
   [M in keyof Methods]: ReturnType<Methods[M]>;
+};
+
+type MethodsLibReturnType = {
+  [M in keyof ApiMethods]: ReturnType<ApiMethods[M]>;
 };
 
 type MsgWith<T, P extends keyof T> = Record<P, NonNullable<T[P]>>;
@@ -33,7 +38,8 @@ type PossiblyAsync<T> = T | Promise<T>;
 
 export {
   type MsgWith,
-  type MethodsReturnType,
+  type MethodsApiReturnType,
+  type MethodsLibReturnType,
   type MethodParameters,
   type IRequestFailt,
   type IRequestSuccess,

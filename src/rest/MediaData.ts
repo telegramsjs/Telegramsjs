@@ -107,7 +107,7 @@ class MediaData {
       compress: requestOptions.compress ?? true,
       headers: requestOptions.headers ?? {
         "content-type": "application/json",
-        connection: "keep-alive",
+        "connection": "keep-alive",
       },
       body: JSON.stringify(payload) as BodyInit,
     };
@@ -150,7 +150,7 @@ class MediaData {
       compress: requestOptions.compress ?? true,
       headers: requestOptions.headers ?? {
         "content-type": `multipart/form-data; boundary=${boundary}`,
-        connection: "keep-alive",
+        "connection": "keep-alive",
       },
       body: formData as MultipartStream,
     };
@@ -230,6 +230,33 @@ class MediaData {
         headers: { "content-disposition": `form-data; name="${id}"` },
         body: JSON.stringify(attachments),
       });
+      return;
+    }
+
+    if (value instanceof ArrayBuffer || ArrayBuffer.isView(value)) {
+      const buffer = ArrayBuffer.isView(value)
+        ? Buffer.from(value.buffer, value.byteOffset, value.byteLength)
+        : Buffer.from(value);
+      await this.attachFormMedia(form, buffer, id);
+      return;
+    }
+
+    if (value instanceof Blob) {
+      const buffer = Buffer.from(await value.arrayBuffer());
+      await this.attachFormMedia(form, buffer, id);
+      return;
+    }
+
+    if (value instanceof FormData) {
+      const formThis = form;
+      for (const [formKey, formValue] of value.entries()) {
+        await this.attachFormValue(formThis, formKey, formValue, agent);
+      }
+      return;
+    }
+
+    if (value instanceof Uint8Array || value instanceof DataView) {
+      await this.attachFormMedia(form, Buffer.from(value.buffer), id);
       return;
     }
 

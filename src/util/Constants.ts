@@ -2,7 +2,7 @@ const DefaultParameters = {
   offset: 0,
   limit: 1,
   timeout: 0,
-  allowed_updates: [
+  allowedUpdates: [
     "message",
     "edited_message",
     "channel_post",

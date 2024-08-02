@@ -208,12 +208,12 @@ class ChatMember extends Base {
       this.requestedTimestamp = data.date;
     }
 
-    if ("user_chat_id" in data) {
+    if ("user_chatId" in data) {
       /**
        * Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user
        * @type {number | undefined}
        */
-      this.userChatId = data.user_chat_id;
+      this.userChatId = data.user_chatId;
     }
 
     if ("until_date" in data) {
@@ -260,7 +260,7 @@ class ChatMember extends Base {
 
   /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {Omit<MethodParameters["kickChatMember"], "user_id" | "chat_id">} [options={}]
+   * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]
    * @return {Promise<true>} - Returns True on success.
    */
   kick(options = {}) {
@@ -271,15 +271,15 @@ class ChatMember extends Base {
     }
 
     return this.client.kickChatMember({
-      user_id: this.user.id,
-      chat_id: this.chatId,
+      userId: this.user.id,
+      chatId: this.chatId,
       ...options,
     });
   }
 
   /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {Omit<MethodParameters["banChatMember"], "user_id" | "chat_id">} [options={}]
+   * @param {Omit<MethodParameters["banChatMember"], "userId" | "chatId">} [options={}]
    * @return {Promise<true>} - Returns True on success.
    */
   ban(options = {}) {
@@ -290,8 +290,8 @@ class ChatMember extends Base {
     }
 
     return this.client.banChatMember({
-      user_id: this.user.id,
-      chat_id: this.chatId,
+      userId: this.user.id,
+      chatId: this.chatId,
       ...options,
     });
   }
@@ -309,9 +309,9 @@ class ChatMember extends Base {
     }
 
     return this.client.banChatMember({
-      user_id: this.user.id,
-      chat_id: this.chatId,
-      only_if_banned: onlyIfBanned,
+      userId: this.user.id,
+      chatId: this.chatId,
+      onlyIfBanned,
     });
   }
 
@@ -336,12 +336,12 @@ class ChatMember extends Base {
   /**
    * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
    * @param {import("../../util/ChatPermissions").ChatPermissionFlags} perms - An object for new user permissions
-   * @param {Omit<MethodParameters["restrictChatMember"], "user_id" | "permissions">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["restrictChatMember"], "userId" | "permissions">} [options={}] - out parameters
    * @return {Promise<true>} - Returns True on success.
    */
   restrict(perms, options = {}) {
     return this.client.restrictChatMember({
-      user_id: this.user.id,
+      userId: this.user.id,
       permissions: perms,
       ...options,
     });
@@ -355,7 +355,7 @@ class ChatMember extends Base {
    */
   promote(persm, isAnonymous) {
     return this.client.promoteChatMember({
-      chat_id: this.chatId,
+      chatId: this.chatId,
       userId: this.user.id,
       is_anonymous: isAnonymous,
       permissions: persm,
@@ -369,9 +369,9 @@ class ChatMember extends Base {
    */
   setNikeName(name) {
     return this.client.setChatAdministratorCustomTitle({
-      chat_id: this.chatId,
-      user_id: this.user.id,
-      custom_title: name,
+      chatId: this.chatId,
+      userId: this.user.id,
+      customTitle: name,
     });
   }
 }

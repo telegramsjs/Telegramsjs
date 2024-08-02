@@ -1,6 +1,12 @@
 import { Agent } from "node:https";
 import { MediaData } from "./MediaData";
+// @ts-ignore
+const snakeCase = require("lodash.snakecase");
+import { isCamelCase } from "../util/Utils";
 import fetch, { type RequestInit } from "node-fetch";
+import { TelegramError } from "../errors/TelegramError";
+import { toApiFormat } from "../util/ApiPermissions";
+import { ChatPermissions } from "../util/ChatPermissions";
 import { HTTPResponseError } from "../errors/HTTPResponseError";
 import type { IRequestFailt, IRequestSuccess } from "../types";
 
@@ -32,10 +38,14 @@ class ApiRequest {
   async transferDataToServer(
     options: Record<string, unknown>,
   ): Promise<RequestInit> {
-    if (this.media.hasMedia(options)) {
-      return await this.media.buildFormDataConfig(options, this.requestOptions);
+    const snakeCaseOptions = this.validateCamelCaseKeys(options);
+    if (this.media.hasMedia(snakeCaseOptions)) {
+      return await this.media.buildFormDataConfig(
+        snakeCaseOptions,
+        this.requestOptions,
+      );
     } else {
-      return this.media.buildJSONConfig(options, this.requestOptions);
+      return this.media.buildJSONConfig(snakeCaseOptions, this.requestOptions);
     }
   }
 
@@ -60,6 +70,40 @@ class ApiRequest {
     }
 
     return response.result;
+  }
+
+  private validateCamelCaseKeys(options: Record<string, any>) {
+    const snakeCaseOptions: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(options)) {
+      if (!isCamelCase(key)) {
+        throw new TelegramError(
+          `The provided string "${key}" is not in camelCase format`,
+        );
+      }
+      if (
+        key === "userAdministratorRights" ||
+        key === "botAdministratorRights"
+      ) {
+        snakeCaseOptions[snakeCase(key)] = toApiFormat(
+          new ChatPermissions(value).toObject(),
+        );
+        continue;
+      }
+      if (Array.isArray(value)) {
+        snakeCaseOptions[snakeCase(key)] = value.map((value) =>
+          typeof value === "object" ? this.validateCamelCaseKeys(value) : value,
+        );
+        continue;
+      }
+      if (typeof value === "object") {
+        snakeCaseOptions[snakeCase(key)] = this.validateCamelCaseKeys(value);
+        continue;
+      }
+      snakeCaseOptions[snakeCase(key)] = value;
+    }
+
+    return snakeCaseOptions;
   }
 }
 

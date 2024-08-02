@@ -226,14 +226,14 @@ class Chat extends Base {
   /**
    * Use this method to send text messages.
    * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
-   * @param {Omit<MethodParameters["sendMessage"], "text" | "chat_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
    * @return {Promise<Message & { content: string }>} - On success, the sent Message is returned.
    */
   send(text, options = {}) {
     return this.client.sendMessage({
       text,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -241,13 +241,13 @@ class Chat extends Base {
   /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {number} userId - Unique identifier of the target user
-   * @param {Omit<MethodParameters["kickChatMember"], "user_id" | "chat_id">} [options={}]
+   * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]
    * @return {Promise<true>} - Returns True on success.
    */
   kick(userId, options = {}) {
     return this.client.kickChatMember({
-      user_id: userId,
-      chat_id: this.id,
+      userId,
+      chatId: this.id,
       ...options,
     });
   }
@@ -255,13 +255,13 @@ class Chat extends Base {
   /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {number} userId - Unique identifier of the target user
-   * @param {Omit<MethodParameters["banChatMember"], "user_id" | "chat_id">} [options={}]
+   * @param {Omit<MethodParameters["banChatMember"], "userId" | "chatId">} [options={}]
    * @return {Promise<true>} - Returns True on success.
    */
   ban(userId, options = {}) {
     return this.client.banChatMember({
-      user_id: userId,
-      chat_id: this.id,
+      userId,
+      chatId: this.id,
       ...options,
     });
   }
@@ -274,9 +274,9 @@ class Chat extends Base {
    */
   unban(userId, onlyIfBanned) {
     return this.client.banChatMember({
-      user_id: userId,
-      chat_id: this.id,
-      only_if_banned: onlyIfBanned,
+      userId,
+      chatId: this.id,
+      onlyIfBanned,
     });
   }
 
@@ -351,13 +351,13 @@ class Chat extends Base {
   /**
    * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights.
    * @param {string} name - Topic name, 1-128 characters
-   * @param {Omit<MethodParameters["createForumTopic"], "name" | "chat_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["createForumTopic"], "name" | "chatId">} [options={}] - out parameters
    * @return {Promise<import("../forum/ForumTopic").ForumTopic>} - Returns information about the created topic as a ForumTopic object.
    */
   createForumTopic(name, options = {}) {
     return this.client.createForumTopic({
       name,
-      chat_id: this.id,
+      chatId: this.id,
       ...options,
     });
   }
@@ -419,7 +419,7 @@ class Chat extends Base {
    */
   setPermissions(perms, useIndependentChatPermissions) {
     return this.client.setChatPermissions({
-      chat_id: this.id,
+      chatId: this.id,
       permissions: perms,
       use_independent_chat_permissions: useIndependentChatPermissions,
     });
@@ -427,12 +427,12 @@ class Chat extends Base {
 
   /**
    * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink.
-   * @param {Omit<MethodParameters["createChatInviteLink"], "chat_id">} [options] - out parameters
+   * @param {Omit<MethodParameters["createChatInviteLink"], "chatId">} [options] - out parameters
    * @return {Promise<import("@telegram.ts/types").ChatInviteLink>} - Returns the new invite link as ChatInviteLink object.
    */
   createInvite(options = {}) {
     return this.client.createChatInviteLink({
-      chat_id: this.id,
+      chatId: this.id,
       ...options,
     });
   }
@@ -440,13 +440,13 @@ class Chat extends Base {
   /**
    * Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {string} inviteLink - The invite link to edit
-   * @param {Omit<MethodParameters["editChatInviteLink"], "invite_link" | "chat_id">} - out parameters
+   * @param {Omit<MethodParameters["editChatInviteLink"], "inviteLink" | "chatId">} - out parameters
    * @return {Promise<import("@telegram.ts/types").ChatInviteLink>} - Returns the edited invite link as a ChatInviteLink object.
    */
   editInvite(inviteLink, options = {}) {
     return this.client.editChatInviteLink({
-      chat_id: this.id,
-      invite_link: inviteLink,
+      chatId: this.id,
+      inviteLink,
       ...options,
     });
   }
@@ -462,7 +462,7 @@ class Chat extends Base {
 
   /**
    * Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {Buffer | ReadStream | string} photo - New chat photo, uploaded using multipart/form-data
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} photo - New chat photo, uploaded using multipart/form-data
    * @return {Promise<true>} - Returns True on success.
    */
   setPhoto(photo) {
@@ -503,7 +503,7 @@ class Chat extends Base {
    */
   pinMessage(messageId, disableNotification) {
     return this.client.pinChatMessage({
-      chat_id: this.id,
+      chatId: this.id,
       message_id: messageId,
       disable_notification: disableNotification,
     });
@@ -528,30 +528,30 @@ class Chat extends Base {
 
   /**
    * Use this method to send photos.
-   * @param {Buffer | ReadStream | string} photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
-   * @param {Omit<MethodParameters["sendPhoto"], "photo" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param {Omit<MethodParameters["sendPhoto"], "photo" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { photo: import("../media/Photo").Photo[] }>} - On success, the sent Message is returned.
    */
   sendPhoto(photo, options = {}) {
     return this.client.sendPhoto({
       photo,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
 
   /**
    * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
-   * @param {Buffer | ReadStream | string} audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data
-   * @param {Omit<MethodParameters["sendAudio"], "audio" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data
+   * @param {Omit<MethodParameters["sendAudio"], "audio" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { audio: import("../media/Audio").Audio }>} - On success, the sent Message is returned.
    */
   sendAudio(audio, options = {}) {
     return this.client.sendAudio({
       audio,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -560,89 +560,89 @@ class Chat extends Base {
    * Use this method to send paid media to channel chats.
    * @param {import("@telegram.ts/types").InputPaidMedia[]} media - An array describing the media to be sent; up to 10 items
    * @param {number} starCount - The number of Telegram Stars that must be paid to buy access to the media
-   * @param {Omit<MethodParameters["sendPaidMedia"], "media" | "star_count" | "chat_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendPaidMedia"], "media" | "starCount" | "chatId">} [options={}] - out parameters
    * @return {Promise<Message & { paidMedia: import("../media/paid/PaidMediaInfo").PaidMediaInfo }>} - On success, the sent Message is returned.
    */
   sendPaidMedia(media, starCount, options = {}) {
     return this.client.sendPaidMedia({
       media,
-      star_count: starCount,
-      chat_id: this.id,
+      starCount,
+      chatId: this.id,
       ...options,
     });
   }
 
   /**
    * Use this method to send general files.
-   * @param {Buffer | ReadStream | string} document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data
-   * @param {Omit<MethodParameters["sendDocument"], "document" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data
+   * @param {Omit<MethodParameters["sendDocument"], "document" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { document: import("../media/Document").Document }>} - On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
    */
   sendDocument(document, options = {}) {
     return this.client.sendDocument({
       document,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
 
   /**
    * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document).
-   * @param {Buffer | ReadStream | string} audio - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data.
-   * @param {Omit<MethodParameters["sendVideo"], "video" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} audio - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data.
+   * @param {Omit<MethodParameters["sendVideo"], "video" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { video: import("../media/Video").Video }>} - On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
    */
   sendVideo(video, options = {}) {
     return this.client.sendVideo({
       video,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
 
   /**
    * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound).
-   * @param {Buffer | ReadStream | string} animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data
-   * @param {Omit<MethodParameters["sendAnimation"], "animation" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data
+   * @param {Omit<MethodParameters["sendAnimation"], "animation" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { animation: import("../media/Animation").Animation }>} - On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
    */
   sendAnimation(animation, options = {}) {
     return this.client.sendAnimation({
       animation,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
 
   /**
    * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document).
-   * @param {Buffer | ReadStream | string} voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data
-   * @param {Omit<MethodParameters["sendVoice"], "voice" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data
+   * @param {Omit<MethodParameters["sendVoice"], "voice" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { voice: import("../media/Voice").Voice }>} - On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
    */
   sendVoice(voice, options = {}) {
     return this.client.sendVoice({
       voice,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
 
   /**
    * Use this method to send video messages.
-   * @param {Buffer | ReadStream | string} videoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported
-   * @param {Omit<MethodParameters["sendVideoNote"], "video_note" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} videoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported
+   * @param {Omit<MethodParameters["sendVideoNote"], "video_note" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { videNote: import("../media/VideoNote").VideoNote }>} - On success, the sent Message is returned.
    */
   sendVideoNote(videoNote, options = {}) {
     return this.client.sendVideoNote({
       video_note: videoNote,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -650,14 +650,14 @@ class Chat extends Base {
   /**
    * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type.
    * @param {ReadonlyArray<import("@telegram.ts/types").InputMediaAudio | import("@telegram.ts/types").InputMediaDocument | import("@telegram.ts/types").InputMediaPhoto | import("@telegram.ts/types").InputMediaVideo>} media - media
-   * @param {Omit<MethodParameters["sendMediaGroup"], "media" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendMediaGroup"], "media" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Array<Message & { audio: import("../media/Audio").Audio; document: import("../media/Document").Document; photo: import("../media/Photo").Photo; video: import("../media/Video").Video}>>} - On success, an array of Messages that were sent is returned.
    */
   sendMediaGroup(media, options = {}) {
     return this.client.sendMediaGroup({
       media,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -666,15 +666,15 @@ class Chat extends Base {
    * Use this method to send point on the map.
    * @param {number} latitude - Latitude of the location
    * @param {number} longitude - Longitude of the location
-   * @param {Omit<MethodParameters["sendLocation"], "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendLocation"], "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { location: import("../misc/Location").Location }>} - On success, the sent Message is returned.
    */
   sendLocation(latitude, longitude, options = {}) {
     return this.client.sendLocation({
       latitude,
       longitude,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -683,15 +683,15 @@ class Chat extends Base {
    * Use this method to send information about a venue.
    * @param {number} latitude - Latitude of the location
    * @param {number} llongitude - Longitude of the location
-   * @param {Omit<MethodParameters["sendVenue"], "latitude" | "longitude" | "chat_id" | "message_thread_id">} options- out parameters
+   * @param {Omit<MethodParameters["sendVenue"], "latitude" | "longitude" | "chatId" | "messageThreadId">} options- out parameters
    * @return {Promise<Message & { venue: import("../misc/Venue").Venue }>} - On success, the sent Message is returned.
    */
   sendVenue(latitude, longitude, options = {}) {
     return this.client.sendVenue({
       latitude,
       longitude,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -700,15 +700,15 @@ class Chat extends Base {
    * Use this method to send phone contacts.
    * @param {string} phoneNumber - Contact's phone number
    * @param {string} firstName - Contact's first name
-   * @param {Omit<MethodParameters["sendContact"], "phone_number" | "first_name" | "chat_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendContact"], "phoneNumber" | "firstName" | "chatId">} [options={}] - out parameters
    * @return {Promise<Message & { contact: import("../media/Contact").Contact }>} - On success, the sent Message is returned.
    */
   sendContact(phoneNumber, firstName, options = {}) {
     return this.client.sendContact({
-      phone_number: phoneNumber,
-      first_name: firstName,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      phoneNumber,
+      firstName,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -717,15 +717,15 @@ class Chat extends Base {
    * Use this method to send a native poll.
    * @param {string} question - Poll question, 1-300 characters
    * @param {import("@telegram.ts/types").InputPollOption[]} options - A list of 2-10 answer options
-   * @param {Omit<MethodParameters["sendPoll"], "question" | "options" | "chat_id" | "message_thread_id">} - out parameters
+   * @param {Omit<MethodParameters["sendPoll"], "question" | "options" | "chatId" | "messageThreadId">} - out parameters
    * @return {Promise<Message & { poll: import("../media/Poll").Poll }>} - On success, the sent Message is returned.
    */
   sendPoll(question, options, other = {}) {
     return this.client.sendPoll({
       question,
       options,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...other,
     });
   }
@@ -733,14 +733,14 @@ class Chat extends Base {
   /**
    * Use this method to send an animated emoji that will display a random value.
    * @param {string} emoji - Emoji on which the dice throw animation is based. Currently, must be one of "🎲", "🎯", "🏀", "⚽", "🎳", or "🎰". Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and values 1-64 for "🎰".
-   * @param {Omit<MethodParameters["sendDice"], "emoji" | "chat_id" | "message_thread_id">} - out parameters
+   * @param {Omit<MethodParameters["sendDice"], "emoji" | "chatId" | "messageThreadId">} - out parameters
    * @return {Promise<Message & { dice: import("../media/Dice").Dice }>} - On success, the sent Message is returned.
    */
   sendDice(emoji, options = {}) {
     return this.client.sendDice({
       emoji,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -753,22 +753,22 @@ class Chat extends Base {
   sendAction(action = "typing") {
     return this.client.sendChatAction({
       action,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
     });
   }
 
   /**
    * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers.
-   * @param {Buffer | ReadStream | string} sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL
-   * @param {Omit<MethodParameters["sendSticker"], "sticker" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL
+   * @param {Omit<MethodParameters["sendSticker"], "sticker" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { sticker: import("../media/Sticker").Sticker }>} - On success, the sent Message is returned.
    */
   sendSticker(sticker, options = {}) {
     return this.client.sendSticker({
       sticker,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -780,7 +780,7 @@ class Chat extends Base {
    * @param {string} payload - Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes
    * @param {string} currency - Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars
    * @param {import("@telegram.ts/types").LabeledPrice[]} prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars
-   * @param {Omit<MethodParameters["sendInvoice"], "title" | "description" | "payload" | "currency" | "prices" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendInvoice"], "title" | "description" | "payload" | "currency" | "prices" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { invoice: import("../invoice/Invoice").Invoice }>} - On success, the sent Message is returned.
    */
   sendInvoice(title, description, payload, currency, prices, options = {}) {
@@ -790,8 +790,8 @@ class Chat extends Base {
       payload,
       currency,
       prices,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }
@@ -799,14 +799,14 @@ class Chat extends Base {
   /**
    * Use this method to send a game.
    * @param {string} gameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games via BotFather.
-   * @param {Omit<MethodParameters["sendGame"], "game_short_name" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendGame"], "gameShortName" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { game: import("../game/Game").Game }>} - On success, the sent Message is returned.
    */
   sendGame(gameShortName, options = {}) {
     return this.client.sendGame({
-      game_short_name: gameShortName,
-      chat_id: this.id,
-      message_thread_id: this.threadId,
+      gameShortName,
+      chatId: this.id,
+      messageThreadId: this.threadId,
       ...options,
     });
   }

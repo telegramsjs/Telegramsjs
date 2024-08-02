@@ -24,10 +24,10 @@ class Forum extends Base {
    */
   edit(name, customEmojiId) {
     return this.client.editForumTopic({
-      chat_id: this.chatId,
-      message_thread_id: this.threadId,
+      chatId: this.chatId,
+      messageThreadId: this.threadId,
       name,
-      icon_custom_emoji_id: customEmojiId,
+      iconCustomEmojiId: customEmojiId,
     });
   }
 

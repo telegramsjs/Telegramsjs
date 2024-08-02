@@ -47,12 +47,12 @@ class CallbackQuery extends Base {
   /**
    * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen
    * @param {string} text - Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
-   * @param {Omit<MethodParameters["answerCallbackQuery"], "callback_query_id" | "text">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["answerCallbackQuery"], "callbackQueryId" | "text">} [options={}] - out parameters
    * @return {Promise<true>} - On success, True is returned.
    */
   send(text, options = {}) {
     return this.client.answerCallbackQuery({
-      callback_query_id: this.id,
+      callbackQueryId: this.id,
       text,
       ...options,
     });
@@ -67,11 +67,11 @@ class CallbackQuery extends Base {
    */
   showAlert(text, url, cacheTime) {
     return this.client.answerCallbackQuery({
-      callback_query_id: this.id,
-      show_alert: true,
+      callbackQueryId: this.id,
+      showAlert: true,
       text,
       url,
-      cache_time: cacheTime,
+      cacheTime: cacheTime,
     });
   }
 }

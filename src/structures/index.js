@@ -71,6 +71,7 @@ module.exports.Document = require("./media/Document").Document;
 module.exports.Photo = require("./media/Photo").Photo;
 module.exports.Poll = require("./media/Poll").Poll;
 module.exports.Sticker = require("./media/Sticker").Sticker;
+module.exports.StickerSet = require("./media/StickerSet").StickerSet;
 module.exports.Video = require("./media/Video").Video;
 module.exports.VideoNote = require("./media/VideoNote").VideoNote;
 module.exports.Voice = require("./media/Voice").Voice;

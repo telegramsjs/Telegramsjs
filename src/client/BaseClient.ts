@@ -21,6 +21,7 @@ import {
   ChatMember,
   Poll,
   Sticker,
+  StickerSet,
   StarTransactions,
   ChatInviteLink,
 } from "../structures/index";
@@ -30,7 +31,8 @@ import {
 } from "../util/ChatPermissions";
 import { toApiFormat } from "../util/ApiPermissions";
 import type {
-  MethodsReturnType,
+  MethodsApiReturnType,
+  MethodsLibReturnType,
   MethodParameters,
   PossiblyAsync,
 } from "../types";
@@ -238,7 +240,7 @@ class BaseClient extends EventEmitter {
   1. This method will not work if an outgoing webhook is set up.
   2. In order to avoid getting duplicate updates, recalculate offset after each server response. */
   async getUpdates(params?: MethodParameters["getUpdates"]) {
-    return await this.apiRequest.get<MethodsReturnType["getUpdates"]>(
+    return await this.apiRequest.get<MethodsApiReturnType["getUpdates"]>(
       "getUpdates",
       params,
     );
@@ -254,270 +256,317 @@ class BaseClient extends EventEmitter {
   3. Ports currently supported for Webhooks: 443, 80, 88, 8443.
 
   If you're having any trouble setting up webhooks, please check out this amazing guide to webhooks. */
-  async setWebhook(params: MethodParameters["setWebhook"]) {
-    return await this.apiRequest.get<MethodsReturnType["setWebhook"]>(
+  async setWebhook(
+    params: MethodParameters["setWebhook"],
+  ): Promise<MethodsLibReturnType["setWebhook"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setWebhook"]>(
       "setWebhook",
       params,
     );
   }
 
   /** A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object. */
-  async getMe() {
+  async getMe(): Promise<MethodsLibReturnType["getMe"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["getMe"]>("getMe")
+      .get<MethodsApiReturnType["getMe"]>("getMe")
       .then((res) => new ClientUser(this, res));
   }
 
   /** Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters. */
-  async logOut() {
-    return await this.apiRequest.get<MethodsReturnType["logOut"]>("logOut");
+  async logOut(): Promise<MethodsLibReturnType["logOut"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["logOut"]>("logOut");
   }
 
   /** Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success. Requires no parameters. */
-  async close() {
-    return await this.apiRequest.get<MethodsReturnType["close"]>("close");
+  async close(): Promise<MethodsLibReturnType["close"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["close"]>("close");
   }
 
   /** Use this method to remove webhook integration if you decide to switch back to getUpdates. Returns True on success. */
-  async deleteWebhook(params?: boolean) {
-    return await this.apiRequest.get<MethodsReturnType["deleteWebhook"]>(
+  async deleteWebhook(
+    dropPendingUpdates?: boolean,
+  ): Promise<MethodsLibReturnType["deleteWebhook"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["deleteWebhook"]>(
       "deleteWebhook",
       {
-        drop_pending_updates: params,
+        dropPendingUpdates,
       },
     );
   }
 
   /** Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty. */
-  async getWebhookInfo() {
+  async getWebhookInfo(): Promise<MethodsLibReturnType["getWebhookInfo"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["getWebhookInfo"]>("getWebhookInfo")
+      .get<MethodsApiReturnType["getWebhookInfo"]>("getWebhookInfo")
       .then((res) => new WebhookInfo(this, res));
   }
 
   /** Use this method to send text messages. On success, the sent Message is returned. */
-  async sendMessage(params: MethodParameters["sendMessage"]) {
+  async sendMessage(
+    params: MethodParameters["sendMessage"],
+  ): Promise<MethodsLibReturnType["sendMessage"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendMessage"]>("sendMessage", params)
+      .get<MethodsApiReturnType["sendMessage"]>("sendMessage", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendMessage"];
       });
   }
 
   /** Use this method to send photos. On success, the sent Message is returned. */
-  async sendPhoto(params: MethodParameters["sendPhoto"]) {
+  async sendPhoto(
+    params: MethodParameters["sendPhoto"],
+  ): Promise<MethodsLibReturnType["sendPhoto"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendPhoto"]>("sendPhoto", params)
+      .get<MethodsApiReturnType["sendPhoto"]>("sendPhoto", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendPhoto"];
       });
   }
 
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
 
   For sending voice messages, use the sendVoice method instead. */
-  async sendAudio(params: MethodParameters["sendAudio"]) {
+  async sendAudio(
+    params: MethodParameters["sendAudio"],
+  ): Promise<MethodsLibReturnType["sendAudio"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendAudio"]>("sendAudio", params)
+      .get<MethodsApiReturnType["sendAudio"]>("sendAudio", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendAudio"];
       });
   }
 
   /** Use this method to send paid media to channel chats. On success, the sent Message is returned. */
-  async sendPaidMedia(params: MethodParameters["sendPaidMedia"]) {
+  async sendPaidMedia(
+    params: MethodParameters["sendPaidMedia"],
+  ): Promise<MethodsLibReturnType["sendPaidMedia"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendPaidMedia"]>("sendPaidMedia", params)
+      .get<MethodsApiReturnType["sendPaidMedia"]>("sendPaidMedia", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendPaidMedia"];
       });
   }
 
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
-  async sendDocument(params: MethodParameters["sendDocument"]) {
+  async sendDocument(
+    params: MethodParameters["sendDocument"],
+  ): Promise<MethodsLibReturnType["sendDocument"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendDocument"]>("sendDocument", params)
+      .get<MethodsApiReturnType["sendDocument"]>("sendDocument", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendDocument"];
       });
   }
 
   /** Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future. */
-  async sendVideo(params: MethodParameters["sendVideo"]) {
+  async sendVideo(
+    params: MethodParameters["sendVideo"],
+  ): Promise<MethodsLibReturnType["sendVideo"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendVideo"]>("sendVideo", params)
+      .get<MethodsApiReturnType["sendVideo"]>("sendVideo", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendVideo"];
       });
   }
 
   /** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future. */
-  async sendAnimation(params: MethodParameters["sendAnimation"]) {
+  async sendAnimation(
+    params: MethodParameters["sendAnimation"],
+  ): Promise<MethodsLibReturnType["sendAnimation"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendAnimation"]>("sendAnimation", params)
+      .get<MethodsApiReturnType["sendAnimation"]>("sendAnimation", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendAnimation"];
       });
   }
 
   /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
-  async sendVoice(params: MethodParameters["sendVoice"]) {
+  async sendVoice(
+    params: MethodParameters["sendVoice"],
+  ): Promise<MethodsLibReturnType["sendVoice"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendVoice"]>("sendVoice", params)
+      .get<MethodsApiReturnType["sendVoice"]>("sendVoice", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendVoice"];
       });
   }
 
   /** Use this method to send video messages. On success, the sent Message is returned.
   As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. */
-  async sendVideoNote(params: MethodParameters["sendVideoNote"]) {
+  async sendVideoNote(
+    params: MethodParameters["sendVideoNote"],
+  ): Promise<MethodsLibReturnType["sendVideoNote"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendVideoNote"]>("sendVideoNote", params)
+      .get<MethodsApiReturnType["sendVideoNote"]>("sendVideoNote", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendVideoNote"];
       });
   }
 
   /** Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned. */
-  async sendMediaGroup(params: MethodParameters["sendMediaGroup"]) {
+  async sendMediaGroup(
+    params: MethodParameters["sendMediaGroup"],
+  ): Promise<MethodsLibReturnType["sendMediaGroup"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendMediaGroup"]>("sendMediaGroup", params)
-      .then((res) => res.map((media) => new Message(this, media)));
+      .get<MethodsApiReturnType["sendMediaGroup"]>("sendMediaGroup", params)
+      .then(
+        (res) =>
+          res.map(
+            (media) => new Message(this, media),
+          ) as MethodsLibReturnType["sendMediaGroup"],
+      );
   }
 
   /** Use this method to send point on the map. On success, the sent Message is returned. */
-  async sendLocation(params: MethodParameters["sendLocation"]) {
+  async sendLocation(
+    params: MethodParameters["sendLocation"],
+  ): Promise<MethodsLibReturnType["sendLocation"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendLocation"]>("sendLocation", params)
+      .get<MethodsApiReturnType["sendLocation"]>("sendLocation", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendLocation"];
       });
   }
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
-  async sendVenue(params: MethodParameters["sendVenue"]) {
+  async sendVenue(
+    params: MethodParameters["sendVenue"],
+  ): Promise<MethodsLibReturnType["sendVenue"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendVenue"]>("sendVenue", params)
+      .get<MethodsApiReturnType["sendVenue"]>("sendVenue", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendVenue"];
       });
   }
 
   /** Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned. */
-  async forwardMessage(params: MethodParameters["forwardMessage"]) {
+  async forwardMessage(
+    params: MethodParameters["forwardMessage"],
+  ): Promise<MethodsLibReturnType["forwardMessage"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["forwardMessage"]>("forwardMessage", params)
+      .get<MethodsApiReturnType["forwardMessage"]>("forwardMessage", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
         return message;
       });
   }
 
   /** Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned. */
-  async forwardMessages(params: MethodParameters["forwardMessages"]) {
+  async forwardMessages(
+    params: MethodParameters["forwardMessages"],
+  ): Promise<MethodsLibReturnType["forwardMessages"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["forwardMessages"]>("forwardMessages", params)
+      .get<MethodsApiReturnType["forwardMessages"]>("forwardMessages", params)
       .then((res) => res.map((msg) => msg.message_id));
   }
 
   /** Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success. */
-  async copyMessage(params: MethodParameters["copyMessage"]) {
+  async copyMessage(
+    params: MethodParameters["copyMessage"],
+  ): Promise<MethodsLibReturnType["copyMessage"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["copyMessage"]>("copyMessage", params)
+      .get<MethodsApiReturnType["copyMessage"]>("copyMessage", params)
       .then((res) => res.message_id);
   }
 
   /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
-  async copyMessages(params: MethodParameters["copyMessages"]) {
+  async copyMessages(
+    params: MethodParameters["copyMessages"],
+  ): Promise<MethodsLibReturnType["copyMessages"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["copyMessages"]>("copyMessages", params)
+      .get<MethodsApiReturnType["copyMessages"]>("copyMessages", params)
       .then((res) => res.map((msg) => msg.message_id));
   }
 
   /** Use this method to send phone contacts. On success, the sent Message is returned. */
-  async sendContact(params: MethodParameters["sendContact"]) {
+  async sendContact(
+    params: MethodParameters["sendContact"],
+  ): Promise<MethodsLibReturnType["sendContact"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendContact"]>("sendContact", params)
+      .get<MethodsApiReturnType["sendContact"]>("sendContact", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendContact"];
       });
   }
 
   /** Use this method to send a native poll. On success, the sent Message is returned. */
-  async sendPoll(params: MethodParameters["sendPoll"]) {
+  async sendPoll(
+    params: MethodParameters["sendPoll"],
+  ): Promise<MethodsLibReturnType["sendPoll"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendPoll"]>("sendPoll", params)
+      .get<MethodsApiReturnType["sendPoll"]>("sendPoll", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendPoll"];
       });
   }
 
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
-  async sendDice(params: MethodParameters["sendDice"]) {
+  async sendDice(
+    params: MethodParameters["sendDice"],
+  ): Promise<MethodsLibReturnType["sendDice"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendDice"]>("sendDice", params)
+      .get<MethodsApiReturnType["sendDice"]>("sendDice", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendDice"];
       });
   }
 
@@ -526,26 +575,31 @@ class BaseClient extends EventEmitter {
   Example: The ImageBot needs some time to process a request and upload the image. Instead of sending a text message along the lines of "Retrieving image, please wait...", the bot may use sendChatAction with action = upload_photo. The user will see a "sending photo" status for the bot.
 
   We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive. */
-  async sendChatAction(params: MethodParameters["sendChatAction"]) {
-    return await this.apiRequest.get<MethodsReturnType["sendChatAction"]>(
+  async sendChatAction(
+    params: MethodParameters["sendChatAction"],
+  ): Promise<MethodsLibReturnType["sendChatAction"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["sendChatAction"]>(
       "sendChatAction",
       params,
     );
   }
 
   /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
-  async setMessageReaction(params: MethodParameters["setMessageReaction"]) {
-    return await this.apiRequest.get<MethodsReturnType["setMessageReaction"]>(
-      "setMessageReaction",
-      params,
-    );
+  async setMessageReaction(
+    params: MethodParameters["setMessageReaction"],
+  ): Promise<MethodsLibReturnType["setMessageReaction"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["setMessageReaction"]
+    >("setMessageReaction", params);
   }
 
   /** Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object. */
-  async getUserProfilePhotos(params: MethodParameters["getUserProfilePhotos"]) {
+  async getUserProfilePhotos(
+    params: MethodParameters["getUserProfilePhotos"],
+  ): Promise<MethodsLibReturnType["getUserProfilePhotos"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getUserProfilePhotos"]
+        MethodsApiReturnType["getUserProfilePhotos"]
       >("getUserProfilePhotos", params)
       .then((res) => new UserProfilePhotos(this, res));
   }
@@ -553,36 +607,41 @@ class BaseClient extends EventEmitter {
   /** Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
 
   Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
-  async getFile(file_id: string) {
-    const response = await this.apiRequest.get<MethodsReturnType["getFile"]>(
+  async getFile(fileId: string): Promise<MethodsLibReturnType["getFile"]> {
+    const response = await this.apiRequest.get<MethodsApiReturnType["getFile"]>(
       "getFile",
       {
-        file_id,
+        fileId,
       },
     );
     return new InputFile(this, response);
   }
 
-  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
-   * @deprecated Use `banChatMember` instead. */
-  async kickChatMember(params: MethodParameters["kickChatMember"]) {
-    return await this.apiRequest.get<MethodsReturnType["kickChatMember"]>(
+  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
+  async kickChatMember(
+    params: MethodParameters["kickChatMember"],
+  ): Promise<MethodsLibReturnType["kickChatMember"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["kickChatMember"]>(
       "kickChatMember",
       params,
     );
   }
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async banChatMember(params: MethodParameters["banChatMember"]) {
-    return await this.apiRequest.get<MethodsReturnType["banChatMember"]>(
+  async banChatMember(
+    params: MethodParameters["banChatMember"],
+  ): Promise<MethodsLibReturnType["banChatMember"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["banChatMember"]>(
       "banChatMember",
       params,
     );
   }
 
   /** Use this method to unban a previously banned user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't want this, use the parameter only_if_banned. Returns True on success. */
-  async unbanChatMember(params: MethodParameters["unbanChatMember"]) {
-    return await this.apiRequest.get<MethodsReturnType["unbanChatMember"]>(
+  async unbanChatMember(
+    params: MethodParameters["unbanChatMember"],
+  ): Promise<MethodsLibReturnType["unbanChatMember"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["unbanChatMember"]>(
       "unbanChatMember",
       params,
     );
@@ -593,12 +652,14 @@ class BaseClient extends EventEmitter {
     params: Omit<MethodParameters["restrictChatMember"], "permissions"> & {
       permissions: ChatPermissionFlags;
     },
-  ) {
+  ): Promise<MethodsLibReturnType["restrictChatMember"]> {
     const permissions = new ChatPermissions(params.permissions);
-    return await this.apiRequest.get<MethodsReturnType["restrictChatMember"]>(
-      "restrictChatMember",
-      { ...params, permissions: toApiFormat(permissions.toObject()) },
-    );
+    return await this.apiRequest.get<
+      MethodsApiReturnType["restrictChatMember"]
+    >("restrictChatMember", {
+      ...params,
+      permissions: toApiFormat(permissions.toObject()),
+    });
   }
 
   /** Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user. Returns True on success. */
@@ -607,9 +668,9 @@ class BaseClient extends EventEmitter {
       MethodParameters["promoteChatMember"],
       keyof ChatPermissionFlags
     > & { permissions: ChatPermissionFlags },
-  ) {
+  ): Promise<MethodsLibReturnType["promoteChatMember"]> {
     const permissions = new ChatPermissions(params.permissions);
-    return await this.apiRequest.get<MethodsReturnType["promoteChatMember"]>(
+    return await this.apiRequest.get<MethodsApiReturnType["promoteChatMember"]>(
       "promoteChatMember",
       { ...params, ...toApiFormat(permissions.toObject()) },
     );
@@ -618,26 +679,31 @@ class BaseClient extends EventEmitter {
   /** Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success. */
   async setChatAdministratorCustomTitle(
     params: MethodParameters["setChatAdministratorCustomTitle"],
-  ) {
+  ): Promise<MethodsLibReturnType["setChatAdministratorCustomTitle"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["setChatAdministratorCustomTitle"]
+      MethodsApiReturnType["setChatAdministratorCustomTitle"]
     >("setChatAdministratorCustomTitle", params);
   }
 
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async banChatSenderChat(chat_id: number | string, sender_chat_id: number) {
-    return await this.apiRequest.get<MethodsReturnType["banChatSenderChat"]>(
+  async banChatSenderChat(
+    chatId: number | string,
+    senderChatId: number,
+  ): Promise<MethodsLibReturnType["banChatSenderChat"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["banChatSenderChat"]>(
       "banChatSenderChat",
-      { chat_id, sender_chat_id },
+      { chatId, senderChatId },
     );
   }
 
   /** Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async unbanChatSenderChat(chat_id: number | string, sender_chat_id: number) {
-    return await this.apiRequest.get<MethodsReturnType["unbanChatSenderChat"]>(
-      "unbanChatSenderChat",
-      { chat_id, sender_chat_id },
-    );
+  async unbanChatSenderChat(
+    chatId: number | string,
+    senderChatId: number,
+  ): Promise<MethodsLibReturnType["unbanChatSenderChat"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["unbanChatSenderChat"]
+    >("unbanChatSenderChat", { chatId, senderChatId });
   }
 
   /** Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success. */
@@ -645,672 +711,830 @@ class BaseClient extends EventEmitter {
     params: Omit<MethodParameters["setChatPermissions"], "permissions"> & {
       permissions?: ChatPermissionFlags;
     },
-  ) {
+  ): Promise<MethodsLibReturnType["setChatPermissions"]> {
     const permissions = new ChatPermissions(params.permissions);
-    return await this.apiRequest.get<MethodsReturnType["setChatPermissions"]>(
-      "setChatPermissions",
-      {
-        ...params,
-        permissions: toApiFormat(permissions.toObject()),
-      },
-    );
+    return await this.apiRequest.get<
+      MethodsApiReturnType["setChatPermissions"]
+    >("setChatPermissions", {
+      ...params,
+      permissions: toApiFormat(permissions.toObject()),
+    });
   }
 
   /** Use this method to generate a new primary invite link for a chat; any previously generated primary link is revoked. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the new invite link as String on success.
 
   Note: Each administrator in a chat generates their own invite links. Bots can't use invite links generated by other administrators. If you want your bot to work with invite links, it will need to generate its own link using exportChatInviteLink or by calling the getChat method. If your bot needs to generate a new primary invite link replacing its previous one, use exportChatInviteLink again. */
-  async exportChatInviteLink(chat_id?: number | string) {
-    return await this.apiRequest.get<MethodsReturnType["exportChatInviteLink"]>(
-      "exportChatInviteLink",
-      { chat_id },
-    );
+  async exportChatInviteLink(
+    chatId?: number | string,
+  ): Promise<MethodsLibReturnType["exportChatInviteLink"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["exportChatInviteLink"]
+    >("exportChatInviteLink", { chatId });
   }
 
   /** Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as ChatInviteLink object. */
-  async createChatInviteLink(params: MethodParameters["createChatInviteLink"]) {
+  async createChatInviteLink(
+    params: MethodParameters["createChatInviteLink"],
+  ): Promise<MethodsLibReturnType["createChatInviteLink"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["createChatInviteLink"]
+        MethodsApiReturnType["createChatInviteLink"]
       >("createChatInviteLink", params)
       .then((res) => new ChatInviteLink(this, res));
   }
 
   /** Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the edited invite link as a ChatInviteLink object. */
-  async editChatInviteLink(params: MethodParameters["editChatInviteLink"]) {
+  async editChatInviteLink(
+    params: MethodParameters["editChatInviteLink"],
+  ): Promise<MethodsLibReturnType["editChatInviteLink"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["editChatInviteLink"]
+        MethodsApiReturnType["editChatInviteLink"]
       >("editChatInviteLink", params)
       .then((res) => new ChatInviteLink(this, res));
   }
 
   /** Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object. */
-  async revokeChatInviteLink(invite_link: string, chat_id?: number | string) {
+  async revokeChatInviteLink(
+    inviteLink: string,
+    chatId?: number | string,
+  ): Promise<MethodsLibReturnType["revokeChatInviteLink"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["revokeChatInviteLink"]
-      >("revokeChatInviteLink", { invite_link, chat_id })
+        MethodsApiReturnType["revokeChatInviteLink"]
+      >("revokeChatInviteLink", { inviteLink, chatId })
       .then((res) => new ChatInviteLink(this, res));
   }
 
   /** Use this method to approve a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
-  async approveChatJoinRequest(user_id: number, chat_id?: number | string) {
+  async approveChatJoinRequest(
+    userId: number,
+    chatId?: number | string,
+  ): Promise<MethodsLibReturnType["approveChatJoinRequest"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["approveChatJoinRequest"]
-    >("approveChatJoinRequest", { user_id, chat_id });
+      MethodsApiReturnType["approveChatJoinRequest"]
+    >("approveChatJoinRequest", { userId, chatId });
   }
 
   /** Use this method to decline a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
-  async declineChatJoinRequest(chat_id: number | string, user_id: number) {
+  async declineChatJoinRequest(
+    chatId: number | string,
+    userId: number,
+  ): Promise<MethodsLibReturnType["declineChatJoinRequest"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["declineChatJoinRequest"]
-    >("declineChatJoinRequest", { chat_id, user_id });
+      MethodsApiReturnType["declineChatJoinRequest"]
+    >("declineChatJoinRequest", { chatId, userId });
   }
 
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatPhoto(
-    chat_id: number | string,
+    chatId: number | string,
     photo: Buffer | ReadStream | string,
-  ) {
-    return await this.apiRequest.get<MethodsReturnType["setChatPhoto"]>(
+  ): Promise<MethodsLibReturnType["setChatPhoto"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setChatPhoto"]>(
       "setChatPhoto",
-      { chat_id, photo },
+      { chatId, photo },
     );
   }
 
   /** Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async deleteChatPhoto(chat_id: number | string) {
-    return await this.apiRequest.get<MethodsReturnType["deleteChatPhoto"]>(
+  async deleteChatPhoto(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["deleteChatPhoto"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["deleteChatPhoto"]>(
       "deleteChatPhoto",
-      { chat_id },
+      { chatId },
     );
   }
 
   /** Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async setChatTitle(chat_id: number | string, title: string) {
-    return await this.apiRequest.get<MethodsReturnType["setChatTitle"]>(
+  async setChatTitle(
+    chatId: number | string,
+    title: string,
+  ): Promise<MethodsLibReturnType["setChatTitle"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setChatTitle"]>(
       "setChatTitle",
-      { chat_id, title },
+      { chatId, title },
     );
   }
 
   /** Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async setChatDescription(chat_id: number, description?: string) {
-    return await this.apiRequest.get<MethodsReturnType["setChatDescription"]>(
-      "setChatDescription",
-      { chat_id, description },
-    );
+  async setChatDescription(
+    chatId: number,
+    description?: string,
+  ): Promise<MethodsLibReturnType["setChatDescription"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["setChatDescription"]
+    >("setChatDescription", { chatId, description });
   }
 
   /** Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
-  async pinChatMessage(params: MethodParameters["pinChatMessage"]) {
-    return await this.apiRequest.get<MethodsReturnType["pinChatMessage"]>(
+  async pinChatMessage(
+    params: MethodParameters["pinChatMessage"],
+  ): Promise<MethodsLibReturnType["pinChatMessage"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["pinChatMessage"]>(
       "pinChatMessage",
       params,
     );
   }
 
   /** Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
-  async unpinChatMessage(chat_id: number | string, message_id?: number) {
-    return await this.apiRequest.get<MethodsReturnType["unpinChatMessage"]>(
+  async unpinChatMessage(
+    chatId: number | string,
+    messageId?: number,
+  ): Promise<MethodsLibReturnType["unpinChatMessage"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["unpinChatMessage"]>(
       "unpinChatMessage",
-      { chat_id, message_id },
+      { chatId, messageId },
     );
   }
 
   /** Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
-  async unpinAllChatMessages(chat_id: number | string) {
-    return await this.apiRequest.get<MethodsReturnType["unpinAllChatMessages"]>(
-      "unpinAllChatMessages",
-      { chat_id },
-    );
+  async unpinAllChatMessages(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["unpinAllChatMessages"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["unpinAllChatMessages"]
+    >("unpinAllChatMessages", { chatId });
   }
 
   /** Use this method for your bot to leave a group, supergroup or channel. Returns True on success. */
-  async leaveChat(chat_id: number | string) {
-    return await this.apiRequest.get<MethodsReturnType["leaveChat"]>(
+  async leaveChat(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["leaveChat"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["leaveChat"]>(
       "leaveChat",
       {
-        chat_id,
+        chatId,
       },
     );
   }
 
   /** Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success. */
-  async getChat(chat_id: number | string) {
+  async getChat(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["getChat"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["getChat"]>("getChat", {
-        chat_id,
+      .get<MethodsApiReturnType["getChat"]>("getChat", {
+        chatId,
       })
-      .then((res) => new ChatFullInfo(this, res));
+      .then(
+        (res) =>
+          new ChatFullInfo(
+            this,
+            res,
+          ) as unknown as MethodsLibReturnType["getChat"],
+      );
   }
 
   /** Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects. */
-  async getChatAdministrators(chat_id: number | string) {
+  async getChatAdministrators(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["getChatAdministrators"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getChatAdministrators"]
-      >("getChatAdministrators", { chat_id })
-      .then((res) => res.map((user) => new ChatMember(this, chat_id, user)));
+        MethodsApiReturnType["getChatAdministrators"]
+      >("getChatAdministrators", { chatId })
+      .then(
+        (res) =>
+          res.map(
+            (user) => new ChatMember(this, chatId, user),
+          ) as unknown as MethodsLibReturnType["getChatAdministrators"],
+      );
   }
 
   /** Use this method to get the number of members in a chat. Returns Int on success. */
-  async getChatMemberCount(chat_id: number | string) {
-    return await this.apiRequest.get<MethodsReturnType["getChatMemberCount"]>(
-      "getChatMemberCount",
-      { chat_id },
-    );
+  async getChatMemberCount(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["getChatMemberCount"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["getChatMemberCount"]
+    >("getChatMemberCount", { chatId });
   }
 
   /** Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object. */
-  async getUserChatBoosts(chat_id: number | string, user_id: number) {
+  async getUserChatBoosts(
+    chatId: number | string,
+    userId: number,
+  ): Promise<MethodsLibReturnType["getUserChatBoosts"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getUserChatBoosts"]
-      >("getUserChatBoosts", { chat_id, user_id })
+        MethodsApiReturnType["getUserChatBoosts"]
+      >("getUserChatBoosts", { chatId, userId })
       .then((res) => new UserChatBoosts(this, res));
   }
 
   /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
-  async getBusinessConnection(business_connection_id: string) {
+  async getBusinessConnection(
+    businessConnectionId: string,
+  ): Promise<MethodsLibReturnType["getBusinessConnection"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getBusinessConnection"]
-      >("getBusinessConnection", { business_connection_id })
+        MethodsApiReturnType["getBusinessConnection"]
+      >("getBusinessConnection", { businessConnectionId })
       .then((res) => new BusinessConnection(this, res));
   }
 
   /** Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success. */
-  async getChatMember(chat_id: number | string, user_id: number) {
+  async getChatMember(
+    chatId: number | string,
+    userId: number,
+  ): Promise<MethodsLibReturnType["getChatMember"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getChatMember"]
-      >("getChatMember", { chat_id, user_id })
-      .then((res) => new ChatMember(this, chat_id, res));
+        MethodsApiReturnType["getChatMember"]
+      >("getChatMember", { chatId, userId })
+      .then((res) => new ChatMember(this, chatId, res));
   }
 
   /** Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method. Returns True on success. */
-  async setChatStickerSet(sticker_set_name: string, chat_id?: number | string) {
-    return await this.apiRequest.get<MethodsReturnType["setChatStickerSet"]>(
+  async setChatStickerSet(
+    stickerSetName: string,
+    chatId?: number | string,
+  ): Promise<MethodsLibReturnType["setChatStickerSet"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setChatStickerSet"]>(
       "setChatStickerSet",
-      { sticker_set_name, chat_id },
+      { stickerSetName, chatId },
     );
   }
 
   /** Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method. Returns True on success. */
-  async deleteChatStickerSet(chat_id?: number | string) {
-    return await this.apiRequest.get<MethodsReturnType["deleteChatStickerSet"]>(
-      "deleteChatStickerSet",
-      { chat_id },
-    );
+  async deleteChatStickerSet(
+    chatId?: number | string,
+  ): Promise<MethodsLibReturnType["deleteChatStickerSet"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["deleteChatStickerSet"]
+    >("deleteChatStickerSet", { chatId });
   }
 
   /** Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects. */
-  async getForumTopicIconStickers() {
+  async getForumTopicIconStickers(): Promise<
+    MethodsLibReturnType["getForumTopicIconStickers"]
+  > {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getForumTopicIconStickers"]
+        MethodsApiReturnType["getForumTopicIconStickers"]
       >("getForumTopicIconStickers")
-      .then((res) => res.map((sticker) => new Sticker(this, sticker)));
+      .then(
+        (res) =>
+          res.map(
+            (sticker) => new Sticker(this, sticker),
+          ) as unknown as MethodsLibReturnType["getForumTopicIconStickers"],
+      );
   }
 
   /** Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object. */
-  async createForumTopic(params: MethodParameters["createForumTopic"]) {
+  async createForumTopic(
+    params: MethodParameters["createForumTopic"],
+  ): Promise<MethodsLibReturnType["createForumTopic"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["createForumTopic"]>("createForumTopic")
+      .get<MethodsApiReturnType["createForumTopic"]>("createForumTopic")
       .then(
         (res) =>
-          new ForumTopic(this, res.message_thread_id, params.chat_id, res),
+          new ForumTopic(this, res.message_thread_id, params.chatId, res),
       );
   }
 
   /** Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
-  async editForumTopic(params: MethodParameters["editForumTopic"]) {
-    return await this.apiRequest.get<MethodsReturnType["editForumTopic"]>(
+  async editForumTopic(
+    params: MethodParameters["editForumTopic"],
+  ): Promise<MethodsLibReturnType["editForumTopic"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["editForumTopic"]>(
       "editForumTopic",
       params,
     );
   }
 
   /** Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
-  async closeForumTopic(chat_id: number | string, message_thread_id: number) {
-    return await this.apiRequest.get<MethodsReturnType["closeForumTopic"]>(
+  async closeForumTopic(
+    chatId: number | string,
+    messageThreadId: number,
+  ): Promise<MethodsLibReturnType["closeForumTopic"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["closeForumTopic"]>(
       "closeForumTopic",
-      { chat_id, message_thread_id },
+      { chatId, messageThreadId },
     );
   }
 
   /** Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
-  async reopenForumTopic(chat_id: number | string, message_thread_id: number) {
-    return await this.apiRequest.get<MethodsReturnType["reopenForumTopic"]>(
+  async reopenForumTopic(
+    chatId: number | string,
+    messageThreadId: number,
+  ): Promise<MethodsLibReturnType["reopenForumTopic"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["reopenForumTopic"]>(
       "reopenForumTopic",
-      { chat_id, message_thread_id },
+      { chatId, messageThreadId },
     );
   }
 
   /** Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success. */
-  async deleteForumTopic(chat_id: number | string, message_thread_id: number) {
-    return await this.apiRequest.get<MethodsReturnType["deleteForumTopic"]>(
+  async deleteForumTopic(
+    chatId: number | string,
+    messageThreadId: number,
+  ): Promise<MethodsLibReturnType["deleteForumTopic"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["deleteForumTopic"]>(
       "deleteForumTopic",
-      { chat_id, message_thread_id },
+      { chatId, messageThreadId },
     );
   }
 
   /** Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success. */
   async unpinAllForumTopicMessages(
-    chat_id: number | string,
-    message_thread_id: number,
-  ) {
+    chatId: number | string,
+    messageThreadId: number,
+  ): Promise<MethodsLibReturnType["unpinAllForumTopicMessages"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["unpinAllForumTopicMessages"]
-    >("unpinAllForumTopicMessages", { chat_id, message_thread_id });
+      MethodsApiReturnType["unpinAllForumTopicMessages"]
+    >("unpinAllForumTopicMessages", { chatId, messageThreadId });
   }
 
   /** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success. */
-  async editGeneralForumTopic(chat_id: number | string, name: string) {
+  async editGeneralForumTopic(
+    chatId: number | string,
+    name: string,
+  ): Promise<MethodsLibReturnType["editGeneralForumTopic"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["editGeneralForumTopic"]
-    >("editGeneralForumTopic", { chat_id, name });
+      MethodsApiReturnType["editGeneralForumTopic"]
+    >("editGeneralForumTopic", { chatId, name });
   }
 
   /** Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
-  async closeGeneralForumTopic(chat_id: number | string) {
+  async closeGeneralForumTopic(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["closeGeneralForumTopic"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["closeGeneralForumTopic"]
-    >("closeGeneralForumTopic", { chat_id });
+      MethodsApiReturnType["closeGeneralForumTopic"]
+    >("closeGeneralForumTopic", { chatId });
   }
 
   /** Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success. */
-  async reopenGeneralForumTopic(chat_id: number | string) {
+  async reopenGeneralForumTopic(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["reopenGeneralForumTopic"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["reopenGeneralForumTopic"]
-    >("reopenGeneralForumTopic", { chat_id });
+      MethodsApiReturnType["reopenGeneralForumTopic"]
+    >("reopenGeneralForumTopic", { chatId });
   }
 
   /** Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success. */
-  async hideGeneralForumTopic(chat_id: number | string) {
+  async hideGeneralForumTopic(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["hideGeneralForumTopic"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["hideGeneralForumTopic"]
-    >("hideGeneralForumTopic", { chat_id });
+      MethodsApiReturnType["hideGeneralForumTopic"]
+    >("hideGeneralForumTopic", { chatId });
   }
 
   /** Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
-  async unhideGeneralForumTopic(chat_id: string | number) {
+  async unhideGeneralForumTopic(
+    chatId: string | number,
+  ): Promise<MethodsLibReturnType["unhideGeneralForumTopic"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["unhideGeneralForumTopic"]
-    >("unhideGeneralForumTopic", { chat_id });
+      MethodsApiReturnType["unhideGeneralForumTopic"]
+    >("unhideGeneralForumTopic", { chatId });
   }
 
   /** Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
    */
-  async unpinAllGeneralForumTopicMessages(chat_id: string | number) {
+  async unpinAllGeneralForumTopicMessages(
+    chatId: string | number,
+  ): Promise<MethodsLibReturnType["unpinAllGeneralForumTopicMessages"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["unpinAllGeneralForumTopicMessages"]
-    >("unpinAllGeneralForumTopicMessages", { chat_id });
+      MethodsApiReturnType["unpinAllGeneralForumTopicMessages"]
+    >("unpinAllGeneralForumTopicMessages", { chatId });
   }
 
   /** Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
 
   Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via @BotFather and accept the terms. Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter. */
-  async answerCallbackQuery(params: MethodParameters["answerCallbackQuery"]) {
-    return await this.apiRequest.get<MethodsReturnType["answerCallbackQuery"]>(
-      "answerCallbackQuery",
-      params,
-    );
+  async answerCallbackQuery(
+    params: MethodParameters["answerCallbackQuery"],
+  ): Promise<MethodsLibReturnType["answerCallbackQuery"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["answerCallbackQuery"]
+    >("answerCallbackQuery", params);
   }
 
   /** Use this method to change the list of the bot's commands. See https://core.telegram.org/bots#commands for more details about bot commands. Returns True on success. */
-  async setMyCommands(params: MethodParameters["setMyCommands"]) {
-    return await this.apiRequest.get<MethodsReturnType["setMyCommands"]>(
+  async setMyCommands(
+    params: MethodParameters["setMyCommands"],
+  ): Promise<MethodsLibReturnType["setMyCommands"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setMyCommands"]>(
       "setMyCommands",
       params,
     );
   }
 
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
-  async deleteMyCommands(scope?: string, language_code?: string) {
-    return await this.apiRequest.get<MethodsReturnType["deleteMyCommands"]>(
+  async deleteMyCommands(
+    scope?: string,
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["deleteMyCommands"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["deleteMyCommands"]>(
       "deleteMyCommands",
-      { scope, language_code },
+      { scope, languageCode },
     );
   }
 
   /** Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned. */
   async getMyCommands(
     scope?: MethodParameters["getMyCommands"]["scope"],
-    language_code?: string,
-  ) {
-    return await this.apiRequest.get<MethodsReturnType["getMyCommands"]>(
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["getMyCommands"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["getMyCommands"]>(
       "getMyCommands",
-      { scope, language_code },
+      { scope, languageCode },
     );
   }
 
   /** Use this method to change the bot's name. Returns True on success. */
-  async setMyName(name?: string, language_code?: string) {
-    return await this.apiRequest.get<MethodsReturnType["setMyName"]>(
+  async setMyName(
+    name?: string,
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["setMyName"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setMyName"]>(
       "setMyName",
       {
         name,
-        language_code,
+        languageCode,
       },
     );
   }
 
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
-  async getMyName(language_code?: string) {
+  async getMyName(
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["getMyName"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["getMyName"]>("getMyName", {
-        language_code,
+      .get<MethodsApiReturnType["getMyName"]>("getMyName", {
+        languageCode,
       })
       .then((res) => res.name);
   }
 
   /** Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success. */
-  async setMyDescription(description?: string, language_code?: string) {
-    return await this.apiRequest.get<MethodsReturnType["setMyDescription"]>(
+  async setMyDescription(
+    description?: string,
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["setMyDescription"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setMyDescription"]>(
       "setMyDescription",
-      { description, language_code },
+      { description, languageCode },
     );
   }
 
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
-  async getMyDescription(language_code?: string) {
+  async getMyDescription(
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["getMyDescription"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getMyDescription"]
-      >("getMyDescription", { language_code })
+        MethodsApiReturnType["getMyDescription"]
+      >("getMyDescription", { languageCode })
       .then((res) => res.description);
   }
 
   /** Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success. */
   async setMyShortDescription(
-    short_description?: string,
-    language_code?: string,
-  ) {
+    shortDescription?: string,
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["setMyShortDescription"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["setMyShortDescription"]
-    >("setMyShortDescription", { short_description, language_code });
+      MethodsApiReturnType["setMyShortDescription"]
+    >("setMyShortDescription", { shortDescription, languageCode });
   }
 
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
-  async getMyShortDescription(language_code?: string) {
+  async getMyShortDescription(
+    languageCode?: string,
+  ): Promise<MethodsLibReturnType["getMyShortDescription"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getMyShortDescription"]
-      >("getMyShortDescription", { language_code })
+        MethodsApiReturnType["getMyShortDescription"]
+      >("getMyShortDescription", { languageCode })
       .then((res) => res.short_description);
   }
 
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
   async setChatMenuButton(
-    chat_id?: number,
-    menu_button?: MethodParameters["setChatMenuButton"]["menu_button"],
-  ) {
-    return await this.apiRequest.get<MethodsReturnType["setChatMenuButton"]>(
+    chatId?: number,
+    menuButton?: MethodParameters["setChatMenuButton"]["menuButton"],
+  ): Promise<MethodsLibReturnType["setChatMenuButton"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["setChatMenuButton"]>(
       "setChatMenuButton",
-      { chat_id, menu_button },
+      { chatId, menuButton },
     );
   }
 
   /** Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns MenuButton on success. */
-  async getChatMenuButton(chat_id?: number | string) {
+  async getChatMenuButton(
+    chatId?: number | string,
+  ): Promise<MethodsLibReturnType["getChatMenuButton"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getChatMenuButton"]
-      >("getChatMenuButton", { chat_id })
+        MethodsApiReturnType["getChatMenuButton"]
+      >("getChatMenuButton", { chatId })
       .then((res) => new MenuButton(res));
   }
 
   /** Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success. */
   async setMyDefaultAdministratorRights(
     rights?: ChatPermissionFlags,
-    for_channels?: boolean,
-  ) {
+    forChannels?: boolean,
+  ): Promise<MethodsLibReturnType["setMyDefaultAdministratorRights"]> {
     const permissions = new ChatPermissions(
       (rights || {}) as ChatPermissionFlags,
     );
     return await this.apiRequest.get<
-      MethodsReturnType["setMyDefaultAdministratorRights"]
+      MethodsApiReturnType["setMyDefaultAdministratorRights"]
     >("setMyDefaultAdministratorRights", {
       rights: toApiFormat(permissions.toObject()),
-      for_channels,
+      forChannels,
     });
   }
 
   /** Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on success. */
-  async getMyDefaultAdministratorRights(for_channels: boolean) {
+  async getMyDefaultAdministratorRights(
+    forChannels: boolean,
+  ): Promise<MethodsLibReturnType["getMyDefaultAdministratorRights"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getMyDefaultAdministratorRights"]
-      >("getMyDefaultAdministratorRights", { for_channels })
+        MethodsApiReturnType["getMyDefaultAdministratorRights"]
+      >("getMyDefaultAdministratorRights", { forChannels })
       .then((res) => new ChatAdministratorRights(res));
   }
 
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
-  async editMessageText(params: MethodParameters["editMessageText"]) {
+  async editMessageText(
+    params: MethodParameters["editMessageText"],
+  ): Promise<MethodsLibReturnType["editMessageText"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["editMessageText"]>("editMessageText", params)
+      .get<MethodsApiReturnType["editMessageText"]>("editMessageText", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["editMessageText"];
       });
   }
 
   /** Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
-  async editMessageCaption(params: MethodParameters["editMessageCaption"]) {
+  async editMessageCaption(
+    params: MethodParameters["editMessageCaption"],
+  ): Promise<MethodsLibReturnType["editMessageCaption"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["editMessageCaption"]
+        MethodsApiReturnType["editMessageCaption"]
       >("editMessageCaption", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["editMessageCaption"];
       });
   }
 
   /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
-  async editMessageMedia(params: MethodParameters["editMessageMedia"]) {
+  async editMessageMedia(
+    params: MethodParameters["editMessageMedia"],
+  ): Promise<MethodsLibReturnType["editMessageMedia"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["editMessageMedia"]>("editMessageMedia", params)
+      .get<MethodsApiReturnType["editMessageMedia"]>("editMessageMedia", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["editMessageMedia"];
       });
   }
 
   /** Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
   async editMessageLiveLocation(
     params: MethodParameters["editMessageLiveLocation"],
-  ) {
+  ): Promise<MethodsLibReturnType["editMessageLiveLocation"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["editMessageLiveLocation"]
+        MethodsApiReturnType["editMessageLiveLocation"]
       >("editMessageLiveLocation", params)
-      .then((res) => (typeof res === "boolean" ? res : new Message(this, res)));
+      .then(
+        (res) =>
+          (typeof res === "boolean"
+            ? res
+            : new Message(
+                this,
+                res,
+              )) as MethodsLibReturnType["editMessageLiveLocation"],
+      );
   }
 
   /** Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned. */
   async stopMessageLiveLocation(
     params: MethodParameters["stopMessageLiveLocation"],
-  ) {
+  ): Promise<MethodsLibReturnType["stopMessageLiveLocation"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["stopMessageLiveLocation"]
+        MethodsApiReturnType["stopMessageLiveLocation"]
       >("stopMessageLiveLocation", params)
-      .then((res) => (typeof res === "boolean" ? res : new Message(this, res)));
+      .then(
+        (res) =>
+          (typeof res === "boolean"
+            ? res
+            : new Message(
+                this,
+                res,
+              )) as MethodsLibReturnType["stopMessageLiveLocation"],
+      );
   }
 
   /** Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   async editMessageReplyMarkup(
     params: MethodParameters["editMessageReplyMarkup"],
-  ) {
+  ): Promise<MethodsLibReturnType["editMessageReplyMarkup"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["editMessageReplyMarkup"]
+        MethodsApiReturnType["editMessageReplyMarkup"]
       >("editMessageReplyMarkup", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["editMessageReplyMarkup"];
       });
   }
 
   /** Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned. */
-  async stopPoll(params: MethodParameters["stopPoll"]) {
+  async stopPoll(
+    params: MethodParameters["stopPoll"],
+  ): Promise<MethodsLibReturnType["stopPoll"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["stopPoll"]>("stopPoll", params)
+      .get<MethodsApiReturnType["stopPoll"]>("stopPoll", params)
       .then((res) => new Poll(this, res));
   }
 
   /** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned. */
-  async sendSticker(params: MethodParameters["sendSticker"]) {
+  async sendSticker(
+    params: MethodParameters["sendSticker"],
+  ): Promise<MethodsLibReturnType["sendSticker"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendSticker"]>("sendSticker", params)
+      .get<MethodsApiReturnType["sendSticker"]>("sendSticker", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendSticker"];
       });
   }
 
   /** Use this method to get a sticker set. On success, a StickerSet object is returned. */
-  async getStickerSet(name: string) {
-    return await this.apiRequest.get<MethodsReturnType["getStickerSet"]>(
-      "getStickerSet",
-      { name },
-    );
+  async getStickerSet(
+    name: string,
+  ): Promise<MethodsLibReturnType["getStickerSet"]> {
+    return await this.apiRequest
+      .get<MethodsApiReturnType["getStickerSet"]>("getStickerSet", { name })
+      .then((res) => new StickerSet(this, res));
   }
 
   /** Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects. */
-  async getCustomEmojiStickers(custom_emoji_ids: string[]) {
+  async getCustomEmojiStickers(
+    customEmojiIds: string[],
+  ): Promise<MethodsLibReturnType["getCustomEmojiStickers"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["getCustomEmojiStickers"]
-      >("getCustomEmojiStickers", { custom_emoji_ids })
+        MethodsApiReturnType["getCustomEmojiStickers"]
+      >("getCustomEmojiStickers", { customEmojiIds })
       .then((res) => res.map((sticker) => new Sticker(this, sticker)));
   }
 
   /** Use this method to upload a file with a sticker for later use in the createNewStickerSet and addStickerToSet methods (the file can be used multiple times). Returns the uploaded File on success. */
-  async uploadStickerFile(params: MethodParameters["uploadStickerFile"]) {
+  async uploadStickerFile(
+    params: MethodParameters["uploadStickerFile"],
+  ): Promise<MethodsLibReturnType["uploadStickerFile"]> {
     const response = await this.apiRequest.get<
-      MethodsReturnType["uploadStickerFile"]
+      MethodsApiReturnType["uploadStickerFile"]
     >("uploadStickerFile", params);
     return new InputFile(this, response);
   }
 
   /** Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns True on success. */
-  async createNewStickerSet(params: MethodParameters["createNewStickerSet"]) {
-    return await this.apiRequest.get<MethodsReturnType["createNewStickerSet"]>(
-      "createNewStickerSet",
-      params,
-    );
+  async createNewStickerSet(
+    params: MethodParameters["createNewStickerSet"],
+  ): Promise<MethodsLibReturnType["createNewStickerSet"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["createNewStickerSet"]
+    >("createNewStickerSet", params);
   }
 
   /** Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success. */
-  async addStickerToSet(params: MethodParameters["addStickerToSet"]) {
-    return await this.apiRequest.get<MethodsReturnType["addStickerToSet"]>(
+  async addStickerToSet(
+    params: MethodParameters["addStickerToSet"],
+  ): Promise<MethodsLibReturnType["addStickerToSet"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["addStickerToSet"]>(
       "addStickerToSet",
       params,
     );
   }
 
   /** Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success. */
-  async replaceStickerInSet(params: MethodParameters["replaceStickerInSet"]) {
-    return await this.apiRequest.get<MethodsReturnType["replaceStickerInSet"]>(
-      "replaceStickerInSet",
-      params,
-    );
+  async replaceStickerInSet(
+    params: MethodParameters["replaceStickerInSet"],
+  ): Promise<MethodsLibReturnType["replaceStickerInSet"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["replaceStickerInSet"]
+    >("replaceStickerInSet", params);
   }
 
   /** Use this method to move a sticker in a set created by the bot to a specific position. Returns True on success. */
-  async setStickerPositionInSet(sticker: string, position: number) {
+  async setStickerPositionInSet(
+    sticker: string,
+    position: number,
+  ): Promise<MethodsLibReturnType["setStickerPositionInSet"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["setStickerPositionInSet"]
+      MethodsApiReturnType["setStickerPositionInSet"]
     >("setStickerPositionInSet", { sticker, position });
   }
 
   /** Use this method to delete a sticker from a set created by the bot. Returns True on success. */
-  async deleteStickerFromSet(sticker: string) {
-    return await this.apiRequest.get<MethodsReturnType["deleteStickerFromSet"]>(
-      "deleteStickerFromSet",
-      { sticker },
-    );
+  async deleteStickerFromSet(
+    sticker: string,
+  ): Promise<MethodsLibReturnType["deleteStickerFromSet"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["deleteStickerFromSet"]
+    >("deleteStickerFromSet", { sticker });
   }
 
   /** Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success. */
-  async setStickerEmojiList(sticker: string, emoji_list: string[]) {
-    return await this.apiRequest.get<MethodsReturnType["setStickerEmojiList"]>(
-      "setStickerEmojiList",
-      { sticker, emoji_list },
-    );
+  async setStickerEmojiList(
+    sticker: string,
+    emojiList: string[],
+  ): Promise<MethodsLibReturnType["setStickerEmojiList"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["setStickerEmojiList"]
+    >("setStickerEmojiList", { sticker, emojiList });
   }
 
   /** Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success. */
-  async setStickerKeywords(sticker: string, keywords?: string[]) {
-    return await this.apiRequest.get<MethodsReturnType["setStickerKeywords"]>(
-      "setStickerKeywords",
-      { sticker, keywords },
-    );
+  async setStickerKeywords(
+    sticker: string,
+    keywords?: string[],
+  ): Promise<MethodsLibReturnType["setStickerKeywords"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["setStickerKeywords"]
+    >("setStickerKeywords", { sticker, keywords });
   }
 
   /** Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns True on success. */
   async setStickerMaskPosition(
     sticker: string,
-    mask_position?: MethodParameters["setStickerMaskPosition"]["mask_position"],
-  ) {
+    maskPosition?: MethodParameters["setStickerMaskPosition"]["maskPosition"],
+  ): Promise<MethodsLibReturnType["setStickerMaskPosition"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["setStickerMaskPosition"]
-    >("setStickerMaskPosition", { sticker, mask_position });
+      MethodsApiReturnType["setStickerMaskPosition"]
+    >("setStickerMaskPosition", { sticker, maskPosition });
   }
 
   /** Use this method to set the title of a created sticker set. Returns True on success. */
-  async setStickerSetTitle(name: string, title: string) {
-    return await this.apiRequest.get<MethodsReturnType["setStickerSetTitle"]>(
-      "setStickerSetTitle",
-      { name, title },
-    );
+  async setStickerSetTitle(
+    name: string,
+    title: string,
+  ): Promise<MethodsLibReturnType["setStickerSetTitle"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["setStickerSetTitle"]
+    >("setStickerSetTitle", { name, title });
   }
 
   /** Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the format of the stickers in the set. Returns True on success. */
   async setStickerSetThumbnail(
     params: MethodParameters["setStickerSetThumbnail"],
-  ) {
+  ): Promise<MethodsLibReturnType["setStickerSetThumbnail"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["setStickerSetThumbnail"]
+      MethodsApiReturnType["setStickerSetThumbnail"]
     >("setStickerSetThumbnail", params);
   }
 
   /** Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success. */
   async setCustomEmojiStickerSetThumbnail(
     name: string,
-    custom_emoji_id?: string,
-  ) {
+    customEmojiId?: string,
+  ): Promise<MethodsLibReturnType["setCustomEmojiStickerSetThumbnail"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["setCustomEmojiStickerSetThumbnail"]
-    >("setCustomEmojiStickerSetThumbnail", { name, custom_emoji_id });
+      MethodsApiReturnType["setCustomEmojiStickerSetThumbnail"]
+    >("setCustomEmojiStickerSetThumbnail", { name, customEmojiId });
   }
 
   /** Use this method to delete a sticker set that was created by the bot. Returns True on success. */
-  async deleteStickerSet(name: string) {
-    return await this.apiRequest.get<MethodsReturnType["deleteStickerSet"]>(
+  async deleteStickerSet(
+    name: string,
+  ): Promise<MethodsLibReturnType["deleteStickerSet"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["deleteStickerSet"]>(
       "deleteStickerSet",
       { name },
     );
@@ -1319,8 +1543,10 @@ class BaseClient extends EventEmitter {
   /** Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
 
   Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via @BotFather and accept the terms. Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter. */
-  async answerInlineQuery(params: MethodParameters["answerInlineQuery"]) {
-    return await this.apiRequest.get<MethodsReturnType["answerInlineQuery"]>(
+  async answerInlineQuery(
+    params: MethodParameters["answerInlineQuery"],
+  ): Promise<MethodsLibReturnType["answerInlineQuery"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["answerInlineQuery"]>(
       "answerInlineQuery",
       params,
     );
@@ -1328,71 +1554,88 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned. */
   async answerWebAppQuery(
-    web_app_query_id: string,
+    webAppQueryId: string,
     result: MethodParameters["answerWebAppQuery"]["result"],
-  ) {
+  ): Promise<MethodsLibReturnType["answerWebAppQuery"]> {
     return await this.apiRequest
       .get<
-        MethodsReturnType["answerWebAppQuery"]
-      >("answerWebAppQuery", { web_app_query_id, result })
+        MethodsApiReturnType["answerWebAppQuery"]
+      >("answerWebAppQuery", { webAppQueryId, result })
       .then((res) => res.inline_message_id);
   }
 
   /** Use this method to send invoices. On success, the sent Message is returned. */
-  async sendInvoice(params: MethodParameters["sendInvoice"]) {
+  async sendInvoice(
+    params: MethodParameters["sendInvoice"],
+  ): Promise<MethodsLibReturnType["sendInvoice"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendInvoice"]>("sendInvoice", params)
+      .get<MethodsApiReturnType["sendInvoice"]>("sendInvoice", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendInvoice"];
       });
   }
 
   /** Use this method to create a link for an invoice. Returns the created invoice link as String on success. */
-  async createInvoiceLink(params: MethodParameters["createInvoiceLink"]) {
-    return await this.apiRequest.get<MethodsReturnType["createInvoiceLink"]>(
+  async createInvoiceLink(
+    params: MethodParameters["createInvoiceLink"],
+  ): Promise<MethodsLibReturnType["createInvoiceLink"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["createInvoiceLink"]>(
       "createInvoiceLink",
       params,
     );
   }
 
   /** If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
-  async answerShippingQuery(params: MethodParameters["answerShippingQuery"]) {
-    return await this.apiRequest.get<MethodsReturnType["answerShippingQuery"]>(
-      "answerShippingQuery",
-      params,
-    );
+  async answerShippingQuery(
+    params: MethodParameters["answerShippingQuery"],
+  ): Promise<MethodsLibReturnType["answerShippingQuery"]> {
+    return await this.apiRequest.get<
+      MethodsApiReturnType["answerShippingQuery"]
+    >("answerShippingQuery", params);
   }
 
   /** Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent. */
   async answerPreCheckoutQuery(
     params: MethodParameters["answerPreCheckoutQuery"],
-  ) {
+  ): Promise<MethodsLibReturnType["answerPreCheckoutQuery"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["answerPreCheckoutQuery"]
+      MethodsApiReturnType["answerPreCheckoutQuery"]
     >("answerPreCheckoutQuery", params);
   }
 
   /** Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object. */
-  async getStarTransactions(offset?: number, limit?: number) {
+  async getStarTransactions(
+    offset?: number,
+    limit?: number,
+  ): Promise<MethodsLibReturnType["getStarTransactions"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["getStarTransactions"]>("getStarTransactions", {
+      .get<MethodsApiReturnType["getStarTransactions"]>("getStarTransactions", {
         offset,
         limit,
       })
-      .then((res) => new StarTransactions(this, res));
+      .then(
+        (res) =>
+          new StarTransactions(
+            this,
+            res,
+          ) as unknown as MethodsLibReturnType["getStarTransactions"],
+      );
   }
 
   /** Refunds a successful payment in Telegram Stars. Returns True on success */
-  async refundStarPayment(userId: number, telegramPaymentChargeId: string) {
-    return await this.apiRequest.get<MethodsReturnType["refundStarPayment"]>(
+  async refundStarPayment(
+    userId: number,
+    telegramPaymentChargeId: string,
+  ): Promise<MethodsLibReturnType["refundStarPayment"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["refundStarPayment"]>(
       "refundStarPayment",
       {
-        user_id: userId,
-        telegram_payment_charge_id: telegramPaymentChargeId,
+        userId,
+        telegramPaymentChargeId,
       },
     );
   }
@@ -1401,40 +1644,53 @@ class BaseClient extends EventEmitter {
 
   Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues. */
   async setPassportDataErrors(
-    user_id: number,
+    userId: number,
     errors: MethodParameters["setPassportDataErrors"]["errors"],
-  ) {
+  ): Promise<MethodsLibReturnType["setPassportDataErrors"]> {
     return await this.apiRequest.get<
-      MethodsReturnType["setPassportDataErrors"]
-    >("setPassportDataErrors", { user_id, errors });
+      MethodsApiReturnType["setPassportDataErrors"]
+    >("setPassportDataErrors", { userId, errors });
   }
 
   /** Use this method to send a game. On success, the sent Message is returned. */
-  async sendGame(params: MethodParameters["sendGame"]) {
+  async sendGame(
+    params: MethodParameters["sendGame"],
+  ): Promise<MethodsLibReturnType["sendGame"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["sendGame"]>("sendGame", params)
+      .get<MethodsApiReturnType["sendGame"]>("sendGame", params)
       .then((res) => {
         const message = new Message(this, res);
         if ("chat" in message && message.chat) {
-          message.chat.messages._add(res);
+          message.chat.messages?._add(res);
         }
-        return message;
+        return message as MethodsLibReturnType["sendGame"];
       });
   }
 
   /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */
-  async setGameScore(params: MethodParameters["setGameScore"]) {
+  async setGameScore(
+    params: MethodParameters["setGameScore"],
+  ): Promise<MethodsLibReturnType["setGameScore"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["setGameScore"]>("setGameScore", params)
-      .then((res) => (typeof res === "boolean" ? res : new Message(this, res)));
+      .get<MethodsApiReturnType["setGameScore"]>("setGameScore", params)
+      .then(
+        (res) =>
+          (typeof res === "boolean"
+            ? res
+            : new Message(this, res)) as MethodsLibReturnType["setGameScore"],
+      );
   }
 
   /** Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of GameHighScore objects.
 
   This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change. */
-  async getGameHighScores(params: MethodParameters["getGameHighScores"]) {
+  async getGameHighScores(
+    params: MethodParameters["getGameHighScores"],
+  ): Promise<MethodsLibReturnType["getGameHighScores"]> {
     return await this.apiRequest
-      .get<MethodsReturnType["getGameHighScores"]>("getGameHighScores", params)
+      .get<
+        MethodsApiReturnType["getGameHighScores"]
+      >("getGameHighScores", params)
       .then((res) => res.map((game) => new GameHighScore(this, game)));
   }
 
@@ -1448,18 +1704,24 @@ class BaseClient extends EventEmitter {
   - If the bot is an administrator of a group, it can delete any message there.
   - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
   Returns True on success. */
-  async deleteMessage(chat_id: number | string, message_id: number) {
-    return await this.apiRequest.get<MethodsReturnType["deleteMessage"]>(
+  async deleteMessage(
+    chatId: number | string,
+    messageId: number,
+  ): Promise<MethodsLibReturnType["deleteMessage"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["deleteMessage"]>(
       "deleteMessage",
-      { chat_id, message_id },
+      { chatId, messageId },
     );
   }
 
   /** Use this method to delete multiple messages simultaneously. Returns True on success. */
-  async deleteMessages(chat_id: number | string, message_ids: number[]) {
-    return await this.apiRequest.get<MethodsReturnType["deleteMessages"]>(
+  async deleteMessages(
+    chatId: number | string,
+    messageIds: number[],
+  ): Promise<MethodsLibReturnType["deleteMessages"]> {
+    return await this.apiRequest.get<MethodsApiReturnType["deleteMessages"]>(
       "deleteMessages",
-      { chat_id, message_ids },
+      { chatId, messageIds },
     );
   }
 }

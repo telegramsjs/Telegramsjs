@@ -947,7 +947,7 @@ class Message extends Base {
   /*
    * Reply to the current message
    * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
-   * @param {Omit<MethodParameters["sendMessage"], "text" | "chat_id" | "message_thread_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { content: string; }>} - On success, the sent Message is returned.
    */
   reply(text, options = {}) {
@@ -959,10 +959,10 @@ class Message extends Base {
 
     return this.client.sendMessage({
       text,
-      chat_id: this.chat.id,
-      message_thread_id: this.threadId,
-      reply_parameters: {
-        message_id: this.id,
+      chatId: this.chat.id,
+      messageThreadId: this.threadId,
+      replyParameters: {
+        messageId: this.id,
       },
       ...options,
     });
@@ -970,7 +970,7 @@ class Message extends Base {
 
   /**
    * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message.
-   * @param {string | import("@telegram.ts/types").ReactionType | import("@telegram.ts/types").ReactionType} reaction - A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators
+   * @param {string | import("@telegram.ts/types").ReactionType} reaction - A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators
    * @param {boolean} [isBig] - Pass True to set the reaction with a big animation
    * @return {Promise<true>} - Returns True on success.
    */
@@ -993,16 +993,16 @@ class Message extends Base {
 
     return this.client.setMessageReaction({
       reaction: react,
-      chat_id: this.chat.id,
-      message_id: this.id,
-      is_big: isBig,
+      chatId: this.chat.id,
+      messageId: this.id,
+      isBig,
     });
   }
 
   /**
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
-   * @param {Omit<MethodParameters["editMessageText"], "text" | "chat_id" | "message_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
    * @return {Promise<Message & {content: string; editedTimestamp: number; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
@@ -1014,8 +1014,8 @@ class Message extends Base {
 
     return this.client.editMessageText({
       text,
-      chat_id: this.chat.id,
-      message_id: this.id,
+      chatId: this.chat.id,
+      messageId: this.id,
       ...options,
     });
   }
@@ -1023,7 +1023,7 @@ class Message extends Base {
   /**
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
-   * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chat_id" | "message_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
    * @return {Promise<Message & { caption?: string; editedTimestamp: number; }>}
    */
   editCaption(caption, options = {}) {
@@ -1035,8 +1035,8 @@ class Message extends Base {
 
     return this.client.editMessageCaption({
       caption,
-      chat_id: this.chat.id,
-      message_id: this.id,
+      chatId: this.chat.id,
+      messageId: this.id,
       ...options,
     });
   }
@@ -1044,7 +1044,7 @@ class Message extends Base {
   /**
    * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param {import("@telegram.ts/types").InputMedia} media - An object for a new media content of the message
-   * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chat_id" | "message_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @return {Promise<true | Message & { editedTimestamp: number; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(media, options = {}) {
@@ -1056,8 +1056,8 @@ class Message extends Base {
 
     return this.client.editMessageMedia({
       media,
-      chat_id: this.chat.id,
-      message_id: this.id,
+      chatId: this.chat.id,
+      messageId: this.id,
       ...options,
     });
   }
@@ -1065,7 +1065,7 @@ class Message extends Base {
   /**
    * Use this method to edit only the reply markup of messages.
    * @param {import("@telegram.ts/types").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
-   * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chat_id" | "message_id">} [options={}] - out parameters
+   * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @return {Promise<true | Message & { editedTimestamp: number; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(replyMarkup, options = {}) {
@@ -1076,9 +1076,9 @@ class Message extends Base {
     }
 
     return this.client.editMessageReplyMarkup({
-      reply_markup: replyMarkup,
-      chat_id: this.chat.id,
-      message_id: this.id,
+      replyMarkup,
+      chatId: this.chat.id,
+      messageId: this.id,
       ...options,
     });
   }
@@ -1086,7 +1086,7 @@ class Message extends Base {
   /**
    * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded.
    * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-   * @param {Omit<MethodParameters["forwardMessage"], "chat_id" | "from_chat_id" | "message_id" | "message_thread_id>} [options={}] - out parameters
+   * @param {Omit<MethodParameters["forwardMessage"], "chatId" | "fromChatId" | "messageId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message>} - On success, the sent Message is returned.
    */
   forward(chatId, options = {}) {
@@ -1097,10 +1097,10 @@ class Message extends Base {
     }
 
     return this.client.forwardMessage({
-      chat_id: chatId,
-      message_thread_id: this.threadId,
-      from_chat_id: this.chat.id,
-      message_id: this.id,
+      chatId: chatId,
+      messageThreadId: this.threadId,
+      fromChatId: this.chat.id,
+      messageId: this.id,
       ...options,
     });
   }
@@ -1108,7 +1108,7 @@ class Message extends Base {
   /**
    * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message.
    * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-   * @param {Omit<MethodParameters["copyMessage"], "chat_id" | "from_chat_id" | "message_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["copyMessage"], "chatId" | "fromChatId" | "messageId">} [options={}] - out parameters
    * @return {Promise<number>} - Returns the message id of the sent message on success.
    */
   copy(chatId, options = {}) {
@@ -1119,9 +1119,9 @@ class Message extends Base {
     }
 
     return this.client.copyMessage({
-      chat_id: chatId,
-      from_chat_id: this.chat.id,
-      message_id: this.id,
+      chatId: chatId,
+      fromChatId: this.chat.id,
+      messageId: this.id,
       ...options,
     });
   }
@@ -1139,9 +1139,9 @@ class Message extends Base {
     }
 
     return this.client.pinChatMessage({
-      chat_id: this.chat.id,
-      message_id: this.id,
-      disable_notification: notification,
+      chatId: this.chat.id,
+      messageId: this.id,
+      disableNotification: notification,
     });
   }
 
@@ -1185,7 +1185,7 @@ class Message extends Base {
    * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation.
    * @param {number} latitude - Latitude of new location
    * @param {number} longitude - Longitude of new location
-   * @param {Omit<MethodParameters["editMessageLiveLocation"], "latitude" | "longitude" | "chat_id" | "message_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["editMessageLiveLocation"], "latitude" | "longitude" | "chatId" | "messageId">} [options={}] - out parameters
    * @return {Promise<true | Message & { location: Location }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   editLiveLocation(latitude, longitude, options = {}) {
@@ -1196,8 +1196,8 @@ class Message extends Base {
     }
 
     return this.client.editMessageLiveLocation({
-      chat_id: this.chat.id,
-      message_id: this.id,
+      chatId: this.chat.id,
+      messageId: this.id,
       latitude,
       longitude,
       ...options,
@@ -1206,7 +1206,7 @@ class Message extends Base {
 
   /**
    * Use this method to stop updating a live location message before live_period expires.
-   * @param {Omit<MethodParameters["stopMessageLiveLocation"], "chat_id" | "message_id">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["stopMessageLiveLocation"], "chatId" | "messageId">} [options={}] - out parameters
    * @return {Promise<true | Message & { location: Location }>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   stopLiveLocation(options = {}) {
@@ -1217,8 +1217,8 @@ class Message extends Base {
     }
 
     return this.client.stopMessageLiveLocation({
-      chat_id: this.chat.id,
-      message_id: this.id,
+      chatId: this.chat.id,
+      messageId: this.id,
       ...options,
     });
   }

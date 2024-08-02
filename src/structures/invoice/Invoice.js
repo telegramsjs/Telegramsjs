@@ -31,7 +31,7 @@ class Invoice extends Base {
    * Use this method to create a link for an invoice.
    * @param {string} payload - Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes
    * @param {import("@telegram.ts/types").LabeledPrice[]} prices - Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
-   * @param {Omit<MethodParameters["createInvoiceLink"], "payload" | "prices" | "title" | "description" | "currency" | "max_tip_amount">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["createInvoiceLink"], "payload" | "prices" | "title" | "description" | "currency" | "maxTipAmount">} [options={}] - out parameters
    * @return {Promise<string>} - Returns the created invoice link as String on success.
    */
   create(payload, prices, options = {}) {
@@ -41,7 +41,7 @@ class Invoice extends Base {
       title: this.title,
       description: this.description,
       currency: this.currency,
-      max_tip_amount: this.totalAmount,
+      maxTipAmount: this.totalAmount,
       ...options,
     });
   }

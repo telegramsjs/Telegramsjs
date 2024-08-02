@@ -2,6 +2,7 @@
  * Type representing the string literals for chat permissions.
  */
 type ChatPermissionString =
+  | "isAnonymous"
   | "sendMessages"
   | "sendAudios"
   | "sendDocuments"
@@ -21,6 +22,7 @@ type ChatPermissionString =
  * Interface representing the chat permission flags.
  */
 interface ChatPermissionFlags {
+  isAnonymous?: boolean;
   sendMessages?: boolean;
   sendAudios?: boolean;
   sendDocuments?: boolean;
@@ -169,6 +171,7 @@ class ChatPermissions {
     inviteUsers: 12,
     pinMessages: 13,
     manageTopics: 14,
+    isAnonymous: 15,
   };
 }
 

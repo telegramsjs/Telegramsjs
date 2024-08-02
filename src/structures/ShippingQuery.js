@@ -50,12 +50,12 @@ class ShippingQuery extends Base {
   /**
    * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries.
    * @param {boolean} ok - Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)
-   * @param {Omit<MethodParameters["answerShippingQuery"], "shipping_query_id" | "ok">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["answerShippingQuery"], "shippingQueryId" | "ok">} [options={}] - out parameters
    * @return {Promise<true>} - On success, True is returned.
    */
   answerQuery(ok, options = {}) {
     return this.client.answerShippingQuery({
-      shipping_query_id: this.id,
+      shippingQueryId: this.id,
       ok,
       ...options,
     });
