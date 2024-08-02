@@ -49,14 +49,14 @@
     "@telegram.ts/collection": "^1.1.0",
     "@telegram.ts/emoji": "^1.1.0",
     "@telegram.ts/formatters": "^1.2.0",
-    "node-fetch": "^2.7.0",
+    "node-fetch": "^3.3.2",
     "safe-compare": "^1.1.4",
     "sandwich-stream": "^2.0.2",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
     "@telegram.ts/types": "^1.12.0",
-    "@types/node": "^18.19.37",
+    "@types/node": "^22.0.3",
     "@types/node-fetch": "^2.6.11"
   }
 }
