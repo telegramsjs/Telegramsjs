@@ -57,7 +57,7 @@
     "@types/node-fetch": "^2.6.11"
   },
   "dependencies": {
-    "@telegram.ts/collection": "^2.1.0",
+    "@telegram.ts/collection": "^2.5.0",
     "lodash.snakecase": "^4.1.1",
     "node-fetch": "^2.7.0",
     "safe-compare": "^1.1.4",
