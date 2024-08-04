@@ -2,7 +2,7 @@ import type {
   InlineKeyboardButton,
   SwitchInlineQueryChosenChat,
   LoginUrl,
-} from "@telegram.ts/types";
+} from "../../client/interfaces/Markup";
 
 /**
  * Represents an inline keyboard for Telegram bots.
@@ -10,10 +10,10 @@ import type {
 class InlineKeyboard {
   /**
    * Creates an instance of InlineKeyboard.
-   * @param inline_keyboard - A 2D array of inline keyboard buttons.
+   * @param inlineKeyboard - A 2D array of inline keyboard buttons.
    */
   constructor(
-    public readonly inline_keyboard: InlineKeyboardButton[][] = [[]],
+    public readonly inlineKeyboard: InlineKeyboardButton[][] = [[]],
   ) {}
 
   /**
@@ -22,7 +22,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   add(...buttons: InlineKeyboardButton[]) {
-    this.inline_keyboard[this.inline_keyboard.length - 1]?.push(...buttons);
+    this.inlineKeyboard[this.inlineKeyboard.length - 1]?.push(...buttons);
     return this;
   }
 
@@ -32,7 +32,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   row(...buttons: InlineKeyboardButton[]) {
-    this.inline_keyboard.push(buttons);
+    this.inlineKeyboard.push(buttons);
     return this;
   }
 
@@ -73,7 +73,7 @@ class InlineKeyboard {
    * @returns The created callback button.
    */
   static text(text: string, data = text): InlineKeyboardButton.CallbackButton {
-    return { text, callback_data: data };
+    return { text, callbackData: data };
   }
 
   /**
@@ -93,7 +93,7 @@ class InlineKeyboard {
    * @returns The created WebApp button.
    */
   static webApp(text: string, url: string): InlineKeyboardButton.WebAppButton {
-    return { text, web_app: { url } };
+    return { text, webApp: { url } };
   }
 
   /**
@@ -118,7 +118,7 @@ class InlineKeyboard {
   ): InlineKeyboardButton.LoginButton {
     return {
       text,
-      login_url: typeof loginUrl === "string" ? { url: loginUrl } : loginUrl,
+      loginUrl: typeof loginUrl === "string" ? { url: loginUrl } : loginUrl,
     };
   }
 
@@ -142,7 +142,7 @@ class InlineKeyboard {
     text: string,
     query = "",
   ): InlineKeyboardButton.SwitchInlineButton {
-    return { text, switch_inline_query: query };
+    return { text, switchInlineQuery: query };
   }
 
   /**
@@ -165,7 +165,7 @@ class InlineKeyboard {
     text: string,
     query = "",
   ): InlineKeyboardButton.SwitchInlineCurrentChatButton {
-    return { text, switch_inline_query_current_chat: query };
+    return { text, switchInlineQueryCurrentChat: query };
   }
 
   /**
@@ -188,7 +188,7 @@ class InlineKeyboard {
     text: string,
     query: SwitchInlineQueryChosenChat = {},
   ): InlineKeyboardButton.SwitchInlineChosenChatButton {
-    return { text, switch_inline_query_chosen_chat: query };
+    return { text, switchInlineQueryChosenChat: query };
   }
 
   /**
@@ -206,7 +206,7 @@ class InlineKeyboard {
    * @returns The created game button.
    */
   static game(text: string): InlineKeyboardButton.GameButton {
-    return { text, callback_game: {} };
+    return { text, callbackGame: {} };
   }
 
   /**
@@ -232,7 +232,7 @@ class InlineKeyboard {
    * @returns A new instance of InlineKeyboard with the same buttons.
    */
   clone() {
-    return new InlineKeyboard(this.inline_keyboard.map((row) => row.slice()));
+    return new InlineKeyboard(this.inlineKeyboard.map((row) => row.slice()));
   }
 
   /**
