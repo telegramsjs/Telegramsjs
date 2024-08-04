@@ -499,23 +499,30 @@ class Chat extends Base {
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param {number} messageId - Identifier of a message to pin
    * @param {boolean} [disableNotification] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
+   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
    * @return {Promise<true>} - Returns True on success.
    */
-  pinMessage(messageId, disableNotification) {
+  pinMessage(messageId, disableNotification, businessConnectionId) {
     return this.client.pinChatMessage({
       chatId: this.id,
       message_id: messageId,
       disable_notification: disableNotification,
+      businessConnectionId,
     });
   }
 
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param {number} [messageId] - Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned
+   * @param {number} [messageId] - Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned
+   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @return {Promise<true>} - Returns True on success.
    */
-  unpinMessage(messageId) {
-    return this.client.unpinChatMessage(this.id, messageId);
+  unpinMessage(messageId, businessConnectionId) {
+    return this.client.unpinChatMessage({
+      chatId: this.id,
+      messageId,
+      businessConnectionId,
+    });
   }
 
   /**

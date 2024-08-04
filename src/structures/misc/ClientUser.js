@@ -23,10 +23,11 @@ class ClientUser extends User {
     /** True, if the bot supports inline queries */
     this.supportsInlineQueries = data.supports_inline_queries;
 
-    if ("can_connect_to_business" in data) {
-      /** True, if the bot can be connected to a Telegram Business account to receive its messages */
-      this.connectBusiness = data.can_connect_to_business;
-    }
+    /** True, if the bot can be connected to a Telegram Business account to receive its messages */
+    this.connectBusiness = data.can_connect_to_business;
+
+    /** True, if the bot has main Web App. Returned only in getMe. */
+    this.hasMainWebApp = data.has_main_web_app;
 
     this._patch(data);
   }

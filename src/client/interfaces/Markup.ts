@@ -39,7 +39,7 @@ export declare namespace InlineKeyboardButton {
   export interface SwitchInlineChosenChatButton
     extends AbstractInlineKeyboardButton {
     /** If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account. */
-    switch_inline_query_chosen_chat: SwitchInlineQueryChosenChat;
+    switchInlineQueryChosenChat: SwitchInlineQueryChosenChat;
   }
   export interface GameButton extends AbstractInlineKeyboardButton {
     /** Description of the game that will be launched when the user presses the button.
@@ -145,7 +145,7 @@ export declare namespace KeyboardButton {
   }
   export interface RequestUsersButton extends CommonButton {
     /** If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in private chats only. */
-    request_users: KeyboardButtonRequestUsers;
+    requestUsers: KeyboardButtonRequestUsers;
   }
   export interface RequestChatButton extends CommonButton {
     /** If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a “chat_shared” service message. Available in private chats only. */

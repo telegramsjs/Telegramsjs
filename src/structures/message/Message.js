@@ -1129,9 +1129,10 @@ class Message extends Base {
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param {boolean} [notification=false] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
+   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
    * @return {Promise<true>} - Returns True on success.
    */
-  pin(notification = false) {
+  pin(notification = false, businessConnectionId) {
     if (!this.chat) {
       throw new TelegramError(
         "Could not find the chat where this message came from in the cache!",
@@ -1142,21 +1143,27 @@ class Message extends Base {
       chatId: this.chat.id,
       messageId: this.id,
       disableNotification: notification,
+      businessConnectionId,
     });
   }
 
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @return {Promise<true>} - Returns True on success.
    */
-  unpin() {
+  unpin(businessConnectionId) {
     if (!this.chat) {
       throw new TelegramError(
         "Could not find the chat where this message came from in the cache!",
       );
     }
 
-    return this.client.unpinChatMessage(this.chat.id, this.id);
+    return this.client.unpinChatMessage({
+      chatId: this.chat.id,
+      messageId: this.id,
+      businessConnectionId,
+    });
   }
 
   /**
