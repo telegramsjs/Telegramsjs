@@ -928,10 +928,33 @@ class Message extends Base {
    * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
    */
   awaitReaction(options = {}) {
+    const _options = { ...options, max: 1 };
+    return new Promise((resolve, reject) => {
+      const collect = this.createReactionCollector(_options);
+      collect.on("end", (collections, reason) => {
+        resolve([collections, reason]);
+      });
+    });
+  }
+
+  /**
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
+   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
+   */
+
+  /**
+   * @param {AwaitRectionsOptions} [options={}] - reaction collector options
+   * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   */
+  awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
       const collect = this.createReactionCollector(options);
       collect.on("end", (collections, reason) => {
-        resolve([collections, reason]);
+        if (options.errors?.includes(reason)) {
+          reject(collection);
+        } else {
+          resolve(collection);
+        }
       });
     });
   }
