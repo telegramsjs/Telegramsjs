@@ -900,14 +900,14 @@ class Message extends Base {
 
   /**
    * @param {AwaitMessagesOptions} [options={}] - message collector options
-   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message> | [import("@telegram.ts/collection").Collection<number, Message>, string]>}
+   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message>>}
    */
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
       const collect = this.createMessageCollector(options);
       collect.on("end", (collections, reason) => {
         if (options.errors?.includes(reason)) {
-          reject([collection, reason]);
+          reject(collection);
         } else {
           resolve(collection);
         }

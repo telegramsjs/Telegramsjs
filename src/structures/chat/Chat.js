@@ -200,14 +200,14 @@ class Chat extends Base {
 
   /**
    * @param {AwaitMessagesOptions} [options={}] - message collector options
-   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message> | [import("@telegram.ts/collection").Collection<number, Message>, string]>}
+   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message>>}
    */
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
       const collector = this.createMessageCollector(options);
       collector.once("end", (collection, reason) => {
         if (options.errors?.includes(reason)) {
-          reject([collection, reason]);
+          reject(collection);
         } else {
           resolve(collection);
         }
