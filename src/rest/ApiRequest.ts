@@ -91,9 +91,14 @@ class ApiRequest {
         continue;
       }
       if (Array.isArray(value)) {
-        snakeCaseOptions[snakeCase(key)] = value.map((value) =>
-          typeof value === "object" ? this.validateCamelCaseKeys(value) : value,
-        );
+        snakeCaseOptions[snakeCase(key)] = value.map((value) => {
+          if (Array.isArray(value)) {
+            return value.map((value) => this.validateCamelCaseKeys(value));
+          }
+          return typeof value === "object"
+            ? this.validateCamelCaseKeys(value)
+            : value;
+        });
         continue;
       }
       if (typeof value === "object") {
