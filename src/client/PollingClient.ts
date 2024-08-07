@@ -12,14 +12,13 @@ class PollingClient {
 
   /**
    * Indicates whether the polling client is closed.
-   * @private
    */
   #isClosed: boolean = false;
 
   /**
    * Creates an instance of PollingClient.
-   * @param {TelegramClient} client - The Telegram client instance.
-   * @param {number} [offset=0] - The initial offset for polling.
+   * @param client - The Telegram client instance.
+   * @param offset - The initial offset for polling.
    */
   constructor(
     public readonly client: TelegramClient,
@@ -30,9 +29,9 @@ class PollingClient {
 
   /**
    * Starts the polling process to receive updates from Telegram.
-   * @param {ILoginOptions["polling"]} [options={}] - The polling options.
+   * @param options - The polling options.
    */
-  async startPolling(options: ILoginOptions["polling"] = {}) {
+  async startPolling(options: ILoginOptions["polling"] = {}): Promise<void> {
     await this.client.getMe().then((res) => {
       this.client.user = res;
       this.client.readyTimestamp = Date.now();
@@ -43,9 +42,9 @@ class PollingClient {
 
   /**
    * Polls for new updates from Telegram.
-   * @param {ILoginOptions["polling"]} options - The polling options.
+   * @param options - The polling options.
    */
-  async poll(options: ILoginOptions["polling"]) {
+  async poll(options: ILoginOptions["polling"]): Promise<void> {
     try {
       const response = await this.client.getUpdates({
         ...options,
@@ -78,9 +77,9 @@ class PollingClient {
 
   /**
    * Closes the polling client, stopping further updates.
-   * @returns {boolean} The closed state of the polling client.
+   * @returns The closed state of the polling client.
    */
-  close() {
+  close(): boolean {
     return (this.#isClosed = true);
   }
 }

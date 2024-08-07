@@ -21,7 +21,7 @@ class InlineKeyboard {
    * @param buttons - The buttons to add.
    * @returns The current instance for chaining.
    */
-  add(...buttons: InlineKeyboardButton[]) {
+  add(...buttons: InlineKeyboardButton[]): this {
     this.inlineKeyboard[this.inlineKeyboard.length - 1]?.push(...buttons);
     return this;
   }
@@ -31,7 +31,7 @@ class InlineKeyboard {
    * @param buttons - The buttons to add.
    * @returns The current instance for chaining.
    */
-  row(...buttons: InlineKeyboardButton[]) {
+  row(...buttons: InlineKeyboardButton[]): this {
     this.inlineKeyboard.push(buttons);
     return this;
   }
@@ -42,7 +42,7 @@ class InlineKeyboard {
    * @param url - The URL to be opened when the button is pressed.
    * @returns The current instance for chaining.
    */
-  url(text: string, url: string) {
+  url(text: string, url: string): this {
     return this.add(InlineKeyboard.url(text, url));
   }
 
@@ -62,7 +62,7 @@ class InlineKeyboard {
    * @param data - The callback data.
    * @returns The current instance for chaining.
    */
-  text(text: string, data = text) {
+  text(text: string, data = text): this {
     return this.add(InlineKeyboard.text(text, data));
   }
 
@@ -82,7 +82,7 @@ class InlineKeyboard {
    * @param url - The URL to the WebApp.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string) {
+  webApp(text: string, url: string): this {
     return this.add(InlineKeyboard.webApp(text, url));
   }
 
@@ -102,7 +102,7 @@ class InlineKeyboard {
    * @param loginUrl - The login URL or LoginUrl object.
    * @returns The current instance for chaining.
    */
-  login(text: string, loginUrl: string | LoginUrl) {
+  login(text: string, loginUrl: string | LoginUrl): this {
     return this.add(InlineKeyboard.login(text, loginUrl));
   }
 
@@ -128,7 +128,7 @@ class InlineKeyboard {
    * @param query - The inline query to switch to.
    * @returns The current instance for chaining.
    */
-  switchInline(text: string, query = "") {
+  switchInline(text: string, query = ""): this {
     return this.add(InlineKeyboard.switchInline(text, query));
   }
 
@@ -151,7 +151,7 @@ class InlineKeyboard {
    * @param query - The inline query to switch to in the current chat.
    * @returns The current instance for chaining.
    */
-  switchInlineCurrent(text: string, query = "") {
+  switchInlineCurrent(text: string, query = ""): this {
     return this.add(InlineKeyboard.switchInlineCurrent(text, query));
   }
 
@@ -174,7 +174,10 @@ class InlineKeyboard {
    * @param query - The inline query to switch to in the chosen chat.
    * @returns The current instance for chaining.
    */
-  switchInlineChosen(text: string, query: SwitchInlineQueryChosenChat = {}) {
+  switchInlineChosen(
+    text: string,
+    query: SwitchInlineQueryChosenChat = {},
+  ): this {
     return this.add(InlineKeyboard.switchInlineChosen(text, query));
   }
 
@@ -196,7 +199,7 @@ class InlineKeyboard {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  game(text: string) {
+  game(text: string): this {
     return this.add(InlineKeyboard.game(text));
   }
 
@@ -214,7 +217,7 @@ class InlineKeyboard {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  pay(text: string) {
+  pay(text: string): this {
     return this.add(InlineKeyboard.pay(text));
   }
 
@@ -231,7 +234,7 @@ class InlineKeyboard {
    * Creates a deep copy of the current InlineKeyboard instance.
    * @returns A new instance of InlineKeyboard with the same buttons.
    */
-  clone() {
+  clone(): InlineKeyboard {
     return new InlineKeyboard(this.inlineKeyboard.map((row) => row.slice()));
   }
 

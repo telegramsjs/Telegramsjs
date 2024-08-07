@@ -110,9 +110,9 @@ class TelegramClient extends BaseClient {
 
   /**
    * Gets the client's uptime in milliseconds.
-   * @returns {number | null} The uptime in milliseconds, or null if the client is not ready.
+   * @returns The uptime in milliseconds, or null if the client is not ready.
    */
-  get uptime() {
+  get uptime(): number | null {
     return this.readyTimestamp && Date.now() - this.readyTimestamp;
   }
 
@@ -121,7 +121,9 @@ class TelegramClient extends BaseClient {
    * @param {ILoginOptions} [options={ polling: DefaultParameters }] - The login options.
    * @throws {TelegramError} If invalid options are provided.
    */
-  async login(options: ILoginOptions = { polling: DefaultParameters }) {
+  async login(
+    options: ILoginOptions = { polling: DefaultParameters },
+  ): Promise<void> {
     if ("polling" in options) {
       await this.polling.startPolling(options.polling);
       return;
@@ -147,7 +149,7 @@ class TelegramClient extends BaseClient {
   /**
    * Destroys the client, closing all connections.
    */
-  destroy() {
+  destroy(): void {
     this.polling.close();
     this.webhook.close();
     this.emit(Events.Disconnect, this);

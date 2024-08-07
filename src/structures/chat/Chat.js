@@ -1,5 +1,6 @@
 const { Base } = require("../Base");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
+const { ReactionCollector } = require("../../util/collector/ReactionCollector");
 const {
   InlineKeyboardCollector,
 } = require("../../util/collector/InlineKeyboardCollector");
@@ -200,14 +201,44 @@ class Chat extends Base {
 
   /**
    * @param {AwaitMessagesOptions} [options={}] - message collector options
-   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message> | [import("@telegram.ts/collection").Collection<number, Message>, string]>}
+   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message>>}
    */
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
       const collector = this.createMessageCollector(options);
       collector.once("end", (collection, reason) => {
         if (options.errors?.includes(reason)) {
-          reject([collection, reason]);
+          reject(collection);
+        } else {
+          resolve(collection);
+        }
+      });
+    });
+  }
+
+  /**
+   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
+   * @return {import("../../util/collector/ReactionCollector").ReactionCollector}
+   */
+  createReactionCollector(options = {}) {
+    return new ReactionCollector(this.client, { chat: this }, options);
+  }
+
+  /**
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
+   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
+   */
+
+  /**
+   * @param {AwaitRectionsOptions} [options={}] - reaction collector options
+   * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   */
+  awaitReactions(options = {}) {
+    return new Promise((resolve, reject) => {
+      const collect = this.createReactionCollector(options);
+      collect.on("end", (collections, reason) => {
+        if (options.errors?.includes(reason)) {
+          reject(collection);
         } else {
           resolve(collection);
         }

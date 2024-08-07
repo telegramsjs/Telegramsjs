@@ -35,7 +35,7 @@ class WebhookClient {
   webhookFilter = (
     request: IncomingMessage & { body?: Update },
     options: { path: string; token: string; secretToken?: string },
-  ) => {
+  ): boolean => {
     if (safeCompare(options.path, request.url)) {
       if (!options.secretToken) {
         return true;
@@ -72,7 +72,7 @@ class WebhookClient {
       host?: string;
       requestCallback?: RequestListener;
     } = {},
-  ) {
+  ): Promise<void> {
     await this.client.getMe().then((me) => {
       this.client.user = me;
       this.client.readyTimestamp = Date.now();
@@ -105,7 +105,15 @@ class WebhookClient {
   async createWebhookCallback(
     requestCallback?: RequestListener,
     { path, secretToken }: { path?: string; secretToken?: string } = {},
-  ) {
+  ): Promise<
+    | http.RequestListener
+    | ((
+        request: IncomingMessage & {
+          body?: Update;
+        },
+        response: ServerResponse,
+      ) => void)
+  > {
     const callback: RequestListener = async (
       request: IncomingMessage & { body?: Update },
       response: ServerResponse,
@@ -161,7 +169,7 @@ class WebhookClient {
   /**
    * Closes the webhook server.
    */
-  close() {
+  close(): void {
     this.webhookServer?.close();
   }
 }
