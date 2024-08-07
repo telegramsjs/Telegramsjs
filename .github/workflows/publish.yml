@@ -14,6 +14,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: TypeScript installed
+        run: npm i typescript
+
+      - name: Build project
+        run: rm -rf dist/ && tsc
       
       - name: Jsr installed
         run: npm i jsr
