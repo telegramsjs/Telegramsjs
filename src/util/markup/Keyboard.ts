@@ -45,7 +45,7 @@ class Keyboard {
    * @param buttons - The buttons to add.
    * @returns The current instance for chaining.
    */
-  add(...buttons: KeyboardButton[]) {
+  add(...buttons: KeyboardButton[]): this {
     this.keyboard[this.keyboard.length - 1]?.push(...buttons);
     return this;
   }
@@ -55,7 +55,7 @@ class Keyboard {
    * @param buttons - The buttons to add.
    * @returns The current instance for chaining.
    */
-  row(...buttons: KeyboardButton[]) {
+  row(...buttons: KeyboardButton[]): this {
     this.keyboard.push(buttons);
     return this;
   }
@@ -65,7 +65,7 @@ class Keyboard {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  text(text: string) {
+  text(text: string): this {
     return this.add(Keyboard.text(text));
   }
 
@@ -89,7 +89,7 @@ class Keyboard {
     text: string,
     requestId: number,
     options: Omit<KeyboardButtonRequestUsers, "requestId"> = {},
-  ) {
+  ): this {
     return this.add(Keyboard.requestUsers(text, requestId, options));
   }
 
@@ -121,7 +121,7 @@ class Keyboard {
     options: Omit<KeyboardButtonRequestChat, "requestId"> = {
       chatIsChannel: false,
     },
-  ) {
+  ): this {
     return this.add(Keyboard.requestChat(text, requestId, options));
   }
 
@@ -147,7 +147,7 @@ class Keyboard {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  requestContact(text: string) {
+  requestContact(text: string): this {
     return this.add(Keyboard.requestContact(text));
   }
 
@@ -165,7 +165,7 @@ class Keyboard {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  requestLocation(text: string) {
+  requestLocation(text: string): this {
     return this.add(Keyboard.requestLocation(text));
   }
 
@@ -184,7 +184,7 @@ class Keyboard {
    * @param type - The type of the poll button.
    * @returns The current instance for chaining.
    */
-  requestPoll(text: string, type?: KeyboardButtonPollType["type"]) {
+  requestPoll(text: string, type?: KeyboardButtonPollType["type"]): this {
     return this.add(Keyboard.requestPoll(text, type));
   }
 
@@ -207,7 +207,7 @@ class Keyboard {
    * @param url - The URL of the web app.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string) {
+  webApp(text: string, url: string): this {
     return this.add(Keyboard.webApp(text, url));
   }
 
@@ -226,7 +226,7 @@ class Keyboard {
    * @param isEnabled - Indicates whether the keyboard should be persistent.
    * @returns The current instance for chaining.
    */
-  persistent(isEnabled = true) {
+  persistent(isEnabled = true): this {
     this.isPersistent = isEnabled;
     return this;
   }
@@ -236,7 +236,7 @@ class Keyboard {
    * @param isEnabled - Indicates whether the keyboard should be selective.
    * @returns The current instance for chaining.
    */
-  selected(isEnabled = true) {
+  selected(isEnabled = true): this {
     this.selective = isEnabled;
     return this;
   }
@@ -246,7 +246,7 @@ class Keyboard {
    * @param isEnabled - Indicates whether the keyboard should be a one-time keyboard.
    * @returns The current instance for chaining.
    */
-  oneTime(isEnabled = true) {
+  oneTime(isEnabled = true): this {
     this.oneTimeKeyboard = isEnabled;
     return this;
   }
@@ -256,7 +256,7 @@ class Keyboard {
    * @param isEnabled - Indicates whether the keyboard should be resized.
    * @returns The current instance for chaining.
    */
-  resized(isEnabled = true) {
+  resized(isEnabled = true): this {
     this.resizeKeyboard = isEnabled;
     return this;
   }
@@ -266,7 +266,7 @@ class Keyboard {
    * @param value - The placeholder text.
    * @returns The current instance for chaining.
    */
-  placeholder(value: string) {
+  placeholder(value: string): this {
     this.inputFieldPlaceholder = value;
     return this;
   }
@@ -275,7 +275,7 @@ class Keyboard {
    * Creates a deep copy of the current Keyboard instance.
    * @returns A new instance of Keyboard with the same buttons and properties.
    */
-  clone(keyboard: KeyboardButton[][] = this.keyboard) {
+  clone(keyboard: KeyboardButton[][] = this.keyboard): Keyboard {
     const clone = new Keyboard(keyboard.map((row) => row.slice()));
     clone.isPersistent = this.isPersistent;
     clone.selective = this.selective;
@@ -291,7 +291,7 @@ class Keyboard {
    * Builds the keyboard structure.
    * @returns The built keyboard structure.
    */
-  build() {
+  build(): KeyboardButton[][] {
     return this.keyboard;
   }
 

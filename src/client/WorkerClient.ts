@@ -31,7 +31,27 @@ class WorketClient {
    * Processes an incoming update and emits the corresponding event.
    * @param data - The update data received from Telegram.
    */
-  processUpdate(data: Update) {
+  processUpdate(
+    data: Update,
+  ):
+    | Message
+    | [Message | null, Message]
+    | BusinessConnection
+    | BusinessMessagesDeleted
+    | MessageReactionUpdated
+    | MessageReactionCountUpdated
+    | InlineQuery
+    | ChosenInlineResult
+    | CallbackQuery
+    | ShippingQuery
+    | PreCheckoutQuery
+    | Poll
+    | PollAnswer
+    | ChatMemberUpdated
+    | ChatJoinRequest
+    | ChatBoostUpdated
+    | ChatBoostRemoved
+    | undefined {
     if (
       "message" in data ||
       "channel_post" in data ||
@@ -118,7 +138,7 @@ class WorketClient {
       | Update["message"]
       | Update["channel_post"]
       | Update["business_message"],
-  ) {
+  ): Message | undefined {
     if (!data) return;
 
     const message = new Message(this.client, data);
@@ -136,7 +156,9 @@ class WorketClient {
    * Handles new business connections.
    * @param data - The business connection data.
    */
-  onBusinessConnection(data: Update["business_connection"]) {
+  onBusinessConnection(
+    data: Update["business_connection"],
+  ): BusinessConnection | undefined {
     if (!data) return;
 
     const business = new BusinessConnection(this.client, data);
@@ -169,7 +191,9 @@ class WorketClient {
    * Handles deleted business messages.
    * @param data - The deleted business messages data.
    */
-  onDeletedBusinessMessages(data: Update["deleted_business_messages"]) {
+  onDeletedBusinessMessages(
+    data: Update["deleted_business_messages"],
+  ): BusinessMessagesDeleted | undefined {
     if (!data) return;
 
     const businessMessage = new BusinessMessagesDeleted(this.client, data);
@@ -182,7 +206,9 @@ class WorketClient {
    * Handles reactions to messages.
    * @param data - The message reaction data.
    */
-  onMessageReaction(data: Update["message_reaction"]) {
+  onMessageReaction(
+    data: Update["message_reaction"],
+  ): MessageReactionUpdated | undefined {
     if (!data) return;
 
     const messageReaction = new MessageReactionUpdated(this.client, data);
@@ -195,7 +221,9 @@ class WorketClient {
    * Handles updates to message reaction counts.
    * @param data - The message reaction count data.
    */
-  onMessageReactionCount(data: Update["message_reaction_count"]) {
+  onMessageReactionCount(
+    data: Update["message_reaction_count"],
+  ): MessageReactionCountUpdated | undefined {
     if (!data) return;
 
     const messageReaction = new MessageReactionCountUpdated(this.client, data);
@@ -208,7 +236,7 @@ class WorketClient {
    * Handles incoming inline queries.
    * @param data - The inline query data.
    */
-  onInlineQuery(data: Update["inline_query"]) {
+  onInlineQuery(data: Update["inline_query"]): InlineQuery | undefined {
     if (!data) return;
 
     const inline = new InlineQuery(this.client, data);
@@ -221,7 +249,9 @@ class WorketClient {
    * Handles chosen inline results.
    * @param data - The chosen inline result data.
    */
-  onChosenInlineResult(data: Update["chosen_inline_result"]) {
+  onChosenInlineResult(
+    data: Update["chosen_inline_result"],
+  ): ChosenInlineResult | undefined {
     if (!data) return;
 
     const chosenInline = new ChosenInlineResult(this.client, data);
@@ -234,7 +264,7 @@ class WorketClient {
    * Handles incoming callback queries.
    * @param data - The callback query data.
    */
-  onCallbackQuery(data: Update["callback_query"]) {
+  onCallbackQuery(data: Update["callback_query"]): CallbackQuery | undefined {
     if (!data) return;
 
     const callback = new CallbackQuery(this.client, data);
@@ -247,7 +277,7 @@ class WorketClient {
    * Handles incoming shipping queries.
    * @param data - The shipping query data.
    */
-  onShippingQuery(data: Update["shipping_query"]) {
+  onShippingQuery(data: Update["shipping_query"]): ShippingQuery | undefined {
     if (!data) return;
 
     const shipping = new ShippingQuery(this.client, data);
@@ -260,7 +290,9 @@ class WorketClient {
    * Handles pre-checkout queries.
    * @param data - The pre-checkout query data.
    */
-  onPreCheckoutQuery(data: Update["pre_checkout_query"]) {
+  onPreCheckoutQuery(
+    data: Update["pre_checkout_query"],
+  ): PreCheckoutQuery | undefined {
     if (!data) return;
 
     const preCheckout = new PreCheckoutQuery(this.client, data);
@@ -273,7 +305,7 @@ class WorketClient {
    * Handles new polls.
    * @param data - The poll data.
    */
-  onPoll(data: Update["poll"]) {
+  onPoll(data: Update["poll"]): Poll | undefined {
     if (!data) return;
 
     const poll = new Poll(this.client, data);
@@ -286,7 +318,7 @@ class WorketClient {
    * Handles new poll answers.
    * @param data - The poll answer data.
    */
-  onPollAnswer(data: Update["poll_answer"]) {
+  onPollAnswer(data: Update["poll_answer"]): PollAnswer | undefined {
     if (!data) return;
 
     const poll = new PollAnswer(this.client, data);
@@ -299,7 +331,9 @@ class WorketClient {
    * Handles updates to the client's chat member status.
    * @param data - The chat member update data.
    */
-  onMyChatMember(data: Update["my_chat_member"]) {
+  onMyChatMember(
+    data: Update["my_chat_member"],
+  ): ChatMemberUpdated | undefined {
     if (!data) return;
 
     const myChat = new ChatMemberUpdated(this.client, data);
@@ -312,7 +346,7 @@ class WorketClient {
    * Handles updates to chat members.
    * @param data - The chat member update data.
    */
-  onChatMember(data: Update["chat_member"]) {
+  onChatMember(data: Update["chat_member"]): ChatMemberUpdated | undefined {
     if (!data) return;
 
     const chatMember = new ChatMemberUpdated(this.client, data);
@@ -325,7 +359,7 @@ class WorketClient {
    * Handles new chat members being added.
    * @param data - The message data containing new chat members.
    */
-  onChatMemberAdd(data: Update["message"]) {
+  onChatMemberAdd(data: Update["message"]): Message | undefined {
     if (!data) return;
 
     const message = new Message(this.client, data);
@@ -351,7 +385,7 @@ class WorketClient {
    * Handles chat members being removed.
    * @param data - The message data containing removed chat members.
    */
-  onChatMemberRemove(data: Update["message"]) {
+  onChatMemberRemove(data: Update["message"]): Message | undefined {
     if (!data) return;
 
     const message = new Message(this.client, data);
@@ -373,7 +407,9 @@ class WorketClient {
    * Handles chat join requests.
    * @param data - The chat join request data.
    */
-  onChatJoinRequest(data: Update["chat_join_request"]) {
+  onChatJoinRequest(
+    data: Update["chat_join_request"],
+  ): ChatJoinRequest | undefined {
     if (!data) return;
 
     const chatJoin = new ChatJoinRequest(this.client, data);
@@ -386,7 +422,7 @@ class WorketClient {
    * Handles updates to chat boosts.
    * @param data - The chat boost update data.
    */
-  onChatBoost(data: Update["chat_boost"]) {
+  onChatBoost(data: Update["chat_boost"]): ChatBoostUpdated | undefined {
     if (!data) return;
 
     const chatBoost = new ChatBoostUpdated(this.client, data);
@@ -399,7 +435,9 @@ class WorketClient {
    * Handles removed chat boosts.
    * @param data - The removed chat boost data.
    */
-  onRemovedChatBoost(data: Update["removed_chat_boost"]) {
+  onRemovedChatBoost(
+    data: Update["removed_chat_boost"],
+  ): ChatBoostRemoved | undefined {
     if (!data) return;
 
     const chatBoost = new ChatBoostRemoved(this.client, data);
