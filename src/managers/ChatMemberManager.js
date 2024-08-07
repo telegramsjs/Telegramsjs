@@ -21,7 +21,7 @@ class ChatMemberManager extends BaseManager {
       if (ctx.chat.id !== chatId) return;
       if (!ctx.newMember?.user?.id) return;
       if (cacheSize !== -1 && cacheSize < this.cache.size) {
-        if (this.cache.has(`${ctx.newMember.user.id}`)) {
+        if (this.cache.has(ctx.newMember.user.id)) {
           this.cache.set(ctx.newMember.user.id, ctx.newMember);
         }
         return;
@@ -50,7 +50,7 @@ class ChatMemberManager extends BaseManager {
           `Overriding the cache handling for ${this.constructor.name} is unsupported and breaks functionality`,
         );
       }
-      return new this.holds(this.client, data);
+      return new this.holds(this.client, this.chatId, data);
     }
 
     for (const extra of extras) {
