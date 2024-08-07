@@ -907,9 +907,9 @@ class Message extends Base {
       const collect = this.createMessageCollector(options);
       collect.on("end", (collections, reason) => {
         if (options.errors?.includes(reason)) {
-          reject(collection);
+          reject(collections);
         } else {
-          resolve(collection);
+          resolve(collections);
         }
       });
     });
@@ -951,9 +951,9 @@ class Message extends Base {
       const collect = this.createReactionCollector(options);
       collect.on("end", (collections, reason) => {
         if (options.errors?.includes(reason)) {
-          reject(collection);
+          reject(collections);
         } else {
-          resolve(collection);
+          resolve(collections);
         }
       });
     });
