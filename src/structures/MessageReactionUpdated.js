@@ -1,11 +1,11 @@
 const { Base } = require("./Base");
 const { Chat } = require("./chat/Chat");
 const { ReactionType } = require("./misc/ReactionType");
-const { MessageCollector } = require("../../util/collector/MessageCollector");
-const { ReactionCollector } = require("../../util/collector/ReactionCollector");
+const { MessageCollector } = require("../util/collector/MessageCollector");
+const { ReactionCollector } = require("../util/collector/ReactionCollector");
 const {
   InlineKeyboardCollector,
-} = require("../../util/collector/InlineKeyboardCollector");
+} = require("../util/collector/InlineKeyboardCollector");
 
 /**
  * @typedef {import("../types").MethodParameters} MethodParameters
