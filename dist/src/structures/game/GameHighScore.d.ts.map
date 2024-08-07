@@ -1,0 +1,1 @@
+{"version":3,"file":"GameHighScore.d.ts","sourceRoot":"","sources":["../../../../src/structures/game/GameHighScore.js"],"names":[],"mappings":"AAGA;IACE;;;OAGG;IACH,oBAHW,OAAO,6BAA6B,EAAE,cAAc,GAAG,OAAO,yBAAyB,EAAE,UAAU,QACnG,OAAO,oBAAoB,EAAE,aAAa,EAapD;IARC,gDAAgD;IAChD,iBAA6B;IAE7B,YAAY;IACZ,cAAuB;IAEvB,WAAW;IACX,WAAuC;CAE1C"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"TelegramError.d.ts","sourceRoot":"","sources":["../../../src/errors/TelegramError.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,cAAM,aAAc,SAAQ,KAAK;IACxB,IAAI,CAAC,EAAE,MAAM,GAAG,MAAM,CAAC;IACvB,WAAW,EAAE,MAAM,CAAC;IAE3B;;;;OAIG;gBACS,WAAW,EAAE,MAAM,EAAE,IAAI,CAAC,EAAE,MAAM,GAAG,MAAM;CAOxD;AAED,OAAO,EAAE,aAAa,EAAE,CAAC"}
