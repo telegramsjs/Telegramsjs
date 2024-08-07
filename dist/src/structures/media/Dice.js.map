@@ -1,0 +1,1 @@
+{"version":3,"file":"Dice.js","sourceRoot":"","sources":["../../../../src/structures/media/Dice.js"],"names":[],"mappings":";AAAA,MAAM,IAAI;IACR;;OAEG;IACH,YAAY,IAAI;QACd,uDAAuD;QACvD,IAAI,CAAC,KAAK,GAAG,IAAI,CAAC,KAAK,CAAC;QAExB,0HAA0H;QAC1H,IAAI,CAAC,KAAK,GAAG,IAAI,CAAC,KAAK,CAAC;IAC1B,CAAC;CACF;AAED,MAAM,CAAC,OAAO,GAAG,EAAE,IAAI,EAAE,CAAC"}
