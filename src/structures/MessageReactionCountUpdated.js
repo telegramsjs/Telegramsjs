@@ -24,7 +24,7 @@ class MessageReactionCountUpdated extends Base {
     super(client);
 
     /** Unique message identifier inside the chat */
-    this.id = data.message_id;
+    this.id = String(data.message_id);
 
     /** The chat containing the message */
     this.chat = new Chat(client, data.chat);

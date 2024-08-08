@@ -23,13 +23,13 @@ const SymbolType = Symbol("SymbolType");
 class Chat extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").Chat & { threadId?: number }} data - Data about the represents a chat
+   * @param {import("@telegram.ts/types").Chat & { threadId?: string }} data - Data about the represents a chat
    */
   constructor(client, data) {
     super(client);
 
     /** Unique identifier for this chat */
-    this.id = data.id;
+    this.id = String(data.id);
 
     Object.defineProperty(this, SymbolType, {
       value: data.type,
@@ -106,7 +106,7 @@ class Chat extends Base {
       if ("threadId" in data && data.threadId) {
         /**
          * Unique identifier of the forum topic
-         * @type {number | undefined}
+         * @type {string | undefined}
          */
         this.threadId = data.threadId;
       }
@@ -161,7 +161,7 @@ class Chat extends Base {
 
   /**
    * Retrieves the permissions of a specific member in the chat.
-   * @param {import("./ChatMember").ChatMember|string|number} member - The member object to check permissions for.
+   * @param {import("./ChatMember").ChatMember|string} member - The member object to check permissions for.
    * @param {boolean} [checkAdmin] - A flag to check if the member is an admin or creator.
    * @returns {UserPermissions|null} The permissions object of the member or null if not available.
    */
@@ -187,7 +187,7 @@ class Chat extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, Message>} [options={}] - message collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message>} [options={}] - message collector options
    * @return {import("../../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
@@ -195,13 +195,13 @@ class Chat extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, Message>} AwaitMessagesOptions
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, Message>} AwaitMessagesOptions
    * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
    */
 
   /**
    * @param {AwaitMessagesOptions} [options={}] - message collector options
-   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message>>}
+   * @return {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
    */
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
@@ -217,7 +217,7 @@ class Chat extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
    * @return {import("../../util/collector/ReactionCollector").ReactionCollector}
    */
   createReactionCollector(options = {}) {
@@ -225,13 +225,13 @@ class Chat extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
    * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
    */
 
   /**
    * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
@@ -247,7 +247,7 @@ class Chat extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
    * @return {InlineKeyboardCollector}
    */
   createMessageComponentCollector(options = {}) {
@@ -271,7 +271,7 @@ class Chat extends Base {
 
   /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {number} userId - Unique identifier of the target user
+   * @param {string | number} userId - Unique identifier of the target user
    * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]
    * @return {Promise<true>} - Returns True on success.
    */
@@ -285,7 +285,7 @@ class Chat extends Base {
 
   /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {number} userId - Unique identifier of the target user
+   * @param {string | number} userId - Unique identifier of the target user
    * @param {Omit<MethodParameters["banChatMember"], "userId" | "chatId">} [options={}]
    * @return {Promise<true>} - Returns True on success.
    */
@@ -299,7 +299,7 @@ class Chat extends Base {
 
   /**
    * Use this method to unban a previously banned user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't want this, use the parameter only_if_banned.
-   * @param {number} userId - Unique identifier of the target user
+   * @param {string | number} userId - Unique identifier of the target user
    * @param {boolean} [onlyIfBanned] - Do nothing if the user is not banned
    * @return {Promise<true>} - Returns True on success.
    */
@@ -313,7 +313,7 @@ class Chat extends Base {
 
   /**
    * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights.
-   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @param {string | number} senderChatId - Unique identifier of the target sender chat
    * @return {Promise<true>} - Returns True on success.
    */
   banSenderChat(senderChatId) {
@@ -322,7 +322,7 @@ class Chat extends Base {
 
   /**
    * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights.
-   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @param {string | number} senderChatId - Unique identifier of the target sender chat
    * @return {Promise<true>} - Returns True on success.
    */
   unbanSenderChat(senderChatId) {
@@ -471,7 +471,7 @@ class Chat extends Base {
   /**
    * Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {string} inviteLink - The invite link to edit
-   * @param {Omit<MethodParameters["editChatInviteLink"], "inviteLink" | "chatId">} - out parameters
+   * @param {Omit<MethodParameters["editChatInviteLink"], "inviteLink" | "chatId">} [options={}] - out parameters
    * @return {Promise<import("@telegram.ts/types").ChatInviteLink>} - Returns the edited invite link as a ChatInviteLink object.
    */
   editInvite(inviteLink, options = {}) {
@@ -528,7 +528,7 @@ class Chat extends Base {
 
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param {number} messageId - Identifier of a message to pin
+   * @param {string | number} messageId - Identifier of a message to pin
    * @param {boolean} [disableNotification] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
    * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
    * @return {Promise<true>} - Returns True on success.
@@ -544,7 +544,7 @@ class Chat extends Base {
 
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param {number} [messageId] - Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned
+   * @param {string | number} [messageId] - Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned
    * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @return {Promise<true>} - Returns True on success.
    */
@@ -627,7 +627,7 @@ class Chat extends Base {
 
   /**
    * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document).
-   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} audio - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data.
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data.
    * @param {Omit<MethodParameters["sendVideo"], "video" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { video: import("../media/Video").Video }>} - On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
    */
@@ -720,8 +720,8 @@ class Chat extends Base {
   /**
    * Use this method to send information about a venue.
    * @param {number} latitude - Latitude of the location
-   * @param {number} llongitude - Longitude of the location
-   * @param {Omit<MethodParameters["sendVenue"], "latitude" | "longitude" | "chatId" | "messageThreadId">} options- out parameters
+   * @param {number} longitude - Longitude of the location
+   * @param {Omit<MethodParameters["sendVenue"], "latitude" | "longitude" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { venue: import("../misc/Venue").Venue }>} - On success, the sent Message is returned.
    */
   sendVenue(latitude, longitude, options = {}) {
@@ -755,7 +755,7 @@ class Chat extends Base {
    * Use this method to send a native poll.
    * @param {string} question - Poll question, 1-300 characters
    * @param {import("@telegram.ts/types").InputPollOption[]} options - A list of 2-10 answer options
-   * @param {Omit<MethodParameters["sendPoll"], "question" | "options" | "chatId" | "messageThreadId">} - out parameters
+   * @param {Omit<MethodParameters["sendPoll"], "question" | "options" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { poll: import("../media/Poll").Poll }>} - On success, the sent Message is returned.
    */
   sendPoll(question, options, other = {}) {
@@ -771,7 +771,7 @@ class Chat extends Base {
   /**
    * Use this method to send an animated emoji that will display a random value.
    * @param {string} emoji - Emoji on which the dice throw animation is based. Currently, must be one of "🎲", "🎯", "🏀", "⚽", "🎳", or "🎰". Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and values 1-64 for "🎰".
-   * @param {Omit<MethodParameters["sendDice"], "emoji" | "chatId" | "messageThreadId">} - out parameters
+   * @param {Omit<MethodParameters["sendDice"], "emoji" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @return {Promise<Message & { dice: import("../media/Dice").Dice }>} - On success, the sent Message is returned.
    */
   sendDice(emoji, options = {}) {

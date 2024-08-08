@@ -370,7 +370,7 @@ class WorketClient {
 
     if (
       message.newChatMembers?.findIndex(
-        ({ id }: { id: number }) => id === this.client.user.id,
+        (user) => user.id === this.client.user.id,
       ) !== -1
     ) {
       this.client.emit("chatCreate", message);

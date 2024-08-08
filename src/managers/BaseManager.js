@@ -23,7 +23,7 @@ class BaseManager {
 
     /**
      * The collection used for caching data objects.
-     * @type {Collection<number | string, T>}
+     * @type {Collection<string | string, T>}
      */
     this.cache = new Collection();
   }
@@ -41,7 +41,7 @@ class BaseManager {
    * @param {any} data - The data to be added or updated in the cache.
    * @param {boolean} [cache=true] - Whether to cache the data.
    * @param {Object} [options={}] - Additional options.
-   * @param {string|number} [options.id] - The ID of the data.
+   * @param {string} [options.id] - The ID of the data.
    * @param {Array} [options.extras=[]] - Additional arguments to pass to the constructor.
    * @returns {T} - The cached or newly created entry.
    */
@@ -76,7 +76,7 @@ class BaseManager {
 
   /**
    * Removes an entry from the cache.
-   * @param {string|number} id - The ID of the entry to remove.
+   * @param {string} id - The ID of the entry to remove.
    * @returns {boolean} - Whether the entry was successfully removed.
    */
   remove(id) {
@@ -85,12 +85,12 @@ class BaseManager {
 
   /**
    * Resolves an entry from the cache.
-   * @param {string|number|T} idOrInstance - The ID or instance to resolve.
+   * @param {string|T} idOrInstance - The ID or instance to resolve.
    * @returns {T|null} - The resolved entry or null if not found.
    */
   resolve(idOrInstance) {
     if (idOrInstance instanceof this.holds) return idOrInstance;
-    if (typeof idOrInstance === "string" || typeof idOrInstance === "number") {
+    if (typeof idOrInstance === "string") {
       return this.cache.get(idOrInstance) || null;
     }
     return null;
@@ -98,13 +98,12 @@ class BaseManager {
 
   /**
    * Resolves the ID of an entry from the cache.
-   * @param {string|number|T} idOrInstance - The ID or instance to resolve.
-   * @returns {string|number|null} - The resolved ID or null if not found.
+   * @param {string|T} idOrInstance - The ID or instance to resolve.
+   * @returns {string|null} - The resolved ID or null if not found.
    */
   resolveId(idOrInstance) {
     if (idOrInstance instanceof this.holds) return idOrInstance.id;
     if (typeof idOrInstance === "string") return idOrInstance;
-    if (typeof idOrInstance === "number") return idOrInstance;
     return null;
   }
 }

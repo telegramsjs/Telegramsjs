@@ -16,7 +16,7 @@ class ChatBoostSource extends Base {
     if ("user" in data) {
       /**
        * User that boosted the chat
-       * @type {User}
+       * @type {User | undefined}
        */
       this.user = new User(this.client, data.user);
     }
@@ -24,31 +24,29 @@ class ChatBoostSource extends Base {
     if ("giveaway_message_id" in data) {
       /**
        * Identifier of a message in the chat with the giveaway; the message could have been deleted already
-       * @type {number}
+       * @type {string | undefined}
        */
-      this.giveawayId = data.giveaway_message_id;
+      this.giveawayId = String(data.giveaway_message_id);
     }
 
-    if ("is_unclaimed" in data) {
-      /**
-       * True, if the giveaway was completed, but there was no user to win the prize
-       * @type {true}
-       */
-      this.unclaimed = data.is_unclaimed;
-    }
+    /**
+     * True, if the giveaway was completed, but there was no user to win the prize
+     * @type {boolean}
+     */
+    this.unclaimed = Boolean(data.is_unclaimed);
 
     return data;
   }
 
   /**
-   * @return {this is this & { giveawayId: number }}
+   * @return {this is this & { giveawayId: string }}
    */
   isGiveaway() {
     return Boolean("giveawayId" in this && this.giveawayId);
   }
 
   /**
-   * @return {this is this & { readonly user: User; readonly giveawayId: number } }
+   * @return {this is this & { user: User; giveawayId: string } }
    */
   isPremiumAndGift() {
     return Boolean("user" in this && this.user && !("giveawayId" in this));

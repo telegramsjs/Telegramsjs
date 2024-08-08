@@ -20,7 +20,7 @@ interface IReactionEventCollector
    * @param data - The collection of user reactions.
    */
   user: (
-    data: Collection<number, MessageReactionUpdated[] | MessageReactionUpdated>,
+    data: Collection<string, MessageReactionUpdated[] | MessageReactionUpdated>,
   ) => void;
 
   /**
@@ -48,7 +48,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * Collection of users and their reactions.
    */
   public users: Collection<
-    number,
+    string,
     MessageReactionUpdated[] | MessageReactionUpdated
   > = new Collection();
 

@@ -23,9 +23,9 @@ class BusinessConnection extends Base {
 
     /**
      * Identifier of a private chat with the user who created the business connection
-     * @type {number}
+     * @type {string}
      */
-    this.userChatId = data.user_chat_id;
+    this.userChatId = String(data.user_chat_id);
 
     /**
      * Date the connection was established in Unix time

@@ -106,7 +106,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Text of the message to be sent, 1-4096 characters after entities parsing */
     text: string;
     /** Mode for parsing entities in the message text. See formatting options for more details. */
@@ -136,7 +136,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** Sends the message silently. Users will receive a notification with no sound. */
@@ -144,7 +144,7 @@ export type ApiMethods = {
     /** Protects the contents of the forwarded message from forwarding and saving */
     protectContent?: boolean;
     /** Message identifier in the chat specified in fromChatId */
-    messageId: number;
+    messageId: string | number;
   }): import("../../structures/message/Message").Message;
 
   /** Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned. */
@@ -152,11 +152,11 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order. */
-    messageIds: number[];
+    messageIds: (string | number)[];
     /** Sends the messages silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
     /** Protects the contents of the forwarded messages from forwarding and saving */
@@ -168,11 +168,11 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** Message identifier in the chat specified in fromChatId */
-    messageId: number;
+    messageId: string | number;
     /** New caption for media, 0-1024 characters after entities parsing. If not specified, the original caption is kept */
     caption?: string;
     /** Mode for parsing entities in the new caption. See formatting options for more details. */
@@ -200,11 +200,11 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order. */
-    messageIds: number[];
+    messageIds: (string | number)[];
     /** Sends the messages silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
     /** Protects the contents of the sent messages from forwarding and saving */
@@ -220,7 +220,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Photo to send. Pass a fileId as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. */
     photo:
       | Buffer
@@ -268,7 +268,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Audio file to send. Pass a fileId as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. */
     audio:
       | Buffer
@@ -326,7 +326,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** File to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     document:
       | Buffer
@@ -380,7 +380,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Video to send. Pass a fileId as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. */
     video:
       | Buffer
@@ -444,7 +444,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Animation to send. Pass a fileId as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. */
     animation:
       | Buffer
@@ -506,7 +506,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Audio file to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     voice:
       | Buffer
@@ -551,7 +551,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Video note to send. Pass a fileId as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported */
     videoNote:
       | Buffer
@@ -602,7 +602,7 @@ export type ApiMethods = {
     chatId: number | string;
     /** An array describing messages to be sent, must include 2-10 items */
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     media: ReadonlyArray<
       InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo
     >;
@@ -636,7 +636,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Latitude of the location */
     latitude: number;
     /** Longitude of the location */
@@ -674,9 +674,9 @@ export type ApiMethods = {
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
-    inlineMessageId?: string;
+    inlineMessageId?: string | number;
     /** Latitude of new location */
     latitude: number;
     /** Longitude of new location */
@@ -705,7 +705,7 @@ export type ApiMethods = {
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message with live location to stop */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
     inlineMessageId?: string;
     /** An object for a new inline keyboard. */
@@ -757,7 +757,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Latitude of the venue */
     latitude: number;
     /** Longitude of the venue */
@@ -799,7 +799,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Contact's phone number */
     phoneNumber: string;
     /** Contact's first name */
@@ -833,7 +833,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Poll question, 1-300 characters */
     question: string;
     /** Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed */
@@ -887,7 +887,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Emoji on which the dice throw animation is based. Currently, must be one of "🎲", "🎯", "🏀", "⚽", "🎳", or "🎰". Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and values 1-64 for "🎰". Defaults to "🎲" */
     emoji?: string;
     /** Sends the message silently. Users will receive a notification with no sound. */
@@ -932,7 +932,7 @@ export type ApiMethods = {
       | "record_video_note"
       | "upload_video_note";
     /** Unique identifier for the target message thread; for supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
   }): true;
 
   /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
@@ -940,7 +940,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Identifier of the target message */
-    messageId: number;
+    messageId: string | number;
     /** A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. */
     reaction?: ReactionType[];
     /** Pass True to set the reaction with a big animation */
@@ -973,7 +973,7 @@ export type ApiMethods = {
     /** Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
     /** Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only. */
     untilDate?: number;
     /** Pass True to delete all messages from the chat for the user that is being removed. If False, the user will be able to see messages in the group that were sent before the user was removed. Always True for supergroups and channels. */
@@ -985,7 +985,7 @@ export type ApiMethods = {
     /** Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
     /** Do nothing if the user is not banned */
     onlyIfBanned?: boolean;
   }): true;
@@ -995,7 +995,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
     /** An object for new user permissions */
     permissions: import("../../util/ChatPermissions").ChatPermissionFlags;
     /** Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission. */
@@ -1009,7 +1009,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
     /** Pass True if the administrator's presence in the chat is hidden */
     isAnonymous?: boolean;
     /** An object for new user permissions */
@@ -1021,7 +1021,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
     /** New custom title for the administrator; 0-16 characters, emoji are not allowed */
     customTitle: string;
   }): true;
@@ -1031,7 +1031,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target sender chat */
-    senderChatId: number;
+    senderChatId: string | number;
   }): true;
 
   /** Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -1039,7 +1039,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target sender chat */
-    senderChatId: number;
+    senderChatId: string | number;
   }): true;
 
   /** Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success. */
@@ -1103,7 +1103,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
   }): true;
 
   /** Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
@@ -1111,7 +1111,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
   }): true;
 
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -1159,7 +1159,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Identifier of a message to pin */
-    messageId: number;
+    messageId: string | number;
     /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats. */
     disableNotification?: boolean;
   }): true;
@@ -1171,7 +1171,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned. */
-    messageId?: number;
+    messageId?: string | number;
   }): true;
 
   /** Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
@@ -1211,7 +1211,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
   }): import("../../structures/chat/ChatMember").ChatMember;
 
   /** Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method. Returns True on success. */
@@ -1247,7 +1247,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread of the forum topic */
-    messageThreadId: number;
+    messageThreadId: string | number;
     /** New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept */
     name?: string;
     /** New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept */
@@ -1259,7 +1259,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread of the forum topic */
-    messageThreadId: number;
+    messageThreadId: string | number;
   }): true;
 
   /** Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
@@ -1267,7 +1267,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread of the forum topic */
-    messageThreadId: number;
+    messageThreadId: string | number;
   }): true;
 
   /** Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success. */
@@ -1275,7 +1275,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread of the forum topic */
-    messageThreadId: number;
+    messageThreadId: string | number;
   }): true;
 
   /** Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success. */
@@ -1283,7 +1283,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread of the forum topic */
-    messageThreadId: number;
+    messageThreadId: string | number;
   }): true;
 
   /** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success. */
@@ -1347,7 +1347,7 @@ export type ApiMethods = {
     /** Unique identifier for the chat or username of the channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
   }): import("../../structures/boots/UserChatBoosts").UserChatBoosts;
 
   /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
@@ -1427,7 +1427,7 @@ export type ApiMethods = {
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
   setChatMenuButton(args: {
     /** Unique identifier for the target private chat. If not specified, default bot's menu button will be changed */
-    chatId?: number;
+    chatId?: string | number;
     /** An object for the bot's new menu button. Defaults to MenuButtonDefault */
     menuButton?: MenuButton;
   }): true;
@@ -1435,7 +1435,7 @@ export type ApiMethods = {
   /** Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns MenuButton on success. */
   getChatMenuButton(args: {
     /** Unique identifier for the target private chat. If not specified, default bot's menu button will be returned */
-    chatId?: number;
+    chatId?: string | number;
   }): import("../../structures/misc/MenuButton").MenuButton;
 
   /** Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success. */
@@ -1459,9 +1459,9 @@ export type ApiMethods = {
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
-    inlineMessageId?: string;
+    inlineMessageId?: string | number;
     /** New text of the message, 1-4096 characters after entities parsing */
     text: string;
     /** Mode for parsing entities in the message text. See formatting options for more details. */
@@ -1486,9 +1486,9 @@ export type ApiMethods = {
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
-    inlineMessageId?: string;
+    inlineMessageId?: string | number;
     /** New caption of the message, 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the message caption. See formatting options for more details. */
@@ -1513,9 +1513,9 @@ export type ApiMethods = {
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
-    inlineMessageId?: string;
+    inlineMessageId?: string | number;
     /** An object for a new media content of the message */
     media: InputMedia;
     /** An object for a new inline keyboard. */
@@ -1533,9 +1533,9 @@ export type ApiMethods = {
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
-    inlineMessageId?: string;
+    inlineMessageId?: string | number;
     /** An object for an inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }):
@@ -1551,7 +1551,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Identifier of the original message with the poll */
-    messageId: number;
+    messageId: string | number;
     /** An object for a new message inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }): import("../../structures/media/Poll").Poll;
@@ -1570,7 +1570,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Identifier of the message to delete */
-    messageId: number;
+    messageId: string | number;
   }): true;
 
   /** Use this method to delete multiple messages simultaneously. Returns True on success. */
@@ -1578,7 +1578,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** A list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted */
-    messageIds: number[];
+    messageIds: (string | number)[];
   }): true;
 
   /** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned. */
@@ -1588,7 +1588,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Sticker to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL. */
     sticker:
       | Buffer
@@ -1634,7 +1634,7 @@ export type ApiMethods = {
   /** Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success. */
   uploadStickerFile(args: {
     /** User identifier of sticker file owner */
-    userId: number;
+    userId: string | number;
     /** Format of the sticker, must be one of “static”, “animated”, “video” */
     stickerFormat: "static" | "animated" | "video";
     /** A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See https://core.telegram.org/stickers for technical requirements. */
@@ -1652,7 +1652,7 @@ export type ApiMethods = {
   /** Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns True on success. */
   createNewStickerSet(args: {
     /** User identifier of created sticker set owner */
-    userId: number;
+    userId: string | number;
     /** Short name of sticker set, to be used in t.me/addstickers/ URLs (e.g., animals). Can contain only English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in "_by_<bot_username>". <bot_username> is case insensitive. 1-64 characters. */
     name: string;
     /** Sticker set title, 1-64 characters */
@@ -1668,7 +1668,7 @@ export type ApiMethods = {
   /** Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success. */
   addStickerToSet(args: {
     /** User identifier of sticker set owner */
-    userId: number;
+    userId: string | number;
     /** Sticker set name */
     name: string;
     /** An object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set isn't changed. */
@@ -1692,7 +1692,7 @@ export type ApiMethods = {
   /** Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success. */
   replaceStickerInSet(args: {
     /** User identifier of the sticker set owner */
-    userId: number;
+    userId: string | number;
     /** Sticker set name */
     name: string;
     /** File identifier of the replaced sticker */
@@ -1744,7 +1744,7 @@ export type ApiMethods = {
     /** Sticker set name */
     name: string;
     /** User identifier of the sticker set owner */
-    userId: number;
+    userId: string | number;
     /** A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. */
     thumbnail?:
       | Buffer
@@ -1799,7 +1799,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Product name, 1-32 characters */
     title: string;
     /** Product description, 1-255 characters */
@@ -1925,7 +1925,7 @@ export type ApiMethods = {
   /** Refunds a successful payment in Telegram Stars. Returns True on success. */
   refundStarPayment(args: {
     /** Identifier of the user whose payment will be refunded */
-    userId: number;
+    userId: string | number;
     /** Telegram payment identifier */
     telegramPaymentChargeId: string;
   }): true;
@@ -1943,7 +1943,7 @@ export type ApiMethods = {
   Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues. */
   setPassportDataErrors(args: {
     /** User identifier */
-    userId: number;
+    userId: string | number;
     /** An array describing the errors */
     errors: readonly PassportElementError[];
   }): true;
@@ -1953,7 +1953,7 @@ export type ApiMethods = {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
     /** Unique identifier for the target chat */
-    chatId: number;
+    chatId: string | number;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: number;
     /** Short name of the game, serves as the unique identifier for the game. Set up your games via BotFather. */
@@ -1975,7 +1975,7 @@ export type ApiMethods = {
   /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */
   setGameScore(args: {
     /** User identifier */
-    userId: number;
+    userId: string | number;
     /** New score, must be non-negative */
     score: number;
     /** Pass True if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters */
@@ -1983,9 +1983,9 @@ export type ApiMethods = {
     /** Pass True if the game message should not be automatically edited to include the current scoreboard */
     disableEditMessage?: boolean;
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat */
-    chatId?: number;
+    chatId?: string | number;
     /** Required if inlineMessageId is not specified. Identifier of the sent message */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
     inlineMessageId?: string;
   }):
@@ -2000,11 +2000,11 @@ export type ApiMethods = {
   This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change. */
   getGameHighScores(args: {
     /** Target user id */
-    userId: number;
+    userId: string | number;
     /** Required if inlineMessageId is not specified. Unique identifier for the target chat */
-    chatId?: number;
+    chatId?: string | number;
     /** Required if inlineMessageId is not specified. Identifier of the sent message */
-    messageId?: number;
+    messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
     inlineMessageId?: string;
   }): import("../../structures/game/GameHighScore").GameHighScore[];

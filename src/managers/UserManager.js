@@ -18,7 +18,7 @@ class UserManager extends BaseManager {
 
   /**
    * Resolves a user from a ChatMember, Message, or user ID.
-   * @param {ChatMember|Message|number|string} user - The ChatMember, Message, or user ID to resolve.
+   * @param {ChatMember|Message|string} user - The ChatMember, Message, or user ID to resolve.
    * @returns {User|null} The resolved User instance or null if not found.
    */
   resolve(user) {
@@ -29,7 +29,7 @@ class UserManager extends BaseManager {
 
   /**
    * Resolves the user ID from a ChatMember, Message, or user ID.
-   * @param {ChatMember|Message|number|string} user - The ChatMember, Message, or user ID to resolve.
+   * @param {ChatMember|Message|string} user - The ChatMember, Message, or user ID to resolve.
    * @returns {string|null} The resolved user ID or null if not found.
    */
   resolveId(user) {
@@ -40,7 +40,7 @@ class UserManager extends BaseManager {
 
   /**
    * Fetches a user by ID, optionally caching the result.
-   * @param {ChatMember|Message|number|string} user - The ChatMember, Message, or user ID to fetch.
+   * @param {ChatMember|Message|string} user - The ChatMember, Message, or user ID to fetch.
    * @param {Object} [options] - Options for fetching.
    * @param {boolean} [options.cache=true] - Whether to cache the fetched user.
    * @param {boolean} [options.force=false] - Whether to force fetching from the API.

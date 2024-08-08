@@ -1,11 +1,14 @@
+const { Base } = require("../Base");
 const { EncryptedPassportElement } = require("./EncryptedPassportElement");
 
-class PassportData {
+class PassportData extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").PassportData} data - Data about the describes the user's Telegram Passport data shared with the bot
    */
   constructor(client, data) {
+    super(client);
+
     /** Array containing information about documents and other Telegram Passport elements shared with the bot. */
     this.data = data.data.map(
       (data) => new EncryptedPassportElement(client, data),
@@ -21,7 +24,7 @@ class PassportData {
 
   /**
    * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change).
-   * @param {number} userId - User identifier
+   * @param {string | number} userId - User identifier
    * @param {readonly import("@telegram.ts/types").PassportElementError[]} errors - An array describing the errors
    * @return {Promise<true>} - Returns True on success.
    */

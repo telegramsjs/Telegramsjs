@@ -32,9 +32,9 @@ class MessageOrigin extends Base {
     if ("message_id" in data) {
       /**
        * Unique message identifier inside the chat
-       * @type {number | undefined}
+       * @type {string | undefined}
        */
-      this.id = data.message_id;
+      this.id = String(data.message_id);
     }
 
     if ("sender_user" in data) {
@@ -113,14 +113,14 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @return {this is this & { id: number; chat: Chat; authorSignature?: string }}
+   * @return {this is this & { id: string; chat: Chat; authorSignature?: string }}
    */
   isChennel() {
     return Boolean("id" in this && this.id && "chat" in this && this.chat);
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, Message>} [options={}] - message collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message>} [options={}] - message collector options
    * @return {import("../../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
@@ -128,8 +128,8 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, Message>} [options={}] - message collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<number, Message>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message>} [options={}] - message collector options
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, Message>, string]>}
    */
   awaitMessage(options = {}) {
     const _options = { ...options, max: 1 };
@@ -142,13 +142,13 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, Message>} AwaitMessagesOptions
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, Message>} AwaitMessagesOptions
    * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
    */
 
   /**
    * @param {AwaitMessagesOptions} [options={}] - message collector options
-   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message>>}
+   * @return {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
    */
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
@@ -164,7 +164,7 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
    * @return {import("../../util/collector/ReactionCollector").ReactionCollector}
    */
   createReactionCollector(options = {}) {
@@ -172,8 +172,8 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
    */
   awaitReaction(options = {}) {
     const _options = { ...options, max: 1 };
@@ -186,13 +186,13 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
    * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
    */
 
   /**
    * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
@@ -208,14 +208,14 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
    * @return {InlineKeyboardCollector}
    */
   createMessageComponentCollector(options = {}) {
     return new InlineKeyboardCollector(this.client, options);
   }
 
-  /*
+  /**
    * Reply to the current message
    * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId" >} [options={}] - out parameters

@@ -29,7 +29,7 @@ class ChosenInlineResult extends Base {
     this.query = data.query;
 
     /** Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message */
-    this.inlineMessageId = data.inline_message_id;
+    this.inlineMessageId = String(data.inline_message_id);
   }
 
   /**
