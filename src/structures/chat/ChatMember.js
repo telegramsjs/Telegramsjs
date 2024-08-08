@@ -17,7 +17,7 @@ class ChatMember extends Base {
     super(client);
 
     /** Identifier of the chat */
-    this.chatId = chatId;
+    this.chatId = String(chatId);
 
     /** The member's status in the chat */
     this.status = data.status || null;
@@ -141,13 +141,11 @@ class ChatMember extends Base {
       this.user = new User(this.client, data.user);
     }
 
-    if ("is_anonymous" in data) {
-      /**
-       * True, if the user's presence in the chat is hidden
-       * @type {boolean | undefined}
-       */
-      this.anonymous = data.is_anonymous;
-    }
+    /**
+     * True, if the user's presence in the chat is hidden
+     * @type {boolean}
+     */
+    this.anonymous = Boolean(data.is_anonymous);
 
     if ("custom_title" in data) {
       /**
@@ -211,9 +209,9 @@ class ChatMember extends Base {
     if ("user_chatId" in data) {
       /**
        * Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user
-       * @type {number | undefined}
+       * @type {string | undefined}
        */
-      this.userChatId = data.user_chatId;
+      this.userChatId = String(data.user_chatId);
     }
 
     if ("until_date" in data) {
@@ -245,7 +243,7 @@ class ChatMember extends Base {
 
   /**
    * Retrieves the permissions of the current member in a specific chat.
-   * @param {ChatMember|string|number} channel - The identifier of the chat channel.
+   * @param {ChatMember|string} channel - The identifier of the chat channel.
    * @returns {UserPermissions|null} The permissions object of the user in the chat or null if not available.
    */
   permissionsIn(channel) {
@@ -317,7 +315,7 @@ class ChatMember extends Base {
 
   /**
    * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights.
-   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @param {string | number} senderChatId - Unique identifier of the target sender chat
    * @return {Promise<true>} - Returns True on success.
    */
   banSenderChat(senderChatId) {
@@ -326,7 +324,7 @@ class ChatMember extends Base {
 
   /**
    * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights.
-   * @param {number} senderChatId - Unique identifier of the target sender chat
+   * @param {string | number} senderChatId - Unique identifier of the target sender chat
    * @return {Promise<true>} - Returns True on success.
    */
   unbanSenderChat(senderChatId) {
@@ -365,7 +363,7 @@ class ChatMember extends Base {
   /**
    * Use this method to set a custom title for an administrator in a supergroup promoted by the bot.
    * @param {string} name - New custom title for the administrator; 0-16 characters, emoji are not allowed
-   * @return {Promise<true} - Returns True on success.
+   * @return {Promise<true>} - Returns True on success.
    */
   setNikeName(name) {
     return this.client.setChatAdministratorCustomTitle({

@@ -10,7 +10,7 @@ class SharedUser extends Base {
     super(client);
 
     /** Identifier of the shared user. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means. */
-    this.userId = data.user_id;
+    this.userId = String(data.user_id);
 
     this._patch(data);
   }
@@ -53,7 +53,7 @@ class SharedUser extends Base {
 
   /**
    * Refunds a successful payment in Telegram Stars.
-   * @param {number} telegramPaymentId - Telegram payment identifier
+   * @param {string} telegramPaymentId - Telegram payment identifier
    * @return {Promise<true>} - Returns True on success.
    */
   refundStarPayment(telegramPaymentId) {

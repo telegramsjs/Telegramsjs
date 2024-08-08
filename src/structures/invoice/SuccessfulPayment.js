@@ -37,7 +37,7 @@ class SuccessfulPayment extends Base {
 
   /**
    * Refunds a successful payment in Telegram Stars.
-   * @param {number} userId - Identifier of the user whose payment will be refunded
+   * @param {string | number} userId - Identifier of the user whose payment will be refunded
    * @return {Promise<true>} - Returns True on success.
    */
   refundStarPayment(userId) {

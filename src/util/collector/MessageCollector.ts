@@ -8,7 +8,7 @@ import { Collector, type ICollectorOptions } from "./Collector";
 /**
  * Collector class for handling messages in a specific chat.
  */
-class MessageCollector extends Collector<number, Message> {
+class MessageCollector extends Collector<string, Message> {
   /**
    * The chat in which messages are being collected.
    */
@@ -28,7 +28,7 @@ class MessageCollector extends Collector<number, Message> {
   constructor(
     public readonly client: TelegramClient,
     public readonly message: Message,
-    public override readonly options: ICollectorOptions<number, Message> = {},
+    public override readonly options: ICollectorOptions<string, Message> = {},
   ) {
     super(options);
 
@@ -53,7 +53,7 @@ class MessageCollector extends Collector<number, Message> {
    * @param message - The message context.
    * @returns The ID of the message or null.
    */
-  collect(message: Message): number | null {
+  collect(message: Message): string | null {
     if (message.chat?.id !== this.chat.id) return null;
     this.received++;
     return message.id;
@@ -64,7 +64,7 @@ class MessageCollector extends Collector<number, Message> {
    * @param message - The message context.
    * @returns The ID of the message or null.
    */
-  dispose(message: Message): number | null {
+  dispose(message: Message): string | null {
     return message.chat?.id === this.chat.id ? message.id : null;
   }
 

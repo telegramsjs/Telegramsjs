@@ -366,9 +366,9 @@ class ChatFullInfo extends Chat {
     if ("linked_chat_id" in data) {
       /**
        * The linked chat ID.
-       * @type {number | undefined}
+       * @type {string | undefined}
        */
-      this.linkedId = data.linked_chat_id;
+      this.linkedId = String(data.linked_chat_id);
     }
 
     if ("location" in data) {

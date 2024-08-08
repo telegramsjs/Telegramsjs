@@ -17,15 +17,15 @@ class BusinessMessagesDeleted extends Base {
 
     /**
      * Information about a chat in the business account. The bot may not have access to the chat or the corresponding user
-     * @type {import("@telegram.ts/types").Chat.PrivateChat}
+     * @type {Chat}
      */
     this.chat = new Chat(client, data.chat);
 
     /**
      * The list of identifiers of deleted messages in the chat of the business account
-     * @type {number[]}
+     * @type {string[]}
      */
-    this.ids = data.message_ids;
+    this.ids = data.message_ids.map((id) => String(id));
   }
 }
 

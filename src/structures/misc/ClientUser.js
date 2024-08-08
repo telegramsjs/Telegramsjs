@@ -9,7 +9,7 @@ class ClientUser extends User {
     super(client, data);
 
     /** True, if this user is a bot */
-    this.bot = data.is_bot;
+    this.bot = true;
 
     /** User's or bot's username */
     this.username = data.username;

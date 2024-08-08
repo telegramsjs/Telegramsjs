@@ -1,7 +1,7 @@
 /** This object represents a Telegram user or bot. */
 export interface User {
   /** Unique identifier for this user or bot. */
-  id: number;
+  id: number | string;
   /** True, if this user is a bot */
   isBot: boolean;
   /** User's or bot's first name */
@@ -114,7 +114,7 @@ export interface InputPollOption {
 /** Describes reply parameters for the message that is being sent. */
 export interface ReplyParameters {
   /** Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified */
-  messageId: number;
+  messageId: number | string;
   /** If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account. */
   chatId?: number | string;
   /** Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic. Always True for messages sent on behalf of a business account. */

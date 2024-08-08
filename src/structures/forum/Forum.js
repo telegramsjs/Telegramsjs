@@ -3,17 +3,17 @@ const { Base } = require("../Base");
 class Forum extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {number} threadId - Unique identifier of the forum topic
-   * @param {number} chatId - Unique identifier for this chat
+   * @param {number | string} threadId - Unique identifier of the forum topic
+   * @param {number | string} chatId - Unique identifier for this chat
    */
   constructor(client, threadId, chatId) {
     super(client);
 
     /** Unique identifier of the forum topic */
-    this.threadId = threadId;
+    this.threadId = String(threadId);
 
     /** Unique identifier for this chat */
-    this.chatId = chatId;
+    this.chatId = String(chatId);
   }
 
   /**

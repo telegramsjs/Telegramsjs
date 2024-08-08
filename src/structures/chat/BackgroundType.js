@@ -11,14 +11,12 @@ class BackgroundType {
       /**
        * The background fill
        * @type {BackgroundFill | undefined}
-        
        */
       this.fill = new BackgroundFill(data.fill);
 
       /**
        * Dimming of the background in dark themes, as a percentage; 0-100
        * @type {number | undefined}
-        
        */
       this.darkDimming = data.dark_theme_dimming;
     }
@@ -27,14 +25,12 @@ class BackgroundType {
       /**
        * Document with the wallpaper
        * @type {Document | undefined}
-        
        */
       this.document = new Document(client, data.document);
 
       /**
        * Dimming of the background in dark themes, as a percentage; 0-100
        * @type {number | undefined}
-        
        */
       this.darkDimming = data.dark_theme_dimming;
 
@@ -42,7 +38,6 @@ class BackgroundType {
         /**
          * True, if the wallpaper is downscaled to fit in a 450x450 square and then box-blurred with radius 12
          * @type {true | undefined}
-          
          */
         this.blurred = data.is_blurred;
       }
@@ -51,7 +46,6 @@ class BackgroundType {
         /**
          * True, if the background moves slightly when the device is tilted
          * @type {true | undefined}
-          
          */
         this.moving = data.is_moving;
       }
@@ -61,21 +55,18 @@ class BackgroundType {
       /**
        * Document with the pattern
        * @type {Document | undefined}
-        
        */
       this.document = new Document(client, data.document);
 
       /**
        * The background fill that is combined with the pattern
        * @type {BackgroundFill | undefined}
-        
        */
       this.fill = new BackgroundFill(data.fill);
 
       /**
        * Intensity of the pattern when it is shown above the filled background; 0-100
        * @type {number}
-        
        */
       this.intensity = data.intensity;
 
@@ -83,7 +74,6 @@ class BackgroundType {
         /**
          * True, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only
          * @type {true | undefined}
-          
          */
         this.inverted = data.is_inverted;
       }
@@ -92,7 +82,6 @@ class BackgroundType {
         /**
          * True, if the background moves slightly when the device is tilted
          * @type {true | undefined}
-          
          */
         this.moving = data.is_moving;
       }
@@ -102,14 +91,13 @@ class BackgroundType {
       /**
        * Name of the chat theme, which is usually an emoji
        * @type {string | undefined}
-        
        */
       this.themeName = data.theme_name;
     }
   }
 
   /**
-   * @return {this is this & { readonly fill: BackgroundFill; readonly darkDimming: number; }}
+   * @return {this is this & { fill: BackgroundFill; darkDimming: number; }}
    */
   isFill() {
     return Boolean(
@@ -118,7 +106,7 @@ class BackgroundType {
   }
 
   /**
-   * @return {this is this & { readonly document: Document; readonly darkDimming: number; }}
+   * @return {this is this & { document: Document; darkDimming: number; }}
    */
   isWallpaper() {
     return Boolean(
@@ -130,7 +118,7 @@ class BackgroundType {
   }
 
   /**
-   * @return {this is this & { readonly fill: BackgroundFill; readonly document: Document; readonly intensity: number }}
+   * @return {this is this & { fill: BackgroundFill; document: Document; intensity: number }}
    */
   isPattern() {
     return Boolean(

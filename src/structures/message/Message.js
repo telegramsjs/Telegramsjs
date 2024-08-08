@@ -2,6 +2,7 @@ const { Base } = require("../Base");
 const { User } = require("../misc/User");
 const { SharedUser } = require("../misc/SharedUser");
 const { ChatShared } = require("../misc/ChatShared");
+const { Story } = require("../misc/Story");
 const { Chat } = require("../chat/Chat");
 const {
   VideoChatParticipantsInvited,
@@ -57,7 +58,7 @@ class Message extends Base {
     super(client);
 
     /** Unique message identifier inside this chat */
-    this.id = data.message_id;
+    this.id = String(data.message_id);
 
     this._patch(data);
   }
@@ -66,9 +67,9 @@ class Message extends Base {
     if ("message_thread_id" in data) {
       /**
        * Unique identifier of a message thread or a forum topic to which the message belongs; for supergroups only
-       * @type {number | undefined}
+       * @type {string | undefined}
        */
-      this.threadId = data.message_thread_id;
+      this.threadId = String(data.message_thread_id);
     }
 
     if ("from" in data) {
@@ -95,7 +96,7 @@ class Message extends Base {
          * @type {import("../chat/ChatMember").ChatMember | undefined}
          */
         this.member = this.chat.members._add(this.chat.id, true, {
-          id: data.from.id,
+          id: String(data.from.id),
           extras: [{ user: data.from }],
         });
       }
@@ -197,24 +198,10 @@ class Message extends Base {
 
     if ("story" in data) {
       /**
-       * @typedef {Object} Story
-       * @property {number} id - Unique identifier for the story in the chat
-       * @property {Chat} chat - Chat that posted the story
-       */
-
-      const story = {
-        id: data.story.id,
-        chat: new Chat(this.client, {
-          ...data.story.chat,
-          threadId: this.threadId,
-        }),
-      };
-
-      /**
        * For replies to a story, the original message
        * @type {Story | undefined}
        */
-      this.story = story;
+      this.story = new Story(this.client, data.story);
     }
 
     if ("via_bot" in data) {
@@ -418,18 +405,10 @@ class Message extends Base {
 
     if ("migrate_to_chat_id" in data) {
       /**
-       * The group has been migrated to a supergroup with the specified identifier
-       * @type {number | undefined}
-       */
-      this.migrateToChatId = data.migrate_to_chat_id;
-    }
-
-    if ("migrate_to_chat_id" in data) {
-      /**
        * The supergroup has been migrated from a group with the specified identifier
-       * @type {number | undefined}
+       * @type {string | undefined}
        */
-      this.migrateFromChatId = data.migrate_to_chat_id;
+      this.migrateFromChatId = String(data.migrate_to_chat_id);
     }
 
     if ("successful_payment" in data) {
@@ -872,7 +851,7 @@ class Message extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, Message>} [options={}] - message collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message>} [options={}] - message collector options
    * @return {import("../../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
@@ -880,8 +859,8 @@ class Message extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, Message>} [options={}] - message collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<number, Message>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message>} [options={}] - message collector options
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, Message>, string]>}
    */
   awaitMessage(options = {}) {
     const _options = { ...options, max: 1 };
@@ -894,13 +873,13 @@ class Message extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, Message>} AwaitMessagesOptions
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, Message>} AwaitMessagesOptions
    * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
    */
 
   /**
    * @param {AwaitMessagesOptions} [options={}] - message collector options
-   * @return {Promise<import("@telegram.ts/collection").Collection<number, Message>>}
+   * @return {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
    */
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
@@ -916,7 +895,7 @@ class Message extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
    * @return {import("../../util/collector/ReactionCollector").ReactionCollector}
    */
   createReactionCollector(options = {}) {
@@ -924,8 +903,8 @@ class Message extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} [options={}] - reaction collector options
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
    */
   awaitReaction(options = {}) {
     const _options = { ...options, max: 1 };
@@ -938,13 +917,13 @@ class Message extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<number, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
+   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
    * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
    */
 
   /**
    * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<number, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
@@ -960,14 +939,14 @@ class Message extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<number, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../CallbackQuery").CallbackQuery>} [options={}] - inline keyboard collector options
    * @return {InlineKeyboardCollector}
    */
   createMessageComponentCollector(options = {}) {
     return new InlineKeyboardCollector(this.client, options);
   }
 
-  /*
+  /**
    * Reply to the current message
    * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId" | "messageThreadId">} [options={}] - out parameters

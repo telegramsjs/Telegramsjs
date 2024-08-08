@@ -48,9 +48,9 @@ class ExternalReplyInfo extends Base {
     if ("message_id" in data) {
       /**
        * Unique message identifier inside the original chat. Available only if the original chat is a supergroup or a channel
-       * @type {number | undefined}
+       * @type {string | undefined}
        */
-      this.messageId = data.message_id;
+      this.messageId = String(data.message_id);
     }
 
     if ("link_preview_options" in data) {

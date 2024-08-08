@@ -11,7 +11,7 @@ let cacheWarningEmitted;
 class ChatMemberManager extends BaseManager {
   /**
    * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client instance.
-   * @param {number} chatId - The ID of the chat.
+   * @param {number|string} chatId - The ID of the chat.
    * @param {number} [cacheSize=-1] - The maximum size of the cache. Default is unlimited.
    */
   constructor(client, chatId, cacheSize) {
@@ -21,7 +21,7 @@ class ChatMemberManager extends BaseManager {
       if (ctx.chat.id !== chatId) return;
       if (!ctx.newMember?.user?.id) return;
       if (cacheSize !== -1 && cacheSize < this.cache.size) {
-        if (this.cache.has(`${ctx.newMember.user.id}`)) {
+        if (this.cache.has(ctx.newMember.user.id)) {
           this.cache.set(ctx.newMember.user.id, ctx.newMember);
         }
         return;
@@ -30,7 +30,7 @@ class ChatMemberManager extends BaseManager {
       this.cache.set(ctx.newMember.user.id, ctx.newMember);
     });
 
-    Object.defineProperty(this, "chatId", { value: chatId });
+    Object.defineProperty(this, "chatId", { value: String(chatId) });
   }
 
   /**
@@ -38,7 +38,7 @@ class ChatMemberManager extends BaseManager {
    * @param {import("@telegram.ts/types").ChatMember} data - The data to add or update.
    * @param {boolean} [cache=true] - Whether to cache the data.
    * @param {Object} [options={}] - Additional options.
-   * @param {string|number} [options.id] - The ID of the entry.
+   * @param {string} [options.id] - The ID of the entry.
    * @param {Array} [options.extras=[]] - Extra data to patch the entry.
    * @returns {ChatMember} - The added or updated chat member.
    */
@@ -50,7 +50,7 @@ class ChatMemberManager extends BaseManager {
           `Overriding the cache handling for ${this.constructor.name} is unsupported and breaks functionality`,
         );
       }
-      return new this.holds(this.client, data);
+      return new this.holds(this.client, this.chatId, data);
     }
 
     for (const extra of extras) {
@@ -76,7 +76,7 @@ class ChatMemberManager extends BaseManager {
 
   /**
    * Fetches a chat member from the API.
-   * @param {ChatMember|string|number} user - The chat member instance or ID.
+   * @param {ChatMember|string} user - The chat member instance or ID.
    * @param {Object} [options={}] - Additional options.
    * @param {boolean} [options.cache=true] - Whether to cache the fetched chat member.
    * @param {boolean} [options.force=false] - Whether to force fetch from the API instead of using the cache.

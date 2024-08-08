@@ -27,7 +27,7 @@ class ChatMemberUpdated extends Base {
     if (!this.chat.isPrivate()) {
       /** New information about the chat member */
       this.newMember = this.chat.members._add(this.chat.id, true, {
-        id: data.new_chat_member.user.id,
+        id: String(data.new_chat_member.user.id),
         extras: [data.new_chat_member],
       });
     } else {

@@ -5,7 +5,7 @@ class User extends Base {
     super(client);
 
     /** Unique identifier for this user or bot. */
-    this.id = data.id;
+    this.id = String(data.id);
 
     /** True, if this user is a bot */
     this.bot = Boolean(data.is_bot);
@@ -58,7 +58,7 @@ class User extends Base {
 
   /**
    * Refunds a successful payment in Telegram Stars.
-   * @param {number} telegramPaymentId - Telegram payment identifier
+   * @param {string} telegramPaymentId - Telegram payment identifier
    * @return {Promise<true>} - Returns True on success.
    */
   refundStarPayment(telegramPaymentId) {

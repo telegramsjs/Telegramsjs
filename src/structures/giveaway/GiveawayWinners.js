@@ -14,7 +14,7 @@ class GiveawayWinners extends Base {
     this.chat = new Chat(client, data.chat);
 
     /** Identifier of the messsage with the giveaway in the chat */
-    this.messageId = data.giveaway_message_id;
+    this.messageId = String(data.giveaway_message_id);
 
     /** Point in time (Unix timestamp) when winners of the giveaway were selected */
     this.selectionTimestamp = data.winners_selection_date;

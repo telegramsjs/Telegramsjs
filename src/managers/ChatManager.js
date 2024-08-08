@@ -18,7 +18,7 @@ class ChatManager extends BaseManager {
 
   /**
    * Resolves a chat object.
-   * @param {Chat|ChatMember|Message|string|number} chat - The chat instance, chat member, message, or ID.
+   * @param {Chat|ChatMember|Message|string} chat - The chat instance, chat member, message, or ID.
    * @returns {Chat|null} - The resolved chat object or null if not found.
    */
   resolve(chat) {
@@ -29,7 +29,7 @@ class ChatManager extends BaseManager {
 
   /**
    * Fetches a chat object from the API.
-   * @param {Chat|string|number} chat - The chat instance or ID.
+   * @param {Chat|string} chat - The chat instance or ID.
    * @param {Object} [options={}] - Additional options.
    * @param {boolean} [options.cache=true] - Whether to cache the fetched chat.
    * @param {boolean} [options.force=false] - Whether to force fetch from the API instead of using the cache.

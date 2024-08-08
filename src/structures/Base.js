@@ -58,7 +58,7 @@ class Base {
 
   /**
    * Returns the primitive value of the instance
-   * @returns {number | null} The primitive value of the instance
+   * @returns {string | null} The primitive value of the instance
    */
   valueOf() {
     return this.id || null;

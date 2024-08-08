@@ -16,7 +16,7 @@ class Contact {
 
     if ("user_id" in data) {
       /** Contact's user identifier in Telegram */
-      this.userId = data.user_id;
+      this.userId = String(data.user_id);
     }
 
     if ("vcard" in data) {
