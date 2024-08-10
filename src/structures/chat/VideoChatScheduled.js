@@ -7,7 +7,14 @@ class VideoChatScheduled {
      * Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator
      * @type {number}
      */
-    this.startedTimestamp = data.start_date;
+    this.startedUnixTime = data.start_date;
+  }
+
+  /**
+   * Return the timestamp video chat is supposed to be started by a chat administrator
+   */
+  get startedTimestamp() {
+    return this.startedUnixTime * 1000;
   }
 
   /**

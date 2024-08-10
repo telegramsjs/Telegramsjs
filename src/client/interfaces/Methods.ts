@@ -695,6 +695,7 @@ export type ApiMethods = {
     | (import("../../structures/message/Message").Message & {
         location: import("../../structures/misc/Location").Location;
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 
@@ -714,6 +715,7 @@ export type ApiMethods = {
     | (import("../../structures/message/Message").Message & {
         location: import("../../structures/misc/Location").Location;
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 
@@ -748,6 +750,7 @@ export type ApiMethods = {
   }): import("../../structures/message/Message").Message & {
     paidMedia: import("../../structures/media/paid/PaidMedia").PaidMedia;
     editedTimestamp: number;
+    editedAt: Date;
   };
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
@@ -1503,6 +1506,7 @@ export type ApiMethods = {
     | (import("../../structures/message/Message").Message & {
         caption: string;
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 
@@ -1523,6 +1527,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 
@@ -1541,6 +1546,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 
@@ -1992,6 +1998,7 @@ export type ApiMethods = {
     | (import("../../structures/message/Message").Message & {
         game: import("../../structures/game/Game").Game;
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 

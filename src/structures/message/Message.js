@@ -275,14 +275,14 @@ class Message extends Base {
      * Date the message was sent in Unix time. It is always a positive number, representing a valid date
      * @type {number}
      */
-    this.createdTimestamp = data.date;
+    this.createdUnixTime = data.date;
 
     if ("edit_date" in data) {
       /**
        * Date the message was last edited in Unix time
        * @type {number | undefined}
        */
-      this.editedTimestamp = data.edit_date;
+      this.editedUnixTime = data.edit_date;
     }
 
     if ("business_connection_id" in data) {
@@ -828,10 +828,17 @@ class Message extends Base {
   }
 
   /**
-   * @return {this is this & { editedTimestamp: number }}
+   * @return {this is this & { editedTimestamp: number; editedAt: Date }}
    */
   get isEdited() {
     return Boolean(this.editedTimestamp);
+  }
+
+  /**
+   * Return the timestamp message was sent, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime * 1000;
   }
 
   /**
@@ -843,11 +850,18 @@ class Message extends Base {
   }
 
   /**
+   * Return the timestamp message was last edited, in milliseconds
+   */
+  get editedTimestamp() {
+    return this.editedUnixTime ? new Date(this.editedUnixTime) : null;
+  }
+
+  /**
    * Date the message was last edited
-   * @type {Date}
+   * @type {null | Date}
    */
   get editedAt() {
-    return new Date(this.editedTimestamp);
+    return this.editedTimestamp ? new Date(this.editedTimestamp) : null;
   }
 
   /**
@@ -1005,7 +1019,7 @@ class Message extends Base {
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
-   * @return {Promise<Message & {content: string; editedTimestamp: number; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @return {Promise<Message & {content: string; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
     if (!this.chat) {
@@ -1026,7 +1040,7 @@ class Message extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @return {Promise<Message & { caption?: string; editedTimestamp: number; }>}
+   * @return {Promise<Message & { caption?: string; editedTimestamp: number; editedAt: Date; }>}
    */
   editCaption(caption, options = {}) {
     if (!this.chat) {
@@ -1047,7 +1061,7 @@ class Message extends Base {
    * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param {import("@telegram.ts/types").InputMedia} media - An object for a new media content of the message
    * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
-   * @return {Promise<true | Message & { editedTimestamp: number; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @return {Promise<true | Message & { editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(media, options = {}) {
     if (!this.chat) {
@@ -1068,7 +1082,7 @@ class Message extends Base {
    * Use this method to edit only the reply markup of messages.
    * @param {import("@telegram.ts/types").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
    * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} [options={}] - out parameters
-   * @return {Promise<true | Message & { editedTimestamp: number; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @return {Promise<true | Message & { editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(replyMarkup, options = {}) {
     if (!this.chat) {

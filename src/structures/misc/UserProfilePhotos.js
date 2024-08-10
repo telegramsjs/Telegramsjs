@@ -8,6 +8,7 @@ class UserProfilePhotos extends Base {
    */
   constructor(client, data) {
     super(client);
+
     /** Total number of profile pictures the target user has */
     this.count = data.total_count;
 

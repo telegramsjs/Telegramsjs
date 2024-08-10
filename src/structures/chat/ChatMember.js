@@ -203,7 +203,7 @@ class ChatMember extends Base {
        * Date the request was sent in Unix time
        * @type {number | undefined}
        */
-      this.requestedTimestamp = data.date;
+      this.requestedUnixTime = data.date;
     }
 
     if ("user_chatId" in data) {
@@ -219,26 +219,40 @@ class ChatMember extends Base {
        * Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
        * @type {number | undefined}
        */
-      this.restrictedTimestamp = data.until_date;
+      this.restrictedUnixTime = data.until_date;
     }
 
     return data;
   }
 
   /**
+   * Return the timestamp restrictions will be lifted for this user,  in milliseconds
+   */
+  get restrictedTimestamp() {
+    return this.restrictedUnixTime ? this.restrictedUnixTime * 1000 : null;
+  }
+
+  /**
    * Date when restrictions will be lifted for this user
-   * @type {Date}
+   * @type {null | Date}
    */
   get restrictedAt() {
-    return new Date(this.restrictedTimestamp);
+    return this.restrictedTimestamp ? new Date(this.restrictedTimestamp) : null;
+  }
+
+  /**
+   * Return the timestamp request was sent, in milliseconds, in milliseconds
+   */
+  get requestedTimestamp() {
+    return this.requestedUnixTime ? this.requestedUnixTime * 1000 : null;
   }
 
   /**
    * Date the request was sent
-   * @type {Date}
+   * @type {null | Date}
    */
   get requestedAt() {
-    return new Date(this.requestedTimestamp);
+    return this.requestedTimestamp ? new Date(this.requestedTimestamp) : null;
   }
 
   /**

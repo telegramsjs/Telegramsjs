@@ -114,17 +114,25 @@ class Poll extends Base {
        * Point in time (Unix timestamp) when the poll will be automatically closed
        * @type {number | undefined}
        */
-      this.closeTimestamp = data.close_date;
+      this.closeUnixTime = data.close_date;
     }
 
     return data;
   }
+
+  /**
+   * Return the timestamp poll will be automatically closed, in milliseconds
+   */
+  get closeTimestamp() {
+    return this.closeUnixTime ? this.closeUnixTime * 1000 : null;
+  }
+
   /**
    * Point in time when the poll will be automatically closed
-   * @type {Date}
+   * @type {null | Date}
    */
   get closedAt() {
-    return new Date(this.closeTimestamp);
+    return this.closeTimestamp ? new Date(this.closeTimestamp) : null;
   }
 }
 

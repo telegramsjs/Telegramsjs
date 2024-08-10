@@ -13,7 +13,7 @@ class StarTransaction {
     this.amount = data.amount;
 
     /** Date the transaction was created in Unix time */
-    this.createdTimestamp = data.date;
+    this.createdUnixTime = data.date;
 
     if ("source" in data) {
       /**
@@ -42,7 +42,14 @@ class StarTransaction {
   }
 
   /**
-   * Date the transaction was created in Unix time
+   * Return the timestamp transaction was created
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime * 1000;
+  }
+
+  /**
+   * Date the transaction was created
    * @type {Date}
    */
   get createdAt() {

@@ -33,7 +33,14 @@ class MessageReactionCountUpdated extends Base {
     this.reactions = data.reactions.map((data) => new ReactionCount(data));
 
     /** Date of the change in Unix time */
-    this.createdTimestamp = data.date;
+    this.createdUnixTime = data.date;
+  }
+
+  /**
+   * Return the timestamp change, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime * 1000;
   }
 
   /**

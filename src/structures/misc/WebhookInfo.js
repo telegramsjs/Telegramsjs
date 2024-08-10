@@ -26,7 +26,7 @@ class WebhookInfo extends Base {
 
     if ("last_error_date" in data) {
       /** Unix time for the most recent error that happened when trying to deliver an update via webhook */
-      this.lastedTimestamp = data.last_error_date;
+      this.lastedUnixTime = data.last_error_date;
     }
 
     if ("last_error_message" in data) {
@@ -36,7 +36,7 @@ class WebhookInfo extends Base {
 
     if ("last_synchronization_error_date" in data) {
       /** Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters */
-      this.synchronizatedTimestamp = data.last_synchronization_error_date;
+      this.synchronizatedUnixTime = data.last_synchronization_error_date;
     }
 
     if ("max_connections" in data) {
@@ -58,19 +58,37 @@ class WebhookInfo extends Base {
   }
 
   /**
+   * Return the timestamp most recent error that happened when trying to deliver an update via webhook, in milliseconds
+   */
+  get lastedTimestamp() {
+    return this.lastedUnixTime ? new Date(this.lastedUnixTime) : null;
+  }
+
+  /**
    * Date for the most recent error that happened when trying to deliver an update via webhook
    * @type {Date}
    */
   get lastedAt() {
-    return new Date(this.lastedTimestamp);
+    return this.lastedTimestamp ? new Date(this.lastedTimestamp) : null;
+  }
+
+  /**
+   * Return the timestamp most recent error that happened when trying to synchronize available updates with Telegram datacenters, in milliseconds
+   */
+  get synchronizatedTimestamp() {
+    return this.synchronizatedUnixTime
+      ? this.synchronizatedUnixTime * 1000
+      : null;
   }
 
   /**
    * Date of the most recent error that happened when trying to synchronize available updates with Telegram datacenters
-   * @type {Date}
+   * @type {null | Date}
    */
   get synchronizatedAt() {
-    return new Date(this.synchronizatedTimestamp);
+    return this.synchronizatedTimestamp
+      ? new Date(this.synchronizatedTimestamp)
+      : null;
   }
 }
 

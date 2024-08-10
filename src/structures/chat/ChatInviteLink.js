@@ -52,7 +52,7 @@ class ChatInviteLink extends Base {
        * Point in time (Unix timestamp) when the link will expire or has been expired
        * @type {number}
        */
-      this.expiredTimestamp = data.expire_date;
+      this.expiredUnixTime = data.expire_date;
     }
 
     if ("member_limit" in data) {
@@ -73,11 +73,18 @@ class ChatInviteLink extends Base {
   }
 
   /**
+   * Return the timestamp link will expire or has been expired, in milliseconds
+   */
+  get expiredTimestamp() {
+    return this.expiredUnixTime ? this.expiredUnixTime * 1000 : null;
+  }
+
+  /**
    * Point in time when the link will expire or has been expired
-   * @type {Date}
+   * @type {null | Date}
    */
   get expiredAt() {
-    return new Date(this.expiredTimestamp);
+    return this.expiredTimestamp ? new Date(this.expiredTimestamp) : null;
   }
 }
 

@@ -31,7 +31,7 @@ class BusinessConnection extends Base {
      * Date the connection was established in Unix time
      * @type {number}
      */
-    this.createdTimestamp = data.date;
+    this.createdUnixTime = data.date;
 
     /**
      * True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
@@ -44,6 +44,13 @@ class BusinessConnection extends Base {
      * @type {boolean}
      */
     this.enabled = data.is_enabled;
+  }
+
+  /**
+   * Return the timestamp connection was established, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime * 1000;
   }
 
   /**
