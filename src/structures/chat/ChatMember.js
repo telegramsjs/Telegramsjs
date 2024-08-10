@@ -386,6 +386,13 @@ class ChatMember extends Base {
       customTitle: name,
     });
   }
+
+  /**
+   * Return this member username, otherwise just an empty string
+   */
+  toString() {
+    return this.user?.toString() ?? "";
+  }
 }
 
 module.exports = { ChatMember };
