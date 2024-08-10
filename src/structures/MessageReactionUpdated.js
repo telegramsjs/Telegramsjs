@@ -150,7 +150,7 @@ class MessageReactionUpdated extends Base {
 
   /**
    * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @return {Promise<[import("@telegram.ts/collection").Collection<string, essageReactionUpdated>, string]>}
+   * @return {Promise<[import("@telegram.ts/collection").Collection<string, MessageReactionUpdated>, string]>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
