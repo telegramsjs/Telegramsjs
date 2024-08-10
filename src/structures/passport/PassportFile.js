@@ -9,7 +9,14 @@ class PassportFile extends InputFile {
     super(client, data);
 
     /** Unix time when the file was uploaded */
-    this.createdTimestamp = data.file_date;
+    this.createdUnixTime = data.file_date;
+  }
+
+  /**
+   * Return the timestamp file was uploaded, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime * 1000;
   }
 
   /**

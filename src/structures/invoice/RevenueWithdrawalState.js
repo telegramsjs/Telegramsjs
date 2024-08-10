@@ -5,7 +5,7 @@ class RevenueWithdrawalState {
   constructor(data) {
     if ("date" in data) {
       /** Date the withdrawal was completed in Unix time */
-      this.createdTimestamp = data.date;
+      this.createdUnixTime = data.date;
     }
 
     if ("url" in data) {
@@ -25,11 +25,18 @@ class RevenueWithdrawalState {
   }
 
   /**
+   * Return the timestamp withdrawal was completed, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime ? this.createdUnixTime * 1000 : null;
+  }
+
+  /**
    * Date the withdrawal was completed
-   * @type {Date}
+   * @type {null | Date}
    */
   get createdAt() {
-    return new Date(this.createdTimestamp);
+    return this.createdTimestamp ? new Date(this.createdTimestamp) : null;
   }
 
   /**

@@ -19,7 +19,7 @@ class ChatMemberUpdated extends Base {
     this.author = new User(client, data.from);
 
     /** Date the change was done in Unix time */
-    this.createdTimestamp = data.date;
+    this.createdUnixTime = data.date;
 
     /** Previous information about the chat member */
     this.oldMember = new ChatMember(client, this.chat.id, data.old_chat_member);
@@ -52,6 +52,13 @@ class ChatMemberUpdated extends Base {
       /** True, if the user joined the chat via a chat folder invite link */
       this.viaInviteLink = data.via_chat_folder_invite_link;
     }
+  }
+
+  /**
+   * Return the timestamp change was done, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime * 1000;
   }
 
   /**

@@ -10,13 +10,20 @@ class ChatBoost {
     this.id = data.boost_id;
 
     /** Point in time (Unix timestamp) when the chat was boosted */
-    this.createdTimestamp = data.add_date;
+    this.createdUnixTime = data.add_date;
 
     /** Point in time (Unix timestamp) when the boost will automatically expire, unless the booster's Telegram Premium subscription is prolonged */
-    this.expirationedTimestamp = data.expiration_date;
+    this.expirationedUnixTime = data.expiration_date;
 
     /** Source of the added boost */
     this.source = new ChatBoostSource(client, data.source);
+  }
+
+  /**
+   * Returns the timestamp when the chat was created, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdTimestamp * 1000;
   }
 
   /**
@@ -28,7 +35,14 @@ class ChatBoost {
   }
 
   /**
-   * Point in time (Unix timestamp) when the boost will automatically expire, unless the booster's Telegram Premium subscription is prolonged
+   * Return the timestamp when the boost will automatically expire, unless the booster's Telegram Premium subscription is prolonged, in milliseconds
+   */
+  get expirationedTimestamp() {
+    return this.expirationedUnixTime * 1000;
+  }
+
+  /**
+   * Point in time when the boost will automatically expire, unless the booster's Telegram Premium subscription is prolonged
    * @type {Date}
    */
   get expirationedAt() {

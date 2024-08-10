@@ -17,7 +17,7 @@ class GiveawayWinners extends Base {
     this.messageId = String(data.giveaway_message_id);
 
     /** Point in time (Unix timestamp) when winners of the giveaway were selected */
-    this.selectionTimestamp = data.winners_selection_date;
+    this.selectionUnixTime = data.winners_selection_date;
 
     /** Total number of winners in the giveaway */
     this.count = data.winner_count;
@@ -78,6 +78,13 @@ class GiveawayWinners extends Base {
     }
 
     return data;
+  }
+
+  /**
+   * Return the timestamp winners of the giveaway were selected, in milliseconds
+   */
+  get selectionTimestamp() {
+    return this.selectionUnixTime * 1000;
   }
 
   /**

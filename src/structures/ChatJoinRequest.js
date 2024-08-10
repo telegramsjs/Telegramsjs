@@ -31,7 +31,22 @@ class ChatJoinRequest extends Base {
     }
 
     /** Date the request was sent in Unix time */
-    this.createdTimestamp = data.date;
+    this.createdUnixTime = data.date;
+  }
+
+  /**
+   * Return the timestamp request was sent, in milliseconds
+   */
+  get createdTimestamp() {
+    return this.createdUnixTime * 1000;
+  }
+
+  /**
+   * Date the request was sent
+   * @type {Date}
+   */
+  get createdAt() {
+    return new Date(this.createdTimestamp);
   }
 
   /**
@@ -48,14 +63,6 @@ class ChatJoinRequest extends Base {
    */
   declineJoinRequest() {
     return this.client.declineChatJoinRequest(this.chat.id, this.author.id);
-  }
-
-  /**
-   * Date the request was sent
-   * @type {Date}
-   */
-  get createdAt() {
-    return new Date(this.createdTimestamp);
   }
 }
 

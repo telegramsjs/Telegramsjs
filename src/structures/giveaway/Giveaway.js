@@ -13,7 +13,7 @@ class Giveaway extends Base {
     this.chats = data.chats.map((chat) => new Chat(client, chat));
 
     /** Point in time (Unix timestamp) when winners of the giveaway will be selected */
-    this.selectedTimestamp = this.winners_selection_date;
+    this.selectedUnixTime = this.winners_selection_date;
 
     /** The number of users which are supposed to be selected as winners of the giveaway */
     this.winnerCount = data.winner_count;
@@ -42,6 +42,13 @@ class Giveaway extends Base {
       /** The number of months the Telegram Premium subscription won from the giveaway will be active for */
       this.subscriptionMonthCount = data.premium_subscription_month_count;
     }
+  }
+
+  /**
+   * Return the timestamp winners of the giveaway will be selected, in milliseconds
+   */
+  get selectedTimestamp() {
+    return this.selectedUnixTime * 1000;
   }
 
   /**

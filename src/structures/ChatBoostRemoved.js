@@ -20,7 +20,14 @@ class ChatBoostRemoved extends Base {
     this.source = new ChatBoostSource(client, data.source);
 
     /** Point in time (Unix timestamp) when the boost was removed */
-    this.removedTimestamp = data.remove_date;
+    this.removedUnixTime = data.remove_date;
+  }
+
+  /**
+   * Return the timestamp boost was removed, in milliseconds
+   */
+  get removedTimestamp() {
+    return this.removedUnixTime * 1000;
   }
 
   /**
