@@ -226,6 +226,13 @@ class ChatMember extends Base {
   }
 
   /**
+   * Return the member id
+   */
+  get id() {
+    return this.user?.id ?? null;
+  }
+
+  /**
    * Return the timestamp restrictions will be lifted for this user,  in milliseconds
    */
   get restrictedTimestamp() {
@@ -253,6 +260,19 @@ class ChatMember extends Base {
    */
   get requestedAt() {
     return this.requestedTimestamp ? new Date(this.requestedTimestamp) : null;
+  }
+
+  /**
+   * Fetches this ChatMember
+   * @param {boolean} [force=true] - whether to skip the cache check and request the API
+   * @return {Promise<ChatMember | null>}
+   */
+  fetch(force = true) {
+    return (
+      this.client.chats
+        .resolve(this.chatId)
+        ?.members?.fetch({ id: this.id }, { force }) ?? null
+    );
   }
 
   /**
