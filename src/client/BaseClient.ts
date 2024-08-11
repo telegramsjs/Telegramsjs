@@ -44,6 +44,7 @@ interface EventHandlers {
   disconnect: (
     telegram: import("./TelegramClient").TelegramClient,
   ) => PossiblyAsync<void>;
+  error: (detalis: [number, unknown]) => PossiblyAsync<void>;
   message: (
     message: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;

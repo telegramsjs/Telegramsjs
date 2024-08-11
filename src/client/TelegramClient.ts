@@ -54,6 +54,7 @@ interface ClientOptions {
   memberCacheMaxSize?: number;
   userCacheMaxSize?: number;
   pollingTimeout?: number;
+  errorHandler?: boolean;
 }
 
 /**
