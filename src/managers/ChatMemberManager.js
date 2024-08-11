@@ -75,6 +75,13 @@ class ChatMemberManager extends BaseManager {
   }
 
   /**
+   * The client user as a ChatMember of this chat
+   */
+  get me() {
+    return super.resolve(this.client.user?.id);
+  }
+
+  /**
    * Fetches a chat member from the API.
    * @param {ChatMember|string} user - The chat member instance or ID.
    * @param {Object} [options={}] - Additional options.
