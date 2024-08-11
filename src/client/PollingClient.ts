@@ -70,7 +70,7 @@ class PollingClient {
       if (!this.#isClosed) {
         setTimeout(async () => {
           await this.poll(options);
-        }, options?.timeout);
+        }, this.client.options?.pollingTimeout ?? 300);
       }
     }
   }

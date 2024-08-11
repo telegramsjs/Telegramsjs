@@ -53,6 +53,7 @@ interface ClientOptions {
   chatCacheMaxSize?: number;
   memberCacheMaxSize?: number;
   userCacheMaxSize?: number;
+  pollingTimeout?: number;
 }
 
 /**

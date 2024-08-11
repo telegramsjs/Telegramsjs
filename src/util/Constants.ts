@@ -33,6 +33,7 @@ const DefaultClientParameters = {
   chatCacheMaxSize: -1,
   memberCacheMaxSize: -1,
   userCacheMaxSize: -1,
+  pollingTimeout: 300,
 } as const;
 
 const Events = {
