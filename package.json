@@ -53,13 +53,13 @@
   "devDependencies": {
     "@telegram.ts/types": "^1.13.0",
     "@types/lodash.snakecase": "^4.1.9",
-    "@types/node": "^18.19.39",
+    "@types/node": "^22.2.0",
     "@types/node-fetch": "^2.6.11"
   },
   "dependencies": {
     "@telegram.ts/collection": "^1.1.0",
     "lodash.snakecase": "^4.1.1",
-    "node-fetch": "^2.7.0",
+    "node-fetch": "^3.3.2",
     "safe-compare": "^1.1.4",
     "sandwich-stream": "^2.0.2",
     "tslib": "^2.6.3"
