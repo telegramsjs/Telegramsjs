@@ -1245,6 +1245,13 @@ class Message extends Base {
       ...options,
     });
   }
+
+  /**
+   * Return this message content and caption for media, otherwise just an empty string
+   */
+  toString() {
+    return this.content ?? this.caption ?? "";
+  }
 }
 
 module.exports = { Message };

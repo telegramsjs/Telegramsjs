@@ -79,21 +79,35 @@ class WebhookClient {
       this.client.emit(Events.Ready, this.client);
     });
 
-    const { tlsOptions, port, host, requestCallback } = options;
-    const webhookCallback = await this.createWebhookCallback(requestCallback, {
-      path,
-      secretToken,
-    });
-    const serverOptions = tlsOptions != null ? tlsOptions : {};
-    this.webhookServer =
-      tlsOptions != null
-        ? https.createServer(serverOptions, webhookCallback)
-        : http.createServer(webhookCallback);
+    try {
+      const { tlsOptions, port, host, requestCallback } = options;
+      const webhookCallback = await this.createWebhookCallback(
+        requestCallback,
+        {
+          path,
+          secretToken,
+        },
+      );
+      const serverOptions = tlsOptions != null ? tlsOptions : {};
+      this.webhookServer =
+        tlsOptions != null
+          ? https.createServer(serverOptions, webhookCallback)
+          : http.createServer(webhookCallback);
 
-    if (!this.webhookServer) {
-      throw new TelegramError("Failed to create webhook server");
+      if (!this.webhookServer) {
+        throw new TelegramError("Failed to create webhook server");
+      }
+      this.webhookServer.listen(port, host);
+    } catch (err) {
+      if (
+        this.client.options?.errorHandler &&
+        this.client.eventNames().indexOf("error") !== -1
+      ) {
+        this.client.emit("error", [this.offset, err]);
+        return;
+      }
+      throw err;
     }
-    this.webhookServer.listen(port, host);
   }
 
   /**

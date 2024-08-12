@@ -87,6 +87,13 @@ class User extends Base {
       offset,
     });
   }
+
+  /**
+   * Return this user username, otherwise just an empty string
+   */
+  toString() {
+    return this.username ?? "";
+  }
 }
 
 module.exports = { User };

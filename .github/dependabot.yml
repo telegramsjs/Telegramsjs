@@ -13,3 +13,8 @@ updates:
       github-actions:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "node-fetch"
+        versions: ["3.x"]
+      - dependency-name: "@types/node"
+        versions: ["19.x", "20.x", "21.x", "22.x"]

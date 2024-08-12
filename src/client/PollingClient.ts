@@ -65,12 +65,19 @@ class PollingClient {
         }
       }
     } catch (err) {
+      if (
+        this.client.options?.errorHandler &&
+        this.client.eventNames().indexOf("error") !== -1
+      ) {
+        this.client.emit("error", [this.offset, err]);
+        return;
+      }
       throw err;
     } finally {
       if (!this.#isClosed) {
         setTimeout(async () => {
           await this.poll(options);
-        }, options?.timeout);
+        }, this.client.options?.pollingTimeout ?? 300);
       }
     }
   }
