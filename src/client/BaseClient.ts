@@ -790,7 +790,15 @@ class BaseClient extends EventEmitter {
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatPhoto(
     chatId: number | string,
-    photo: Buffer | ReadStream | string,
+    photo:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
   ): Promise<MethodsLibReturnType["setChatPhoto"]> {
     return await this.apiRequest.get<MethodsApiReturnType["setChatPhoto"]>(
       "setChatPhoto",
