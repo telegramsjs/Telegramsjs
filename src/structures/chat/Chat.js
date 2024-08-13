@@ -371,6 +371,64 @@ class Chat extends Base {
   }
 
   /**
+   * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
+   * @param {(number | string)[]} messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
+   * @param {(number | string)[]} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {Omit<MethodParameters["forwardMessages"], "chatId" | "fromChatId" | "messageIds">} [options={}] - out parameters
+   * @returns {Promise<number[]>} - On success, an array of MessageId of the sent messages is returned.
+   */
+  forwardMessages(messageIds, chatId, options = {}) {
+    return this.client.forwardMessages({
+      chatId,
+      fromChatId: this.id,
+      messageIds,
+      ...options,
+    });
+  }
+
+  /**
+   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages.
+   * @param {(number | string)[]} messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order
+   * @param {(number | string)[]} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {Omit<MethodParameters["copyMessages"], "chatId" | "fromChatId" | "messageIds">} [options={}] - out parameters
+   * @returns {Promise<number[]>} - On success, an array of MessageId of the sent messages is returned.
+   */
+  copyMessages(messageIds, chatId, options = {}) {
+    return this.client.copyMessages({
+      chatId,
+      fromChatId: this.id,
+      messageIds,
+      ...options,
+    });
+  }
+
+  /**
+   * Use this method to delete a message, including service messages, with the following limitations:
+  - A message can only be deleted if it was sent less than 48 hours ago.
+  - Service messages about a supergroup, channel, or forum topic creation can't be deleted.
+  - A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.
+  - Bots can delete outgoing messages in private chats, groups, and supergroups.
+  - Bots can delete incoming messages in private chats.
+  - Bots granted can_post_messages permissions can delete outgoing messages in channels.
+  - If the bot is an administrator of a group, it can delete any message there.
+  - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+   * @param {number | string} id - Identifier of the message to delete 
+   * @return {Promise<true>} - Returns True on success.
+   */
+  deleteMessage(id) {
+    return this.client.deleteMessage(this.id, id);
+  }
+
+  /**
+   * Use this method to delete multiple messages simultaneously.
+   * @param {(number | string)[]} ids - A list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
+   * @return {Promise<true>} - Returns True on success.
+   */
+  deleteMessages(ids) {
+    return this.client.deleteMessages(this.id, ids);
+  }
+
+  /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param {import("@telegram.ts/types").MenuButton} [menuButton] - An object for the bot's new menu button. Defaults to MenuButtonDefault
    * @return {Promise<true>} - Returns True on success.
