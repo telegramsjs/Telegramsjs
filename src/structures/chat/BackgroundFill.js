@@ -41,14 +41,14 @@ class BackgroundFill {
   }
 
   /**
-   * @return {this is this & { color: number; }}
+   * @returns {this is this & { color: number; }}
    */
   isSolid() {
     return Boolean("color" in this && this.color);
   }
 
   /**
-   * @return {this is this & { topColor: number; bottomColor: number; rotationAngle: number; }}
+   * @returns {this is this & { topColor: number; bottomColor: number; rotationAngle: number; }}
    */
   isGradient() {
     return Boolean(
@@ -62,7 +62,7 @@ class BackgroundFill {
   }
 
   /**
-   * @return {this is this & { colors: number[] }}
+   * @returns {this is this & { colors: number[] }}
    */
   isFreeformGradient() {
     return Boolean("colors" in this && this.colors);

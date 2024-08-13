@@ -40,7 +40,7 @@ class RevenueWithdrawalState {
   }
 
   /**
-   * @return {this is this & { createdTimestamp: number; url: string; }}
+   * @returns {this is this & { createdTimestamp: number; url: string; }}
    */
   isSucceeded() {
     return Boolean(

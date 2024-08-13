@@ -97,7 +97,7 @@ class BackgroundType {
   }
 
   /**
-   * @return {this is this & { fill: BackgroundFill; darkDimming: number; }}
+   * @returns {this is this & { fill: BackgroundFill; darkDimming: number; }}
    */
   isFill() {
     return Boolean(
@@ -106,7 +106,7 @@ class BackgroundType {
   }
 
   /**
-   * @return {this is this & { document: Document; darkDimming: number; }}
+   * @returns {this is this & { document: Document; darkDimming: number; }}
    */
   isWallpaper() {
     return Boolean(
@@ -118,7 +118,7 @@ class BackgroundType {
   }
 
   /**
-   * @return {this is this & { fill: BackgroundFill; document: Document; intensity: number }}
+   * @returns {this is this & { fill: BackgroundFill; document: Document; intensity: number }}
    */
   isPattern() {
     return Boolean(

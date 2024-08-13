@@ -45,14 +45,14 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @return {this is this & { user: User }}
+   * @returns {this is this & { user: User }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @return {this is this & { withdrawal: RevenueWithdrawalState }}
+   * @returns {this is this & { withdrawal: RevenueWithdrawalState }}
    */
   isFragment() {
     return Boolean("withdrawal" in this && this.withdrawal);

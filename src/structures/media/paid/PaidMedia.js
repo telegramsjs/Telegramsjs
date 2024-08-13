@@ -58,21 +58,21 @@ class PaidMedia extends Base {
   }
 
   /**
-   * @return {this & this & { video?: undefined; photo?: undefined }}
+   * @returns {this & this & { video?: undefined; photo?: undefined }}
    */
   isPreview() {
     return !this.isPhoto() && !this.isVideo();
   }
 
   /**
-   * @return {this is this & { photo: Photo[] }}
+   * @returns {this is this & { photo: Photo[] }}
    */
   isPhoto() {
     return Boolean("photo" in this && this.photo);
   }
 
   /**
-   * @return {this is this & { video: Video }}
+   * @returns {this is this & { video: Video }}
    */
   isVideo() {
     return Boolean("video" in this && this.video);

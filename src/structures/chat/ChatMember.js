@@ -265,7 +265,7 @@ class ChatMember extends Base {
   /**
    * Fetches this ChatMember
    * @param {boolean} [force=true] - whether to skip the cache check and request the API
-   * @return {Promise<ChatMember | null>}
+   * @returns {Promise<ChatMember | null>}
    */
   fetch(force = true) {
     return (
@@ -293,7 +293,7 @@ class ChatMember extends Base {
   /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   kick(options = {}) {
     if (!this.user) {
@@ -312,7 +312,7 @@ class ChatMember extends Base {
   /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {Omit<MethodParameters["banChatMember"], "userId" | "chatId">} [options={}]
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   ban(options = {}) {
     if (!this.user) {
@@ -331,7 +331,7 @@ class ChatMember extends Base {
   /**
    * Use this method to unban a previously banned user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't want this, use the parameter only_if_banned.
    * @param {boolean} [onlyIfBanned] - Do nothing if the user is not banned
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   unban(onlyIfBanned) {
     if (!this.user) {
@@ -350,7 +350,7 @@ class ChatMember extends Base {
   /**
    * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights.
    * @param {string | number} senderChatId - Unique identifier of the target sender chat
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   banSenderChat(senderChatId) {
     return this.client.banChatSenderChat(this.chatId, senderChatId);
@@ -359,7 +359,7 @@ class ChatMember extends Base {
   /**
    * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights.
    * @param {string | number} senderChatId - Unique identifier of the target sender chat
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   unbanSenderChat(senderChatId) {
     return this.client.unbanChatSenderChat(this.chatId, senderChatId);
@@ -369,7 +369,7 @@ class ChatMember extends Base {
    * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
    * @param {import("../../util/ChatPermissions").ChatPermissionFlags} perms - An object for new user permissions
    * @param {Omit<MethodParameters["restrictChatMember"], "userId" | "permissions">} [options={}] - out parameters
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   restrict(perms, options = {}) {
     return this.client.restrictChatMember({
@@ -383,7 +383,7 @@ class ChatMember extends Base {
    * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user.
    * @param {import("../../util/ChatPermissions").ChatPermissionFlags} persm - An object for new user permissions
    * @param {boolean} [isAnonymous] - Pass True if the administrator's presence in the chat is hidden
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   promote(persm, isAnonymous) {
     return this.client.promoteChatMember({
@@ -397,7 +397,7 @@ class ChatMember extends Base {
   /**
    * Use this method to set a custom title for an administrator in a supergroup promoted by the bot.
    * @param {string} name - New custom title for the administrator; 0-16 characters, emoji are not allowed
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   setNikeName(name) {
     return this.client.setChatAdministratorCustomTitle({
