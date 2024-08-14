@@ -28,6 +28,13 @@ class ReactionType {
   isCustomEmoji() {
     return Boolean("customEmoji" in this && this.customEmoji);
   }
+
+  /**
+   * @returns {this is this & { customEmoji?: undefined; emoji?: undefined }}
+   */
+  isPaid() {
+    return !this.isEmoji() && !this.isCustomEmoji();
+  }
 }
 
 module.exports = { ReactionType };

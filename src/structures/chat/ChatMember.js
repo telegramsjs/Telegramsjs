@@ -206,6 +206,14 @@ class ChatMember extends Base {
       this.requestedUnixTime = data.date;
     }
 
+    if ("until_date" in data) {
+      /**
+       * Date when the user's subscription will expire; Unix time
+       * @type {number | undefined}
+       */
+      this.untilUnixTime = data.until_date;
+    }
+
     if ("user_chatId" in data) {
       /**
        * Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user
@@ -245,6 +253,21 @@ class ChatMember extends Base {
    */
   get restrictedAt() {
     return this.restrictedTimestamp ? new Date(this.restrictedTimestamp) : null;
+  }
+
+  /**
+   * Date when the user's subscription will expire, in milliseconds
+   */
+  get untilTimestamp() {
+    return this.untilUnixTime ? this.untilUnixTime * 1000 : null;
+  }
+
+  /**
+   * Date the user's subscription will expire
+   * @type {null | Date}
+   */
+  get untilAt() {
+    return this.untilTimestamp ? new Date(this.untilTimestamp) : null;
   }
 
   /**
