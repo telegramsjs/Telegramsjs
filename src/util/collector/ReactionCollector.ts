@@ -1,5 +1,5 @@
-import { Events } from "../Constants";
 import { Collection } from "@telegram.ts/collection";
+import { Events, ReactionCollectorEvents } from "../Constants";
 import { ReactionType } from "../../structures/misc/ReactionType";
 import type { TelegramClient } from "../../client/TelegramClient";
 import type { MessageReactionUpdated } from "../../structures/MessageReactionUpdated";
@@ -71,7 +71,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
 
     client.incrementMaxListeners();
     client.on(Events.MessageReaction, this.handleCollect);
-    this.once("end", () => {
+    this.once(ReactionCollectorEvents.End, () => {
       client.off(Events.MessageReaction, this.handleCollect);
       client.decrementMaxListeners();
     });
@@ -156,7 +156,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
     if (!reaction.user?.id) return;
     if (!this.users.has(reaction.user.id)) {
       if (this.users.size === 0) {
-        this.emit("create", reaction);
+        this.emit(ReactionCollectorEvents.Create, reaction);
       }
       this.users.set(reaction.user.id, reaction);
       return;
@@ -164,7 +164,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
     const getUser = this.users.get(reaction.user.id) || {};
     const setUser = Array.isArray(getUser) ? [...getUser] : [getUser];
     this.emit(
-      "user",
+      ReactionCollectorEvents.User,
       new Collection([[reaction.user.id, [...setUser, reaction]]]),
     );
     this.users.set(reaction.user.id, [...setUser, reaction]);

@@ -215,7 +215,7 @@ class BaseClient extends EventEmitter {
 
   /**
    * Increments max listeners by one, if they are not zero.
-   * @return {void}
+   * @returns {void}
    */
   incrementMaxListeners() {
     const maxListeners = this.getMaxListeners();
@@ -226,7 +226,7 @@ class BaseClient extends EventEmitter {
 
   /**
    * Decrements max listeners by one, if they are not zero.
-   * @return {void}
+   * @returns {void}
    */
   decrementMaxListeners() {
     const maxListeners = this.getMaxListeners();
@@ -689,7 +689,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
   async banChatSenderChat(
     chatId: number | string,
-    senderChatId: number,
+    senderChatId: number | string,
   ): Promise<MethodsLibReturnType["banChatSenderChat"]> {
     return await this.apiRequest.get<MethodsApiReturnType["banChatSenderChat"]>(
       "banChatSenderChat",
@@ -700,7 +700,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns True on success. */
   async unbanChatSenderChat(
     chatId: number | string,
-    senderChatId: number,
+    senderChatId: number | string,
   ): Promise<MethodsLibReturnType["unbanChatSenderChat"]> {
     return await this.apiRequest.get<
       MethodsApiReturnType["unbanChatSenderChat"]
@@ -769,7 +769,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to approve a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   async approveChatJoinRequest(
-    userId: number,
+    userId: number | string,
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["approveChatJoinRequest"]> {
     return await this.apiRequest.get<
@@ -780,7 +780,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to decline a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   async declineChatJoinRequest(
     chatId: number | string,
-    userId: number,
+    userId: number | string,
   ): Promise<MethodsLibReturnType["declineChatJoinRequest"]> {
     return await this.apiRequest.get<
       MethodsApiReturnType["declineChatJoinRequest"]
@@ -790,7 +790,15 @@ class BaseClient extends EventEmitter {
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatPhoto(
     chatId: number | string,
-    photo: Buffer | ReadStream | string,
+    photo:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
   ): Promise<MethodsLibReturnType["setChatPhoto"]> {
     return await this.apiRequest.get<MethodsApiReturnType["setChatPhoto"]>(
       "setChatPhoto",
@@ -821,7 +829,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatDescription(
-    chatId: number,
+    chatId: number | string,
     description?: string,
   ): Promise<MethodsLibReturnType["setChatDescription"]> {
     return await this.apiRequest.get<
@@ -915,7 +923,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object. */
   async getUserChatBoosts(
     chatId: number | string,
-    userId: number,
+    userId: number | string,
   ): Promise<MethodsLibReturnType["getUserChatBoosts"]> {
     return await this.apiRequest
       .get<
@@ -938,7 +946,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success. */
   async getChatMember(
     chatId: number | string,
-    userId: number,
+    userId: number | string,
   ): Promise<MethodsLibReturnType["getChatMember"]> {
     return await this.apiRequest
       .get<
@@ -1008,7 +1016,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
   async closeForumTopic(
     chatId: number | string,
-    messageThreadId: number,
+    messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["closeForumTopic"]> {
     return await this.apiRequest.get<MethodsApiReturnType["closeForumTopic"]>(
       "closeForumTopic",
@@ -1019,7 +1027,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
   async reopenForumTopic(
     chatId: number | string,
-    messageThreadId: number,
+    messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["reopenForumTopic"]> {
     return await this.apiRequest.get<MethodsApiReturnType["reopenForumTopic"]>(
       "reopenForumTopic",
@@ -1030,7 +1038,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success. */
   async deleteForumTopic(
     chatId: number | string,
-    messageThreadId: number,
+    messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["deleteForumTopic"]> {
     return await this.apiRequest.get<MethodsApiReturnType["deleteForumTopic"]>(
       "deleteForumTopic",
@@ -1041,7 +1049,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success. */
   async unpinAllForumTopicMessages(
     chatId: number | string,
-    messageThreadId: number,
+    messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["unpinAllForumTopicMessages"]> {
     return await this.apiRequest.get<
       MethodsApiReturnType["unpinAllForumTopicMessages"]
@@ -1628,7 +1636,7 @@ class BaseClient extends EventEmitter {
 
   /** Refunds a successful payment in Telegram Stars. Returns True on success */
   async refundStarPayment(
-    userId: number,
+    userId: number | string,
     telegramPaymentChargeId: string,
   ): Promise<MethodsLibReturnType["refundStarPayment"]> {
     return await this.apiRequest.get<MethodsApiReturnType["refundStarPayment"]>(
@@ -1644,7 +1652,7 @@ class BaseClient extends EventEmitter {
 
   Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues. */
   async setPassportDataErrors(
-    userId: number,
+    userId: number | string,
     errors: MethodParameters["setPassportDataErrors"]["errors"],
   ): Promise<MethodsLibReturnType["setPassportDataErrors"]> {
     return await this.apiRequest.get<
@@ -1706,7 +1714,7 @@ class BaseClient extends EventEmitter {
   Returns True on success. */
   async deleteMessage(
     chatId: number | string,
-    messageId: number,
+    messageId: number | string,
   ): Promise<MethodsLibReturnType["deleteMessage"]> {
     return await this.apiRequest.get<MethodsApiReturnType["deleteMessage"]>(
       "deleteMessage",
@@ -1717,7 +1725,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to delete multiple messages simultaneously. Returns True on success. */
   async deleteMessages(
     chatId: number | string,
-    messageIds: number[],
+    messageIds: (number | string)[],
   ): Promise<MethodsLibReturnType["deleteMessages"]> {
     return await this.apiRequest.get<MethodsApiReturnType["deleteMessages"]>(
       "deleteMessages",

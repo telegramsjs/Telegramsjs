@@ -39,14 +39,14 @@ class ChatBoostSource extends Base {
   }
 
   /**
-   * @return {this is this & { giveawayId: string }}
+   * @returns {this is this & { giveawayId: string }}
    */
   isGiveaway() {
     return Boolean("giveawayId" in this && this.giveawayId);
   }
 
   /**
-   * @return {this is this & { user: User; giveawayId: string } }
+   * @returns {this is this & { user: User; giveawayId: string } }
    */
   isPremiumAndGift() {
     return Boolean("user" in this && this.user && !("giveawayId" in this));

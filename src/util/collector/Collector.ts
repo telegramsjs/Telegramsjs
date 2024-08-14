@@ -1,4 +1,5 @@
 import { EventEmitter } from "node:events";
+import { CollectorEvents } from "../Constants";
 import { TelegramError } from "../../errors/TelegramError";
 import { Collection } from "@telegram.ts/collection";
 import { setTimeout, clearTimeout } from "node:timers";
@@ -128,7 +129,7 @@ abstract class Collector<K, V> extends EventEmitter {
       if (filterResult) {
         this.collected.set(collectedId, msg);
 
-        this.emit("collect", msg, this.collected);
+        this.emit(CollectorEvents.Collect, msg, this.collected);
 
         this.lastCollectedTimestamp = Date.now();
         if (this._idleTimeout) {
@@ -139,7 +140,7 @@ abstract class Collector<K, V> extends EventEmitter {
           ).unref();
         }
       } else {
-        this.emit("ignore", msg);
+        this.emit(CollectorEvents.Ignore, msg);
       }
     }
     this.checkEnd();
@@ -161,7 +162,7 @@ abstract class Collector<K, V> extends EventEmitter {
       return;
     this.collected.delete(dispose);
 
-    this.emit("dispose", msg, this.collected);
+    this.emit(CollectorEvents.Dispose, msg, this.collected);
     this.checkEnd();
   }
 
@@ -176,8 +177,8 @@ abstract class Collector<K, V> extends EventEmitter {
       }
 
       const cleanup = () => {
-        this.off("collect", onCollect);
-        this.off("end", onEnd);
+        this.off(CollectorEvents.Collect, onCollect);
+        this.off(CollectorEvents.End, onEnd);
       };
 
       const onCollect = (item: V) => {
@@ -190,8 +191,8 @@ abstract class Collector<K, V> extends EventEmitter {
         reject(this.collected);
       };
 
-      this.on("collect", onCollect);
-      this.on("end", onEnd);
+      this.on(CollectorEvents.Collect, onCollect);
+      this.on(CollectorEvents.End, onEnd);
     });
   }
 
@@ -214,7 +215,7 @@ abstract class Collector<K, V> extends EventEmitter {
     this._endReason = reason;
     this.isEnded = true;
 
-    this.emit("end", this.collected, reason);
+    this.emit(CollectorEvents.End, this.collected, reason);
   }
 
   /**
@@ -255,7 +256,7 @@ abstract class Collector<K, V> extends EventEmitter {
     const queue: unknown[] = [];
     const onCollect = (data: V, collected: Collection<K, V>) =>
       queue.push(data, collected);
-    this.on("collect", onCollect);
+    this.on(CollectorEvents.Collect, onCollect);
 
     try {
       while (queue.length || !this.isEnded) {
@@ -264,17 +265,17 @@ abstract class Collector<K, V> extends EventEmitter {
         } else {
           await new Promise((resolve) => {
             const tick = () => {
-              this.off("collect", tick);
-              this.off("end", tick);
+              this.off(CollectorEvents.Collect, tick);
+              this.off(CollectorEvents.End, tick);
               return resolve(true);
             };
-            this.on("collect", tick);
-            this.on("end", tick);
+            this.on(CollectorEvents.Collect, tick);
+            this.on(CollectorEvents.End, tick);
           });
         }
       }
     } finally {
-      this.off("collect", onCollect);
+      this.off(CollectorEvents.Collect, onCollect);
     }
   }
 

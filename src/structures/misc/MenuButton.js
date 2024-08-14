@@ -15,14 +15,14 @@ class MenuButton {
   }
 
   /**
-   * @return {this is this & { text?: undefined; webApp?: undefined }}
+   * @returns {this is this & { text?: undefined; webApp?: undefined }}
    */
   isDefaultAndCmd() {
     return !this.isWebApp();
   }
 
   /**
-   * @return {this is this & { text: string; webApp: import("@telegram.ts/types").WebAppInfo }}
+   * @returns {this is this & { text: string; webApp: import("@telegram.ts/types").WebAppInfo }}
    */
   isWebApp() {
     return Boolean(

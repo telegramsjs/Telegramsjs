@@ -43,7 +43,7 @@ class Game extends Base {
    * @param {string | number} userId - User identifier
    * @param {number} score - New score, must be non-negative
    * @param {Omit<MethodParameters["setGameScore"], "userId" | "score">} [options={}] - out parameters
-   * @return {Promise<Message & { game: Game; editedTimestamp: number; }>} - On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+   * @returns {Promise<Message & { game: Game; editedTimestamp: number; }>} - On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
    */
   setScore(userId, score, options = {}) {
     return this.client.setGameScore({
@@ -57,7 +57,7 @@ class Game extends Base {
    * Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game.
    * @param {string | number} userId - Target user id
    * @param {Omit<MethodParameters["getGameHighScores"], "userId">} [options={}] - out parameters
-   * @return {Promise<import("./GameHighScore").GameHighScore[]>} -  Returns an Array of GameHighScore objects.
+   * @returns {Promise<import("./GameHighScore").GameHighScore[]>} -  Returns an Array of GameHighScore objects.
    * This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
    */
   getHighScores(userId, options = {}) {

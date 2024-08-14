@@ -51,7 +51,7 @@ class WebhookInfo extends Base {
   /**
    * Use this method to remove webhook integration if you decide to switch back to getUpdates.
    * @param {boolean} [dropPendingUpdates] - Pass True to drop all pending updates
-   * @return {Promise<true>} - Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   delete(dropPendingUpdates) {
     return this.client.deleteWebhook(dropPendingUpdates);

@@ -38,6 +38,7 @@ const DefaultClientParameters = {
 
 const Events = {
   Ready: "ready",
+  Error: "error",
   Disconnect: "disconnect",
   Message: "message",
   ChannelPost: "message",
@@ -67,4 +68,23 @@ const Events = {
   RemovedChatBoost: "removedChatBoost",
 } as const;
 
-export { DefaultParameters, DefaultClientParameters, Events };
+const CollectorEvents = {
+  Collect: "collect",
+  Ignore: "ignore",
+  Dispose: "dispose",
+  End: "end",
+} as const;
+
+const ReactionCollectorEvents = {
+  User: "user",
+  Create: "create",
+  ...CollectorEvents,
+} as const;
+
+export {
+  DefaultParameters,
+  DefaultClientParameters,
+  Events,
+  CollectorEvents,
+  ReactionCollectorEvents,
+};

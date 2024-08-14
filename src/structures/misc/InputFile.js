@@ -38,7 +38,7 @@ class InputFile extends Base {
 
   /**
    * Gets the URL to access the file on the Telegram server.
-   * @return {string | null}
+   * @returns {string | null}
    */
   get url() {
     return (this.url = this.path
