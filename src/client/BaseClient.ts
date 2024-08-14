@@ -755,6 +755,28 @@ class BaseClient extends EventEmitter {
       .then((res) => new ChatInviteLink(this, res));
   }
 
+  /** Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object. */
+  async createChatSubscriptionInviteLink(
+    params: MethodParameters["createChatSubscriptionInviteLink"],
+  ): Promise<MethodsLibReturnType["createChatSubscriptionInviteLink"]> {
+    return await this.apiRequest
+      .get<
+        MethodsApiReturnType["createChatSubscriptionInviteLink"]
+      >("createChatSubscriptionInviteLink", params)
+      .then((res) => new ChatInviteLink(this, res));
+  }
+
+  /** Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object. */
+  async editChatSubscriptionInviteLink(
+    params: MethodParameters["editChatSubscriptionInviteLink"],
+  ): Promise<MethodsLibReturnType["editChatSubscriptionInviteLink"]> {
+    return await this.apiRequest
+      .get<
+        MethodsApiReturnType["editChatSubscriptionInviteLink"]
+      >("editChatSubscriptionInviteLink", params)
+      .then((res) => new ChatInviteLink(this, res));
+  }
+
   /** Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object. */
   async revokeChatInviteLink(
     inviteLink: string,
