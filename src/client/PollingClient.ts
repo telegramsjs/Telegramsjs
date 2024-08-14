@@ -13,7 +13,7 @@ class PollingClient {
   /**
    * Indicates whether the polling client is closed.
    */
-  #isClosed: boolean = false;
+  public isClosed: boolean = false;
 
   /**
    * Creates an instance of PollingClient.
@@ -32,12 +32,17 @@ class PollingClient {
    * @param options - The polling options.
    */
   async startPolling(options: ILoginOptions["polling"] = {}): Promise<void> {
-    await this.client.getMe().then((res) => {
+    try {
+      const res = await this.client.getMe();
       this.client.user = res;
       this.client.readyTimestamp = Date.now();
       this.client.emit(Events.Ready, this.client);
-    });
-    await this.poll(options);
+
+      await this.poll(options);
+    } catch (err) {
+      this.handlerError(err);
+      this.client.emit(Events.Disconnect);
+    }
   }
 
   /**
@@ -65,16 +70,14 @@ class PollingClient {
         }
       }
     } catch (err) {
-      if (
-        this.client.options?.errorHandler &&
-        this.client.eventNames().indexOf("error") !== -1
-      ) {
-        this.client.emit("error", [this.offset, err]);
+      const returned = this.handlerError(err);
+      if (returned) {
         return;
-      }
+      } else this.client.emit(Events.Disconnect);
+
       throw err;
     } finally {
-      if (!this.#isClosed) {
+      if (!this.isClosed) {
         setTimeout(async () => {
           await this.poll(options);
         }, this.client.options?.pollingTimeout ?? 300);
@@ -83,11 +86,28 @@ class PollingClient {
   }
 
   /**
+   * Handles errors that occur during polling or initialization.
+   * @param err - The error object.
+   */
+  private handlerError(err: unknown): boolean {
+    if (
+      this.client.options?.errorHandler &&
+      this.client.eventNames().indexOf(Events.Error) !== -1
+    ) {
+      this.client.emit(Events.Error, [this.offset, err]);
+      return true;
+    }
+
+    this.isClosed = true;
+    return this.close();
+  }
+
+  /**
    * Closes the polling client, stopping further updates.
    * @returns The closed state of the polling client.
    */
   close(): boolean {
-    return (this.#isClosed = true);
+    return (this.isClosed = true);
   }
 }
 

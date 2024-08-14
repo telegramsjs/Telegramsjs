@@ -22,6 +22,11 @@ class WebhookClient {
   public offset: number;
 
   /**
+   * Indicates whether the webhook client is closed.
+   */
+  public isClosed: boolean = false;
+
+  /**
    * The HTTP or HTTPS server for handling webhook requests.
    */
   webhookServer?: http.Server | https.Server;
@@ -73,13 +78,13 @@ class WebhookClient {
       requestCallback?: RequestListener;
     } = {},
   ): Promise<void> {
-    await this.client.getMe().then((me) => {
-      this.client.user = me;
-      this.client.readyTimestamp = Date.now();
-      this.client.emit(Events.Ready, this.client);
-    });
-
     try {
+      await this.client.getMe().then((me) => {
+        this.client.user = me;
+        this.client.readyTimestamp = Date.now();
+        this.client.emit(Events.Ready, this.client);
+      });
+
       const { tlsOptions, port, host, requestCallback } = options;
       const webhookCallback = await this.createWebhookCallback(
         requestCallback,
@@ -97,16 +102,18 @@ class WebhookClient {
       if (!this.webhookServer) {
         throw new TelegramError("Failed to create webhook server");
       }
-      this.webhookServer.listen(port, host);
+
+      this.webhookServer.listen(port, host, () => {
+        this.client.emit(Events.Ready, this.client);
+      });
+
+      this.webhookServer.on("error", (err) => {
+        this.handlerError(err);
+        this.client.emit(Events.Disconnect);
+      });
     } catch (err) {
-      if (
-        this.client.options?.errorHandler &&
-        this.client.eventNames().indexOf("error") !== -1
-      ) {
-        this.client.emit("error", [this.offset, err]);
-        return;
-      }
-      throw err;
+      this.handlerError(err);
+      this.client.emit(Events.Disconnect);
     }
   }
 
@@ -181,10 +188,33 @@ class WebhookClient {
   }
 
   /**
-   * Closes the webhook server.
+   * Handles errors that occur during webhook processing.
+   * @param err - The error object.
    */
-  close(): void {
-    this.webhookServer?.close();
+  private handlerError(err: unknown): boolean {
+    if (
+      this.client.options?.errorHandler &&
+      this.client.eventNames().indexOf(Events.Error) !== -1
+    ) {
+      this.client.emit(Events.Error, [this.offset, err]);
+      return true;
+    }
+
+    this.isClosed = true;
+    return false;
+  }
+
+  /**
+   * Closes the webhook server.
+   * @returns The closed state of the webhook client.
+   */
+  close(): boolean {
+    if (this.webhookServer && !this.isClosed) {
+      this.webhookServer.close(() => {
+        this.isClosed = true;
+      });
+    }
+    return this.isClosed;
   }
 }
 
