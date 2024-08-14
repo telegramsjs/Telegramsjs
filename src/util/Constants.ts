@@ -38,6 +38,7 @@ const DefaultClientParameters = {
 
 const Events = {
   Ready: "ready",
+  Error: "error",
   Disconnect: "disconnect",
   Message: "message",
   ChannelPost: "message",
