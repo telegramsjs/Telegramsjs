@@ -4,6 +4,10 @@ const { ReactionCollector } = require("../../util/collector/ReactionCollector");
 const {
   InlineKeyboardCollector,
 } = require("../../util/collector/InlineKeyboardCollector");
+const {
+  CollectorEvents,
+  ReactionCollectorEvents,
+} = require("../../util/Constants");
 const { UserPermissions } = require("../../util/UserPermissions");
 
 /**
@@ -206,7 +210,7 @@ class Chat extends Base {
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
       const collector = this.createMessageCollector(options);
-      collector.once("end", (collection, reason) => {
+      collector.once(CollectorEvents.End, (collection, reason) => {
         if (options.errors?.includes(reason)) {
           reject(collection);
         } else {
@@ -236,7 +240,7 @@ class Chat extends Base {
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
       const collect = this.createReactionCollector(options);
-      collect.on("end", (collections, reason) => {
+      collect.on(ReactionCollectorEvents.End, (collections, reason) => {
         if (options.errors?.includes(reason)) {
           reject(collection);
         } else {

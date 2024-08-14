@@ -5,6 +5,10 @@ const { ReactionCollector } = require("../../util/collector/ReactionCollector");
 const {
   InlineKeyboardCollector,
 } = require("../../util/collector/InlineKeyboardCollector");
+const {
+  CollectorEvents,
+  ReactionCollectorEvents,
+} = require("../../util/Constants");
 
 /**
  * @typedef {import("../../types").MethodParameters} MethodParameters
@@ -135,7 +139,7 @@ class MessageOrigin extends Base {
     const _options = { ...options, max: 1 };
     return new Promise((resolve, reject) => {
       const collect = this.createMessageCollector(_options);
-      collect.on("end", (collections, reason) => {
+      collect.on(CollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
       });
     });
@@ -153,7 +157,7 @@ class MessageOrigin extends Base {
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
       const collect = this.createMessageCollector(options);
-      collect.on("end", (collections, reason) => {
+      collect.on(CollectorEvents.End, (collections, reason) => {
         if (options.errors?.includes(reason)) {
           reject(collections);
         } else {
@@ -179,7 +183,7 @@ class MessageOrigin extends Base {
     const _options = { ...options, max: 1 };
     return new Promise((resolve, reject) => {
       const collect = this.createReactionCollector(_options);
-      collect.on("end", (collections, reason) => {
+      collect.on(ReactionCollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
       });
     });
@@ -197,7 +201,7 @@ class MessageOrigin extends Base {
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
       const collect = this.createReactionCollector(options);
-      collect.on("end", (collections, reason) => {
+      collect.on(ReactionCollectorEvents.End, (collections, reason) => {
         if (options.errors?.includes(reason)) {
           reject(collections);
         } else {
