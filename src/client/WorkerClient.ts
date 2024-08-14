@@ -1,3 +1,4 @@
+import { Events } from "../util/Constants";
 import type { Update } from "@telegram.ts/types";
 import { Message } from "../structures/message/Message";
 import { Poll } from "../structures/media/Poll";
@@ -147,7 +148,7 @@ class WorketClient {
       message.chat?.messages._add(data);
     }
 
-    this.client.emit("message", message);
+    this.client.emit(Events.Message, message);
 
     return message;
   }
@@ -162,7 +163,7 @@ class WorketClient {
     if (!data) return;
 
     const business = new BusinessConnection(this.client, data);
-    this.client.emit("businessConnection", business);
+    this.client.emit(Events.BusinessConnection, business);
 
     return business;
   }
@@ -182,7 +183,7 @@ class WorketClient {
     const newMessage = new Message(this.client, data);
     const oldMessage =
       newMessage.chat?.messages.cache.get(newMessage.id) || null;
-    this.client.emit("messageUpdate", oldMessage, newMessage);
+    this.client.emit(Events.EditedMessage, oldMessage, newMessage);
 
     return [oldMessage, newMessage];
   }
@@ -197,7 +198,7 @@ class WorketClient {
     if (!data) return;
 
     const businessMessage = new BusinessMessagesDeleted(this.client, data);
-    this.client.emit("deletedBusinessMessages", businessMessage);
+    this.client.emit(Events.DeletedBusinessMessages, businessMessage);
 
     return businessMessage;
   }
@@ -212,7 +213,7 @@ class WorketClient {
     if (!data) return;
 
     const messageReaction = new MessageReactionUpdated(this.client, data);
-    this.client.emit("messageReaction", messageReaction);
+    this.client.emit(Events.MessageReaction, messageReaction);
 
     return messageReaction;
   }
@@ -227,7 +228,7 @@ class WorketClient {
     if (!data) return;
 
     const messageReaction = new MessageReactionCountUpdated(this.client, data);
-    this.client.emit("messageReactionCount", messageReaction);
+    this.client.emit(Events.MessageReactionCount, messageReaction);
 
     return messageReaction;
   }
@@ -240,7 +241,7 @@ class WorketClient {
     if (!data) return;
 
     const inline = new InlineQuery(this.client, data);
-    this.client.emit("inlineQuery", inline);
+    this.client.emit(Events.InlineQuery, inline);
 
     return inline;
   }
@@ -255,7 +256,7 @@ class WorketClient {
     if (!data) return;
 
     const chosenInline = new ChosenInlineResult(this.client, data);
-    this.client.emit("chosenInlineResult", chosenInline);
+    this.client.emit(Events.ChosenInlineResult, chosenInline);
 
     return chosenInline;
   }
@@ -268,7 +269,7 @@ class WorketClient {
     if (!data) return;
 
     const callback = new CallbackQuery(this.client, data);
-    this.client.emit("callbackQuery", callback);
+    this.client.emit(Events.CallbackQuery, callback);
 
     return callback;
   }
@@ -281,7 +282,7 @@ class WorketClient {
     if (!data) return;
 
     const shipping = new ShippingQuery(this.client, data);
-    this.client.emit("shippingQuery", shipping);
+    this.client.emit(Events.ShippingQuery, shipping);
 
     return shipping;
   }
@@ -296,7 +297,7 @@ class WorketClient {
     if (!data) return;
 
     const preCheckout = new PreCheckoutQuery(this.client, data);
-    this.client.emit("preCheckoutQuery", preCheckout);
+    this.client.emit(Events.PreCheckoutQuery, preCheckout);
 
     return preCheckout;
   }
@@ -309,7 +310,7 @@ class WorketClient {
     if (!data) return;
 
     const poll = new Poll(this.client, data);
-    this.client.emit("poll", poll);
+    this.client.emit(Events.Poll, poll);
 
     return poll;
   }
@@ -322,7 +323,7 @@ class WorketClient {
     if (!data) return;
 
     const poll = new PollAnswer(this.client, data);
-    this.client.emit("pollAnswer", poll);
+    this.client.emit(Events.PollAnswer, poll);
 
     return poll;
   }
@@ -337,7 +338,7 @@ class WorketClient {
     if (!data) return;
 
     const myChat = new ChatMemberUpdated(this.client, data);
-    this.client.emit("myChatMember", myChat);
+    this.client.emit(Events.MyChatMember, myChat);
 
     return myChat;
   }
@@ -350,7 +351,7 @@ class WorketClient {
     if (!data) return;
 
     const chatMember = new ChatMemberUpdated(this.client, data);
-    this.client.emit("chatMember", chatMember);
+    this.client.emit(Events.ChatMember, chatMember);
 
     return chatMember;
   }
@@ -373,10 +374,10 @@ class WorketClient {
         (user) => user.id === this.client.user.id,
       ) !== -1
     ) {
-      this.client.emit("chatCreate", message);
+      this.client.emit(Events.ChatCreate, message);
       return message;
     } else {
-      this.client.emit("chatMemberAdd", message);
+      this.client.emit(Events.ChatMemberAdd, message);
       return message;
     }
   }
@@ -398,7 +399,7 @@ class WorketClient {
       this.client.emit("chatDelete", message);
       return message;
     } else {
-      this.client.emit("chatMemberRemove", message);
+      this.client.emit(Events.ChatMemberRemove, message);
       return message;
     }
   }
@@ -413,7 +414,7 @@ class WorketClient {
     if (!data) return;
 
     const chatJoin = new ChatJoinRequest(this.client, data);
-    this.client.emit("chatJoinRequest", chatJoin);
+    this.client.emit(Events.ChatJoinRequest, chatJoin);
 
     return chatJoin;
   }
@@ -426,7 +427,7 @@ class WorketClient {
     if (!data) return;
 
     const chatBoost = new ChatBoostUpdated(this.client, data);
-    this.client.emit("chatBoost", chatBoost);
+    this.client.emit(Events.ChatBoost, chatBoost);
 
     return chatBoost;
   }
@@ -441,7 +442,7 @@ class WorketClient {
     if (!data) return;
 
     const chatBoost = new ChatBoostRemoved(this.client, data);
-    this.client.emit("removedChatBoost", chatBoost);
+    this.client.emit(Events.RemovedChatBoost, chatBoost);
 
     return chatBoost;
   }
