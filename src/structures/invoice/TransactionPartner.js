@@ -1,5 +1,6 @@
 const { Base } = require("../Base");
 const { User } = require("../misc/User");
+const { PaidMedia } = require("../media/paid/PaidMedia");
 const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");
 
 class TransactionPartner extends Base {
@@ -33,6 +34,16 @@ class TransactionPartner extends Base {
       this.user = new User(this.client, data.user);
     }
 
+    if ("paid_media" in data) {
+      /**
+       * Information about the paid media bought by the user
+       * @type {PaidMedia[] | undefined}
+       */
+      this.paidMedia = data.paid_media.map(
+        (media) => new PaidMedia(this.client, media),
+      );
+    }
+
     if ("invoice_payload" in data) {
       /**
        * Bot-specified invoice payload
@@ -45,14 +56,14 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { user: User }}
+   * @returns {this is this & { user: User; paidMedia?: PaidMedia[]; }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @returns {this is this & { withdrawal: RevenueWithdrawalState }}
+   * @returns {this is this & { withdrawal: RevenueWithdrawalState; paidMedia?: undefined }}
    */
   isFragment() {
     return Boolean("withdrawal" in this && this.withdrawal);

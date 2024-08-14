@@ -9,7 +9,7 @@ const {
 const {
   CollectorEvents,
   ReactionCollectorEvents,
-} = require("../../util/Constants");
+} = require("../util/Constants");
 
 /**
  * @typedef {import("../types").MethodParameters} MethodParameters

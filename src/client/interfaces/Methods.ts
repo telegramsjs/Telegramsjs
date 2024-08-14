@@ -721,6 +721,8 @@ export type ApiMethods = {
 
   /** Use this method to send paid media to channel chats. On success, the sent Message is returned. */
   sendPaidMedia(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    businessConnectionId?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** The number of Telegram Stars that must be paid to buy access to the media */
@@ -1091,6 +1093,28 @@ export type ApiMethods = {
     memberLimit?: number;
     /** True, if users joining the chat via the link need to be approved by chat administrators. If True, memberLimit can't be specified */
     createsJoinRequest?: boolean;
+  }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
+
+  /** Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object. */
+  createChatSubscriptionInviteLink(args: {
+    /** Unique identifier for the target channel chat or username of the target channel (in the format @channelusername) */
+    chatId: number | string;
+    /** Invite link name; 0-32 characters */
+    name?: string;
+    /** The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days) */
+    subscriptionPeriod: number;
+    /** The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500 */
+    subscriptionPrice: number;
+  }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
+
+  /** Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object. */
+  editChatSubscriptionInviteLink(args: {
+    /** Unique identifier for the target channel chat or username of the target channel (in the format @channelusername) */
+    chatId: number | string;
+    /** The invite link to edit */
+    inviteLink: string;
+    /** Invite link name; 0-32 characters */
+    name?: string;
   }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
 
   /** Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object. */
