@@ -8,28 +8,36 @@ class ClientUser extends User {
   constructor(client, data) {
     super(client, data);
 
-    /** True, if this user is a bot */
-    this.bot = true;
+    /** Indicates if this user is a bot */
+    this.isBot = true;
 
-    /** User's or bot's username */
+    /** The bot's or user's username */
     this.username = data.username;
 
-    /** True, if the bot can be invited to groups */
-    this.joinGroups = data.can_join_groups;
+    /** Indicates if the bot can be invited to groups */
+    this.canJoinGroups = data.can_join_groups;
 
-    /** True, if privacy mode is disabled for the bot */
-    this.readAllGroupMessages = data.can_read_all_group_messages;
+    /** Indicates if privacy mode is disabled for the bot */
+    this.canReadAllMessages = data.can_read_all_group_messages;
 
-    /** True, if the bot supports inline queries */
-    this.supportsInlineQueries = data.supports_inline_queries;
+    /** Indicates if the bot supports inline queries */
+    this.inlineQueries = data.supports_inline_queries;
 
-    /** True, if the bot can be connected to a Telegram Business account to receive its messages */
+    /** Indicates if the bot can be connected to a Telegram Business account */
     this.connectBusiness = data.can_connect_to_business;
 
-    /** True, if the bot has main Web App. Returned only in getMe. */
-    this.hasMainWebApp = data.has_main_web_app;
+    /** Indicates if the bot has a main Web App */
+    this.mainWebApp = data.has_main_web_app;
 
     this._patch(data);
+  }
+
+  /**
+   * The authentication token for the Telegram bot
+   * @type {string}
+   */
+  get token() {
+    return this.client.authToken;
   }
 
   /**
