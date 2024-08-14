@@ -1,4 +1,4 @@
-import { Events } from "../Constants";
+import { Events, CollectorEvents } from "../Constants";
 import { TelegramError } from "../../errors/TelegramError";
 import { TelegramClient } from "../../client/TelegramClient";
 import type { Chat } from "../../structures/chat/Chat";
@@ -42,7 +42,7 @@ class MessageCollector extends Collector<string, Message> {
 
     client.incrementMaxListeners();
     client.on(Events.Message, this.handleCollect);
-    this.once("end", () => {
+    this.once(CollectorEvents.End, () => {
       client.off(Events.Message, this.handleCollect);
       client.decrementMaxListeners();
     });
