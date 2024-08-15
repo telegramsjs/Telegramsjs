@@ -520,7 +520,7 @@ class Chat extends Base {
 
   /**
    * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink.
-   * @param {Omit<MethodParameters["createChatSubscriptionInviteLink"], "chatId">} [options] - out parameters
+   * @param {Omit<MethodParameters["createChatSubscriptionInviteLink"], "chatId">} [options={}] - out parameters
    * @returns {Promise<import("./ChatInviteLink").ChatInviteLink>} - Returns the new invite link as a ChatInviteLink object.
    */
   createSubscriptionInvite(options = {}) {
@@ -532,7 +532,7 @@ class Chat extends Base {
 
   /**
    * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights.
-   * @param {Omit<MethodParameters["editChatSubscriptionInviteLink"], "chatId">} [options] - out parameters
+   * @param {Omit<MethodParameters["editChatSubscriptionInviteLink"], "chatId">} [options={}] - out parameters
    * @returns {Promise<import("./ChatInviteLink").ChatInviteLink>} - Returns the edited invite link as a ChatInviteLink object.
    */
   editSubscriptionInvite(options = {}) {

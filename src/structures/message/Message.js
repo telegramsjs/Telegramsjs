@@ -78,7 +78,7 @@ class Message extends Base {
 
     if ("from" in data) {
       /**
-       * Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+       * Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
        * @type {import("../misc/User").User | undefined}
        */
       this.author = this.client.users._add(data.from);
@@ -86,7 +86,7 @@ class Message extends Base {
 
     if ("chat" in data) {
       /**
-       * Chat the message belongs to
+       * Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field *from* contains a fake sender user in non-channel chats.
        * @type {import("../chat/Chat").Chat | undefined}
        */
       this.chat = this.client.chats._add({
@@ -990,7 +990,7 @@ class Message extends Base {
 
   /**
    * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message.
-   * @param {string | import("@telegram.ts/types").ReactionType} reaction - A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators
+   * @param {string | import("@telegram.ts/types").ReactionType} reaction - A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots
    * @param {boolean} [isBig] - Pass True to set the reaction with a big animation
    * @returns {Promise<true>} - Returns True on success.
    */
