@@ -66,7 +66,6 @@ interface EventHandlers {
     newMessage: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
   editedBusinessMessage: (
-    oldMessage: import("../structures/message/Message").Message | null,
     newMessage: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
   deletedBusinessMessages: (
@@ -128,10 +127,6 @@ interface EventHandlers {
 
 type EventHandlerParameters =
   | import("../structures/message/Message").Message
-  | [
-      null | import("../structures/message/Message").Message,
-      import("../structures/message/Message").Message,
-    ]
   | import("../structures/business/BusinessConnection").BusinessConnection
   | import("../structures/business/BusinessMessagesDeleted").BusinessMessagesDeleted
   | import("../structures/MessageReactionUpdated").MessageReactionUpdated
@@ -308,13 +303,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendMessage"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendMessage"]>("sendMessage", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendMessage"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendMessage"],
+      );
   }
 
   /** Use this method to send photos. On success, the sent Message is returned. */
@@ -323,13 +314,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendPhoto"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendPhoto"]>("sendPhoto", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendPhoto"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendPhoto"],
+      );
   }
 
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -340,13 +327,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendAudio"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendAudio"]>("sendAudio", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendAudio"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendAudio"],
+      );
   }
 
   /** Use this method to send paid media to channel chats. On success, the sent Message is returned. */
@@ -355,13 +338,10 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendPaidMedia"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendPaidMedia"]>("sendPaidMedia", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendPaidMedia"];
-      });
+      .then(
+        (res) =>
+          new Message(this, res) as MethodsLibReturnType["sendPaidMedia"],
+      );
   }
 
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
@@ -370,13 +350,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendDocument"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendDocument"]>("sendDocument", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendDocument"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendDocument"],
+      );
   }
 
   /** Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future. */
@@ -385,13 +361,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendVideo"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendVideo"]>("sendVideo", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendVideo"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendVideo"],
+      );
   }
 
   /** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future. */
@@ -400,13 +372,10 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendAnimation"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendAnimation"]>("sendAnimation", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendAnimation"];
-      });
+      .then(
+        (res) =>
+          new Message(this, res) as MethodsLibReturnType["sendAnimation"],
+      );
   }
 
   /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
@@ -415,13 +384,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendVoice"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendVoice"]>("sendVoice", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendVoice"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendVoice"],
+      );
   }
 
   /** Use this method to send video messages. On success, the sent Message is returned.
@@ -431,13 +396,10 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendVideoNote"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendVideoNote"]>("sendVideoNote", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendVideoNote"];
-      });
+      .then(
+        (res) =>
+          new Message(this, res) as MethodsLibReturnType["sendVideoNote"],
+      );
   }
 
   /** Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned. */
@@ -460,13 +422,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendLocation"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendLocation"]>("sendLocation", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendLocation"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendLocation"],
+      );
   }
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
@@ -475,13 +433,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendVenue"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendVenue"]>("sendVenue", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendVenue"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendVenue"],
+      );
   }
 
   /** Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned. */
@@ -490,13 +444,7 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["forwardMessage"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["forwardMessage"]>("forwardMessage", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message;
-      });
+      .then((res) => new Message(this, res));
   }
 
   /** Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned. */
@@ -532,13 +480,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendContact"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendContact"]>("sendContact", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendContact"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendContact"],
+      );
   }
 
   /** Use this method to send a native poll. On success, the sent Message is returned. */
@@ -547,13 +491,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendPoll"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendPoll"]>("sendPoll", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendPoll"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendPoll"],
+      );
   }
 
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
@@ -562,13 +502,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendDice"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendDice"]>("sendDice", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendDice"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendDice"],
+      );
   }
 
   /** Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -1302,11 +1238,10 @@ class BaseClient extends EventEmitter {
       .get<MethodsApiReturnType["editMessageText"]>("editMessageText", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["editMessageText"];
+        return new Message(
+          this,
+          res,
+        ) as MethodsLibReturnType["editMessageText"];
       });
   }
 
@@ -1320,11 +1255,10 @@ class BaseClient extends EventEmitter {
       >("editMessageCaption", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["editMessageCaption"];
+        return new Message(
+          this,
+          res,
+        ) as MethodsLibReturnType["editMessageCaption"];
       });
   }
 
@@ -1336,11 +1270,10 @@ class BaseClient extends EventEmitter {
       .get<MethodsApiReturnType["editMessageMedia"]>("editMessageMedia", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["editMessageMedia"];
+        return new Message(
+          this,
+          res,
+        ) as MethodsLibReturnType["editMessageMedia"];
       });
   }
 
@@ -1392,11 +1325,10 @@ class BaseClient extends EventEmitter {
       >("editMessageReplyMarkup", params)
       .then((res) => {
         if (typeof res === "boolean") return res;
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["editMessageReplyMarkup"];
+        return new Message(
+          this,
+          res,
+        ) as MethodsLibReturnType["editMessageReplyMarkup"];
       });
   }
 
@@ -1415,13 +1347,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendSticker"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendSticker"]>("sendSticker", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendSticker"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendSticker"],
+      );
   }
 
   /** Use this method to get a sticker set. On success, a StickerSet object is returned. */
@@ -1600,13 +1528,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendInvoice"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendInvoice"]>("sendInvoice", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendInvoice"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendInvoice"],
+      );
   }
 
   /** Use this method to create a link for an invoice. Returns the created invoice link as String on success. */
@@ -1688,13 +1612,9 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendGame"]> {
     return await this.apiRequest
       .get<MethodsApiReturnType["sendGame"]>("sendGame", params)
-      .then((res) => {
-        const message = new Message(this, res);
-        if ("chat" in message && message.chat) {
-          message.chat.messages?._add(res);
-        }
-        return message as MethodsLibReturnType["sendGame"];
-      });
+      .then(
+        (res) => new Message(this, res) as MethodsLibReturnType["sendGame"],
+      );
   }
 
   /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */

@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 
 class ChatBoostSource extends Base {
   /**
@@ -16,9 +15,9 @@ class ChatBoostSource extends Base {
     if ("user" in data) {
       /**
        * User that boosted the chat
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.user = new User(this.client, data.user);
+      this.user = this.client.users._add(data.user);
     }
 
     if ("giveaway_message_id" in data) {
@@ -46,7 +45,7 @@ class ChatBoostSource extends Base {
   }
 
   /**
-   * @returns {this is this & { user: User; giveawayId: string } }
+   * @returns {this is this & { user: import("../misc/User").User; giveawayId: string } }
    */
   isPremiumAndGift() {
     return Boolean("user" in this && this.user && !("giveawayId" in this));

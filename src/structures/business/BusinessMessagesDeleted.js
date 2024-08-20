@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { Chat } = require("../chat/Chat");
 
 class BusinessMessagesDeleted extends Base {
   /**
@@ -17,9 +16,9 @@ class BusinessMessagesDeleted extends Base {
 
     /**
      * Information about a chat in the business account. The bot may not have access to the chat or the corresponding user
-     * @type {Chat}
+     * @type {import("../chat/Chat").Chat}
      */
-    this.chat = new Chat(client, data.chat);
+    this.chat = this.client.chats._add(data.chat);
 
     /**
      * The list of identifiers of deleted messages in the chat of the business account

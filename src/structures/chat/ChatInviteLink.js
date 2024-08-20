@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 
 class ChatInviteLink extends Base {
   /**
@@ -17,9 +16,9 @@ class ChatInviteLink extends Base {
 
     /**
      * Creator of the link
-     * @type {User}
+     * @type {import("../misc/User").User}
      */
-    this.creator = new User(client, data.creator);
+    this.creator = this.client.users._add(data.creator);
 
     /**
      * True, if users joining the chat via the link need to be approved by chat administrators
@@ -50,7 +49,7 @@ class ChatInviteLink extends Base {
     if ("expire_date" in data) {
       /**
        * Point in time (Unix timestamp) when the link will expire or has been expired
-       * @type {number}
+       * @type {number | undefined}
        */
       this.expiredUnixTime = data.expire_date;
     }

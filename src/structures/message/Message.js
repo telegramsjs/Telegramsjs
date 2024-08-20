@@ -1,9 +1,8 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 const { SharedUser } = require("../misc/SharedUser");
 const { ChatShared } = require("../misc/ChatShared");
+const { ChatMember } = require("../chat/ChatMember");
 const { Story } = require("../misc/Story");
-const { Chat } = require("../chat/Chat");
 const {
   VideoChatParticipantsInvited,
 } = require("../chat/VideoChatParticipantsInvited");
@@ -94,14 +93,13 @@ class Message extends Base {
         threadId: this.threadId,
       });
 
-      if (!this.chat.isPrivate() && this.author) {
+      if (!this.chat.isPrivate() && data.from) {
         /**
          * Member that were added to the message group or supergroup and information about them
-         * @type {import("../chat/ChatMember").ChatMember | undefined}
+         * @type {ChatMember | undefined}
          */
-        this.member = this.chat.members._add(this.chat.id, true, {
-          id: String(data.from.id),
-          extras: [{ user: data.from }],
+        this.member = new ChatMember(this.client, this.chat.id, {
+          user: data.from,
         });
       }
     }
@@ -152,9 +150,9 @@ class Message extends Base {
     if ("sender_business_bot" in data) {
       /**
        * The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.senderBusinessBot = new User(this.client, data.sender_business_bot);
+      this.senderBusinessBot = this.client.users._add(data.sender_business_bot);
     }
 
     if ("forward_origin" in data) {
@@ -211,9 +209,9 @@ class Message extends Base {
     if ("via_bot" in data) {
       /**
        * Bot through which the message was sent
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.viaBot = new User(this.client, data.via_bot);
+      this.viaBot = new this.client.users._add(data.via_bot);
     }
 
     if ("has_protected_content" in data) {
@@ -267,9 +265,9 @@ class Message extends Base {
     if ("sender_chat" in data) {
       /**
        * Chat that sent the message originally
-       * @type {Chat | undefined}
+       * @type {import("../misc/Chat").Chat | undefined}
        */
-      this.senderChat = new Chat(this.client, {
+      this.senderChat = this.client.chats._add({
         ...data.sender_chat,
         threadId: this.threadId,
       });
@@ -316,27 +314,27 @@ class Message extends Base {
     if ("new_chat_member" in data) {
       /**
        * New member that were added to the group or supergroup and information about them (the bot itself may be one of these member)
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.newChatMember = new User(this.client, data.new_chat_member);
+      this.newChatMember = this.client.users._add(data.new_chat_member);
     }
 
     if ("new_chat_members" in data) {
       /**
        * New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
-       * @type {User[] | undefined}
+       * @type {import("../misc/User").User[] | undefined}
        */
-      this.newChatMembers = data.new_chat_members.map(
-        (user) => new User(this.client, user),
+      this.newChatMembers = data.new_chat_members.map((user) =>
+        this.client.users._add(user),
       );
     }
 
     if ("left_chat_member" in data) {
       /**
        * A member was removed from the group, information about them (this member may be the bot itself)
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.leftChatMember = new User(this.client, data.left_chat_member);
+      this.leftChatMember = this.client.users._add(data.left_chat_member);
     }
 
     if ("new_chat_title" in data) {
@@ -503,17 +501,16 @@ class Message extends Base {
     if ("proximity_alert_triggered" in data) {
       /**
        * @typedef {Object} ProximityAlertTriggered
-       * @property {User} traveler - User that triggered the alert
-       * @property {User} watcher - User that set the alert
+       * @property {import("../misc/User").User} traveler - User that triggered the alert
+       * @property {import("../misc/User").User} watcher - User that set the alert
        * @property {number} distance - The distance between the users
        */
 
       const proximityAlertTriggered = {
-        traveler: new User(
-          this.client,
+        traveler: this.client.users._add(
           data.proximity_alert_triggered.traveler,
         ),
-        watcher: new User(this.client, data.proximity_alert_triggered.watcher),
+        watcher: this.client.users._add(data.proximity_alert_triggered.watcher),
         distance: data.proximity_alert_triggered.distance,
       };
 

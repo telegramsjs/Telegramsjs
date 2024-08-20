@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { Chat } = require("../chat/Chat");
 
 class Giveaway extends Base {
   /**
@@ -9,8 +8,11 @@ class Giveaway extends Base {
   constructor(client, data) {
     super(client);
 
-    /** The list of chats which the user must join to participate in the giveaway */
-    this.chats = data.chats.map((chat) => new Chat(client, chat));
+    /**
+     * The list of chats which the user must join to participate in the giveaway
+     * @type {import("../chat/Chat").Chat[]}
+     */
+    this.chats = data.chats.map((chat) => this.client.chats._add(chat));
 
     /** Point in time (Unix timestamp) when winners of the giveaway will be selected */
     this.selectedUnixTime = this.winners_selection_date;

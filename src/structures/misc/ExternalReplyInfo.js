@@ -20,7 +20,6 @@ const { Location } = require("./Location");
 const { Poll } = require("../media/Poll");
 const { Venue } = require("./Venue");
 const { MessageOrigin } = require("../message/MessageOrigin");
-const { Chat } = require("../chat/Chat");
 
 class ExternalReplyInfo extends Base {
   /**
@@ -40,9 +39,9 @@ class ExternalReplyInfo extends Base {
     if ("chat" in data) {
       /**
        * Chat the original message belongs to. Available only if the chat is a supergroup or a channel
-       * @type {Chat | undefined}
+       * @type {import("../chat/Chat").Chat | undefined}
        */
-      this.chat = new Chat(this.client, data.chat);
+      this.chat = this.client.chats._add(data.chat);
     }
 
     if ("message_id" in data) {

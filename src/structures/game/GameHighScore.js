@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 
 class GameHighScore extends Base {
   /**
@@ -16,7 +15,7 @@ class GameHighScore extends Base {
     this.score = data.score;
 
     /** User */
-    this.user = new User(client, data.user);
+    this.user = this.client.users._add(data.user);
   }
 }
 

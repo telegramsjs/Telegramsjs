@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 const { PaidMedia } = require("../media/paid/PaidMedia");
 const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");
 
@@ -9,7 +8,7 @@ class TransactionPartner extends Base {
    * @param {import("@telegram.ts/types").TransactionPartner} data - Data about the describes the source of a transaction, or its recipient for outgoing transactions
    */
   constructor(client, data) {
-    super(client, data);
+    super(client);
 
     /** Type of the transaction partner */
     this.type = data.type;
@@ -29,9 +28,9 @@ class TransactionPartner extends Base {
     if ("user" in data) {
       /**
        * Information about the user
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.user = new User(this.client, data.user);
+      this.user = this.client.users._add(data.user);
     }
 
     if ("paid_media" in data) {
@@ -56,7 +55,7 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { user: User; paidMedia?: PaidMedia[]; }}
+   * @returns {this is this & { user: import("../misc/User").User; paidMedia?: PaidMedia[]; }}
    */
   isUser() {
     return Boolean("user" in this && this.user);

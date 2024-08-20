@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { User } = require("./misc/User");
 const { Message } = require("./message/Message");
 
 /**
@@ -17,8 +16,11 @@ class CallbackQuery extends Base {
     /** Unique identifier for this query */
     this.id = data.id;
 
-    /** Sender */
-    this.author = new User(client, data.from);
+    /**
+     * Sender
+     * @type {import("./misc/User").User}
+     */
+    this.author = this.client.users._add(data.from);
 
     if ("message" in data) {
       /** Message sent by the bot with the callback button that originated the query */

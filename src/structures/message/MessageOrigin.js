@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { Chat } = require("../chat/Chat");
+const { ChatMember } = require("../chat/ChatMember");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
 const { ReactionCollector } = require("../../util/collector/ReactionCollector");
 const {
@@ -60,9 +60,9 @@ class MessageOrigin extends Base {
     if ("sender_chat" in data) {
       /**
        * Chat that sent the message originally
-       * @type {Chat | undefined}
+       * @type {import("../misc/Chat").Chat | undefined}
        */
-      this.senderChat = new Chat(this.client, data.sender_chat);
+      this.senderChat = this.client.chats._add(data.sender_chat);
     }
 
     if ("chat" in data) {
@@ -75,11 +75,10 @@ class MessageOrigin extends Base {
       if (!this.chat.isPrivate() && data.sender_user) {
         /**
          * Member that were added to the message group or supergroup and information about them
-         * @type {import("../chat/ChatMember").ChatMember | undefined}
+         * @type {ChatMember | undefined}
          */
-        this.member = this.chat.members._add(this.chat.id, true, {
-          id: data.sender_user.id,
-          extras: [{ user: data.sender_user }],
+        this.member = new ChatMember(this.client, this.chat.id, {
+          user: data.sender_user,
         });
       }
     }
@@ -110,14 +109,14 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @returns {this is this & { senderChat: Chat; authorSignature?: string }}
+   * @returns {this is this & { senderChat: import("../chat/Chat").Chat; authorSignature?: string }}
    */
   isChat() {
     return Boolean("senderChat" in this && this.senderChat);
   }
 
   /**
-   * @returns {this is this & { id: string; chat: Chat; authorSignature?: string }}
+   * @returns {this is this & { id: string; chat: import("../chat/Chat").Chat; authorSignature?: string }}
    */
   isChennel() {
     return Boolean("id" in this && this.id && "chat" in this && this.chat);

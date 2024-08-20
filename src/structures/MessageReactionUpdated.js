@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { Chat } = require("./chat/Chat");
 const { ReactionType } = require("./misc/ReactionType");
 const { MessageCollector } = require("../util/collector/MessageCollector");
 const { ReactionCollector } = require("../util/collector/ReactionCollector");
@@ -36,13 +35,6 @@ class MessageReactionUpdated extends Base {
      */
     this.chat = this.client.chats._add(data.chat);
 
-    if (!this.chat.isPrivate() && data.user) {
-      this.chat.members._add(this.chat.id, true, {
-        id: String(data.user.id),
-        extras: [{ user: data.user }],
-      });
-    }
-
     if ("user" in data) {
       /**
        * The user that changed the reaction, if the user isn't anonymous
@@ -52,8 +44,11 @@ class MessageReactionUpdated extends Base {
     }
 
     if ("actor_chat" in data) {
-      /** The chat on behalf of which the reaction was changed, if the user is anonymous */
-      this.actorChat = new Chat(this.client, data.actor_chat);
+      /**
+       * The chat on behalf of which the reaction was changed, if the user is anonymous
+       * @type {import("./chat/Chat").Chat}
+       */
+      this.actorChat = this.client.chats._add(data.actor_chat);
     }
 
     /** Date of the change in Unix time */

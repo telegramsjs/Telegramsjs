@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { Chat } = require("../chat/Chat");
 
 class Story extends Base {
   /**
@@ -12,8 +11,11 @@ class Story extends Base {
     /** Unique identifier for the story in the chat */
     this.id = data.id;
 
-    /** Chat that posted the story */
-    this.chat = new Chat(client, data.chat);
+    /**
+     * Chat that posted the story
+     * @type {import("../chat/Chat").Chat}
+     */
+    this.chat = this.client.chats._add(data.chat);
   }
 }
 

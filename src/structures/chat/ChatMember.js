@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 const { ChatInviteLink } = require("./ChatInviteLink");
 const { UserPermissions } = require("../../util/UserPermissions");
 
@@ -136,9 +135,9 @@ class ChatMember extends Base {
     if ("user" in data) {
       /**
        * Information about the user
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.user = new User(this.client, data.user);
+      this.user = this.client.users._add(data.user);
     }
 
     /**
@@ -177,9 +176,9 @@ class ChatMember extends Base {
     if ("from" in data) {
       /**
        * User that sent the join request
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.author = new User(this.client, data.from);
+      this.author = this.client.users._add(data.from);
     }
 
     if ("bio" in data) {
@@ -287,30 +286,30 @@ class ChatMember extends Base {
 
   /**
    * Fetches this ChatMember
-   * @param {boolean} [force=true] - whether to skip the cache check and request the API
    * @returns {Promise<ChatMember | null>}
    */
-  fetch(force = true) {
-    return (
-      this.client.chats
-        .resolve(this.chatId)
-        ?.members?.fetch({ id: this.id }, { force }) ?? null
-    );
+  fetch() {
+    if (!this.author) {
+      return null;
+    }
+
+    return this.client.getChatMember(this.chatId, this.author.id);
   }
 
   /**
    * Retrieves the permissions of the current member in a specific chat.
    * @param {ChatMember|string} channel - The identifier of the chat channel.
-   * @returns {UserPermissions|null} The permissions object of the user in the chat or null if not available.
+   * @param {boolean} [checkAdmin] - A flag to check if the member is an admin or creator.
+   * @returns {Promise<UserPermissions|null>} The permissions object of the user in the chat or null if not available.
    */
-  permissionsIn(channel) {
+  permissionsIn(channel, checkAdmin) {
     const chat = this.client.chats.resolve(channel);
 
-    if (!chat || chat.isPrivate() || !chat.members) {
+    if (!chat || chat.isPrivate() || !this.user) {
       return null;
     }
 
-    return chat.members.resolve(this)?.permissions || null;
+    return chat.memberPermissions(this.user.id, checkAdmin);
   }
 
   /**

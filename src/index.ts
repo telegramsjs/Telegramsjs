@@ -11,8 +11,6 @@ export * from "./util/Constants";
 export * from "./util/ApiPermissions";
 export * from "./managers/BaseManager";
 export * from "./managers/ChatManager";
-export * from "./managers/ChatMemberManager";
-export * from "./managers/MessageManager";
 export * from "./managers/UserManager";
 export * from "./client/BaseClient";
 export * from "./client/PollingClient";

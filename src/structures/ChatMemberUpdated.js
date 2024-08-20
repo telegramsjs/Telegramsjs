@@ -1,6 +1,4 @@
 const { Base } = require("./Base");
-const { Chat } = require("./chat/Chat");
-const { User } = require("./misc/User");
 const { ChatMember } = require("./chat/ChatMember");
 const { ChatInviteLink } = require("./chat/ChatInviteLink");
 
@@ -12,11 +10,17 @@ class ChatMemberUpdated extends Base {
   constructor(client, data) {
     super(client);
 
-    /** Chat the user belongs to */
-    this.chat = new Chat(client, data.chat);
+    /**
+     * Chat the user belongs to
+     * @type {import("./chat/Chat").Chat}
+     */
+    this.chat = this.client.chats._add(data.chat);
 
-    /** Performer of the action, which resulted in the change */
-    this.author = new User(client, data.from);
+    /**
+     * Performer of the action, which resulted in the change
+     * @type {import("./misc/User").User}
+     */
+    this.author = this.client.users._add(data.from);
 
     /** Date the change was done in Unix time */
     this.createdUnixTime = data.date;
@@ -24,19 +28,8 @@ class ChatMemberUpdated extends Base {
     /** Previous information about the chat member */
     this.oldMember = new ChatMember(client, this.chat.id, data.old_chat_member);
 
-    if (!this.chat.isPrivate()) {
-      /** New information about the chat member */
-      this.newMember = this.chat.members._add(this.chat.id, true, {
-        id: String(data.new_chat_member.user.id),
-        extras: [data.new_chat_member],
-      });
-    } else {
-      this.newMember = new ChatMember(
-        client,
-        this.chat.id,
-        data.new_chat_member,
-      );
-    }
+    /** New information about the chat member */
+    this.newMember = new ChatMember(client, this.chat.id, data.new_chat_member);
 
     if ("invite_link" in data) {
       /** Chat invite link, which was used by the user to join the chat; for joining by invite link events only */
