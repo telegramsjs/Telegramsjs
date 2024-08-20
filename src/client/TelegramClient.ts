@@ -49,9 +49,7 @@ interface ILoginOptions {
 interface ClientOptions {
   offset?: number;
   requestOptions?: RequestInit;
-  messageCacheMaxSize?: number;
   chatCacheMaxSize?: number;
-  memberCacheMaxSize?: number;
   userCacheMaxSize?: number;
   pollingTimeout?: number;
   errorHandler?: boolean;

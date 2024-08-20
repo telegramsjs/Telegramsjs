@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 
 class BusinessConnection extends Base {
   /**
@@ -17,9 +16,9 @@ class BusinessConnection extends Base {
 
     /**
      * Business account user that created the business connection
-     * @type {User}
+     * @type {import("../misc/User").User}
      */
-    this.user = new User(client, data.user);
+    this.user = this.client.users._add(data.user);
 
     /**
      * Identifier of a private chat with the user who created the business connection

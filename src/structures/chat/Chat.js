@@ -40,31 +40,6 @@ class Chat extends Base {
       writable: true,
     });
 
-    if (!this.isPrivate()) {
-      const { ChatMemberManager } = require("../../managers/ChatMemberManager");
-
-      /**
-       * Manages API methods for ChatMember and stores their cache.
-       * @type {ChatMemberManager | undefined}
-       */
-      this.members = new ChatMemberManager(
-        client,
-        this.id,
-        client.options?.memberCacheMaxSize,
-      );
-    }
-
-    const { MessageManager } = require("../../managers/MessageManager");
-
-    /**
-     * Manages API methods for Message and stores their cache.
-     * @type {MessageManager}
-     */
-    this.messages = new MessageManager(
-      client,
-      client.options?.messageCacheMaxSize,
-    );
-
     this._patch(data);
   }
 
@@ -167,24 +142,25 @@ class Chat extends Base {
    * Retrieves the permissions of a specific member in the chat.
    * @param {import("./ChatMember").ChatMember|string} member - The member object to check permissions for.
    * @param {boolean} [checkAdmin] - A flag to check if the member is an admin or creator.
-   * @returns {UserPermissions|null} The permissions object of the member or null if not available.
+   * @returns {Promise<UserPermissions|null>} The permissions object of the member or null if not available.
    */
-  memberPermissions(member, checkAdmin) {
-    if (member?.status === null || this.isPrivate()) {
-      return null;
-    }
+  async memberPermissions(member, checkAdmin) {
+    if (this.isPrivate()) return null;
 
     if (checkAdmin && member?.status === "creator") {
       return new UserPermissions(UserPermissions.Flags);
     }
 
-    const cacheMember = this.members.resolve(member);
+    const fetchMember = await this.client.getChatMember(
+      this.id,
+      member.user?.id ?? member,
+    );
 
-    if (cacheMember && cacheMember.permissions) {
-      if (Object.keys(cacheMember.permissions).length === 0) {
-        return this.memberPermissions(chatMember, checkAdmin);
+    if (fetchMember && fetchMember.permissions) {
+      if (Object.keys(fetchMember.permissions).length === 0) {
+        return this.memberPermissions(fetchMember, checkAdmin);
       }
-      return cacheMember.permissions;
+      return fetchMember.permissions;
     }
 
     return null;
@@ -520,7 +496,7 @@ class Chat extends Base {
 
   /**
    * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink.
-   * @param {Omit<MethodParameters["createChatSubscriptionInviteLink"], "chatId">} [options] - out parameters
+   * @param {Omit<MethodParameters["createChatSubscriptionInviteLink"], "chatId">} [options={}] - out parameters
    * @returns {Promise<import("./ChatInviteLink").ChatInviteLink>} - Returns the new invite link as a ChatInviteLink object.
    */
   createSubscriptionInvite(options = {}) {
@@ -532,7 +508,7 @@ class Chat extends Base {
 
   /**
    * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights.
-   * @param {Omit<MethodParameters["editChatSubscriptionInviteLink"], "chatId">} [options] - out parameters
+   * @param {Omit<MethodParameters["editChatSubscriptionInviteLink"], "chatId">} [options={}] - out parameters
    * @returns {Promise<import("./ChatInviteLink").ChatInviteLink>} - Returns the edited invite link as a ChatInviteLink object.
    */
   editSubscriptionInvite(options = {}) {

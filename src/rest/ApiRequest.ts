@@ -1,4 +1,3 @@
-import { Agent } from "node:https";
 import { MediaData } from "./MediaData";
 // @ts-ignore
 const snakeCase = require("lodash.snakecase");
@@ -22,12 +21,7 @@ class ApiRequest {
    */
   constructor(
     public readonly authToken: string,
-    public readonly requestOptions: RequestInit = {
-      agent: new Agent({
-        keepAlive: true,
-        keepAliveMsecs: 10000,
-      }),
-    },
+    public readonly requestOptions?: RequestInit,
   ) {}
 
   /**
@@ -39,7 +33,7 @@ class ApiRequest {
     options: Record<string, unknown>,
   ): Promise<RequestInit> {
     const snakeCaseOptions = this.validateCamelCaseKeys(options);
-    if (this.media.hasMedia(snakeCaseOptions)) {
+    if (this.media.hasMedia(options)) {
       return await this.media.buildFormDataConfig(
         snakeCaseOptions,
         this.requestOptions,
@@ -95,13 +89,13 @@ class ApiRequest {
           if (Array.isArray(value)) {
             return value.map((value) => this.validateCamelCaseKeys(value));
           }
-          return typeof value === "object"
+          return typeof value === "object" && !this.media.isMediaType(value)
             ? this.validateCamelCaseKeys(value)
             : value;
         });
         continue;
       }
-      if (typeof value === "object") {
+      if (typeof value === "object" && !this.media.isMediaType(value)) {
         snakeCaseOptions[snakeCase(key)] = this.validateCamelCaseKeys(value);
         continue;
       }

@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { User } = require("./misc/User");
 
 /**
  * @typedef {import("../types").MethodParameters} MethodParameters
@@ -16,8 +15,11 @@ class ShippingQuery extends Base {
     /** Unique query identifier */
     this.id = data.id;
 
-    /**.User who sent the query */
-    this.author = new User(client, data.from);
+    /**
+     * User who sent the query
+     * @type {import("./misc/User").User}
+     */
+    this.author = this.client.users._add(data.from);
 
     /** Bot specified invoice payload.*/
     this.invoicePayload = data.invoice_payload;

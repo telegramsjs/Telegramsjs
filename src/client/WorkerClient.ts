@@ -36,7 +36,6 @@ class WorketClient {
     data: Update,
   ):
     | Message
-    | [Message | null, Message]
     | BusinessConnection
     | BusinessMessagesDeleted
     | MessageReactionUpdated
@@ -143,11 +142,6 @@ class WorketClient {
     if (!data) return;
 
     const message = new Message(this.client, data);
-
-    if ("chat" in message) {
-      message.chat?.messages._add(data);
-    }
-
     this.client.emit(Events.Message, message);
 
     return message;
@@ -177,15 +171,13 @@ class WorketClient {
       | Update["edited_message"]
       | Update["edited_channel_post"]
       | Update["edited_business_message"],
-  ): [Message | null, Message] | undefined {
+  ): Message | undefined {
     if (!data) return;
 
     const newMessage = new Message(this.client, data);
-    const oldMessage =
-      newMessage.chat?.messages.cache.get(newMessage.id) || null;
-    this.client.emit(Events.EditedMessage, oldMessage, newMessage);
+    this.client.emit(Events.EditedMessage, newMessage);
 
-    return [oldMessage, newMessage];
+    return newMessage;
   }
 
   /**
@@ -365,10 +357,6 @@ class WorketClient {
 
     const message = new Message(this.client, data);
 
-    if ("chat" in message) {
-      message.chat?.messages._add(data);
-    }
-
     if (
       message.newChatMembers?.findIndex(
         (user) => user.id === this.client.user.id,
@@ -390,10 +378,6 @@ class WorketClient {
     if (!data) return;
 
     const message = new Message(this.client, data);
-
-    if ("chat" in message) {
-      message.chat?.messages._add(data);
-    }
 
     if (message.leftChatMember?.id === this.client.user.id) {
       this.client.emit("chatDelete", message);

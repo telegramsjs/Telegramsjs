@@ -1,6 +1,4 @@
 const { Base } = require("./Base");
-const { User } = require("./misc/User");
-const { Chat } = require("./chat/Chat");
 
 class PollAnswer extends Base {
   /**
@@ -14,13 +12,19 @@ class PollAnswer extends Base {
     this.id = data.poll_id;
 
     if ("voter_chat" in data) {
-      /** The chat that changed the answer to the poll, if the voter is anonymous */
-      this.voterChat = new Chat(client, data.voter_chat);
+      /**
+       * The chat that changed the answer to the poll, if the voter is anonymous
+       * @type {import("./chat/Chat").Chat}
+       */
+      this.voterChat = this.client.chats._add(data.voter_chat);
     }
 
     if ("user" in data) {
-      /** The user that changed the answer to the poll, if the voter isn't anonymous */
-      this.user = new User(client, data.user);
+      /**
+       * The user that changed the answer to the poll, if the voter isn't anonymous
+       * @type {import("./misc/User").User}
+       */
+      this.user = this.client.users._add(data.user);
     }
 
     /** 0-based identifiers of chosen answer options. May be empty if the vote was retracted */

@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { User } = require("./misc/User");
 const { OrderInfo } = require("./invoice/OrderInfo");
 
 /**
@@ -17,8 +16,11 @@ class PreCheckoutQuery extends Base {
     /** Unique query identifier */
     this.id = data.id;
 
-    /** User who sent the query */
-    this.author = new User(client, data.from);
+    /**
+     * User who sent the query
+     * @type {import("./misc/User").User}
+     */
+    this.author = this.client.users._add(data.from);
 
     /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars */
     this.currency = data.currency;

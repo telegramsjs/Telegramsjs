@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { User } = require("./misc/User");
 const { Location } = require("./misc/Location");
 
 /**
@@ -17,8 +16,11 @@ class ChosenInlineResult extends Base {
     /** The unique identifier for the result that was chosen */
     this.id = data.result_id;
 
-    /** The user that chose the result */
-    this.author = new User(client, data.from);
+    /**
+     * The user that chose the result
+     * @type {import("./misc/User").User}
+     */
+    this.author = this.client.users._add(data.from);
 
     if ("location" in data) {
       /** Sender location, only for bots that require user location */

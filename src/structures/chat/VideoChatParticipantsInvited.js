@@ -1,5 +1,4 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 
 class VideoChatParticipantsInvited extends Base {
   /**
@@ -11,9 +10,9 @@ class VideoChatParticipantsInvited extends Base {
 
     /**
      * New members that were invited to the video chat
-     * @type {User[]}
+     * @type {import("../misc/User").User[]}
      */
-    this.users = data.users.map((user) => new User(client, user));
+    this.users = data.users.map((user) => this.client.users._add(user));
   }
 }
 

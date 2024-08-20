@@ -1,3 +1,5 @@
+import { Agent } from "node:https";
+
 const DefaultParameters = {
   offset: 0,
   limit: 1,
@@ -29,11 +31,15 @@ const DefaultParameters = {
 } as const;
 
 const DefaultClientParameters = {
-  messageCacheMaxSize: -1,
   chatCacheMaxSize: -1,
-  memberCacheMaxSize: -1,
   userCacheMaxSize: -1,
   pollingTimeout: 300,
+  requestOptions: {
+    agent: new Agent({
+      keepAlive: true,
+      keepAliveMsecs: 10000,
+    }),
+  },
 } as const;
 
 const Events = {

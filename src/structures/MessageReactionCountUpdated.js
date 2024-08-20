@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { Chat } = require("./chat/Chat");
 const { ReactionType } = require("./misc/ReactionType");
 
 class ReactionCount {
@@ -26,8 +25,11 @@ class MessageReactionCountUpdated extends Base {
     /** Unique message identifier inside the chat */
     this.id = String(data.message_id);
 
-    /** The chat containing the message */
-    this.chat = new Chat(client, data.chat);
+    /**
+     * The chat containing the message
+     * @type {import("./chat/Chat").Chat}
+     */
+    this.chat = this.client.chats._add(data.chat);
 
     /** List of reactions that are present on the message */
     this.reactions = data.reactions.map((data) => new ReactionCount(data));

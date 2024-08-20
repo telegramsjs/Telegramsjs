@@ -1,6 +1,4 @@
 const { Base } = require("../Base");
-const { Chat } = require("../chat/Chat");
-const { User } = require("../misc/User");
 
 class GiveawayWinners extends Base {
   /**
@@ -10,8 +8,11 @@ class GiveawayWinners extends Base {
   constructor(client, data) {
     super(client);
 
-    /** The chat that created the giveaway */
-    this.chat = new Chat(client, data.chat);
+    /**
+     * The chat that created the giveaway
+     * @type {import("../misc/Chat").Chat}
+     */
+    this.chat = this.client.chats._add(data.chat);
 
     /** Identifier of the messsage with the giveaway in the chat */
     this.messageId = String(data.giveaway_message_id);
@@ -22,8 +23,11 @@ class GiveawayWinners extends Base {
     /** Total number of winners in the giveaway */
     this.count = data.winner_count;
 
-    /** List of up to 100 winners of the giveaway */
-    this.winners = data.winners.map((user) => new User(client, user));
+    /**
+     * List of up to 100 winners of the giveaway
+     * @type {import("../misc/User").User[]}
+     */
+    this.winners = data.winners.map((user) => this.client.users._add(user));
 
     this._patch(data);
   }

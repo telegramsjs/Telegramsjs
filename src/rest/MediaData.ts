@@ -1,6 +1,7 @@
+import { Agent } from "node:https";
 import { Buffer } from "node:buffer";
 import { randomBytes } from "node:crypto";
-import fs, { type ReadStream } from "node:fs";
+import fs, { ReadStream } from "node:fs";
 import fetch, {
   type RequestInit,
   type BodyInit,
@@ -50,9 +51,9 @@ class MediaData {
    */
   readonly formDataJsonFields: string[] = [
     "results",
-    "reply_markup",
-    "mask_position",
-    "shipping_options",
+    "replyMarkup",
+    "maskPosition",
+    "shippingOptions",
     "errors",
     "commands",
   ];
@@ -69,8 +70,31 @@ class MediaData {
     "video",
     "animation",
     "voice",
-    "video_note",
+    "videoNote",
   ];
+
+  /**
+   * Checks if the given value is a media-related object.
+   * This function determines if the provided value is an object associated with media data types such as Buffer, ArrayBuffer, Blob, FormData, Uint8Array, or DataView.
+   *
+   * @param value - The value to check.
+   * @returns `true` if the value is a media-related object; otherwise, `false`.
+   */
+  isMediaType(value: any) {
+    return Boolean(
+      typeof value === "object" &&
+        value !== null &&
+        value.constructor &&
+        (value instanceof Buffer ||
+          value instanceof ReadStream ||
+          value instanceof ArrayBuffer ||
+          ArrayBuffer.isView(value) ||
+          value instanceof Blob ||
+          value instanceof FormData ||
+          value instanceof Uint8Array ||
+          value instanceof DataView),
+    );
+  }
 
   /**
    * Checks if the payload contains media data.
@@ -110,6 +134,12 @@ class MediaData {
         "connection": "keep-alive",
       },
       body: JSON.stringify(payload) as BodyInit,
+      agent:
+        requestOptions.agent ??
+        new Agent({
+          keepAlive: true,
+          keepAliveMsecs: 10000,
+        }),
     };
   }
 
@@ -153,6 +183,12 @@ class MediaData {
         "connection": "keep-alive",
       },
       body: formData as MultipartStream,
+      agent:
+        requestOptions.agent ??
+        new Agent({
+          keepAlive: true,
+          keepAliveMsecs: 10000,
+        }),
     };
   }
 
@@ -189,7 +225,7 @@ class MediaData {
       } else {
         form.addPart({
           headers: { "content-disposition": `form-data; name="${id}"` },
-          body: `${value}`,
+          body: String(value),
         });
         return;
       }
@@ -198,7 +234,7 @@ class MediaData {
     if (typeof value === "boolean" || typeof value === "number") {
       form.addPart({
         headers: { "content-disposition": `form-data; name="${id}"` },
-        body: `${value}`,
+        body: String(value),
       });
       return;
     }

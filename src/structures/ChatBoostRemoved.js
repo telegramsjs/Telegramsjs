@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { Chat } = require("./chat/Chat");
 const { ChatBoostSource } = require("./boots/ChatBoostSource");
 
 class ChatBoostRemoved extends Base {
@@ -13,8 +12,11 @@ class ChatBoostRemoved extends Base {
     /** Unique identifier of the boost */
     this.id = data.boost_id;
 
-    /** Chat which was boosted */
-    this.chat = new Chat(client, data.chat);
+    /**
+     * Chat which was boosted
+     * @type {import("./chat/Chat").Chat}
+     */
+    this.chat = this.client.chats._add(data.chat);
 
     /** Source of the removed boost */
     this.source = new ChatBoostSource(client, data.source);

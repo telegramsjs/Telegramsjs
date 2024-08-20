@@ -694,6 +694,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         location: import("../../structures/misc/Location").Location;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -714,6 +715,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         location: import("../../structures/misc/Location").Location;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -723,7 +725,7 @@ export type ApiMethods = {
   sendPaidMedia(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance */
     chatId: number | string;
     /** The number of Telegram Stars that must be paid to buy access to the media */
     starCount: number;
@@ -751,8 +753,6 @@ export type ApiMethods = {
       | ForceReply;
   }): import("../../structures/message/Message").Message & {
     paidMedia: import("../../structures/media/paid/PaidMedia").PaidMedia;
-    editedTimestamp: number;
-    editedAt: Date;
   };
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
@@ -946,7 +946,7 @@ export type ApiMethods = {
     chatId: number | string;
     /** Identifier of the target message */
     messageId: string | number;
-    /** A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. */
+    /** A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots. */
     reaction?: ReactionType[];
     /** Pass True to set the reaction with a big animation */
     isBig?: boolean;
@@ -1502,7 +1502,9 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         content: string;
+        editedUnixTime: number;
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 
@@ -1528,7 +1530,8 @@ export type ApiMethods = {
     replyMarkup?: InlineKeyboardMarkup;
   }):
     | (import("../../structures/message/Message").Message & {
-        caption: string;
+        caption?: string;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -1550,6 +1553,7 @@ export type ApiMethods = {
     replyMarkup?: InlineKeyboardMarkup;
   }):
     | (import("../../structures/message/Message").Message & {
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -1569,6 +1573,7 @@ export type ApiMethods = {
     replyMarkup?: InlineKeyboardMarkup;
   }):
     | (import("../../structures/message/Message").Message & {
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -2021,6 +2026,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         game: import("../../structures/game/Game").Game;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })

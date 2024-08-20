@@ -1,5 +1,4 @@
 const { Base } = require("./Base");
-const { User } = require("./misc/User");
 const { Location } = require("./misc/Location");
 
 class InlineQuery extends Base {
@@ -13,8 +12,11 @@ class InlineQuery extends Base {
     /** Unique identifier for this query */
     this.id = data.id;
 
-    /** Sender */
-    this.author = new User(client, data.from);
+    /**
+     * Sender
+     * @type {import("./misc/User").User}
+     */
+    this.author = this.client.users._add(data.from);
 
     /** Text of the query (up to 256 characters) */
     this.query = data.query;

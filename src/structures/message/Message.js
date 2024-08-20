@@ -1,9 +1,8 @@
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
 const { SharedUser } = require("../misc/SharedUser");
 const { ChatShared } = require("../misc/ChatShared");
+const { ChatMember } = require("../chat/ChatMember");
 const { Story } = require("../misc/Story");
-const { Chat } = require("../chat/Chat");
 const {
   VideoChatParticipantsInvited,
 } = require("../chat/VideoChatParticipantsInvited");
@@ -47,6 +46,7 @@ const {
   CollectorEvents,
   ReactionCollectorEvents,
 } = require("../../util/Constants");
+const { ReactionType } = require("../misc/ReactionType");
 const { TelegramError } = require("../../errors/TelegramError");
 
 /**
@@ -78,7 +78,7 @@ class Message extends Base {
 
     if ("from" in data) {
       /**
-       * Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+       * Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
        * @type {import("../misc/User").User | undefined}
        */
       this.author = this.client.users._add(data.from);
@@ -86,7 +86,7 @@ class Message extends Base {
 
     if ("chat" in data) {
       /**
-       * Chat the message belongs to
+       * Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field *from* contains a fake sender user in non-channel chats.
        * @type {import("../chat/Chat").Chat | undefined}
        */
       this.chat = this.client.chats._add({
@@ -94,14 +94,13 @@ class Message extends Base {
         threadId: this.threadId,
       });
 
-      if (!this.chat.isPrivate() && this.author) {
+      if (!this.chat.isPrivate() && data.from) {
         /**
          * Member that were added to the message group or supergroup and information about them
-         * @type {import("../chat/ChatMember").ChatMember | undefined}
+         * @type {ChatMember | undefined}
          */
-        this.member = this.chat.members._add(this.chat.id, true, {
-          id: String(data.from.id),
-          extras: [{ user: data.from }],
+        this.member = new ChatMember(this.client, this.chat.id, {
+          user: data.from,
         });
       }
     }
@@ -152,9 +151,9 @@ class Message extends Base {
     if ("sender_business_bot" in data) {
       /**
        * The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.senderBusinessBot = new User(this.client, data.sender_business_bot);
+      this.senderBusinessBot = this.client.users._add(data.sender_business_bot);
     }
 
     if ("forward_origin" in data) {
@@ -211,9 +210,9 @@ class Message extends Base {
     if ("via_bot" in data) {
       /**
        * Bot through which the message was sent
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.viaBot = new User(this.client, data.via_bot);
+      this.viaBot = new this.client.users._add(data.via_bot);
     }
 
     if ("has_protected_content" in data) {
@@ -267,9 +266,9 @@ class Message extends Base {
     if ("sender_chat" in data) {
       /**
        * Chat that sent the message originally
-       * @type {Chat | undefined}
+       * @type {import("../misc/Chat").Chat | undefined}
        */
-      this.senderChat = new Chat(this.client, {
+      this.senderChat = this.client.chats._add({
         ...data.sender_chat,
         threadId: this.threadId,
       });
@@ -316,27 +315,27 @@ class Message extends Base {
     if ("new_chat_member" in data) {
       /**
        * New member that were added to the group or supergroup and information about them (the bot itself may be one of these member)
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.newChatMember = new User(this.client, data.new_chat_member);
+      this.newChatMember = this.client.users._add(data.new_chat_member);
     }
 
     if ("new_chat_members" in data) {
       /**
        * New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
-       * @type {User[] | undefined}
+       * @type {import("../misc/User").User[] | undefined}
        */
-      this.newChatMembers = data.new_chat_members.map(
-        (user) => new User(this.client, user),
+      this.newChatMembers = data.new_chat_members.map((user) =>
+        this.client.users._add(user),
       );
     }
 
     if ("left_chat_member" in data) {
       /**
        * A member was removed from the group, information about them (this member may be the bot itself)
-       * @type {User | undefined}
+       * @type {import("../misc/User").User | undefined}
        */
-      this.leftChatMember = new User(this.client, data.left_chat_member);
+      this.leftChatMember = this.client.users._add(data.left_chat_member);
     }
 
     if ("new_chat_title" in data) {
@@ -503,17 +502,16 @@ class Message extends Base {
     if ("proximity_alert_triggered" in data) {
       /**
        * @typedef {Object} ProximityAlertTriggered
-       * @property {User} traveler - User that triggered the alert
-       * @property {User} watcher - User that set the alert
+       * @property {import("../misc/User").User} traveler - User that triggered the alert
+       * @property {import("../misc/User").User} watcher - User that set the alert
        * @property {number} distance - The distance between the users
        */
 
       const proximityAlertTriggered = {
-        traveler: new User(
-          this.client,
+        traveler: this.client.users._add(
           data.proximity_alert_triggered.traveler,
         ),
-        watcher: new User(this.client, data.proximity_alert_triggered.watcher),
+        watcher: this.client.users._add(data.proximity_alert_triggered.watcher),
         distance: data.proximity_alert_triggered.distance,
       };
 
@@ -832,7 +830,7 @@ class Message extends Base {
   }
 
   /**
-   * @returns {this is this & { editedTimestamp: number; editedAt: Date }}
+   * @returns {this is this & { editedUnixTime: number; editedTimestamp: number; editedAt: Date }}
    */
   get isEdited() {
     return Boolean(this.editedTimestamp);
@@ -990,7 +988,7 @@ class Message extends Base {
 
   /**
    * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message.
-   * @param {string | import("@telegram.ts/types").ReactionType} reaction - A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators
+   * @param {string | import("@telegram.ts/types").ReactionType | import("@telegram.ts/types").ReactionType[] | ReactionType | ReactionType[]} reaction - A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots
    * @param {boolean} [isBig] - Pass True to set the reaction with a big animation
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -1005,6 +1003,22 @@ class Message extends Base {
 
     if (typeof reaction === "string") {
       react.push({ type: "emoji", emoji: reaction });
+    } else if (reaction instanceof ReactionType) {
+      const reactionData = reaction.isEmoji()
+        ? { type: "emoji", emoji: reaction.emoji }
+        : { type: "custom_emoji", customEmojiId: reaction.custom_emoji };
+      react.push(reactionData);
+    } else if (Array.isArray(reaction)) {
+      reaction.forEach((rea) => {
+        if (rea instanceof ReactionType) {
+          const reactionData = rea.isEmoji()
+            ? { type: "emoji", emoji: rea.emoji }
+            : { type: "custom_emoji", customEmojiId: rea.custom_emoji };
+          react.push(reactionData);
+        } else {
+          react.push(rea);
+        }
+      });
     } else if (typeof reaction === "object") {
       react.push(reaction);
     } else {
@@ -1023,7 +1037,7 @@ class Message extends Base {
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & {content: string; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
     if (!this.chat) {
@@ -1044,7 +1058,7 @@ class Message extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & { caption?: string; editedTimestamp: number; editedAt: Date; }>}
+   * @returns {Promise<Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>}
    */
   editCaption(caption, options = {}) {
     if (!this.chat) {
@@ -1065,7 +1079,7 @@ class Message extends Base {
    * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param {import("@telegram.ts/types").InputMedia} media - An object for a new media content of the message
    * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(media, options = {}) {
     if (!this.chat) {
@@ -1086,7 +1100,7 @@ class Message extends Base {
    * Use this method to edit only the reply markup of messages.
    * @param {import("@telegram.ts/types").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
    * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(replyMarkup, options = {}) {
     if (!this.chat) {
@@ -1213,7 +1227,7 @@ class Message extends Base {
    * @param {number} latitude - Latitude of new location
    * @param {number} longitude - Longitude of new location
    * @param {Omit<MethodParameters["editMessageLiveLocation"], "latitude" | "longitude" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { location: Location }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   editLiveLocation(latitude, longitude, options = {}) {
     if (!this.chat) {
@@ -1234,7 +1248,7 @@ class Message extends Base {
   /**
    * Use this method to stop updating a live location message before live_period expires.
    * @param {Omit<MethodParameters["stopMessageLiveLocation"], "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { location: Location }>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   stopLiveLocation(options = {}) {
     if (!this.chat) {
