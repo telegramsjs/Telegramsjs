@@ -1,4 +1,5 @@
 const { Base } = require("../Base");
+const { ReactionType } = require("../misc/ReactionType");
 const { ChatMember } = require("../chat/ChatMember");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
 const { ReactionCollector } = require("../../util/collector/ReactionCollector");
@@ -249,17 +250,11 @@ class MessageOrigin extends Base {
 
   /**
    * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message.
-   * @param {string | import("@telegram.ts/types").ReactionType} reaction - A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots
+   * @param {string | import("@telegram.ts/types").ReactionType | import("@telegram.ts/types").ReactionType[] | ReactionType | ReactionType[]} reaction - A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots
    * @param {boolean} [isBig] - Pass True to set the reaction with a big animation
    * @returns {Promise<true>} - Returns True on success.
    */
   react(reaction, isBig) {
-    if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
-    }
-
     if (!this.chat) {
       throw new TelegramError(
         "Could not find the chat where this message came from in the cache!",
@@ -270,6 +265,22 @@ class MessageOrigin extends Base {
 
     if (typeof reaction === "string") {
       react.push({ type: "emoji", emoji: reaction });
+    } else if (reaction instanceof ReactionType) {
+      const reactionData = reaction.isEmoji()
+        ? { type: "emoji", emoji: reaction.emoji }
+        : { type: "custom_emoji", customEmojiId: reaction.custom_emoji };
+      react.push(reactionData);
+    } else if (Array.isArray(reaction)) {
+      reaction.forEach((rea) => {
+        if (rea instanceof ReactionType) {
+          const reactionData = rea.isEmoji()
+            ? { type: "emoji", emoji: rea.emoji }
+            : { type: "custom_emoji", customEmojiId: rea.custom_emoji };
+          react.push(reactionData);
+        } else {
+          react.push(rea);
+        }
+      });
     } else if (typeof reaction === "object") {
       react.push(reaction);
     } else {
