@@ -389,18 +389,6 @@ class MessageReactionUpdated extends Base {
    * @returns Information about the reactions.
    */
   static reactions(messageReaction) {
-    function isEmoji(reaction) {
-      const reactionTypeEmojis = reaction.filter((react) => react.isEmoji());
-      return reactionTypeEmojis.map((react) => react.moji);
-    }
-
-    function isCustomEmoji(reaction) {
-      const reactionTypeCustomEmojis = reaction.filter((react) =>
-        react.isCustomEmoji(),
-      );
-      return reactionTypeCustomEmojis.map((react) => react.customEmoji);
-    }
-
     const { added, removed } = messageReaction || {
       added: [],
       removed: [],
@@ -436,6 +424,26 @@ class MessageReactionUpdated extends Base {
       customEmojiRemoved,
     };
   }
+}
+
+/**
+ * @param {import("@telegram.ts/types").ReactionType[]} reaction
+ * @returns {import("@telegram.ts/types").ReactionTypeEmoji["emoji"][]}
+ */
+function isEmoji(reaction) {
+  const reactionTypeEmojis = reaction.filter((react) => react.isEmoji());
+  return reactionTypeEmojis.map((react) => react.emoji);
+}
+
+/**
+ * @param {import("@telegram.ts/types").ReactionType[]} reaction
+ * @returns {string[]}
+ */
+function isCustomEmoji(reaction) {
+  const reactionTypeCustomEmojis = reaction.filter((react) =>
+    react.isCustomEmoji(),
+  );
+  return reactionTypeCustomEmojis.map((react) => react.customEmoji);
 }
 
 module.exports = { MessageReactionUpdated };
