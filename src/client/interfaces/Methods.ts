@@ -694,6 +694,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         location: import("../../structures/misc/Location").Location;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -714,6 +715,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         location: import("../../structures/misc/Location").Location;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -751,8 +753,6 @@ export type ApiMethods = {
       | ForceReply;
   }): import("../../structures/message/Message").Message & {
     paidMedia: import("../../structures/media/paid/PaidMedia").PaidMedia;
-    editedTimestamp: number;
-    editedAt: Date;
   };
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
@@ -1502,7 +1502,9 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         content: string;
+        editedUnixTime: number;
         editedTimestamp: number;
+        editedAt: Date;
       })
     | true;
 
@@ -1528,7 +1530,8 @@ export type ApiMethods = {
     replyMarkup?: InlineKeyboardMarkup;
   }):
     | (import("../../structures/message/Message").Message & {
-        caption: string;
+        caption?: string;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -1550,6 +1553,7 @@ export type ApiMethods = {
     replyMarkup?: InlineKeyboardMarkup;
   }):
     | (import("../../structures/message/Message").Message & {
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -1569,6 +1573,7 @@ export type ApiMethods = {
     replyMarkup?: InlineKeyboardMarkup;
   }):
     | (import("../../structures/message/Message").Message & {
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
@@ -2021,6 +2026,7 @@ export type ApiMethods = {
   }):
     | (import("../../structures/message/Message").Message & {
         game: import("../../structures/game/Game").Game;
+        editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
       })
