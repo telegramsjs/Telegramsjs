@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("./Base");
 const { ReactionType } = require("./misc/ReactionType");
 const { MessageCollector } = require("../util/collector/MessageCollector");
@@ -54,11 +55,25 @@ class MessageReactionUpdated extends Base {
     /** Date of the change in Unix time */
     this.createdUnixTime = data.date;
 
-    /** Previous list of reaction types that were set by the user */
-    this.added = data.new_reaction.map((data) => new ReactionType(data));
+    const reactionData = reactions({
+      added: data.new_reaction,
+      removed: data.old_reaction,
+    });
 
-    /** New list of reaction types that have been set by the user */
-    this.removed = data.old_reaction.map((data) => new ReactionType(data));
+    if (reactionData.isEmoji()) {
+      /** Summary of emoji reactions */
+      this.emojiSummary = reactionData.emoji;
+    }
+
+    if (reactionData.isCustomEmoji()) {
+      /** Summary of custom emoji reactions */
+      this.customEmojiSummary = reactionData.customEmoji;
+    }
+
+    if (reactionData.isPaidEmoji()) {
+      /** Summary of paid emoji reactions */
+      this.paidEmoji = reactionData.paid;
+    }
   }
 
   /**
@@ -399,48 +414,63 @@ class MessageReactionUpdated extends Base {
       ...options,
     });
   }
+}
 
-  /**
-   * Retrieves information about reactions to a message.
-   * @param {MessageReactionUpdated} messageReaction - The message reaction object.
-   * @returns Information about the reactions.
-   */
-  static reactions(messageReaction) {
-    const { added, removed } = messageReaction || {
-      added: [],
-      removed: [],
-    };
+/**
+ * Retrieves information about reactions to a message.
+ * @param {MessageReactionUpdated} messageReaction - The message reaction object.
+ * @returns Information about the reactions.
+ */
+function reactions(messageReaction) {
+  const { added, removed } = messageReaction || {
+    added: [],
+    removed: [],
+  };
 
-    const emoji = isEmoji(added);
-    const customEmoji = isCustomEmoji(added);
-    const emojiRemoved = isEmoji(removed);
-    const customEmojiRemoved = isCustomEmoji(removed);
+  const emoji = isEmoji(added);
+  const customEmoji = isCustomEmoji(added);
+  const emojiRemoved = isEmoji(removed);
+  const customEmojiRemoved = isCustomEmoji(removed);
+  const paidAdded = isPaidEmoji(added);
+  const paidRemoved = isPaidEmoji(removed);
 
-    const emojiAdded = emoji.filter(
-      (emojiItem) => !emojiRemoved.includes(emojiItem),
-    );
-    const customEmojiAdded = customEmoji.filter(
-      (emojiItem) => !customEmojiRemoved.includes(emojiItem),
-    );
+  const emojiAdded = emoji.filter(
+    (emojiItem) => !emojiRemoved.includes(emojiItem),
+  );
+  const customEmojiAdded = customEmoji.filter(
+    (emojiItem) => !customEmojiRemoved.includes(emojiItem),
+  );
 
-    const emojiKept = emoji.filter((emojiItem) =>
-      emojiRemoved.includes(emojiItem),
-    );
-    const customEmojiKept = customEmoji.filter((emojiItem) =>
-      customEmojiRemoved.includes(emojiItem),
-    );
+  const emojiKept = emoji.filter((emojiItem) =>
+    emojiRemoved.includes(emojiItem),
+  );
+  const customEmojiKept = customEmoji.filter((emojiItem) =>
+    customEmojiRemoved.includes(emojiItem),
+  );
 
-    return {
-      emoji,
-      emojiAdded,
-      emojiKept,
-      emojiRemoved,
-      customEmoji,
-      customEmojiAdded,
-      customEmojiKept,
-      customEmojiRemoved,
-    };
-  }
+  return {
+    emoji: {
+      added: emojiAdded,
+      kept: emojiKept,
+      removed: emojiRemoved,
+    },
+    customEmoji: {
+      added: customEmojiAdded,
+      kept: customEmojiKept,
+      removed: customEmojiRemoved,
+    },
+    paid: {
+      added: paidAdded,
+      removed: paidRemoved,
+    },
+    isEmoji: () =>
+      emojiAdded.length > 0 || emojiKept.length > 0 || emojiRemoved.length > 0,
+    isCustomEmoji: () =>
+      customEmojiAdded.length > 0 ||
+      customEmojiKept.length > 0 ||
+      customEmojiRemoved.length > 0,
+    isPaidEmoji: () => paidAdded.length > 0 || paidRemoved.length > 0,
+  };
 }
 
 /**
@@ -448,7 +478,7 @@ class MessageReactionUpdated extends Base {
  * @returns {import("@telegram.ts/types").ReactionTypeEmoji["emoji"][]}
  */
 function isEmoji(reaction) {
-  const reactionTypeEmojis = reaction.filter((react) => react.isEmoji());
+  const reactionTypeEmojis = reaction.filter((react) => react.type === "emoji");
   return reactionTypeEmojis.map((react) => react.emoji);
 }
 
@@ -457,10 +487,21 @@ function isEmoji(reaction) {
  * @returns {string[]}
  */
 function isCustomEmoji(reaction) {
-  const reactionTypeCustomEmojis = reaction.filter((react) =>
-    react.isCustomEmoji(),
+  const reactionTypeCustomEmojis = reaction.filter(
+    (react) => react.type === "custom_emoji",
   );
   return reactionTypeCustomEmojis.map((react) => react.customEmoji);
+}
+
+/**
+ * @param {import("@telegram.ts/types").ReactionType[]} reaction
+ * @returns {boolean}
+ */
+function isPaidEmoji(reaction) {
+  const reactionTypeCustomEmojis = reaction.filter(
+    (react) => react.type === "paid",
+  );
+  return reactionTypeCustomEmojis.length > 0;
 }
 
 module.exports = { MessageReactionUpdated };
