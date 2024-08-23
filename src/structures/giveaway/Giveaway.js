@@ -15,7 +15,7 @@ class Giveaway extends Base {
     this.chats = data.chats.map((chat) => this.client.chats._add(chat));
 
     /** Point in time (Unix timestamp) when winners of the giveaway will be selected */
-    this.selectedUnixTime = this.winners_selection_date;
+    this.selectedUnixTime = data.winners_selection_date;
 
     /** The number of users which are supposed to be selected as winners of the giveaway */
     this.winnerCount = data.winner_count;

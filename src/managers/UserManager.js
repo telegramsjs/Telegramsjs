@@ -10,20 +10,22 @@ const { ChatMember } = require("../structures/chat/ChatMember");
 class UserManager extends BaseManager {
   /**
    * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client instance.
+   * @param {Array<unknown>} [iterable] - data iterable
    * @param {number} [cacheSize=-1] - The maximum size of the cache. Default is unlimited.
    */
-  constructor(client, cacheSize) {
-    super(client, User, cacheSize);
+  constructor(client, iterable, cacheSize) {
+    super(client, User, iterable, cacheSize);
   }
 
   /**
    * Resolves a user from a ChatMember, Message, or user ID.
    * @param {ChatMember|Message|string} user - The ChatMember, Message, or user ID to resolve.
    * @returns {User|null} The resolved User instance or null if not found.
+   * @override
    */
   resolve(user) {
-    if (user instanceof ChatMember) return user.user;
-    if (user instanceof Message) return user.author;
+    if (user instanceof ChatMember && user.user) return user.user;
+    if (user instanceof Message && user.author) return user.author;
     return super.resolve(user);
   }
 
@@ -31,10 +33,11 @@ class UserManager extends BaseManager {
    * Resolves the user ID from a ChatMember, Message, or user ID.
    * @param {ChatMember|Message|string} user - The ChatMember, Message, or user ID to resolve.
    * @returns {string|null} The resolved user ID or null if not found.
+   * @override
    */
   resolveId(user) {
-    if (user instanceof ChatMember) return user.user.id;
-    if (user instanceof Message) return user.author.id;
+    if (user instanceof ChatMember && user.id) return user.id;
+    if (user instanceof Message && user.author) return user.author.id;
     return super.resolveId(user);
   }
 
@@ -50,11 +53,11 @@ class UserManager extends BaseManager {
     const id = this.resolveId(user);
 
     if (!force) {
-      const existing = this.cache.get(id);
+      const existing = this.cache.get(String(id));
       if (existing) return existing;
     }
 
-    const data = await this.client.getChat(id);
+    const data = await this.client.getChat(String(id));
     return this._add(data, cache);
   }
 }

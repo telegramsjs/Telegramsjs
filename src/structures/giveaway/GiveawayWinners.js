@@ -10,7 +10,7 @@ class GiveawayWinners extends Base {
 
     /**
      * The chat that created the giveaway
-     * @type {import("../misc/Chat").Chat}
+     * @type {import("../chat/Chat").Chat}
      */
     this.chat = this.client.chats._add(data.chat);
 
@@ -32,6 +32,10 @@ class GiveawayWinners extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").GiveawayWinners} data - Data about the represents a message about the completion of a giveaway with public winners
+   * @override
+   */
   _patch(data) {
     if ("additional_chat_count" in data) {
       /**

@@ -4,7 +4,7 @@ const { Video } = require("../Video");
 
 class PaidMedia extends Base {
   /**
-   * @param {import("../../../client/TelegramClient").TelegramClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").PaidMedia} data - Data about the describes paid media
    */
   constructor(client, data) {
@@ -13,6 +13,10 @@ class PaidMedia extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").PaidMedia} data - Data about the describes paid media
+   * @override
+   */
   _patch(data) {
     if ("width" in data) {
       /**
@@ -58,7 +62,7 @@ class PaidMedia extends Base {
   }
 
   /**
-   * @returns {this & this & { video?: undefined; photo?: undefined }}
+   * @returns {this is this & { video?: undefined; photo?: undefined }}
    */
   isPreview() {
     return !this.isPhoto() && !this.isVideo();

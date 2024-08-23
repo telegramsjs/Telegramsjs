@@ -54,11 +54,25 @@ class MessageReactionUpdated extends Base {
     /** Date of the change in Unix time */
     this.createdUnixTime = data.date;
 
-    /** Previous list of reaction types that were set by the user */
-    this.added = data.new_reaction.map((data) => new ReactionType(data));
+    const reactionData = reactions({
+      added: data.new_reaction.map((reaction) => new ReactionType(reaction)),
+      removed: data.old_reaction.map((reaction) => new ReactionType(reaction)),
+    });
 
-    /** New list of reaction types that have been set by the user */
-    this.removed = data.old_reaction.map((data) => new ReactionType(data));
+    if (reactionData.isEmoji()) {
+      /** Summary of emoji reactions */
+      this.emojiSummary = reactionData.emoji;
+    }
+
+    if (reactionData.isCustomEmoji()) {
+      /** Summary of custom emoji reactions */
+      this.customEmojiSummary = reactionData.customEmoji;
+    }
+
+    if (reactionData.isPaidEmoji()) {
+      /** Summary of paid emoji reactions */
+      this.paidEmoji = reactionData.paid;
+    }
   }
 
   /**
@@ -81,7 +95,7 @@ class MessageReactionUpdated extends Base {
    * @returns {import("../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
-    return new MessageCollector(this.client, this, options);
+    return new MessageCollector(this.client, this.chat, options);
   }
 
   /**
@@ -90,7 +104,7 @@ class MessageReactionUpdated extends Base {
    */
   awaitMessage(options = {}) {
     const _options = { ...options, max: 1 };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const collect = this.createMessageCollector(_options);
       collect.on(CollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
@@ -99,12 +113,7 @@ class MessageReactionUpdated extends Base {
   }
 
   /**
-   * @typedef {import("../util/collector/Collector").ICollectorOptions<string, Message>} AwaitMessagesOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitMessagesOptions} [options={}] - message collector options
+   * @param {import("../util/collector/Collector").ICollectorOptions<string, Message> & { errors?: string[] }} [options={}] - message collector options
    * @returns {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
    */
   awaitMessages(options = {}) {
@@ -125,7 +134,7 @@ class MessageReactionUpdated extends Base {
    * @returns {import("../util/collector/ReactionCollector").ReactionCollector}
    */
   createReactionCollector(options = {}) {
-    return new ReactionCollector(this.client, this, options);
+    return new ReactionCollector(this.client, this.chat, options);
   }
 
   /**
@@ -134,7 +143,7 @@ class MessageReactionUpdated extends Base {
    */
   awaitReaction(options = {}) {
     const _options = { ...options, max: 1 };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const collect = this.createReactionCollector(_options);
       collect.on(ReactionCollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
@@ -143,13 +152,8 @@ class MessageReactionUpdated extends Base {
   }
 
   /**
-   * @typedef {import("../util/collector/Collector").ICollectorOptions<string, MessageReactionUpdated>} AwaitRectionsOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @returns {Promise<[import("@telegram.ts/collection").Collection<string, MessageReactionUpdated>, string]>}
+   * @param {import("../util/collector/Collector").ICollectorOptions<string, MessageReactionUpdated> & { errors?: string[] }} [options={}] - reaction collector options
+   * @returns {Promise<import("@telegram.ts/collection").Collection<string, MessageReactionUpdated>>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
@@ -196,12 +200,7 @@ class MessageReactionUpdated extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   react(reaction, isBig) {
-    if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
-    }
-
+    /** @type {any[]} */
     let react = [];
 
     if (typeof reaction === "string") {
@@ -209,14 +208,14 @@ class MessageReactionUpdated extends Base {
     } else if (reaction instanceof ReactionType) {
       const reactionData = reaction.isEmoji()
         ? { type: "emoji", emoji: reaction.emoji }
-        : { type: "custom_emoji", customEmojiId: reaction.custom_emoji };
+        : { type: "custom_emoji", customEmojiId: reaction.customEmojiId };
       react.push(reactionData);
     } else if (Array.isArray(reaction)) {
       reaction.forEach((rea) => {
         if (rea instanceof ReactionType) {
           const reactionData = rea.isEmoji()
             ? { type: "emoji", emoji: rea.emoji }
-            : { type: "custom_emoji", customEmojiId: rea.custom_emoji };
+            : { type: "custom_emoji", customEmojiId: rea.customEmojiId };
           react.push(reactionData);
         } else {
           react.push(rea);
@@ -232,7 +231,7 @@ class MessageReactionUpdated extends Base {
       reaction: react,
       chatId: this.chat.id,
       messageId: this.id,
-      isBig,
+      ...(isBig && { isBig }),
     });
   }
 
@@ -240,7 +239,7 @@ class MessageReactionUpdated extends Base {
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<boolean | (Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
     return this.client.editMessageText({
@@ -255,11 +254,11 @@ class MessageReactionUpdated extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>}
+   * @returns {Promise<boolean | (Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>}
    */
   editCaption(caption, options = {}) {
     return this.client.editMessageCaption({
-      caption,
+      ...(caption && { caption }),
       chatId: this.chat.id,
       messageId: this.id,
       ...options,
@@ -283,7 +282,7 @@ class MessageReactionUpdated extends Base {
 
   /**
    * Use this method to edit only the reply markup of messages.
-   * @param {import("@telegram.ts/types").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
+   * @param {import("../client/interfaces/Markup").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
    * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
@@ -337,7 +336,7 @@ class MessageReactionUpdated extends Base {
       chatId: this.chat.id,
       messageId: this.id,
       disableNotification: notification,
-      businessConnectionId,
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -350,7 +349,7 @@ class MessageReactionUpdated extends Base {
     return this.client.unpinChatMessage({
       chatId: this.chat.id,
       messageId: this.id,
-      businessConnectionId,
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -375,7 +374,7 @@ class MessageReactionUpdated extends Base {
    * @param {number} latitude - Latitude of new location
    * @param {number} longitude - Longitude of new location
    * @param {Omit<MethodParameters["editMessageLiveLocation"], "latitude" | "longitude" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("./misc/Location").Location })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   editLiveLocation(latitude, longitude, options = {}) {
     return this.client.editMessageLiveLocation({
@@ -390,7 +389,7 @@ class MessageReactionUpdated extends Base {
   /**
    * Use this method to stop updating a live location message before live_period expires.
    * @param {Omit<MethodParameters["stopMessageLiveLocation"], "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("./misc/Location").Location })>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   stopLiveLocation(options = {}) {
     return this.client.stopMessageLiveLocation({
@@ -399,52 +398,67 @@ class MessageReactionUpdated extends Base {
       ...options,
     });
   }
-
-  /**
-   * Retrieves information about reactions to a message.
-   * @param {MessageReactionUpdated} messageReaction - The message reaction object.
-   * @returns Information about the reactions.
-   */
-  static reactions(messageReaction) {
-    const { added, removed } = messageReaction || {
-      added: [],
-      removed: [],
-    };
-
-    const emoji = isEmoji(added);
-    const customEmoji = isCustomEmoji(added);
-    const emojiRemoved = isEmoji(removed);
-    const customEmojiRemoved = isCustomEmoji(removed);
-
-    const emojiAdded = emoji.filter(
-      (emojiItem) => !emojiRemoved.includes(emojiItem),
-    );
-    const customEmojiAdded = customEmoji.filter(
-      (emojiItem) => !customEmojiRemoved.includes(emojiItem),
-    );
-
-    const emojiKept = emoji.filter((emojiItem) =>
-      emojiRemoved.includes(emojiItem),
-    );
-    const customEmojiKept = customEmoji.filter((emojiItem) =>
-      customEmojiRemoved.includes(emojiItem),
-    );
-
-    return {
-      emoji,
-      emojiAdded,
-      emojiKept,
-      emojiRemoved,
-      customEmoji,
-      customEmojiAdded,
-      customEmojiKept,
-      customEmojiRemoved,
-    };
-  }
 }
 
 /**
- * @param {import("@telegram.ts/types").ReactionType[]} reaction
+ * Retrieves information about reactions to a message.
+ * @param {{ added: ReactionType[]; removed: ReactionType[] }} messageReaction - The message reaction object.
+ * @returns Information about the reactions.
+ */
+function reactions(messageReaction) {
+  const { added, removed } = messageReaction || {
+    added: [],
+    removed: [],
+  };
+
+  const emoji = isEmoji(added);
+  const customEmoji = isCustomEmoji(added);
+  const emojiRemoved = isEmoji(removed);
+  const customEmojiRemoved = isCustomEmoji(removed);
+  const paidAdded = isPaidEmoji(added);
+  const paidRemoved = isPaidEmoji(removed);
+
+  const emojiAdded = emoji.filter(
+    (emojiItem) => !emojiRemoved.includes(emojiItem),
+  );
+  const customEmojiAdded = customEmoji.filter(
+    (emojiItem) => !customEmojiRemoved.includes(emojiItem),
+  );
+
+  const emojiKept = emoji.filter((emojiItem) =>
+    emojiRemoved.includes(emojiItem),
+  );
+  const customEmojiKept = customEmoji.filter((emojiItem) =>
+    customEmojiRemoved.includes(emojiItem),
+  );
+
+  return {
+    emoji: {
+      added: emojiAdded,
+      kept: emojiKept,
+      removed: emojiRemoved,
+    },
+    customEmoji: {
+      added: customEmojiAdded,
+      kept: customEmojiKept,
+      removed: customEmojiRemoved,
+    },
+    paid: {
+      added: paidAdded,
+      removed: paidRemoved,
+    },
+    isEmoji: () =>
+      emojiAdded.length > 0 || emojiKept.length > 0 || emojiRemoved.length > 0,
+    isCustomEmoji: () =>
+      customEmojiAdded.length > 0 ||
+      customEmojiKept.length > 0 ||
+      customEmojiRemoved.length > 0,
+    isPaidEmoji: () => paidAdded || paidRemoved,
+  };
+}
+
+/**
+ * @param {ReactionType[]} reaction
  * @returns {import("@telegram.ts/types").ReactionTypeEmoji["emoji"][]}
  */
 function isEmoji(reaction) {
@@ -453,14 +467,23 @@ function isEmoji(reaction) {
 }
 
 /**
- * @param {import("@telegram.ts/types").ReactionType[]} reaction
+ * @param {ReactionType[]} reaction
  * @returns {string[]}
  */
 function isCustomEmoji(reaction) {
   const reactionTypeCustomEmojis = reaction.filter((react) =>
     react.isCustomEmoji(),
   );
-  return reactionTypeCustomEmojis.map((react) => react.customEmoji);
+  return reactionTypeCustomEmojis.map((react) => react.customEmojiId);
+}
+
+/**
+ * @param {ReactionType[]} reaction
+ * @returns {boolean}
+ */
+function isPaidEmoji(reaction) {
+  const reactionTypeCustomEmojis = reaction.filter((react) => react.isPaid());
+  return reactionTypeCustomEmojis.length > 0;
 }
 
 module.exports = { MessageReactionUpdated };

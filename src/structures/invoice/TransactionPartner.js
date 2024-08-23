@@ -16,6 +16,10 @@ class TransactionPartner extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").TransactionPartner} data - Data about the describes the source of a transaction, or its recipient for outgoing transactions
+   * @override
+   */
   _patch(data) {
     if ("withdrawal_state" in data) {
       /**

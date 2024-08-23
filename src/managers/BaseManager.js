@@ -1,7 +1,7 @@
 const process = require("node:process");
 const { Collection } = require("@telegram.ts/collection");
 
-let cacheWarningEmitted;
+let cacheWarningEmitted = false;
 const ClientSymbol = Symbol("Client");
 
 /**
@@ -12,9 +12,10 @@ class BaseManager {
   /**
    * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client instance.
    * @param {T} holds - The class or function that the manager holds.
+   * @param {Array<unknown>} [iterable] - data iterable
    * @param {number} [cacheSize=-1] - The maximum size of the cache. Default is unlimited.
    */
-  constructor(client, holds, cacheSize = -1) {
+  constructor(client, holds, iterable, cacheSize = -1) {
     Object.defineProperty(this, ClientSymbol, { value: client });
 
     Object.defineProperty(this, "holds", { value: holds });
@@ -26,6 +27,12 @@ class BaseManager {
      * @type {Collection<string | string, T>}
      */
     this.cache = new Collection();
+
+    if (iterable) {
+      for (const item of iterable) {
+        this._add(item);
+      }
+    }
   }
 
   /**
@@ -42,7 +49,7 @@ class BaseManager {
    * @param {boolean} [cache=true] - Whether to cache the data.
    * @param {Object} [options={}] - Additional options.
    * @param {string} [options.id] - The ID of the data.
-   * @param {Array} [options.extras=[]] - Additional arguments to pass to the constructor.
+   * @param {Array<unknown>} [options.extras=[]] - Additional arguments to pass to the constructor.
    * @returns {T} - The cached or newly created entry.
    */
   _add(data, cache = true, { id, extras = [] } = {}) {
@@ -68,7 +75,7 @@ class BaseManager {
     }
 
     const entry = this.holds
-      ? new this.holds(this.client, data, ...extras)
+      ? new this.holds(this.client, data, ...extras, this.cacheSize)
       : data;
     if (cache) this.cache.set(id ?? entry.id, entry);
     return entry;

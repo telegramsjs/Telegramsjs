@@ -35,6 +35,10 @@ class ExternalReplyInfo extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").ExternalReplyInfo} data - Data about the contains information about a message that is being replied to, which may come from another chat or forum topic
+   * @override
+   */
   _patch(data) {
     if ("chat" in data) {
       /**

@@ -1,7 +1,6 @@
 class ReactionType {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").ReactionType} data - Data about the describes the type of a reaction
+   * @param {import("@telegram.ts/types").ReactionType | { customEmojiId: string }} data - Data about the describes the type of a reaction
    */
   constructor(data) {
     if ("emoji" in data) {
@@ -9,28 +8,33 @@ class ReactionType {
       this.emoji = data.emoji;
     }
 
-    if ("custom_emoji" in data) {
+    if ("custom_emoji_id" in data) {
       /** Custom emoji identifier */
-      this.customEmoji = data.custom_emoji;
+      this.customEmojiId = data.custom_emoji_id;
+    }
+
+    if ("customEmojiId" in data) {
+      /** Custom emoji identifier */
+      this.customEmojiId = data.customEmojiId;
     }
   }
 
   /**
-   * @returns {this is this & { emoji: import("@telegram.ts/types").ReactionTypeEmoji["emoji"]; customEmoji?: undefined }}
+   * @returns {this is this & { emoji: import("@telegram.ts/types").ReactionTypeEmoji["emoji"]; customEmojiId?: undefined }}
    */
   isEmoji() {
     return Boolean("emoji" in this && this.emoji);
   }
 
   /**
-   * @returns {this is this & { customEmoji: string; emoji?: undefined }}
+   * @returns {this is this & { customEmojiId: string; emoji?: undefined }}
    */
   isCustomEmoji() {
-    return Boolean("customEmoji" in this && this.customEmoji);
+    return Boolean("customEmojiId" in this && this.customEmojiId);
   }
 
   /**
-   * @returns {this is this & { customEmoji?: undefined; emoji?: undefined }}
+   * @returns {this is this & { customEmojiId?: undefined; emoji?: undefined }}
    */
   isPaid() {
     return !this.isEmoji() && !this.isCustomEmoji();

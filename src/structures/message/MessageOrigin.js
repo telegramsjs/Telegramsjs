@@ -1,6 +1,7 @@
 const { Base } = require("../Base");
+const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 const { ReactionType } = require("../misc/ReactionType");
-const { ChatMember } = require("../chat/ChatMember");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
 const { ReactionCollector } = require("../../util/collector/ReactionCollector");
 const {
@@ -33,6 +34,10 @@ class MessageOrigin extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").MessageOrigin} data - Data about the describes the origin of a message
+   * @override
+   */
   _patch(data) {
     if ("message_id" in data) {
       /**
@@ -61,7 +66,7 @@ class MessageOrigin extends Base {
     if ("sender_chat" in data) {
       /**
        * Chat that sent the message originally
-       * @type {import("../misc/Chat").Chat | undefined}
+       * @type {import("../chat/Chat").Chat | undefined}
        */
       this.senderChat = this.client.chats._add(data.sender_chat);
     }
@@ -72,16 +77,6 @@ class MessageOrigin extends Base {
        * @type {import("../chat/Chat").Chat | undefined}
        */
       this.chat = this.client.chats._add(data.chat);
-
-      if (!this.chat.isPrivate() && data.sender_user) {
-        /**
-         * Member that were added to the message group or supergroup and information about them
-         * @type {ChatMember | undefined}
-         */
-        this.member = new ChatMember(this.client, this.chat.id, {
-          user: data.sender_user,
-        });
-      }
     }
 
     if ("author_signature" in data) {
@@ -128,7 +123,11 @@ class MessageOrigin extends Base {
    * @returns {import("../../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
-    return new MessageCollector(this.client, this, options);
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return new MessageCollector(this.client, this.chat, options);
   }
 
   /**
@@ -137,7 +136,7 @@ class MessageOrigin extends Base {
    */
   awaitMessage(options = {}) {
     const _options = { ...options, max: 1 };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const collect = this.createMessageCollector(_options);
       collect.on(CollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
@@ -146,12 +145,7 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, Message>} AwaitMessagesOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitMessagesOptions} [options={}] - message collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message> & { errors?: string[] }} [options={}] - message collector options
    * @returns {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
    */
   awaitMessages(options = {}) {
@@ -172,7 +166,11 @@ class MessageOrigin extends Base {
    * @returns {import("../../util/collector/ReactionCollector").ReactionCollector}
    */
   createReactionCollector(options = {}) {
-    return new ReactionCollector(this.client, this, options);
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return new ReactionCollector(this.client, this.chat, options);
   }
 
   /**
@@ -181,7 +179,7 @@ class MessageOrigin extends Base {
    */
   awaitReaction(options = {}) {
     const _options = { ...options, max: 1 };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const collect = this.createReactionCollector(_options);
       collect.on(ReactionCollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
@@ -190,13 +188,8 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @returns {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated> & { errors?: string[] }} [options={}] - reaction collector options
+   * @returns {Promise<import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
@@ -227,15 +220,11 @@ class MessageOrigin extends Base {
    */
   reply(text, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.sendMessage({
@@ -255,12 +244,15 @@ class MessageOrigin extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   react(reaction, isBig) {
-    if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+    if (!this.id) {
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    /** @type {any[]} */
     let react = [];
 
     if (typeof reaction === "string") {
@@ -268,14 +260,14 @@ class MessageOrigin extends Base {
     } else if (reaction instanceof ReactionType) {
       const reactionData = reaction.isEmoji()
         ? { type: "emoji", emoji: reaction.emoji }
-        : { type: "custom_emoji", customEmojiId: reaction.custom_emoji };
+        : { type: "custom_emoji", customEmojiId: reaction.customEmojiId };
       react.push(reactionData);
     } else if (Array.isArray(reaction)) {
       reaction.forEach((rea) => {
         if (rea instanceof ReactionType) {
           const reactionData = rea.isEmoji()
             ? { type: "emoji", emoji: rea.emoji }
-            : { type: "custom_emoji", customEmojiId: rea.custom_emoji };
+            : { type: "custom_emoji", customEmojiId: rea.customEmojiId };
           react.push(reactionData);
         } else {
           react.push(rea);
@@ -291,7 +283,7 @@ class MessageOrigin extends Base {
       reaction: react,
       chatId: this.chat.id,
       messageId: this.id,
-      isBig,
+      ...(isBig && { isBig }),
     });
   }
 
@@ -299,19 +291,15 @@ class MessageOrigin extends Base {
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<boolean | (Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageText({
@@ -326,25 +314,21 @@ class MessageOrigin extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>}
+   * @returns {Promise<boolean | (Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>}
    */
   editCaption(caption, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageCaption({
-      caption,
       chatId: this.chat.id,
       messageId: this.id,
+      ...(caption && { caption }),
       ...options,
     });
   }
@@ -357,15 +341,11 @@ class MessageOrigin extends Base {
    */
   editMedia(media, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageMedia({
@@ -378,21 +358,17 @@ class MessageOrigin extends Base {
 
   /**
    * Use this method to edit only the reply markup of messages.
-   * @param {import("@telegram.ts/types").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
+   * @param {import("../../client/interfaces/Markup").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
    * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(replyMarkup, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageReplyMarkup({
@@ -411,15 +387,11 @@ class MessageOrigin extends Base {
    */
   forward(chatId, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.forwardMessage({
@@ -438,15 +410,11 @@ class MessageOrigin extends Base {
    */
   copy(chatId, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.copyMessage({
@@ -465,22 +433,18 @@ class MessageOrigin extends Base {
    */
   pin(notification = false, businessConnectionId) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.pinChatMessage({
       chatId: this.chat.id,
       messageId: this.id,
       disableNotification: notification,
-      businessConnectionId,
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -491,21 +455,17 @@ class MessageOrigin extends Base {
    */
   unpin(businessConnectionId) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.unpinChatMessage({
       chatId: this.chat.id,
       messageId: this.id,
-      businessConnectionId,
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -523,15 +483,11 @@ class MessageOrigin extends Base {
    */
   delete() {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.deleteMessage(this.chat.id, this.id);
@@ -542,19 +498,15 @@ class MessageOrigin extends Base {
    * @param {number} latitude - Latitude of new location
    * @param {number} longitude - Longitude of new location
    * @param {Omit<MethodParameters["editMessageLiveLocation"], "latitude" | "longitude" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("../misc/Location").Location })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   editLiveLocation(latitude, longitude, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageLiveLocation({
@@ -569,19 +521,15 @@ class MessageOrigin extends Base {
   /**
    * Use this method to stop updating a live location message before live_period expires.
    * @param {Omit<MethodParameters["stopMessageLiveLocation"], "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("../misc/Location").Location })>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   stopLiveLocation(options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.stopMessageLiveLocation({

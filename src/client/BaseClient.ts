@@ -160,7 +160,7 @@ class BaseClient extends EventEmitter {
     /**
      * All of the objects that have been cached at any point, mapped by their ids
      */
-    this.users = new UserManager(this, options?.userCacheMaxSize);
+    this.users = new UserManager(this, [], options?.userCacheMaxSize);
 
     /**
      * All of the that the client is currently handling, mapped by their ids -
@@ -168,7 +168,7 @@ class BaseClient extends EventEmitter {
      * is a member of. Note that DM channels will not be initially cached, and thus not be present
      * in the Manager without their explicit fetching or use.
      */
-    this.chats = new ChatManager(this, options?.chatCacheMaxSize);
+    this.chats = new ChatManager(this, [], options?.chatCacheMaxSize);
 
     /**
      * The updates cache for polling/webhook
@@ -1093,7 +1093,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
   async deleteMyCommands(
-    scope?: string,
+    scope?: MethodParameters["deleteMyCommands"]["scope"],
     languageCode?: string,
   ): Promise<MethodsLibReturnType["deleteMyCommands"]> {
     return await this.apiRequest.get<MethodsApiReturnType["deleteMyCommands"]>(
@@ -1183,7 +1183,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
   async setChatMenuButton(
-    chatId?: number,
+    chatId?: string | number,
     menuButton?: MethodParameters["setChatMenuButton"]["menuButton"],
   ): Promise<MethodsLibReturnType["setChatMenuButton"]> {
     return await this.apiRequest.get<MethodsApiReturnType["setChatMenuButton"]>(
@@ -1221,7 +1221,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on success. */
   async getMyDefaultAdministratorRights(
-    forChannels: boolean,
+    forChannels?: boolean,
   ): Promise<MethodsLibReturnType["getMyDefaultAdministratorRights"]> {
     return await this.apiRequest
       .get<

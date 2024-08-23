@@ -9,6 +9,7 @@ import { PollingClient } from "./PollingClient";
 import { WebhookClient } from "./WebhookClient";
 import { WorketClient } from "./WorkerClient";
 import { TelegramError } from "../errors/TelegramError";
+import { ErrorCodes } from "../errors/ErrorCodes";
 import type { ClientUser } from "../structures/misc/ClientUser";
 import {
   Events,
@@ -98,9 +99,7 @@ class TelegramClient extends BaseClient {
     super(authToken, { ...DefaultClientParameters, ...options });
 
     if (!authToken) {
-      throw new TelegramError(
-        "Specify a token to receive updates from Telegram",
-      );
+      throw new TelegramError(ErrorCodes.MissingToken);
     }
 
     this.polling = new PollingClient(this, options?.offset);
@@ -114,6 +113,15 @@ class TelegramClient extends BaseClient {
    */
   get uptime(): number | null {
     return this.readyTimestamp && Date.now() - this.readyTimestamp;
+  }
+
+  /**
+   * Fetch about the client/bot
+   */
+  async fetchApplication() {
+    const client = await this.getMe();
+    this.user = client;
+    return client;
   }
 
   /**
@@ -131,7 +139,7 @@ class TelegramClient extends BaseClient {
 
     if ("webhook" in options) {
       if (typeof options.webhook?.url !== "string") {
-        throw new TelegramError("You did not specify the 'url' parameter");
+        throw new TelegramError(ErrorCodes.MissingUrlParameter);
       }
 
       await this.setWebhook(options.webhook);
@@ -143,7 +151,7 @@ class TelegramClient extends BaseClient {
       return;
     }
 
-    throw new TelegramError("Invalid options");
+    throw new TelegramError(ErrorCodes.InvalidOptions);
   }
 
   /**

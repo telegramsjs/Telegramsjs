@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const fetch = require("node-fetch");
 const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 
 class InputFile extends Base {
   /**
@@ -27,7 +28,7 @@ class InputFile extends Base {
      * The size of the file in bytes, if available
      * @type {number | null}
      */
-    this.size = data.size || null;
+    this.size = "size" in data ? Number(data.size) : null;
 
     /**
      * The path to the file on the Telegram server, if available
@@ -41,19 +42,19 @@ class InputFile extends Base {
    * @returns {string | null}
    */
   get url() {
-    return (this.url = this.path
+    return this.path
       ? `https://api.telegram.org/file/bot${this.client.authToken}/${this.path}`
-      : null);
+      : null;
   }
 
   /**
    * Downloads the file from the Telegram server.
-   * @param {string} [filePath=this.path] - The path of the file on the Telegram server.
+   * @param {string | null} [filePath=this.path] - The path of the file on the Telegram server.
    * @returns {Promise<Buffer>} - A promise that resolves with the file data as a Buffer.
    */
   async download(filePath = this.path) {
     if (!this.path) {
-      throw new TelegramError("getFile did not return <file_path>");
+      throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
 
     const fileUrl = `https://api.telegram.org/file/bot${this.client.authToken}/${filePath}`;
@@ -63,20 +64,22 @@ class InputFile extends Base {
       const arrayBuffer = await response.arrayBuffer();
       return Buffer.from(arrayBuffer);
     } catch (err) {
-      throw new TelegramError(`Failed to download file: ${err}`);
+      throw new TelegramError(ErrorCodes.FileDownloadFailed, {
+        err: String(err),
+      });
     }
   }
 
   /**
    * @typedef {Object} PromiseOptions
-   * @property {string | null} [encoding] - The encoding to use.
+   * @property {BufferEncoding | undefined} [encoding] - The encoding to use.
    * @property {string} [flag] - File system flag.
    * @property {AbortSignal} [signal] - An AbortSignal to abort the operation.
    */
 
   /**
    * @typedef {Object} StreamOptions
-   * @property {string} [encoding] - The encoding to use.
+   * @property {BufferEncoding | undefined} [encoding] - The encoding to use.
    * @property {boolean} [autoClose] - Automatically close the stream when the file is finished.
    * @property {boolean} [emitClose] - Emit a 'close' event when the stream is closed.
    * @property {number} [start] - The position to start reading data from the file.
@@ -93,7 +96,7 @@ class InputFile extends Base {
    */
   async write(path, writeType = "promise", options = {}) {
     if (!this.path) {
-      throw new TelegramError("getFile did not return <file_path>");
+      throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
 
     if (writeType === "promise") {
@@ -104,15 +107,16 @@ class InputFile extends Base {
 
     if (writeType === "stream") {
       const fileData = await this.download(this.path);
-      const writeStream = fs.createWriteStream(path, options);
+      const writeStream = fs.createWriteStream(path, {
+        ...options,
+        encoding: options.encoding ?? undefined,
+      });
       writeStream.write(fileData);
       writeStream.end();
       return;
     }
 
-    throw new TelegramError(
-      "The specified incorrect file write type is available: stream | promise",
-    );
+    throw new TelegramError(ErrorCodes.FileWriteInvalidType);
   }
 }
 

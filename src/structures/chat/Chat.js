@@ -43,6 +43,10 @@ class Chat extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").Chat & { threadId?: string }} data - Data about the represents a chat
+   * @override
+   */
   _patch(data) {
     if ("title" in data) {
       /**
@@ -132,7 +136,7 @@ class Chat extends Base {
   /**
    * Fetches this chat
    * @param {boolean} [force=true] - Whether to skip the cache check and request the API
-   * @returns {Promise<import("./ChatFullInfo").ChatFullInfo>}
+   * @returns {Promise<Chat>}
    */
   fetch(force = true) {
     return this.client.chats.fetch(this.id, { force });
@@ -147,14 +151,21 @@ class Chat extends Base {
   async memberPermissions(member, checkAdmin) {
     if (this.isPrivate()) return null;
 
-    if (checkAdmin && member?.status === "creator") {
-      return new UserPermissions(UserPermissions.Flags);
+    if (
+      checkAdmin &&
+      typeof member !== "string" &&
+      member.status === "creator"
+    ) {
+      const permissions = Object.fromEntries(
+        Object.entries(UserPermissions.Flags).map(([key]) => [key, true]),
+      );
+      return new UserPermissions(permissions);
     }
 
-    const fetchMember = await this.client.getChatMember(
-      this.id,
-      member.user?.id ?? member,
-    );
+    const memberId = typeof member === "string" ? member : member.id;
+    if (!memberId) return null;
+
+    const fetchMember = await this.client.getChatMember(this.id, memberId);
 
     if (fetchMember && fetchMember.permissions) {
       if (Object.keys(fetchMember.permissions).length === 0) {
@@ -171,16 +182,11 @@ class Chat extends Base {
    * @returns {import("../../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
-    return new MessageCollector(this.client, { chat: this }, options);
+    return new MessageCollector(this.client, this, options);
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, Message>} AwaitMessagesOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitMessagesOptions} [options={}] - message collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message> & { errors?: string[] }} [options={}] - message collector options
    * @returns {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
    */
   awaitMessages(options = {}) {
@@ -201,26 +207,21 @@ class Chat extends Base {
    * @returns {import("../../util/collector/ReactionCollector").ReactionCollector}
    */
   createReactionCollector(options = {}) {
-    return new ReactionCollector(this.client, { chat: this }, options);
+    return new ReactionCollector(this.client, this, options);
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @returns {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated> & { errors?: string[] }} [options={}] - reaction collector options
+   * @returns {Promise<import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
       const collect = this.createReactionCollector(options);
       collect.on(ReactionCollectorEvents.End, (collections, reason) => {
         if (options.errors?.includes(reason)) {
-          reject(collection);
+          reject(collections);
         } else {
-          resolve(collection);
+          resolve(collections);
         }
       });
     });
@@ -244,7 +245,7 @@ class Chat extends Base {
     return this.client.sendMessage({
       text,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -287,7 +288,7 @@ class Chat extends Base {
     return this.client.banChatMember({
       userId,
       chatId: this.id,
-      onlyIfBanned,
+      ...(onlyIfBanned && { onlyIfBanned }),
     });
   }
 
@@ -319,7 +320,7 @@ class Chat extends Base {
 
   /**
    * Use this method to get a list of administrators in a chat, which aren't bots.
-   * @returns {Promise<import("./ChatMember")[]>} - Returns an Array of ChatMember objects.
+   * @returns {Promise<import("./ChatAdministratorRights").ChatAdministratorRights[]>} - Returns an Array of ChatAdministratorRights objects.
    */
   getAdmins() {
     return this.client.getChatAdministrators(this.id);
@@ -353,7 +354,7 @@ class Chat extends Base {
   /**
    * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
    * @param {(number | string)[]} messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
-   * @param {(number | string)[]} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
    * @param {Omit<MethodParameters["forwardMessages"], "chatId" | "fromChatId" | "messageIds">} [options={}] - out parameters
    * @returns {Promise<number[]>} - On success, an array of MessageId of the sent messages is returned.
    */
@@ -369,7 +370,7 @@ class Chat extends Base {
   /**
    * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages.
    * @param {(number | string)[]} messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order
-   * @param {(number | string)[]} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
    * @param {Omit<MethodParameters["copyMessages"], "chatId" | "fromChatId" | "messageIds">} [options={}] - out parameters
    * @returns {Promise<number[]>} - On success, an array of MessageId of the sent messages is returned.
    */
@@ -410,11 +411,11 @@ class Chat extends Base {
 
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
-   * @param {import("@telegram.ts/types").MenuButton} [menuButton] - An object for the bot's new menu button. Defaults to MenuButtonDefault
+   * @param {import("../../client/interfaces/Bot").MenuButton} [menuButton] - An object for the bot's new menu button. Defaults to MenuButtonDefault
    * @returns {Promise<true>} - Returns True on success.
    */
   setMenuButton(menuButton) {
-    return this.client.deleteChatStickerSet(this.id, menuButton);
+    return this.client.setChatMenuButton(this.id, menuButton);
   }
 
   /**
@@ -490,31 +491,37 @@ class Chat extends Base {
     return this.client.setChatPermissions({
       chatId: this.id,
       permissions: perms,
-      use_independent_chat_permissions: useIndependentChatPermissions,
+      ...(useIndependentChatPermissions && { useIndependentChatPermissions }),
     });
   }
 
   /**
    * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink.
-   * @param {Omit<MethodParameters["createChatSubscriptionInviteLink"], "chatId">} [options={}] - out parameters
+   * @param {number} subscriptionPeriod - The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days)
+   * @param {number} subscriptionPrice - The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
+   * @param {string} [name] - Invite link name; 0-32 characters
    * @returns {Promise<import("./ChatInviteLink").ChatInviteLink>} - Returns the new invite link as a ChatInviteLink object.
    */
-  createSubscriptionInvite(options = {}) {
+  createSubscriptionInvite(subscriptionPeriod, subscriptionPrice, name) {
     return this.client.createChatSubscriptionInviteLink({
       chatId: this.id,
-      ...options,
+      subscriptionPeriod,
+      subscriptionPrice,
+      ...(name && { name }),
     });
   }
 
   /**
    * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights.
-   * @param {Omit<MethodParameters["editChatSubscriptionInviteLink"], "chatId">} [options={}] - out parameters
+   * @param {string} inviteLink - The invite link to edit
+   * @param {string} [name] - Invite link name; 0-32 characters
    * @returns {Promise<import("./ChatInviteLink").ChatInviteLink>} - Returns the edited invite link as a ChatInviteLink object.
    */
-  editSubscriptionInvite(options = {}) {
+  editSubscriptionInvite(inviteLink, name) {
     return this.client.editChatSubscriptionInviteLink({
       chatId: this.id,
-      ...options,
+      inviteLink,
+      ...(name && { name }),
     });
   }
 
@@ -598,9 +605,9 @@ class Chat extends Base {
   pinMessage(messageId, disableNotification, businessConnectionId) {
     return this.client.pinChatMessage({
       chatId: this.id,
-      message_id: messageId,
-      disable_notification: disableNotification,
-      businessConnectionId,
+      messageId,
+      ...(disableNotification && { disableNotification }),
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -613,8 +620,8 @@ class Chat extends Base {
   unpinMessage(messageId, businessConnectionId) {
     return this.client.unpinChatMessage({
       chatId: this.id,
-      messageId,
-      businessConnectionId,
+      ...(messageId && { messageId }),
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -636,7 +643,7 @@ class Chat extends Base {
     return this.client.sendPhoto({
       photo,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -651,7 +658,7 @@ class Chat extends Base {
     return this.client.sendAudio({
       audio,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -682,7 +689,7 @@ class Chat extends Base {
     return this.client.sendDocument({
       document,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -697,7 +704,7 @@ class Chat extends Base {
     return this.client.sendVideo({
       video,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -712,7 +719,7 @@ class Chat extends Base {
     return this.client.sendAnimation({
       animation,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -727,7 +734,7 @@ class Chat extends Base {
     return this.client.sendVoice({
       voice,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -735,14 +742,14 @@ class Chat extends Base {
   /**
    * Use this method to send video messages.
    * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} videoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported
-   * @param {Omit<MethodParameters["sendVideoNote"], "video_note" | "chatId" | "messageThreadId">} [options={}] - out parameters
-   * @returns {Promise<Message & { videNote: import("../media/VideoNote").VideoNote }>} - On success, the sent Message is returned.
+   * @param {Omit<MethodParameters["sendVideoNote"], "videoNote" | "chatId" | "messageThreadId">} [options={}] - out parameters
+   * @returns {Promise<Message & { videoNote: import("../media/VideoNote").VideoNote }>} - On success, the sent Message is returned.
    */
   sendVideoNote(videoNote, options = {}) {
     return this.client.sendVideoNote({
-      video_note: videoNote,
+      videoNote,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -751,13 +758,13 @@ class Chat extends Base {
    * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type.
    * @param {ReadonlyArray<import("@telegram.ts/types").InputMediaAudio | import("@telegram.ts/types").InputMediaDocument | import("@telegram.ts/types").InputMediaPhoto | import("@telegram.ts/types").InputMediaVideo>} media - media
    * @param {Omit<MethodParameters["sendMediaGroup"], "media" | "chatId" | "messageThreadId">} [options={}] - out parameters
-   * @returns {Promise<Array<Message & { audio: import("../media/Audio").Audio; document: import("../media/Document").Document; photo: import("../media/Photo").Photo; video: import("../media/Video").Video}>>} - On success, an array of Messages that were sent is returned.
+   * @returns {Promise<Array<Message & { audio: import("../media/Audio").Audio; } | Message & { document: import("../media/Document").Document; } | Message & { photo: import("../media/Photo").Photo; } | Message & { video: import("../media/Video").Video}>>} - On success, an array of Messages that were sent is returned.
    */
   sendMediaGroup(media, options = {}) {
     return this.client.sendMediaGroup({
       media,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -766,7 +773,7 @@ class Chat extends Base {
    * Use this method to send point on the map.
    * @param {number} latitude - Latitude of the location
    * @param {number} longitude - Longitude of the location
-   * @param {Omit<MethodParameters["sendLocation"], "chatId" | "messageThreadId">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendLocation"], "latitude" | "longitude" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @returns {Promise<Message & { location: import("../misc/Location").Location }>} - On success, the sent Message is returned.
    */
   sendLocation(latitude, longitude, options = {}) {
@@ -774,7 +781,7 @@ class Chat extends Base {
       latitude,
       longitude,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -783,15 +790,15 @@ class Chat extends Base {
    * Use this method to send information about a venue.
    * @param {number} latitude - Latitude of the location
    * @param {number} longitude - Longitude of the location
-   * @param {Omit<MethodParameters["sendVenue"], "latitude" | "longitude" | "chatId" | "messageThreadId">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["sendVenue"], "latitude" | "longitude" | "chatId" | "messageThreadId">} options - out parameters
    * @returns {Promise<Message & { venue: import("../misc/Venue").Venue }>} - On success, the sent Message is returned.
    */
-  sendVenue(latitude, longitude, options = {}) {
+  sendVenue(latitude, longitude, options) {
     return this.client.sendVenue({
       latitude,
       longitude,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -808,7 +815,7 @@ class Chat extends Base {
       phoneNumber,
       firstName,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -816,8 +823,8 @@ class Chat extends Base {
   /**
    * Use this method to send a native poll.
    * @param {string} question - Poll question, 1-300 characters
-   * @param {import("@telegram.ts/types").InputPollOption[]} options - A list of 2-10 answer options
-   * @param {Omit<MethodParameters["sendPoll"], "question" | "options" | "chatId" | "messageThreadId">} [options={}] - out parameters
+   * @param {import("../../client/interfaces/Message").InputPollOption[]} options - A list of 2-10 answer options
+   * @param {Omit<MethodParameters["sendPoll"], "question" | "options" | "chatId" | "messageThreadId">} [other={}] - out parameters
    * @returns {Promise<Message & { poll: import("../media/Poll").Poll }>} - On success, the sent Message is returned.
    */
   sendPoll(question, options, other = {}) {
@@ -825,7 +832,7 @@ class Chat extends Base {
       question,
       options,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...other,
     });
   }
@@ -840,7 +847,7 @@ class Chat extends Base {
     return this.client.sendDice({
       emoji,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -854,7 +861,7 @@ class Chat extends Base {
     return this.client.sendChatAction({
       action,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
     });
   }
 
@@ -868,7 +875,7 @@ class Chat extends Base {
     return this.client.sendSticker({
       sticker,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -891,7 +898,7 @@ class Chat extends Base {
       currency,
       prices,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -906,7 +913,7 @@ class Chat extends Base {
     return this.client.sendGame({
       gameShortName,
       chatId: this.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       ...options,
     });
   }

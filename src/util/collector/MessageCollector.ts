@@ -1,5 +1,6 @@
 import { Events, CollectorEvents } from "../Constants";
 import { TelegramError } from "../../errors/TelegramError";
+import { ErrorCodes } from "../../errors/ErrorCodes";
 import { TelegramClient } from "../../client/TelegramClient";
 import type { Chat } from "../../structures/chat/Chat";
 import type { Message } from "../../structures/message/Message";
@@ -10,11 +11,6 @@ import { Collector, type ICollectorOptions } from "./Collector";
  */
 class MessageCollector extends Collector<string, Message> {
   /**
-   * The chat in which messages are being collected.
-   */
-  public chat: Chat;
-
-  /**
    * The number of received messages.
    */
   public received: number = 0;
@@ -22,23 +18,19 @@ class MessageCollector extends Collector<string, Message> {
   /**
    * Creates an instance of MessageCollector.
    * @param client - The TelegramClient instance.
-   * @param message - The initial message context.
+   * @param chat - The chat in which messages are being collected.
    * @param options - The options for the collector.
    */
   constructor(
     public readonly client: TelegramClient,
-    public readonly message: Message,
+    public readonly chat: Chat,
     public override readonly options: ICollectorOptions<string, Message> = {},
   ) {
     super(options);
 
-    if (!message.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+    if (!chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
-
-    this.chat = message.chat;
 
     client.incrementMaxListeners();
     client.on(Events.Message, this.handleCollect);

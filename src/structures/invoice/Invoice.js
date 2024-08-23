@@ -6,6 +6,7 @@ const { Base } = require("../Base");
 
 class Invoice extends Base {
   /**
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Invoice} data - Data about the contains basic information about an invoice
    */
   constructor(client, data) {
@@ -30,7 +31,7 @@ class Invoice extends Base {
   /**
    * Use this method to create a link for an invoice.
    * @param {string} payload - Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes
-   * @param {import("@telegram.ts/types").LabeledPrice[]} prices - Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
+   * @param {import("../../client/interfaces/Inline").LabeledPrice[]} prices - Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
    * @param {Omit<MethodParameters["createInvoiceLink"], "payload" | "prices" | "title" | "description" | "currency" | "maxTipAmount">} [options={}] - out parameters
    * @returns {Promise<string>} - Returns the created invoice link as String on success.
    */

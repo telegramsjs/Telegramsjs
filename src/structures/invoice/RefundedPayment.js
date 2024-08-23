@@ -2,6 +2,7 @@ const { Base } = require("../Base");
 
 class RefundedPayment extends Base {
   /**
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").RefundedPayment} data - Data about the contains basic information about a refunded payment
    */
   constructor(client, data) {

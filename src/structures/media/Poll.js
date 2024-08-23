@@ -22,7 +22,7 @@ class Poll extends Base {
     this.closed = data.is_closed;
 
     /** True, if the poll is anonymous */
-    this.anonymous = Boolean(data.anonymous);
+    this.anonymous = Boolean(data.is_anonymous);
 
     /** Poll type, currently can be “regular” or “quiz” */
     this.type = data.type;
@@ -33,6 +33,10 @@ class Poll extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").Poll} data - Data about the contains information about a poll
+   * @override
+   */
   _patch(data) {
     if ("question_entities" in data) {
       /**
@@ -46,20 +50,6 @@ class Poll extends Base {
     }
 
     if ("options" in data) {
-      const options = [];
-
-      if (Array.isArray(data.options)) {
-        for (const opts of data.options) {
-          if ("text_entities" in options) {
-            opts.entities = new MessageEntities(opts.text, opts.text_entities);
-            delete opts["text_entities"];
-          }
-          opts.voterCount = opts.voter_count;
-          delete opts["voter_count"];
-          options.push(opts);
-        }
-      }
-
       /**
        * @typedef {Object} PollOptions
        * @property {string} text - Option text, 1-100 characters
@@ -67,9 +57,29 @@ class Poll extends Base {
        * @property {number} voterCount - Number of users that voted for this option
        */
 
+      /** @type {PollOptions[]} */
+      const options = [];
+
+      if (Array.isArray(data.options)) {
+        for (const opts of data.options) {
+          /** @type {PollOptions} */
+          const result = {};
+
+          result.text = opts.text;
+          if ("text_entities" in opts) {
+            result.entities = new MessageEntities(
+              opts.text,
+              opts.text_entities,
+            );
+          }
+          result.voterCount = opts.voter_count;
+          options.push(result);
+        }
+      }
+
       /**
        * List of poll options
-       * @type {PollOptions | undefined}
+       * @type {PollOptions[] | undefined}
        */
       this.options = options;
     }

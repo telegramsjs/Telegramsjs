@@ -1,15 +1,12 @@
 const { Photo } = require("./Photo");
 const { Sticker } = require("./Sticker");
-const { InputFile } = require("../misc/InputFile");
 
-class StickerSet extends InputFile {
+class StickerSet {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").StickerSet} data - Data about the represents a sticker
    */
   constructor(client, data) {
-    super(client, data);
-
     /** Sticker set name */
     this.name = data.name;
 

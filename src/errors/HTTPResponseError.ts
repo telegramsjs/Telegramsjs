@@ -1,4 +1,3 @@
-import { TelegramError } from "./TelegramError";
 import type { IRequestFailt } from "../types";
 import type { Response, Headers } from "node-fetch";
 
@@ -6,8 +5,9 @@ import type { Response, Headers } from "node-fetch";
  * Represents an HTTP response error received from Telegram API.
  * Extends the base `TelegramError` class to include specific details about the error response.
  */
-class HTTPResponseError extends TelegramError {
-  public override description: string;
+class HTTPResponseError extends Error {
+  public description: string;
+  public code: string | number;
   public parameters: IRequestFailt["parameters"];
   #request?: Response;
 
@@ -17,7 +17,7 @@ class HTTPResponseError extends TelegramError {
    */
   constructor(response: IRequestFailt, request?: Response) {
     const { error_code, description, parameters } = response;
-    super(description, error_code);
+    super(description);
     this.name = `ErrorResponse[${error_code}]`;
     this.code = error_code;
     this.description = description;

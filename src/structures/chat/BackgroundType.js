@@ -4,7 +4,7 @@ const { BackgroundFill } = require("./BackgroundFill");
 class BackgroundType {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").ChatBoost} data - Data about the describes the type of a background
+   * @param {import("@telegram.ts/types").BackgroundType} data - Data about the describes the type of a background
    */
   constructor(client, data) {
     if (data.type === "fill") {

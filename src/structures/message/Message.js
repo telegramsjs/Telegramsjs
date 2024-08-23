@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { SharedUser } = require("../misc/SharedUser");
+const { UsersShared } = require("../misc/UsersShared");
 const { ChatShared } = require("../misc/ChatShared");
 const { ChatMember } = require("../chat/ChatMember");
 const { Story } = require("../misc/Story");
@@ -33,7 +33,6 @@ const { GiveawayWinners } = require("../giveaway/GiveawayWinners");
 const { GiveawayCompleted } = require("../giveaway/GiveawayCompleted");
 const { VideoChatScheduled } = require("../chat/VideoChatScheduled");
 const { Forum } = require("../forum/Forum");
-const { ForumTopicEdited } = require("../forum/ForumTopic");
 const { ForumTopic } = require("../forum/ForumTopic");
 const { TextQuote } = require("../misc/TextQuote");
 const { PassportData } = require("../passport/PassportData");
@@ -48,6 +47,7 @@ const {
 } = require("../../util/Constants");
 const { ReactionType } = require("../misc/ReactionType");
 const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 
 /**
  * @typedef {import("../../types").MethodParameters} MethodParameters
@@ -65,8 +65,26 @@ class Message extends Base {
     this.id = String(data.message_id);
 
     this._patch(data);
+
+    /**
+     * Date the message was sent in Unix time. It is always a positive number, representing a valid date
+     * @type {number}
+     */
+    this.createdUnixTime = data.date;
+
+    if ("edit_date" in data) {
+      /**
+       * Date the message was last edited in Unix time
+       * @type {number | undefined}
+       */
+      this.editedUnixTime = data.edit_date;
+    }
   }
 
+  /**
+   * @param {import("@telegram.ts/types").Message} data - Data about the message
+   * @override
+   */
   _patch(data) {
     if ("message_thread_id" in data) {
       /**
@@ -101,6 +119,7 @@ class Message extends Base {
          */
         this.member = new ChatMember(this.client, this.chat.id, {
           user: data.from,
+          status: "member",
         });
       }
     }
@@ -121,7 +140,7 @@ class Message extends Base {
       this.caption = data.caption;
     }
 
-    if ("caption_entities" in data) {
+    if ("caption_entities" in data && "caption" in data) {
       /**
        * For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
        * @type {MessageEntities | undefined}
@@ -132,7 +151,7 @@ class Message extends Base {
       );
     }
 
-    if ("entities" in data) {
+    if ("entities" in data && "text" in data) {
       /**
        * For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
        * @type {MessageEntities | undefined}
@@ -212,7 +231,7 @@ class Message extends Base {
        * Bot through which the message was sent
        * @type {import("../misc/User").User | undefined}
        */
-      this.viaBot = new this.client.users._add(data.via_bot);
+      this.viaBot = this.client.users._add(data.via_bot);
     }
 
     if ("has_protected_content" in data) {
@@ -242,7 +261,7 @@ class Message extends Base {
     if ("author_signature" in data) {
       /**
        * Signature of the post author for messages in channels, or the custom title of an anonymous group administrator
-       * @type {true | undefined}
+       * @type {string | undefined}
        */
       this.authorSignature = data.author_signature;
     }
@@ -266,26 +285,12 @@ class Message extends Base {
     if ("sender_chat" in data) {
       /**
        * Chat that sent the message originally
-       * @type {import("../misc/Chat").Chat | undefined}
+       * @type {import("../chat/Chat").Chat | undefined}
        */
       this.senderChat = this.client.chats._add({
         ...data.sender_chat,
         threadId: this.threadId,
       });
-    }
-
-    /**
-     * Date the message was sent in Unix time. It is always a positive number, representing a valid date
-     * @type {number}
-     */
-    this.createdUnixTime = data.date;
-
-    if ("edit_date" in data) {
-      /**
-       * Date the message was last edited in Unix time
-       * @type {number | undefined}
-       */
-      this.editedUnixTime = data.edit_date;
     }
 
     if ("business_connection_id" in data) {
@@ -297,7 +302,7 @@ class Message extends Base {
     }
 
     if ("is_topic_message" in data) {
-      if ("chat" in this && "threadId" in this) {
+      if ("chat" in this && this.chat && "threadId" in this && this.threadId) {
         /**
          * If the message is sent to a forum topic
          * @type {Forum | undefined}
@@ -307,7 +312,7 @@ class Message extends Base {
 
       /**
        * True, if the message is sent to a forum topic
-       * @type {number | undefined}
+       * @type {boolean | undefined}
        */
       this.inTopic = data.is_topic_message;
     }
@@ -352,7 +357,7 @@ class Message extends Base {
        * @type {Photo[] | undefined}
        */
       this.newChatPhoto = data.new_chat_photo.map(
-        (photo) => new Photo(this.client, data.new_chat_photo),
+        (photo) => new Photo(this.client, photo),
       );
     }
 
@@ -439,9 +444,9 @@ class Message extends Base {
     if ("users_shared" in data) {
       /**
        * Service message: users were shared with the bot
-       * @type {SharedUser | undefined}
+       * @type {UsersShared | undefined}
        */
-      this.usersShared = new SharedUser(this.client, data.users_shared);
+      this.usersShared = new UsersShared(this.client, data.users_shared);
     }
 
     if ("chat_shared" in data) {
@@ -463,11 +468,12 @@ class Message extends Base {
     if ("write_access_allowed" in data) {
       /**
        * @typedef {Object} WiteAccessAllowed
-       * @property {boolean | undefined} authorRequest - True, if the access was granted after the user accepted an explicit request from a Web App sent by the method requestWriteAccess
-       * @property {string | undefined} appName - Name of the Web App, if the access was granted when the Web App was launched from a link
-       * @property {boolean | undefined} authorAttachmentMenu - True, if the access was granted when the bot was added to the attachment or side menu
+       * @property {boolean} [authorRequest] - True, if the access was granted after the user accepted an explicit request from a Web App sent by the method requestWriteAccess
+       * @property {string} [appName] - Name of the Web App, if the access was granted when the Web App was launched from a link
+       * @property {boolean} [authorAttachmentMenu] - True, if the access was granted when the bot was added to the attachment or side menu
        */
 
+      /** @type {WiteAccessAllowed} */
       const writeAccessAllowed = {};
 
       if ("from_request" in data.write_access_allowed) {
@@ -496,7 +502,7 @@ class Message extends Base {
        * Telegram Passport data
        * @type {PassportData | undefined}
        */
-      this.passport = new PassportData(data.passport_data);
+      this.passport = new PassportData(this.client, data.passport_data);
     }
 
     if ("proximity_alert_triggered" in data) {
@@ -507,6 +513,7 @@ class Message extends Base {
        * @property {number} distance - The distance between the users
        */
 
+      /** @type {ProximityAlertTriggered} */
       const proximityAlertTriggered = {
         traveler: this.client.users._add(
           data.proximity_alert_triggered.traveler,
@@ -550,7 +557,7 @@ class Message extends Base {
       );
     }
 
-    if ("forum_topic_created" in data) {
+    if ("forum_topic_created" in data && this.threadId && this.chat) {
       /**
        * Service message: forum topic created
        * @type {ForumTopic | undefined}
@@ -563,7 +570,7 @@ class Message extends Base {
       );
     }
 
-    if ("forum_topic_edited" in data) {
+    if ("forum_topic_edited" in data && this.threadId && this.chat) {
       /**
        * Service message: forum topic edited
        * @type {ForumTopic | undefined}
@@ -807,7 +814,7 @@ class Message extends Base {
        * Message is a venue, information about the venue
        * @type {Venue | undefined}
        */
-      this.venue = new Venue(data.venue);
+      this.venue = new Venue(this.client, data.venue);
     }
 
     if ("game" in data) {
@@ -871,7 +878,11 @@ class Message extends Base {
    * @returns {import("../../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
-    return new MessageCollector(this.client, this, options);
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return new MessageCollector(this.client, this.chat, options);
   }
 
   /**
@@ -880,7 +891,7 @@ class Message extends Base {
    */
   awaitMessage(options = {}) {
     const _options = { ...options, max: 1 };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const collect = this.createMessageCollector(_options);
       collect.on(CollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
@@ -889,12 +900,7 @@ class Message extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, Message>} AwaitMessagesOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitMessagesOptions} [options={}] - message collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message> & { errors?: string[] }} [options={}] - message collector options
    * @returns {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
    */
   awaitMessages(options = {}) {
@@ -915,7 +921,11 @@ class Message extends Base {
    * @returns {import("../../util/collector/ReactionCollector").ReactionCollector}
    */
   createReactionCollector(options = {}) {
-    return new ReactionCollector(this.client, this, options);
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return new ReactionCollector(this.client, this.chat, options);
   }
 
   /**
@@ -924,7 +934,7 @@ class Message extends Base {
    */
   awaitReaction(options = {}) {
     const _options = { ...options, max: 1 };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const collect = this.createReactionCollector(_options);
       collect.on(ReactionCollectorEvents.End, (collections, reason) => {
         resolve([collections, reason]);
@@ -933,13 +943,8 @@ class Message extends Base {
   }
 
   /**
-   * @typedef {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated>} AwaitRectionsOptions
-   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
-   */
-
-  /**
-   * @param {AwaitRectionsOptions} [options={}] - reaction collector options
-   * @returns {Promise<[import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("../MessageReactionUpdated").MessageReactionUpdated> & { errors?: string[] }} [options={}] - reaction collector options
+   * @returns {Promise<import("@telegram.ts/collection").Collection<string, import("../MessageReactionUpdated").MessageReactionUpdated>>}
    */
   awaitReactions(options = {}) {
     return new Promise((resolve, reject) => {
@@ -970,15 +975,13 @@ class Message extends Base {
    */
   reply(text, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.sendMessage({
       text,
       chatId: this.chat.id,
-      messageThreadId: this.threadId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       replyParameters: {
         messageId: this.id,
       },
@@ -994,11 +997,10 @@ class Message extends Base {
    */
   react(reaction, isBig) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
+    /** @type {any[]} */
     let react = [];
 
     if (typeof reaction === "string") {
@@ -1006,14 +1008,14 @@ class Message extends Base {
     } else if (reaction instanceof ReactionType) {
       const reactionData = reaction.isEmoji()
         ? { type: "emoji", emoji: reaction.emoji }
-        : { type: "custom_emoji", customEmojiId: reaction.custom_emoji };
+        : { type: "custom_emoji", customEmojiId: reaction.customEmojiId };
       react.push(reactionData);
     } else if (Array.isArray(reaction)) {
       reaction.forEach((rea) => {
         if (rea instanceof ReactionType) {
           const reactionData = rea.isEmoji()
             ? { type: "emoji", emoji: rea.emoji }
-            : { type: "custom_emoji", customEmojiId: rea.custom_emoji };
+            : { type: "custom_emoji", customEmojiId: rea.customEmojiId };
           react.push(reactionData);
         } else {
           react.push(rea);
@@ -1029,7 +1031,7 @@ class Message extends Base {
       reaction: react,
       chatId: this.chat.id,
       messageId: this.id,
-      isBig,
+      ...(isBig && { isBig }),
     });
   }
 
@@ -1037,13 +1039,11 @@ class Message extends Base {
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<boolean | (Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageText({
@@ -1058,17 +1058,15 @@ class Message extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>}
+   * @returns {Promise<boolean | (Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>}
    */
   editCaption(caption, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageCaption({
-      caption,
+      ...(caption && { caption }),
       chatId: this.chat.id,
       messageId: this.id,
       ...options,
@@ -1083,9 +1081,7 @@ class Message extends Base {
    */
   editMedia(media, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageMedia({
@@ -1098,15 +1094,13 @@ class Message extends Base {
 
   /**
    * Use this method to edit only the reply markup of messages.
-   * @param {import("@telegram.ts/types").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
+   * @param {import("../../client/interfaces/Markup").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
    * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(replyMarkup, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageReplyMarkup({
@@ -1125,14 +1119,12 @@ class Message extends Base {
    */
   forward(chatId, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.forwardMessage({
-      chatId: chatId,
-      messageThreadId: this.threadId,
+      chatId,
+      ...(this.threadId && { messageThreadId: this.threadId }),
       fromChatId: this.chat.id,
       messageId: this.id,
       ...options,
@@ -1147,9 +1139,7 @@ class Message extends Base {
    */
   copy(chatId, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.copyMessage({
@@ -1168,16 +1158,14 @@ class Message extends Base {
    */
   pin(notification = false, businessConnectionId) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.pinChatMessage({
       chatId: this.chat.id,
       messageId: this.id,
       disableNotification: notification,
-      businessConnectionId,
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -1188,15 +1176,13 @@ class Message extends Base {
    */
   unpin(businessConnectionId) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.unpinChatMessage({
       chatId: this.chat.id,
       messageId: this.id,
-      businessConnectionId,
+      ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
@@ -1214,9 +1200,7 @@ class Message extends Base {
    */
   delete() {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.deleteMessage(this.chat.id, this.id);
@@ -1227,13 +1211,11 @@ class Message extends Base {
    * @param {number} latitude - Latitude of new location
    * @param {number} longitude - Longitude of new location
    * @param {Omit<MethodParameters["editMessageLiveLocation"], "latitude" | "longitude" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   editLiveLocation(latitude, longitude, options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageLiveLocation({
@@ -1248,13 +1230,11 @@ class Message extends Base {
   /**
    * Use this method to stop updating a live location message before live_period expires.
    * @param {Omit<MethodParameters["stopMessageLiveLocation"], "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location }>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: Location })>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   stopLiveLocation(options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.stopMessageLiveLocation({
@@ -1266,6 +1246,7 @@ class Message extends Base {
 
   /**
    * Return this message content and caption for media, otherwise just an empty string
+   * @override
    */
   toString() {
     return this.content ?? this.caption ?? "";

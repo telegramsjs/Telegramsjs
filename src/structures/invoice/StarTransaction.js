@@ -1,11 +1,14 @@
+const { Base } = require("../Base");
 const { TransactionPartner } = require("./TransactionPartner");
 
-class StarTransaction {
+class StarTransaction extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").StarTransaction} data - Data about the describes a Telegram Star transaction
    */
   constructor(client, data) {
+    super(client);
+
     /** Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
     this.id = data.id;
 

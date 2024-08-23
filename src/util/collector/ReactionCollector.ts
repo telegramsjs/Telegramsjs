@@ -1,6 +1,7 @@
 import { Collection } from "@telegram.ts/collection";
 import { Events, ReactionCollectorEvents } from "../Constants";
-import { ReactionType } from "../../structures/misc/ReactionType";
+import { TelegramError } from "../../errors/TelegramError";
+import { ErrorCodes } from "../../errors/ErrorCodes";
 import type { TelegramClient } from "../../client/TelegramClient";
 import type { MessageReactionUpdated } from "../../structures/MessageReactionUpdated";
 import type { Chat } from "../../structures/chat/Chat";
@@ -35,11 +36,6 @@ interface IReactionEventCollector
  */
 class ReactionCollector extends Collector<string, MessageReactionUpdated> {
   /**
-   * The chat in which reactions are being collected.
-   */
-  public chat: Chat;
-
-  /**
    * The number of received reactions.
    */
   public received: number = 0;
@@ -55,19 +51,22 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
   /**
    * Creates an instance of ReactionCollector.
    * @param client - The TelegramClient instance.
-   * @param reaction - The initial message context.
+   * @param chat - The chat in which reactions are being collected.
    * @param options - The options for the collector.
    */
   constructor(
     public readonly client: TelegramClient,
-    public readonly reaction: MessageReactionUpdated,
+    public readonly chat: Chat,
     public override readonly options: ICollectorOptions<
       string,
       MessageReactionUpdated
     > = {},
   ) {
     super(options);
-    this.chat = reaction.chat;
+
+    if (!chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
 
     client.incrementMaxListeners();
     client.on(Events.MessageReaction, this.handleCollect);
@@ -111,10 +110,19 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * @returns The key of the reaction or null.
    */
   collect(reaction: MessageReactionUpdated): string | null {
-    const { chat, added, removed } = reaction;
+    const { chat, emojiSummary, customEmojiSummary, paidEmoji } = reaction;
+
+    if (paidEmoji !== undefined) {
+      return null;
+    }
+
+    const addedEmoji = emojiSummary?.added ?? customEmojiSummary?.added ?? [];
+    const removedEmoji =
+      emojiSummary?.removed ?? customEmojiSummary?.removed ?? [];
 
     const isReactionInCorrectChat = this.chat.id === chat.id;
-    const hasNewOrOldReaction = added?.length > 0 || removed?.length > 0;
+    const hasNewOrOldReaction =
+      addedEmoji?.length > 0 || removedEmoji?.length > 0;
 
     if (!isReactionInCorrectChat || !hasNewOrOldReaction) {
       return null;
@@ -123,9 +131,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
     this.received++;
     this.handleUsers(reaction);
 
-    return ReactionCollector.getKeyFromReaction(
-      added.shift() || removed.shift(),
-    );
+    return addedEmoji.shift() || removedEmoji.shift() || null;
   }
 
   /**
@@ -134,15 +140,22 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
    * @returns The key of the reaction or null.
    */
   dispose(reaction: MessageReactionUpdated): string | null {
-    const { chat, added, removed } = reaction;
+    const { chat, emojiSummary, customEmojiSummary, paidEmoji } = reaction;
+
+    if (paidEmoji !== undefined) {
+      return null;
+    }
+
+    const addedEmoji = emojiSummary?.added ?? customEmojiSummary?.added ?? [];
+    const removedEmoji =
+      emojiSummary?.removed ?? customEmojiSummary?.removed ?? [];
 
     const isReactionInCorrectChat = this.chat.id === chat.id;
-    const hasNewOrOldReaction = added?.length > 0 || removed?.length > 0;
+    const hasNewOrOldReaction =
+      addedEmoji.length > 0 || removedEmoji.length > 0;
 
     if (isReactionInCorrectChat && hasNewOrOldReaction) {
-      return ReactionCollector.getKeyFromReaction(
-        added.shift() || removed.shift(),
-      );
+      return addedEmoji.shift() || removedEmoji.shift() || null;
     } else {
       return null;
     }
@@ -187,25 +200,6 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
     }
 
     return super.endReason;
-  }
-
-  /**
-   * Gets the key from a reaction.
-   * @param reaction - The reaction types.
-   * @returns The key of the reaction or null.
-   */
-  static getKeyFromReaction(reaction?: ReactionType): string | null {
-    if (!reaction) {
-      return null;
-    }
-
-    if (reaction.isEmoji()) {
-      return reaction.emoji || null;
-    } else if (reaction.isCustomEmoji()) {
-      return reaction.customEmoji || null;
-    } else {
-      return null;
-    }
   }
 }
 
