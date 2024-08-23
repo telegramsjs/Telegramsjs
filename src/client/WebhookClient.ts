@@ -6,6 +6,7 @@ import { Events } from "../util/Constants";
 import type { Update } from "@telegram.ts/types";
 import type { TelegramClient } from "./TelegramClient";
 import { TelegramError } from "../errors/TelegramError";
+import { ErrorCodes } from "../errors/ErrorCodes";
 import http, {
   type IncomingMessage,
   type ServerResponse,
@@ -100,7 +101,7 @@ class WebhookClient {
           : http.createServer(webhookCallback);
 
       if (!this.webhookServer) {
-        throw new TelegramError("Failed to create webhook server");
+        throw new TelegramError(ErrorCodes.WebhookServerCreationFailed);
       }
 
       this.webhookServer.listen(port, host, () => {

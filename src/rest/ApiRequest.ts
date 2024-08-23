@@ -4,6 +4,7 @@ const snakeCase = require("lodash.snakecase");
 import { isCamelCase } from "../util/Utils";
 import fetch, { type RequestInit } from "node-fetch";
 import { TelegramError } from "../errors/TelegramError";
+import { ErrorCodes } from "../errors/ErrorCodes";
 import { toApiFormat } from "../util/ApiPermissions";
 import { ChatPermissions } from "../util/ChatPermissions";
 import { HTTPResponseError } from "../errors/HTTPResponseError";
@@ -71,9 +72,7 @@ class ApiRequest {
 
     for (const [key, value] of Object.entries(options)) {
       if (!isCamelCase(key)) {
-        throw new TelegramError(
-          `The provided string "${key}" is not in camelCase format`,
-        );
+        throw new TelegramError(ErrorCodes.InvalidCamelCaseFormat, { key });
       }
       if (
         key === "userAdministratorRights" ||

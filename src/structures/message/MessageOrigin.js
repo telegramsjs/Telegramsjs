@@ -1,5 +1,6 @@
 const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 const { ReactionType } = require("../misc/ReactionType");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
 const { ReactionCollector } = require("../../util/collector/ReactionCollector");
@@ -123,9 +124,7 @@ class MessageOrigin extends Base {
    */
   createMessageCollector(options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return new MessageCollector(this.client, this.chat, options);
@@ -168,9 +167,7 @@ class MessageOrigin extends Base {
    */
   createReactionCollector(options = {}) {
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return new ReactionCollector(this.client, this.chat, options);
@@ -223,15 +220,11 @@ class MessageOrigin extends Base {
    */
   reply(text, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.sendMessage({
@@ -252,15 +245,11 @@ class MessageOrigin extends Base {
    */
   react(reaction, isBig) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     /** @type {any[]} */
@@ -306,15 +295,11 @@ class MessageOrigin extends Base {
    */
   edit(text, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageText({
@@ -333,15 +318,11 @@ class MessageOrigin extends Base {
    */
   editCaption(caption, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageCaption({
@@ -360,15 +341,11 @@ class MessageOrigin extends Base {
    */
   editMedia(media, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageMedia({
@@ -387,15 +364,11 @@ class MessageOrigin extends Base {
    */
   editReplyMarkup(replyMarkup, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageReplyMarkup({
@@ -414,15 +387,11 @@ class MessageOrigin extends Base {
    */
   forward(chatId, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.forwardMessage({
@@ -441,15 +410,11 @@ class MessageOrigin extends Base {
    */
   copy(chatId, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.copyMessage({
@@ -468,15 +433,11 @@ class MessageOrigin extends Base {
    */
   pin(notification = false, businessConnectionId) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.pinChatMessage({
@@ -494,15 +455,11 @@ class MessageOrigin extends Base {
    */
   unpin(businessConnectionId) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.unpinChatMessage({
@@ -526,15 +483,11 @@ class MessageOrigin extends Base {
    */
   delete() {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.deleteMessage(this.chat.id, this.id);
@@ -549,15 +502,11 @@ class MessageOrigin extends Base {
    */
   editLiveLocation(latitude, longitude, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.editMessageLiveLocation({
@@ -576,15 +525,11 @@ class MessageOrigin extends Base {
    */
   stopLiveLocation(options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the messageId where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }
 
     if (!this.chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     return this.client.stopMessageLiveLocation({

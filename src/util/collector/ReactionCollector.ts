@@ -1,6 +1,7 @@
 import { Collection } from "@telegram.ts/collection";
 import { Events, ReactionCollectorEvents } from "../Constants";
 import { TelegramError } from "../../errors/TelegramError";
+import { ErrorCodes } from "../../errors/ErrorCodes";
 import type { TelegramClient } from "../../client/TelegramClient";
 import type { MessageReactionUpdated } from "../../structures/MessageReactionUpdated";
 import type { Chat } from "../../structures/chat/Chat";
@@ -64,9 +65,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
     super(options);
 
     if (!chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     client.incrementMaxListeners();

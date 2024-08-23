@@ -31,7 +31,6 @@ const ApiPermissionsFlags = {
  * Converts the permission object to the API format.
  * @param permission - The permission object to convert.
  * @returns The API-compatible permission object.
- * @throws {TelegramError} If the permission flags are invalid.
  */
 function toApiFormat(
   permission:

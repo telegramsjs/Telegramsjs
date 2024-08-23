@@ -1,5 +1,6 @@
 const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 const { UserPermissions } = require("../../util/UserPermissions");
 
 /**
@@ -251,9 +252,7 @@ class ChatMember extends Base {
    */
   kick(options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the user where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
     }
 
     return this.client.kickChatMember({
@@ -270,9 +269,7 @@ class ChatMember extends Base {
    */
   ban(options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the user where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
     }
 
     return this.client.banChatMember({
@@ -289,9 +286,7 @@ class ChatMember extends Base {
    */
   unban(onlyIfBanned) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the user where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
     }
 
     return this.client.banChatMember({
@@ -327,9 +322,7 @@ class ChatMember extends Base {
    */
   restrict(perms, options = {}) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the user where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
     }
 
     return this.client.restrictChatMember({
@@ -348,9 +341,7 @@ class ChatMember extends Base {
    */
   promote(persm, isAnonymous) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the user where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
     }
 
     return this.client.promoteChatMember({
@@ -368,9 +359,7 @@ class ChatMember extends Base {
    */
   setNikeName(name) {
     if (!this.id) {
-      throw new TelegramError(
-        "Could not find the user where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
     }
 
     return this.client.setChatAdministratorCustomTitle({

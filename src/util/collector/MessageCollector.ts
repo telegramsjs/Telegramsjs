@@ -1,5 +1,6 @@
 import { Events, CollectorEvents } from "../Constants";
 import { TelegramError } from "../../errors/TelegramError";
+import { ErrorCodes } from "../../errors/ErrorCodes";
 import { TelegramClient } from "../../client/TelegramClient";
 import type { Chat } from "../../structures/chat/Chat";
 import type { Message } from "../../structures/message/Message";
@@ -28,9 +29,7 @@ class MessageCollector extends Collector<string, Message> {
     super(options);
 
     if (!chat) {
-      throw new TelegramError(
-        "Could not find the chat where this message came from in the cache!",
-      );
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
     }
 
     client.incrementMaxListeners();

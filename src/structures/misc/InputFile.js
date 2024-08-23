@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const fetch = require("node-fetch");
 const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 
 class InputFile extends Base {
   /**
@@ -53,7 +54,7 @@ class InputFile extends Base {
    */
   async download(filePath = this.path) {
     if (!this.path) {
-      throw new TelegramError("getFile did not return <file_path>");
+      throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
 
     const fileUrl = `https://api.telegram.org/file/bot${this.client.authToken}/${filePath}`;
@@ -63,7 +64,9 @@ class InputFile extends Base {
       const arrayBuffer = await response.arrayBuffer();
       return Buffer.from(arrayBuffer);
     } catch (err) {
-      throw new TelegramError(`Failed to download file: ${err}`);
+      throw new TelegramError(ErrorCodes.FileDownloadFailed, {
+        err: String(err),
+      });
     }
   }
 
@@ -93,7 +96,7 @@ class InputFile extends Base {
    */
   async write(path, writeType = "promise", options = {}) {
     if (!this.path) {
-      throw new TelegramError("getFile did not return <file_path>");
+      throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
 
     if (writeType === "promise") {
@@ -113,9 +116,7 @@ class InputFile extends Base {
       return;
     }
 
-    throw new TelegramError(
-      "The specified incorrect file write type is available: stream | promise",
-    );
+    throw new TelegramError(ErrorCodes.FileWriteInvalidType);
   }
 }
 
