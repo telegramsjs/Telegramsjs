@@ -1,5 +1,5 @@
 const { Base } = require("../Base");
-const { ChatInviteLink } = require("./ChatInviteLink");
+const { TelegramError } = require("../../errors/TelegramError");
 const { UserPermissions } = require("../../util/UserPermissions");
 
 /**
@@ -21,6 +21,7 @@ class ChatMember extends Base {
     /** The member's status in the chat */
     this.status = data.status || null;
 
+    /** @type {any} */
     const permissions = {};
 
     if ("can_be_edited" in data) {
@@ -131,6 +132,10 @@ class ChatMember extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").ChatMember} data - Data about the contains information about one member of a chat
+   * @override
+   */
   _patch(data) {
     if ("user" in data) {
       /**
@@ -144,7 +149,7 @@ class ChatMember extends Base {
      * True, if the user's presence in the chat is hidden
      * @type {boolean}
      */
-    this.anonymous = Boolean(data.is_anonymous);
+    this.anonymous = Boolean("is_anonymous" in data && data.is_anonymous);
 
     if ("custom_title" in data) {
       /**
@@ -181,52 +186,12 @@ class ChatMember extends Base {
       this.author = this.client.users._add(data.from);
     }
 
-    if ("bio" in data) {
-      /**
-       * Bio of the user
-       * @type {string | undefined}
-       */
-      this.bio = data.bio;
-    }
-
-    if ("invite_link" in data) {
-      /**
-       * Chat invite link that was used by the user to send the join request
-       * @type {ChatInviteLink | undefined}
-       */
-      this.link = new ChatInviteLink(this.client, data.invite_link);
-    }
-
-    if ("date" in data) {
-      /**
-       * Date the request was sent in Unix time
-       * @type {number | undefined}
-       */
-      this.requestedUnixTime = data.date;
-    }
-
     if ("until_date" in data) {
       /**
        * Date when the user's subscription will expire; Unix time
        * @type {number | undefined}
        */
       this.untilUnixTime = data.until_date;
-    }
-
-    if ("user_chatId" in data) {
-      /**
-       * Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user
-       * @type {string | undefined}
-       */
-      this.userChatId = String(data.user_chatId);
-    }
-
-    if ("until_date" in data) {
-      /**
-       * Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
-       * @type {number | undefined}
-       */
-      this.restrictedUnixTime = data.until_date;
     }
 
     return data;
@@ -236,22 +201,7 @@ class ChatMember extends Base {
    * Return the member id
    */
   get id() {
-    return this.user?.id ?? null;
-  }
-
-  /**
-   * Return the timestamp restrictions will be lifted for this user,  in milliseconds
-   */
-  get restrictedTimestamp() {
-    return this.restrictedUnixTime ? this.restrictedUnixTime * 1000 : null;
-  }
-
-  /**
-   * Date when restrictions will be lifted for this user
-   * @type {null | Date}
-   */
-  get restrictedAt() {
-    return this.restrictedTimestamp ? new Date(this.restrictedTimestamp) : null;
+    return this.user?.id ?? this.author?.id ?? null;
   }
 
   /**
@@ -270,30 +220,12 @@ class ChatMember extends Base {
   }
 
   /**
-   * Return the timestamp request was sent, in milliseconds, in milliseconds
-   */
-  get requestedTimestamp() {
-    return this.requestedUnixTime ? this.requestedUnixTime * 1000 : null;
-  }
-
-  /**
-   * Date the request was sent
-   * @type {null | Date}
-   */
-  get requestedAt() {
-    return this.requestedTimestamp ? new Date(this.requestedTimestamp) : null;
-  }
-
-  /**
    * Fetches this ChatMember
    * @returns {Promise<ChatMember | null>}
    */
-  fetch() {
-    if (!this.author) {
-      return null;
-    }
-
-    return this.client.getChatMember(this.chatId, this.author.id);
+  async fetch() {
+    if (!this.id) return null;
+    return this.client.getChatMember(this.chatId, this.id);
   }
 
   /**
@@ -302,14 +234,14 @@ class ChatMember extends Base {
    * @param {boolean} [checkAdmin] - A flag to check if the member is an admin or creator.
    * @returns {Promise<UserPermissions|null>} The permissions object of the user in the chat or null if not available.
    */
-  permissionsIn(channel, checkAdmin) {
+  async permissionsIn(channel, checkAdmin) {
     const chat = this.client.chats.resolve(channel);
 
-    if (!chat || chat.isPrivate() || !this.user) {
+    if (!chat || chat.isPrivate() || !this.id) {
       return null;
     }
 
-    return chat.memberPermissions(this.user.id, checkAdmin);
+    return chat.memberPermissions(this.id, checkAdmin);
   }
 
   /**
@@ -318,14 +250,14 @@ class ChatMember extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   kick(options = {}) {
-    if (!this.user) {
+    if (!this.id) {
       throw new TelegramError(
         "Could not find the user where this message came from in the cache!",
       );
     }
 
     return this.client.kickChatMember({
-      userId: this.user.id,
+      userId: this.id,
       chatId: this.chatId,
       ...options,
     });
@@ -337,14 +269,14 @@ class ChatMember extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   ban(options = {}) {
-    if (!this.user) {
+    if (!this.id) {
       throw new TelegramError(
         "Could not find the user where this message came from in the cache!",
       );
     }
 
     return this.client.banChatMember({
-      userId: this.user.id,
+      userId: this.id,
       chatId: this.chatId,
       ...options,
     });
@@ -356,16 +288,16 @@ class ChatMember extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   unban(onlyIfBanned) {
-    if (!this.user) {
+    if (!this.id) {
       throw new TelegramError(
         "Could not find the user where this message came from in the cache!",
       );
     }
 
     return this.client.banChatMember({
-      userId: this.user.id,
+      userId: this.id,
       chatId: this.chatId,
-      onlyIfBanned,
+      ...(onlyIfBanned && { onlyIfBanned }),
     });
   }
 
@@ -390,12 +322,19 @@ class ChatMember extends Base {
   /**
    * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
    * @param {import("../../util/ChatPermissions").ChatPermissionFlags} perms - An object for new user permissions
-   * @param {Omit<MethodParameters["restrictChatMember"], "userId" | "permissions">} [options={}] - out parameters
+   * @param {Omit<MethodParameters["restrictChatMember"], "userId" | "chatId" | "permissions">} [options={}] - out parameters
    * @returns {Promise<true>} - Returns True on success.
    */
   restrict(perms, options = {}) {
+    if (!this.id) {
+      throw new TelegramError(
+        "Could not find the user where this message came from in the cache!",
+      );
+    }
+
     return this.client.restrictChatMember({
-      userId: this.user.id,
+      userId: this.id,
+      chatId: this.chatId,
       permissions: perms,
       ...options,
     });
@@ -408,10 +347,16 @@ class ChatMember extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   promote(persm, isAnonymous) {
+    if (!this.id) {
+      throw new TelegramError(
+        "Could not find the user where this message came from in the cache!",
+      );
+    }
+
     return this.client.promoteChatMember({
       chatId: this.chatId,
-      userId: this.user.id,
-      is_anonymous: isAnonymous,
+      userId: this.id,
+      ...(isAnonymous && { isAnonymous }),
       permissions: persm,
     });
   }
@@ -422,18 +367,25 @@ class ChatMember extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   setNikeName(name) {
+    if (!this.id) {
+      throw new TelegramError(
+        "Could not find the user where this message came from in the cache!",
+      );
+    }
+
     return this.client.setChatAdministratorCustomTitle({
       chatId: this.chatId,
-      userId: this.user.id,
+      userId: this.id,
       customTitle: name,
     });
   }
 
   /**
    * Return this member username, otherwise just an empty string
+   * @override
    */
   toString() {
-    return this.user?.toString() ?? "";
+    return this.author?.toString() ?? this.user?.toString() ?? "";
   }
 }
 

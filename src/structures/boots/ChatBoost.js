@@ -23,7 +23,7 @@ class ChatBoost {
    * Returns the timestamp when the chat was created, in milliseconds
    */
   get createdTimestamp() {
-    return this.createdTimestamp * 1000;
+    return this.createdUnixTime * 1000;
   }
 
   /**

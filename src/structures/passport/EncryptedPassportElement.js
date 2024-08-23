@@ -18,6 +18,10 @@ class EncryptedPassportElement extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").EncryptedPassportElement} data - Data about the describes documents or other Telegram Passport elements shared with the bot by the user
+   * @override
+   */
   _patch(data) {
     if ("data" in data) {
       /**

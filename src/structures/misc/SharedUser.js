@@ -15,6 +15,10 @@ class SharedUser extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").SharedUser} data - Data about the contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button
+   * @override
+   */
   _patch(data) {
     if ("first_name" in data) {
       /**
@@ -57,12 +61,12 @@ class SharedUser extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   refundStarPayment(telegramPaymentId) {
-    return this.client.refundStarPayment(this.id, telegramPaymentId);
+    return this.client.refundStarPayment(this.userId, telegramPaymentId);
   }
 
   /**
    * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change).
-   * @param {readonly import("@telegram.ts/types").PassportElementError[]} errors - An array describing the errors
+   * @param {readonly import("../../client/interfaces/Passport").PassportElementError[]} errors - An array describing the errors
    * @returns {Promise<true>} - Returns True on success.
    */
   setPassportErrors(errors) {

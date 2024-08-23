@@ -117,6 +117,15 @@ class TelegramClient extends BaseClient {
   }
 
   /**
+   * Fetch about the client/bot
+   */
+  async fetchApplication() {
+    const client = await this.getMe();
+    this.user = client;
+    return client;
+  }
+
+  /**
    * Logs in to the Telegram API using the specified options.
    * @param {ILoginOptions} [options={ polling: DefaultParameters }] - The login options.
    * @throws {TelegramError} If invalid options are provided.

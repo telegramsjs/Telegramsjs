@@ -2,7 +2,7 @@ const { PaidMedia } = require("./PaidMedia");
 
 class PaidMediaInfo {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").PaidMediaInfo} data - Data about the describes the paid media added to a message
    */
   constructor(client, data) {

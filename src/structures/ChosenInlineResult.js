@@ -36,7 +36,7 @@ class ChosenInlineResult extends Base {
 
   /**
    * Use this method to send answers to an inline query.
-   * @param {readonly import("@telegram.ts/types").InlineQueryResult[]} results - An array of results for the inline query
+   * @param {readonly import("../client/interfaces/Inline").InlineQueryResult[]} results - An array of results for the inline query
    * @param {Omit<MethodParameters["answerInlineQuery"], "inlineQueryId" | "results">} [options={}] - out parameters
    * @returns {Promise<true>} - On success, True is returned.
    */

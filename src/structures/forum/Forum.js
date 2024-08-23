@@ -26,8 +26,8 @@ class Forum extends Base {
     return this.client.editForumTopic({
       chatId: this.chatId,
       messageThreadId: this.threadId,
-      name,
-      iconCustomEmojiId: customEmojiId,
+      ...(name && { name }),
+      ...(customEmojiId && { iconCustomEmojiId: customEmojiId }),
     });
   }
 

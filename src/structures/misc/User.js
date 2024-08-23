@@ -1,6 +1,10 @@
 const { Base } = require("../Base");
 
 class User extends Base {
+  /**
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("@telegram.ts/types").User | import("@telegram.ts/types").UserFromGetMe} data - represents a Telegram user or bot
+   */
   constructor(client, data) {
     super(client);
 
@@ -16,6 +20,10 @@ class User extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").User | import("@telegram.ts/types").UserFromGetMe} data - represents a Telegram user or bot
+   * @override
+   */
   _patch(data) {
     if ("last_name" in data) {
       /**
@@ -67,7 +75,7 @@ class User extends Base {
 
   /**
    * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change).
-   * @param {readonly import("@telegram.ts/types").PassportElementError[]} errors - An array describing the errors
+   * @param {readonly import("../../client/interfaces/Passport").PassportElementError[]} errors - An array describing the errors
    * @returns {Promise<true>} - Returns True on success.
    */
   setPassportErrors(errors) {
@@ -90,6 +98,7 @@ class User extends Base {
 
   /**
    * Return this user username, otherwise just an empty string
+   * @override
    */
   toString() {
     return this.username ?? "";

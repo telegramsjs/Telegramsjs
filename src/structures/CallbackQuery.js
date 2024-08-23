@@ -72,8 +72,8 @@ class CallbackQuery extends Base {
       callbackQueryId: this.id,
       showAlert: true,
       text,
-      url,
-      cacheTime: cacheTime,
+      ...(url && { url }),
+      ...(cacheTime && { cacheTime }),
     });
   }
 }

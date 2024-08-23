@@ -50,9 +50,9 @@ class PreCheckoutQuery extends Base {
    */
   answerQuery(ok, errorMessage) {
     return this.client.answerPreCheckoutQuery({
-      pre_checkout_query_id: this.id,
+      preCheckoutQueryId: this.id,
       ok,
-      errorMessage,
+      ...(errorMessage && { errorMessage }),
     });
   }
 }

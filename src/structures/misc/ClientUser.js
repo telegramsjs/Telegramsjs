@@ -50,24 +50,30 @@ class ClientUser extends User {
 
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
-   * @param {readonly import("@telegram.ts/types").BotCommand[]} commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
-   * @param {import("@telegram.ts/types").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
-   * @param {string} [language] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
+   * @param {readonly import("../../client/interfaces/Bot").BotCommand[]} commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
+   * @param {import("../../client/interfaces/Bot").BotCommandScope} [scope] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
+   * @param {string} [languageCode] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
    * @returns {Promise<true>} - Returns True on success.
    */
-  setCommands(commands, score, language) {
-    return this.client.setMyCommands({
+  setCommands(commands, scope, languageCode) {
+    /** @type {import("../../types").MethodParameters["setMyCommands"]} */
+    const options = {
       commands,
-      score,
-      language,
-    });
+    };
+    if (scope) {
+      options.scope = scope;
+    }
+    if (languageCode) {
+      options.languageCode = languageCode;
+    }
+    return this.client.setMyCommands(options);
   }
 
   /**
    * Use this method to get the current list of the bot's commands for the given scope and user language.
-   * @param {import("@telegram.ts/types").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
+   * @param {import("../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
    * @param {string} [language] - A two-letter ISO 639-1 language code or an empty string
-   * @returns {Promise<import("@telegram.ts/types").BotCommand[]>} - Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
+   * @returns {Promise<import("../../client/interfaces/Bot").BotCommand[]>} - Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
    */
   getCommands(score, language) {
     return this.client.getMyCommands(score, language);
@@ -75,7 +81,7 @@ class ClientUser extends User {
 
   /**
    * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users.
-   * @param {import("@telegram.ts/types").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
+   * @param {import("../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
    * @param {string} [language] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -143,7 +149,7 @@ class ClientUser extends User {
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param {number} [chatId] - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
-   * @param {import("@telegram.ts/types").MenuButton} [menu] - An object for the bot's new menu button. Defaults to MenuButtonDefault
+   * @param {import("../../client/interfaces/Bot").MenuButton} [menu] - An object for the bot's new menu button. Defaults to MenuButtonDefault
    * @returns {Promise<true>} - Returns True on success.
    */
   setMenuButton(chatId, menu) {

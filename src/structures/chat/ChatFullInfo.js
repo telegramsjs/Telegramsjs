@@ -1,4 +1,3 @@
-const { Base } = require("../Base");
 const { Chat } = require("./Chat");
 const { Photo } = require("../media/Photo");
 const { Location } = require("../misc/Location");
@@ -18,6 +17,10 @@ class ChatFullInfo extends Chat {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").ChatFullInfo} data - Data about the full information of a chat
+   * @override
+   */
   _patch(data) {
     if ("title" in data) {
       /**
@@ -75,7 +78,7 @@ class ChatFullInfo extends Chat {
       this.maxReactionCount = data.max_reaction_count;
     }
 
-    if ("photo" in data) {
+    if ("photo" in data && data.photo) {
       /**
        * The photo of the chat.
        * @type {{ smail: Photo, big: Photo } | undefined}
@@ -84,10 +87,14 @@ class ChatFullInfo extends Chat {
         smail: new Photo(this.client, {
           file_id: data.photo.small_file_id,
           file_unique_id: data.photo.small_file_unique_id,
+          width: 0,
+          height: 0,
         }),
         big: new Photo(this.client, {
           file_id: data.photo.big_file_id,
           file_unique_id: data.photo.big_file_unique_id,
+          width: 0,
+          height: 0,
         }),
       };
     }
@@ -100,7 +107,7 @@ class ChatFullInfo extends Chat {
       this.activeUsernames = data.active_usernames;
     }
 
-    if ("birthdate" in data) {
+    if ("birthdate" in data && data.birthdate) {
       /**
        * The birthdate of the chat.
        * @type {{ day: number, month: number, year?: number } | undefined}
@@ -108,41 +115,47 @@ class ChatFullInfo extends Chat {
       this.birthdate = {
         day: data.birthdate.day,
         month: data.birthdate.month,
-        year: data.birthdate.year,
+        ...(data.birthdate.year && { year: data.birthdate.year }),
       };
     }
 
-    if ("business_intro" in data) {
+    if ("business_intro" in data && data.business_intro) {
       /**
        * The business introduction of the chat.
-       * @type {{ title?: string, message?: string, sticker?: Sticker } | undefined}
+       * @type {{ title?: string, message?: string, sticker?: Sticker } | undefined}}
        */
       this.businessIntro = {
-        title: data.business_intro.title,
-        message: data.business_intro.message,
-        sticker: new Sticker(this.client, data.business_intro.sticker),
+        ...(data.business_intro.title && { title: data.business_intro.title }),
+        ...(data.business_intro.message && {
+          message: data.business_intro.message,
+        }),
+        ...(data.business_intro.sticker && {
+          sticker: new Sticker(this.client, data.business_intro.sticker),
+        }),
       };
     }
 
-    if ("business_location" in data) {
+    if ("business_location" in data && data.business_location) {
       /**
        * The business location of the chat.
        * @type {{ address: string, location?: Location } | undefined}
        */
       this.businessLocation = {
         address: data.business_location.address,
-        location: new Location(this.client, data.business_location.location),
+        ...(data.business_location.location && {
+          location: new Location(this.client, data.business_location.location),
+        }),
       };
     }
 
-    if ("business_opening_hours" in data) {
+    if ("business_opening_hours" in data && data.business_opening_hours) {
       /**
        * The business opening hours of the chat.
        * @type {undefined | { timeZone: string, hours: { opening: number, closing: number }[] } }
        */
       this.businessOpeningHours = {
         timeZone: data.business_opening_hours.time_zone_name,
-        hours: data.business_opening_hours.map(
+        hours: data.business_opening_hours.opening_hours.map(
           ({ opening_minute, closing_minute }) => ({
             opening: opening_minute,
             closing: closing_minute,
@@ -151,7 +164,7 @@ class ChatFullInfo extends Chat {
       };
     }
 
-    if ("personal_chat" in data) {
+    if ("personal_chat" in data && data.personal_chat) {
       /**
        * The personal chat associated with this chat.
        * @type {Chat | undefined}
@@ -275,12 +288,73 @@ class ChatFullInfo extends Chat {
       this.pinnedMessage = new Message(this.client, data.pinned_message);
     }
 
-    if ("permissions" in data) {
+    if ("permissions" in data && data.permissions) {
+      /** @type {any} */
+      const permissions = {};
+
+      if ("can_send_messages" in data.permissions) {
+        permissions.sendMessages = data.permissions.can_send_messages;
+      }
+
+      if ("can_send_audios" in data.permissions) {
+        permissions.sendAudios = data.permissions.can_send_audios;
+      }
+
+      if ("can_send_documents" in data.permissions) {
+        permissions.sendDocuments = data.permissions.can_send_documents;
+      }
+
+      if ("can_send_photos" in data.permissions) {
+        permissions.sendPhotos = data.permissions.can_send_photos;
+      }
+
+      if ("can_send_videos" in data.permissions) {
+        permissions.sendVideos = data.permissions.can_send_videos;
+      }
+
+      if ("can_send_video_notes" in data.permissions) {
+        permissions.sendVideoNotes = data.permissions.can_send_video_notes;
+      }
+
+      if ("can_send_voice_notes" in data.permissions) {
+        permissions.sendVoiceNotes = data.permissions.can_send_voice_notes;
+      }
+
+      if ("can_send_polls" in data.permissions) {
+        permissions.sendPolls = data.permissions.can_send_polls;
+      }
+
+      if ("can_send_other_messages" in data.permissions) {
+        permissions.sendOtherMessages =
+          data.permissions.can_send_other_messages;
+      }
+
+      if ("can_add_web_page_previews" in data.permissions) {
+        permissions.addWebPagePreviews =
+          data.permissions.can_add_web_page_previews;
+      }
+
+      if ("can_change_info" in data.permissions) {
+        permissions.changeInfo = data.permissions.can_change_info;
+      }
+
+      if ("can_invite_users" in data.permissions) {
+        permissions.inviteUsers = data.permissions.can_invite_users;
+      }
+
+      if ("can_pin_messages" in data.permissions) {
+        permissions.pinMessages = data.permissions.can_pin_messages;
+      }
+
+      if ("can_manage_topics" in data.permissions) {
+        permissions.manageTopics = data.permissions.can_manage_topics;
+      }
+
       /**
        * The permissions in the chat.
        * @type {ChatPermissions | undefined}
        */
-      this.permissions = new ChatPermissions(data.permissions);
+      this.permissions = new ChatPermissions(permissions);
     }
 
     if ("slow_mode_delay" in data) {
@@ -352,7 +426,7 @@ class ChatFullInfo extends Chat {
        * Whether the chat can set a sticker set.
        * @type {boolean | undefined}
        */
-      this.setStickerSet = data.can_set_sticker_set;
+      this.setStickeredSet = data.can_set_sticker_set;
     }
 
     if ("custom_emoji_sticker_set_name" in data) {
@@ -371,13 +445,18 @@ class ChatFullInfo extends Chat {
       this.linkedId = String(data.linked_chat_id);
     }
 
-    if ("location" in data) {
+    if ("location" in data && data.location) {
       /**
        * The location of the chat.
-       * @type {Location | undefined}
+       * @type {{ location: Location; address: string; } | undefined}}
        */
-      this.location = new Location(this.client, data.location);
+      this.location = {
+        location: new Location(this.client, data.location.location),
+        address: data.location.address,
+      };
     }
+
+    return data;
   }
 }
 

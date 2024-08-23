@@ -66,7 +66,7 @@ class WebhookInfo extends Base {
 
   /**
    * Date for the most recent error that happened when trying to deliver an update via webhook
-   * @type {Date}
+   * @type {Date | null}
    */
   get lastedAt() {
     return this.lastedTimestamp ? new Date(this.lastedTimestamp) : null;

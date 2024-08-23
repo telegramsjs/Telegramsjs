@@ -11,6 +11,10 @@ class ChatBoostSource extends Base {
     this._patch(data);
   }
 
+  /**
+   * @param {import("@telegram.ts/types").ChatBoostSource} data - Data about the boost source
+   * @override
+   */
   _patch(data) {
     if ("user" in data) {
       /**
@@ -32,7 +36,7 @@ class ChatBoostSource extends Base {
      * True, if the giveaway was completed, but there was no user to win the prize
      * @type {boolean}
      */
-    this.unclaimed = Boolean(data.is_unclaimed);
+    this.unclaimed = Boolean("is_unclaimed" in data && data.is_unclaimed);
 
     return data;
   }

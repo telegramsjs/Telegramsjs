@@ -136,7 +136,9 @@ class MessageEntities {
    * @returns {SearchResult[]} An array of objects representing the found entities.
    */
   searchEntity(searchType) {
+    /** @type {SearchResult[]} */
     const entities = [];
+
     this.entities.forEach((entity, index) => {
       const { offset, length, type } = entity;
       if (type === searchType) {

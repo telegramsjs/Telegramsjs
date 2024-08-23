@@ -1,5 +1,6 @@
 import { Collection } from "@telegram.ts/collection";
 import { Events, ReactionCollectorEvents } from "../Constants";
+import { TelegramError } from "../../errors/TelegramError";
 import type { TelegramClient } from "../../client/TelegramClient";
 import type { MessageReactionUpdated } from "../../structures/MessageReactionUpdated";
 import type { Chat } from "../../structures/chat/Chat";
@@ -34,11 +35,6 @@ interface IReactionEventCollector
  */
 class ReactionCollector extends Collector<string, MessageReactionUpdated> {
   /**
-   * The chat in which reactions are being collected.
-   */
-  public chat: Chat;
-
-  /**
    * The number of received reactions.
    */
   public received: number = 0;
@@ -54,19 +50,24 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
   /**
    * Creates an instance of ReactionCollector.
    * @param client - The TelegramClient instance.
-   * @param reaction - The initial message context.
+   * @param chat - The chat in which reactions are being collected.
    * @param options - The options for the collector.
    */
   constructor(
     public readonly client: TelegramClient,
-    public readonly reaction: MessageReactionUpdated,
+    public readonly chat: Chat,
     public override readonly options: ICollectorOptions<
       string,
       MessageReactionUpdated
     > = {},
   ) {
     super(options);
-    this.chat = reaction.chat;
+
+    if (!chat) {
+      throw new TelegramError(
+        "Could not find the chat where this message came from in the cache!",
+      );
+    }
 
     client.incrementMaxListeners();
     client.on(Events.MessageReaction, this.handleCollect);

@@ -10,7 +10,7 @@ class UserChatBoosts {
      * The list of boosts added to the chat by the user
      * @type {ChatBoost[]}
      */
-    this.boosts = data.boosts.map((boost) => new ChatBoost(client, data));
+    this.boosts = data.boosts.map((boost) => new ChatBoost(client, boost));
 
     /**
      * The boost count added to the chat by the user

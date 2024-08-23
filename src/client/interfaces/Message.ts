@@ -220,7 +220,7 @@ export interface ReactionTypeCustomEmoji {
   /** Type of the reaction, always “custom_emoji” */
   type: "custom_emoji";
   /** Custom emoji identifier */
-  customEmoji: string;
+  customEmojiId: string;
 }
 
 /** This object represents a point on the map. */

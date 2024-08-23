@@ -955,7 +955,7 @@ export type ApiMethods = {
   /** Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object. */
   getUserProfilePhotos(args: {
     /** Unique identifier of the target user */
-    userId: number;
+    userId: string | number;
     /** Sequential number of the first photo to be returned. By default, all photos are returned. */
     offset?: number;
     /** Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100. */
@@ -1990,7 +1990,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat */
     chatId: string | number;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
-    messageThreadId?: number;
+    messageThreadId?: string | number;
     /** Short name of the game, serves as the unique identifier for the game. Set up your games via BotFather. */
     gameShortName: string;
     /** Sends the message silently. Users will receive a notification with no sound. */

@@ -1,6 +1,6 @@
 class VideoChatScheduled {
   /**
-   * @param {import("@telegram.ts/types").Chat & { threadId?: number }} data - Data about the represents a service message about a video chat scheduled in the chat
+   * @param {import("@telegram.ts/types").VideoChatScheduled} data - Data about the represents a service message about a video chat scheduled in the chat
    */
   constructor(data) {
     /**
