@@ -56,17 +56,11 @@ class ClientUser extends User {
    * @returns {Promise<true>} - Returns True on success.
    */
   setCommands(commands, scope, languageCode) {
-    /** @type {import("../../types").MethodParameters["setMyCommands"]} */
-    const options = {
+    return this.client.setMyCommands({
       commands,
-    };
-    if (scope) {
-      options.scope = scope;
-    }
-    if (languageCode) {
-      options.languageCode = languageCode;
-    }
-    return this.client.setMyCommands(options);
+      ...(scope && { scope }),
+      ...(languageCode && { languageCode }),
+    });
   }
 
   /**
