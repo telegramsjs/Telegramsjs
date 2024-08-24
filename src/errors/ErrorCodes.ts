@@ -13,7 +13,7 @@ enum ErrorCodes {
   FileWriteInvalidType = "FILE_WRITE_INVALID_TYPE",
 }
 
-const ErrorMessages: Record<ErrorCodes, string> = {
+const ErrorMessages = {
   [ErrorCodes.InvalidOptions]: "The provided options are invalid.",
   [ErrorCodes.MissingUrlParameter]:
     "The 'url' parameter is required but was not provided.",

@@ -22,7 +22,7 @@ class MenuButton {
   }
 
   /**
-   * @returns {this is this & { text: string; webApp: import("@telegram.ts/types").WebAppInfo }}
+   * @returns {this is this & { text: string; webApp: import("../../client/interfaces/Markup").WebAppInfo }}
    */
   isWebApp() {
     return Boolean(

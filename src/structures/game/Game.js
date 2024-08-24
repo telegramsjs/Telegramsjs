@@ -4,10 +4,6 @@ const { Animation } = require("../media/Animation");
 const { MessageEntities } = require("../message/MessageEntities");
 
 /**
- * @typedef {import("../message/Message").Message} Message
- */
-
-/**
  * @typedef {import("../../types").MethodParameters} MethodParameters
  */
 
@@ -43,7 +39,7 @@ class Game extends Base {
    * @param {string | number} userId - User identifier
    * @param {number} score - New score, must be non-negative
    * @param {Omit<MethodParameters["setGameScore"], "userId" | "score">} [options={}] - out parameters
-   * @returns {Promise<boolean | (Message & { game: Game; editedTimestamp: number; })>} - On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+   * @returns {Promise<boolean | (import("../message/Message").Message & { game: Game; editedTimestamp: number; })>} - On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
    */
   setScore(userId, score, options = {}) {
     return this.client.setGameScore({
