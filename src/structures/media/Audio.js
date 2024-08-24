@@ -12,8 +12,8 @@ class Audio extends InputFile {
     /** Duration of the audio in seconds as defined by sender */
     this.duration = data.duration;
 
-    /** Performer of the audio as defined by sender or by audio tags  */
     if ("performer" in data) {
+      /** Performer of the audio as defined by sender or by audio tags  */
       this.performer = data.performer;
     }
 

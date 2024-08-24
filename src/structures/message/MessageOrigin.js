@@ -16,10 +16,6 @@ const {
  * @typedef {import("../../types").MethodParameters} MethodParameters
  */
 
-/**
- * @typedef {import("./Message").Message} Message
- */
-
 class MessageOrigin extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
@@ -119,7 +115,7 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message>} [options={}] - message collector options
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("./Message").Message>} [options={}] - message collector options
    * @returns {import("../../util/collector/MessageCollector").MessageCollector}
    */
   createMessageCollector(options = {}) {
@@ -131,8 +127,8 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message>} [options={}] - message collector options
-   * @returns {Promise<[import("@telegram.ts/collection").Collection<string, Message>, string]>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("./Message").Message>} [options={}] - message collector options
+   * @returns {Promise<[import("@telegram.ts/collection").Collection<string, import("./Message").Message>, string]>}
    */
   awaitMessage(options = {}) {
     const _options = { ...options, max: 1 };
@@ -145,8 +141,8 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @param {import("../../util/collector/Collector").ICollectorOptions<string, Message> & { errors?: string[] }} [options={}] - message collector options
-   * @returns {Promise<import("@telegram.ts/collection").Collection<string, Message>>}
+   * @param {import("../../util/collector/Collector").ICollectorOptions<string, import("./Message").Message> & { errors?: string[] }} [options={}] - message collector options
+   * @returns {Promise<import("@telegram.ts/collection").Collection<string, import("./Message").Message>>}
    */
   awaitMessages(options = {}) {
     return new Promise((resolve, reject) => {
@@ -216,7 +212,7 @@ class MessageOrigin extends Base {
    * Reply to the current message
    * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId" >} [options={}] - out parameters
-   * @returns {Promise<Message & { content: string; }>} - On success, the sent Message is returned.
+   * @returns {Promise<import("./Message").Message & { content: string; }>} - On success, the sent Message is returned.
    */
   reply(text, options = {}) {
     if (!this.id) {
@@ -291,7 +287,7 @@ class MessageOrigin extends Base {
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<boolean | (Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<boolean | (import("./Message").Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
     if (!this.id) {
@@ -314,7 +310,7 @@ class MessageOrigin extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<boolean | (Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>}
+   * @returns {Promise<boolean | (import("./Message").Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editCaption(caption, options = {}) {
     if (!this.id) {
@@ -337,7 +333,7 @@ class MessageOrigin extends Base {
    * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param {import("@telegram.ts/types").InputMedia} media - An object for a new media content of the message
    * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | import("./Message").Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(media, options = {}) {
     if (!this.id) {
@@ -360,7 +356,7 @@ class MessageOrigin extends Base {
    * Use this method to edit only the reply markup of messages.
    * @param {import("../../client/interfaces/Markup").InlineKeyboardMarkup} replyMarkup - An object for an inline keyboard
    * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | import("./Message").Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(replyMarkup, options = {}) {
     if (!this.id) {
@@ -383,7 +379,7 @@ class MessageOrigin extends Base {
    * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded.
    * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
    * @param {Omit<MethodParameters["forwardMessage"], "chatId" | "fromChatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<Message>} - On success, the sent Message is returned.
+   * @returns {Promise<import("./Message").Message>} - On success, the sent Message is returned.
    */
   forward(chatId, options = {}) {
     if (!this.id) {
@@ -498,7 +494,7 @@ class MessageOrigin extends Base {
    * @param {number} latitude - Latitude of new location
    * @param {number} longitude - Longitude of new location
    * @param {Omit<MethodParameters["editMessageLiveLocation"], "latitude" | "longitude" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("../misc/Location").Location })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (import("./Message").Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("../misc/Location").Location })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   editLiveLocation(latitude, longitude, options = {}) {
     if (!this.id) {
@@ -521,7 +517,7 @@ class MessageOrigin extends Base {
   /**
    * Use this method to stop updating a live location message before live_period expires.
    * @param {Omit<MethodParameters["stopMessageLiveLocation"], "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | (Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("../misc/Location").Location })>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * @returns {Promise<true | (import("./Message").Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; location: import("../misc/Location").Location })>} - On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
    */
   stopLiveLocation(options = {}) {
     if (!this.id) {

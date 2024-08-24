@@ -92,10 +92,11 @@ class BaseManager {
 
   /**
    * Resolves an entry from the cache.
-   * @param {string|T} idOrInstance - The ID or instance to resolve.
+   * @param {any} idOrInstance - The ID or instance to resolve.
    * @returns {T|null} - The resolved entry or null if not found.
    */
   resolve(idOrInstance) {
+    if (!idOrInstance) return null;
     if (idOrInstance instanceof this.holds) return idOrInstance;
     if (typeof idOrInstance === "string") {
       return this.cache.get(idOrInstance) || null;
@@ -105,10 +106,11 @@ class BaseManager {
 
   /**
    * Resolves the ID of an entry from the cache.
-   * @param {string|T} idOrInstance - The ID or instance to resolve.
+   * @param {any} idOrInstance - The ID or instance to resolve.
    * @returns {string|null} - The resolved ID or null if not found.
    */
   resolveId(idOrInstance) {
+    if (!idOrInstance) return null;
     if (idOrInstance instanceof this.holds) return idOrInstance.id;
     if (typeof idOrInstance === "string") return idOrInstance;
     return null;
