@@ -23,16 +23,6 @@
         "types": "./typings/index.d.ts",
         "default": "./dist/src/index.mjs"
       }
-    },
-    "types": {
-      "require": {
-        "types": "./typings/telegram/index.d.ts",
-        "default": "./dist/src/client/interfaces/index.js"
-      },
-      "import": {
-        "types": "./typings/telegram/index.d.ts",
-        "default": "./dist/src/client/interfaces/index.mjs"
-      }
     }
   },
   "license": "MIT",
