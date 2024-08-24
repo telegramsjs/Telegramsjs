@@ -6,8 +6,8 @@
   "types": "./typings/index.d.ts",
   "scripts": {
     "clear": "rm -rf dist/",
-    "prettier": "prettier --write src/",
-    "build:dev": "npm run clear && tsc --project ./tsconfig.dev.json",
+    "prettier": "prettier --write src/ typings/",
+    "build:test": "npm run clear && tsc --project ./tsconfig.test.json",
     "build:release": "npm run prettier && npm run clear && tsc --project ./tsconfig.json"
   },
   "engines": {
@@ -22,6 +22,16 @@
       "import": {
         "types": "./typings/index.d.ts",
         "default": "./dist/src/index.mjs"
+      }
+    },
+    "types": {
+      "require": {
+        "types": "./typings/telegram/index.d.ts",
+        "default": "./dist/src/client/interfaces/index.js"
+      },
+      "import": {
+        "types": "./typings/telegram/index.d.ts",
+        "default": "./dist/src/client/interfaces/index.mjs"
       }
     }
   },
