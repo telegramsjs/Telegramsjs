@@ -24,4 +24,4 @@ export * from "./rest/ApiRequest";
 export * from "./rest/MediaData";
 export * from "./rest/MultipartStream";
 export * from "./structures/index";
-// export { version } from "../package.json";
+export { version } from "../package.json";
