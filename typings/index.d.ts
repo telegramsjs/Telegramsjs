@@ -8750,6 +8750,8 @@ export declare enum ErrorCodes {
   FileRetrievalFailed = "FILE_RETRIEVAL_FAILED",
   FileDownloadFailed = "FILE_DOWNLOAD_FAILED",
   FileWriteInvalidType = "FILE_WRITE_INVALID_TYPE",
+  InvalidUserID = "INVALID_USER_ID",
+  InvalidChatID = "INVALID_CHAT_ID",
 }
 
 export declare const ErrorMessages: {
@@ -8765,6 +8767,8 @@ export declare const ErrorMessages: {
   readonly FILE_RETRIEVAL_FAILED: "Failed to retrieve the file from the path: <file_path>.";
   readonly FILE_DOWNLOAD_FAILED: "Failed to download the file. Error: ${err}.";
   readonly FILE_WRITE_INVALID_TYPE: "Invalid file write type specified. Available types: 'stream' or 'promise'.";
+  readonly INVALID_USER_ID: "The provided ID is invalid for retrieving user information; it does not correspond to a valid user ID.";
+  readonly INVALID_CHAT_ID: "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.";
 };
 
 /**
