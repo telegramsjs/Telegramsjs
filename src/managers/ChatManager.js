@@ -2,6 +2,8 @@ const { BaseManager } = require("./BaseManager");
 const { Chat } = require("../structures/chat/Chat");
 const { Message } = require("../structures/message/Message");
 const { ChatMember } = require("../structures/chat/ChatMember");
+const { TelegramError } = require("../errors/TelegramError");
+const { ErrorCodes } = require("../errors/ErrorCodes");
 
 /**
  * Manages chat-related data.
@@ -46,6 +48,11 @@ class ChatManager extends BaseManager {
     }
 
     const data = await this.client.getChat(String(id));
+
+    if (data?.isPrivate()) {
+      throw new TelegramError(ErrorCodes.InvalidChatID);
+    }
+
     return this._add(data, cache);
   }
 }

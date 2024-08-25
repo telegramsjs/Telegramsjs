@@ -2,6 +2,8 @@ const { BaseManager } = require("./BaseManager");
 const { User } = require("../structures/misc/User");
 const { Message } = require("../structures/message/Message");
 const { ChatMember } = require("../structures/chat/ChatMember");
+const { TelegramError } = require("../errors/TelegramError");
+const { ErrorCodes } = require("../errors/ErrorCodes");
 
 /**
  * Manages users in the cache.
@@ -58,6 +60,11 @@ class UserManager extends BaseManager {
     }
 
     const data = await this.client.getChat(String(id));
+
+    if (!data?.isPrivate()) {
+      throw new TelegramError(ErrorCodes.InvalidUserID);
+    }
+
     return this._add(data, cache);
   }
 }

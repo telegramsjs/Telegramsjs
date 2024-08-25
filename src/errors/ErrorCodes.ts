@@ -11,6 +11,8 @@ enum ErrorCodes {
   FileRetrievalFailed = "FILE_RETRIEVAL_FAILED",
   FileDownloadFailed = "FILE_DOWNLOAD_FAILED",
   FileWriteInvalidType = "FILE_WRITE_INVALID_TYPE",
+  InvalidUserID = "INVALID_USER_ID",
+  InvalidChatID = "INVALID_CHAT_ID",
 }
 
 const ErrorMessages = {
@@ -37,6 +39,10 @@ const ErrorMessages = {
     "Failed to download the file. Error: ${err}.",
   [ErrorCodes.FileWriteInvalidType]:
     "Invalid file write type specified. Available types: 'stream' or 'promise'.",
+  [ErrorCodes.InvalidUserID]:
+    "The provided ID is invalid for retrieving user information; it does not correspond to a valid user ID.",
+  [ErrorCodes.InvalidChatID]:
+    "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.",
 } as const;
 
 export { ErrorCodes, ErrorMessages };
