@@ -1550,7 +1550,7 @@ export declare class MessageReactionUpdated extends Base {
   >;
   /**
    * Use this method to edit captions of messages.
-   * @param [caption] - New caption of the message, 0-1024 characters after entities parsing
+   * @param caption - New caption of the message, 0-1024 characters after entities parsing
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
@@ -3152,8 +3152,8 @@ export declare class SharedUser extends Base {
   setPassportErrors(errors: readonly PassportElementError[]): Promise<true>;
   /**
    * Use this method to get a list of profile pictures for a user.
-   * @param [offset=0] - Sequential number of the first photo to be returned. By default, all photos are returned
-   * @param [limit=100] - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100
+   * @param offset - Sequential number of the first photo to be returned. By default, all photos are returned
+   * @param limit - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100
    * @returns Returns a UserProfilePhotos object.
    */
   getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
@@ -4266,7 +4266,7 @@ export declare class Message extends Base {
   >;
 }
 
-declare class CallbackQuery extends Base {
+export declare class CallbackQuery extends Base {
   /**
    * @param client - The client that instantiated this
    * @param data - Data about the represents an incoming callback query from a callback button in an inline keyboard. If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present
@@ -5998,8 +5998,6 @@ export class ChatManager extends BaseManager<Chat> {
    * Fetches a chat object from the API.
    * @param chat - The chat instance or ID.
    * @param options - Additional options.
-   * @param [options.cache=true] - Whether to cache the fetched chat.
-   * @param [options.force=false] - Whether to force fetch from the API instead of using the cache.
    * @returns The fetched chat object.
    */
   fetch(
@@ -6272,7 +6270,7 @@ export declare class PreCheckoutQuery extends Base {
   /**
    * Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries.
    * @param ok - Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use False if there are any problems
-   * @param [errorMessage] - Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user
+   * @param errorMessage - Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user
    * @returns On success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
    */
   answerQuery(ok: boolean, errorMessage?: string): Promise<true>;
@@ -6495,7 +6493,7 @@ export declare class ChatBoostRemoved extends Base {
   get removedAt(): Date;
 }
 
-interface EventHandlers {
+export interface EventHandlers {
   ready: (telegram: TelegramClient) => PossiblyAsync<void>;
   disconnect: (telegram: TelegramClient) => PossiblyAsync<void>;
   error: (detalis: [number, unknown]) => PossiblyAsync<void>;
@@ -7552,7 +7550,7 @@ export declare class ClientUser extends User {
   deleteCommands(score?: BotCommandScope, language?: string): Promise<true>;
   /**
    * Use this method to change the bot's name.
-   * @param [name] - New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language
+   * @param name - New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language
    * @param language - A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name
    * @returns Returns True on success.
    */
@@ -7705,7 +7703,7 @@ export declare class TelegramClient extends BaseClient {
   fetchApplication(): Promise<ClientUser>;
   /**
    * Logs in to the Telegram API using the specified options.
-   * @param [options={ polling: DefaultParameters }] - The login options.
+   * @param options - The login options.
    * @throws {TelegramError} If invalid options are provided.
    */
   login(options?: ILoginOptions): Promise<void>;
@@ -8801,3 +8799,5 @@ export declare class StarTransactions {
   /** The list of transactions */
   transactions: StarTransaction[];
 }
+
+export * from "./telegram/index";
