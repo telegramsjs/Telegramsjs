@@ -14,7 +14,10 @@ class MessageEntities {
    * @param {import("@telegram.ts/types").MessageEntity[]} entities - The array of message entities.
    */
   constructor(searchText, entities) {
-    Object.defineProperty(this, "searchText", { value: searchText });
+    /**
+     * The text to search within.
+     */
+    this.searchText = searchText;
 
     Object.defineProperty(this, "entities", { value: entities });
   }
