@@ -761,7 +761,7 @@ export declare abstract class Collector<K, V> extends EventEmitter {
   abstract dispose(msg: V): K | null;
 }
 
-type SearchResult = {
+export type SearchResult = {
   /**
    * - The index of the entity.
    */
@@ -780,7 +780,7 @@ type SearchResult = {
   search: string;
 };
 
-declare class MessageEntities {
+export declare class MessageEntities {
   /**
    * Creates an instance of the MessageEntities class.
    * @param searchText - The text to search within.
@@ -790,8 +790,10 @@ declare class MessageEntities {
     searchText: string,
     entities: import("@telegram.ts/types").MessageEntity[],
   );
-  searchText: string;
-  entities: import("@telegram.ts/types").MessageEntity[];
+  /**
+   * The text to search within.
+   */
+  public readonly searchText: string;
   /**
    * Retrieves all mention entities from the message.
    * @returns An array of objects representing mention entities.
@@ -867,13 +869,45 @@ declare class MessageEntities {
    * @param searchType - The type of entity to search for.
    * @returns An array of objects representing the found entities.
    */
-  searchEntity(searchType: string): SearchResult[];
+  searchEntity(
+    searchType:
+      | "mention"
+      | "hashtag"
+      | "cashtag"
+      | "botCommand"
+      | "url"
+      | "email"
+      | "phoneNumber"
+      | "bold"
+      | "italic"
+      | "underline"
+      | "strikethrough"
+      | "spoiler"
+      | "blockquote"
+      | "code",
+  ): SearchResult[];
   /**
    * Enables iteration over the message entities.
    * @returns An iterator over the message entities.
    */
   [Symbol.iterator](): Generator<
-    [string, import("@telegram.ts/types").MessageEntity[]]
+    (SearchResult & {
+      type:
+        | "mention"
+        | "hashtag"
+        | "cashtag"
+        | "botCommand"
+        | "url"
+        | "email"
+        | "phoneNumber"
+        | "bold"
+        | "italic"
+        | "underline"
+        | "strikethrough"
+        | "spoiler"
+        | "blockquote"
+        | "code";
+    })[]
   >;
 }
 
