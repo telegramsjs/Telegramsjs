@@ -411,7 +411,7 @@ export declare class UserProfilePhotos extends Base {
   photos: Photo[][];
 }
 
-declare class User extends Base {
+export declare class User extends Base {
   /**
    * @param client - The client that instantiated this
    * @param data - represents a Telegram user or bot
