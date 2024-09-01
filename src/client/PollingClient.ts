@@ -72,6 +72,9 @@ class PollingClient {
     } catch (err) {
       const returned = this.handlerError(err);
       if (returned) {
+        if (this.client.eventNames().indexOf(Events.Error) === -1) {
+          console.error(err);
+        }
         return;
       } else this.client.emit(Events.Disconnect);
 

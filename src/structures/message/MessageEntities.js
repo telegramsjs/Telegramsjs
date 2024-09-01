@@ -14,8 +14,12 @@ class MessageEntities {
    * @param {import("@telegram.ts/types").MessageEntity[]} entities - The array of message entities.
    */
   constructor(searchText, entities) {
-    this.searchText = searchText || "";
-    this.entities = entities || [];
+    /**
+     * The text to search within.
+     */
+    this.searchText = searchText;
+
+    Object.defineProperty(this, "entities", { value: entities });
   }
 
   /**
@@ -132,7 +136,7 @@ class MessageEntities {
 
   /**
    * Searches for a specific type of entity in the message.
-   * @param {string} searchType - The type of entity to search for.
+   * @param {"mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" | "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"} searchType - The type of entity to search for.
    * @returns {SearchResult[]} An array of objects representing the found entities.
    */
   searchEntity(searchType) {
@@ -155,12 +159,45 @@ class MessageEntities {
 
   /**
    * Enables iteration over the message entities.
-   * @returns {Generator<[string, import("@telegram.ts/types").MessageEntity[]]>} An iterator over the message entities.
+   * @returns {Generator<(SearchResult & { type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"})[]>} An iterator over the message entities.
    */
   *[Symbol.iterator]() {
-    yield* Object.entries({
-      [this.searchText]: this.entities,
-    });
+    const entityTypes = [
+      "mention",
+      "hashtag",
+      "cashtag",
+      "botCommand",
+      "url",
+      "email",
+      "phoneNumber",
+      "bold",
+      "italic",
+      "underline",
+      "strikethrough",
+      "spoiler",
+      "blockquote",
+      "code",
+    ];
+
+    /** @type {(SearchResult & { type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"})[]} */
+    const sortedEntities = [];
+
+    for (const type of entityTypes) {
+      const results = this[type].map((entity) => ({
+        ...entity,
+        type,
+      }));
+
+      sortedEntities.push(...results);
+    }
+
+    sortedEntities.sort((a, b) => a.index - b.index);
+
+    for (const entity of sortedEntities) {
+      yield entity;
+    }
   }
 }
 

@@ -109,11 +109,21 @@ class WebhookClient {
       });
 
       this.webhookServer.on("error", (err) => {
-        this.handlerError(err);
+        if (
+          this.handlerError(err) &&
+          this.client.eventNames().indexOf(Events.Error) === -1
+        ) {
+          console.error(err);
+        }
         this.client.emit(Events.Disconnect);
       });
     } catch (err) {
-      this.handlerError(err);
+      if (
+        this.handlerError(err) &&
+        this.client.eventNames().indexOf(Events.Error) === -1
+      ) {
+        console.log(err);
+      }
       this.client.emit(Events.Disconnect);
     }
   }
