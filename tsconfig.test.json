@@ -35,6 +35,8 @@
     "experimentalDecorators": true,
     "lib": ["es2019"],
     "target": "es2019",
+    "skipLibCheck": false,
+    "skipDefaultLibCheck": false,
     "useDefineForClassFields": true
   },
   "exclude": ["node_modules"],
