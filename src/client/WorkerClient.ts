@@ -16,6 +16,7 @@ import { MessageReactionCountUpdated } from "../structures/MessageReactionCountU
 import { CallbackQuery } from "../structures/CallbackQuery";
 import { BusinessConnection } from "../structures/business/BusinessConnection";
 import { BusinessMessagesDeleted } from "../structures/business/BusinessMessagesDeleted";
+import { PaidMediaPurchased } from "../structures/PaidMediaPurchased";
 import type { TelegramClient } from "./TelegramClient";
 
 /**
@@ -51,6 +52,7 @@ class WorketClient {
     | ChatJoinRequest
     | ChatBoostUpdated
     | ChatBoostRemoved
+    | PaidMediaPurchased
     | undefined {
     if (
       "message" in data ||
@@ -125,6 +127,9 @@ class WorketClient {
     }
     if ("removed_chat_boost" in data) {
       return this.onRemovedChatBoost(data.removed_chat_boost);
+    }
+    if ("purchased_paid_media" in data) {
+      return this.onPurchasedPaidMedia(data.purchased_paid_media);
     }
     return;
   }
@@ -429,6 +434,21 @@ class WorketClient {
     this.client.emit(Events.RemovedChatBoost, chatBoost);
 
     return chatBoost;
+  }
+
+  /**
+   * Handles purchased paid media.
+   * @param data - The purchased paid media.
+   */
+  onPurchasedPaidMedia(
+    data: Update["purchased_paid_media"],
+  ): PaidMediaPurchased | undefined {
+    if (!data) return;
+
+    const paidMedia = new PaidMediaPurchased(this.client, data);
+    this.client.emit(Events.PurchasedPaidMedia, paidMedia);
+
+    return paidMedia;
   }
 }
 

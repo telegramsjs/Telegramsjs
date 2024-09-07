@@ -727,10 +727,12 @@ export type ApiMethods = {
     businessConnectionId?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance */
     chatId: number | string;
-    /** The number of Telegram Stars that must be paid to buy access to the media */
+    /** The number of Telegram Stars that must be paid to buy access to the media; 1-2500 */
     starCount: number;
     /** An array describing the media to be sent; up to 10 items */
     media: InputPaidMedia[];
+    /** Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes. */
+    payload?: string;
     /** Media caption, 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the media caption. See formatting options for more details. */

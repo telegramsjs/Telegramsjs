@@ -105,3 +105,5 @@ module.exports.PassportFile = require("./passport/PassportFile").PassportFile;
 module.exports.PaidMedia = require("./media/paid/PaidMedia").PaidMedia;
 module.exports.PaidMediaInfo =
   require("./media/paid/PaidMediaInfo").PaidMediaInfo;
+module.exports.PaidMediaPurchased =
+  require("./PaidMediaPurchased").PaidMediaPurchased;

@@ -47,6 +47,14 @@ class TransactionPartner extends Base {
       );
     }
 
+    if ("paid_media_payload" in data) {
+      /**
+       * Bot-specified paid media payload
+       * @type {string | undefined}
+       */
+      this.paidMediaPayload = data.paid_media_payload;
+    }
+
     if ("invoice_payload" in data) {
       /**
        * Bot-specified invoice payload
@@ -59,14 +67,14 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { user: import("../misc/User").User; paidMedia?: PaidMedia[]; }}
+   * @returns {this is this & { user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @returns {this is this & { withdrawal: RevenueWithdrawalState; paidMedia?: undefined }}
+   * @returns {this is this & { withdrawal: RevenueWithdrawalState; paidMedia?: undefined; paidMediaPayload?: undefined }}
    */
   isFragment() {
     return Boolean("withdrawal" in this && this.withdrawal);

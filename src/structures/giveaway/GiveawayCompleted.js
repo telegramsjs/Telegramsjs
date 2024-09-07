@@ -18,6 +18,11 @@ class GiveawayCompleted {
       /** Message with the giveaway that was completed, if it wasn't deleted */
       this.message = new Message(client, data.giveaway_message);
     }
+
+    if ("is_star_giveaway" in data) {
+      /** True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway. */
+      this.startedGiveaway = data.is_star_giveaway;
+    }
   }
 }
 

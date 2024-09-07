@@ -35,13 +35,18 @@ class Giveaway extends Base {
       this.description = data.prize_description;
     }
 
+    if ("prize_star_count" in data) {
+      /** The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only */
+      this.starCount = data.prize_star_count;
+    }
+
     if ("country_codes" in data) {
       /** A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways */
       this.countryCodes = data.country_codes;
     }
 
     if ("premium_subscription_month_count" in data) {
-      /** The number of months the Telegram Premium subscription won from the giveaway will be active for */
+      /** The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only */
       this.subscriptionMonthCount = data.premium_subscription_month_count;
     }
   }

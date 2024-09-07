@@ -874,10 +874,10 @@ export declare class MessageEntities {
       | "mention"
       | "hashtag"
       | "cashtag"
-      | "botCommand"
+      | "bot_command"
       | "url"
       | "email"
-      | "phoneNumber"
+      | "phone_number"
       | "bold"
       | "italic"
       | "underline"
@@ -2557,7 +2557,9 @@ export declare class Giveaway extends Base {
   description?: string;
   /** A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways */
   countryCodes?: string[];
-  /** The number of months the Telegram Premium subscription won from the giveaway will be active for */
+  /** The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only */
+  starCount?: number;
+  /** The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only */
   subscriptionMonthCount?: number;
   /**
    * Return the timestamp winners of the giveaway will be selected, in milliseconds
@@ -2604,7 +2606,11 @@ export declare class GiveawayWinners extends Base {
    */
   addChatCount?: number;
   /**
-   * The number of months the Telegram Premium subscription won from the giveaway will be active for
+   * The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+   */
+  starCount?: number;
+  /**
+   * The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
    */
   subscriptionMonthCount?: number;
   /**
@@ -3498,6 +3504,8 @@ export declare class GiveawayCompleted {
   unclaimedPrizeCount?: number;
   /** Message with the giveaway that was completed, if it wasn't deleted */
   message?: Message;
+  /** True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway */
+  startedGiveaway?: boolean;
 }
 
 export declare class VideoChatScheduled {
@@ -3740,7 +3748,7 @@ export declare class Message extends Base {
   /**
    * Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
    */
-  writeAccessAllowed: {
+  writeAccessAllowed?: {
     /**
      * - True, if the access was granted after the user accepted an explicit request from a Web App sent by the method requestWriteAccess
      */
@@ -3778,7 +3786,7 @@ export declare class Message extends Base {
   /**
    * Service message: user boosted the chat
    */
-  boostAdded: {
+  boostAdded?: {
     /**
      * - Number of boosts added by the user
      */
@@ -3815,7 +3823,12 @@ export declare class Message extends Base {
   /**
    * Service message: a scheduled giveaway was created
    */
-  giveawayCreated?: true;
+  giveawayCreated?: {
+    /**
+     * - The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+     */
+    starCount?: number;
+  };
   /**
    * The message is a scheduled giveaway message
    */
@@ -6432,9 +6445,13 @@ export declare class ChatBoostSource extends Base {
    */
   giveawayId?: string;
   /**
+   * The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+   */
+  starCount?: number;
+  /**
    * True, if the giveaway was completed, but there was no user to win the prize
    */
-  unclaimed?: boolean;
+  unclaimed: boolean;
 
   isGiveaway(): this is this & {
     giveawayId: string;
@@ -6567,6 +6584,7 @@ export interface EventHandlers {
   chatJoinRequest: (joinRequest: ChatJoinRequest) => PossiblyAsync<void>;
   chatBoost: (boostChat: ChatBoostUpdated) => PossiblyAsync<void>;
   removedChatBoost: (chatBoost: ChatBoostRemoved) => PossiblyAsync<void>;
+  purchasedPaidMedia: (paidMedia: PaidMediaPurchased) => PossiblyAsync<void>;
 }
 
 export type EventHandlerParameters =
@@ -6585,7 +6603,8 @@ export type EventHandlerParameters =
   | ChatMemberUpdated
   | ChatJoinRequest
   | ChatBoostUpdated
-  | ChatBoostRemoved;
+  | ChatBoostRemoved
+  | PaidMediaPurchased;
 
 export declare class BaseClient extends EventEmitter {
   readonly apiRequest: ApiRequest;
@@ -7370,6 +7389,7 @@ export declare class WorketClient {
     | ChatJoinRequest
     | ChatBoostUpdated
     | ChatBoostRemoved
+    | PaidMediaPurchased
     | undefined;
   /**
    * Handles new messages, channel posts, or business messages.
@@ -7497,6 +7517,13 @@ export declare class WorketClient {
   onRemovedChatBoost(
     data: Update["removed_chat_boost"],
   ): ChatBoostRemoved | undefined;
+  /**
+   * Handles purchased paid media.
+   * @param data - The purchased paid media.
+   */
+  onPurchasedPaidMedia(
+    data: Update["purchased_paid_media"],
+  ): PaidMediaPurchased | undefined;
 }
 
 export declare class MenuButton {
@@ -8142,6 +8169,10 @@ export declare class TransactionPartner extends Base {
    */
   paidMedia?: PaidMedia[];
   /**
+   * Bot-specified paid media payload
+   */
+  paidMediaPayload?: string;
+  /**
    * Bot-specified invoice payload
    */
   payload?: string;
@@ -8149,11 +8180,13 @@ export declare class TransactionPartner extends Base {
   isUser(): this is this & {
     user: User;
     paidMedia?: PaidMedia[];
+    paidMediaPayload?: string;
   };
 
   isFragment(): this is this & {
     withdrawal: RevenueWithdrawalState;
     paidMedia?: undefined;
+    paidMediaPayload?: undefined;
   };
 }
 
@@ -8194,6 +8227,21 @@ export declare class StarTransaction extends Base {
    * Date the transaction was created
    */
   get createdAt(): Date;
+}
+
+export class PaidMediaPurchased extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - information about a paid media purchase.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").PaidMediaPurchased,
+  );
+  /** User who purchased the media */
+  author: User;
+  /** Bot-specified paid media payload */
+  payload: string;
 }
 
 type ApiMethodParameters<T> = T extends (...args: infer P) => any ? P : never;
