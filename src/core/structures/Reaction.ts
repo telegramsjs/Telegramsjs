@@ -7,6 +7,7 @@ import type {
   ReactionType,
   ReactionTypeEmoji,
   ReactionTypeCustomEmoji,
+  ReactionTypePaid,
   MessageReactionUpdated,
 } from "@telegram.ts/types";
 
@@ -66,21 +67,9 @@ class Reaction {
     customEmojiAdded: string[];
     customEmojiKept: string[];
     customEmojiRemoved: string[];
+    paidEmojiAdded: boolean;
+    paidEmojiRemoved: boolean;
   } {
-    function isEmoji(reaction: ReactionType[]) {
-      const reactionTypeEmojis = reaction.filter(
-        (react) => react.type === "emoji",
-      ) as ReactionTypeEmoji[];
-      return reactionTypeEmojis.map((react) => react.emoji);
-    }
-
-    function isCustomEmoji(reaction: ReactionType[]) {
-      const reactionTypeCustomEmojis = reaction.filter(
-        (react) => react.type === "custom_emoji",
-      ) as ReactionTypeCustomEmoji[];
-      return reactionTypeCustomEmojis.map((react) => react.custom_emoji);
-    }
-
     const { old_reaction, new_reaction } = messageReaction || {
       old_reaction: [],
       new_reaction: [],
@@ -90,6 +79,8 @@ class Reaction {
     const customEmoji = isCustomEmoji(new_reaction);
     const emojiRemoved = isEmoji(old_reaction);
     const customEmojiRemoved = isCustomEmoji(old_reaction);
+    const paidEmojiAdded = isPaidEmoji(new_reaction);
+    const paidEmojiRemoved = isPaidEmoji(old_reaction);
 
     const emojiAdded = emoji.filter(
       (emojiItem) => !emojiRemoved.includes(emojiItem),
@@ -114,6 +105,8 @@ class Reaction {
       customEmojiAdded,
       customEmojiKept,
       customEmojiRemoved,
+      paidEmojiAdded,
+      paidEmojiRemoved,
     };
   }
 
@@ -178,7 +171,10 @@ class Reaction {
                 (reaction) => (reaction as ReactionTypeEmoji).emoji,
               )
             : [];
-        const allReactions = [...newReactions, ...oldReactions];
+        const allReactions: ReactionTypeEmoji["emoji"][] = [
+          ...newReactions,
+          ...oldReactions,
+        ];
 
         if (allReactions.some((reaction) => reactions.includes(reaction))) {
           if (!filter || (filter && (await filter(data)))) {
@@ -218,6 +214,27 @@ class Reaction {
       this.api.on("message_reaction", handler);
     });
   }
+}
+
+function isEmoji(reaction: ReactionType[]) {
+  const reactionTypeEmojis = reaction.filter(
+    (react) => react.type === "emoji",
+  ) as ReactionTypeEmoji[];
+  return reactionTypeEmojis.map((react) => react.emoji);
+}
+
+function isCustomEmoji(reaction: ReactionType[]) {
+  const reactionTypeCustomEmojis = reaction.filter(
+    (react) => react.type === "custom_emoji",
+  ) as ReactionTypeCustomEmoji[];
+  return reactionTypeCustomEmojis.map((react) => react.custom_emoji_id);
+}
+
+function isPaidEmoji(reaction: ReactionType[]) {
+  const reactionTypePaidEmojis = reaction.filter(
+    (react) => react.type === "paid",
+  ) as ReactionTypePaid[];
+  return reactionTypePaidEmojis.length > 0;
 }
 
 export { Reaction, IReactionCollection };

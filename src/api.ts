@@ -367,6 +367,24 @@ class Api extends ApiRequest {
     );
   }
 
+  /** Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object. */
+  async createChatSubscriptionInviteLink(
+    params: MethodParameters["createChatSubscriptionInviteLink"],
+  ) {
+    return await this.request<
+      MethodsReturnType["createChatSubscriptionInviteLink"]
+    >("createChatSubscriptionInviteLink", params);
+  }
+
+  /** Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object. */
+  async editChatSubscriptionInviteLink(
+    params: MethodParameters["editChatSubscriptionInviteLink"],
+  ) {
+    return await this.request<
+      MethodsReturnType["editChatSubscriptionInviteLink"]
+    >("editChatSubscriptionInviteLink", params);
+  }
+
   /** Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object. */
   async revokeChatInviteLink(invite_link: string, chat_id?: number | string) {
     return await this.request<MethodsReturnType["revokeChatInviteLink"]>(

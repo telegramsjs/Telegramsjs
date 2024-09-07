@@ -92,6 +92,9 @@ const EventAvaliableUpdates = {
   removed_chat_boost: {
     event: "removed_chat_boost",
   },
+  purchased_paid_media: {
+    event: "purchased_paid_media",
+  },
 };
 
 interface ICaptionableMessage {
@@ -143,6 +146,9 @@ interface IEventFunctions {
   chat_join_request: (data: Update["chat_join_request"] & Context) => void;
   chat_boost: (data: Update["chat_boost"] & Context) => void;
   removed_chat_boost: (data: Update["removed_chat_boost"] & Context) => void;
+  purchased_paid_media: (
+    data: Update["purchased_paid_media"] & Context,
+  ) => void;
 }
 
 type EventKeysFunctions = keyof IEventFunctions;

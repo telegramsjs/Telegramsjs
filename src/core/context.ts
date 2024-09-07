@@ -61,6 +61,10 @@ class ApiContext {
       exportChatInviteLink: this.exportChatInviteLink.bind(this),
       createChatInviteLink: this.createChatInviteLink.bind(this),
       editChatInviteLink: this.editChatInviteLink.bind(this),
+      editChatSubscriptionInviteLink:
+        this.editChatSubscriptionInviteLink.bind(this),
+      createChatSubscriptionInviteLink:
+        this.createChatSubscriptionInviteLink.bind(this),
       revokeChatInviteLink: this.revokeChatInviteLink.bind(this),
       banChatMember: this.banChatMember.bind(this),
       unbanChatMember: this.unbanChatMember.bind(this),
@@ -237,6 +241,10 @@ class ApiContext {
     return this.update.removed_chat_boost as Update["removed_chat_boost"];
   }
 
+  get purchasedPaidMedia() {
+    return this.update.purchased_paid_media as Update["purchased_paid_media"];
+  }
+
   get msg() {
     const messageKeys: Array<keyof this> = [
       "message",
@@ -319,6 +327,7 @@ class ApiContext {
       this.chatMember,
       this.myChatMember,
       this.removedChatBoost,
+      this.purchasedPaidMedia,
     ];
 
     for (const user of possibleUsers) {
@@ -580,6 +589,26 @@ class ApiContext {
   ) {
     this.assert(this.chat, "editChatInviteLink");
     return this.api.editChatInviteLink({ chat_id: this.chat.id, ...args });
+  }
+
+  createChatSubscriptionInviteLink(
+    args: Omit<MethodParameters["createChatSubscriptionInviteLink"], "chat_id">,
+  ) {
+    this.assert(this.chat, "createChatSubscriptionInviteLink");
+    return this.api.createChatSubscriptionInviteLink({
+      chat_id: this.chat.id,
+      ...args,
+    });
+  }
+
+  editChatSubscriptionInviteLink(
+    args: Omit<MethodParameters["editChatSubscriptionInviteLink"], "chat_id">,
+  ) {
+    this.assert(this.chat, "editChatSubscriptionInviteLink");
+    return this.api.editChatSubscriptionInviteLink({
+      chat_id: this.chat.id,
+      ...args,
+    });
   }
 
   revokeChatInviteLink(inviteLink: string) {

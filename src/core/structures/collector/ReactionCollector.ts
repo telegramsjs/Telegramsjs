@@ -211,7 +211,7 @@ class ReactionCollector extends Collector<string, ReactCollectorContext> {
     if (firstReaction.type === "emoji") {
       return firstReaction.emoji || null;
     } else if (firstReaction.type === "custom_emoji") {
-      return firstReaction.custom_emoji || null;
+      return firstReaction.custom_emoji_id || null;
     } else {
       return null;
     }
