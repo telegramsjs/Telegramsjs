@@ -136,7 +136,7 @@ class MessageEntities {
 
   /**
    * Searches for a specific type of entity in the message.
-   * @param {"mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" | "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"} searchType - The type of entity to search for.
+   * @param {"mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"} searchType - The type of entity to search for.
    * @returns {SearchResult[]} An array of objects representing the found entities.
    */
   searchEntity(searchType) {

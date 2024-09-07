@@ -32,6 +32,14 @@ class ChatBoostSource extends Base {
       this.giveawayId = String(data.giveaway_message_id);
     }
 
+    if ("prize_star_count" in data) {
+      /**
+       * The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only
+       * @type {number | undefined}
+       */
+      this.starCount = data.prize_star_count;
+    }
+
     /**
      * True, if the giveaway was completed, but there was no user to win the prize
      * @type {boolean}

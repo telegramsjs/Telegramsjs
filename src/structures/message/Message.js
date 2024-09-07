@@ -617,10 +617,19 @@ class Message extends Base {
 
     if ("giveaway_created" in data) {
       /**
-       * Service message: a scheduled giveaway was created
-       * @type {true | undefined}
+       * @typedef {Object} GiveawayCreated
+       * @property {number} [starCount] - The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
        */
-      this.giveawayCreated = true;
+
+      /**
+       * Service message: a scheduled giveaway was created
+       * @type {GiveawayCreated | undefined}
+       */
+      this.giveawayCreated = {
+        ...("prize_star_count" in data.giveaway_created && {
+          starCount: data.giveaway_created.prize_star_count,
+        }),
+      };
     }
 
     if ("giveaway" in data) {

@@ -45,9 +45,17 @@ class GiveawayWinners extends Base {
       this.addChatCount = data.additional_chat_count;
     }
 
+    if ("prize_star_count" in data) {
+      /**
+       * The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only
+       * @type {number | undefined}
+       */
+      this.starCount = data.prize_star_count;
+    }
+
     if ("premium_subscription_month_count" in data) {
       /**
-       * The number of months the Telegram Premium subscription won from the giveaway will be active for
+       * The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
        * @type {number | undefined}
        */
       this.subscriptionMonthCount = data.premium_subscription_month_count;

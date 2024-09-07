@@ -27,6 +27,7 @@ const DefaultParameters = {
     "chat_join_request",
     "chat_boost",
     "removed_chat_boost",
+    "purchased_paid_media",
   ],
 } as const;
 
@@ -72,6 +73,7 @@ const Events = {
   ChatJoinRequest: "chatJoinRequest",
   ChatBoost: "chatBoost",
   RemovedChatBoost: "removedChatBoost",
+  PurchasedPaidMedia: "purchasedPaidMedia",
 } as const;
 
 const CollectorEvents = {

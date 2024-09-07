@@ -123,6 +123,9 @@ interface EventHandlers {
   removedChatBoost: (
     chatBoost: import("../structures/ChatBoostRemoved").ChatBoostRemoved,
   ) => PossiblyAsync<void>;
+  purchasedPaidMedia: (
+    paidMedia: import("../structures/PaidMediaPurchased").PaidMediaPurchased,
+  ) => PossiblyAsync<void>;
 }
 
 type EventHandlerParameters =
@@ -141,7 +144,8 @@ type EventHandlerParameters =
   | import("../structures/ChatMemberUpdated").ChatMemberUpdated
   | import("../structures/ChatJoinRequest").ChatJoinRequest
   | import("../structures/ChatBoostUpdated").ChatBoostUpdated
-  | import("../structures/ChatBoostRemoved").ChatBoostRemoved;
+  | import("../structures/ChatBoostRemoved").ChatBoostRemoved
+  | import("../structures/PaidMediaPurchased").PaidMediaPurchased;
 
 class BaseClient extends EventEmitter {
   public readonly apiRequest: ApiRequest;
