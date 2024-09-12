@@ -65,6 +65,15 @@ class User extends Base {
   }
 
   /**
+   * Fetches this user
+   * @param {boolean} [force=true] - Whether to skip the cache check and request the API
+   * @returns {Promise<User>}
+   */
+  fetch(force = false) {
+    return this.client.users.fetch(this.id, { force });
+  }
+
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param {string} telegramPaymentId - Telegram payment identifier
    * @returns {Promise<true>} - Returns True on success.

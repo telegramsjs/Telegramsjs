@@ -460,6 +460,11 @@ export declare class User extends Base {
    */
   inAttachmentMenu?: boolean;
   /**
+   * Fetches this user
+   * @param force - Whether to skip the cache check and request the API
+   */
+  fetch(force?: boolean): Promise<User>;
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param telegramPaymentId - Telegram payment identifier
    * @returns Returns True on success.
