@@ -425,7 +425,7 @@ export declare class User extends Base {
   /** Unique identifier for this user or bot. */
   id: string;
   /** True, if this user is a bot */
-  bot: boolean;
+  isBot: boolean;
   /** User's or bot's first name */
   firstName: string;
   /**
@@ -7573,7 +7573,7 @@ export declare class ClientUser extends User {
     data: import("@telegram.ts/types").UserFromGetMe,
   );
   /** Indicates if this user is a bot */
-  isBot: boolean;
+  isBot: true;
   /** The bot's or user's username */
   username: string;
   /** Indicates if the bot can be invited to groups */
@@ -7593,7 +7593,7 @@ export declare class ClientUser extends User {
   /**
    * Fetch about the client/bot
    */
-  fetch(): Promise<ClientUser>;
+  override fetch(): Promise<ClientUser>;
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
    * @param commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified

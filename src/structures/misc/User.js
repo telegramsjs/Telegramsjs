@@ -12,7 +12,7 @@ class User extends Base {
     this.id = String(data.id);
 
     /** True, if this user is a bot */
-    this.bot = Boolean(data.is_bot);
+    this.isBot = Boolean(data.is_bot);
 
     /** User's or bot's first name */
     this.firstName = data.first_name;

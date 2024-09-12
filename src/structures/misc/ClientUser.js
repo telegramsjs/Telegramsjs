@@ -43,6 +43,7 @@ class ClientUser extends User {
   /**
    * Fetch about the client/bot
    * @returns {Promise<ClientUser>}
+   * @override
    */
   fetch() {
     return this.client.fetchApplication();
