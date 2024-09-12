@@ -846,10 +846,13 @@ class Message extends Base {
   }
 
   /**
+   * Checking if the message has been edited
    * @returns {this is this & { editedUnixTime: number; editedTimestamp: number; editedAt: Date }}
    */
-  get isEdited() {
-    return Boolean(this.editedTimestamp);
+  isEdited() {
+    return Boolean(
+      this.editedUnixTime && this.editedTimestamp && this.editedAt,
+    );
   }
 
   /**

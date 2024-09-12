@@ -3936,7 +3936,12 @@ export declare class Message extends Base {
    */
   dice?: Dice;
 
-  get isEdited(): boolean;
+  /** Checking if the message has been edited */
+  isEdited(): this is this & {
+    editedUnixTime: number;
+    editedTimestamp: number;
+    editedAt: Date;
+  };
   /**
    * Return the timestamp message was sent, in milliseconds
    */
