@@ -1245,7 +1245,7 @@ class BaseClient extends EventEmitter {
         return new Message(
           this,
           res,
-        ) as MethodsLibReturnType["editMessageText"];
+        ) as unknown as MethodsLibReturnType["editMessageText"];
       });
   }
 
@@ -1262,7 +1262,7 @@ class BaseClient extends EventEmitter {
         return new Message(
           this,
           res,
-        ) as MethodsLibReturnType["editMessageCaption"];
+        ) as unknown as MethodsLibReturnType["editMessageCaption"];
       });
   }
 
@@ -1277,7 +1277,7 @@ class BaseClient extends EventEmitter {
         return new Message(
           this,
           res,
-        ) as MethodsLibReturnType["editMessageMedia"];
+        ) as unknown as MethodsLibReturnType["editMessageMedia"];
       });
   }
 
@@ -1332,7 +1332,7 @@ class BaseClient extends EventEmitter {
         return new Message(
           this,
           res,
-        ) as MethodsLibReturnType["editMessageReplyMarkup"];
+        ) as unknown as MethodsLibReturnType["editMessageReplyMarkup"];
       });
   }
 

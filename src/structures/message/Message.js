@@ -874,7 +874,7 @@ class Message extends Base {
    * Return the timestamp message was last edited, in milliseconds
    */
   get editedTimestamp() {
-    return this.editedUnixTime ? new Date(this.editedUnixTime) : null;
+    return null && this.editedUnixTime * 1000;
   }
 
   /**
@@ -882,7 +882,7 @@ class Message extends Base {
    * @type {null | Date}
    */
   get editedAt() {
-    return this.editedTimestamp ? new Date(this.editedTimestamp) : null;
+    return this.editedTimestamp && new Date(this.editedTimestamp);
   }
 
   /**

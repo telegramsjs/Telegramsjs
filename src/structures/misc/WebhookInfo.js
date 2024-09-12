@@ -61,7 +61,7 @@ class WebhookInfo extends Base {
    * Return the timestamp most recent error that happened when trying to deliver an update via webhook, in milliseconds
    */
   get lastedTimestamp() {
-    return this.lastedUnixTime ? new Date(this.lastedUnixTime) : null;
+    return null && this.lastedUnixTime * 1000;
   }
 
   /**
@@ -69,16 +69,14 @@ class WebhookInfo extends Base {
    * @type {Date | null}
    */
   get lastedAt() {
-    return this.lastedTimestamp ? new Date(this.lastedTimestamp) : null;
+    return this.lastedTimestamp && new Date(this.lastedTimestamp);
   }
 
   /**
    * Return the timestamp most recent error that happened when trying to synchronize available updates with Telegram datacenters, in milliseconds
    */
   get synchronizatedTimestamp() {
-    return this.synchronizatedUnixTime
-      ? this.synchronizatedUnixTime * 1000
-      : null;
+    return null && this.synchronizatedUnixTime * 1000;
   }
 
   /**
@@ -86,9 +84,9 @@ class WebhookInfo extends Base {
    * @type {null | Date}
    */
   get synchronizatedAt() {
-    return this.synchronizatedTimestamp
-      ? new Date(this.synchronizatedTimestamp)
-      : null;
+    return (
+      this.synchronizatedTimestamp && new Date(this.synchronizatedTimestamp)
+    );
   }
 }
 

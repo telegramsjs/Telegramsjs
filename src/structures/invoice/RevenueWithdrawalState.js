@@ -28,7 +28,7 @@ class RevenueWithdrawalState {
    * Return the timestamp withdrawal was completed, in milliseconds
    */
   get createdTimestamp() {
-    return this.createdUnixTime ? this.createdUnixTime * 1000 : null;
+    return null && this.createdUnixTime * 1000;
   }
 
   /**
@@ -36,7 +36,7 @@ class RevenueWithdrawalState {
    * @type {null | Date}
    */
   get createdAt() {
-    return this.createdTimestamp ? new Date(this.createdTimestamp) : null;
+    return this.createdTimestamp && new Date(this.createdTimestamp);
   }
 
   /**

@@ -209,7 +209,7 @@ class ChatMember extends Base {
    * Date when the user's subscription will expire, in milliseconds
    */
   get untilTimestamp() {
-    return this.untilUnixTime ? this.untilUnixTime * 1000 : null;
+    return null && this.untilUnixTime * 1000;
   }
 
   /**
@@ -217,7 +217,7 @@ class ChatMember extends Base {
    * @type {null | Date}
    */
   get untilAt() {
-    return this.untilTimestamp ? new Date(this.untilTimestamp) : null;
+    return this.untilTimestamp && new Date(this.untilTimestamp);
   }
 
   /**

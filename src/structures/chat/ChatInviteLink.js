@@ -91,7 +91,7 @@ class ChatInviteLink extends Base {
    * Return the timestamp link will expire or has been expired, in milliseconds
    */
   get expiredTimestamp() {
-    return this.expiredUnixTime ? this.expiredUnixTime * 1000 : null;
+    return null && this.expiredUnixTime * 1000;
   }
 
   /**
@@ -99,7 +99,7 @@ class ChatInviteLink extends Base {
    * @type {null | Date}
    */
   get expiredAt() {
-    return this.expiredTimestamp ? new Date(this.expiredTimestamp) : null;
+    return this.expiredTimestamp && new Date(this.expiredTimestamp);
   }
 }
 
