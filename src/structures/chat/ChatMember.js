@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
 const { ErrorCodes } = require("../../errors/ErrorCodes");
@@ -169,25 +170,6 @@ class ChatMember extends Base {
       this.isMember = data.is_member;
     }
 
-    if ("chat" in data) {
-      /**
-       * @typedef {import("./Chat").Chat} Chat
-      /**
-       
-       * Chat to which the request was sent
-       * @type {Chat | undefined}
-       */
-      this.chat = this.client.chats._add(data.chat);
-    }
-
-    if ("from" in data) {
-      /**
-       * User that sent the join request
-       * @type {import("../misc/User").User | undefined}
-       */
-      this.author = this.client.users._add(data.from);
-    }
-
     if ("until_date" in data) {
       /**
        * Date when the user's subscription will expire; Unix time
@@ -203,14 +185,14 @@ class ChatMember extends Base {
    * Return the member id
    */
   get id() {
-    return this.user?.id ?? this.author?.id ?? null;
+    return this.user?.id ?? null;
   }
 
   /**
    * Date when the user's subscription will expire, in milliseconds
    */
   get untilTimestamp() {
-    return null && this.untilUnixTime * 1000;
+    return this.untilUnixTime ? this.untilUnixTime * 1000 : null;
   }
 
   /**
@@ -218,7 +200,7 @@ class ChatMember extends Base {
    * @type {null | Date}
    */
   get untilAt() {
-    return this.untilTimestamp && new Date(this.untilTimestamp);
+    return this.untilTimestamp ? new Date(this.untilTimestamp) : null;
   }
 
   /**
@@ -389,8 +371,6 @@ class ChatMember extends Base {
           anonymous: this.anonymous,
           nickName: this.nickName,
           isMember: this.isMember,
-          chat: this.chat,
-          author: this.author,
           untilUnixTime: this.untilUnixTime,
         },
         {
@@ -402,8 +382,6 @@ class ChatMember extends Base {
           anonymous: other.anonymous,
           nickName: other.nickName,
           isMember: other.isMember,
-          chat: other.chat,
-          author: other.author,
           untilUnixTime: other.untilUnixTime,
         },
       );
@@ -418,7 +396,7 @@ class ChatMember extends Base {
    * @override
    */
   toString() {
-    return this.author?.toString() ?? this.user?.toString() ?? "";
+    return this.user?.toString() ?? "";
   }
 }
 

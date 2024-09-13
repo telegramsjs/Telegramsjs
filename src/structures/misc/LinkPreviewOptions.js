@@ -1,3 +1,4 @@
+// @ts-check
 class LinkPreviewOptions {
   /**
    * @param {import("@telegram.ts/types").LinkPreviewOptions} data - Data about the options used for link preview generation

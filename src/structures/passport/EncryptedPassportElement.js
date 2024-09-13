@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 const { PassportFile } = require("./PassportFile");
 const { InputFile } = require("../misc/InputFile");

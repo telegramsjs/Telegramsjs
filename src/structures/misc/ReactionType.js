@@ -1,3 +1,4 @@
+// @ts-check
 class ReactionType {
   /**
    * @param {import("@telegram.ts/types").ReactionType | { customEmojiId: string }} data - Data about the describes the type of a reaction

@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 
 class Giveaway extends Base {
@@ -74,20 +75,23 @@ class Giveaway extends Base {
   equals(other) {
     if (!other || !(other instanceof Giveaway)) return false;
 
-    return (
+    return Boolean(
       this.selectedUnixTime === other.selectedUnixTime &&
-      this.winnerCount === other.winnerCount &&
-      this.onlyNewMembers === other.onlyNewMembers &&
-      this.publicWinners === other.publicWinners &&
-      this.description === other.description &&
-      this.starCount === other.starCount &&
-      this.subscriptionMonthCount === other.subscriptionMonthCount &&
-      this.countryCodes?.length === other.countryCodes?.length &&
-      this.countryCodes?.every?.(
-        (code, index) => code === other.countryCodes[index],
-      ) &&
-      this.chats.length === other.chats.length &&
-      this.chats.every((chat, index) => chat.equals(other.chats[index]))
+        this.winnerCount === other.winnerCount &&
+        this.onlyNewMembers === other.onlyNewMembers &&
+        this.publicWinners === other.publicWinners &&
+        this.description === other.description &&
+        this.starCount === other.starCount &&
+        this.subscriptionMonthCount === other.subscriptionMonthCount &&
+        this.countryCodes?.length === other.countryCodes?.length &&
+        this.countryCodes?.every?.(
+          (code, index) => code === other.countryCodes?.[index],
+        ) &&
+        this.chats.length === other.chats.length &&
+        this.chats.every(
+          (chat, index) =>
+            other.chats[index] && chat.equals(other.chats[index]),
+        ),
     );
   }
 }

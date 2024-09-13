@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 
 class GiveawayWinners extends Base {
@@ -131,8 +132,9 @@ class GiveawayWinners extends Base {
       this.refunded === other.refunded &&
       this.description === other.description &&
       this.winners.length === other.winners.length &&
-      this.winners.every((winner, index) =>
-        winner.equals(other.winners[index]),
+      this.winners.every(
+        (winner, index) =>
+          other.winners[index] && winner.equals(other.winners[index]),
       ) &&
       this.chat.equals(other.chat)
     );

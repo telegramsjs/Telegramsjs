@@ -1,3 +1,4 @@
+// @ts-check
 class MenuButton {
   /**
    * @param {import("@telegram.ts/types").MenuButton} data - Data about the interface describes the bot's menu button in a private chat

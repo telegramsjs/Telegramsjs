@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 
 class ChatInviteLink extends Base {
@@ -91,7 +92,7 @@ class ChatInviteLink extends Base {
    * Return the timestamp link will expire or has been expired, in milliseconds
    */
   get expiredTimestamp() {
-    return null && this.expiredUnixTime * 1000;
+    return this.expiredUnixTime ? this.expiredUnixTime * 1000 : null;
   }
 
   /**
@@ -99,7 +100,7 @@ class ChatInviteLink extends Base {
    * @type {null | Date}
    */
   get expiredAt() {
-    return this.expiredTimestamp && new Date(this.expiredTimestamp);
+    return this.expiredTimestamp ? new Date(this.expiredTimestamp) : null;
   }
 }
 

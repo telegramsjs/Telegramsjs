@@ -1,3 +1,4 @@
+// @ts-check
 const { ChatPermissions } = require("../../util/ChatPermissions");
 
 class ChatAdministratorRights {

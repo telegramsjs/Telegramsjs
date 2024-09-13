@@ -1,3 +1,4 @@
+// @ts-check
 const { ReactionType } = require("./ReactionType");
 
 class ReactionCount {

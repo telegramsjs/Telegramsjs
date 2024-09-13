@@ -1,7 +1,13 @@
 import http from "node:http";
 import https from "node:https";
 import { Collection } from "@telegram.ts/collection";
-import { ApiMethods as Methods, ParseMode, Update } from "@telegram.ts/types";
+import {
+  ApiMethods as Methods,
+  Chat as ApiChat,
+  User as ApiUser,
+  ParseMode,
+  Update,
+} from "@telegram.ts/types";
 import {
   BodyInit,
   Headers,
@@ -497,41 +503,40 @@ export declare class User extends Base {
   equals(other: User | ClientUser): boolean;
 }
 
-/**
- * @template T
- * Base class for managing a collection of data objects.
- */
-export class BaseManager<T> {
+type Constructable<Entity> = new (...args: any[]) => Entity;
+
+export declare class BaseManager<
+  T extends Base,
+  ApiObject extends {
+    id: number;
+  },
+> {
+  public readonly cache: Collection<string, T>;
+  public readonly cacheSize: number;
   /**
    * @param client - The client instance.
    * @param holds - The class or function that the manager holds.
-   * @param iterable - data iterable
+   * @param iterable - Data iterable.
    * @param cacheSize - The maximum size of the cache. Default is unlimited.
    */
   constructor(
     client: TelegramClient | BaseClient,
-    holds: T,
-    iterable?: unknown[],
+    holds: Constructable<T>,
+    iterable?: ApiObject[],
     cacheSize?: number,
   );
-  cacheSize: number;
-  /**
-   * The collection used for caching data objects.
-   */
-  cache: Collection<string | string, T>;
   /**
    * The client that instantiated this
    */
-  get client(): TelegramClient;
+  get client(): TelegramClient | BaseClient;
   /**
    * Adds or updates an entry in the cache.
    * @param data - The data to be added or updated in the cache.
-   * @param cache - Whether to cache the data.
    * @param options - Additional options.
    * @returns The cached or newly created entry.
    */
   _add(
-    data: any,
+    data: ApiObject,
     cache?: boolean,
     {
       id,
@@ -3712,10 +3717,6 @@ export declare class Message extends Base {
    */
   inTopic?: boolean;
   /**
-   * New member that were added to the group or supergroup and information about them (the bot itself may be one of these member)
-   */
-  newChatMember?: User;
-  /**
    * New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
    */
   newChatMembers?: User[];
@@ -5897,14 +5898,6 @@ export declare class ChatMember extends Base {
    */
   isMember?: boolean;
   /**
-   * Chat to which the request was sent
-   */
-  chat?: Chat;
-  /**
-   * User that sent the join request
-   */
-  author?: User;
-  /**
    * Date when the user's subscription will expire; Unix time
    */
   untilUnixTime?: number;
@@ -6024,32 +6017,27 @@ export declare class ChatMember extends Base {
   equals(other: ChatMember): boolean;
 }
 
-/**
- * Manages users in the cache.
- */
-export class UserManager extends BaseManager<User> {
+export declare class UserManager extends BaseManager<User, ApiUser> {
   /**
    * @param client - The client instance.
-   * @param iterable - data iterable
+   * @param iterable - Data iterable.
    * @param cacheSize - The maximum size of the cache. Default is unlimited.
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: unknown[],
+    iterable?: ApiUser[],
     cacheSize?: number,
   );
   /**
    * Resolves a user from a ChatMember, Message, or user ID.
    * @param user - The ChatMember, Message, or user ID to resolve.
    * @returns The resolved User instance or null if not found.
-   * @override
    */
   override resolve(user: ChatMember | Message | string): User | null;
   /**
    * Resolves the user ID from a ChatMember, Message, or user ID.
    * @param user - The ChatMember, Message, or user ID to resolve.
    * @returns The resolved user ID or null if not found.
-   * @override
    */
   override resolveId(user: ChatMember | Message | string): string | null;
   /**
@@ -6070,25 +6058,21 @@ export class UserManager extends BaseManager<User> {
   ): Promise<User>;
 }
 
-/**
- * Manages chat-related data.
- */
-export class ChatManager extends BaseManager<Chat> {
+export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * @param client - The client instance.
-   * @param iterable - data iterable
+   * @param iterable - Data iterable.
    * @param cacheSize - The maximum size of the cache. Default is unlimited.
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: unknown[],
+    iterable?: ApiChat[],
     cacheSize?: number,
   );
   /**
    * Resolves a chat object.
    * @param chat - The chat instance, chat member, message, or ID.
-   * @returns The resolved chat object or null if not found.
-   * @override
+   * @returns - The resolved chat object or null if not found.
    */
   override resolve(chat: Chat | ChatMember | Message | string): Chat | null;
   /**

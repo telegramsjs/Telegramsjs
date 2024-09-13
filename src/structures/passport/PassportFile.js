@@ -1,3 +1,4 @@
+// @ts-check
 const { InputFile } = require("../misc/InputFile");
 
 class PassportFile extends InputFile {

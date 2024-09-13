@@ -1,3 +1,4 @@
+// @ts-check
 const { ChatBoostSource } = require("./ChatBoostSource");
 
 class ChatBoost {

@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 
 class WebhookInfo extends Base {
@@ -61,7 +62,7 @@ class WebhookInfo extends Base {
    * Return the timestamp most recent error that happened when trying to deliver an update via webhook, in milliseconds
    */
   get lastedTimestamp() {
-    return null && this.lastedUnixTime * 1000;
+    return this.lastedUnixTime ? this.lastedUnixTime * 1000 : null;
   }
 
   /**
@@ -69,14 +70,16 @@ class WebhookInfo extends Base {
    * @type {Date | null}
    */
   get lastedAt() {
-    return this.lastedTimestamp && new Date(this.lastedTimestamp);
+    return this.lastedTimestamp ? new Date(this.lastedTimestamp) : null;
   }
 
   /**
    * Return the timestamp most recent error that happened when trying to synchronize available updates with Telegram datacenters, in milliseconds
    */
   get synchronizatedTimestamp() {
-    return null && this.synchronizatedUnixTime * 1000;
+    return this.synchronizatedUnixTime
+      ? this.synchronizatedUnixTime * 1000
+      : null;
   }
 
   /**
@@ -84,9 +87,9 @@ class WebhookInfo extends Base {
    * @type {null | Date}
    */
   get synchronizatedAt() {
-    return (
-      this.synchronizatedTimestamp && new Date(this.synchronizatedTimestamp)
-    );
+    return this.synchronizatedTimestamp
+      ? new Date(this.synchronizatedTimestamp)
+      : null;
   }
 }
 

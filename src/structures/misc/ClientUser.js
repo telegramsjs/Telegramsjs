@@ -1,3 +1,4 @@
+// @ts-check
 const { User } = require("./User");
 
 class ClientUser extends User {

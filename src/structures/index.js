@@ -1,3 +1,4 @@
+// @ts-check
 module.exports.Base = require("./Base").Base;
 module.exports.CallbackQuery = require("./CallbackQuery").CallbackQuery;
 module.exports.ChatBoostRemoved =

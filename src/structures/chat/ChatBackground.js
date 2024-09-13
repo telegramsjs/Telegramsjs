@@ -1,3 +1,4 @@
+// @ts-check
 const { BackgroundType } = require("./BackgroundType");
 
 class ChatBackground {

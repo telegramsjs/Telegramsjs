@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 const { MessageCollector } = require("../../util/collector/MessageCollector");
 const { ReactionCollector } = require("../../util/collector/ReactionCollector");
@@ -18,9 +19,10 @@ const { UserPermissions } = require("../../util/UserPermissions");
  * @typedef {import("../../types").MethodParameters} MethodParameters
  */
 
-const SymbolType = Symbol("SymbolType");
-
 class Chat extends Base {
+  /** @type {import("@telegram.ts/types").Chat["type"]} */
+  #chatType;
+
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Chat & { threadId?: string }} data - Data about the represents a chat
@@ -31,10 +33,7 @@ class Chat extends Base {
     /** Unique identifier for this chat */
     this.id = String(data.id);
 
-    Object.defineProperty(this, SymbolType, {
-      value: data.type,
-      writable: true,
-    });
+    this.#chatType = data.type;
 
     this._patch(data);
   }
@@ -98,28 +97,28 @@ class Chat extends Base {
    * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined }}
    */
   isChannel() {
-    return this[SymbolType] === "channel";
+    return this.#chatType === "channel";
   }
 
   /**
    * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: true;  threadId?: number }}
    */
   isSupergroup() {
-    return this[SymbolType] === "supergroup";
+    return this.#chatType === "supergroup";
   }
 
   /**
    * @returns {this is this & {  title: string;  username?: undefined;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined }}
    */
   isGroup() {
-    return this[SymbolType] === "group";
+    return this.#chatType === "group";
   }
 
   /**
    * @returns {this is this & {  title?: undefined;  username?: string;  firstName: string;  lastName?: string;  forum?: undefined;  threadId?: undefined }}
    */
   isPrivate() {
-    return this[SymbolType] === "private";
+    return this.#chatType === "private";
   }
 
   /**

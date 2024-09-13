@@ -1,3 +1,4 @@
+// @ts-check
 const { Photo } = require("./Photo");
 const { InputFile } = require("../misc/InputFile");
 

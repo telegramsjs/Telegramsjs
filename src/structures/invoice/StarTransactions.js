@@ -1,3 +1,4 @@
+// @ts-check
 const { StarTransaction } = require("./StarTransaction");
 
 class StarTransactions {

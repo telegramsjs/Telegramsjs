@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 const { PaidMedia } = require("../media/paid/PaidMedia");
 const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");

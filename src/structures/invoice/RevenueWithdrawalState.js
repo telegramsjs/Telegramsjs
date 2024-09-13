@@ -1,3 +1,4 @@
+// @ts-check
 class RevenueWithdrawalState {
   /**
    * @param {import("@telegram.ts/types").RevenueWithdrawalState} data - Data about the describes the state of a revenue withdrawal operation
@@ -28,7 +29,7 @@ class RevenueWithdrawalState {
    * Return the timestamp withdrawal was completed, in milliseconds
    */
   get createdTimestamp() {
-    return null && this.createdUnixTime * 1000;
+    return this.createdUnixTime ? this.createdUnixTime * 1000 : null;
   }
 
   /**
@@ -36,7 +37,7 @@ class RevenueWithdrawalState {
    * @type {null | Date}
    */
   get createdAt() {
-    return this.createdTimestamp && new Date(this.createdTimestamp);
+    return this.createdTimestamp ? new Date(this.createdTimestamp) : null;
   }
 
   /**
