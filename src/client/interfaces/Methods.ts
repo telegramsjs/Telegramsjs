@@ -1377,7 +1377,7 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
-  }): import("../../structures/boots/UserChatBoosts").UserChatBoosts;
+  }): import("../../structures/boost/UserChatBoosts").UserChatBoosts;
 
   /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
   getBusinessConnection(args: {

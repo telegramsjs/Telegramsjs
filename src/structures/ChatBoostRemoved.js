@@ -1,5 +1,5 @@
 const { Base } = require("./Base");
-const { ChatBoostSource } = require("./boots/ChatBoostSource");
+const { ChatBoostSource } = require("./boost/ChatBoostSource");
 
 class ChatBoostRemoved extends Base {
   /**
