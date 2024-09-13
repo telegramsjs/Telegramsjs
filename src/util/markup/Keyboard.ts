@@ -307,6 +307,45 @@ class Keyboard {
     }
     return new Keyboard(source.map((row) => row.map(toButton)));
   }
+
+  /**
+   * Checks if this keyboard is equal to another keyboard.
+   * @param {Keyboard} other - The other keyboard to compare with.
+   * @returns {boolean} True if both keyboards are equal based on their structure and properties, otherwise false.
+   */
+  equals(other: Keyboard): boolean {
+    if (!other || !(other instanceof Keyboard)) return false;
+
+    if (this.keyboard.length !== other.keyboard.length) return false;
+
+    for (let i = 0; i < this.keyboard.length; i++) {
+      const row = this.keyboard[i];
+      const otherRow = other.keyboard[i];
+
+      if (!row || !otherRow || row.length !== otherRow.length) return false;
+
+      for (let j = 0; j < row.length; j++) {
+        const buttonA = row[j];
+        const buttonB = otherRow[j];
+
+        if (buttonA === undefined || buttonB === undefined) return false;
+
+        if (typeof buttonA === "string" && typeof buttonB === "string") {
+          if (buttonA !== buttonB) return false;
+        } else if (typeof buttonA === "object" && typeof buttonB === "object") {
+          if ("text" in buttonA && "text" in buttonB) {
+            if (buttonA.text !== buttonB.text) return false;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 }
 
 export { Keyboard };

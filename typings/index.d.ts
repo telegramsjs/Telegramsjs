@@ -125,6 +125,12 @@ export declare class ChatPermissions {
    */
   toObject(): ChatPermissionFlags;
   /**
+   * Checks if this instance is equal to another ChatPermissions instance.
+   * @param other - The other instance to compare.
+   * @returns `true` if both instances are equal, otherwise `false`.
+   */
+  equals(other: ChatPermissions): boolean;
+  /**
    * Updates the permissions based on the provided data.
    * @param data - An object containing permission states.
    */
@@ -483,6 +489,12 @@ export declare class User extends Base {
    * @returns Returns a UserProfilePhotos object.
    */
   getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
+  /**
+   * Checks if this user is equal to another user.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of User and are equal based on key properties, otherwise false.
+   */
+  equals(other: User | ClientUser): boolean;
 }
 
 /**
@@ -622,6 +634,12 @@ export declare class UserPermissions {
    * @returns An object with permissions and their status.
    */
   toObject(): UserPermissionFlags;
+  /**
+   * Checks if this instance is equal to another UserPermissions instance.
+   * @param other - The other instance to compare.
+   * @returns `true` if both instances are equal, otherwise `false`.
+   */
+  equals(other: UserPermissions): boolean;
   /**
    * Updates the permissions based on the provided data.
    * @param data - An object containing permission states.
@@ -2574,6 +2592,12 @@ export declare class Giveaway extends Base {
    * Point in time when winners of the giveaway will be selected
    */
   get selectedAt(): Date;
+  /**
+   * Checks if this giveaway is equal to another giveaway.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of Giveaway and are equal based on key properties, otherwise false.
+   */
+  equals(other: Giveaway): boolean;
 }
 
 export declare class GiveawayWinners extends Base {
@@ -2642,6 +2666,12 @@ export declare class GiveawayWinners extends Base {
    * Point in time when winners of the giveaway were selected
    */
   get selectionAt(): Date;
+  /**
+   * Checks if this giveaway winners object is equal to another giveaway winners object.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of GiveawayWinners and are equal based on key properties, otherwise false.
+   */
+  equals(other: GiveawayWinners): boolean;
 }
 
 export declare class Invoice extends Base {
@@ -5986,6 +6016,12 @@ export declare class ChatMember extends Base {
    * @returns Returns True on success.
    */
   setNikeName(name: string): Promise<true>;
+  /**
+   * Checks if this member is equal to another member.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of ChatMember and are equal based on key properties, otherwise false.
+   */
+  equals(other: ChatMember): boolean;
 }
 
 /**
@@ -7693,6 +7729,12 @@ export declare class ClientUser extends User {
   getAdministratorRigths(
     forChannels?: boolean,
   ): Promise<ChatAdministratorRights>;
+  /**
+   * Checks if this ClientUser is equal to another ClientUser.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of ClientUser and are equal based on key properties, otherwise false.
+   */
+  override equals(other: ClientUser): boolean;
 }
 
 /**
@@ -7818,10 +7860,7 @@ export declare class Base {
    * @protected
    */
   protected _update(data: Record<string, any>): Base;
-  /**
-   * Returns the primitive value of the instance
-   * @returns The primitive value of the instance
-   */
+  /** Returns the id instance Chat, User, ChatMember and other */
   valueOf(): string | null;
 }
 
@@ -8462,6 +8501,12 @@ export declare class InlineKeyboard {
   static from(
     source: InlineKeyboard | InlineKeyboardButton[][],
   ): InlineKeyboard;
+  /**
+   * Checks if this inline keyboard is equal to another inline keyboard.
+   * @param other - The other inline keyboard to compare with.
+   * @returns True if both keyboards are equal based on their structure and button properties, otherwise false.
+   */
+  equals(other: InlineKeyboard): boolean;
 }
 
 /**
@@ -8667,6 +8712,12 @@ export declare class Keyboard {
    * @returns A new instance of Keyboard.
    */
   static from(source: (string | KeyboardButton)[][] | Keyboard): Keyboard;
+  /**
+   * Checks if this keyboard is equal to another keyboard.
+   * @param other - The other keyboard to compare with.
+   * @returns True if both keyboards are equal based on their structure and properties, otherwise false.
+   */
+  equals(other: Keyboard): boolean;
 }
 
 export declare const DefaultParameters: {

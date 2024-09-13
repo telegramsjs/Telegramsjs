@@ -249,6 +249,93 @@ class InlineKeyboard {
     if (source instanceof InlineKeyboard) return source.clone();
     return new InlineKeyboard(source.map((row) => row.slice()));
   }
+
+  /**
+   * Checks if this inline keyboard is equal to another inline keyboard.
+   * @param {InlineKeyboard} other - The other inline keyboard to compare with.
+   * @returns {boolean} True if both keyboards are equal based on their structure and button properties, otherwise false.
+   */
+  equals(other: InlineKeyboard): boolean {
+    if (!other || !(other instanceof InlineKeyboard)) return false;
+
+    if (this.inlineKeyboard.length !== other.inlineKeyboard.length)
+      return false;
+
+    for (let i = 0; i < this.inlineKeyboard.length; i++) {
+      const row = this.inlineKeyboard[i];
+      const otherRow = other.inlineKeyboard[i];
+
+      if (!row || !otherRow || row.length !== otherRow.length) return false;
+
+      for (let j = 0; j < row.length; j++) {
+        const buttonA = row[j];
+        const buttonB = otherRow[j];
+
+        if (!buttonA || !buttonB) return false;
+
+        if ("url" in buttonA && "url" in buttonB) {
+          if (buttonA.text !== buttonB.text || buttonA.url !== buttonB.url)
+            return false;
+        } else if ("callbackData" in buttonA && "callbackData" in buttonB) {
+          if (
+            buttonA.text !== buttonB.text ||
+            buttonA.callbackData !== buttonB.callbackData
+          )
+            return false;
+        } else if ("webApp" in buttonA && "webApp" in buttonB) {
+          if (
+            buttonA.text !== buttonB.text ||
+            buttonA.webApp.url !== buttonB.webApp.url
+          )
+            return false;
+        } else if ("loginUrl" in buttonA && "loginUrl" in buttonB) {
+          if (
+            buttonA.text !== buttonB.text ||
+            JSON.stringify(buttonA.loginUrl) !==
+              JSON.stringify(buttonB.loginUrl)
+          )
+            return false;
+        } else if (
+          "switchInlineQuery" in buttonA &&
+          "switchInlineQuery" in buttonB
+        ) {
+          if (
+            buttonA.text !== buttonB.text ||
+            buttonA.switchInlineQuery !== buttonB.switchInlineQuery
+          )
+            return false;
+        } else if (
+          "switchInlineQueryCurrentChat" in buttonA &&
+          "switchInlineQueryCurrentChat" in buttonB
+        ) {
+          if (
+            buttonA.text !== buttonB.text ||
+            buttonA.switchInlineQueryCurrentChat !==
+              buttonB.switchInlineQueryCurrentChat
+          )
+            return false;
+        } else if (
+          "switchInlineQueryChosenChat" in buttonA &&
+          "switchInlineQueryChosenChat" in buttonB
+        ) {
+          if (
+            buttonA.text !== buttonB.text ||
+            JSON.stringify(buttonA.switchInlineQueryChosenChat) !==
+              JSON.stringify(buttonB.switchInlineQueryChosenChat)
+          )
+            return false;
+        } else if ("callbackGame" in buttonA && "callbackGame" in buttonB) {
+          if (buttonA.text !== buttonB.text) return false;
+        } else if ("pay" in buttonA && "pay" in buttonB) {
+          if (buttonA.text !== buttonB.text) return false;
+        } else {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 }
 
 export { InlineKeyboard };

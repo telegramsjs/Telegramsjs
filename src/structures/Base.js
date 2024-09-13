@@ -6,7 +6,6 @@ const ClientSymbol = Symbol("Client");
  */
 class Base {
   /**
-   * @public
    * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
    */
   constructor(client) {
@@ -57,8 +56,8 @@ class Base {
   }
 
   /**
-   * Returns the primitive value of the instance
-   * @returns {string | null} The primitive value of the instance
+   * Returns the id instance Chat, User, ChatMember and other
+   * @returns {string | null}
    */
   valueOf() {
     return "id" in this ? String(this.id) : null;

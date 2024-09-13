@@ -106,6 +106,26 @@ class User extends Base {
   }
 
   /**
+   * Checks if this user is equal to another user.
+   * @param {User | import("./ClientUser").ClientUser} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of User and are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof User)) return false;
+
+    return (
+      this.id === other.id &&
+      this.isBot === other.isBot &&
+      this.firstName === other.firstName &&
+      this.lastName === other.lastName &&
+      this.username === other.username &&
+      this.language === other.language &&
+      this.premium === other.premium &&
+      this.inAttachmentMenu === other.inAttachmentMenu
+    );
+  }
+
+  /**
    * Return this user username, otherwise just an empty string
    * @override
    */

@@ -913,6 +913,25 @@ class Chat extends Base {
       ...options,
     });
   }
+
+  /**
+   * Checks if this chat is equal to another chat.
+   * @param {Chat} other - The other chat to compare with.
+   * @returns {boolean} True if both chats are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof Chat)) return false;
+
+    return (
+      this.id === other.id &&
+      this.title === other.title &&
+      this.username === other.username &&
+      this.firstName === other.firstName &&
+      this.lastName === other.lastName &&
+      this.forum === other.forum &&
+      this.threadId === other.threadId
+    );
+  }
 }
 
 module.exports = { Chat };

@@ -65,6 +65,31 @@ class Giveaway extends Base {
   get selectedAt() {
     return new Date(this.selectedTimestamp);
   }
+
+  /**
+   * Checks if this giveaway is equal to another giveaway.
+   * @param {Giveaway} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of Giveaway and are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof Giveaway)) return false;
+
+    return (
+      this.selectedUnixTime === other.selectedUnixTime &&
+      this.winnerCount === other.winnerCount &&
+      this.onlyNewMembers === other.onlyNewMembers &&
+      this.publicWinners === other.publicWinners &&
+      this.description === other.description &&
+      this.starCount === other.starCount &&
+      this.subscriptionMonthCount === other.subscriptionMonthCount &&
+      this.countryCodes?.length === other.countryCodes?.length &&
+      this.countryCodes?.every?.(
+        (code, index) => code === other.countryCodes[index],
+      ) &&
+      this.chats.length === other.chats.length &&
+      this.chats.every((chat, index) => chat.equals(other.chats[index]))
+    );
+  }
 }
 
 module.exports = { Giveaway };

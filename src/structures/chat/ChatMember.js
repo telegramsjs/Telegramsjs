@@ -2,6 +2,7 @@ const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
 const { ErrorCodes } = require("../../errors/ErrorCodes");
 const { UserPermissions } = require("../../util/UserPermissions");
+const { deepStrictEqual } = require("node:assert");
 
 /**
  * @typedef {import("../../types").MethodParameters} MethodParameters
@@ -367,6 +368,49 @@ class ChatMember extends Base {
       userId: this.id,
       customTitle: name,
     });
+  }
+
+  /**
+   * Checks if this member is equal to another member.
+   * @param {ChatMember} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of ChatMember and are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof ChatMember)) return false;
+
+    try {
+      deepStrictEqual(
+        {
+          chatId: this.chatId,
+          id: this.id,
+          status: this.status,
+          permissions: this.permissions,
+          user: this.user,
+          anonymous: this.anonymous,
+          nickName: this.nickName,
+          isMember: this.isMember,
+          chat: this.chat,
+          author: this.author,
+          untilUnixTime: this.untilUnixTime,
+        },
+        {
+          chatId: other.chatId,
+          id: other.id,
+          status: other.status,
+          permissions: other.permissions,
+          user: other.user,
+          anonymous: other.anonymous,
+          nickName: other.nickName,
+          isMember: other.isMember,
+          chat: other.chat,
+          author: other.author,
+          untilUnixTime: other.untilUnixTime,
+        },
+      );
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
