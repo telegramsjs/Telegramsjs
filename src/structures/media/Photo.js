@@ -1,3 +1,4 @@
+// @ts-check
 const { InputFile } = require("../misc/InputFile");
 
 class Photo extends InputFile {

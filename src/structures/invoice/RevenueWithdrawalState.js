@@ -1,3 +1,4 @@
+// @ts-check
 class RevenueWithdrawalState {
   /**
    * @param {import("@telegram.ts/types").RevenueWithdrawalState} data - Data about the describes the state of a revenue withdrawal operation

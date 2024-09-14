@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../../Base");
 const { Photo } = require("../Photo");
 const { Video } = require("../Video");

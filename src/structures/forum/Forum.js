@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 
 class Forum extends Base {

@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 
 class User extends Base {
@@ -12,10 +13,9 @@ class User extends Base {
     this.id = String(data.id);
 
     /** True, if this user is a bot */
-    this.bot = Boolean(data.is_bot);
-
-    /** User's or bot's first name */
-    this.firstName = data.first_name;
+    this.isBot = Boolean(
+      data.id == ("user" in client ? client.user?.id : 0) ? true : data.is_bot,
+    );
 
     this._patch(data);
   }
@@ -25,6 +25,9 @@ class User extends Base {
    * @override
    */
   _patch(data) {
+    /** User's or bot's first name */
+    this.firstName = data.first_name;
+
     if ("last_name" in data) {
       /**
        * User's or bot's last name
@@ -53,7 +56,7 @@ class User extends Base {
      * True, if this user is a Telegram Premium user
      * @type {boolean}
      */
-    this.premium = Boolean(data.is_premium);
+    this.isPremium = Boolean(data.is_premium);
 
     /**
      * True, if this user added the bot to the attachment menu
@@ -62,6 +65,15 @@ class User extends Base {
     this.inAttachmentMenu = Boolean(data.added_to_attachment_menu);
 
     return data;
+  }
+
+  /**
+   * Fetches this user
+   * @param {boolean} [force=true] - Whether to skip the cache check and request the API
+   * @returns {Promise<User>}
+   */
+  fetch(force = false) {
+    return this.client.users.fetch(this.id, { force });
   }
 
   /**
@@ -94,6 +106,26 @@ class User extends Base {
       limit,
       offset,
     });
+  }
+
+  /**
+   * Checks if this user is equal to another user.
+   * @param {User | import("./ClientUser").ClientUser} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of User and are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof User)) return false;
+
+    return (
+      this.id === other.id &&
+      this.isBot === other.isBot &&
+      this.firstName === other.firstName &&
+      this.lastName === other.lastName &&
+      this.username === other.username &&
+      this.language === other.language &&
+      this.isPremium === other.isPremium &&
+      this.inAttachmentMenu === other.inAttachmentMenu
+    );
   }
 
   /**

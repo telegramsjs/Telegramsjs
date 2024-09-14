@@ -1,3 +1,4 @@
+// @ts-check
 module.exports.Base = require("./Base").Base;
 module.exports.CallbackQuery = require("./CallbackQuery").CallbackQuery;
 module.exports.ChatBoostRemoved =
@@ -18,11 +19,11 @@ module.exports.PollAnswer = require("./PollAnswer").PollAnswer;
 module.exports.PreCheckoutQuery =
   require("./PreCheckoutQuery").PreCheckoutQuery;
 module.exports.ShippingQuery = require("./ShippingQuery").ShippingQuery;
-module.exports.ChatBoost = require("./boots/ChatBoost").ChatBoost;
+module.exports.ChatBoost = require("./boost/ChatBoost").ChatBoost;
 module.exports.ChatBoostSource =
-  require("./boots/ChatBoostSource").ChatBoostSource;
+  require("./boost/ChatBoostSource").ChatBoostSource;
 module.exports.UserChatBoosts =
-  require("./boots/UserChatBoosts").UserChatBoosts;
+  require("./boost/UserChatBoosts").UserChatBoosts;
 module.exports.BusinessConnection =
   require("./business/BusinessConnection").BusinessConnection;
 module.exports.BusinessMessagesDeleted =

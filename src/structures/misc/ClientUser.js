@@ -1,3 +1,4 @@
+// @ts-check
 const { User } = require("./User");
 
 class ClientUser extends User {
@@ -43,6 +44,7 @@ class ClientUser extends User {
   /**
    * Fetch about the client/bot
    * @returns {Promise<ClientUser>}
+   * @override
    */
   fetch() {
     return this.client.fetchApplication();
@@ -176,6 +178,26 @@ class ClientUser extends User {
    */
   getAdministratorRigths(forChannels) {
     return this.client.getMyDefaultAdministratorRights(forChannels);
+  }
+
+  /**
+   * Checks if this ClientUser is equal to another ClientUser.
+   * @param {ClientUser} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of ClientUser and are equal based on key properties, otherwise false.
+   * @override
+   */
+  equals(other) {
+    if (!other || !(other instanceof ClientUser)) return false;
+
+    if (!super.equals(other)) return false;
+
+    return (
+      this.canJoinGroups === other.canJoinGroups &&
+      this.canReadAllMessages === other.canReadAllMessages &&
+      this.inlineQueries === other.inlineQueries &&
+      this.connectBusiness === other.connectBusiness &&
+      this.mainWebApp === other.mainWebApp
+    );
   }
 }
 

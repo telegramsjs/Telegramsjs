@@ -1,3 +1,4 @@
+// @ts-check
 const { Document } = require("../media/Document");
 const { BackgroundFill } = require("./BackgroundFill");
 

@@ -1,3 +1,4 @@
+// @ts-check
 const { SharedUser } = require("./SharedUser");
 
 class UsersShared {

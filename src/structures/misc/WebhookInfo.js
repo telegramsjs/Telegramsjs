@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 
 class WebhookInfo extends Base {
@@ -61,7 +62,7 @@ class WebhookInfo extends Base {
    * Return the timestamp most recent error that happened when trying to deliver an update via webhook, in milliseconds
    */
   get lastedTimestamp() {
-    return this.lastedUnixTime ? new Date(this.lastedUnixTime) : null;
+    return this.lastedUnixTime ? this.lastedUnixTime * 1000 : null;
   }
 
   /**

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Represents a search result for a specific message entity type.
  * @typedef {Object} SearchResult
@@ -8,6 +9,9 @@
  */
 
 class MessageEntities {
+  /** @type {import("@telegram.ts/types").MessageEntity[]} */
+  #entities;
+
   /**
    * Creates an instance of the MessageEntities class.
    * @param {string} searchText - The text to search within.
@@ -19,7 +23,8 @@ class MessageEntities {
      */
     this.searchText = searchText;
 
-    Object.defineProperty(this, "entities", { value: entities });
+    /** @type {import("@telegram.ts/types").MessageEntity[]} */
+    this.#entities = entities;
   }
 
   /**
@@ -143,7 +148,7 @@ class MessageEntities {
     /** @type {SearchResult[]} */
     const entities = [];
 
-    this.entities.forEach((entity, index) => {
+    this.#entities.forEach((entity, index) => {
       const { offset, length, type } = entity;
       if (type === searchType) {
         entities.push({
@@ -160,9 +165,10 @@ class MessageEntities {
   /**
    * Enables iteration over the message entities.
    * @returns {Generator<(SearchResult & { type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"})[]>} An iterator over the message entities.
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"})>} An iterator over the message entities.
    */
   *[Symbol.iterator]() {
+    /** @type {(keyof MessageEntities)[]} */
     const entityTypes = [
       "mention",
       "hashtag",
@@ -185,12 +191,13 @@ class MessageEntities {
     const sortedEntities = [];
 
     for (const type of entityTypes) {
-      const results = this[type].map((entity) => ({
-        ...entity,
-        type,
-      }));
-
-      sortedEntities.push(...results);
+      if (this[type] && Array.isArray(this[type])) {
+        const results = this[type].map((entity) => ({
+          ...entity,
+          type,
+        }));
+        sortedEntities.push(...results);
+      }
     }
 
     sortedEntities.sort((a, b) => a.index - b.index);

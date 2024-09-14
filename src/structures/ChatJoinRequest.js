@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("./Base");
 const { ChatInviteLink } = require("./chat/ChatInviteLink");
 
@@ -55,7 +56,7 @@ class ChatJoinRequest extends Base {
 
   /**
    * Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right.
-   * @returns {Promise<true>} Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
    */
   approveJoinRequest() {
     return this.client.approveChatJoinRequest(this.chat.id, this.author.id);

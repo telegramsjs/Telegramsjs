@@ -1,3 +1,4 @@
+// @ts-check
 const { MessageEntities } = require("../message/MessageEntities");
 
 class TextQuote {

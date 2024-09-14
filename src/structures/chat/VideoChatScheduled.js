@@ -1,3 +1,4 @@
+// @ts-check
 class VideoChatScheduled {
   /**
    * @param {import("@telegram.ts/types").VideoChatScheduled} data - Data about the represents a service message about a video chat scheduled in the chat

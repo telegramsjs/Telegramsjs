@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
 const { ErrorCodes } = require("../../errors/ErrorCodes");

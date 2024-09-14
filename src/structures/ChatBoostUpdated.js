@@ -1,5 +1,6 @@
+// @ts-check
 const { Base } = require("./Base");
-const { ChatBoost } = require("./boots/ChatBoost");
+const { ChatBoost } = require("./boost/ChatBoost");
 
 class ChatBoostUpdated extends Base {
   /**

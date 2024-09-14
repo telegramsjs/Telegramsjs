@@ -1,3 +1,4 @@
+// @ts-check
 class Dice {
   /**
    * @param {import("@telegram.ts/types").Dice} data - Data about the represents an animated emoji that displays a random value

@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("./Base");
 const { ReactionType } = require("./misc/ReactionType");
 const { MessageCollector } = require("../util/collector/MessageCollector");

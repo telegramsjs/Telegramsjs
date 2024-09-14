@@ -1,3 +1,4 @@
+// @ts-check
 class Contact {
   /**
    * @param {import("@telegram.ts/types").Contact} data - Data about the represents a phone contact

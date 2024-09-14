@@ -1,3 +1,4 @@
+// @ts-check
 class GiveawayCompleted {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this

@@ -1,3 +1,4 @@
+// @ts-check
 const { Chat } = require("./Chat");
 const { Photo } = require("../media/Photo");
 const { Location } = require("../misc/Location");

@@ -1,3 +1,4 @@
+// @ts-check
 const { Base } = require("../Base");
 const { UsersShared } = require("../misc/UsersShared");
 const { ChatShared } = require("../misc/ChatShared");
@@ -109,7 +110,7 @@ class Message extends Base {
        */
       this.chat = this.client.chats._add({
         ...data.chat,
-        threadId: this.threadId,
+        ...(data.chat.type !== "private" && { threadId: this.threadId }),
       });
 
       if (!this.chat.isPrivate() && data.from) {
@@ -289,7 +290,7 @@ class Message extends Base {
        */
       this.senderChat = this.client.chats._add({
         ...data.sender_chat,
-        threadId: this.threadId,
+        ...(data.sender_chat.type !== "private" && { threadId: this.threadId }),
       });
     }
 
@@ -315,14 +316,6 @@ class Message extends Base {
        * @type {boolean | undefined}
        */
       this.inTopic = data.is_topic_message;
-    }
-
-    if ("new_chat_member" in data) {
-      /**
-       * New member that were added to the group or supergroup and information about them (the bot itself may be one of these member)
-       * @type {import("../misc/User").User | undefined}
-       */
-      this.newChatMember = this.client.users._add(data.new_chat_member);
     }
 
     if ("new_chat_members" in data) {
@@ -846,10 +839,13 @@ class Message extends Base {
   }
 
   /**
+   * Checking if the message has been edited
    * @returns {this is this & { editedUnixTime: number; editedTimestamp: number; editedAt: Date }}
    */
-  get isEdited() {
-    return Boolean(this.editedTimestamp);
+  isEdited() {
+    return Boolean(
+      this.editedUnixTime && this.editedTimestamp && this.editedAt,
+    );
   }
 
   /**
@@ -871,7 +867,7 @@ class Message extends Base {
    * Return the timestamp message was last edited, in milliseconds
    */
   get editedTimestamp() {
-    return this.editedUnixTime ? new Date(this.editedUnixTime) : null;
+    return this.editedUnixTime ? this.editedUnixTime * 1000 : null;
   }
 
   /**

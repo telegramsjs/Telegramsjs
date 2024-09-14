@@ -1,3 +1,4 @@
+// @ts-check
 class OrderInfo {
   /**
    * @param {import("@telegram.ts/types").OrderInfo} data - Data about the represents information about an order

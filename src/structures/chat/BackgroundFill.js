@@ -1,3 +1,4 @@
+// @ts-check
 class BackgroundFill {
   /**
    * @param {import("@telegram.ts/types").BackgroundFill} data - Data about the describes the way a background is filled based on the selected colors

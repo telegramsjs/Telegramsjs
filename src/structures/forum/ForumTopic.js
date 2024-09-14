@@ -1,3 +1,4 @@
+// @ts-check
 const { Forum } = require("./Forum");
 
 class ForumTopic extends Forum {

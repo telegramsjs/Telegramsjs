@@ -1,3 +1,4 @@
+// @ts-check
 const fs = require("node:fs");
 const fetch = require("node-fetch");
 const { Base } = require("../Base");

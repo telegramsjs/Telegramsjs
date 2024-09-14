@@ -129,6 +129,27 @@ class UserPermissions {
   }
 
   /**
+   * Checks if this instance is equal to another UserPermissions instance.
+   * @param other - The other instance to compare.
+   * @returns `true` if both instances are equal, otherwise `false`.
+   */
+  equals(other: UserPermissions): boolean {
+    if (!other || !(other instanceof UserPermissions)) return false;
+
+    const thisAllowed = Array.from(this.allowed).sort();
+    const otherAllowed = Array.from(other.allowed).sort();
+    const thisDenied = Array.from(this.denied).sort();
+    const otherDenied = Array.from(other.denied).sort();
+
+    return (
+      thisAllowed.length === otherAllowed.length &&
+      thisDenied.length === otherDenied.length &&
+      thisAllowed.every((perm, index) => perm === otherAllowed[index]) &&
+      thisDenied.every((perm, index) => perm === otherDenied[index])
+    );
+  }
+
+  /**
    * Updates the permissions based on the provided data.
    * @param data - An object containing permission states.
    */
