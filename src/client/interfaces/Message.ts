@@ -72,7 +72,7 @@ export declare namespace MessageEntity {
   export interface TextMentionMessageEntity extends AbstractMessageEntity {
     type: "text_mention";
     /** For “text_mention” only, the mentioned user */
-    user: User;
+    user: { id: string };
   }
   export interface CustomEmojiMessageEntity extends AbstractMessageEntity {
     type: "custom_emoji";
