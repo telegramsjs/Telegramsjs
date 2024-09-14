@@ -466,7 +466,7 @@ export declare class User extends Base {
   /**
    * True, if this user is a Telegram Premium user
    */
-  premium?: boolean;
+  isPremium?: boolean;
   /**
    * True, if this user added the bot to the attachment menu
    */
