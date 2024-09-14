@@ -1,5 +1,6 @@
 import { BaseManager } from "./BaseManager";
 import { User } from "../structures/misc/User";
+import type { MethodsApiReturnType } from "../types";
 import type { User as ApiUser } from "@telegram.ts/types";
 import { Message } from "../structures/message/Message";
 import { ChatMember } from "../structures/chat/ChatMember";
@@ -69,9 +70,13 @@ class UserManager extends BaseManager<User, ApiUser> {
       if (existing) return existing;
     }
 
-    const data = await this.client.getChat(String(id));
+    const data = await this.client.apiRequest.get<
+      MethodsApiReturnType["getChat"]
+    >("getChat", {
+      chatId: id,
+    });
 
-    if (data?.isPrivate()) {
+    if (data?.type !== "private") {
       throw new TelegramError(ErrorCodes.InvalidUserID);
     }
 
