@@ -77,7 +77,7 @@ class BaseManager<T extends Base, ApiObject extends { id: number }> {
       return clone;
     }
 
-    const entry = new this.#holds(this.client, data, ...extras, this.cacheSize);
+    const entry = new this.#holds(this.client, data, ...extras);
     if (cache) this.cache.set(String(id ?? entry.valueOf()), entry);
     return entry;
   }
