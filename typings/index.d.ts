@@ -1602,7 +1602,7 @@ export declare class MessageReactionUpdated extends Base {
       "text" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         content: string;
         editedUnixTime: number;
@@ -1633,7 +1633,7 @@ export declare class MessageReactionUpdated extends Base {
       "caption" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         caption?: string;
         editedUnixTime: number;
@@ -2023,7 +2023,7 @@ export declare class MessageOrigin extends Base {
       "text" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         content: string;
         editedUnixTime: number;
@@ -2054,7 +2054,7 @@ export declare class MessageOrigin extends Base {
       "caption" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         caption?: string;
         editedUnixTime: number;
@@ -4124,7 +4124,7 @@ export declare class Message extends Base {
       "text" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         content: string;
         editedUnixTime: number;
@@ -4155,7 +4155,7 @@ export declare class Message extends Base {
       "caption" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         caption?: string;
         editedUnixTime: number;
@@ -4526,6 +4526,7 @@ export declare class Chat extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").Chat & {
       threadId?: string;
+      inTopic?: boolean;
     },
   );
   /** Unique identifier for this chat */
@@ -4537,9 +4538,11 @@ export declare class Chat extends Base {
   override _patch(
     data: import("@telegram.ts/types").Chat & {
       threadId?: string;
+      inTopic?: boolean;
     },
   ): import("@telegram.ts/types").Chat & {
     threadId?: string;
+    inTopic?: boolean;
   };
   /**
    * Title, for supergroups, channels and group chats
@@ -4565,6 +4568,10 @@ export declare class Chat extends Base {
    * Unique identifier of the forum topic
    */
   threadId?: string;
+  /**
+   * True, if the message is sent to a forum topic
+   */
+  inTopic?: boolean;
 
   isChannel(): this is this & {
     title: string;
@@ -4573,6 +4580,7 @@ export declare class Chat extends Base {
     lastName?: undefined;
     forum?: undefined;
     threadId?: undefined;
+    inTopic?: undefined;
   };
 
   isSupergroup(): this is this & {
@@ -4581,7 +4589,8 @@ export declare class Chat extends Base {
     firstName?: undefined;
     lastName?: undefined;
     forum?: true;
-    threadId?: number;
+    threadId?: string;
+    inTopic?: boolean;
   };
 
   isGroup(): this is this & {
@@ -4591,6 +4600,7 @@ export declare class Chat extends Base {
     lastName?: undefined;
     forum?: undefined;
     threadId?: undefined;
+    inTopic?: undefined;
   };
 
   isPrivate(): this is this & {
@@ -4600,6 +4610,7 @@ export declare class Chat extends Base {
     lastName?: string;
     forum?: undefined;
     threadId?: undefined;
+    inTopic?: undefined;
   };
 
   me(): Promise<ChatMember>;
@@ -7729,8 +7740,8 @@ export interface ILoginOptions {
     offset?: number;
     limit?: number;
     timeout?: number;
-    allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
-    drop_pending_updates?: boolean;
+    allowedUpdates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
+    dropPendingUpdates?: boolean;
   };
   webhook?: {
     url: string;
@@ -7738,13 +7749,13 @@ export interface ILoginOptions {
     host?: string;
     path?: string;
     certificate?: Buffer | ReadStream | string;
-    ip_address?: string;
-    max_connections?: number;
+    ipAddress?: string;
+    maxConnections?: number;
     tlsOptions?: TlsOptions;
     requestCallback?: RequestListener;
-    allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
-    drop_pending_updates?: boolean;
-    secret_token?: string;
+    allowedUpdates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
+    dropPendingUpdates?: boolean;
+    secretToken?: string;
   };
 }
 

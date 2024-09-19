@@ -25,7 +25,7 @@ class Chat extends Base {
 
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").Chat & { threadId?: string }} data - Data about the represents a chat
+   * @param {import("@telegram.ts/types").Chat & { threadId?: string; inTopic?: boolean }} data - Data about the represents a chat
    */
   constructor(client, data) {
     super(client);
@@ -39,7 +39,7 @@ class Chat extends Base {
   }
 
   /**
-   * @param {import("@telegram.ts/types").Chat & { threadId?: string }} data - Data about the represents a chat
+   * @param {import("@telegram.ts/types").Chat & { threadId?: string; inTopic?: boolean }} data - Data about the represents a chat
    * @override
    */
   _patch(data) {
@@ -88,34 +88,42 @@ class Chat extends Base {
          */
         this.threadId = data.threadId;
       }
+
+      if ("inTopic" in data) {
+        /**
+         * True, if the message is sent to a forum topic
+         * @type {boolean | undefined}
+         */
+        this.inTopic = data.inTopic;
+      }
     }
 
     return data;
   }
 
   /**
-   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined }}
+   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined; inTopic?: undefined; }}
    */
   isChannel() {
     return this.#chatType === "channel";
   }
 
   /**
-   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: true;  threadId?: number }}
+   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: true;  threadId?: string; inTopic?: boolean; }}
    */
   isSupergroup() {
     return this.#chatType === "supergroup";
   }
 
   /**
-   * @returns {this is this & {  title: string;  username?: undefined;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined }}
+   * @returns {this is this & {  title: string;  username?: undefined;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined; inTopic?: undefined;}}
    */
   isGroup() {
     return this.#chatType === "group";
   }
 
   /**
-   * @returns {this is this & {  title?: undefined;  username?: string;  firstName: string;  lastName?: string;  forum?: undefined;  threadId?: undefined }}
+   * @returns {this is this & {  title?: undefined;  username?: string;  firstName: string;  lastName?: string;  forum?: undefined;  threadId?: undefined; inTopic?: undefined; }}
    */
   isPrivate() {
     return this.#chatType === "private";
@@ -240,7 +248,7 @@ class Chat extends Base {
     return this.client.sendMessage({
       text,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -638,7 +646,7 @@ class Chat extends Base {
     return this.client.sendPhoto({
       photo,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -653,7 +661,7 @@ class Chat extends Base {
     return this.client.sendAudio({
       audio,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -684,7 +692,7 @@ class Chat extends Base {
     return this.client.sendDocument({
       document,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -699,7 +707,7 @@ class Chat extends Base {
     return this.client.sendVideo({
       video,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -714,7 +722,7 @@ class Chat extends Base {
     return this.client.sendAnimation({
       animation,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -729,7 +737,7 @@ class Chat extends Base {
     return this.client.sendVoice({
       voice,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -744,7 +752,7 @@ class Chat extends Base {
     return this.client.sendVideoNote({
       videoNote,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -759,7 +767,7 @@ class Chat extends Base {
     return this.client.sendMediaGroup({
       media,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -776,7 +784,7 @@ class Chat extends Base {
       latitude,
       longitude,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -793,7 +801,7 @@ class Chat extends Base {
       latitude,
       longitude,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -810,7 +818,7 @@ class Chat extends Base {
       phoneNumber,
       firstName,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -827,7 +835,7 @@ class Chat extends Base {
       question,
       options,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...other,
     });
   }
@@ -842,7 +850,7 @@ class Chat extends Base {
     return this.client.sendDice({
       emoji,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -856,7 +864,7 @@ class Chat extends Base {
     return this.client.sendChatAction({
       action,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
     });
   }
 
@@ -870,7 +878,7 @@ class Chat extends Base {
     return this.client.sendSticker({
       sticker,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -893,7 +901,7 @@ class Chat extends Base {
       currency,
       prices,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }
@@ -908,7 +916,7 @@ class Chat extends Base {
     return this.client.sendGame({
       gameShortName,
       chatId: this.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }

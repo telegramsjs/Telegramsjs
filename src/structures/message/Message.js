@@ -103,6 +103,22 @@ class Message extends Base {
       this.author = this.client.users._add(data.from);
     }
 
+    if ("is_topic_message" in data) {
+      if ("chat" in this && this.chat && "threadId" in this && this.threadId) {
+        /**
+         * If the message is sent to a forum topic
+         * @type {Forum | undefined}
+         */
+        this.forum = new Forum(this.client, this.threadId, this.chat.id);
+      }
+
+      /**
+       * True, if the message is sent to a forum topic
+       * @type {boolean | undefined}
+       */
+      this.inTopic = data.is_topic_message;
+    }
+
     if ("chat" in data) {
       /**
        * Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field *from* contains a fake sender user in non-channel chats.
@@ -110,7 +126,10 @@ class Message extends Base {
        */
       this.chat = this.client.chats._add({
         ...data.chat,
-        ...(data.chat.type !== "private" && { threadId: this.threadId }),
+        ...(data.chat.type !== "private" && {
+          threadId: this.threadId,
+          inTopic: this.inTopic,
+        }),
       });
 
       if (!this.chat.isPrivate() && data.from) {
@@ -290,7 +309,10 @@ class Message extends Base {
        */
       this.senderChat = this.client.chats._add({
         ...data.sender_chat,
-        ...(data.sender_chat.type !== "private" && { threadId: this.threadId }),
+        ...(data.sender_chat.type !== "private" && {
+          threadId: this.threadId,
+          inTopic: this.inTopic,
+        }),
       });
     }
 
@@ -300,22 +322,6 @@ class Message extends Base {
        * @type {string | undefined}
        */
       this.businessId = data.business_connection_id;
-    }
-
-    if ("is_topic_message" in data) {
-      if ("chat" in this && this.chat && "threadId" in this && this.threadId) {
-        /**
-         * If the message is sent to a forum topic
-         * @type {Forum | undefined}
-         */
-        this.forum = new Forum(this.client, this.threadId, this.chat.id);
-      }
-
-      /**
-       * True, if the message is sent to a forum topic
-       * @type {boolean | undefined}
-       */
-      this.inTopic = data.is_topic_message;
     }
 
     if ("new_chat_members" in data) {
@@ -986,7 +992,7 @@ class Message extends Base {
     return this.client.sendMessage({
       text,
       chatId: this.chat.id,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       replyParameters: {
         messageId: this.id,
       },
@@ -1044,7 +1050,7 @@ class Message extends Base {
    * Use this method to edit text and game messages.
    * @param {string} text - New text of the message, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageText"], "text" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<boolean | (Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | (Message & {content: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   edit(text, options = {}) {
     if (!this.chat) {
@@ -1063,7 +1069,7 @@ class Message extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<boolean | (Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | (Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editCaption(caption, options = {}) {
     if (!this.chat) {
@@ -1129,7 +1135,7 @@ class Message extends Base {
 
     return this.client.forwardMessage({
       chatId,
-      ...(this.threadId && { messageThreadId: this.threadId }),
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       fromChatId: this.chat.id,
       messageId: this.id,
       ...options,
