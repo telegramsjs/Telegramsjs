@@ -7855,6 +7855,16 @@ export declare class Base {
    * @protected
    */
   protected _update(data: Record<string, any>): Base;
+  /**
+   * Flatten an object. Any properties that are collections will get converted to an array of keys.
+   * @param propsRecursive Optional. If true, calls toJSON method on nested objects.
+   * @param props Optional. Specific properties to include/exclude, or rename.
+   * @returns Flattened object.
+   */
+  toJSON(
+    propsRecursive?: boolean,
+    ...props: Record<string, boolean | string>[]
+  ): Record<string, any>;
   /** Returns the id instance Chat, User, ChatMember and other */
   valueOf(): string | null;
 }
@@ -8912,6 +8922,19 @@ export declare const ErrorMessages: {
   readonly INVALID_USER_ID: "The provided ID is invalid for retrieving user information; it does not correspond to a valid user ID.";
   readonly INVALID_CHAT_ID: "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.";
 };
+
+/**
+ * Flatten an object. Any properties that are collections will get converted to an array of keys.
+ * @param obj The object to flatten.
+ * @param propsRecursive Optional. If true, calls toJSON method on nested objects.
+ * @param props Optional. Specific properties to include/exclude, or rename.
+ * @returns Flattened object.
+ */
+export declare function flatten(
+  obj: Record<string, any>,
+  propsRecursive?: boolean,
+  ...props: Record<string, boolean | string>[]
+): Record<string, any>;
 
 /**
  * Represents a generic error from the Telegram API.

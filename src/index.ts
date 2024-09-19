@@ -8,6 +8,7 @@ export * from "./util/markup/Keyboard";
 export * from "./util/ChatPermissions";
 export * from "./util/UserPermissions";
 export * from "./util/Constants";
+export { flatten } from "./util/Utils";
 export * from "./util/ApiPermissions";
 export * from "./managers/BaseManager";
 export * from "./managers/ChatManager";
