@@ -1,3 +1,4 @@
+import url from "node:url";
 import type { Buffer } from "node:buffer";
 import type { ReadStream } from "node:fs";
 import type { TlsOptions } from "node:tls";
@@ -25,8 +26,8 @@ interface ILoginOptions {
     offset?: number;
     limit?: number;
     timeout?: number;
-    allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
-    drop_pending_updates?: boolean;
+    allowedUpdates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
+    dropPendingUpdates?: boolean;
   };
   webhook?: {
     url: string;
@@ -34,13 +35,13 @@ interface ILoginOptions {
     host?: string;
     path?: string;
     certificate?: Buffer | ReadStream | string;
-    ip_address?: string;
-    max_connections?: number;
+    ipAddress?: string;
+    maxConnections?: number;
     tlsOptions?: TlsOptions;
     requestCallback?: RequestListener;
-    allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
-    drop_pending_updates?: boolean;
-    secret_token?: string;
+    allowedUpdates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
+    dropPendingUpdates?: boolean;
+    secretToken?: string;
   };
 }
 
@@ -88,15 +89,17 @@ class TelegramClient extends BaseClient {
 
   /**
    * Creates an instance of TelegramClient.
-   * @param {string} authToken - The authentication token for the Telegram bot.
-   * @param {ClientOptions} [options={}] - Optional client parameters.
+   * @param authToken - The authentication token for the Telegram bot.
+   * @param options - Optional client parameters.
    * @throws {TelegramError} If the authentication token is not specified.
    */
   constructor(
     public readonly authToken: string,
-    public readonly options: ClientOptions = {},
+    public readonly options: ClientOptions = DefaultParameters,
   ) {
     super(authToken, { ...DefaultClientParameters, ...options });
+
+    Object.assign(this.options, { ...DefaultParameters, ...options });
 
     if (!authToken) {
       throw new TelegramError(ErrorCodes.MissingToken);
@@ -126,14 +129,18 @@ class TelegramClient extends BaseClient {
 
   /**
    * Logs in to the Telegram API using the specified options.
-   * @param {ILoginOptions} [options={ polling: DefaultParameters }] - The login options.
+   * @param options - The login options.
    * @throws {TelegramError} If invalid options are provided.
    */
   async login(
     options: ILoginOptions = { polling: DefaultParameters },
   ): Promise<void> {
     if ("polling" in options) {
-      await this.polling.startPolling(options.polling);
+      await this.deleteWebhook(options.polling?.dropPendingUpdates);
+      await this.polling.startPolling({
+        ...DefaultParameters,
+        ...options.polling,
+      });
       return;
     }
 
@@ -142,10 +149,20 @@ class TelegramClient extends BaseClient {
         throw new TelegramError(ErrorCodes.MissingUrlParameter);
       }
 
-      await this.setWebhook(options.webhook);
+      const parsedUrl = url.parse(options.webhook.url);
+
+      options.webhook.path ??= parsedUrl.path ?? "/";
+      if (parsedUrl.port) {
+        options.webhook.port ??= Number(parsedUrl.port);
+      }
+      if (parsedUrl.host) {
+        options.webhook.host ??= parsedUrl.host;
+      }
+
+      await this.setWebhook({ ...DefaultParameters, ...options.webhook });
       await this.webhook.startWebhook(
-        options.webhook?.path,
-        options.webhook?.secret_token,
+        options.webhook.path,
+        options.webhook.secretToken,
         options.webhook,
       );
       return;
