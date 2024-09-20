@@ -2,7 +2,7 @@ import type {
   InlineKeyboardButton,
   SwitchInlineQueryChosenChat,
   LoginUrl,
-} from "../../client/interfaces/Markup";
+} from "@telegram.ts/types";
 
 /**
  * Represents an inline keyboard for Telegram bots.
@@ -10,10 +10,10 @@ import type {
 class InlineKeyboard {
   /**
    * Creates an instance of InlineKeyboard.
-   * @param inlineKeyboard - A 2D array of inline keyboard buttons.
+   * @param inline_keyboard - A 2D array of inline keyboard buttons.
    */
   constructor(
-    public readonly inlineKeyboard: InlineKeyboardButton[][] = [[]],
+    public readonly inline_keyboard: InlineKeyboardButton[][] = [[]],
   ) {}
 
   /**
@@ -22,7 +22,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   add(...buttons: InlineKeyboardButton[]): this {
-    this.inlineKeyboard[this.inlineKeyboard.length - 1]?.push(...buttons);
+    this.inline_keyboard[this.inline_keyboard.length - 1]?.push(...buttons);
     return this;
   }
 
@@ -32,7 +32,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   row(...buttons: InlineKeyboardButton[]): this {
-    this.inlineKeyboard.push(buttons);
+    this.inline_keyboard.push(buttons);
     return this;
   }
 
@@ -73,7 +73,7 @@ class InlineKeyboard {
    * @returns The created callback button.
    */
   static text(text: string, data = text): InlineKeyboardButton.CallbackButton {
-    return { text, callbackData: data };
+    return { text, callback_data: data };
   }
 
   /**
@@ -93,7 +93,7 @@ class InlineKeyboard {
    * @returns The created WebApp button.
    */
   static webApp(text: string, url: string): InlineKeyboardButton.WebAppButton {
-    return { text, webApp: { url } };
+    return { text, web_app: { url } };
   }
 
   /**
@@ -118,7 +118,7 @@ class InlineKeyboard {
   ): InlineKeyboardButton.LoginButton {
     return {
       text,
-      loginUrl: typeof loginUrl === "string" ? { url: loginUrl } : loginUrl,
+      login_url: typeof loginUrl === "string" ? { url: loginUrl } : loginUrl,
     };
   }
 
@@ -142,7 +142,7 @@ class InlineKeyboard {
     text: string,
     query = "",
   ): InlineKeyboardButton.SwitchInlineButton {
-    return { text, switchInlineQuery: query };
+    return { text, switch_inline_query: query };
   }
 
   /**
@@ -165,7 +165,7 @@ class InlineKeyboard {
     text: string,
     query = "",
   ): InlineKeyboardButton.SwitchInlineCurrentChatButton {
-    return { text, switchInlineQueryCurrentChat: query };
+    return { text, switch_inline_query_current_chat: query };
   }
 
   /**
@@ -191,7 +191,7 @@ class InlineKeyboard {
     text: string,
     query: SwitchInlineQueryChosenChat = {},
   ): InlineKeyboardButton.SwitchInlineChosenChatButton {
-    return { text, switchInlineQueryChosenChat: query };
+    return { text, switch_inline_query_chosen_chat: query };
   }
 
   /**
@@ -209,7 +209,7 @@ class InlineKeyboard {
    * @returns The created game button.
    */
   static game(text: string): InlineKeyboardButton.GameButton {
-    return { text, callbackGame: {} };
+    return { text, callback_game: {} };
   }
 
   /**
@@ -235,7 +235,7 @@ class InlineKeyboard {
    * @returns A new instance of InlineKeyboard with the same buttons.
    */
   clone(): InlineKeyboard {
-    return new InlineKeyboard(this.inlineKeyboard.map((row) => row.slice()));
+    return new InlineKeyboard(this.inline_keyboard.map((row) => row.slice()));
   }
 
   /**
@@ -258,12 +258,12 @@ class InlineKeyboard {
   equals(other: InlineKeyboard): boolean {
     if (!other || !(other instanceof InlineKeyboard)) return false;
 
-    if (this.inlineKeyboard.length !== other.inlineKeyboard.length)
+    if (this.inline_keyboard.length !== other.inline_keyboard.length)
       return false;
 
-    for (let i = 0; i < this.inlineKeyboard.length; i++) {
-      const row = this.inlineKeyboard[i];
-      const otherRow = other.inlineKeyboard[i];
+    for (let i = 0; i < this.inline_keyboard.length; i++) {
+      const row = this.inline_keyboard[i];
+      const otherRow = other.inline_keyboard[i];
 
       if (!row || !otherRow || row.length !== otherRow.length) return false;
 
@@ -276,55 +276,55 @@ class InlineKeyboard {
         if ("url" in buttonA && "url" in buttonB) {
           if (buttonA.text !== buttonB.text || buttonA.url !== buttonB.url)
             return false;
-        } else if ("callbackData" in buttonA && "callbackData" in buttonB) {
+        } else if ("callback_data" in buttonA && "callback_data" in buttonB) {
           if (
             buttonA.text !== buttonB.text ||
-            buttonA.callbackData !== buttonB.callbackData
+            buttonA.callback_data !== buttonB.callback_data
           )
             return false;
-        } else if ("webApp" in buttonA && "webApp" in buttonB) {
+        } else if ("web_app" in buttonA && "web_app" in buttonB) {
           if (
             buttonA.text !== buttonB.text ||
-            buttonA.webApp.url !== buttonB.webApp.url
+            buttonA.web_app.url !== buttonB.web_app.url
           )
             return false;
-        } else if ("loginUrl" in buttonA && "loginUrl" in buttonB) {
+        } else if ("login_url" in buttonA && "login_url" in buttonB) {
           if (
             buttonA.text !== buttonB.text ||
-            JSON.stringify(buttonA.loginUrl) !==
-              JSON.stringify(buttonB.loginUrl)
-          )
-            return false;
-        } else if (
-          "switchInlineQuery" in buttonA &&
-          "switchInlineQuery" in buttonB
-        ) {
-          if (
-            buttonA.text !== buttonB.text ||
-            buttonA.switchInlineQuery !== buttonB.switchInlineQuery
+            JSON.stringify(buttonA.login_url) !==
+              JSON.stringify(buttonB.login_url)
           )
             return false;
         } else if (
-          "switchInlineQueryCurrentChat" in buttonA &&
-          "switchInlineQueryCurrentChat" in buttonB
+          "switch_inline_query" in buttonA &&
+          "switch_inline_query" in buttonB
         ) {
           if (
             buttonA.text !== buttonB.text ||
-            buttonA.switchInlineQueryCurrentChat !==
-              buttonB.switchInlineQueryCurrentChat
+            buttonA.switch_inline_query !== buttonB.switch_inline_query
           )
             return false;
         } else if (
-          "switchInlineQueryChosenChat" in buttonA &&
-          "switchInlineQueryChosenChat" in buttonB
+          "switch_inline_query_current_chat" in buttonA &&
+          "switch_inline_query_current_chat" in buttonB
         ) {
           if (
             buttonA.text !== buttonB.text ||
-            JSON.stringify(buttonA.switchInlineQueryChosenChat) !==
-              JSON.stringify(buttonB.switchInlineQueryChosenChat)
+            buttonA.switch_inline_query_current_chat !==
+              buttonB.switch_inline_query_current_chat
           )
             return false;
-        } else if ("callbackGame" in buttonA && "callbackGame" in buttonB) {
+        } else if (
+          "switch_inline_query_chosen_chat" in buttonA &&
+          "switch_inline_query_chosen_chat" in buttonB
+        ) {
+          if (
+            buttonA.text !== buttonB.text ||
+            JSON.stringify(buttonA.switch_inline_query_chosen_chat) !==
+              JSON.stringify(buttonB.switch_inline_query_chosen_chat)
+          )
+            return false;
+        } else if ("callback_game" in buttonA && "callback_game" in buttonB) {
           if (buttonA.text !== buttonB.text) return false;
         } else if ("pay" in buttonA && "pay" in buttonB) {
           if (buttonA.text !== buttonB.text) return false;

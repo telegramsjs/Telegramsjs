@@ -1,12 +1,5 @@
 import { MediaData } from "./MediaData";
-// @ts-ignore
-const snakeCase = require("lodash.snakecase");
-import { isCamelCase } from "../util/Utils";
 import fetch, { type RequestInit } from "node-fetch";
-import { TelegramError } from "../errors/TelegramError";
-import { ErrorCodes } from "../errors/ErrorCodes";
-import { toApiFormat } from "../util/ApiPermissions";
-import { ChatPermissions } from "../util/ChatPermissions";
 import { HTTPResponseError } from "../errors/HTTPResponseError";
 import type { IRequestFailt, IRequestSuccess } from "../types";
 
@@ -33,14 +26,10 @@ class ApiRequest {
   async transferDataToServer(
     options: Record<string, unknown>,
   ): Promise<RequestInit> {
-    const snakeCaseOptions = this.validateCamelCaseKeys(options);
     if (this.media.hasMedia(options)) {
-      return await this.media.buildFormDataConfig(
-        snakeCaseOptions,
-        this.requestOptions,
-      );
+      return await this.media.buildFormDataConfig(options, this.requestOptions);
     } else {
-      return this.media.buildJSONConfig(snakeCaseOptions, this.requestOptions);
+      return this.media.buildJSONConfig(options, this.requestOptions);
     }
   }
 
@@ -65,43 +54,6 @@ class ApiRequest {
     }
 
     return response.result;
-  }
-
-  private validateCamelCaseKeys(options: Record<string, any>) {
-    const snakeCaseOptions: Record<string, any> = {};
-
-    for (const [key, value] of Object.entries(options)) {
-      if (!isCamelCase(key)) {
-        throw new TelegramError(ErrorCodes.InvalidCamelCaseFormat, { key });
-      }
-      if (
-        key === "userAdministratorRights" ||
-        key === "botAdministratorRights"
-      ) {
-        snakeCaseOptions[snakeCase(key)] = toApiFormat(
-          new ChatPermissions(value).toObject(),
-        );
-        continue;
-      }
-      if (Array.isArray(value)) {
-        snakeCaseOptions[snakeCase(key)] = value.map((value) => {
-          if (Array.isArray(value)) {
-            return value.map((value) => this.validateCamelCaseKeys(value));
-          }
-          return typeof value === "object" && !this.media.isMediaType(value)
-            ? this.validateCamelCaseKeys(value)
-            : value;
-        });
-        continue;
-      }
-      if (typeof value === "object" && !this.media.isMediaType(value)) {
-        snakeCaseOptions[snakeCase(key)] = this.validateCamelCaseKeys(value);
-        continue;
-      }
-      snakeCaseOptions[snakeCase(key)] = value;
-    }
-
-    return snakeCaseOptions;
   }
 }
 

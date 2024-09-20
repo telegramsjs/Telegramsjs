@@ -994,7 +994,7 @@ class Message extends Base {
       chatId: this.chat.id,
       ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       replyParameters: {
-        messageId: this.id,
+        message_id: this.id,
       },
       ...options,
     });
@@ -1086,7 +1086,7 @@ class Message extends Base {
 
   /**
    * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
-   * @param {import("@telegram.ts/types").InputMedia} media - An object for a new media content of the message
+   * @param {MethodParameters["editMessageMedia"]["media"]} media - An object for a new media content of the message
    * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */

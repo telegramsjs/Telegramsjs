@@ -1648,7 +1648,7 @@ export declare class MessageReactionUpdated extends Base {
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(
-    media: import("@telegram.ts/types").InputMedia,
+    media: MethodParameters["editMessageMedia"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -1671,7 +1671,7 @@ export declare class MessageReactionUpdated extends Base {
   /**
    * Use this method to edit only the reply markup of messages.
    * @param replyMarkup - An object for an inline keyboard
-   * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} options - out parameters
+   * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(
@@ -2069,7 +2069,7 @@ export declare class MessageOrigin extends Base {
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(
-    media: import("@telegram.ts/types").InputMedia,
+    media: MethodParameters["editMessageMedia"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -4170,7 +4170,7 @@ export declare class Message extends Base {
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(
-    media: import("@telegram.ts/types").InputMedia,
+    media: MethodParameters["editMessageMedia"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -5163,7 +5163,7 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendPaidMedia(
-    media: import("@telegram.ts/types").InputPaidMedia[],
+    media: MethodParameters["sendPaidMedia"]["media"],
     starCount: number,
     options?: Omit<
       {
@@ -5496,12 +5496,7 @@ export declare class Chat extends Base {
    * @returns On success, an array of Messages that were sent is returned.
    */
   sendMediaGroup(
-    media: ReadonlyArray<
-      | import("@telegram.ts/types").InputMediaAudio
-      | import("@telegram.ts/types").InputMediaDocument
-      | import("@telegram.ts/types").InputMediaPhoto
-      | import("@telegram.ts/types").InputMediaVideo
-    >,
+    media: MethodParameters["sendMediaGroup"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -8341,12 +8336,12 @@ export type PossiblyAsync<T> = T | Promise<T>;
  * Represents an inline keyboard for Telegram bots.
  */
 export declare class InlineKeyboard {
-  readonly inlineKeyboard: InlineKeyboardButton[][];
+  readonly inline_keyboard: InlineKeyboardButton[][];
   /**
    * Creates an instance of InlineKeyboard.
    * @param inlineKeyboard - A 2D array of inline keyboard buttons.
    */
-  constructor(inlineKeyboard?: InlineKeyboardButton[][]);
+  constructor(inline_keyboard?: InlineKeyboardButton[][]);
   /**
    * Adds buttons to the last row of the inline keyboard.
    * @param buttons - The buttons to add.
@@ -8522,7 +8517,7 @@ export declare class Keyboard {
   /**
    * Indicates whether the keyboard is persistent.
    */
-  isPersistent: boolean;
+  is_persistent: boolean;
   /**
    * Indicates whether the keyboard is selective.
    */
@@ -8530,15 +8525,15 @@ export declare class Keyboard {
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  oneTimeKeyboard: boolean;
+  one_time_keyboard: boolean;
   /**
    * Indicates whether the keyboard should be resized.
    */
-  resizeKeyboard: boolean;
+  resize_keyboard: boolean;
   /**
    * The placeholder text for the input field.
    */
-  inputFieldPlaceholder?: string;
+  input_field_placeholder?: string;
   /**
    * Creates an instance of Keyboard.
    * @param keyboard - A 2D array of keyboard buttons.
@@ -8895,7 +8890,6 @@ export declare enum ErrorCodes {
   MissingToken = "MISSING_TOKEN",
   WebhookServerCreationFailed = "WEBHOOK_SERVER_CREATION_FAILED",
   InvalidFilterFunction = "INVALID_FILTER_FUNCTION",
-  InvalidCamelCaseFormat = "INVALID_CAMEL_CASE_FORMAT",
   UserIdNotAvailable = "USER_ID_NOT_AVAILABLE",
   MessageIdNotAvailable = "MESSAGE_ID_NOT_AVAILABLE",
   ChatIdNotAvailable = "CHAT_ID_NOT_AVAILABLE",
@@ -8912,7 +8906,6 @@ export declare const ErrorMessages: {
   readonly MISSING_TOKEN: "A token must be specified to receive updates from Telegram.";
   readonly WEBHOOK_SERVER_CREATION_FAILED: "The webhook server could not be created.";
   readonly INVALID_FILTER_FUNCTION: "The provided 'options.filter' is not a function.";
-  readonly INVALID_CAMEL_CASE_FORMAT: "The provided string '${key}' does not follow camelCase format.";
   readonly USER_ID_NOT_AVAILABLE: "The user ID related to this message is not available.";
   readonly MESSAGE_ID_NOT_AVAILABLE: "The message ID related to this message is not available.";
   readonly CHAT_ID_NOT_AVAILABLE: "The chat ID related to this message is not available.";

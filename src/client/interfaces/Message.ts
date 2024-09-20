@@ -3,33 +3,33 @@ export interface User {
   /** Unique identifier for this user or bot. */
   id: number | string;
   /** True, if this user is a bot */
-  isBot: boolean;
+  is_bot: boolean;
   /** User's or bot's first name */
-  firstName: string;
+  first_name: string;
   /** User's or bot's last name */
-  lastName?: string;
+  last_name?: string;
   /** User's or bot's username */
   username?: string;
   /** IETF language tag of the user's language */
-  languageCode?: string;
+  language_code?: string;
   /** True, if this user is a Telegram Premium user */
-  isPremium?: true;
+  is_premium?: true;
   /** True, if this user added the bot to the attachment menu */
-  addedToAttachmentMenu?: true;
+  added_to_attachment_menu?: true;
 }
 
 /** Describes the options used for link preview generation. */
 export interface LinkPreviewOptions {
   /** True, if the link preview is disabled */
-  isDisabled?: boolean;
+  is_disabled?: boolean;
   /** URL to use for the link preview. If empty, then the first URL found in the message text will be used */
   url?: string;
   /** True, if the media in the link preview is suppposed to be shrunk; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview */
-  preferSmallMedia?: boolean;
+  prefer_small_media?: boolean;
   /** True, if the media in the link preview is suppposed to be enlarged; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview */
-  preferLargeMedia?: boolean;
+  prefer_large_media?: boolean;
   /** True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text */
-  showAboveText?: boolean;
+  show_above_text?: boolean;
 }
 
 export declare namespace MessageEntity {
@@ -77,7 +77,7 @@ export declare namespace MessageEntity {
   export interface CustomEmojiMessageEntity extends AbstractMessageEntity {
     type: "custom_emoji";
     /** For “custom_emoji” only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker */
-    customEmojiId: string;
+    custom_emoji_id: string;
   }
 }
 
@@ -94,9 +94,9 @@ export interface MaskPosition {
   /** The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”. */
   point: "forehead" | "eyes" | "mouth" | "chin";
   /** Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place mask just to the left of the default mask position. */
-  xShift: number;
+  x_shift: number;
   /** Shift by Y-axis measured in heights of the mask scaled to the face size, from top to bottom. For example, 1.0 will place the mask just below the default mask position. */
-  yShift: number;
+  y_shift: number;
   /** Mask scaling coefficient. For example, 2.0 means double size. */
   scale: number;
 }
@@ -106,27 +106,27 @@ export interface InputPollOption {
   /** Option text, 1-100 characters */
   text: string;
   /** Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed */
-  textParseMode?: string;
+  text_parse_mode?: string;
   /** A list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode */
-  textEntities?: MessageEntity[];
+  text_entities?: MessageEntity[];
 }
 
 /** Describes reply parameters for the message that is being sent. */
 export interface ReplyParameters {
   /** Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified */
-  messageId: number | string;
+  message_id: number | string;
   /** If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account. */
-  chatId?: number | string;
+  chat_id?: number | string;
   /** Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic. Always True for messages sent on behalf of a business account. */
-  allowSendingWithoutReply?: boolean;
+  allow_sending_without_reply?: boolean;
   /** Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message. */
   quote?: string;
   /** Mode for parsing entities in the quote. See formatting options for more details. */
-  quoteParseMode?: string;
+  quote_parse_mode?: string;
   /** A JSON-serialized list of special entities that appear in the quote. It can be specified instead of quote_parse_mode. */
-  quoteEntities?: MessageEntity[];
+  quote_entities?: MessageEntity[];
   /** Position of the quote in the original message in UTF-16 code units */
-  quotePosition?: number;
+  quote_position?: number;
 }
 
 /** This object describes the type of a reaction. Currently, it can be one of
@@ -220,7 +220,7 @@ export interface ReactionTypeCustomEmoji {
   /** Type of the reaction, always “custom_emoji” */
   type: "custom_emoji";
   /** Custom emoji identifier */
-  customEmojiId: string;
+  custom_emoji_id: string;
 }
 
 /** This object represents a point on the map. */
@@ -230,11 +230,11 @@ export interface Location {
   /** Longitude as defined by sender */
   longitude: number;
   /** The radius of uncertainty for the location, measured in meters; 0-1500 */
-  horizontalAccuracy?: number;
+  horizontal_accuracy?: number;
   /** Time relative to the message sending date, during which the location can be updated; in seconds. For active live locations only. */
-  livePeriod?: number;
+  live_period?: number;
   /** The direction in which user is moving, in degrees; 1-360. For active live locations only. */
   heading?: number;
   /** The maximum distance for proximity alerts about approaching another chat member, in meters. For sent live locations only. */
-  proximityAlertRadius?: number;
+  proximity_alert_padius?: number;
 }

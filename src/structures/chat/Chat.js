@@ -668,7 +668,7 @@ class Chat extends Base {
 
   /**
    * Use this method to send paid media to channel chats.
-   * @param {import("@telegram.ts/types").InputPaidMedia[]} media - An array describing the media to be sent; up to 10 items
+   * @param {MethodParameters["sendPaidMedia"]["media"]} media - An array describing the media to be sent; up to 10 items
    * @param {number} starCount - The number of Telegram Stars that must be paid to buy access to the media
    * @param {Omit<MethodParameters["sendPaidMedia"], "media" | "starCount" | "chatId">} [options={}] - out parameters
    * @returns {Promise<import("../message/Message").Message & { paidMedia: import("../media/paid/PaidMediaInfo").PaidMediaInfo }>} - On success, the sent Message is returned.
@@ -759,7 +759,7 @@ class Chat extends Base {
 
   /**
    * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type.
-   * @param {ReadonlyArray<import("@telegram.ts/types").InputMediaAudio | import("@telegram.ts/types").InputMediaDocument | import("@telegram.ts/types").InputMediaPhoto | import("@telegram.ts/types").InputMediaVideo>} media - media
+   * @param {MethodParameters["sendMediaGroup"]["media"]} media - media
    * @param {Omit<MethodParameters["sendMediaGroup"], "media" | "chatId" | "messageThreadId">} [options={}] - out parameters
    * @returns {Promise<Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, an array of Messages that were sent is returned.
    */

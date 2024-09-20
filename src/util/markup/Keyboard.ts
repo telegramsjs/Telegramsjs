@@ -3,7 +3,7 @@ import type {
   KeyboardButtonPollType,
   KeyboardButtonRequestChat,
   KeyboardButtonRequestUsers,
-} from "../../client/interfaces/Markup";
+} from "@telegram.ts/types";
 
 /**
  * Represents a custom keyboard for Telegram bots.
@@ -12,7 +12,7 @@ class Keyboard {
   /**
    * Indicates whether the keyboard is persistent.
    */
-  public isPersistent: boolean = false;
+  public is_persistent: boolean = false;
 
   /**
    * Indicates whether the keyboard is selective.
@@ -22,17 +22,17 @@ class Keyboard {
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  public oneTimeKeyboard: boolean = false;
+  public one_time_keyboard: boolean = false;
 
   /**
    * Indicates whether the keyboard should be resized.
    */
-  public resizeKeyboard: boolean = false;
+  public resize_keyboard: boolean = false;
 
   /**
    * The placeholder text for the input field.
    */
-  public inputFieldPlaceholder?: string;
+  public input_field_placeholder?: string;
 
   /**
    * Creates an instance of Keyboard.
@@ -88,7 +88,7 @@ class Keyboard {
   requestUsers(
     text: string,
     requestId: number,
-    options: Omit<KeyboardButtonRequestUsers, "requestId"> = {},
+    options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
   ): this {
     return this.add(Keyboard.requestUsers(text, requestId, options));
   }
@@ -103,9 +103,9 @@ class Keyboard {
   static requestUsers(
     text: string,
     requestId: number,
-    options: Omit<KeyboardButtonRequestUsers, "requestId"> = {},
+    options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
   ): KeyboardButton.RequestUsersButton {
-    return { text, requestUsers: { requestId, ...options } };
+    return { text, request_users: { request_id: requestId, ...options } };
   }
 
   /**
@@ -118,8 +118,8 @@ class Keyboard {
   requestChat(
     text: string,
     requestId: number,
-    options: Omit<KeyboardButtonRequestChat, "requestId"> = {
-      chatIsChannel: false,
+    options: Omit<KeyboardButtonRequestChat, "request_id"> = {
+      chat_is_channel: false,
     },
   ): this {
     return this.add(Keyboard.requestChat(text, requestId, options));
@@ -135,11 +135,11 @@ class Keyboard {
   static requestChat(
     text: string,
     requestId: number,
-    options: Omit<KeyboardButtonRequestChat, "requestId"> = {
-      chatIsChannel: false,
+    options: Omit<KeyboardButtonRequestChat, "request_id"> = {
+      chat_is_channel: false,
     },
   ): KeyboardButton.RequestChatButton {
-    return { text, requestChat: { requestId, ...options } };
+    return { text, request_chat: { request_id: requestId, ...options } };
   }
 
   /**
@@ -157,7 +157,7 @@ class Keyboard {
    * @returns The created request contact button.
    */
   static requestContact(text: string): KeyboardButton.RequestContactButton {
-    return { text, requestContact: true };
+    return { text, request_contact: true };
   }
 
   /**
@@ -175,7 +175,7 @@ class Keyboard {
    * @returns The created request location button.
    */
   static requestLocation(text: string): KeyboardButton.RequestLocationButton {
-    return { text, requestLocation: true };
+    return { text, request_location: true };
   }
 
   /**
@@ -198,7 +198,7 @@ class Keyboard {
     text: string,
     type: KeyboardButtonPollType["type"] = "regular",
   ): KeyboardButton.RequestPollButton {
-    return { text, requestPoll: { type } };
+    return { text, request_poll: { type } };
   }
 
   /**
@@ -218,7 +218,7 @@ class Keyboard {
    * @returns The created web app button.
    */
   static webApp(text: string, url: string): KeyboardButton.WebAppButton {
-    return { text, webApp: { url } };
+    return { text, web_app: { url } };
   }
 
   /**
@@ -227,7 +227,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   persistent(isEnabled = true): this {
-    this.isPersistent = isEnabled;
+    this.is_persistent = isEnabled;
     return this;
   }
 
@@ -247,7 +247,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   oneTime(isEnabled = true): this {
-    this.oneTimeKeyboard = isEnabled;
+    this.one_time_keyboard = isEnabled;
     return this;
   }
 
@@ -257,7 +257,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   resized(isEnabled = true): this {
-    this.resizeKeyboard = isEnabled;
+    this.resize_keyboard = isEnabled;
     return this;
   }
 
@@ -267,7 +267,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   placeholder(value: string): this {
-    this.inputFieldPlaceholder = value;
+    this.input_field_placeholder = value;
     return this;
   }
 
@@ -277,12 +277,12 @@ class Keyboard {
    */
   clone(keyboard: KeyboardButton[][] = this.keyboard): Keyboard {
     const clone = new Keyboard(keyboard.map((row) => row.slice()));
-    clone.isPersistent = this.isPersistent;
+    clone.is_persistent = this.is_persistent;
     clone.selective = this.selective;
-    clone.oneTimeKeyboard = this.oneTimeKeyboard;
-    clone.resizeKeyboard = this.resizeKeyboard;
-    if (this.inputFieldPlaceholder) {
-      clone.inputFieldPlaceholder = this.inputFieldPlaceholder;
+    clone.one_time_keyboard = this.one_time_keyboard;
+    clone.resize_keyboard = this.resize_keyboard;
+    if (this.input_field_placeholder) {
+      clone.input_field_placeholder = this.input_field_placeholder;
     }
     return clone;
   }

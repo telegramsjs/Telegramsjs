@@ -33,9 +33,9 @@ export interface PassportElementErrorDataField {
     | "internal_passport"
     | "address";
   /** Name of the data field that has the error. */
-  fieldName: string;
+  field_name: string;
   /** Base64-encoded data hash. */
-  dataHash: string;
+  data_hash: string;
   /** Error message. */
   message: string;
 }
@@ -47,7 +47,7 @@ export interface PassportElementErrorFrontSide {
   /** The section of the user's Telegram Passport that has the issue. Possible values are "passport", "driver_license", "identity_card", and "internal_passport". */
   type: "passport" | "driver_license" | "identity_card" | "internal_passport";
   /** Base64-encoded hash of the file with the front side of the document. */
-  fileHash: string;
+  file_hash: string;
   /** Error message. */
   message: string;
 }
@@ -58,10 +58,8 @@ export interface PassportElementErrorReverseSide {
   source: "reverse_side";
   /** The section of the user's Telegram Passport that has the issue. Possible values are "driver_license" and "identity_card". */
   type: "driver_license" | "identity_card";
-  /** Base64-encoded hash of the file with the reverse side
-
-  of the document. */
-  fileHash: string;
+  /** Base64-encoded hash of the file with the reverse side of the document. */
+  file_hash: string;
   /** Error message. */
   message: string;
 }
@@ -73,7 +71,7 @@ export interface PassportElementErrorSelfie {
   /** The section of the user's Telegram Passport that has the issue. Possible values are "passport", "driver_license", "identity_card", and "internal_passport". */
   type: "passport" | "driver_license" | "identity_card" | "internal_passport";
   /** Base64-encoded hash of the file with the selfie. */
-  fileHash: string;
+  file_hash: string;
   /** Error message. */
   message: string;
 }
@@ -90,7 +88,7 @@ export interface PassportElementErrorFile {
     | "passport_registration"
     | "temporary_registration";
   /** Base64-encoded file hash. */
-  fileHash: string;
+  file_hash: string;
   /** Error message. */
   message: string;
 }
@@ -107,7 +105,7 @@ export interface PassportElementErrorFiles {
     | "passport_registration"
     | "temporary_registration";
   /** List of base64-encoded file hashes. */
-  fileHashes: string[];
+  file_hashes: string[];
   /** Error message. */
   message: string;
 }
@@ -128,7 +126,7 @@ export interface PassportElementErrorTranslationFile {
     | "passport_registration"
     | "temporary_registration";
   /** Base64-encoded file hash. */
-  fileHash: string;
+  file_hash: string;
   /** Error message. */
   message: string;
 }
@@ -149,7 +147,7 @@ export interface PassportElementErrorTranslationFiles {
     | "passport_registration"
     | "temporary_registration";
   /** List of base64-encoded file hashes. */
-  fileHashes: string[];
+  file_hashes: string[];
   /** Error message. */
   message: string;
 }
@@ -174,7 +172,7 @@ export interface PassportElementErrorUnspecified {
     | "phone_number"
     | "email";
   /** Base64-encoded element hash. */
-  elementHash: string;
+  element_hash: string;
   /** Error message. */
   message: string;
 }
