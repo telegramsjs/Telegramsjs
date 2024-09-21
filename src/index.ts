@@ -21,7 +21,7 @@ export * from "./client/WorkerClient";
 export * from "./errors/HTTPResponseError";
 export * from "./errors/TelegramError";
 export * from "./errors/ErrorCodes";
-export * from "./rest/ApiRequest";
+export * from "./rest/Rest";
 export * from "./rest/MediaData";
 export * from "./rest/MultipartStream";
 export * from "./structures/index";

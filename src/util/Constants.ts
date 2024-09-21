@@ -1,6 +1,6 @@
 import { Agent } from "node:https";
 
-const DefaultParameters = {
+const DefaultPollingParameters = {
   offset: 0,
   limit: 100,
   timeout: 30,
@@ -21,11 +21,12 @@ const DefaultClientParameters = {
   chatCacheMaxSize: -1,
   userCacheMaxSize: -1,
   pollingTimeout: 300,
-  requestOptions: {
+  restOptions: {
     agent: new Agent({
       keepAlive: true,
       keepAliveMsecs: 10000,
     }),
+    enableRateLimit: true,
   },
 } as const;
 
@@ -76,7 +77,7 @@ const ReactionCollectorEvents = {
 } as const;
 
 export {
-  DefaultParameters,
+  DefaultPollingParameters,
   DefaultClientParameters,
   Events,
   CollectorEvents,

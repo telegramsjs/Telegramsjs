@@ -2,9 +2,9 @@ import url from "node:url";
 import type { Buffer } from "node:buffer";
 import type { ReadStream } from "node:fs";
 import type { TlsOptions } from "node:tls";
-import type { RequestInit } from "node-fetch";
 import type { RequestListener } from "node:http";
 import type { Update } from "@telegram.ts/types";
+import type { IRestOptions } from "../rest/Rest";
 import { BaseClient } from "./BaseClient";
 import { PollingClient } from "./PollingClient";
 import { WebhookClient } from "./WebhookClient";
@@ -14,7 +14,7 @@ import { ErrorCodes } from "../errors/ErrorCodes";
 import type { ClientUser } from "../structures/misc/ClientUser";
 import {
   Events,
-  DefaultParameters,
+  DefaultPollingParameters,
   DefaultClientParameters,
 } from "../util/Constants";
 
@@ -50,7 +50,7 @@ interface ILoginOptions {
  */
 interface ClientOptions {
   offset?: number;
-  requestOptions?: RequestInit;
+  restOptions?: IRestOptions;
   chatCacheMaxSize?: number;
   userCacheMaxSize?: number;
   pollingTimeout?: number;
@@ -95,11 +95,11 @@ class TelegramClient extends BaseClient {
    */
   constructor(
     public readonly authToken: string,
-    public readonly options: ClientOptions = DefaultParameters,
+    public readonly options: ClientOptions = DefaultClientParameters,
   ) {
     super(authToken, { ...DefaultClientParameters, ...options });
 
-    Object.assign(this.options, { ...DefaultParameters, ...options });
+    Object.assign(this.options, { ...DefaultClientParameters, ...options });
 
     if (!authToken) {
       throw new TelegramError(ErrorCodes.MissingToken);
@@ -133,12 +133,12 @@ class TelegramClient extends BaseClient {
    * @throws {TelegramError} If invalid options are provided.
    */
   async login(
-    options: ILoginOptions = { polling: DefaultParameters },
+    options: ILoginOptions = { polling: DefaultPollingParameters },
   ): Promise<void> {
     if ("polling" in options) {
       await this.deleteWebhook(options.polling?.dropPendingUpdates);
       await this.polling.startPolling({
-        ...DefaultParameters,
+        ...DefaultPollingParameters,
         ...options.polling,
       });
       return;
@@ -159,7 +159,10 @@ class TelegramClient extends BaseClient {
         options.webhook.host ??= parsedUrl.host;
       }
 
-      await this.setWebhook({ ...DefaultParameters, ...options.webhook });
+      await this.setWebhook({
+        allowedUpdates: DefaultPollingParameters.allowedUpdates,
+        ...options.webhook,
+      });
       await this.webhook.startWebhook(
         options.webhook.path,
         options.webhook.secretToken,
