@@ -51,7 +51,7 @@
   "bugs": {
     "url": "https://github.com/Telegramsjs/telegramsjs/issues"
   },
-  "homepage": "https://telegramsjs.vercel.app/",
+  "homepage": "https://docs-telegramsjs.vercel.app/",
   "devDependencies": {
     "@telegram.ts/types": "^1.15.1",
     "@types/node": "^18.19.39",
