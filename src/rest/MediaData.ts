@@ -70,7 +70,8 @@ class MediaData {
     "video",
     "animation",
     "voice",
-    "videoNote",
+    "video_note",
+    "certificate",
   ];
 
   /**

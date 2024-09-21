@@ -277,18 +277,59 @@ export declare class MediaData {
   ): Promise<void>;
 }
 
+export interface IRateLimitData {
+  /** The API method of this request */
+  method: keyof ApiMethods;
+  /** In case of exceeding flood control, the number of seconds left to wait before the request can be repeated */
+  retryAfter?: number;
+  /** The group has been migrated to a supergroup with the specified identifier */
+  migrateToChatId?: string;
+}
+
+export interface IRestEventHandlers {
+  rateLimit: (rateLimitData: IRateLimitData) => PossiblyAsync<void>;
+  apiRequest: (method: string, options: RequestInit) => PossiblyAsync<void>;
+  apiResponse: (
+    method: string,
+    response: IRequestSuccess<unknown> | IRequestFailt,
+  ) => PossiblyAsync<void>;
+}
+
+export type IRestOptions = {
+  enableRateLimit?: boolean;
+} & Omit<RequestInit, "timeout" | "size" | "follow" | "signal" | "redirect">;
+
 /**
  * Handles API requests to the Telegram Bot API.
  */
-export declare class ApiRequest {
-  readonly authToken: string;
-  readonly requestOptions?: RequestInit;
+export declare class Rest extends EventEmitter {
+  readonly options?: IRestOptions;
   media: MediaData;
   /**
    * @param authToken - The authentication token for the Telegram Bot API.
    * @param requestOptions - Options for the fetch request.
    */
-  constructor(authToken: string, requestOptions?: RequestInit);
+  constructor(authToken: string, requestOptions?: IRestOptions);
+  /**
+   * Adds a typed listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The Rest instance.
+   */
+  on<T extends keyof IRestEventHandlers>(
+    event: T,
+    listener: IRestEventHandlers[T],
+  ): this;
+  /**
+   * Adds a typed one-time listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The Rest instance.
+   */
+  once<T extends keyof IRestEventHandlers>(
+    event: T,
+    listener: IRestEventHandlers[T],
+  ): this;
   /**
    * Prepares the configuration for the fetch request based on the provided options.
    * @param options - The options to include in the request.
@@ -296,14 +337,17 @@ export declare class ApiRequest {
    */
   transferDataToServer(options: Record<string, unknown>): Promise<RequestInit>;
   /**
-   * Makes a GET request to the Telegram Bot API.
+   * Makes a request to the Telegram Bot API.
+   * Handles rate limits and retries the request if necessary.
    * @param method - The API method to call.
    * @param options - The options to include in the request.
    * @returns The result from the API response.
    * @throws {HTTPResponseError} If the API response indicates an error.
    */
-  get<T>(method: string, options?: Record<string, unknown>): Promise<T>;
-  private validateCamelCaseKeys;
+  request<T>(
+    method: keyof ApiMethods,
+    options?: Record<string, unknown>,
+  ): Promise<T>;
 }
 
 export declare class InputFile extends Base {
@@ -1602,7 +1646,7 @@ export declare class MessageReactionUpdated extends Base {
       "text" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         content: string;
         editedUnixTime: number;
@@ -1633,7 +1677,7 @@ export declare class MessageReactionUpdated extends Base {
       "caption" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         caption?: string;
         editedUnixTime: number;
@@ -1648,7 +1692,7 @@ export declare class MessageReactionUpdated extends Base {
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(
-    media: import("@telegram.ts/types").InputMedia,
+    media: MethodParameters["editMessageMedia"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -1671,7 +1715,7 @@ export declare class MessageReactionUpdated extends Base {
   /**
    * Use this method to edit only the reply markup of messages.
    * @param replyMarkup - An object for an inline keyboard
-   * @param  {Omit<MethodParameters["editMessageReplyMarkup"], "media" | "chatId" | "messageId">} options - out parameters
+   * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editReplyMarkup(
@@ -2023,7 +2067,7 @@ export declare class MessageOrigin extends Base {
       "text" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         content: string;
         editedUnixTime: number;
@@ -2054,7 +2098,7 @@ export declare class MessageOrigin extends Base {
       "caption" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         caption?: string;
         editedUnixTime: number;
@@ -2069,7 +2113,7 @@ export declare class MessageOrigin extends Base {
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(
-    media: import("@telegram.ts/types").InputMedia,
+    media: MethodParameters["editMessageMedia"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -4124,7 +4168,7 @@ export declare class Message extends Base {
       "text" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         content: string;
         editedUnixTime: number;
@@ -4155,7 +4199,7 @@ export declare class Message extends Base {
       "caption" | "chatId" | "messageId"
     >,
   ): Promise<
-    | boolean
+    | true
     | (Message & {
         caption?: string;
         editedUnixTime: number;
@@ -4170,7 +4214,7 @@ export declare class Message extends Base {
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editMedia(
-    media: import("@telegram.ts/types").InputMedia,
+    media: MethodParameters["editMessageMedia"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -4526,6 +4570,7 @@ export declare class Chat extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").Chat & {
       threadId?: string;
+      inTopic?: boolean;
     },
   );
   /** Unique identifier for this chat */
@@ -4537,9 +4582,11 @@ export declare class Chat extends Base {
   override _patch(
     data: import("@telegram.ts/types").Chat & {
       threadId?: string;
+      inTopic?: boolean;
     },
   ): import("@telegram.ts/types").Chat & {
     threadId?: string;
+    inTopic?: boolean;
   };
   /**
    * Title, for supergroups, channels and group chats
@@ -4565,6 +4612,10 @@ export declare class Chat extends Base {
    * Unique identifier of the forum topic
    */
   threadId?: string;
+  /**
+   * True, if the message is sent to a forum topic
+   */
+  inTopic?: boolean;
 
   isChannel(): this is this & {
     title: string;
@@ -4573,6 +4624,7 @@ export declare class Chat extends Base {
     lastName?: undefined;
     forum?: undefined;
     threadId?: undefined;
+    inTopic?: undefined;
   };
 
   isSupergroup(): this is this & {
@@ -4581,7 +4633,8 @@ export declare class Chat extends Base {
     firstName?: undefined;
     lastName?: undefined;
     forum?: true;
-    threadId?: number;
+    threadId?: string;
+    inTopic?: boolean;
   };
 
   isGroup(): this is this & {
@@ -4591,6 +4644,7 @@ export declare class Chat extends Base {
     lastName?: undefined;
     forum?: undefined;
     threadId?: undefined;
+    inTopic?: undefined;
   };
 
   isPrivate(): this is this & {
@@ -4600,6 +4654,7 @@ export declare class Chat extends Base {
     lastName?: string;
     forum?: undefined;
     threadId?: undefined;
+    inTopic?: undefined;
   };
 
   me(): Promise<ChatMember>;
@@ -5152,7 +5207,7 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendPaidMedia(
-    media: import("@telegram.ts/types").InputPaidMedia[],
+    media: MethodParameters["sendPaidMedia"]["media"],
     starCount: number,
     options?: Omit<
       {
@@ -5485,12 +5540,7 @@ export declare class Chat extends Base {
    * @returns On success, an array of Messages that were sent is returned.
    */
   sendMediaGroup(
-    media: ReadonlyArray<
-      | import("@telegram.ts/types").InputMediaAudio
-      | import("@telegram.ts/types").InputMediaDocument
-      | import("@telegram.ts/types").InputMediaPhoto
-      | import("@telegram.ts/types").InputMediaVideo
-    >,
+    media: MethodParameters["sendMediaGroup"]["media"],
     options?: Omit<
       {
         businessConnectionId?: string;
@@ -6641,7 +6691,7 @@ export type EventHandlerParameters =
   | PaidMediaPurchased;
 
 export declare class BaseClient extends EventEmitter {
-  readonly apiRequest: ApiRequest;
+  readonly rest: Rest;
   readonly users: UserManager;
   readonly chats: ChatManager;
   readonly updates: Collection<number, EventHandlerParameters>;
@@ -7729,8 +7779,8 @@ export interface ILoginOptions {
     offset?: number;
     limit?: number;
     timeout?: number;
-    allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
-    drop_pending_updates?: boolean;
+    allowedUpdates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
+    dropPendingUpdates?: boolean;
   };
   webhook?: {
     url: string;
@@ -7738,13 +7788,13 @@ export interface ILoginOptions {
     host?: string;
     path?: string;
     certificate?: Buffer | ReadStream | string;
-    ip_address?: string;
-    max_connections?: number;
+    ipAddress?: string;
+    maxConnections?: number;
     tlsOptions?: TlsOptions;
     requestCallback?: RequestListener;
-    allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
-    drop_pending_updates?: boolean;
-    secret_token?: string;
+    allowedUpdates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
+    dropPendingUpdates?: boolean;
+    secretToken?: string;
   };
 }
 
@@ -7753,7 +7803,7 @@ export interface ILoginOptions {
  */
 export interface ClientOptions {
   offset?: number;
-  requestOptions?: RequestInit;
+  restOptions?: IRestOptions;
   chatCacheMaxSize?: number;
   userCacheMaxSize?: number;
   pollingTimeout?: number;
@@ -7844,6 +7894,16 @@ export declare class Base {
    * @protected
    */
   protected _update(data: Record<string, any>): Base;
+  /**
+   * Flatten an object. Any properties that are collections will get converted to an array of keys.
+   * @param propsRecursive Optional. If true, calls toJSON method on nested objects.
+   * @param props Optional. Specific properties to include/exclude, or rename.
+   * @returns Flattened object.
+   */
+  toJSON(
+    propsRecursive?: boolean,
+    ...props: Record<string, boolean | string>[]
+  ): Record<string, any>;
   /** Returns the id instance Chat, User, ChatMember and other */
   valueOf(): string | null;
 }
@@ -8320,12 +8380,12 @@ export type PossiblyAsync<T> = T | Promise<T>;
  * Represents an inline keyboard for Telegram bots.
  */
 export declare class InlineKeyboard {
-  readonly inlineKeyboard: InlineKeyboardButton[][];
+  readonly inline_keyboard: InlineKeyboardButton[][];
   /**
    * Creates an instance of InlineKeyboard.
    * @param inlineKeyboard - A 2D array of inline keyboard buttons.
    */
-  constructor(inlineKeyboard?: InlineKeyboardButton[][]);
+  constructor(inline_keyboard?: InlineKeyboardButton[][]);
   /**
    * Adds buttons to the last row of the inline keyboard.
    * @param buttons - The buttons to add.
@@ -8501,7 +8561,7 @@ export declare class Keyboard {
   /**
    * Indicates whether the keyboard is persistent.
    */
-  isPersistent: boolean;
+  is_persistent: boolean;
   /**
    * Indicates whether the keyboard is selective.
    */
@@ -8509,15 +8569,15 @@ export declare class Keyboard {
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  oneTimeKeyboard: boolean;
+  one_time_keyboard: boolean;
   /**
    * Indicates whether the keyboard should be resized.
    */
-  resizeKeyboard: boolean;
+  resize_keyboard: boolean;
   /**
    * The placeholder text for the input field.
    */
-  inputFieldPlaceholder?: string;
+  input_field_placeholder?: string;
   /**
    * Creates an instance of Keyboard.
    * @param keyboard - A 2D array of keyboard buttons.
@@ -8704,33 +8764,20 @@ export declare class Keyboard {
   equals(other: Keyboard): boolean;
 }
 
-export declare const DefaultParameters: {
+export declare const DefaultPollingParameters: {
   readonly offset: 0;
-  readonly limit: 1;
-  readonly timeout: 0;
+  readonly limit: 100;
+  readonly timeout: 30;
   readonly allowedUpdates: readonly [
     "message",
     "edited_message",
     "channel_post",
     "edited_channel_post",
-    "business_connection",
-    "business_message",
-    "edited_business_message",
-    "deleted_business_messages",
-    "message_reaction",
-    "message_reaction_count",
-    "inline_query",
-    "chosen_inline_result",
     "callback_query",
-    "shipping_query",
-    "pre_checkout_query",
-    "poll",
-    "poll_answer",
+    "inline_query",
     "my_chat_member",
     "chat_member",
     "chat_join_request",
-    "chat_boost",
-    "removed_chat_boost",
   ];
 };
 
@@ -8738,8 +8785,9 @@ export declare const DefaultClientParameters: {
   readonly chatCacheMaxSize: -1;
   readonly userCacheMaxSize: -1;
   readonly pollingTimeout: 300;
-  readonly requestOptions: {
+  readonly restOptions: {
     readonly agent: Agent;
+    readonly enableRateLimit: true;
   };
 };
 
@@ -8789,6 +8837,12 @@ export declare const ReactionCollectorEvents: {
   readonly End: "end";
   readonly User: "user";
   readonly Create: "create";
+};
+
+export declare const RestEvents: {
+  readonly RateLimit: "rateLimit";
+  readonly ApiRequest: "apiRequest";
+  readonly ApiResponse: "apiResponse";
 };
 
 /**
@@ -8874,7 +8928,6 @@ export declare enum ErrorCodes {
   MissingToken = "MISSING_TOKEN",
   WebhookServerCreationFailed = "WEBHOOK_SERVER_CREATION_FAILED",
   InvalidFilterFunction = "INVALID_FILTER_FUNCTION",
-  InvalidCamelCaseFormat = "INVALID_CAMEL_CASE_FORMAT",
   UserIdNotAvailable = "USER_ID_NOT_AVAILABLE",
   MessageIdNotAvailable = "MESSAGE_ID_NOT_AVAILABLE",
   ChatIdNotAvailable = "CHAT_ID_NOT_AVAILABLE",
@@ -8891,7 +8944,6 @@ export declare const ErrorMessages: {
   readonly MISSING_TOKEN: "A token must be specified to receive updates from Telegram.";
   readonly WEBHOOK_SERVER_CREATION_FAILED: "The webhook server could not be created.";
   readonly INVALID_FILTER_FUNCTION: "The provided 'options.filter' is not a function.";
-  readonly INVALID_CAMEL_CASE_FORMAT: "The provided string '${key}' does not follow camelCase format.";
   readonly USER_ID_NOT_AVAILABLE: "The user ID related to this message is not available.";
   readonly MESSAGE_ID_NOT_AVAILABLE: "The message ID related to this message is not available.";
   readonly CHAT_ID_NOT_AVAILABLE: "The chat ID related to this message is not available.";
@@ -8901,6 +8953,19 @@ export declare const ErrorMessages: {
   readonly INVALID_USER_ID: "The provided ID is invalid for retrieving user information; it does not correspond to a valid user ID.";
   readonly INVALID_CHAT_ID: "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.";
 };
+
+/**
+ * Flatten an object. Any properties that are collections will get converted to an array of keys.
+ * @param obj The object to flatten.
+ * @param propsRecursive Optional. If true, calls toJSON method on nested objects.
+ * @param props Optional. Specific properties to include/exclude, or rename.
+ * @returns Flattened object.
+ */
+export declare function flatten(
+  obj: Record<string, any>,
+  propsRecursive?: boolean,
+  ...props: Record<string, boolean | string>[]
+): Record<string, any>;
 
 /**
  * Represents a generic error from the Telegram API.

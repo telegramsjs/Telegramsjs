@@ -30,7 +30,7 @@ export interface MenuButtonWebApp {
   /** The text on the button. */
   text: string;
   /** Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Alternatively, a t.me link to a Web App can be specified in the object instead of the Web App's URL, in which case the Web App will be opened as if the user pressed the link. */
-  webApp: WebAppInfo;
+  web_app: WebAppInfo;
 }
 
 /**
@@ -127,7 +127,7 @@ export interface BotCommandScopeChat {
   /** The scope type, must be "chat". */
   type: "chat";
   /** The unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). */
-  chatId: number | string;
+  chat_id: number | string;
 }
 
 /**
@@ -137,7 +137,7 @@ export interface BotCommandScopeChatAdministrators {
   /** The scope type, must be "chat_administrators". */
   type: "chat_administrators";
   /** The unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). */
-  chatId: number | string;
+  chat_id: number | string;
 }
 
 /**
@@ -147,7 +147,7 @@ export interface BotCommandScopeChatMember {
   /** The scope type, must be "chat_member". */
   type: "chat_member";
   /** The unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). */
-  chatId: number | string;
+  chat_id: number | string;
   /** The unique identifier of the target user. */
-  userId: number;
+  user_id: number;
 }

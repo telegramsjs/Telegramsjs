@@ -1,6 +1,6 @@
 import type { ReadStream } from "node:fs";
 import { EventEmitter } from "node:events";
-import { ApiRequest } from "../rest/ApiRequest";
+import { Rest } from "../rest/Rest";
 import { Collection } from "@telegram.ts/collection";
 import type { ClientOptions } from "./TelegramClient";
 import { UserManager } from "../managers/UserManager";
@@ -36,6 +36,26 @@ import type {
   MethodParameters,
   PossiblyAsync,
 } from "../types";
+
+/**
+ * Convert an object's keys from camelCase to snake_case.
+ * @param params The object with camelCase keys.
+ * @returns A new object with snake_case keys.
+ */
+function toSnakeCase<T extends Record<string, any>>(
+  params: T,
+): Record<string, any> {
+  const snakeCasedParams: Record<string, any> = {};
+
+  for (const key in params) {
+    if (Object.prototype.hasOwnProperty.call(params, key)) {
+      const snakeCaseKey = key.replace(/([A-Z])/g, "_$1").toLowerCase();
+      snakeCasedParams[snakeCaseKey] = params[key];
+    }
+  }
+
+  return snakeCasedParams;
+}
 
 interface EventHandlers {
   ready: (
@@ -148,7 +168,7 @@ type EventHandlerParameters =
   | import("../structures/PaidMediaPurchased").PaidMediaPurchased;
 
 class BaseClient extends EventEmitter {
-  public readonly apiRequest: ApiRequest;
+  public readonly rest: Rest;
   public readonly users: UserManager;
   public readonly chats: ChatManager;
   public readonly updates: Collection<number, EventHandlerParameters>;
@@ -159,7 +179,7 @@ class BaseClient extends EventEmitter {
     /**
      * The Rest manager of the client
      */
-    this.apiRequest = new ApiRequest(authToken, options?.requestOptions);
+    this.rest = new Rest(authToken, options?.restOptions);
 
     /**
      * All of the objects that have been cached at any point, mapped by their ids
@@ -240,9 +260,9 @@ class BaseClient extends EventEmitter {
   1. This method will not work if an outgoing webhook is set up.
   2. In order to avoid getting duplicate updates, recalculate offset after each server response. */
   async getUpdates(params?: MethodParameters["getUpdates"]) {
-    return await this.apiRequest.get<MethodsApiReturnType["getUpdates"]>(
+    return await this.rest.request<MethodsApiReturnType["getUpdates"]>(
       "getUpdates",
-      params,
+      toSnakeCase(params || {}),
     );
   }
 
@@ -259,34 +279,34 @@ class BaseClient extends EventEmitter {
   async setWebhook(
     params: MethodParameters["setWebhook"],
   ): Promise<MethodsLibReturnType["setWebhook"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setWebhook"]>(
+    return await this.rest.request<MethodsApiReturnType["setWebhook"]>(
       "setWebhook",
-      params,
+      toSnakeCase(params),
     );
   }
 
   /** A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object. */
   async getMe(): Promise<MethodsLibReturnType["getMe"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["getMe"]>("getMe")
+    return await this.rest
+      .request<MethodsApiReturnType["getMe"]>("getMe")
       .then((res) => new ClientUser(this, res));
   }
 
   /** Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters. */
   async logOut(): Promise<MethodsLibReturnType["logOut"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["logOut"]>("logOut");
+    return await this.rest.request<MethodsApiReturnType["logOut"]>("logOut");
   }
 
   /** Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns True on success. Requires no parameters. */
   async close(): Promise<MethodsLibReturnType["close"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["close"]>("close");
+    return await this.rest.request<MethodsApiReturnType["close"]>("close");
   }
 
   /** Use this method to remove webhook integration if you decide to switch back to getUpdates. Returns True on success. */
   async deleteWebhook(
     dropPendingUpdates?: boolean,
   ): Promise<MethodsLibReturnType["deleteWebhook"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["deleteWebhook"]>(
+    return await this.rest.request<MethodsApiReturnType["deleteWebhook"]>(
       "deleteWebhook",
       {
         dropPendingUpdates,
@@ -296,8 +316,8 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty. */
   async getWebhookInfo(): Promise<MethodsLibReturnType["getWebhookInfo"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["getWebhookInfo"]>("getWebhookInfo")
+    return await this.rest
+      .request<MethodsApiReturnType["getWebhookInfo"]>("getWebhookInfo")
       .then((res) => new WebhookInfo(this, res));
   }
 
@@ -305,8 +325,10 @@ class BaseClient extends EventEmitter {
   async sendMessage(
     params: MethodParameters["sendMessage"],
   ): Promise<MethodsLibReturnType["sendMessage"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendMessage"]>("sendMessage", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendMessage"]
+      >("sendMessage", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendMessage"],
       );
@@ -316,8 +338,10 @@ class BaseClient extends EventEmitter {
   async sendPhoto(
     params: MethodParameters["sendPhoto"],
   ): Promise<MethodsLibReturnType["sendPhoto"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendPhoto"]>("sendPhoto", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendPhoto"]
+      >("sendPhoto", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendPhoto"],
       );
@@ -329,8 +353,10 @@ class BaseClient extends EventEmitter {
   async sendAudio(
     params: MethodParameters["sendAudio"],
   ): Promise<MethodsLibReturnType["sendAudio"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendAudio"]>("sendAudio", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendAudio"]
+      >("sendAudio", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendAudio"],
       );
@@ -340,8 +366,10 @@ class BaseClient extends EventEmitter {
   async sendPaidMedia(
     params: MethodParameters["sendPaidMedia"],
   ): Promise<MethodsLibReturnType["sendPaidMedia"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendPaidMedia"]>("sendPaidMedia", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendPaidMedia"]
+      >("sendPaidMedia", toSnakeCase(params))
       .then(
         (res) =>
           new Message(this, res) as MethodsLibReturnType["sendPaidMedia"],
@@ -352,8 +380,10 @@ class BaseClient extends EventEmitter {
   async sendDocument(
     params: MethodParameters["sendDocument"],
   ): Promise<MethodsLibReturnType["sendDocument"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendDocument"]>("sendDocument", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendDocument"]
+      >("sendDocument", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendDocument"],
       );
@@ -363,8 +393,10 @@ class BaseClient extends EventEmitter {
   async sendVideo(
     params: MethodParameters["sendVideo"],
   ): Promise<MethodsLibReturnType["sendVideo"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendVideo"]>("sendVideo", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendVideo"]
+      >("sendVideo", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendVideo"],
       );
@@ -374,8 +406,10 @@ class BaseClient extends EventEmitter {
   async sendAnimation(
     params: MethodParameters["sendAnimation"],
   ): Promise<MethodsLibReturnType["sendAnimation"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendAnimation"]>("sendAnimation", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendAnimation"]
+      >("sendAnimation", toSnakeCase(params))
       .then(
         (res) =>
           new Message(this, res) as MethodsLibReturnType["sendAnimation"],
@@ -386,8 +420,10 @@ class BaseClient extends EventEmitter {
   async sendVoice(
     params: MethodParameters["sendVoice"],
   ): Promise<MethodsLibReturnType["sendVoice"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendVoice"]>("sendVoice", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendVoice"]
+      >("sendVoice", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendVoice"],
       );
@@ -398,8 +434,10 @@ class BaseClient extends EventEmitter {
   async sendVideoNote(
     params: MethodParameters["sendVideoNote"],
   ): Promise<MethodsLibReturnType["sendVideoNote"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendVideoNote"]>("sendVideoNote", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendVideoNote"]
+      >("sendVideoNote", toSnakeCase(params))
       .then(
         (res) =>
           new Message(this, res) as MethodsLibReturnType["sendVideoNote"],
@@ -410,8 +448,10 @@ class BaseClient extends EventEmitter {
   async sendMediaGroup(
     params: MethodParameters["sendMediaGroup"],
   ): Promise<MethodsLibReturnType["sendMediaGroup"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendMediaGroup"]>("sendMediaGroup", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendMediaGroup"]
+      >("sendMediaGroup", toSnakeCase(params))
       .then(
         (res) =>
           res.map(
@@ -424,8 +464,10 @@ class BaseClient extends EventEmitter {
   async sendLocation(
     params: MethodParameters["sendLocation"],
   ): Promise<MethodsLibReturnType["sendLocation"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendLocation"]>("sendLocation", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendLocation"]
+      >("sendLocation", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendLocation"],
       );
@@ -435,8 +477,10 @@ class BaseClient extends EventEmitter {
   async sendVenue(
     params: MethodParameters["sendVenue"],
   ): Promise<MethodsLibReturnType["sendVenue"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendVenue"]>("sendVenue", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendVenue"]
+      >("sendVenue", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendVenue"],
       );
@@ -446,8 +490,10 @@ class BaseClient extends EventEmitter {
   async forwardMessage(
     params: MethodParameters["forwardMessage"],
   ): Promise<MethodsLibReturnType["forwardMessage"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["forwardMessage"]>("forwardMessage", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["forwardMessage"]
+      >("forwardMessage", toSnakeCase(params))
       .then((res) => new Message(this, res));
   }
 
@@ -455,8 +501,10 @@ class BaseClient extends EventEmitter {
   async forwardMessages(
     params: MethodParameters["forwardMessages"],
   ): Promise<MethodsLibReturnType["forwardMessages"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["forwardMessages"]>("forwardMessages", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["forwardMessages"]
+      >("forwardMessages", toSnakeCase(params))
       .then((res) => res.map((msg) => msg.message_id));
   }
 
@@ -464,8 +512,10 @@ class BaseClient extends EventEmitter {
   async copyMessage(
     params: MethodParameters["copyMessage"],
   ): Promise<MethodsLibReturnType["copyMessage"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["copyMessage"]>("copyMessage", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["copyMessage"]
+      >("copyMessage", toSnakeCase(params))
       .then((res) => res.message_id);
   }
 
@@ -473,8 +523,10 @@ class BaseClient extends EventEmitter {
   async copyMessages(
     params: MethodParameters["copyMessages"],
   ): Promise<MethodsLibReturnType["copyMessages"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["copyMessages"]>("copyMessages", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["copyMessages"]
+      >("copyMessages", toSnakeCase(params))
       .then((res) => res.map((msg) => msg.message_id));
   }
 
@@ -482,8 +534,10 @@ class BaseClient extends EventEmitter {
   async sendContact(
     params: MethodParameters["sendContact"],
   ): Promise<MethodsLibReturnType["sendContact"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendContact"]>("sendContact", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendContact"]
+      >("sendContact", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendContact"],
       );
@@ -493,8 +547,10 @@ class BaseClient extends EventEmitter {
   async sendPoll(
     params: MethodParameters["sendPoll"],
   ): Promise<MethodsLibReturnType["sendPoll"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendPoll"]>("sendPoll", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendPoll"]
+      >("sendPoll", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendPoll"],
       );
@@ -504,8 +560,10 @@ class BaseClient extends EventEmitter {
   async sendDice(
     params: MethodParameters["sendDice"],
   ): Promise<MethodsLibReturnType["sendDice"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendDice"]>("sendDice", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendDice"]
+      >("sendDice", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendDice"],
       );
@@ -519,9 +577,9 @@ class BaseClient extends EventEmitter {
   async sendChatAction(
     params: MethodParameters["sendChatAction"],
   ): Promise<MethodsLibReturnType["sendChatAction"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["sendChatAction"]>(
+    return await this.rest.request<MethodsApiReturnType["sendChatAction"]>(
       "sendChatAction",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -529,19 +587,20 @@ class BaseClient extends EventEmitter {
   async setMessageReaction(
     params: MethodParameters["setMessageReaction"],
   ): Promise<MethodsLibReturnType["setMessageReaction"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["setMessageReaction"]
-    >("setMessageReaction", params);
+    return await this.rest.request<MethodsApiReturnType["setMessageReaction"]>(
+      "setMessageReaction",
+      toSnakeCase(params),
+    );
   }
 
   /** Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object. */
   async getUserProfilePhotos(
     params: MethodParameters["getUserProfilePhotos"],
   ): Promise<MethodsLibReturnType["getUserProfilePhotos"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getUserProfilePhotos"]
-      >("getUserProfilePhotos", params)
+      >("getUserProfilePhotos", toSnakeCase(params))
       .then((res) => new UserProfilePhotos(this, res));
   }
 
@@ -549,10 +608,10 @@ class BaseClient extends EventEmitter {
 
   Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
   async getFile(fileId: string): Promise<MethodsLibReturnType["getFile"]> {
-    const response = await this.apiRequest.get<MethodsApiReturnType["getFile"]>(
+    const response = await this.rest.request<MethodsApiReturnType["getFile"]>(
       "getFile",
       {
-        fileId,
+        file_id: fileId,
       },
     );
     return new InputFile(this, response);
@@ -562,9 +621,9 @@ class BaseClient extends EventEmitter {
   async kickChatMember(
     params: MethodParameters["kickChatMember"],
   ): Promise<MethodsLibReturnType["kickChatMember"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["kickChatMember"]>(
+    return await this.rest.request<MethodsApiReturnType["kickChatMember"]>(
       "kickChatMember",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -572,9 +631,9 @@ class BaseClient extends EventEmitter {
   async banChatMember(
     params: MethodParameters["banChatMember"],
   ): Promise<MethodsLibReturnType["banChatMember"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["banChatMember"]>(
+    return await this.rest.request<MethodsApiReturnType["banChatMember"]>(
       "banChatMember",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -582,9 +641,9 @@ class BaseClient extends EventEmitter {
   async unbanChatMember(
     params: MethodParameters["unbanChatMember"],
   ): Promise<MethodsLibReturnType["unbanChatMember"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["unbanChatMember"]>(
+    return await this.rest.request<MethodsApiReturnType["unbanChatMember"]>(
       "unbanChatMember",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -595,12 +654,13 @@ class BaseClient extends EventEmitter {
     },
   ): Promise<MethodsLibReturnType["restrictChatMember"]> {
     const permissions = new ChatPermissions(params.permissions);
-    return await this.apiRequest.get<
-      MethodsApiReturnType["restrictChatMember"]
-    >("restrictChatMember", {
-      ...params,
-      permissions: toApiFormat(permissions.toObject()),
-    });
+    return await this.rest.request<MethodsApiReturnType["restrictChatMember"]>(
+      "restrictChatMember",
+      {
+        ...toSnakeCase(params),
+        permissions: toApiFormat(permissions.toObject()),
+      },
+    );
   }
 
   /** Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user. Returns True on success. */
@@ -611,9 +671,9 @@ class BaseClient extends EventEmitter {
     > & { permissions: ChatPermissionFlags },
   ): Promise<MethodsLibReturnType["promoteChatMember"]> {
     const permissions = new ChatPermissions(params.permissions);
-    return await this.apiRequest.get<MethodsApiReturnType["promoteChatMember"]>(
+    return await this.rest.request<MethodsApiReturnType["promoteChatMember"]>(
       "promoteChatMember",
-      { ...params, ...toApiFormat(permissions.toObject()) },
+      { ...toSnakeCase(params), ...toApiFormat(permissions.toObject()) },
     );
   }
 
@@ -621,9 +681,9 @@ class BaseClient extends EventEmitter {
   async setChatAdministratorCustomTitle(
     params: MethodParameters["setChatAdministratorCustomTitle"],
   ): Promise<MethodsLibReturnType["setChatAdministratorCustomTitle"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setChatAdministratorCustomTitle"]
-    >("setChatAdministratorCustomTitle", params);
+    >("setChatAdministratorCustomTitle", toSnakeCase(params));
   }
 
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -631,9 +691,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     senderChatId: number | string,
   ): Promise<MethodsLibReturnType["banChatSenderChat"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["banChatSenderChat"]>(
+    return await this.rest.request<MethodsApiReturnType["banChatSenderChat"]>(
       "banChatSenderChat",
-      { chatId, senderChatId },
+      { chat_id: chatId, sender_chat_id: senderChatId },
     );
   }
 
@@ -642,9 +702,10 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     senderChatId: number | string,
   ): Promise<MethodsLibReturnType["unbanChatSenderChat"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["unbanChatSenderChat"]
-    >("unbanChatSenderChat", { chatId, senderChatId });
+    return await this.rest.request<MethodsApiReturnType["unbanChatSenderChat"]>(
+      "unbanChatSenderChat",
+      { chat_id: chatId, sender_chat_id: senderChatId },
+    );
   }
 
   /** Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success. */
@@ -654,12 +715,13 @@ class BaseClient extends EventEmitter {
     },
   ): Promise<MethodsLibReturnType["setChatPermissions"]> {
     const permissions = new ChatPermissions(params.permissions);
-    return await this.apiRequest.get<
-      MethodsApiReturnType["setChatPermissions"]
-    >("setChatPermissions", {
-      ...params,
-      permissions: toApiFormat(permissions.toObject()),
-    });
+    return await this.rest.request<MethodsApiReturnType["setChatPermissions"]>(
+      "setChatPermissions",
+      {
+        ...toSnakeCase(params),
+        permissions: toApiFormat(permissions.toObject()),
+      },
+    );
   }
 
   /** Use this method to generate a new primary invite link for a chat; any previously generated primary link is revoked. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the new invite link as String on success.
@@ -668,19 +730,19 @@ class BaseClient extends EventEmitter {
   async exportChatInviteLink(
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["exportChatInviteLink"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["exportChatInviteLink"]
-    >("exportChatInviteLink", { chatId });
+    >("exportChatInviteLink", { chat_id: chatId });
   }
 
   /** Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as ChatInviteLink object. */
   async createChatInviteLink(
     params: MethodParameters["createChatInviteLink"],
   ): Promise<MethodsLibReturnType["createChatInviteLink"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["createChatInviteLink"]
-      >("createChatInviteLink", params)
+      >("createChatInviteLink", toSnakeCase(params))
       .then((res) => new ChatInviteLink(this, res));
   }
 
@@ -688,10 +750,10 @@ class BaseClient extends EventEmitter {
   async editChatInviteLink(
     params: MethodParameters["editChatInviteLink"],
   ): Promise<MethodsLibReturnType["editChatInviteLink"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["editChatInviteLink"]
-      >("editChatInviteLink", params)
+      >("editChatInviteLink", toSnakeCase(params))
       .then((res) => new ChatInviteLink(this, res));
   }
 
@@ -699,10 +761,10 @@ class BaseClient extends EventEmitter {
   async createChatSubscriptionInviteLink(
     params: MethodParameters["createChatSubscriptionInviteLink"],
   ): Promise<MethodsLibReturnType["createChatSubscriptionInviteLink"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["createChatSubscriptionInviteLink"]
-      >("createChatSubscriptionInviteLink", params)
+      >("createChatSubscriptionInviteLink", toSnakeCase(params))
       .then((res) => new ChatInviteLink(this, res));
   }
 
@@ -710,10 +772,10 @@ class BaseClient extends EventEmitter {
   async editChatSubscriptionInviteLink(
     params: MethodParameters["editChatSubscriptionInviteLink"],
   ): Promise<MethodsLibReturnType["editChatSubscriptionInviteLink"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["editChatSubscriptionInviteLink"]
-      >("editChatSubscriptionInviteLink", params)
+      >("editChatSubscriptionInviteLink", toSnakeCase(params))
       .then((res) => new ChatInviteLink(this, res));
   }
 
@@ -722,10 +784,10 @@ class BaseClient extends EventEmitter {
     inviteLink: string,
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["revokeChatInviteLink"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["revokeChatInviteLink"]
-      >("revokeChatInviteLink", { inviteLink, chatId })
+      >("revokeChatInviteLink", { invite_link: inviteLink, ...(chatId && { chat_id: chatId }) })
       .then((res) => new ChatInviteLink(this, res));
   }
 
@@ -734,9 +796,12 @@ class BaseClient extends EventEmitter {
     userId: number | string,
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["approveChatJoinRequest"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["approveChatJoinRequest"]
-    >("approveChatJoinRequest", { userId, chatId });
+    >("approveChatJoinRequest", {
+      ...(chatId && { chat_id: chatId }),
+      user_id: userId,
+    });
   }
 
   /** Use this method to decline a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
@@ -744,9 +809,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     userId: number | string,
   ): Promise<MethodsLibReturnType["declineChatJoinRequest"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["declineChatJoinRequest"]
-    >("declineChatJoinRequest", { chatId, userId });
+    >("declineChatJoinRequest", { chat_id: chatId, user_id: userId });
   }
 
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -762,9 +827,9 @@ class BaseClient extends EventEmitter {
       | Uint8Array
       | string,
   ): Promise<MethodsLibReturnType["setChatPhoto"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setChatPhoto"]>(
+    return await this.rest.request<MethodsApiReturnType["setChatPhoto"]>(
       "setChatPhoto",
-      { chatId, photo },
+      { chat_id: chatId, photo },
     );
   }
 
@@ -772,9 +837,9 @@ class BaseClient extends EventEmitter {
   async deleteChatPhoto(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["deleteChatPhoto"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["deleteChatPhoto"]>(
+    return await this.rest.request<MethodsApiReturnType["deleteChatPhoto"]>(
       "deleteChatPhoto",
-      { chatId },
+      { chat_id: chatId },
     );
   }
 
@@ -783,9 +848,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     title: string,
   ): Promise<MethodsLibReturnType["setChatTitle"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setChatTitle"]>(
+    return await this.rest.request<MethodsApiReturnType["setChatTitle"]>(
       "setChatTitle",
-      { chatId, title },
+      { chat_id: chatId, title },
     );
   }
 
@@ -794,18 +859,22 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     description?: string,
   ): Promise<MethodsLibReturnType["setChatDescription"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["setChatDescription"]
-    >("setChatDescription", { chatId, description });
+    return await this.rest.request<MethodsApiReturnType["setChatDescription"]>(
+      "setChatDescription",
+      {
+        chat_id: chatId,
+        ...(description && { description }),
+      },
+    );
   }
 
   /** Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
   async pinChatMessage(
     params: MethodParameters["pinChatMessage"],
   ): Promise<MethodsLibReturnType["pinChatMessage"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["pinChatMessage"]>(
+    return await this.rest.request<MethodsApiReturnType["pinChatMessage"]>(
       "pinChatMessage",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -813,9 +882,9 @@ class BaseClient extends EventEmitter {
   async unpinChatMessage(
     params: MethodParameters["unpinChatMessage"],
   ): Promise<MethodsLibReturnType["unpinChatMessage"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["unpinChatMessage"]>(
+    return await this.rest.request<MethodsApiReturnType["unpinChatMessage"]>(
       "unpinChatMessage",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -823,19 +892,19 @@ class BaseClient extends EventEmitter {
   async unpinAllChatMessages(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["unpinAllChatMessages"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["unpinAllChatMessages"]
-    >("unpinAllChatMessages", { chatId });
+    >("unpinAllChatMessages", { chat_id: chatId });
   }
 
   /** Use this method for your bot to leave a group, supergroup or channel. Returns True on success. */
   async leaveChat(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["leaveChat"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["leaveChat"]>(
+    return await this.rest.request<MethodsApiReturnType["leaveChat"]>(
       "leaveChat",
       {
-        chatId,
+        chat_id: chatId,
       },
     );
   }
@@ -844,9 +913,9 @@ class BaseClient extends EventEmitter {
   async getChat(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["getChat"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["getChat"]>("getChat", {
-        chatId,
+    return await this.rest
+      .request<MethodsApiReturnType["getChat"]>("getChat", {
+        chat_id: chatId,
       })
       .then(
         (res) =>
@@ -861,10 +930,10 @@ class BaseClient extends EventEmitter {
   async getChatAdministrators(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["getChatAdministrators"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getChatAdministrators"]
-      >("getChatAdministrators", { chatId })
+      >("getChatAdministrators", { chat_id: chatId })
       .then(
         (res) =>
           res.map(
@@ -877,9 +946,10 @@ class BaseClient extends EventEmitter {
   async getChatMemberCount(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["getChatMemberCount"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["getChatMemberCount"]
-    >("getChatMemberCount", { chatId });
+    return await this.rest.request<MethodsApiReturnType["getChatMemberCount"]>(
+      "getChatMemberCount",
+      { chat_id: chatId },
+    );
   }
 
   /** Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object. */
@@ -887,10 +957,10 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     userId: number | string,
   ): Promise<MethodsLibReturnType["getUserChatBoosts"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getUserChatBoosts"]
-      >("getUserChatBoosts", { chatId, userId })
+      >("getUserChatBoosts", { chat_id: chatId, user_id: userId })
       .then((res) => new UserChatBoosts(this, res));
   }
 
@@ -898,10 +968,10 @@ class BaseClient extends EventEmitter {
   async getBusinessConnection(
     businessConnectionId: string,
   ): Promise<MethodsLibReturnType["getBusinessConnection"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getBusinessConnection"]
-      >("getBusinessConnection", { businessConnectionId })
+      >("getBusinessConnection", { business_connection_id: businessConnectionId })
       .then((res) => new BusinessConnection(this, res));
   }
 
@@ -910,10 +980,10 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     userId: number | string,
   ): Promise<MethodsLibReturnType["getChatMember"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getChatMember"]
-      >("getChatMember", { chatId, userId })
+      >("getChatMember", { chat_id: chatId, user_id: userId })
       .then((res) => new ChatMember(this, chatId, res));
   }
 
@@ -922,9 +992,9 @@ class BaseClient extends EventEmitter {
     stickerSetName: string,
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["setChatStickerSet"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setChatStickerSet"]>(
+    return await this.rest.request<MethodsApiReturnType["setChatStickerSet"]>(
       "setChatStickerSet",
-      { stickerSetName, chatId },
+      { sticker_set_name: stickerSetName, ...(chatId && { chat_id: chatId }) },
     );
   }
 
@@ -932,17 +1002,17 @@ class BaseClient extends EventEmitter {
   async deleteChatStickerSet(
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["deleteChatStickerSet"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["deleteChatStickerSet"]
-    >("deleteChatStickerSet", { chatId });
+    >("deleteChatStickerSet", { ...(chatId && { chat_id: chatId }) });
   }
 
   /** Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects. */
   async getForumTopicIconStickers(): Promise<
     MethodsLibReturnType["getForumTopicIconStickers"]
   > {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getForumTopicIconStickers"]
       >("getForumTopicIconStickers")
       .then(
@@ -957,8 +1027,8 @@ class BaseClient extends EventEmitter {
   async createForumTopic(
     params: MethodParameters["createForumTopic"],
   ): Promise<MethodsLibReturnType["createForumTopic"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["createForumTopic"]>("createForumTopic")
+    return await this.rest
+      .request<MethodsApiReturnType["createForumTopic"]>("createForumTopic")
       .then(
         (res) =>
           new ForumTopic(this, res.message_thread_id, params.chatId, res),
@@ -969,9 +1039,9 @@ class BaseClient extends EventEmitter {
   async editForumTopic(
     params: MethodParameters["editForumTopic"],
   ): Promise<MethodsLibReturnType["editForumTopic"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["editForumTopic"]>(
+    return await this.rest.request<MethodsApiReturnType["editForumTopic"]>(
       "editForumTopic",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -980,9 +1050,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["closeForumTopic"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["closeForumTopic"]>(
+    return await this.rest.request<MethodsApiReturnType["closeForumTopic"]>(
       "closeForumTopic",
-      { chatId, messageThreadId },
+      { chat_id: chatId, message_thread_id: messageThreadId },
     );
   }
 
@@ -991,9 +1061,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["reopenForumTopic"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["reopenForumTopic"]>(
+    return await this.rest.request<MethodsApiReturnType["reopenForumTopic"]>(
       "reopenForumTopic",
-      { chatId, messageThreadId },
+      { chat_id: chatId, message_thread_id: messageThreadId },
     );
   }
 
@@ -1002,9 +1072,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["deleteForumTopic"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["deleteForumTopic"]>(
+    return await this.rest.request<MethodsApiReturnType["deleteForumTopic"]>(
       "deleteForumTopic",
-      { chatId, messageThreadId },
+      { chat_id: chatId, message_thread_id: messageThreadId },
     );
   }
 
@@ -1013,9 +1083,12 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     messageThreadId: number | string,
   ): Promise<MethodsLibReturnType["unpinAllForumTopicMessages"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["unpinAllForumTopicMessages"]
-    >("unpinAllForumTopicMessages", { chatId, messageThreadId });
+    >("unpinAllForumTopicMessages", {
+      chat_id: chatId,
+      message_thread_id: messageThreadId,
+    });
   }
 
   /** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success. */
@@ -1023,45 +1096,45 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     name: string,
   ): Promise<MethodsLibReturnType["editGeneralForumTopic"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["editGeneralForumTopic"]
-    >("editGeneralForumTopic", { chatId, name });
+    >("editGeneralForumTopic", { chat_id: chatId, name });
   }
 
   /** Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
   async closeGeneralForumTopic(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["closeGeneralForumTopic"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["closeGeneralForumTopic"]
-    >("closeGeneralForumTopic", { chatId });
+    >("closeGeneralForumTopic", { chat_id: chatId });
   }
 
   /** Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success. */
   async reopenGeneralForumTopic(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["reopenGeneralForumTopic"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["reopenGeneralForumTopic"]
-    >("reopenGeneralForumTopic", { chatId });
+    >("reopenGeneralForumTopic", { chat_id: chatId });
   }
 
   /** Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success. */
   async hideGeneralForumTopic(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["hideGeneralForumTopic"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["hideGeneralForumTopic"]
-    >("hideGeneralForumTopic", { chatId });
+    >("hideGeneralForumTopic", { chat_id: chatId });
   }
 
   /** Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
   async unhideGeneralForumTopic(
     chatId: string | number,
   ): Promise<MethodsLibReturnType["unhideGeneralForumTopic"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["unhideGeneralForumTopic"]
-    >("unhideGeneralForumTopic", { chatId });
+    >("unhideGeneralForumTopic", { chat_id: chatId });
   }
 
   /** Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
@@ -1069,9 +1142,9 @@ class BaseClient extends EventEmitter {
   async unpinAllGeneralForumTopicMessages(
     chatId: string | number,
   ): Promise<MethodsLibReturnType["unpinAllGeneralForumTopicMessages"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["unpinAllGeneralForumTopicMessages"]
-    >("unpinAllGeneralForumTopicMessages", { chatId });
+    >("unpinAllGeneralForumTopicMessages", { chat_id: chatId });
   }
 
   /** Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
@@ -1080,18 +1153,19 @@ class BaseClient extends EventEmitter {
   async answerCallbackQuery(
     params: MethodParameters["answerCallbackQuery"],
   ): Promise<MethodsLibReturnType["answerCallbackQuery"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["answerCallbackQuery"]
-    >("answerCallbackQuery", params);
+    return await this.rest.request<MethodsApiReturnType["answerCallbackQuery"]>(
+      "answerCallbackQuery",
+      toSnakeCase(params),
+    );
   }
 
   /** Use this method to change the list of the bot's commands. See https://core.telegram.org/bots#commands for more details about bot commands. Returns True on success. */
   async setMyCommands(
     params: MethodParameters["setMyCommands"],
   ): Promise<MethodsLibReturnType["setMyCommands"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setMyCommands"]>(
+    return await this.rest.request<MethodsApiReturnType["setMyCommands"]>(
       "setMyCommands",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -1100,9 +1174,12 @@ class BaseClient extends EventEmitter {
     scope?: MethodParameters["deleteMyCommands"]["scope"],
     languageCode?: string,
   ): Promise<MethodsLibReturnType["deleteMyCommands"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["deleteMyCommands"]>(
+    return await this.rest.request<MethodsApiReturnType["deleteMyCommands"]>(
       "deleteMyCommands",
-      { scope, languageCode },
+      {
+        ...(scope && { scope }),
+        ...(languageCode && { language_code: languageCode }),
+      },
     );
   }
 
@@ -1111,9 +1188,12 @@ class BaseClient extends EventEmitter {
     scope?: MethodParameters["getMyCommands"]["scope"],
     languageCode?: string,
   ): Promise<MethodsLibReturnType["getMyCommands"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["getMyCommands"]>(
+    return await this.rest.request<MethodsApiReturnType["getMyCommands"]>(
       "getMyCommands",
-      { scope, languageCode },
+      {
+        ...(scope && { scope }),
+        ...(languageCode && { language_code: languageCode }),
+      },
     );
   }
 
@@ -1122,11 +1202,11 @@ class BaseClient extends EventEmitter {
     name?: string,
     languageCode?: string,
   ): Promise<MethodsLibReturnType["setMyName"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setMyName"]>(
+    return await this.rest.request<MethodsApiReturnType["setMyName"]>(
       "setMyName",
       {
-        name,
-        languageCode,
+        ...(name && { name }),
+        ...(languageCode && { language_code: languageCode }),
       },
     );
   }
@@ -1135,9 +1215,9 @@ class BaseClient extends EventEmitter {
   async getMyName(
     languageCode?: string,
   ): Promise<MethodsLibReturnType["getMyName"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["getMyName"]>("getMyName", {
-        languageCode,
+    return await this.rest
+      .request<MethodsApiReturnType["getMyName"]>("getMyName", {
+        ...(languageCode && { language_code: languageCode }),
       })
       .then((res) => res.name);
   }
@@ -1147,9 +1227,12 @@ class BaseClient extends EventEmitter {
     description?: string,
     languageCode?: string,
   ): Promise<MethodsLibReturnType["setMyDescription"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setMyDescription"]>(
+    return await this.rest.request<MethodsApiReturnType["setMyDescription"]>(
       "setMyDescription",
-      { description, languageCode },
+      {
+        ...(description && { description }),
+        ...(languageCode && { language_code: languageCode }),
+      },
     );
   }
 
@@ -1157,10 +1240,10 @@ class BaseClient extends EventEmitter {
   async getMyDescription(
     languageCode?: string,
   ): Promise<MethodsLibReturnType["getMyDescription"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getMyDescription"]
-      >("getMyDescription", { languageCode })
+      >("getMyDescription", { ...(languageCode && { language_code: languageCode }) })
       .then((res) => res.description);
   }
 
@@ -1169,19 +1252,22 @@ class BaseClient extends EventEmitter {
     shortDescription?: string,
     languageCode?: string,
   ): Promise<MethodsLibReturnType["setMyShortDescription"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setMyShortDescription"]
-    >("setMyShortDescription", { shortDescription, languageCode });
+    >("setMyShortDescription", {
+      ...(shortDescription && { short_description: shortDescription }),
+      ...(languageCode && { language_code: languageCode }),
+    });
   }
 
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   async getMyShortDescription(
     languageCode?: string,
   ): Promise<MethodsLibReturnType["getMyShortDescription"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getMyShortDescription"]
-      >("getMyShortDescription", { languageCode })
+      >("getMyShortDescription", { ...(languageCode && { language_code: languageCode }) })
       .then((res) => res.short_description);
   }
 
@@ -1190,9 +1276,12 @@ class BaseClient extends EventEmitter {
     chatId?: string | number,
     menuButton?: MethodParameters["setChatMenuButton"]["menuButton"],
   ): Promise<MethodsLibReturnType["setChatMenuButton"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["setChatMenuButton"]>(
+    return await this.rest.request<MethodsApiReturnType["setChatMenuButton"]>(
       "setChatMenuButton",
-      { chatId, menuButton },
+      {
+        ...(chatId && { chat_id: chatId }),
+        ...(menuButton && { menu_button: menuButton }),
+      },
     );
   }
 
@@ -1200,10 +1289,10 @@ class BaseClient extends EventEmitter {
   async getChatMenuButton(
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["getChatMenuButton"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getChatMenuButton"]
-      >("getChatMenuButton", { chatId })
+      >("getChatMenuButton", { ...(chatId && { chat_id: chatId }) })
       .then((res) => new MenuButton(res));
   }
 
@@ -1215,11 +1304,11 @@ class BaseClient extends EventEmitter {
     const permissions = new ChatPermissions(
       (rights || {}) as ChatPermissionFlags,
     );
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setMyDefaultAdministratorRights"]
     >("setMyDefaultAdministratorRights", {
-      rights: toApiFormat(permissions.toObject()),
-      forChannels,
+      ...(rights && { rights: toApiFormat(permissions.toObject()) }),
+      ...(typeof forChannels === "boolean" && { for_channels: forChannels }),
     });
   }
 
@@ -1227,10 +1316,10 @@ class BaseClient extends EventEmitter {
   async getMyDefaultAdministratorRights(
     forChannels?: boolean,
   ): Promise<MethodsLibReturnType["getMyDefaultAdministratorRights"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getMyDefaultAdministratorRights"]
-      >("getMyDefaultAdministratorRights", { forChannels })
+      >("getMyDefaultAdministratorRights", { ...(typeof forChannels === "boolean" && { for_channels: forChannels }) })
       .then((res) => new ChatAdministratorRights(res));
   }
 
@@ -1238,8 +1327,10 @@ class BaseClient extends EventEmitter {
   async editMessageText(
     params: MethodParameters["editMessageText"],
   ): Promise<MethodsLibReturnType["editMessageText"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["editMessageText"]>("editMessageText", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["editMessageText"]
+      >("editMessageText", toSnakeCase(params))
       .then((res) => {
         if (typeof res === "boolean") return res;
         return new Message(
@@ -1253,10 +1344,10 @@ class BaseClient extends EventEmitter {
   async editMessageCaption(
     params: MethodParameters["editMessageCaption"],
   ): Promise<MethodsLibReturnType["editMessageCaption"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["editMessageCaption"]
-      >("editMessageCaption", params)
+      >("editMessageCaption", toSnakeCase(params))
       .then((res) => {
         if (typeof res === "boolean") return res;
         return new Message(
@@ -1270,8 +1361,10 @@ class BaseClient extends EventEmitter {
   async editMessageMedia(
     params: MethodParameters["editMessageMedia"],
   ): Promise<MethodsLibReturnType["editMessageMedia"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["editMessageMedia"]>("editMessageMedia", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["editMessageMedia"]
+      >("editMessageMedia", toSnakeCase(params))
       .then((res) => {
         if (typeof res === "boolean") return res;
         return new Message(
@@ -1285,10 +1378,10 @@ class BaseClient extends EventEmitter {
   async editMessageLiveLocation(
     params: MethodParameters["editMessageLiveLocation"],
   ): Promise<MethodsLibReturnType["editMessageLiveLocation"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["editMessageLiveLocation"]
-      >("editMessageLiveLocation", params)
+      >("editMessageLiveLocation", toSnakeCase(params))
       .then(
         (res) =>
           (typeof res === "boolean"
@@ -1304,10 +1397,10 @@ class BaseClient extends EventEmitter {
   async stopMessageLiveLocation(
     params: MethodParameters["stopMessageLiveLocation"],
   ): Promise<MethodsLibReturnType["stopMessageLiveLocation"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["stopMessageLiveLocation"]
-      >("stopMessageLiveLocation", params)
+      >("stopMessageLiveLocation", toSnakeCase(params))
       .then(
         (res) =>
           (typeof res === "boolean"
@@ -1323,10 +1416,10 @@ class BaseClient extends EventEmitter {
   async editMessageReplyMarkup(
     params: MethodParameters["editMessageReplyMarkup"],
   ): Promise<MethodsLibReturnType["editMessageReplyMarkup"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["editMessageReplyMarkup"]
-      >("editMessageReplyMarkup", params)
+      >("editMessageReplyMarkup", toSnakeCase(params))
       .then((res) => {
         if (typeof res === "boolean") return res;
         return new Message(
@@ -1340,8 +1433,10 @@ class BaseClient extends EventEmitter {
   async stopPoll(
     params: MethodParameters["stopPoll"],
   ): Promise<MethodsLibReturnType["stopPoll"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["stopPoll"]>("stopPoll", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["stopPoll"]
+      >("stopPoll", toSnakeCase(params))
       .then((res) => new Poll(this, res));
   }
 
@@ -1349,8 +1444,10 @@ class BaseClient extends EventEmitter {
   async sendSticker(
     params: MethodParameters["sendSticker"],
   ): Promise<MethodsLibReturnType["sendSticker"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendSticker"]>("sendSticker", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendSticker"]
+      >("sendSticker", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendSticker"],
       );
@@ -1360,8 +1457,8 @@ class BaseClient extends EventEmitter {
   async getStickerSet(
     name: string,
   ): Promise<MethodsLibReturnType["getStickerSet"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["getStickerSet"]>("getStickerSet", { name })
+    return await this.rest
+      .request<MethodsApiReturnType["getStickerSet"]>("getStickerSet", { name })
       .then((res) => new StickerSet(this, res));
   }
 
@@ -1369,10 +1466,10 @@ class BaseClient extends EventEmitter {
   async getCustomEmojiStickers(
     customEmojiIds: string[],
   ): Promise<MethodsLibReturnType["getCustomEmojiStickers"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getCustomEmojiStickers"]
-      >("getCustomEmojiStickers", { customEmojiIds })
+      >("getCustomEmojiStickers", { custom_emoji_ids: customEmojiIds })
       .then((res) => res.map((sticker) => new Sticker(this, sticker)));
   }
 
@@ -1380,9 +1477,9 @@ class BaseClient extends EventEmitter {
   async uploadStickerFile(
     params: MethodParameters["uploadStickerFile"],
   ): Promise<MethodsLibReturnType["uploadStickerFile"]> {
-    const response = await this.apiRequest.get<
+    const response = await this.rest.request<
       MethodsApiReturnType["uploadStickerFile"]
-    >("uploadStickerFile", params);
+    >("uploadStickerFile", toSnakeCase(params));
     return new InputFile(this, response);
   }
 
@@ -1390,18 +1487,19 @@ class BaseClient extends EventEmitter {
   async createNewStickerSet(
     params: MethodParameters["createNewStickerSet"],
   ): Promise<MethodsLibReturnType["createNewStickerSet"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["createNewStickerSet"]
-    >("createNewStickerSet", params);
+    return await this.rest.request<MethodsApiReturnType["createNewStickerSet"]>(
+      "createNewStickerSet",
+      toSnakeCase(params),
+    );
   }
 
   /** Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success. */
   async addStickerToSet(
     params: MethodParameters["addStickerToSet"],
   ): Promise<MethodsLibReturnType["addStickerToSet"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["addStickerToSet"]>(
+    return await this.rest.request<MethodsApiReturnType["addStickerToSet"]>(
       "addStickerToSet",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -1409,9 +1507,10 @@ class BaseClient extends EventEmitter {
   async replaceStickerInSet(
     params: MethodParameters["replaceStickerInSet"],
   ): Promise<MethodsLibReturnType["replaceStickerInSet"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["replaceStickerInSet"]
-    >("replaceStickerInSet", params);
+    return await this.rest.request<MethodsApiReturnType["replaceStickerInSet"]>(
+      "replaceStickerInSet",
+      toSnakeCase(params),
+    );
   }
 
   /** Use this method to move a sticker in a set created by the bot to a specific position. Returns True on success. */
@@ -1419,7 +1518,7 @@ class BaseClient extends EventEmitter {
     sticker: string,
     position: number,
   ): Promise<MethodsLibReturnType["setStickerPositionInSet"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setStickerPositionInSet"]
     >("setStickerPositionInSet", { sticker, position });
   }
@@ -1428,7 +1527,7 @@ class BaseClient extends EventEmitter {
   async deleteStickerFromSet(
     sticker: string,
   ): Promise<MethodsLibReturnType["deleteStickerFromSet"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["deleteStickerFromSet"]
     >("deleteStickerFromSet", { sticker });
   }
@@ -1438,9 +1537,10 @@ class BaseClient extends EventEmitter {
     sticker: string,
     emojiList: string[],
   ): Promise<MethodsLibReturnType["setStickerEmojiList"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["setStickerEmojiList"]
-    >("setStickerEmojiList", { sticker, emojiList });
+    return await this.rest.request<MethodsApiReturnType["setStickerEmojiList"]>(
+      "setStickerEmojiList",
+      { sticker, emoji_list: emojiList },
+    );
   }
 
   /** Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success. */
@@ -1448,9 +1548,10 @@ class BaseClient extends EventEmitter {
     sticker: string,
     keywords?: string[],
   ): Promise<MethodsLibReturnType["setStickerKeywords"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["setStickerKeywords"]
-    >("setStickerKeywords", { sticker, keywords });
+    return await this.rest.request<MethodsApiReturnType["setStickerKeywords"]>(
+      "setStickerKeywords",
+      { sticker, ...(keywords && { keywords }) },
+    );
   }
 
   /** Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns True on success. */
@@ -1458,9 +1559,12 @@ class BaseClient extends EventEmitter {
     sticker: string,
     maskPosition?: MethodParameters["setStickerMaskPosition"]["maskPosition"],
   ): Promise<MethodsLibReturnType["setStickerMaskPosition"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setStickerMaskPosition"]
-    >("setStickerMaskPosition", { sticker, maskPosition });
+    >("setStickerMaskPosition", {
+      sticker,
+      ...(maskPosition && { mask_position: maskPosition }),
+    });
   }
 
   /** Use this method to set the title of a created sticker set. Returns True on success. */
@@ -1468,18 +1572,19 @@ class BaseClient extends EventEmitter {
     name: string,
     title: string,
   ): Promise<MethodsLibReturnType["setStickerSetTitle"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["setStickerSetTitle"]
-    >("setStickerSetTitle", { name, title });
+    return await this.rest.request<MethodsApiReturnType["setStickerSetTitle"]>(
+      "setStickerSetTitle",
+      { name, title },
+    );
   }
 
   /** Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the format of the stickers in the set. Returns True on success. */
   async setStickerSetThumbnail(
     params: MethodParameters["setStickerSetThumbnail"],
   ): Promise<MethodsLibReturnType["setStickerSetThumbnail"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setStickerSetThumbnail"]
-    >("setStickerSetThumbnail", params);
+    >("setStickerSetThumbnail", toSnakeCase(params));
   }
 
   /** Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success. */
@@ -1487,16 +1592,19 @@ class BaseClient extends EventEmitter {
     name: string,
     customEmojiId?: string,
   ): Promise<MethodsLibReturnType["setCustomEmojiStickerSetThumbnail"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setCustomEmojiStickerSetThumbnail"]
-    >("setCustomEmojiStickerSetThumbnail", { name, customEmojiId });
+    >("setCustomEmojiStickerSetThumbnail", {
+      name,
+      ...(customEmojiId && { custom_emoji_id: customEmojiId }),
+    });
   }
 
   /** Use this method to delete a sticker set that was created by the bot. Returns True on success. */
   async deleteStickerSet(
     name: string,
   ): Promise<MethodsLibReturnType["deleteStickerSet"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["deleteStickerSet"]>(
+    return await this.rest.request<MethodsApiReturnType["deleteStickerSet"]>(
       "deleteStickerSet",
       { name },
     );
@@ -1508,9 +1616,9 @@ class BaseClient extends EventEmitter {
   async answerInlineQuery(
     params: MethodParameters["answerInlineQuery"],
   ): Promise<MethodsLibReturnType["answerInlineQuery"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["answerInlineQuery"]>(
+    return await this.rest.request<MethodsApiReturnType["answerInlineQuery"]>(
       "answerInlineQuery",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -1519,10 +1627,10 @@ class BaseClient extends EventEmitter {
     webAppQueryId: string,
     result: MethodParameters["answerWebAppQuery"]["result"],
   ): Promise<MethodsLibReturnType["answerWebAppQuery"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["answerWebAppQuery"]
-      >("answerWebAppQuery", { webAppQueryId, result })
+      >("answerWebAppQuery", { web_app_query_id: webAppQueryId, result })
       .then((res) => res.inline_message_id);
   }
 
@@ -1530,8 +1638,10 @@ class BaseClient extends EventEmitter {
   async sendInvoice(
     params: MethodParameters["sendInvoice"],
   ): Promise<MethodsLibReturnType["sendInvoice"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendInvoice"]>("sendInvoice", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendInvoice"]
+      >("sendInvoice", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendInvoice"],
       );
@@ -1541,9 +1651,9 @@ class BaseClient extends EventEmitter {
   async createInvoiceLink(
     params: MethodParameters["createInvoiceLink"],
   ): Promise<MethodsLibReturnType["createInvoiceLink"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["createInvoiceLink"]>(
+    return await this.rest.request<MethodsApiReturnType["createInvoiceLink"]>(
       "createInvoiceLink",
-      params,
+      toSnakeCase(params),
     );
   }
 
@@ -1551,18 +1661,19 @@ class BaseClient extends EventEmitter {
   async answerShippingQuery(
     params: MethodParameters["answerShippingQuery"],
   ): Promise<MethodsLibReturnType["answerShippingQuery"]> {
-    return await this.apiRequest.get<
-      MethodsApiReturnType["answerShippingQuery"]
-    >("answerShippingQuery", params);
+    return await this.rest.request<MethodsApiReturnType["answerShippingQuery"]>(
+      "answerShippingQuery",
+      toSnakeCase(params),
+    );
   }
 
   /** Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent. */
   async answerPreCheckoutQuery(
     params: MethodParameters["answerPreCheckoutQuery"],
   ): Promise<MethodsLibReturnType["answerPreCheckoutQuery"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["answerPreCheckoutQuery"]
-    >("answerPreCheckoutQuery", params);
+    >("answerPreCheckoutQuery", toSnakeCase(params));
   }
 
   /** Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object. */
@@ -1570,11 +1681,14 @@ class BaseClient extends EventEmitter {
     offset?: number,
     limit?: number,
   ): Promise<MethodsLibReturnType["getStarTransactions"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["getStarTransactions"]>("getStarTransactions", {
-        offset,
-        limit,
-      })
+    return await this.rest
+      .request<MethodsApiReturnType["getStarTransactions"]>(
+        "getStarTransactions",
+        {
+          offset,
+          limit,
+        },
+      )
       .then(
         (res) =>
           new StarTransactions(
@@ -1589,11 +1703,11 @@ class BaseClient extends EventEmitter {
     userId: number | string,
     telegramPaymentChargeId: string,
   ): Promise<MethodsLibReturnType["refundStarPayment"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["refundStarPayment"]>(
+    return await this.rest.request<MethodsApiReturnType["refundStarPayment"]>(
       "refundStarPayment",
       {
-        userId,
-        telegramPaymentChargeId,
+        user_id: userId,
+        telegram_payment_charge_id: telegramPaymentChargeId,
       },
     );
   }
@@ -1605,17 +1719,19 @@ class BaseClient extends EventEmitter {
     userId: number | string,
     errors: MethodParameters["setPassportDataErrors"]["errors"],
   ): Promise<MethodsLibReturnType["setPassportDataErrors"]> {
-    return await this.apiRequest.get<
+    return await this.rest.request<
       MethodsApiReturnType["setPassportDataErrors"]
-    >("setPassportDataErrors", { userId, errors });
+    >("setPassportDataErrors", { user_id: userId, errors });
   }
 
   /** Use this method to send a game. On success, the sent Message is returned. */
   async sendGame(
     params: MethodParameters["sendGame"],
   ): Promise<MethodsLibReturnType["sendGame"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["sendGame"]>("sendGame", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["sendGame"]
+      >("sendGame", toSnakeCase(params))
       .then(
         (res) => new Message(this, res) as MethodsLibReturnType["sendGame"],
       );
@@ -1625,8 +1741,10 @@ class BaseClient extends EventEmitter {
   async setGameScore(
     params: MethodParameters["setGameScore"],
   ): Promise<MethodsLibReturnType["setGameScore"]> {
-    return await this.apiRequest
-      .get<MethodsApiReturnType["setGameScore"]>("setGameScore", params)
+    return await this.rest
+      .request<
+        MethodsApiReturnType["setGameScore"]
+      >("setGameScore", toSnakeCase(params))
       .then(
         (res) =>
           (typeof res === "boolean"
@@ -1641,10 +1759,10 @@ class BaseClient extends EventEmitter {
   async getGameHighScores(
     params: MethodParameters["getGameHighScores"],
   ): Promise<MethodsLibReturnType["getGameHighScores"]> {
-    return await this.apiRequest
-      .get<
+    return await this.rest
+      .request<
         MethodsApiReturnType["getGameHighScores"]
-      >("getGameHighScores", params)
+      >("getGameHighScores", toSnakeCase(params))
       .then((res) => res.map((game) => new GameHighScore(this, game)));
   }
 
@@ -1662,9 +1780,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     messageId: number | string,
   ): Promise<MethodsLibReturnType["deleteMessage"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["deleteMessage"]>(
+    return await this.rest.request<MethodsApiReturnType["deleteMessage"]>(
       "deleteMessage",
-      { chatId, messageId },
+      { chat_id: chatId, message_id: messageId },
     );
   }
 
@@ -1673,9 +1791,9 @@ class BaseClient extends EventEmitter {
     chatId: number | string,
     messageIds: (number | string)[],
   ): Promise<MethodsLibReturnType["deleteMessages"]> {
-    return await this.apiRequest.get<MethodsApiReturnType["deleteMessages"]>(
+    return await this.rest.request<MethodsApiReturnType["deleteMessages"]>(
       "deleteMessages",
-      { chatId, messageIds },
+      { chat_id: chatId, message_ids: messageIds },
     );
   }
 }

@@ -1,33 +1,19 @@
 import { Agent } from "node:https";
 
-const DefaultParameters = {
+const DefaultPollingParameters = {
   offset: 0,
-  limit: 1,
-  timeout: 0,
+  limit: 100,
+  timeout: 30,
   allowedUpdates: [
     "message",
     "edited_message",
     "channel_post",
     "edited_channel_post",
-    "business_connection",
-    "business_message",
-    "edited_business_message",
-    "deleted_business_messages",
-    "message_reaction",
-    "message_reaction_count",
-    "inline_query",
-    "chosen_inline_result",
     "callback_query",
-    "shipping_query",
-    "pre_checkout_query",
-    "poll",
-    "poll_answer",
+    "inline_query",
     "my_chat_member",
     "chat_member",
     "chat_join_request",
-    "chat_boost",
-    "removed_chat_boost",
-    "purchased_paid_media",
   ],
 } as const;
 
@@ -35,11 +21,12 @@ const DefaultClientParameters = {
   chatCacheMaxSize: -1,
   userCacheMaxSize: -1,
   pollingTimeout: 300,
-  requestOptions: {
+  restOptions: {
     agent: new Agent({
       keepAlive: true,
       keepAliveMsecs: 10000,
     }),
+    enableRateLimit: true,
   },
 } as const;
 
@@ -76,6 +63,12 @@ const Events = {
   PurchasedPaidMedia: "purchasedPaidMedia",
 } as const;
 
+const RestEvents = {
+  RateLimit: "rateLimit",
+  ApiRequest: "apiRequest",
+  ApiResponse: "apiResponse",
+} as const;
+
 const CollectorEvents = {
   Collect: "collect",
   Ignore: "ignore",
@@ -90,9 +83,10 @@ const ReactionCollectorEvents = {
 } as const;
 
 export {
-  DefaultParameters,
+  DefaultPollingParameters,
   DefaultClientParameters,
   Events,
   CollectorEvents,
   ReactionCollectorEvents,
+  RestEvents,
 };

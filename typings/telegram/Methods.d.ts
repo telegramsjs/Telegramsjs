@@ -2062,9 +2062,9 @@ export interface InputSticker {
   /** Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a WEBM video */
   format: "static" | "animated" | "video";
   /** List of 1-20 emoji associated with the sticker */
-  emojiList: string[];
+  emoji_list: string[];
   /** Position where the mask should be placed on faces. For “mask” stickers only. */
-  maskPosition?: MaskPosition;
+  mask_position?: MaskPosition;
   /** List of 0-20 search keywords for the sticker with total length of up to 64 characters. For “regular” and “custom_emoji” stickers only. */
   keywords?: string[];
 }
@@ -2099,13 +2099,13 @@ export interface InputMediaPhoto {
   /** Caption of the photo to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Pass True, if the caption must be shown above the message media */
-  showCaptionAboveMedia?: boolean;
+  show_caption_above_media?: boolean;
   /** Mode for parsing entities in the photo caption. See formatting options for more details. */
-  parseMode?: ParseMode;
+  parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parseMode */
-  captionEntities?: MessageEntity[];
+  caption_entities?: MessageEntity[];
   /** Pass True if the photo needs to be covered with a spoiler animation */
-  hasSpoiler?: boolean;
+  has_spoiler?: boolean;
 }
 
 /** Represents a video to be sent. */
@@ -2135,11 +2135,11 @@ export interface InputMediaVideo {
   /** Caption of the video to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Pass True, if the caption must be shown above the message media */
-  showCaptionAboveMedia?: boolean;
+  show_caption_above_media?: boolean;
   /** Mode for parsing entities in the video caption. See formatting options for more details. */
-  parseMode?: ParseMode;
+  parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parseMode */
-  captionEntities?: MessageEntity[];
+  caption_entities?: MessageEntity[];
   /** Video width */
   width?: number;
   /** Video height */
@@ -2147,9 +2147,9 @@ export interface InputMediaVideo {
   /** Video duration in seconds */
   duration?: number;
   /** Pass True if the uploaded video is suitable for streaming */
-  supportsStreaming?: boolean;
+  supports_streaming?: boolean;
   /** Pass True if the photo needs to be covered with a spoiler animation */
-  hasSpoiler?: boolean;
+  has_spoiler?: boolean;
 }
 
 /** Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent. */
@@ -2179,11 +2179,11 @@ export interface InputMediaAnimation {
   /** Caption of the animation to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Pass True, if the caption must be shown above the message media */
-  showCaptionAboveMedia?: boolean;
+  show_caption_above_media?: boolean;
   /** Mode for parsing entities in the animation caption. See formatting options for more details. */
-  parseMode?: ParseMode;
+  parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parseMode */
-  captionEntities?: MessageEntity[];
+  caption_entities?: MessageEntity[];
   /** Animation width */
   width?: number;
   /** Animation height */
@@ -2191,7 +2191,7 @@ export interface InputMediaAnimation {
   /** Animation duration in seconds */
   duration?: number;
   /** Pass True if the photo needs to be covered with a spoiler animation */
-  hasSpoiler?: boolean;
+  has_spoiler?: boolean;
 }
 
 /** Represents an audio file to be treated as music to be sent. */
@@ -2221,9 +2221,9 @@ export interface InputMediaAudio {
   /** Caption of the audio to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Mode for parsing entities in the audio caption. See formatting options for more details. */
-  parseMode?: ParseMode;
+  parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parseMode */
-  captionEntities?: MessageEntity[];
+  caption_entities?: MessageEntity[];
   /** Duration of the audio in seconds */
   duration?: number;
   /** Performer of the audio */
@@ -2259,11 +2259,11 @@ export interface InputMediaDocument {
   /** Caption of the document to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Mode for parsing entities in the document caption. See formatting options for more details. */
-  parseMode?: ParseMode;
+  parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parseMode */
-  captionEntities?: MessageEntity[];
+  caption_entities?: MessageEntity[];
   /** Disables automatic server-side content type detection for files uploaded using multipart/form-data. Always true, if the document is sent as part of an album. */
-  disableContentTypeDetection?: boolean;
+  disable_content_type_detection?: boolean;
 }
 
 /** This object describes the paid media to be sent. Currently, it can be one of
@@ -2318,5 +2318,5 @@ export interface InputPaidMediaVideo {
   /** Video duration in seconds */
   duration?: number;
   /** Pass True if the uploaded video is suitable for streaming */
-  supportsStreaming?: boolean;
+  supports_streaming?: boolean;
 }

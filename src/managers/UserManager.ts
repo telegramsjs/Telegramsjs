@@ -70,7 +70,7 @@ class UserManager extends BaseManager<User, ApiUser> {
       if (existing) return existing;
     }
 
-    const data = await this.client.apiRequest.get<
+    const data = await this.client.rest.request<
       MethodsApiReturnType["getChat"]
     >("getChat", {
       chatId: id,

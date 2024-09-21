@@ -63,7 +63,7 @@ client.on("ready", async ({ user }) => {
 });
 
 client.on("message", async (message) => {
-  if (message.content === "/start") {
+  if (message.content === "/start" && message.author) {
     return await message.reply(
       `Hello ${message.author.username ? `@${message.author.username}` : message.author.firstName}!`,
     );

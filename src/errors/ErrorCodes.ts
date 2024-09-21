@@ -4,7 +4,6 @@ enum ErrorCodes {
   MissingToken = "MISSING_TOKEN",
   WebhookServerCreationFailed = "WEBHOOK_SERVER_CREATION_FAILED",
   InvalidFilterFunction = "INVALID_FILTER_FUNCTION",
-  InvalidCamelCaseFormat = "INVALID_CAMEL_CASE_FORMAT",
   UserIdNotAvailable = "USER_ID_NOT_AVAILABLE",
   MessageIdNotAvailable = "MESSAGE_ID_NOT_AVAILABLE",
   ChatIdNotAvailable = "CHAT_ID_NOT_AVAILABLE",
@@ -25,8 +24,6 @@ const ErrorMessages = {
     "The webhook server could not be created.",
   [ErrorCodes.InvalidFilterFunction]:
     "The provided 'options.filter' is not a function.",
-  [ErrorCodes.InvalidCamelCaseFormat]:
-    "The provided string '${key}' does not follow camelCase format.",
   [ErrorCodes.UserIdNotAvailable]:
     "The user ID related to this message is not available.",
   [ErrorCodes.MessageIdNotAvailable]:

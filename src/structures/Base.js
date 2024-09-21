@@ -1,4 +1,5 @@
 // @ts-check
+const { flatten } = require("../util/Utils");
 
 /**
  * Represents a data model
@@ -49,6 +50,16 @@ class Base {
     const clone = this._clone();
     this._patch(data);
     return clone;
+  }
+
+  /**
+   * Flatten an object. Any properties that are collections will get converted to an array of keys.
+   * @param {boolean} [propsRecursive=false] - If true, calls toJSON method on nested objects.
+   * @param {Record<string, boolean | string>[]} props - Specific properties to include/exclude, or rename.
+   * @returns Flattened object.
+   */
+  toJSON(propsRecursive, ...props) {
+    return flatten(this, propsRecursive, ...props);
   }
 
   /**
