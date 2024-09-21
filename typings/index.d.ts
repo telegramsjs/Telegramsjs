@@ -277,18 +277,59 @@ export declare class MediaData {
   ): Promise<void>;
 }
 
+export interface IRateLimitData {
+  /** The API method of this request */
+  method: keyof ApiMethods;
+  /** In case of exceeding flood control, the number of seconds left to wait before the request can be repeated */
+  retryAfter?: number;
+  /** The group has been migrated to a supergroup with the specified identifier */
+  migrateToChatId?: string;
+}
+
+export interface IRestEventHandlers {
+  rateLimit: (rateLimitData: IRateLimitData) => PossiblyAsync<void>;
+  apiRequest: (method: string, options: RequestInit) => PossiblyAsync<void>;
+  apiResponse: (
+    method: string,
+    response: IRequestSuccess<unknown> | IRequestFailt,
+  ) => PossiblyAsync<void>;
+}
+
+export type IRestOptions = {
+  enableRateLimit?: boolean;
+} & Omit<RequestInit, "timeout" | "size" | "follow" | "signal" | "redirect">;
+
 /**
  * Handles API requests to the Telegram Bot API.
  */
-export declare class ApiRequest {
-  readonly authToken: string;
-  readonly requestOptions?: RequestInit;
+export declare class Rest extends EventEmitter {
+  readonly options?: IRestOptions;
   media: MediaData;
   /**
    * @param authToken - The authentication token for the Telegram Bot API.
    * @param requestOptions - Options for the fetch request.
    */
-  constructor(authToken: string, requestOptions?: RequestInit);
+  constructor(authToken: string, requestOptions?: IRestOptions);
+  /**
+   * Adds a typed listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The Rest instance.
+   */
+  on<T extends keyof IRestEventHandlers>(
+    event: T,
+    listener: IRestEventHandlers[T],
+  ): this;
+  /**
+   * Adds a typed one-time listener for the specified event.
+   * @param event - The event name.
+   * @param listener - The listener function.
+   * @returns The Rest instance.
+   */
+  once<T extends keyof IRestEventHandlers>(
+    event: T,
+    listener: IRestEventHandlers[T],
+  ): this;
   /**
    * Prepares the configuration for the fetch request based on the provided options.
    * @param options - The options to include in the request.
@@ -296,14 +337,17 @@ export declare class ApiRequest {
    */
   transferDataToServer(options: Record<string, unknown>): Promise<RequestInit>;
   /**
-   * Makes a GET request to the Telegram Bot API.
+   * Makes a request to the Telegram Bot API.
+   * Handles rate limits and retries the request if necessary.
    * @param method - The API method to call.
    * @param options - The options to include in the request.
    * @returns The result from the API response.
    * @throws {HTTPResponseError} If the API response indicates an error.
    */
-  get<T>(method: string, options?: Record<string, unknown>): Promise<T>;
-  private validateCamelCaseKeys;
+  request<T>(
+    method: keyof ApiMethods,
+    options?: Record<string, unknown>,
+  ): Promise<T>;
 }
 
 export declare class InputFile extends Base {
@@ -6647,7 +6691,7 @@ export type EventHandlerParameters =
   | PaidMediaPurchased;
 
 export declare class BaseClient extends EventEmitter {
-  readonly apiRequest: ApiRequest;
+  readonly rest: Rest;
   readonly users: UserManager;
   readonly chats: ChatManager;
   readonly updates: Collection<number, EventHandlerParameters>;
@@ -7759,7 +7803,7 @@ export interface ILoginOptions {
  */
 export interface ClientOptions {
   offset?: number;
-  requestOptions?: RequestInit;
+  restOptions?: IRestOptions;
   chatCacheMaxSize?: number;
   userCacheMaxSize?: number;
   pollingTimeout?: number;
@@ -8720,33 +8764,20 @@ export declare class Keyboard {
   equals(other: Keyboard): boolean;
 }
 
-export declare const DefaultParameters: {
+export declare const DefaultPollingParameters: {
   readonly offset: 0;
-  readonly limit: 1;
-  readonly timeout: 0;
+  readonly limit: 100;
+  readonly timeout: 30;
   readonly allowedUpdates: readonly [
     "message",
     "edited_message",
     "channel_post",
     "edited_channel_post",
-    "business_connection",
-    "business_message",
-    "edited_business_message",
-    "deleted_business_messages",
-    "message_reaction",
-    "message_reaction_count",
-    "inline_query",
-    "chosen_inline_result",
     "callback_query",
-    "shipping_query",
-    "pre_checkout_query",
-    "poll",
-    "poll_answer",
+    "inline_query",
     "my_chat_member",
     "chat_member",
     "chat_join_request",
-    "chat_boost",
-    "removed_chat_boost",
   ];
 };
 
@@ -8754,8 +8785,9 @@ export declare const DefaultClientParameters: {
   readonly chatCacheMaxSize: -1;
   readonly userCacheMaxSize: -1;
   readonly pollingTimeout: 300;
-  readonly requestOptions: {
+  readonly restOptions: {
     readonly agent: Agent;
+    readonly enableRateLimit: true;
   };
 };
 
@@ -8805,6 +8837,12 @@ export declare const ReactionCollectorEvents: {
   readonly End: "end";
   readonly User: "user";
   readonly Create: "create";
+};
+
+export declare const RestEvents: {
+  readonly RateLimit: "rateLimit";
+  readonly ApiRequest: "apiRequest";
+  readonly ApiResponse: "apiResponse";
 };
 
 /**
