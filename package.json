@@ -54,16 +54,15 @@
   "homepage": "https://telegramsjs.vercel.app/",
   "devDependencies": {
     "@telegram.ts/types": "^1.15.1",
-    "@types/lodash.snakecase": "^4.1.9",
     "@types/node": "^18.19.39",
-    "@types/node-fetch": "^2.6.11"
+    "@types/node-fetch": "^2.6.11",
+    "typescript": "5.5.4"
   },
   "dependencies": {
     "@telegram.ts/collection": "^1.1.0",
-    "lodash.snakecase": "^4.1.1",
     "node-fetch": "^2.7.0",
     "safe-compare": "^1.1.4",
     "sandwich-stream": "^2.0.2",
-    "tslib": "^2.6.3"
+    "tslib": "^2.7.0"
   }
 }
