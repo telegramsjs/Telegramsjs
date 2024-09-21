@@ -63,6 +63,12 @@ const Events = {
   PurchasedPaidMedia: "purchasedPaidMedia",
 } as const;
 
+const RestEvents = {
+  RateLimit: "rateLimit",
+  ApiRequest: "apiRequest",
+  ApiResponse: "apiResponse",
+} as const;
+
 const CollectorEvents = {
   Collect: "collect",
   Ignore: "ignore",
@@ -82,4 +88,5 @@ export {
   Events,
   CollectorEvents,
   ReactionCollectorEvents,
+  RestEvents,
 };
