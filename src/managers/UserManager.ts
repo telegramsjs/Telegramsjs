@@ -73,7 +73,7 @@ class UserManager extends BaseManager<User, ApiUser> {
     const data = await this.client.rest.request<
       MethodsApiReturnType["getChat"]
     >("getChat", {
-      chatId: id,
+      chat_id: id,
     });
 
     if (data?.type !== "private") {

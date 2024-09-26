@@ -58,7 +58,7 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
     const data = await this.client.rest.request<
       MethodsApiReturnType["getChat"]
     >("getChat", {
-      chatId: id,
+      chat_id: id,
     });
 
     if (data?.type === "private") {
