@@ -6636,14 +6636,8 @@ export interface EventHandlers {
   channelPost: (message: Message) => PossiblyAsync<void>;
   businessMessage: (message: Message) => PossiblyAsync<void>;
   businessConnection: (message: BusinessConnection) => PossiblyAsync<void>;
-  editedMessage: (
-    oldMessage: Message | null,
-    newMessage: Message,
-  ) => PossiblyAsync<void>;
-  editedChannelPost: (
-    oldMessage: Message | null,
-    newMessage: Message,
-  ) => PossiblyAsync<void>;
+  editedMessage: (newMessage: Message) => PossiblyAsync<void>;
+  editedChannelPost: (newMessage: Message) => PossiblyAsync<void>;
   editedBusinessMessage: (newMessage: Message) => PossiblyAsync<void>;
   deletedBusinessMessages: (
     message: BusinessMessagesDeleted,

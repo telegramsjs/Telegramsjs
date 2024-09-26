@@ -78,11 +78,9 @@ interface EventHandlers {
     message: import("../structures/business/BusinessConnection").BusinessConnection,
   ) => PossiblyAsync<void>;
   editedMessage: (
-    oldMessage: import("../structures/message/Message").Message | null,
     newMessage: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
   editedChannelPost: (
-    oldMessage: import("../structures/message/Message").Message | null,
     newMessage: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
   editedBusinessMessage: (
