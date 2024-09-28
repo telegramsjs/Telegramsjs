@@ -1590,7 +1590,7 @@ export declare class MessageReactionUpdated extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -1640,7 +1640,7 @@ export declare class MessageReactionUpdated extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         replyMarkup?: InlineKeyboardMarkup;
       },
       "text" | "chatId" | "messageId"
@@ -2011,7 +2011,7 @@ export declare class MessageOrigin extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -2061,7 +2061,7 @@ export declare class MessageOrigin extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         replyMarkup?: InlineKeyboardMarkup;
       },
       "text" | "chatId" | "messageId"
@@ -4112,7 +4112,7 @@ export declare class Message extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -4162,7 +4162,7 @@ export declare class Message extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         replyMarkup?: InlineKeyboardMarkup;
       },
       "text" | "chatId" | "messageId"
@@ -4725,7 +4725,7 @@ export declare class Chat extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -6591,9 +6591,7 @@ export declare class ChatBoostUpdated extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").ChatBoostUpdated,
   );
-  /**
-   * Chat which was boosted
-   */
+  /** Chat which was boosted */
   chat: Chat;
   /** Information about the chat boost */
   boost: ChatBoost;
@@ -6610,9 +6608,7 @@ export declare class ChatBoostRemoved extends Base {
   );
   /** Unique identifier of the boost */
   id: string;
-  /**
-   * Chat which was boosted
-   */
+  /** Chat which was boosted */
   chat: Chat;
   /** Source of the removed boost */
   source: ChatBoostSource;
