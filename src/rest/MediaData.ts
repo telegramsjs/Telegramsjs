@@ -254,9 +254,6 @@ class MediaData {
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {
-          if (typeof item.media !== "object") {
-            return item;
-          }
           const attachmentId = randomBytes(16).toString("hex");
           await this.attachFormMedia(form, item.media, attachmentId);
           return { ...item, media: `attach://${attachmentId}` };
