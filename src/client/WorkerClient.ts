@@ -54,6 +54,11 @@ class WorketClient {
     | ChatBoostRemoved
     | PaidMediaPurchased
     | undefined {
+    this.client.emit(
+      Events.RawUpdate,
+      Object.assign({}, data, { client: this.client }),
+    );
+
     if (
       "message" in data ||
       "channel_post" in data ||

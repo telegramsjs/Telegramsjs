@@ -2,9 +2,9 @@ import type { ReadStream } from "node:fs";
 import { EventEmitter } from "node:events";
 import { Rest } from "../rest/Rest";
 import { Collection } from "@telegram.ts/collection";
-import type { ClientOptions } from "./TelegramClient";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
+import type { ClientOptions, TelegramClient } from "./TelegramClient";
 import {
   Message,
   MenuButton,
@@ -65,6 +65,9 @@ interface EventHandlers {
     telegram: import("./TelegramClient").TelegramClient,
   ) => PossiblyAsync<void>;
   error: (detalis: [number, unknown]) => PossiblyAsync<void>;
+  rawUpdate: (
+    raw: import("@telegram.ts/types").Update & { client: TelegramClient },
+  ) => PossiblyAsync<void>;
   message: (
     message: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
@@ -147,6 +150,7 @@ interface EventHandlers {
 }
 
 type EventHandlerParameters =
+  | import("@telegram.ts/types").Update
   | import("../structures/message/Message").Message
   | import("../structures/business/BusinessConnection").BusinessConnection
   | import("../structures/business/BusinessMessagesDeleted").BusinessMessagesDeleted
