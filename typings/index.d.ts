@@ -7584,7 +7584,7 @@ export declare class WebhookClient {
   /**
    * The HTTP or HTTPS server for handling webhook requests.
    */
-  webhookServer?: http.Server | https.Server;
+  webhookServer: http.Server | https.Server | null;
   /**
    * Filters incoming webhook requests to verify their authenticity.
    * @param request - The incoming request.

@@ -600,9 +600,9 @@ export type ApiMethods = {
     businessConnectionId?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
-    /** An array describing messages to be sent, must include 2-10 items */
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** An array describing messages to be sent, must include 2-10 items */
     media: ReadonlyArray<
       InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo
     >;

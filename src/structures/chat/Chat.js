@@ -240,11 +240,19 @@ class Chat extends Base {
 
   /**
    * Use this method to send text messages.
-   * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
+   * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId" | "messageThreadId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { content: string }>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, the sent Message is returned.
    */
   send(text, options = {}) {
+    if (typeof text === "object") {
+      return this.client.sendMediaGroup({
+        chatId: this.id,
+        ...(this.threadId &&
+          this.inTopic && { messageThreadId: this.threadId }),
+        ...text,
+      });
+    }
     return this.client.sendMessage({
       text,
       chatId: this.id,
