@@ -249,14 +249,13 @@ abstract class Collector<K, V> extends EventEmitter {
     if (reason) this.stop(reason);
     return Boolean(reason);
   }
-
+  
   /**
    * Async generator for iterating over collected items.
    */
   async *[Symbol.asyncIterator](): AsyncGenerator<[V, Collection<K, V>]> {
     const queue: unknown[] = [];
-    const onCollect = (data: V, collected: Collection<K, V>) =>
-      queue.push(data, collected);
+    const onCollect = (...item: unknown[]) => queue.push(item);
     this.on(CollectorEvents.Collect, onCollect);
 
     try {
