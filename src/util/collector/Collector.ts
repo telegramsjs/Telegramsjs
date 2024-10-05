@@ -249,7 +249,7 @@ abstract class Collector<K, V> extends EventEmitter {
     if (reason) this.stop(reason);
     return Boolean(reason);
   }
-  
+
   /**
    * Async generator for iterating over collected items.
    */
