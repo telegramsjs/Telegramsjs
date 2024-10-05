@@ -145,6 +145,28 @@ class Poll extends Base {
   get closedAt() {
     return this.closeTimestamp ? new Date(this.closeTimestamp) : null;
   }
+
+  /**
+   * @typedef {Object} StopPoll
+   * @property {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message to be edited was sent.
+   * @property {import("../../client/interfaces/Markup").InlineKeyboardMarkup} [replyMarkup] - An object for a new message inline keyboard.
+   */
+
+  /**
+   * Use this method to stop a poll which was sent by the bot. ONLY BOT POLL
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+   * @param {number | string} messageId -Identifier of the original message with the poll.
+   * @param {StopPoll} [options] - options for stopping poll
+   * @return {Promise<Omit<Poll, "close">>} On success, the stopped Poll is returned
+   */
+  close(chatId, messageId, { businessConnectionId, replyMarkup } = {}) {
+    return this.client.stopPoll({
+      chatId,
+      messageId,
+      ...(businessConnectionId && { businessConnectionId }),
+      ...(replyMarkup && { replyMarkup }),
+    });
+  }
 }
 
 module.exports = { Poll };
