@@ -51,13 +51,18 @@ class ClientUser extends User {
   }
 
   /**
-   * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
-   * @param {readonly import("../../client/interfaces/Bot").BotCommand[]} commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
-   * @param {import("../../client/interfaces/Bot").BotCommandScope} [scope] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
-   * @param {string} [languageCode] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
-   * @returns {Promise<true>} - Returns True on success.
+   * @typedef {Object} SetMyCommands
+   * @property {import("../../client/interfaces/Bot").BotCommandScope} [scope] - Describes the scope for which the commands apply. Defaults to BotCommandScopeDefault.
+   * @property {string} [languageCode] - Two-letter ISO 639-1 language code. If not specified, commands will apply to users without a dedicated language.
    */
-  setCommands(commands, scope, languageCode) {
+
+  /**
+   * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
+   * @param {readonly import("../../client/interfaces/Bot").BotCommand[]} commands - A list of bot commands to set. Maximum of 100 commands.
+   * @param {SetMyCommands} [options] - Options for setting commands, including scope and language code.
+   * @returns {Promise<true>} - Returns true on success.
+   */
+  setCommands(commands, { scope, languageCode } = {}) {
     return this.client.setMyCommands({
       commands,
       ...(scope && { scope }),
