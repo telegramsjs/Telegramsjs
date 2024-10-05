@@ -1589,7 +1589,7 @@ export type ApiMethods = {
     messageId: string | number;
     /** An object for a new message inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
-  }): import("../index").Poll;
+  }): Omit<import("../index").Poll, "close">;
 
   /** Use this method to delete a message, including service messages, with the following limitations:
   - A message can only be deleted if it was sent less than 48 hours ago.

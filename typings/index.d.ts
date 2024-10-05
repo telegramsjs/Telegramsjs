@@ -1920,11 +1920,15 @@ export declare class MessageReactionUpdated extends Base {
   ): Promise<number>;
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param notification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - options for pinned message
    * @returns Returns True on success.
    */
-  pin(notification?: boolean, businessConnectionId?: string): Promise<true>;
+  pin(options?: {
+    /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+    notification?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
@@ -2341,11 +2345,15 @@ export declare class MessageOrigin extends Base {
   ): Promise<number>;
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param notification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - options for pinned message
    * @returns Returns True on success.
    */
-  pin(notification?: boolean, businessConnectionId?: string): Promise<true>;
+  pin(options?: {
+    /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+    notification?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
@@ -3060,6 +3068,23 @@ export declare class Poll extends Base {
    * Point in time when the poll will be automatically closed
    */
   get closedAt(): Date | null;
+  /**
+   * Use this method to stop a poll which was sent by the bot. ONLY BOT POLL
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+   * @param messageId -Identifier of the original message with the poll.
+   * @param options - options for stopping poll
+   * @return On success, the stopped Poll is returned
+   */
+  close(
+    chatId: number | string,
+    messageId: number | string,
+    options?: {
+      /** Unique identifier of the business connection on behalf of which the message to be edited was sent. */
+      businessConnectionId?: string;
+      /** An object for a new message inline keyboard. */
+      replyMarkup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Omit<Poll, "close">>;
 }
 
 export declare class Venue extends Base {
@@ -3231,11 +3256,15 @@ export declare class Forum extends Base {
   chatId: string;
   /**
    * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic.
-   * @param name - New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
-   * @param customEmojiId - New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept
+   * @param options - Options for edited forum topic.
    * @returns Returns True on success.
    */
-  edit(name?: string, customEmojiId?: string): Promise<true>;
+  edit(options?: {
+    /** New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept */
+    name?: string;
+    /** New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept */
+    customEmojiId?: string;
+  }): Promise<true>;
   /**
    * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
    * @returns Returns True on success.
@@ -4442,11 +4471,15 @@ export declare class Message extends Base {
   ): Promise<number>;
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param notification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - options for pinned message
    * @returns Returns True on success.
    */
-  pin(notification?: boolean, businessConnectionId?: string): Promise<true>;
+  pin(options?: {
+    /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+    notification?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
@@ -5287,25 +5320,29 @@ export declare class Chat extends Base {
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param messageId - Identifier of a message to pin
-   * @param disableNotification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - Options for pinned message
    * @returns Returns True on success.
    */
   pinMessage(
     messageId: string | number,
-    disableNotification?: boolean,
-    businessConnectionId?: string,
+    options?: {
+      /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+      notification?: boolean;
+      /** Unique identifier of the business connection on behalf of which the message will be pinned */
+      businessConnectionId?: string;
+    },
   ): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param messageId - Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
+   * @param options - Options for unpinned message
    * @returns Returns True on success.
    */
-  unpinMessage(
-    messageId?: string | number,
-    businessConnectionId?: string,
-  ): Promise<true>;
+  unpinMessage(options?: {
+    /** Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned */
+    messageId?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @returns Returns True on success.
@@ -7885,14 +7922,17 @@ export declare class ClientUser extends User {
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
    * @param commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
-   * @param scope - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
-   * @param languageCode - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
+   * @param options - Options for setting commands, including scope and language code
    * @returns Returns True on success.
    */
   setCommands(
     commands: readonly BotCommand[],
-    scope?: BotCommandScope,
-    languageCode?: string,
+    options?: {
+      /** A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified */
+      cope?: BotCommandScope;
+      /** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
+      languageCode?: string;
+    },
   ): Promise<true>;
   /**
    * Use this method to get the current list of the bot's commands for the given scope and user language.
