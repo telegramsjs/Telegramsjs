@@ -6456,6 +6456,136 @@ export declare class BusinessConnection extends Base {
    * Date the connection was established
    */
   get createdAt(): Date;
+  /**
+   * Use this method to send text messages.
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  send(
+    text: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    Message & {
+      content: string;
+    }
+  >;
+  send(
+    text: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "chatId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  send(
+    text:
+      | string
+      | Omit<
+          {
+            businessConnectionId?: string;
+            chatId: number | string;
+            messageThreadId?: string | number;
+            media: ReadonlyArray<
+              | InputMediaAudio
+              | InputMediaDocument
+              | InputMediaPhoto
+              | InputMediaVideo
+            >;
+            disableNotification?: boolean;
+            protectContent?: boolean;
+            messageEffectId?: string;
+            replyParameters?: ReplyParameters;
+          },
+          "chatId"
+        >,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    | (Message & {
+        content: string;
+      })
+    | Array<
+        | (Message & {
+            audio: Audio;
+          })
+        | (Message & {
+            document: Document;
+          })
+        | (Message & {
+            photo: Photo;
+          })
+        | (Message & {
+            video: Video;
+          })
+      >
+  >;
 }
 
 export declare class BusinessMessagesDeleted extends Base {
