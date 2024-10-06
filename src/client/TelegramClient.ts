@@ -182,6 +182,14 @@ class TelegramClient extends BaseClient {
     this.webhook.close();
     this.emit(Events.Disconnect, this);
   }
+
+  /**
+   * Asynchronously disposes of the client, closing all connections.
+   * Implements `Symbol.asyncDispose` by calling `destroy()`.
+   */
+  async [Symbol.asyncDispose](): Promise<void> {
+    await this.destroy();
+  }
 }
 
 export { TelegramClient, type ClientOptions, type ILoginOptions };

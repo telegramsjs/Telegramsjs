@@ -8133,6 +8133,11 @@ export declare class TelegramClient extends BaseClient {
    * Destroys the client, closing all connections.
    */
   destroy(): void;
+  /**
+   * Asynchronously disposes of the client, closing all connections.
+   * Implements `Symbol.asyncDispose` by calling `destroy()`.
+   */
+  [Symbol.asyncDispose](): Promise<void>;
 }
 
 export declare class Base {
