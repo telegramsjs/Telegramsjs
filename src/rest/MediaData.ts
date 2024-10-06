@@ -254,7 +254,7 @@ class MediaData {
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {
-          if (!this.isMediaType(item)) {
+          if (!this.isMediaType(item.media)) {
             if (!(await fileExists(item.media))) {
               return item;
             }
