@@ -116,6 +116,16 @@ class BaseManager<T extends Base, ApiObject extends { id: number }> {
     if (typeof idOrInstance === "string") return idOrInstance;
     return null;
   }
+
+  /**
+   * Returns a new Iterator object that contains the [key, value] pairs for each element in the collection.
+   * @returns An iterator object that can be used to iterate over the key-value pairs of the Collection.
+   */
+  *[Symbol.iterator](): IterableIterator<[string, T]> {
+    for (const item of this.cache) {
+      yield item;
+    }
+  }
 }
 
 export { BaseManager };

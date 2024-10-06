@@ -13,6 +13,16 @@ class UsersShared {
     /** Information about users shared with the bot. */
     this.users = data.users.map((user) => new SharedUser(client, user));
   }
+
+  /**
+   * Makes the class iterable, returning each `SharedUser` object.
+   * @returns {IterableIterator<SharedUser>}
+   */
+  *[Symbol.iterator]() {
+    for (const user of this.users) {
+      yield user;
+    }
+  }
 }
 
 module.exports = { UsersShared };

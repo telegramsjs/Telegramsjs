@@ -13,6 +13,16 @@ class PaidMediaInfo {
     /** Information about the paid media */
     this.media = data.paid_media.map((media) => new PaidMedia(client, media));
   }
+
+  /**
+   * Makes the class iterable, returning each `PaidMedia` object.
+   * @returns {IterableIterator<PaidMedia>}
+   */
+  *[Symbol.iterator]() {
+    for (const media of this.media) {
+      yield media;
+    }
+  }
 }
 
 module.exports = { PaidMediaInfo };

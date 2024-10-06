@@ -738,6 +738,11 @@ export declare class BaseManager<
    * @returns The resolved ID or null if not found.
    */
   resolveId(idOrInstance: any): string | null;
+  /**
+   * Returns a new Iterator object that contains the [key, value] pairs for each element in the collection.
+   * @returns An iterator object that can be used to iterate over the key-value pairs of the Collection.
+   */
+  [Symbol.iterator](): IterableIterator<[string, T]>;
 }
 
 /**
@@ -2987,6 +2992,8 @@ export declare class PaidMediaInfo {
   starCount: number;
   /** Information about the paid media */
   media: PaidMedia[];
+  /** Makes the class iterable, returning each `PaidMedia` object. */
+  [Symbol.iterator](): IterableIterator<PaidMedia>;
 }
 
 export declare class Poll extends Base {
@@ -3455,6 +3462,8 @@ export declare class UsersShared {
   requestId: number;
   /** Information about users shared with the bot. */
   users: SharedUser[];
+  /** Makes the class iterable, returning each `SharedUser` object. */
+  [Symbol.iterator](): IterableIterator<SharedUser>;
 }
 
 export declare class ChatShared extends Base {
@@ -6470,6 +6479,10 @@ export declare class BusinessMessagesDeleted extends Base {
    * The list of identifiers of deleted messages in the chat of the business account
    */
   ids: string[];
+  /**
+   * Makes the class iterable, returning each messages identifiers
+   */
+  [Symbol.iterator](): IterableIterator<string>;
 }
 
 export declare class ReactionCount {
@@ -8442,6 +8455,10 @@ export declare class UserChatBoosts {
    * The boost count added to the chat by the user
    */
   count: number;
+  /**
+   * Makes the class iterable, returning each `ChatBoost` object.
+   */
+  [Symbol.iterator](): IterableIterator<ChatBoost>;
 }
 
 export declare class StickerSet {
