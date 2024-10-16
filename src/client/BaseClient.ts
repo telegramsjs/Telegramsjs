@@ -186,7 +186,12 @@ class BaseClient extends EventEmitter {
     /**
      * All of the objects that have been cached at any point, mapped by their ids
      */
-    this.users = new UserManager(this, [], options?.userCacheMaxSize);
+    this.users = new UserManager(this, [], {
+      cacheSize: options?.userCacheMaxSize ?? -1,
+      ...(options?.userCacheFilter && {
+        cacheFilter: options?.userCacheFilter,
+      }),
+    });
 
     /**
      * All of the that the client is currently handling, mapped by their ids -
@@ -194,7 +199,12 @@ class BaseClient extends EventEmitter {
      * is a member of. Note that DM channels will not be initially cached, and thus not be present
      * in the Manager without their explicit fetching or use.
      */
-    this.chats = new ChatManager(this, [], options?.chatCacheMaxSize);
+    this.chats = new ChatManager(this, [], {
+      cacheSize: options?.chatCacheMaxSize ?? -1,
+      ...(options?.chatCacheFilter && {
+        cacheFilter: options?.chatCacheFilter,
+      }),
+    });
 
     /**
      * The updates cache for polling/webhook

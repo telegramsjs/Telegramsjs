@@ -5,28 +5,47 @@ import type { TelegramClient } from "../client/TelegramClient";
 
 type Constructable<Entity> = new (...args: any[]) => Entity;
 
+interface ICachedOptions<T> {
+  /**
+   * Optional maximum cache size. If not set, the cache is unlimited.
+   */
+  cacheSize?: number;
+  /**
+   * Optional filter function to determine if an item should be cached.
+   * Returns `true` to cache the item, `false` otherwise.
+   */
+  cacheFilter?: (holds: T) => boolean;
+}
+
 class BaseManager<T extends Base, ApiObject extends { id: number }> {
   #holds: Constructable<T>;
   #apiClient: TelegramClient | BaseClient;
   cache: Collection<string, T>;
   cacheSize: number;
+  cacheFilter?: (holds: T) => boolean;
   #cacheWarningEmitted: boolean = false;
 
   /**
    * @param client - The client instance.
    * @param holds - The class or function that the manager holds.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
     holds: Constructable<T>,
-    iterable?: ApiObject[],
-    cacheSize: number = -1,
+    iterable: ApiObject[],
+    options: ICachedOptions<T>,
   ) {
     this.#holds = holds;
+
     this.#apiClient = client;
-    this.cacheSize = cacheSize;
+
+    this.cacheSize = options.cacheSize ?? -1;
+
+    if (options.cacheFilter) {
+      this.cacheFilter = options.cacheFilter;
+    }
 
     /** The collection used for caching data objects. */
     this.cache = new Collection<string, T>();
@@ -78,7 +97,15 @@ class BaseManager<T extends Base, ApiObject extends { id: number }> {
     }
 
     const entry = new this.#holds(this.client, data, ...extras);
-    if (cache) this.cache.set(String(id ?? entry.valueOf()), entry);
+    if (cache) {
+      if (this.cacheFilter) {
+        if (this.cacheFilter?.(entry)) {
+          this.cache.set(String(id ?? entry.valueOf()), entry);
+          return entry;
+        } else return entry;
+      }
+      this.cache.set(String(id ?? entry.valueOf()), entry);
+    }
     return entry;
   }
 
@@ -128,4 +155,4 @@ class BaseManager<T extends Base, ApiObject extends { id: number }> {
   }
 }
 
-export { BaseManager };
+export { BaseManager, type ICachedOptions };

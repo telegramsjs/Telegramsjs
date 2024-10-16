@@ -12,6 +12,8 @@ import { WorketClient } from "./WorkerClient";
 import { TelegramError } from "../errors/TelegramError";
 import { ErrorCodes } from "../errors/ErrorCodes";
 import type { ClientUser } from "../structures/misc/ClientUser";
+import type { User } from "../structures/misc/User";
+import type { Chat } from "../structures/chat/Chat";
 import {
   Events,
   DefaultPollingParameters,
@@ -53,6 +55,8 @@ interface ClientOptions {
   restOptions?: IRestOptions;
   chatCacheMaxSize?: number;
   userCacheMaxSize?: number;
+  userCacheFilter?: (user: User) => boolean;
+  chatCacheFilter?: (chat: Chat) => boolean;
   pollingTimeout?: number;
   errorHandler?: boolean;
 }
@@ -121,7 +125,7 @@ class TelegramClient extends BaseClient {
   /**
    * Fetch about the client/bot
    */
-  async fetchApplication() {
+  async fetchApplication(): Promise<ClientUser> {
     const client = await this.getMe();
     this.user = client;
     return client;

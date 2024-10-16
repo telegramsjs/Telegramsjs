@@ -677,7 +677,19 @@ export declare class User extends Base {
   equals(other: User | ClientUser): boolean;
 }
 
-type Constructable<Entity> = new (...args: any[]) => Entity;
+export type Constructable<Entity> = new (...args: any[]) => Entity;
+
+export interface ICachedOptions<T> {
+  /**
+   * Optional maximum cache size. If not set, the cache is unlimited.
+   */
+  cacheSize?: number;
+  /**
+   * Optional filter function to determine if an item should be cached.
+   * Returns `true` to cache the item, `false` otherwise.
+   */
+  cacheFilter?: (holds: T) => boolean;
+}
 
 export declare class BaseManager<
   T extends Base,
@@ -687,17 +699,18 @@ export declare class BaseManager<
 > {
   public readonly cache: Collection<string, T>;
   public readonly cacheSize: number;
+  public readonly cacheFilter?: (holds: T) => boolean;
   /**
    * @param client - The client instance.
    * @param holds - The class or function that the manager holds.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
     holds: Constructable<T>,
-    iterable?: ApiObject[],
-    cacheSize?: number,
+    iterable: ApiObject[],
+    options?: ICachedOptions<T>,
   );
   /**
    * The client that instantiated this
@@ -6347,8 +6360,8 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: ApiUser[],
-    cacheSize?: number,
+    iterable: ApiUser[],
+    options?: ICachedOptions<User>,
   );
   /**
    * Resolves a user from a ChatMember, Message, or user ID.
@@ -6384,12 +6397,12 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * @param client - The client instance.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: ApiChat[],
-    cacheSize?: number,
+    iterable: ApiChat[],
+    options?: ICachedOptions<Chat>,
   );
   /**
    * Resolves a chat object.
@@ -8207,6 +8220,8 @@ export interface ClientOptions {
   restOptions?: IRestOptions;
   chatCacheMaxSize?: number;
   userCacheMaxSize?: number;
+  userCacheFilter?: (user: User) => boolean;
+  chatCacheFilter?: (chat: Chat) => boolean;
   pollingTimeout?: number;
   errorHandler?: boolean;
 }

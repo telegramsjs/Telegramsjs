@@ -1,4 +1,4 @@
-import { BaseManager } from "./BaseManager";
+import { BaseManager, type ICachedOptions } from "./BaseManager";
 import { User } from "../structures/misc/User";
 import type { MethodsApiReturnType } from "../types";
 import type { User as ApiUser } from "@telegram.ts/types";
@@ -13,14 +13,14 @@ class UserManager extends BaseManager<User, ApiUser> {
   /**
    * @param client - The client instance.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: ApiUser[],
-    cacheSize: number = -1,
+    iterable: ApiUser[],
+    options: ICachedOptions<User> = {},
   ) {
-    super(client, User, iterable, cacheSize);
+    super(client, User, iterable, options);
   }
 
   /**
