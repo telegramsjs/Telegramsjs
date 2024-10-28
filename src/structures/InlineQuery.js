@@ -2,6 +2,10 @@
 const { Base } = require("./Base");
 const { Location } = require("./misc/Location");
 
+/**
+ * @typedef {import("../types").MethodParameters} MethodParameters
+ */
+
 class InlineQuery extends Base {
   /**
    * @param {import("../client/TelegramClient").TelegramClient | import("../client/BaseClient").BaseClient} client - The client that instantiated this
@@ -34,6 +38,20 @@ class InlineQuery extends Base {
       /** Sender location, only for bots that request user location */
       this.location = new Location(client, data.location);
     }
+  }
+
+  /**
+   * Use this method to send answers to an inline query.
+   * @param {readonly import("../client/interfaces/Inline").InlineQueryResult[]} results - An array of results for the inline query
+   * @param {Omit<MethodParameters["answerInlineQuery"], "inlineQueryId" | "results">} [options={}] - out parameters
+   * @returns {Promise<true>} - On success, True is returned.
+   */
+  answerQuery(results, options = {}) {
+    return this.client.answerInlineQuery({
+      inlineQueryId: this.id,
+      results,
+      ...options,
+    });
   }
 }
 
