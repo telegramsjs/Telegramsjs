@@ -881,10 +881,45 @@ export interface ICollectorOptions<EventCtx, Collected> {
  * Interface representing the events for the collector.
  */
 export interface ICollectorEvent<K, V> {
-  collect: (data: V, collect: Collection<K, V>) => void;
-  ignore: (data: V) => void;
-  dispose: (data: V, collect: Collection<K, V>) => void;
-  end: (collected: Collection<K, V>, reason: string) => void;
+  /**
+   * Triggered when a new item is collected. The `collect` function receives the
+   * item (`data`) and the collection itself (`collect`). Can perform any
+   * asynchronous or synchronous operations needed to handle the collected item.
+   *
+   * @param data - The data item to be collected.
+   * @param collect - The collection where the data is stored.
+   */
+  collect: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+
+  /**
+   * Triggered when a data item is ignored. The `ignore` function is called with
+   * the ignored item (`data`). This is useful for cases where items do not meet
+   * certain criteria and should not be added to the collection.
+   *
+   * @param data - The data item to be ignored.
+   */
+  ignore: (data: V) => PossiblyAsync<void>;
+
+  /**
+   * Triggered when an item is removed or disposed of from the collection. The
+   * `dispose` function receives the data item (`data`) and the collection itself
+   * (`collect`). Use this to handle any cleanup or additional logic when an item
+   * is removed from the collection.
+   *
+   * @param data - The data item to be disposed of.
+   * @param collect - The collection where the data is stored.
+   */
+  dispose: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+
+  /**
+   * Triggered when the collection process ends. The `end` function receives the
+   * final collection (`collected`) and a reason (`reason`) for the collection’s
+   * termination. Use this to handle any finalization or post-processing steps.
+   *
+   * @param collected - The collection of all collected data.
+   * @param reason - The reason the collection process ended.
+   */
+  end: (collected: Collection<K, V>, reason: string) => PossiblyAsync<void>;
 }
 
 /**
@@ -1287,13 +1322,13 @@ export interface IReactionEventCollector
    * @param data - The collection of user reactions.
    */
   user: (
-    data: Collection<string, MessageReactionUpdated[] | MessageReactionUpdated>,
-  ) => void;
+    data: Collection<string, MessageReactionUpdated[]>,
+  ) => PossiblyAsync<void>;
   /**
    * Event emitted when a reaction is created.
    * @param data - The reaction context.
    */
-  create: (data: MessageReactionUpdated) => void;
+  create: (data: MessageReactionUpdated) => PossiblyAsync<void>;
 }
 
 /**
@@ -1313,7 +1348,7 @@ export declare class ReactionCollector extends Collector<
   /**
    * Collection of users and their reactions.
    */
-  users: Collection<string, MessageReactionUpdated[] | MessageReactionUpdated>;
+  users: Collection<string, MessageReactionUpdated[]>;
   /**
    * Creates an instance of ReactionCollector.
    * @param client - The TelegramClient instance.
