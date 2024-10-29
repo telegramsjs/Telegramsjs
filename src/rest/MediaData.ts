@@ -51,9 +51,9 @@ class MediaData {
    */
   readonly formDataJsonFields: string[] = [
     "results",
-    "replyMarkup",
-    "maskPosition",
-    "shippingOptions",
+    "reply_markup",
+    "mask_position",
+    "shipping_options",
     "errors",
     "commands",
   ];
@@ -154,7 +154,7 @@ class MediaData {
     apiPayload: Record<string, any>,
     requestOptions: RequestInit = {},
   ): Promise<IApiConfig> {
-    Object.keys(this.formDataJsonFields).map((fieldName) => {
+    Object.values(this.formDataJsonFields).map((fieldName) => {
       const fieldValue = apiPayload[fieldName];
       if (fieldValue && typeof fieldValue !== "string") {
         apiPayload[fieldName] = JSON.stringify(fieldValue);
