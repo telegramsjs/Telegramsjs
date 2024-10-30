@@ -4,6 +4,7 @@ import { Rest } from "../rest/Rest";
 import { Collection } from "@telegram.ts/collection";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
+import type { LanguageCode } from "./interfaces/Language";
 import type { ClientOptions, TelegramClient } from "./TelegramClient";
 import {
   Message,
@@ -1184,7 +1185,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
   async deleteMyCommands(
     scope?: MethodParameters["deleteMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["deleteMyCommands"]> {
     return await this.rest.request<MethodsApiReturnType["deleteMyCommands"]>(
       "deleteMyCommands",
@@ -1198,7 +1199,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned. */
   async getMyCommands(
     scope?: MethodParameters["getMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyCommands"]> {
     return await this.rest.request<MethodsApiReturnType["getMyCommands"]>(
       "getMyCommands",
@@ -1212,7 +1213,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to change the bot's name. Returns True on success. */
   async setMyName(
     name?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyName"]> {
     return await this.rest.request<MethodsApiReturnType["setMyName"]>(
       "setMyName",
@@ -1225,7 +1226,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
   async getMyName(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyName"]> {
     return await this.rest
       .request<MethodsApiReturnType["getMyName"]>("getMyName", {
@@ -1237,7 +1238,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success. */
   async setMyDescription(
     description?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyDescription"]> {
     return await this.rest.request<MethodsApiReturnType["setMyDescription"]>(
       "setMyDescription",
@@ -1250,7 +1251,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
   async getMyDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyDescription"]> {
     return await this.rest
       .request<
@@ -1262,7 +1263,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success. */
   async setMyShortDescription(
     shortDescription?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyShortDescription"]> {
     return await this.rest.request<
       MethodsApiReturnType["setMyShortDescription"]
@@ -1274,7 +1275,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   async getMyShortDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyShortDescription"]> {
     return await this.rest
       .request<

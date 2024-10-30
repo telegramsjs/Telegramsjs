@@ -2,6 +2,10 @@
 const { Base } = require("../Base");
 
 /**
+ * @typedef {import("../../client/interfaces/Language").LanguageCode} LanguageCode
+ */
+
+/**
  * @typedef {import("../../types").MethodParameters} MethodParameters
  */
 
@@ -51,7 +55,7 @@ class User extends Base {
     if ("language_code" in data) {
       /**
        * IETF language tag of the user's language
-       * @type {string | undefined}
+       * @type {LanguageCode | undefined}
        */
       this.language = data.language_code;
     }

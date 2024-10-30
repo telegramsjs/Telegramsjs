@@ -1,5 +1,6 @@
 import type { ReadStream } from "node:fs";
 import type { Buffer, Blob } from "node:buffer";
+import type { LanguageCode } from "./Language";
 import type { PassportElementError } from "./Passport";
 import type { BotCommand, MenuButton, BotCommandScope } from "./Bot";
 import type {
@@ -1390,7 +1391,7 @@ export type ApiMethods = {
     /** An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault. */
     scope?: BotCommandScope;
     /** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
@@ -1398,7 +1399,7 @@ export type ApiMethods = {
     /** An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault. */
     scope?: BotCommandScope;
     /** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned. */
@@ -1406,7 +1407,7 @@ export type ApiMethods = {
     /** An object, describing scope of users. Defaults to BotCommandScopeDefault. */
     scope?: BotCommandScope;
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): BotCommand[];
 
   /** Use this method to change the bot's name. Returns True on success. */
@@ -1414,13 +1415,13 @@ export type ApiMethods = {
     /** New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language. */
     name?: string;
     /** A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name. */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
   getMyName(args: {
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): string;
 
   /** Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success. */
@@ -1428,13 +1429,13 @@ export type ApiMethods = {
     /** New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language. */
     description?: string;
     /** A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description. */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
   getMyDescription(args: {
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): string;
 
   /** Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success. */
@@ -1442,13 +1443,13 @@ export type ApiMethods = {
     /** New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language. */
     shortDescription?: string;
     /** A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description. */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   getMyShortDescription(args: {
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): string;
 
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */

@@ -53,6 +53,7 @@ import {
   InputMediaAudio,
   InlineKeyboardButton,
   InlineQueryResultsButton,
+  LanguageCode,
 } from "./telegram/index";
 
 /**
@@ -506,7 +507,7 @@ export declare class User extends Base {
   /**
    * IETF language tag of the user's language
    */
-  language?: string;
+  language?: LanguageCode;
   /**
    * True, if this user is a Telegram Premium user
    */
@@ -7530,37 +7531,39 @@ export declare class BaseClient extends EventEmitter {
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
   deleteMyCommands(
     scope?: MethodParameters["deleteMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["deleteMyCommands"]>;
   /** Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned. */
   getMyCommands(
     scope?: MethodParameters["getMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyCommands"]>;
   /** Use this method to change the bot's name. Returns True on success. */
   setMyName(
     name?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyName"]>;
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
-  getMyName(languageCode?: string): Promise<MethodsLibReturnType["getMyName"]>;
+  getMyName(
+    languageCode?: LanguageCode,
+  ): Promise<MethodsLibReturnType["getMyName"]>;
   /** Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success. */
   setMyDescription(
     description?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyDescription"]>;
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
   getMyDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyDescription"]>;
   /** Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success. */
   setMyShortDescription(
     shortDescription?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyShortDescription"]>;
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   getMyShortDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyShortDescription"]>;
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
   setChatMenuButton(
@@ -8122,7 +8125,7 @@ export declare class ClientUser extends User {
       /** A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified */
       cope?: BotCommandScope;
       /** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
-      languageCode?: string;
+      languageCode?: LanguageCode;
     },
   ): Promise<true>;
   /**
@@ -8133,7 +8136,7 @@ export declare class ClientUser extends User {
    */
   getCommands(
     score?: BotCommandScope,
-    language?: string,
+    language?: LanguageCode,
   ): Promise<BotCommand[]>;
   /**
    * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users.
@@ -8141,46 +8144,52 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
    * @returns Returns True on success.
    */
-  deleteCommands(score?: BotCommandScope, language?: string): Promise<true>;
+  deleteCommands(
+    score?: BotCommandScope,
+    language?: LanguageCode,
+  ): Promise<true>;
   /**
    * Use this method to change the bot's name.
    * @param name - New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language
    * @param language - A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name
    * @returns Returns True on success.
    */
-  setName(name?: string, language?: string): Promise<true>;
+  setName(name?: string, language?: LanguageCode): Promise<true>;
   /**
    * Use this method to get the current bot name for the given user language.
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot name on success
    */
-  getName(language?: string): Promise<string>;
+  getName(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty.
    * @param description - New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language
    * @param language - A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description
    * @returns Returns True on success.
    */
-  setDescription(description?: string, language?: string): Promise<true>;
+  setDescription(description?: string, language?: LanguageCode): Promise<true>;
   /**
    * Use this method to get the current bot description for the given user language.
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot description on success.
    */
-  getDescription(language?: string): Promise<string>;
+  getDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot.
    * @param description - New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language
    * @param language - A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description
    * @returns Returns True on success.
    */
-  setShortDescription(description?: string, language?: string): Promise<true>;
+  setShortDescription(
+    description?: string,
+    language?: LanguageCode,
+  ): Promise<true>;
   /**
    * Use this method to get the current bot short description for the given user language.
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot short description on success
    */
-  getShortDescription(language?: string): Promise<string>;
+  getShortDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
