@@ -315,14 +315,7 @@ class Keyboard {
       | KeyboardButton[][]
       | { keyboard: KeyboardButton[][] }
       | {
-          toJSON: () => {
-            keyboard: KeyboardButton[][];
-            one_time_keyboard?: boolean;
-            is_persistent?: boolean;
-            input_field_placeholder?: string;
-            selective?: boolean;
-            resize_keyboard?: boolean;
-          };
+          toJSON: () => ReplyKeyboardMarkup;
         },
   ): Keyboard {
     const json = "toJSON" in keyboard ? keyboard.toJSON() : keyboard;
@@ -399,14 +392,7 @@ class Keyboard {
    * Converts the keyboard to a JSON format suitable for Telegram API.
    * @returns An object representing the keyboard in JSON format.
    */
-  toJSON(): {
-    keyboard: KeyboardButton[][];
-    one_time_keyboard?: boolean;
-    is_persistent?: boolean;
-    input_field_placeholder?: string;
-    selective?: boolean;
-    resize_keyboard?: boolean;
-  } {
+  toJSON(): ReplyKeyboardMarkup {
     return {
       keyboard: this.keyboard,
       ...(this.one_time_keyboard !== undefined && {
