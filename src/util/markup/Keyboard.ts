@@ -13,22 +13,22 @@ class Keyboard {
   /**
    * Indicates whether the keyboard is persistent.
    */
-  public is_persistent: boolean = false;
+  public is_persistent?: boolean;
 
   /**
    * Indicates whether the keyboard is selective.
    */
-  public selective: boolean = false;
+  public selective?: boolean;
 
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  public one_time_keyboard: boolean = false;
+  public one_time_keyboard?: boolean;
 
   /**
    * Indicates whether the keyboard should be resized.
    */
-  public resize_keyboard: boolean = false;
+  public resize_keyboard?: boolean;
 
   /**
    * The placeholder text for the input field.
@@ -278,10 +278,18 @@ class Keyboard {
    */
   clone(keyboard: KeyboardButton[][] = this.keyboard): Keyboard {
     const clone = new Keyboard(keyboard.map((row) => row.slice()));
-    clone.is_persistent = this.is_persistent;
-    clone.selective = this.selective;
-    clone.one_time_keyboard = this.one_time_keyboard;
-    clone.resize_keyboard = this.resize_keyboard;
+    if (this.is_persistent !== undefined) {
+      clone.is_persistent = this.is_persistent;
+    }
+    if (this.selective !== undefined) {
+      clone.selective = this.selective;
+    }
+    if (this.one_time_keyboard !== undefined) {
+      clone.one_time_keyboard = this.one_time_keyboard;
+    }
+    if (this.resize_keyboard !== undefined) {
+      clone.resize_keyboard = this.resize_keyboard;
+    }
     if (this.input_field_placeholder) {
       clone.input_field_placeholder = this.input_field_placeholder;
     }
@@ -309,11 +317,11 @@ class Keyboard {
       | {
           toJSON: () => {
             keyboard: KeyboardButton[][];
-            one_time_keyboard: boolean;
-            is_persistent: boolean;
+            one_time_keyboard?: boolean;
+            is_persistent?: boolean;
             input_field_placeholder?: string;
-            selective: boolean;
-            resize_keyboard: boolean;
+            selective?: boolean;
+            resize_keyboard?: boolean;
           };
         },
   ): Keyboard {
@@ -393,21 +401,27 @@ class Keyboard {
    */
   toJSON(): {
     keyboard: KeyboardButton[][];
-    one_time_keyboard: boolean;
-    is_persistent: boolean;
+    one_time_keyboard?: boolean;
+    is_persistent?: boolean;
     input_field_placeholder?: string;
-    selective: boolean;
-    resize_keyboard: boolean;
+    selective?: boolean;
+    resize_keyboard?: boolean;
   } {
     return {
       keyboard: this.keyboard,
-      one_time_keyboard: this.one_time_keyboard,
-      is_persistent: this.is_persistent,
+      ...(this.one_time_keyboard !== undefined && {
+        one_time_keyboard: this.one_time_keyboard,
+      }),
+      ...(this.persistent !== undefined && {
+        is_persistent: this.is_persistent,
+      }),
       ...(this.input_field_placeholder && {
         input_field_placeholder: this.input_field_placeholder,
       }),
-      selective: this.selective,
-      resize_keyboard: this.resize_keyboard,
+      ...(this.selective !== undefined && { selective: this.selective }),
+      ...(this.resize_keyboard !== undefined && {
+        resize_keyboard: this.resize_keyboard,
+      }),
     };
   }
 }

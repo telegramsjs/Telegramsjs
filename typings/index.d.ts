@@ -9040,19 +9040,19 @@ export declare class Keyboard {
   /**
    * Indicates whether the keyboard is persistent.
    */
-  is_persistent: boolean;
+  is_persistent?: boolean;
   /**
    * Indicates whether the keyboard is selective.
    */
-  selective: boolean;
+  selective?: boolean;
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  one_time_keyboard: boolean;
+  one_time_keyboard?: boolean;
   /**
    * Indicates whether the keyboard should be resized.
    */
-  resize_keyboard: boolean;
+  resize_keyboard?: boolean;
   /**
    * The placeholder text for the input field.
    */
@@ -9242,11 +9242,11 @@ export declare class Keyboard {
       | {
           toJSON: () => {
             keyboard: KeyboardButton[][];
-            one_time_keyboard: boolean;
-            is_persistent: boolean;
+            one_time_keyboard?: boolean;
+            is_persistent?: boolean;
             input_field_placeholder?: string;
-            selective: boolean;
-            resize_keyboard: boolean;
+            selective?: boolean;
+            resize_keyboard?: boolean;
           };
         },
   ): Keyboard;
@@ -9268,11 +9268,11 @@ export declare class Keyboard {
    */
   toJSON(): {
     keyboard: KeyboardButton[][];
-    one_time_keyboard: boolean;
-    is_persistent: boolean;
+    one_time_keyboard?: boolean;
+    is_persistent?: boolean;
     input_field_placeholder?: string;
-    selective: boolean;
-    resize_keyboard: boolean;
+    selective?: boolean;
+    resize_keyboard?: boolean;
   };
 }
 
