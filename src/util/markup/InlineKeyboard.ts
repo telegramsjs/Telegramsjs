@@ -239,6 +239,28 @@ class InlineKeyboard {
   }
 
   /**
+   * Combines the current inline keyboard with another one.
+   * @param other - The other InlineKeyboard instance to combine with.
+   * @returns The current instance for chaining.
+   */
+  combine(
+    other:
+      | InlineKeyboard
+      | InlineKeyboardButton[][]
+      | { inline_keyboard: InlineKeyboardButton[][] }
+      | { toJSON(): { inline_keyboard: InlineKeyboardButton[][] } },
+  ): InlineKeyboard {
+    const json = "toJSON" in other ? other.toJSON() : other;
+
+    const buttons = Array.isArray(json) ? json : json.inline_keyboard;
+
+    for (const row of buttons) {
+      this.row().add(...row);
+    }
+    return this;
+  }
+
+  /**
    * Creates an InlineKeyboard instance from another instance or a 2D array of buttons.
    * @param source - The source InlineKeyboard instance or 2D array of buttons.
    * @returns A new instance of InlineKeyboard.
@@ -252,11 +274,13 @@ class InlineKeyboard {
 
   /**
    * Checks if this inline keyboard is equal to another inline keyboard.
-   * @param {InlineKeyboard} other - The other inline keyboard to compare with.
-   * @returns {boolean} True if both keyboards are equal based on their structure and button properties, otherwise false.
+   * @param other - The other inline keyboard to compare with.
+   * @returns True if both keyboards are equal based on their structure and button properties, otherwise false.
    */
-  equals(other: InlineKeyboard): boolean {
-    if (!other || !(other instanceof InlineKeyboard)) return false;
+  equals(
+    other: InlineKeyboard | { inline_keyboard: InlineKeyboardButton[][] },
+  ): boolean {
+    if (!other) return false;
 
     if (this.inline_keyboard.length !== other.inline_keyboard.length)
       return false;
@@ -335,6 +359,14 @@ class InlineKeyboard {
     }
 
     return true;
+  }
+
+  /**
+   * Converts the inline keyboard to a JSON format suitable for Telegram API.
+   * @returns An object representing the inline keyboard in JSON format.
+   */
+  toJSON(): { inline_keyboard: InlineKeyboardButton[][] } {
+    return { inline_keyboard: this.inline_keyboard };
   }
 }
 

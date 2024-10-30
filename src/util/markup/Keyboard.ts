@@ -3,7 +3,8 @@ import type {
   KeyboardButtonPollType,
   KeyboardButtonRequestChat,
   KeyboardButtonRequestUsers,
-} from "@telegram.ts/types";
+  ReplyKeyboardMarkup,
+} from "../../client/interfaces/Markup";
 
 /**
  * Represents a custom keyboard for Telegram bots.
@@ -296,6 +297,38 @@ class Keyboard {
   }
 
   /**
+   * Combines the current keyboard with another one.
+   * @param other - The other Keyboard instance to combine with.
+   * @returns The current instance for chaining.
+   */
+  combine(
+    keyboard:
+      | ReplyKeyboardMarkup
+      | KeyboardButton[][]
+      | { keyboard: KeyboardButton[][] }
+      | {
+          toJSON: () => {
+            keyboard: KeyboardButton[][];
+            one_time_keyboard: boolean;
+            is_persistent: boolean;
+            input_field_placeholder?: string;
+            selective: boolean;
+            resize_keyboard: boolean;
+          };
+        },
+  ): Keyboard {
+    const json = "toJSON" in keyboard ? keyboard.toJSON() : keyboard;
+
+    const buttons = Array.isArray(json) ? json : json.keyboard;
+
+    for (const row of buttons) {
+      if (row.length) this.row().add(...row);
+    }
+
+    return this;
+  }
+
+  /**
    * Creates a Keyboard instance from another instance or a 2D array of buttons.
    * @param source - The source Keyboard instance or 2D array of buttons.
    * @returns A new instance of Keyboard.
@@ -310,13 +343,20 @@ class Keyboard {
 
   /**
    * Checks if this keyboard is equal to another keyboard.
-   * @param {Keyboard} other - The other keyboard to compare with.
-   * @returns {boolean} True if both keyboards are equal based on their structure and properties, otherwise false.
+   * @param other - The other keyboard to compare with.
+   * @returns True if both keyboards are equal based on their structure and properties, otherwise false.
    */
-  equals(other: Keyboard): boolean {
-    if (!other || !(other instanceof Keyboard)) return false;
+  equals(other: Keyboard | ReplyKeyboardMarkup): boolean {
+    if (!other) return false;
 
     if (this.keyboard.length !== other.keyboard.length) return false;
+
+    if (this.is_persistent !== other.is_persistent) return false;
+    if (this.selective !== other.selective) return false;
+    if (this.one_time_keyboard !== other.one_time_keyboard) return false;
+    if (this.resize_keyboard !== other.resize_keyboard) return false;
+    if (this.input_field_placeholder !== other.input_field_placeholder)
+      return false;
 
     for (let i = 0; i < this.keyboard.length; i++) {
       const row = this.keyboard[i];
@@ -345,6 +385,30 @@ class Keyboard {
     }
 
     return true;
+  }
+
+  /**
+   * Converts the keyboard to a JSON format suitable for Telegram API.
+   * @returns An object representing the keyboard in JSON format.
+   */
+  toJSON(): {
+    keyboard: KeyboardButton[][];
+    one_time_keyboard: boolean;
+    is_persistent: boolean;
+    input_field_placeholder?: string;
+    selective: boolean;
+    resize_keyboard: boolean;
+  } {
+    return {
+      keyboard: this.keyboard,
+      one_time_keyboard: this.one_time_keyboard,
+      is_persistent: this.is_persistent,
+      ...(this.input_field_placeholder && {
+        input_field_placeholder: this.input_field_placeholder,
+      }),
+      selective: this.selective,
+      resize_keyboard: this.resize_keyboard,
+    };
   }
 }
 

@@ -8998,6 +8998,18 @@ export declare class InlineKeyboard {
    */
   clone(): InlineKeyboard;
   /**
+   * Combines the current inline keyboard with another one.
+   * @param other - The other InlineKeyboard instance to combine with.
+   * @returns The current instance for chaining.
+   */
+  combine(
+    other:
+      | InlineKeyboard
+      | InlineKeyboardButton[][]
+      | { inline_keyboard: InlineKeyboardButton[][] }
+      | { toJSON(): { inline_keyboard: InlineKeyboardButton[][] } },
+  ): InlineKeyboard;
+  /**
    * Creates an InlineKeyboard instance from another instance or a 2D array of buttons.
    * @param source - The source InlineKeyboard instance or 2D array of buttons.
    * @returns A new instance of InlineKeyboard.
@@ -9010,7 +9022,14 @@ export declare class InlineKeyboard {
    * @param other - The other inline keyboard to compare with.
    * @returns True if both keyboards are equal based on their structure and button properties, otherwise false.
    */
-  equals(other: InlineKeyboard): boolean;
+  equals(
+    other: InlineKeyboard | { inline_keyboard: InlineKeyboardButton[][] },
+  ): boolean;
+  /**
+   * Converts the inline keyboard to a JSON format suitable for Telegram API.
+   * @returns An object representing the inline keyboard in JSON format.
+   */
+  toJSON(): { inline_keyboard: InlineKeyboardButton[][] };
 }
 
 /**
@@ -9211,6 +9230,27 @@ export declare class Keyboard {
    */
   build(): KeyboardButton[][];
   /**
+   * Combines the current keyboard with another one.
+   * @param other - The other Keyboard instance to combine with.
+   * @returns The current instance for chaining.
+   */
+  combine(
+    keyboard:
+      | ReplyKeyboardMarkup
+      | KeyboardButton[][]
+      | { keyboard: KeyboardButton[][] }
+      | {
+          toJSON: () => {
+            keyboard: KeyboardButton[][];
+            one_time_keyboard: boolean;
+            is_persistent: boolean;
+            input_field_placeholder?: string;
+            selective: boolean;
+            resize_keyboard: boolean;
+          };
+        },
+  ): Keyboard;
+  /**
    * Creates a Keyboard instance from another instance or a 2D array of buttons.
    * @param source - The source Keyboard instance or 2D array of buttons.
    * @returns A new instance of Keyboard.
@@ -9221,7 +9261,19 @@ export declare class Keyboard {
    * @param other - The other keyboard to compare with.
    * @returns True if both keyboards are equal based on their structure and properties, otherwise false.
    */
-  equals(other: Keyboard): boolean;
+  equals(other: Keyboard | ReplyKeyboardMarkup): boolean;
+  /**
+   * Converts the keyboard to a JSON format suitable for Telegram API.
+   * @returns An object representing the keyboard in JSON format.
+   */
+  toJSON(): {
+    keyboard: KeyboardButton[][];
+    one_time_keyboard: boolean;
+    is_persistent: boolean;
+    input_field_placeholder?: string;
+    selective: boolean;
+    resize_keyboard: boolean;
+  };
 }
 
 export declare const DefaultPollingParameters: {
