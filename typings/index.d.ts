@@ -54,6 +54,32 @@ import {
   InlineKeyboardButton,
   InlineQueryResultsButton,
   LanguageCode,
+  InputContactMessageContent,
+  InputInvoiceMessageContent,
+  InputLocationMessageContent,
+  InputTextMessageContent,
+  InputVenueMessageContent,
+  InlineQueryResultCachedAudio,
+  InlineQueryResultCachedDocument,
+  InlineQueryResultCachedGif,
+  InlineQueryResultCachedMpeg4Gif,
+  InlineQueryResultCachedPhoto,
+  InlineQueryResultCachedSticker,
+  InlineQueryResultCachedVideo,
+  InlineQueryResultCachedVoice,
+  InlineQueryResultArticle,
+  InlineQueryResultAudio,
+  InlineQueryResultContact,
+  InlineQueryResultDocument,
+  InlineQueryResultGame,
+  InlineQueryResultGif,
+  InlineQueryResultLocation,
+  InlineQueryResultMpeg4Gif,
+  InlineQueryResultPhoto,
+  InlineQueryResultVenue,
+  InlineQueryResultVideo,
+  InlineQueryResultVoice,
+  InputMessageContent,
 } from "./telegram/index";
 
 /**
@@ -8848,7 +8874,7 @@ export type PossiblyAsync<T> = T | Promise<T>;
 /**
  * Represents an inline keyboard for Telegram bots.
  */
-export declare class InlineKeyboard {
+export declare class InlineKeyboardBuilder {
   readonly inline_keyboard: InlineKeyboardButton[][];
   /**
    * Creates an instance of InlineKeyboard.
@@ -9005,7 +9031,7 @@ export declare class InlineKeyboard {
    * Creates a deep copy of the current InlineKeyboard instance.
    * @returns A new instance of InlineKeyboard with the same buttons.
    */
-  clone(): InlineKeyboard;
+  clone(): InlineKeyboardBuilder;
   /**
    * Combines the current inline keyboard with another one.
    * @param other - The other InlineKeyboard instance to combine with.
@@ -9013,26 +9039,28 @@ export declare class InlineKeyboard {
    */
   combine(
     other:
-      | InlineKeyboard
+      | InlineKeyboardBuilder
       | InlineKeyboardButton[][]
       | { inline_keyboard: InlineKeyboardButton[][] }
       | { toJSON(): { inline_keyboard: InlineKeyboardButton[][] } },
-  ): InlineKeyboard;
+  ): InlineKeyboardBuilder;
   /**
    * Creates an InlineKeyboard instance from another instance or a 2D array of buttons.
    * @param source - The source InlineKeyboard instance or 2D array of buttons.
    * @returns A new instance of InlineKeyboard.
    */
   static from(
-    source: InlineKeyboard | InlineKeyboardButton[][],
-  ): InlineKeyboard;
+    source: InlineKeyboardBuilder | InlineKeyboardButton[][],
+  ): InlineKeyboardBuilder;
   /**
    * Checks if this inline keyboard is equal to another inline keyboard.
    * @param other - The other inline keyboard to compare with.
    * @returns True if both keyboards are equal based on their structure and button properties, otherwise false.
    */
   equals(
-    other: InlineKeyboard | { inline_keyboard: InlineKeyboardButton[][] },
+    other:
+      | InlineKeyboardBuilder
+      | { inline_keyboard: InlineKeyboardButton[][] },
   ): boolean;
   /**
    * Converts the inline keyboard to a JSON format suitable for Telegram API.
@@ -9044,7 +9072,7 @@ export declare class InlineKeyboard {
 /**
  * Represents a custom keyboard for Telegram bots.
  */
-export declare class Keyboard {
+export declare class KeyboardBuilder {
   readonly keyboard: KeyboardButton[][];
   /**
    * Indicates whether the keyboard is persistent.
@@ -9232,7 +9260,7 @@ export declare class Keyboard {
    * Creates a deep copy of the current Keyboard instance.
    * @returns A new instance of Keyboard with the same buttons and properties.
    */
-  clone(keyboard?: KeyboardButton[][]): Keyboard;
+  clone(keyboard?: KeyboardButton[][]): KeyboardBuilder;
   /**
    * Builds the keyboard structure.
    * @returns The built keyboard structure.
@@ -9245,30 +9273,432 @@ export declare class Keyboard {
    */
   combine(
     keyboard:
+      | KeyboardBuilder
       | ReplyKeyboardMarkup
       | KeyboardButton[][]
       | { keyboard: KeyboardButton[][] }
       | {
           toJSON: () => ReplyKeyboardMarkup;
         },
-  ): Keyboard;
+  ): KeyboardBuilder;
   /**
    * Creates a Keyboard instance from another instance or a 2D array of buttons.
    * @param source - The source Keyboard instance or 2D array of buttons.
    * @returns A new instance of Keyboard.
    */
-  static from(source: (string | KeyboardButton)[][] | Keyboard): Keyboard;
+  static from(
+    source: (string | KeyboardButton)[][] | KeyboardBuilder,
+  ): KeyboardBuilder;
   /**
    * Checks if this keyboard is equal to another keyboard.
    * @param other - The other keyboard to compare with.
    * @returns True if both keyboards are equal based on their structure and properties, otherwise false.
    */
-  equals(other: Keyboard | ReplyKeyboardMarkup): boolean;
+  equals(other: KeyboardBuilder | ReplyKeyboardMarkup): boolean;
   /**
    * Converts the keyboard to a JSON format suitable for Telegram API.
    * @returns An object representing the keyboard in JSON format.
    */
   toJSON(): ReplyKeyboardMarkup;
+}
+
+export declare class InlineQueryResultBuilder {
+  /** Cached result of InlineQuery builder */
+  static cached: typeof InlineQueryResultCachedBuilder;
+  /**
+   * Represents a link to an article or web page.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title of the result.
+   * @param inputMessageContent - Content of the message to be sent.
+   * @param options - out parameters.
+   */
+  static article(
+    id: string,
+    title: string,
+    inputMessageContent: InputMessageContent,
+    options?: Omit<
+      InlineQueryResultArticle,
+      "type" | "title" | "id" | "input_message_content"
+    >,
+  ): InlineQueryResultArticle;
+  /**
+   * Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the audio.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title.
+   * @param audioUrl - A valid URL for the audio file.
+   * @param options - out parameters.
+   */
+  static audio(
+    id: string,
+    title: string,
+    audioUrl: string,
+    options?: Omit<
+      InlineQueryResultAudio,
+      "type" | "title" | "id" | "audio_url"
+    >,
+  ): InlineQueryResultAudio;
+  /**
+   * Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the contact.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param phoneNumber - Contact's phone number.
+   * @param firstName - Contact's first name
+   * @param options - out parameters.
+   */
+  static contact(
+    id: string,
+    phoneNumber: string,
+    firstName: string,
+    options?: Omit<
+      InlineQueryResultContact,
+      "type" | "phone_number" | "id" | "first_name"
+    >,
+  ): InlineQueryResultContact;
+  /**
+   * Represents a [Game](https://core.telegram.org/bots/api/#games).
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param gameShortName - Short name of the game.
+   * @param replyMarkup - Inline keyboard attached to the message.
+   */
+  static game(
+    id: string,
+    gameShortName: string,
+    replyMarkup?: InlineQueryResultGame["reply_markup"],
+  ): InlineQueryResultGame;
+  /**
+   * Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title for the result.
+   * @param url - A valid URL for the file.
+   * @param options - out parameters.
+   */
+  static documentPdf(
+    id: string,
+    title: string,
+    url: string,
+    options?: Omit<
+      InlineQueryResultDocument,
+      "type" | "mime_type" | "id" | "title" | "document_url"
+    >,
+  ): InlineQueryResultDocument;
+  /**
+   * Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title for the result.
+   * @param url - A valid URL for the file.
+   * @param options - out parameters.
+   */
+  static documentZip(
+    id: string,
+    title: string,
+    url: string,
+    options?: Omit<
+      InlineQueryResultDocument,
+      "type" | "mime_type" | "id" | "title" | "document_url"
+    >,
+  ): InlineQueryResultDocument;
+  /**
+   * Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param gifUrl - A valid URL for the GIF file. File size must not exceed 1MB.
+   * @param thumbnailUrl - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result.
+   * @param options - out parameters.
+   */
+  static gif(
+    id: string,
+    gifUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultGif,
+      "type" | "gif_url" | "id" | "thumbnail_url"
+    >,
+  ): InlineQueryResultGif;
+  /**
+   * Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the location.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param latitude - Location latitude in degrees.
+   * @param longitude - Location longitude in degrees.
+   * @param title - Location title.
+   * @param options - out parameters
+   */
+  static location(
+    id: string,
+    latitude: number,
+    longitude: number,
+    title: string,
+    options?: Omit<
+      InlineQueryResultLocation,
+      "type" | "latitude" | "id" | "longitude" | "title"
+    >,
+  ): InlineQueryResultLocation;
+  /**
+   * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param mpeg4Url - A valid URL for the MPEG4 file. File size must not exceed 1MB.
+   * @param thumbnailUrl - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result.
+   * @param options - out parameters.
+   */
+  static mpeg4Gif(
+    id: string,
+    mpeg4Url: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultMpeg4Gif,
+      "type" | "mpeg4_url" | "id" | "thumbnail_url"
+    >,
+  ): InlineQueryResultMpeg4Gif;
+  /**
+   * Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param photoUrl - A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB.
+   * @param thumbnailUrl - URL of the thumbnail for the photo.
+   * @param options - out parameters.
+   */
+  static photo(
+    id: string,
+    photoUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultPhoto,
+      "type" | "photo_url" | "id" | "thumbnail_url"
+    >,
+  ): InlineQueryResultPhoto;
+  /**
+   * Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the venue.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param options - out parameters.
+   */
+  static venue(
+    id: string,
+    options: Omit<InlineQueryResultVenue, "type" | "id">,
+  ): InlineQueryResultVenue;
+  /**
+   * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+   *
+   * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input\_message\_content*.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param videoUrl - A valid URL for the embedded video player or video file.
+   * @param thumbnailUrl - URL of the thumbnail (JPEG only) for the video.
+   * @param options - out parameters.
+   */
+  static videoHtml(
+    id: string,
+    title: string,
+    videoUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultVideo,
+      "type" | "video_url" | "id" | "thumbnail_url" | "mime_type" | "title"
+    >,
+  ): InlineQueryResultVideo;
+  /**
+   * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+   *
+   * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input\_message\_content*.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param videoUrl - A valid URL for the embedded video player or video file.
+   * @param thumbnailUrl - URL of the thumbnail (JPEG only) for the video.
+   * @param options - out parameters.
+   */
+  static videoMp4(
+    id: string,
+    title: string,
+    videoUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultVideo,
+      "type" | "video_url" | "id" | "thumbnail_url" | "mime_type" | "title"
+    >,
+  ): InlineQueryResultVideo;
+  /**
+   * Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the the voice message.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Recording title.
+   * @param url - A valid URL for the voice recording.
+   * @param options - out parameters.
+   */
+  static voice(
+    id: string,
+    title: string,
+    url: string,
+    options?: Omit<
+      InlineQueryResultVoice,
+      "type" | "voice_url" | "id" | "title"
+    >,
+  ): InlineQueryResultVoice;
+}
+
+export declare class InlineQueryResultCachedBuilder {
+  /**
+   * Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the audio.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier for the audio file.
+   * @param options - out parameters.
+   */
+  static audio(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedAudio,
+      "type" | "audio_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedAudio;
+  /**
+   * Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param fileId - A valid file identifier for the file.
+   * @param options - out parameters.
+   */
+  static document(
+    id: string,
+    title: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedDocument,
+      "type" | "document_file_id" | "id" | "title"
+    >,
+  ): InlineQueryResultCachedDocument;
+  /**
+   * Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier for the GIF file.
+   * @param options - out parameters.
+   */
+  static gif(
+    id: string,
+    fileId: string,
+    options?: Omit<InlineQueryResultCachedGif, "type" | "gif_file_id" | "id">,
+  ): InlineQueryResultCachedGif;
+  /**
+   * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier for the GIF file.
+   * @param options - out parameters.
+   */
+  static mpeg4Gif(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedMpeg4Gif,
+      "type" | "mpeg4_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedMpeg4Gif;
+  /**
+   * Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier of the photo.
+   * @param options - out parameters.
+   */
+  static photo(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedPhoto,
+      "type" | "photo_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedPhoto;
+  /**
+   * Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the sticker.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier of the sticker.
+   * @param options - out parameters.
+   */
+  static sticker(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedSticker,
+      "type" | "sticker_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedSticker;
+  /**
+   * Represents a link to a video file stored on the Telegram servers. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param fileId - A valid file identifier for the video file.
+   * @param options - out parameters.
+   */
+  static video(
+    id: string,
+    title: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedVideo,
+      "type" | "video_file_id" | "id" | "title"
+    >,
+  ): InlineQueryResultCachedVideo;
+  /**
+   * Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the voice message.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Voice message title.
+   * @param fileId - A valid file identifier for the voice message.
+   * @param options - out parameters.
+   */
+  static voice(
+    id: string,
+    title: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedVoice,
+      "type" | "voice_file_id" | "id" | "title"
+    >,
+  ): InlineQueryResultCachedVoice;
+}
+
+export declare class InputMessageContentBuilder {
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a text message to be sent as the result of an inline query.
+   * @param text - Text of the message to be sent, 1-4096 characters.
+   * @param options - out parameters.
+   */
+  static text(
+    text: InputTextMessageContent["message_text"],
+    options?: Omit<InputTextMessageContent, "message_text">,
+  ): InputTextMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a location message to be sent as the result of an inline query.
+   * @param latitude - Latitude of the location in degrees.
+   * @param longitude - Longitude of the location in degrees.
+   * @param options - out parameters.
+   */
+  static location(
+    latitude: number,
+    longitude: number,
+    options?: Omit<InputLocationMessageContent, "latitude" | "longitude">,
+  ): InputLocationMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a venue message to be sent as the result of an inline query.
+   * @param latitude - Latitude of the venue in degrees.
+   * @param longitude - Longitude of the venue in degrees.
+   * @param title - Name of the venue.
+   * @param address - Address of the venue.
+   * @param options - out parameters.
+   */
+  static venue(
+    latitude: number,
+    longitude: number,
+    options?: Omit<InputVenueMessageContent, "latitude" | "longitude">,
+  ): InputLocationMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a contact message to be sent as the result of an inline query.
+   * @param phoneNumber - Contact's phone number.
+   * @param firstName - Contact's first name.
+   * @param options - out parameters.
+   */
+  static contact(
+    phoneNumber: string,
+    firstName: string,
+    options?: Omit<InputContactMessageContent, "phone_number" | "first_name">,
+  ): InputContactMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of an invoice message to be sent as the result of an inline query.
+   * @param options - out parameters.
+   */
+  static invoice(
+    options: InputInvoiceMessageContent,
+  ): InputInvoiceMessageContent;
 }
 
 export declare const DefaultPollingParameters: {

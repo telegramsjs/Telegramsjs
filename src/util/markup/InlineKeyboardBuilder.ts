@@ -7,7 +7,7 @@ import type {
 /**
  * Represents an inline keyboard for Telegram bots.
  */
-class InlineKeyboard {
+class InlineKeyboardBuilder {
   /**
    * Creates an instance of InlineKeyboard.
    * @param inline_keyboard - A 2D array of inline keyboard buttons.
@@ -43,7 +43,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   url(text: string, url: string): this {
-    return this.add(InlineKeyboard.url(text, url));
+    return this.add(InlineKeyboardBuilder.url(text, url));
   }
 
   /**
@@ -63,7 +63,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   text(text: string, data = text): this {
-    return this.add(InlineKeyboard.text(text, data));
+    return this.add(InlineKeyboardBuilder.text(text, data));
   }
 
   /**
@@ -83,7 +83,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   webApp(text: string, url: string): this {
-    return this.add(InlineKeyboard.webApp(text, url));
+    return this.add(InlineKeyboardBuilder.webApp(text, url));
   }
 
   /**
@@ -103,7 +103,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   login(text: string, loginUrl: string | LoginUrl): this {
-    return this.add(InlineKeyboard.login(text, loginUrl));
+    return this.add(InlineKeyboardBuilder.login(text, loginUrl));
   }
 
   /**
@@ -129,7 +129,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   switchInline(text: string, query = ""): this {
-    return this.add(InlineKeyboard.switchInline(text, query));
+    return this.add(InlineKeyboardBuilder.switchInline(text, query));
   }
 
   /**
@@ -152,7 +152,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   switchInlineCurrent(text: string, query = ""): this {
-    return this.add(InlineKeyboard.switchInlineCurrent(text, query));
+    return this.add(InlineKeyboardBuilder.switchInlineCurrent(text, query));
   }
 
   /**
@@ -178,7 +178,7 @@ class InlineKeyboard {
     text: string,
     query: SwitchInlineQueryChosenChat = {},
   ): this {
-    return this.add(InlineKeyboard.switchInlineChosen(text, query));
+    return this.add(InlineKeyboardBuilder.switchInlineChosen(text, query));
   }
 
   /**
@@ -200,7 +200,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   game(text: string): this {
-    return this.add(InlineKeyboard.game(text));
+    return this.add(InlineKeyboardBuilder.game(text));
   }
 
   /**
@@ -218,7 +218,7 @@ class InlineKeyboard {
    * @returns The current instance for chaining.
    */
   pay(text: string): this {
-    return this.add(InlineKeyboard.pay(text));
+    return this.add(InlineKeyboardBuilder.pay(text));
   }
 
   /**
@@ -234,8 +234,10 @@ class InlineKeyboard {
    * Creates a deep copy of the current InlineKeyboard instance.
    * @returns A new instance of InlineKeyboard with the same buttons.
    */
-  clone(): InlineKeyboard {
-    return new InlineKeyboard(this.inline_keyboard.map((row) => row.slice()));
+  clone(): InlineKeyboardBuilder {
+    return new InlineKeyboardBuilder(
+      this.inline_keyboard.map((row) => row.slice()),
+    );
   }
 
   /**
@@ -245,11 +247,11 @@ class InlineKeyboard {
    */
   combine(
     other:
-      | InlineKeyboard
+      | InlineKeyboardBuilder
       | InlineKeyboardButton[][]
       | { inline_keyboard: InlineKeyboardButton[][] }
       | { toJSON(): { inline_keyboard: InlineKeyboardButton[][] } },
-  ): InlineKeyboard {
+  ): InlineKeyboardBuilder {
     const json = "toJSON" in other ? other.toJSON() : other;
 
     const buttons = Array.isArray(json) ? json : json.inline_keyboard;
@@ -266,10 +268,10 @@ class InlineKeyboard {
    * @returns A new instance of InlineKeyboard.
    */
   static from(
-    source: InlineKeyboard | InlineKeyboardButton[][],
-  ): InlineKeyboard {
-    if (source instanceof InlineKeyboard) return source.clone();
-    return new InlineKeyboard(source.map((row) => row.slice()));
+    source: InlineKeyboardBuilder | InlineKeyboardButton[][],
+  ): InlineKeyboardBuilder {
+    if (source instanceof InlineKeyboardBuilder) return source.clone();
+    return new InlineKeyboardBuilder(source.map((row) => row.slice()));
   }
 
   /**
@@ -278,7 +280,9 @@ class InlineKeyboard {
    * @returns True if both keyboards are equal based on their structure and button properties, otherwise false.
    */
   equals(
-    other: InlineKeyboard | { inline_keyboard: InlineKeyboardButton[][] },
+    other:
+      | InlineKeyboardBuilder
+      | { inline_keyboard: InlineKeyboardButton[][] },
   ): boolean {
     if (!other) return false;
 
@@ -370,4 +374,4 @@ class InlineKeyboard {
   }
 }
 
-export { InlineKeyboard };
+export { InlineKeyboardBuilder };

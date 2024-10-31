@@ -9,7 +9,7 @@ import type {
 /**
  * Represents a custom keyboard for Telegram bots.
  */
-class Keyboard {
+class KeyboardBuilder {
   /**
    * Indicates whether the keyboard is persistent.
    */
@@ -67,7 +67,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   text(text: string): this {
-    return this.add(Keyboard.text(text));
+    return this.add(KeyboardBuilder.text(text));
   }
 
   /**
@@ -91,7 +91,7 @@ class Keyboard {
     requestId: number,
     options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
   ): this {
-    return this.add(Keyboard.requestUsers(text, requestId, options));
+    return this.add(KeyboardBuilder.requestUsers(text, requestId, options));
   }
 
   /**
@@ -123,7 +123,7 @@ class Keyboard {
       chat_is_channel: false,
     },
   ): this {
-    return this.add(Keyboard.requestChat(text, requestId, options));
+    return this.add(KeyboardBuilder.requestChat(text, requestId, options));
   }
 
   /**
@@ -149,7 +149,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   requestContact(text: string): this {
-    return this.add(Keyboard.requestContact(text));
+    return this.add(KeyboardBuilder.requestContact(text));
   }
 
   /**
@@ -167,7 +167,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   requestLocation(text: string): this {
-    return this.add(Keyboard.requestLocation(text));
+    return this.add(KeyboardBuilder.requestLocation(text));
   }
 
   /**
@@ -186,7 +186,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   requestPoll(text: string, type?: KeyboardButtonPollType["type"]): this {
-    return this.add(Keyboard.requestPoll(text, type));
+    return this.add(KeyboardBuilder.requestPoll(text, type));
   }
 
   /**
@@ -209,7 +209,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   webApp(text: string, url: string): this {
-    return this.add(Keyboard.webApp(text, url));
+    return this.add(KeyboardBuilder.webApp(text, url));
   }
 
   /**
@@ -276,8 +276,8 @@ class Keyboard {
    * Creates a deep copy of the current Keyboard instance.
    * @returns A new instance of Keyboard with the same buttons and properties.
    */
-  clone(keyboard: KeyboardButton[][] = this.keyboard): Keyboard {
-    const clone = new Keyboard(keyboard.map((row) => row.slice()));
+  clone(keyboard: KeyboardButton[][] = this.keyboard): KeyboardBuilder {
+    const clone = new KeyboardBuilder(keyboard.map((row) => row.slice()));
     if (this.is_persistent !== undefined) {
       clone.is_persistent = this.is_persistent;
     }
@@ -311,13 +311,14 @@ class Keyboard {
    */
   combine(
     keyboard:
+      | KeyboardBuilder
       | ReplyKeyboardMarkup
       | KeyboardButton[][]
       | { keyboard: KeyboardButton[][] }
       | {
           toJSON: () => ReplyKeyboardMarkup;
         },
-  ): Keyboard {
+  ): KeyboardBuilder {
     const json = "toJSON" in keyboard ? keyboard.toJSON() : keyboard;
 
     const buttons = Array.isArray(json) ? json : json.keyboard;
@@ -334,12 +335,14 @@ class Keyboard {
    * @param source - The source Keyboard instance or 2D array of buttons.
    * @returns A new instance of Keyboard.
    */
-  static from(source: (string | KeyboardButton)[][] | Keyboard): Keyboard {
-    if (source instanceof Keyboard) return source.clone();
+  static from(
+    source: (string | KeyboardButton)[][] | KeyboardBuilder,
+  ): KeyboardBuilder {
+    if (source instanceof KeyboardBuilder) return source.clone();
     function toButton(btn: string | KeyboardButton) {
-      return typeof btn === "string" ? Keyboard.text(btn) : btn;
+      return typeof btn === "string" ? KeyboardBuilder.text(btn) : btn;
     }
-    return new Keyboard(source.map((row) => row.map(toButton)));
+    return new KeyboardBuilder(source.map((row) => row.map(toButton)));
   }
 
   /**
@@ -347,7 +350,7 @@ class Keyboard {
    * @param other - The other keyboard to compare with.
    * @returns True if both keyboards are equal based on their structure and properties, otherwise false.
    */
-  equals(other: Keyboard | ReplyKeyboardMarkup): boolean {
+  equals(other: KeyboardBuilder | ReplyKeyboardMarkup): boolean {
     if (!other) return false;
 
     if (this.keyboard.length !== other.keyboard.length) return false;
@@ -412,4 +415,4 @@ class Keyboard {
   }
 }
 
-export { Keyboard };
+export { KeyboardBuilder };
