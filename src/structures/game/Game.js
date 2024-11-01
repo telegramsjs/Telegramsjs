@@ -29,7 +29,7 @@ class Game extends Base {
     this.text = data.text;
 
     /** Special entities that appear in text, such as usernames, URLs, bot commands, etc */
-    this.entities = new MessageEntities(data.text, data.text_entities);
+    this.entities = new MessageEntities(client, data.text, data.text_entities);
 
     /** Animation that will be displayed in the game message in chats. Upload via BotFather */
     this.animation = new Animation(client, data.animation);

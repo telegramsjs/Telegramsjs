@@ -5,6 +5,7 @@ import { ErrorCodes } from "../../errors/ErrorCodes";
 import type { TelegramClient } from "../../client/TelegramClient";
 import type { MessageReactionUpdated } from "../../structures/MessageReactionUpdated";
 import type { Chat } from "../../structures/chat/Chat";
+import type { PossiblyAsync } from "../../types";
 import {
   Collector,
   type ICollectorEvent,
@@ -21,14 +22,14 @@ interface IReactionEventCollector
    * @param data - The collection of user reactions.
    */
   user: (
-    data: Collection<string, MessageReactionUpdated[] | MessageReactionUpdated>,
-  ) => void;
+    data: Collection<string, MessageReactionUpdated[]>,
+  ) => PossiblyAsync<void>;
 
   /**
    * Event emitted when a reaction is created.
    * @param data - The reaction context.
    */
-  create: (data: MessageReactionUpdated) => void;
+  create: (data: MessageReactionUpdated) => PossiblyAsync<void>;
 }
 
 /**
@@ -43,10 +44,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
   /**
    * Collection of users and their reactions.
    */
-  public users: Collection<
-    string,
-    MessageReactionUpdated[] | MessageReactionUpdated
-  > = new Collection();
+  public users: Collection<string, MessageReactionUpdated[]> = new Collection();
 
   /**
    * Creates an instance of ReactionCollector.
@@ -171,16 +169,15 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
       if (this.users.size === 0) {
         this.emit(ReactionCollectorEvents.Create, reaction);
       }
-      this.users.set(reaction.user.id, reaction);
+      this.users.set(reaction.user.id, [reaction]);
       return;
     }
-    const getUser = this.users.get(reaction.user.id) || {};
-    const setUser = Array.isArray(getUser) ? [...getUser] : [getUser];
+    const getUser = this.users.get(reaction.user.id) || [];
     this.emit(
       ReactionCollectorEvents.User,
-      new Collection([[reaction.user.id, [...setUser, reaction]]]),
+      new Collection([[reaction.user.id, [...getUser, reaction]]]),
     );
-    this.users.set(reaction.user.id, [...setUser, reaction]);
+    this.users.set(reaction.user.id, [...getUser, reaction]);
     return;
   }
 

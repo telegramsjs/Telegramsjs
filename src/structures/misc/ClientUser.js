@@ -1,6 +1,10 @@
 // @ts-check
 const { User } = require("./User");
 
+/**
+ * @typedef {import("../../client/interfaces/Language").LanguageCode} LanguageCode
+ */
+
 class ClientUser extends User {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
@@ -51,13 +55,18 @@ class ClientUser extends User {
   }
 
   /**
-   * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
-   * @param {readonly import("../../client/interfaces/Bot").BotCommand[]} commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
-   * @param {import("../../client/interfaces/Bot").BotCommandScope} [scope] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
-   * @param {string} [languageCode] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
-   * @returns {Promise<true>} - Returns True on success.
+   * @typedef {Object} SetMyCommands
+   * @property {import("../../client/interfaces/Bot").BotCommandScope} [scope] - Describes the scope for which the commands apply. Defaults to BotCommandScopeDefault.
+   * @property {LanguageCode} [languageCode] - Two-letter ISO 639-1 language code. If not specified, commands will apply to users without a dedicated language.
    */
-  setCommands(commands, scope, languageCode) {
+
+  /**
+   * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
+   * @param {readonly import("../../client/interfaces/Bot").BotCommand[]} commands - A list of bot commands to set. Maximum of 100 commands.
+   * @param {SetMyCommands} [options] - Options for setting commands, including scope and language code.
+   * @returns {Promise<true>} - Returns true on success.
+   */
+  setCommands(commands, { scope, languageCode } = {}) {
     return this.client.setMyCommands({
       commands,
       ...(scope && { scope }),
@@ -68,7 +77,7 @@ class ClientUser extends User {
   /**
    * Use this method to get the current list of the bot's commands for the given scope and user language.
    * @param {import("../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
-   * @param {string} [language] - A two-letter ISO 639-1 language code or an empty string
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<import("../../client/interfaces/Bot").BotCommand[]>} - Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
    */
   getCommands(score, language) {
@@ -78,7 +87,7 @@ class ClientUser extends User {
   /**
    * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users.
    * @param {import("../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
-   * @param {string} [language] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
    * @returns {Promise<true>} - Returns True on success.
    */
   deleteCommands(score, language) {
@@ -88,7 +97,7 @@ class ClientUser extends User {
   /**
    * Use this method to change the bot's name.
    * @param {string} [name] - New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language
-   * @param {string} [language] - A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name
    * @returns {Promise<true>} - Returns True on success.
    */
   setName(name, language) {
@@ -97,7 +106,7 @@ class ClientUser extends User {
 
   /**
    * Use this method to get the current bot name for the given user language.
-   * @param {string} [language] - A two-letter ISO 639-1 language code or an empty string
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<string>} - Returns bot name on success
    */
   getName(language) {
@@ -107,7 +116,7 @@ class ClientUser extends User {
   /**
    * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty.
    * @param {string} [description] - New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language
-   * @param {string} [language] - A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description
    * @returns {Promise<true>} - Returns True on success.
    */
   setDescription(description, language) {
@@ -116,7 +125,7 @@ class ClientUser extends User {
 
   /**
    * Use this method to get the current bot description for the given user language.
-   * @param {string} [language] - A two-letter ISO 639-1 language code or an empty string
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<string>} - Returns bot description on success.
    */
   getDescription(language) {
@@ -126,7 +135,7 @@ class ClientUser extends User {
   /**
    * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot.
    * @param {string} [description] - New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language
-   * @param {string} [language] - A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description
    * @returns {Promise<true>} - Returns True on success.
    */
   setShortDescription(description, language) {
@@ -135,7 +144,7 @@ class ClientUser extends User {
 
   /**
    * Use this method to get the current bot short description for the given user language.
-   * @param {string} [language] - A two-letter ISO 639-1 language code or an empty string
+   * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<string>} - Returns bot short description on success
    */
   getShortDescription(language) {

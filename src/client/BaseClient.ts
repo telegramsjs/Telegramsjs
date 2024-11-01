@@ -2,9 +2,10 @@ import type { ReadStream } from "node:fs";
 import { EventEmitter } from "node:events";
 import { Rest } from "../rest/Rest";
 import { Collection } from "@telegram.ts/collection";
-import type { ClientOptions } from "./TelegramClient";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
+import type { LanguageCode } from "./interfaces/Language";
+import type { ClientOptions, TelegramClient } from "./TelegramClient";
 import {
   Message,
   MenuButton,
@@ -65,6 +66,9 @@ interface EventHandlers {
     telegram: import("./TelegramClient").TelegramClient,
   ) => PossiblyAsync<void>;
   error: (detalis: [number, unknown]) => PossiblyAsync<void>;
+  rawUpdate: (
+    raw: import("@telegram.ts/types").Update & { client: TelegramClient },
+  ) => PossiblyAsync<void>;
   message: (
     message: import("../structures/message/Message").Message,
   ) => PossiblyAsync<void>;
@@ -147,6 +151,7 @@ interface EventHandlers {
 }
 
 type EventHandlerParameters =
+  | import("@telegram.ts/types").Update
   | import("../structures/message/Message").Message
   | import("../structures/business/BusinessConnection").BusinessConnection
   | import("../structures/business/BusinessMessagesDeleted").BusinessMessagesDeleted
@@ -182,7 +187,12 @@ class BaseClient extends EventEmitter {
     /**
      * All of the objects that have been cached at any point, mapped by their ids
      */
-    this.users = new UserManager(this, [], options?.userCacheMaxSize);
+    this.users = new UserManager(this, [], {
+      cacheSize: options?.userCacheMaxSize ?? -1,
+      ...(options?.userCacheFilter && {
+        cacheFilter: options?.userCacheFilter,
+      }),
+    });
 
     /**
      * All of the that the client is currently handling, mapped by their ids -
@@ -190,7 +200,12 @@ class BaseClient extends EventEmitter {
      * is a member of. Note that DM channels will not be initially cached, and thus not be present
      * in the Manager without their explicit fetching or use.
      */
-    this.chats = new ChatManager(this, [], options?.chatCacheMaxSize);
+    this.chats = new ChatManager(this, [], {
+      cacheSize: options?.chatCacheMaxSize ?? -1,
+      ...(options?.chatCacheFilter && {
+        cacheFilter: options?.chatCacheFilter,
+      }),
+    });
 
     /**
      * The updates cache for polling/webhook
@@ -1170,7 +1185,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
   async deleteMyCommands(
     scope?: MethodParameters["deleteMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["deleteMyCommands"]> {
     return await this.rest.request<MethodsApiReturnType["deleteMyCommands"]>(
       "deleteMyCommands",
@@ -1184,7 +1199,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned. */
   async getMyCommands(
     scope?: MethodParameters["getMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyCommands"]> {
     return await this.rest.request<MethodsApiReturnType["getMyCommands"]>(
       "getMyCommands",
@@ -1198,7 +1213,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to change the bot's name. Returns True on success. */
   async setMyName(
     name?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyName"]> {
     return await this.rest.request<MethodsApiReturnType["setMyName"]>(
       "setMyName",
@@ -1211,7 +1226,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
   async getMyName(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyName"]> {
     return await this.rest
       .request<MethodsApiReturnType["getMyName"]>("getMyName", {
@@ -1223,7 +1238,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success. */
   async setMyDescription(
     description?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyDescription"]> {
     return await this.rest.request<MethodsApiReturnType["setMyDescription"]>(
       "setMyDescription",
@@ -1236,7 +1251,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
   async getMyDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyDescription"]> {
     return await this.rest
       .request<
@@ -1248,7 +1263,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success. */
   async setMyShortDescription(
     shortDescription?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyShortDescription"]> {
     return await this.rest.request<
       MethodsApiReturnType["setMyShortDescription"]
@@ -1260,7 +1275,7 @@ class BaseClient extends EventEmitter {
 
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   async getMyShortDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyShortDescription"]> {
     return await this.rest
       .request<
@@ -1355,7 +1370,7 @@ class BaseClient extends EventEmitter {
       });
   }
 
-  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   async editMessageMedia(
     params: MethodParameters["editMessageMedia"],
   ): Promise<MethodsLibReturnType["editMessageMedia"]> {

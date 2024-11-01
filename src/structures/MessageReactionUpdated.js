@@ -251,7 +251,7 @@ class MessageReactionUpdated extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | (import("./message/Message").Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | (import("./message/Message").Message & { caption: string | undefined; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editCaption(caption, options = {}) {
     return this.client.editMessageCaption({
@@ -263,7 +263,7 @@ class MessageReactionUpdated extends Base {
   }
 
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param {MethodParameters["editMessageMedia"]["media"]} media - An object for a new media content of the message
    * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<true | import("./message/Message").Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -323,12 +323,17 @@ class MessageReactionUpdated extends Base {
   }
 
   /**
+   * @typedef {Object} PinMessage
+   * @property {boolean} [notification] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
+   * @property {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
+   */
+
+  /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param {boolean} [notification=false] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param {PinMessage} [options] - Options for pinned message
    * @returns {Promise<true>} - Returns True on success.
    */
-  pin(notification = false, businessConnectionId) {
+  pin({ notification = false, businessConnectionId } = {}) {
     return this.client.pinChatMessage({
       chatId: this.chat.id,
       messageId: this.id,

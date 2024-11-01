@@ -1,4 +1,4 @@
-import { BaseManager } from "./BaseManager";
+import { BaseManager, type ICachedOptions } from "./BaseManager";
 import { Chat } from "../structures/chat/Chat";
 import type { MethodsApiReturnType } from "../types";
 import type { Chat as ApiChat } from "@telegram.ts/types";
@@ -13,14 +13,14 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * @param client - The client instance.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: ApiChat[],
-    cacheSize: number = -1,
+    iterable: ApiChat[],
+    options: ICachedOptions<Chat> = {},
   ) {
-    super(client, Chat, iterable, cacheSize);
+    super(client, Chat, iterable, options);
   }
 
   /**
@@ -58,7 +58,7 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
     const data = await this.client.rest.request<
       MethodsApiReturnType["getChat"]
     >("getChat", {
-      chatId: id,
+      chat_id: id,
     });
 
     if (data?.type === "private") {

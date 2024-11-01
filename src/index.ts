@@ -1,10 +1,17 @@
+// @ts-expect-error This is a polyfill, so it's fine to write
+Symbol.dispose ??= Symbol("Symbol.dispose");
+// @ts-expect-error Same as above
+Symbol.asyncDispose ??= Symbol("Symbol.asyncDispose");
+
 export * from "./types";
 export * from "./util/collector/Collector";
 export * from "./util/collector/MessageCollector";
 export * from "./util/collector/InlineKeyboardCollector";
-export * from "./util/collector/ReactionCollector";
-export * from "./util/markup/InlineKeyboard";
-export * from "./util/markup/Keyboard";
+export * from "./util/inline/InlineQueryResultBuilder";
+export * from "./util/inline/InlineQueryResultCachedBuilder";
+export * from "./util/inline/InputMessageContentBuilder";
+export * from "./util/markup/InlineKeyboardBuilder";
+export * from "./util/markup/KeyboardBuilder";
 export * from "./util/ChatPermissions";
 export * from "./util/UserPermissions";
 export * from "./util/Constants";

@@ -27,6 +27,16 @@ class BusinessMessagesDeleted extends Base {
      */
     this.ids = data.message_ids.map((id) => String(id));
   }
+
+  /**
+   * Makes the class iterable, returning each messages identifiers.
+   * @returns {IterableIterator<string>}
+   */
+  *[Symbol.iterator]() {
+    for (const id of this.ids) {
+      yield id;
+    }
+  }
 }
 
 module.exports = { BusinessMessagesDeleted };

@@ -1,6 +1,10 @@
 // @ts-check
 const { Base } = require("../Base");
 
+/**
+ * @typedef {import("../../types").MethodParameters} MethodParameters
+ */
+
 class BusinessConnection extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
@@ -59,6 +63,26 @@ class BusinessConnection extends Base {
    */
   get createdAt() {
     return new Date(this.createdTimestamp);
+  }
+
+  /**
+   * Use this method to send text messages.
+   * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
+   * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
+   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, the sent Message is returned.
+   */
+  send(text, options = {}) {
+    if (typeof text === "object") {
+      return this.client.sendMediaGroup({
+        chatId: this.userChatId,
+        ...text,
+      });
+    }
+    return this.client.sendMessage({
+      text,
+      chatId: this.userChatId,
+      ...options,
+    });
   }
 }
 

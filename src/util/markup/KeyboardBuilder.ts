@@ -3,31 +3,32 @@ import type {
   KeyboardButtonPollType,
   KeyboardButtonRequestChat,
   KeyboardButtonRequestUsers,
-} from "@telegram.ts/types";
+  ReplyKeyboardMarkup,
+} from "../../client/interfaces/Markup";
 
 /**
  * Represents a custom keyboard for Telegram bots.
  */
-class Keyboard {
+class KeyboardBuilder {
   /**
    * Indicates whether the keyboard is persistent.
    */
-  public is_persistent: boolean = false;
+  public is_persistent?: boolean;
 
   /**
    * Indicates whether the keyboard is selective.
    */
-  public selective: boolean = false;
+  public selective?: boolean;
 
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  public one_time_keyboard: boolean = false;
+  public one_time_keyboard?: boolean;
 
   /**
    * Indicates whether the keyboard should be resized.
    */
-  public resize_keyboard: boolean = false;
+  public resize_keyboard?: boolean;
 
   /**
    * The placeholder text for the input field.
@@ -66,7 +67,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   text(text: string): this {
-    return this.add(Keyboard.text(text));
+    return this.add(KeyboardBuilder.text(text));
   }
 
   /**
@@ -90,7 +91,7 @@ class Keyboard {
     requestId: number,
     options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
   ): this {
-    return this.add(Keyboard.requestUsers(text, requestId, options));
+    return this.add(KeyboardBuilder.requestUsers(text, requestId, options));
   }
 
   /**
@@ -122,7 +123,7 @@ class Keyboard {
       chat_is_channel: false,
     },
   ): this {
-    return this.add(Keyboard.requestChat(text, requestId, options));
+    return this.add(KeyboardBuilder.requestChat(text, requestId, options));
   }
 
   /**
@@ -148,7 +149,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   requestContact(text: string): this {
-    return this.add(Keyboard.requestContact(text));
+    return this.add(KeyboardBuilder.requestContact(text));
   }
 
   /**
@@ -166,7 +167,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   requestLocation(text: string): this {
-    return this.add(Keyboard.requestLocation(text));
+    return this.add(KeyboardBuilder.requestLocation(text));
   }
 
   /**
@@ -185,7 +186,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   requestPoll(text: string, type?: KeyboardButtonPollType["type"]): this {
-    return this.add(Keyboard.requestPoll(text, type));
+    return this.add(KeyboardBuilder.requestPoll(text, type));
   }
 
   /**
@@ -208,7 +209,7 @@ class Keyboard {
    * @returns The current instance for chaining.
    */
   webApp(text: string, url: string): this {
-    return this.add(Keyboard.webApp(text, url));
+    return this.add(KeyboardBuilder.webApp(text, url));
   }
 
   /**
@@ -275,12 +276,20 @@ class Keyboard {
    * Creates a deep copy of the current Keyboard instance.
    * @returns A new instance of Keyboard with the same buttons and properties.
    */
-  clone(keyboard: KeyboardButton[][] = this.keyboard): Keyboard {
-    const clone = new Keyboard(keyboard.map((row) => row.slice()));
-    clone.is_persistent = this.is_persistent;
-    clone.selective = this.selective;
-    clone.one_time_keyboard = this.one_time_keyboard;
-    clone.resize_keyboard = this.resize_keyboard;
+  clone(keyboard: KeyboardButton[][] = this.keyboard): KeyboardBuilder {
+    const clone = new KeyboardBuilder(keyboard.map((row) => row.slice()));
+    if (this.is_persistent !== undefined) {
+      clone.is_persistent = this.is_persistent;
+    }
+    if (this.selective !== undefined) {
+      clone.selective = this.selective;
+    }
+    if (this.one_time_keyboard !== undefined) {
+      clone.one_time_keyboard = this.one_time_keyboard;
+    }
+    if (this.resize_keyboard !== undefined) {
+      clone.resize_keyboard = this.resize_keyboard;
+    }
     if (this.input_field_placeholder) {
       clone.input_field_placeholder = this.input_field_placeholder;
     }
@@ -296,27 +305,62 @@ class Keyboard {
   }
 
   /**
+   * Combines the current keyboard with another one.
+   * @param other - The other Keyboard instance to combine with.
+   * @returns The current instance for chaining.
+   */
+  combine(
+    keyboard:
+      | KeyboardBuilder
+      | ReplyKeyboardMarkup
+      | KeyboardButton[][]
+      | { keyboard: KeyboardButton[][] }
+      | {
+          toJSON: () => ReplyKeyboardMarkup;
+        },
+  ): KeyboardBuilder {
+    const json = "toJSON" in keyboard ? keyboard.toJSON() : keyboard;
+
+    const buttons = Array.isArray(json) ? json : json.keyboard;
+
+    for (const row of buttons) {
+      if (row.length) this.row().add(...row);
+    }
+
+    return this;
+  }
+
+  /**
    * Creates a Keyboard instance from another instance or a 2D array of buttons.
    * @param source - The source Keyboard instance or 2D array of buttons.
    * @returns A new instance of Keyboard.
    */
-  static from(source: (string | KeyboardButton)[][] | Keyboard): Keyboard {
-    if (source instanceof Keyboard) return source.clone();
+  static from(
+    source: (string | KeyboardButton)[][] | KeyboardBuilder,
+  ): KeyboardBuilder {
+    if (source instanceof KeyboardBuilder) return source.clone();
     function toButton(btn: string | KeyboardButton) {
-      return typeof btn === "string" ? Keyboard.text(btn) : btn;
+      return typeof btn === "string" ? KeyboardBuilder.text(btn) : btn;
     }
-    return new Keyboard(source.map((row) => row.map(toButton)));
+    return new KeyboardBuilder(source.map((row) => row.map(toButton)));
   }
 
   /**
    * Checks if this keyboard is equal to another keyboard.
-   * @param {Keyboard} other - The other keyboard to compare with.
-   * @returns {boolean} True if both keyboards are equal based on their structure and properties, otherwise false.
+   * @param other - The other keyboard to compare with.
+   * @returns True if both keyboards are equal based on their structure and properties, otherwise false.
    */
-  equals(other: Keyboard): boolean {
-    if (!other || !(other instanceof Keyboard)) return false;
+  equals(other: KeyboardBuilder | ReplyKeyboardMarkup): boolean {
+    if (!other) return false;
 
     if (this.keyboard.length !== other.keyboard.length) return false;
+
+    if (this.is_persistent !== other.is_persistent) return false;
+    if (this.selective !== other.selective) return false;
+    if (this.one_time_keyboard !== other.one_time_keyboard) return false;
+    if (this.resize_keyboard !== other.resize_keyboard) return false;
+    if (this.input_field_placeholder !== other.input_field_placeholder)
+      return false;
 
     for (let i = 0; i < this.keyboard.length; i++) {
       const row = this.keyboard[i];
@@ -346,6 +390,29 @@ class Keyboard {
 
     return true;
   }
+
+  /**
+   * Converts the keyboard to a JSON format suitable for Telegram API.
+   * @returns An object representing the keyboard in JSON format.
+   */
+  toJSON(): ReplyKeyboardMarkup {
+    return {
+      keyboard: this.keyboard,
+      ...(this.one_time_keyboard !== undefined && {
+        one_time_keyboard: this.one_time_keyboard,
+      }),
+      ...(this.persistent !== undefined && {
+        is_persistent: this.is_persistent,
+      }),
+      ...(this.input_field_placeholder && {
+        input_field_placeholder: this.input_field_placeholder,
+      }),
+      ...(this.selective !== undefined && { selective: this.selective }),
+      ...(this.resize_keyboard !== undefined && {
+        resize_keyboard: this.resize_keyboard,
+      }),
+    };
+  }
 }
 
-export { Keyboard };
+export { KeyboardBuilder };

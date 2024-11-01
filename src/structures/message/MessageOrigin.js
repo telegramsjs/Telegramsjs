@@ -38,7 +38,7 @@ class MessageOrigin extends Base {
   _patch(data) {
     if ("message_id" in data) {
       /**
-       * Unique message identifier inside the chat
+       * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
        * @type {string | undefined}
        */
       this.id = String(data.message_id);
@@ -311,7 +311,7 @@ class MessageOrigin extends Base {
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
-   * @returns {Promise<true | (import("./Message").Message & { caption?: string; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+   * @returns {Promise<true | (import("./Message").Message & { caption: string | undefined; editedUnixTime: number; editedTimestamp: number; editedAt: Date; })>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    */
   editCaption(caption, options = {}) {
     if (!this.id) {
@@ -423,12 +423,17 @@ class MessageOrigin extends Base {
   }
 
   /**
+   * @typedef {Object} PinMessage
+   * @property {boolean} [notification] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
+   * @property {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
+   */
+
+  /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param {boolean} [notification=false] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param {PinMessage} [options] - Options for pinned message.
    * @returns {Promise<true>} - Returns True on success.
    */
-  pin(notification = false, businessConnectionId) {
+  pin({ notification = false, businessConnectionId } = {}) {
     if (!this.id) {
       throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
     }

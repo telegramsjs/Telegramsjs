@@ -47,12 +47,40 @@ import {
   ForceReply,
   ReplyKeyboardRemove,
   ReplyKeyboardMarkup,
+  CopyTextButton,
   InputMediaVideo,
   InputMediaPhoto,
   InputMediaDocument,
   InputMediaAudio,
   InlineKeyboardButton,
   InlineQueryResultsButton,
+  LanguageCode,
+  InputContactMessageContent,
+  InputInvoiceMessageContent,
+  InputLocationMessageContent,
+  InputTextMessageContent,
+  InputVenueMessageContent,
+  InlineQueryResultCachedAudio,
+  InlineQueryResultCachedDocument,
+  InlineQueryResultCachedGif,
+  InlineQueryResultCachedMpeg4Gif,
+  InlineQueryResultCachedPhoto,
+  InlineQueryResultCachedSticker,
+  InlineQueryResultCachedVideo,
+  InlineQueryResultCachedVoice,
+  InlineQueryResultArticle,
+  InlineQueryResultAudio,
+  InlineQueryResultContact,
+  InlineQueryResultDocument,
+  InlineQueryResultGame,
+  InlineQueryResultGif,
+  InlineQueryResultLocation,
+  InlineQueryResultMpeg4Gif,
+  InlineQueryResultPhoto,
+  InlineQueryResultVenue,
+  InlineQueryResultVideo,
+  InlineQueryResultVoice,
+  InputMessageContent,
 } from "./telegram/index";
 
 /**
@@ -506,7 +534,7 @@ export declare class User extends Base {
   /**
    * IETF language tag of the user's language
    */
-  language?: string;
+  language?: LanguageCode;
   /**
    * True, if this user is a Telegram Premium user
    */
@@ -520,6 +548,136 @@ export declare class User extends Base {
    * @param force - Whether to skip the cache check and request the API
    */
   fetch(force?: boolean): Promise<User>;
+  /**
+   * Use this method to send text messages.
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  send(
+    text: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    Message & {
+      content: string;
+    }
+  >;
+  send(
+    text: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "chatId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  send(
+    text:
+      | string
+      | Omit<
+          {
+            businessConnectionId?: string;
+            chatId: number | string;
+            messageThreadId?: string | number;
+            media: ReadonlyArray<
+              | InputMediaAudio
+              | InputMediaDocument
+              | InputMediaPhoto
+              | InputMediaVideo
+            >;
+            disableNotification?: boolean;
+            protectContent?: boolean;
+            messageEffectId?: string;
+            replyParameters?: ReplyParameters;
+          },
+          "chatId"
+        >,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    | (Message & {
+        content: string;
+      })
+    | Array<
+        | (Message & {
+            audio: Audio;
+          })
+        | (Message & {
+            document: Document;
+          })
+        | (Message & {
+            photo: Photo;
+          })
+        | (Message & {
+            video: Video;
+          })
+      >
+  >;
   /**
    * Refunds a successful payment in Telegram Stars.
    * @param telegramPaymentId - Telegram payment identifier
@@ -547,7 +705,19 @@ export declare class User extends Base {
   equals(other: User | ClientUser): boolean;
 }
 
-type Constructable<Entity> = new (...args: any[]) => Entity;
+export type Constructable<Entity> = new (...args: any[]) => Entity;
+
+export interface ICachedOptions<T> {
+  /**
+   * Optional maximum cache size. If not set, the cache is unlimited.
+   */
+  cacheSize?: number;
+  /**
+   * Optional filter function to determine if an item should be cached.
+   * Returns `true` to cache the item, `false` otherwise.
+   */
+  cacheFilter?: (holds: T) => boolean;
+}
 
 export declare class BaseManager<
   T extends Base,
@@ -557,17 +727,18 @@ export declare class BaseManager<
 > {
   public readonly cache: Collection<string, T>;
   public readonly cacheSize: number;
+  public readonly cacheFilter?: (holds: T) => boolean;
   /**
    * @param client - The client instance.
    * @param holds - The class or function that the manager holds.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
     holds: Constructable<T>,
-    iterable?: ApiObject[],
-    cacheSize?: number,
+    iterable: ApiObject[],
+    options?: ICachedOptions<T>,
   );
   /**
    * The client that instantiated this
@@ -608,6 +779,11 @@ export declare class BaseManager<
    * @returns The resolved ID or null if not found.
    */
   resolveId(idOrInstance: any): string | null;
+  /**
+   * Returns a new Iterator object that contains the [key, value] pairs for each element in the collection.
+   * @returns An iterator object that can be used to iterate over the key-value pairs of the Collection.
+   */
+  [Symbol.iterator](): IterableIterator<[string, T]>;
 }
 
 /**
@@ -733,10 +909,45 @@ export interface ICollectorOptions<EventCtx, Collected> {
  * Interface representing the events for the collector.
  */
 export interface ICollectorEvent<K, V> {
-  collect: (data: V, collect: Collection<K, V>) => void;
-  ignore: (data: V) => void;
-  dispose: (data: V, collect: Collection<K, V>) => void;
-  end: (collected: Collection<K, V>, reason: string) => void;
+  /**
+   * Triggered when a new item is collected. The `collect` function receives the
+   * item (`data`) and the collection itself (`collect`). Can perform any
+   * asynchronous or synchronous operations needed to handle the collected item.
+   *
+   * @param data - The data item to be collected.
+   * @param collect - The collection where the data is stored.
+   */
+  collect: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+
+  /**
+   * Triggered when a data item is ignored. The `ignore` function is called with
+   * the ignored item (`data`). This is useful for cases where items do not meet
+   * certain criteria and should not be added to the collection.
+   *
+   * @param data - The data item to be ignored.
+   */
+  ignore: (data: V) => PossiblyAsync<void>;
+
+  /**
+   * Triggered when an item is removed or disposed of from the collection. The
+   * `dispose` function receives the data item (`data`) and the collection itself
+   * (`collect`). Use this to handle any cleanup or additional logic when an item
+   * is removed from the collection.
+   *
+   * @param data - The data item to be disposed of.
+   * @param collect - The collection where the data is stored.
+   */
+  dispose: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+
+  /**
+   * Triggered when the collection process ends. The `end` function receives the
+   * final collection (`collected`) and a reason (`reason`) for the collection’s
+   * termination. Use this to handle any finalization or post-processing steps.
+   *
+   * @param collected - The collection of all collected data.
+   * @param reason - The reason the collection process ended.
+   */
+  end: (collected: Collection<K, V>, reason: string) => PossiblyAsync<void>;
 }
 
 /**
@@ -852,13 +1063,15 @@ export type SearchResult = {
   search: string;
 };
 
-export declare class MessageEntities {
+export declare class MessageEntities extends Base {
   /**
    * Creates an instance of the MessageEntities class.
+   * @param client - The client that instantiated this.
    * @param searchText - The text to search within.
    * @param entities - The array of message entities.
    */
   constructor(
+    client: TelegramClient | BaseClient,
     searchText: string,
     entities: import("@telegram.ts/types").MessageEntity[],
   );
@@ -937,6 +1150,26 @@ export declare class MessageEntities {
    */
   get code(): SearchResult[];
   /**
+   * Retrieves all pre entities from the message.
+   * @returns An array of objects representing pre entities.
+   */
+  get pre(): (SearchResult & { language?: string })[];
+  /**
+   * Retrieves all text link entities from the message.
+   * @returns An array of objects representing text link entities.
+   */
+  get textLink(): (SearchResult & { url: string })[];
+  /**
+   * Retrieves all text mention entities from the message.
+   * @returns An array of objects representing text mention entities.
+   */
+  get textMention(): (SearchResult & { user: User })[];
+  /**
+   * Retrieves all custom emoji entities from the message.
+   * @returns An array of objects representing custom emoji entities.
+   */
+  get customEmoji(): (SearchResult & { customEmojiId: string })[];
+  /**
    * Searches for a specific type of entity in the message.
    * @param searchType - The type of entity to search for.
    * @returns An array of objects representing the found entities.
@@ -956,14 +1189,24 @@ export declare class MessageEntities {
       | "strikethrough"
       | "spoiler"
       | "blockquote"
-      | "code",
-  ): SearchResult[];
+      | "code"
+      | "pre"
+      | "text_link"
+      | "text_mention"
+      | "custom_emoji",
+  ): (SearchResult &
+    (
+      | { language?: string }
+      | { url: string }
+      | { user: User }
+      | { customEmojiId: string }
+    ))[];
   /**
    * Enables iteration over the message entities.
    * @returns An iterator over the message entities.
    */
   [Symbol.iterator](): Generator<
-    (SearchResult & {
+    SearchResult & {
       type:
         | "mention"
         | "hashtag"
@@ -979,7 +1222,12 @@ export declare class MessageEntities {
         | "spoiler"
         | "blockquote"
         | "code";
-    })[]
+    } & (
+        | { type: "pre"; language?: string }
+        | { type: "textLink"; url: string }
+        | { type: "textMention"; user: User }
+        | { type: "customEmoji"; customEmojiId: string }
+      )
   >;
 }
 
@@ -1139,13 +1387,13 @@ export interface IReactionEventCollector
    * @param data - The collection of user reactions.
    */
   user: (
-    data: Collection<string, MessageReactionUpdated[] | MessageReactionUpdated>,
-  ) => void;
+    data: Collection<string, MessageReactionUpdated[]>,
+  ) => PossiblyAsync<void>;
   /**
    * Event emitted when a reaction is created.
    * @param data - The reaction context.
    */
-  create: (data: MessageReactionUpdated) => void;
+  create: (data: MessageReactionUpdated) => PossiblyAsync<void>;
 }
 
 /**
@@ -1165,7 +1413,7 @@ export declare class ReactionCollector extends Collector<
   /**
    * Collection of users and their reactions.
    */
-  users: Collection<string, MessageReactionUpdated[] | MessageReactionUpdated>;
+  users: Collection<string, MessageReactionUpdated[]>;
   /**
    * Creates an instance of ReactionCollector.
    * @param client - The TelegramClient instance.
@@ -1590,7 +1838,7 @@ export declare class MessageReactionUpdated extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -1640,7 +1888,7 @@ export declare class MessageReactionUpdated extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         replyMarkup?: InlineKeyboardMarkup;
       },
       "text" | "chatId" | "messageId"
@@ -1686,7 +1934,7 @@ export declare class MessageReactionUpdated extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -1790,11 +2038,15 @@ export declare class MessageReactionUpdated extends Base {
   ): Promise<number>;
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param notification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - options for pinned message
    * @returns Returns True on success.
    */
-  pin(notification?: boolean, businessConnectionId?: string): Promise<true>;
+  pin(options?: {
+    /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+    notification?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
@@ -1895,7 +2147,7 @@ export declare class MessageOrigin extends Base {
     data: import("@telegram.ts/types").MessageOrigin,
   ): import("@telegram.ts/types").MessageOrigin;
   /**
-   * Unique message identifier inside the chat
+   * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
    */
   id?: string;
   /**
@@ -2011,7 +2263,7 @@ export declare class MessageOrigin extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -2061,7 +2313,7 @@ export declare class MessageOrigin extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         replyMarkup?: InlineKeyboardMarkup;
       },
       "text" | "chatId" | "messageId"
@@ -2107,7 +2359,7 @@ export declare class MessageOrigin extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -2211,11 +2463,15 @@ export declare class MessageOrigin extends Base {
   ): Promise<number>;
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param notification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - options for pinned message
    * @returns Returns True on success.
    */
-  pin(notification?: boolean, businessConnectionId?: string): Promise<true>;
+  pin(options?: {
+    /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+    notification?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
@@ -2849,6 +3105,8 @@ export declare class PaidMediaInfo {
   starCount: number;
   /** Information about the paid media */
   media: PaidMedia[];
+  /** Makes the class iterable, returning each `PaidMedia` object. */
+  [Symbol.iterator](): IterableIterator<PaidMedia>;
 }
 
 export declare class Poll extends Base {
@@ -2930,6 +3188,23 @@ export declare class Poll extends Base {
    * Point in time when the poll will be automatically closed
    */
   get closedAt(): Date | null;
+  /**
+   * Use this method to stop a poll which was sent by the bot. ONLY BOT POLL
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+   * @param messageId -Identifier of the original message with the poll.
+   * @param options - options for stopping poll
+   * @return On success, the stopped Poll is returned
+   */
+  close(
+    chatId: number | string,
+    messageId: number | string,
+    options?: {
+      /** Unique identifier of the business connection on behalf of which the message to be edited was sent. */
+      businessConnectionId?: string;
+      /** An object for a new message inline keyboard. */
+      replyMarkup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Omit<Poll, "close">>;
 }
 
 export declare class Venue extends Base {
@@ -3071,9 +3346,13 @@ export declare class ExternalReplyInfo extends Base {
 
 export declare class TextQuote {
   /**
+   * @param client - The client that instantiated this.
    * @param data - Data about the contains information about the quoted part of a message that is replied to by the given message
    */
-  constructor(data: import("@telegram.ts/types").TextQuote);
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").TextQuote,
+  );
   /** Text of the quoted part of a message that is replied to by the given message */
   text: string;
   /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes. */
@@ -3101,11 +3380,15 @@ export declare class Forum extends Base {
   chatId: string;
   /**
    * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic.
-   * @param name - New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
-   * @param customEmojiId - New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept
+   * @param options - Options for edited forum topic.
    * @returns Returns True on success.
    */
-  edit(name?: string, customEmojiId?: string): Promise<true>;
+  edit(options?: {
+    /** New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept */
+    name?: string;
+    /** New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept */
+    customEmojiId?: string;
+  }): Promise<true>;
   /**
    * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
    * @returns Returns True on success.
@@ -3296,6 +3579,8 @@ export declare class UsersShared {
   requestId: number;
   /** Information about users shared with the bot. */
   users: SharedUser[];
+  /** Makes the class iterable, returning each `SharedUser` object. */
+  [Symbol.iterator](): IterableIterator<SharedUser>;
 }
 
 export declare class ChatShared extends Base {
@@ -3635,7 +3920,7 @@ export declare class Message extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").Message,
   );
-  /** Unique message identifier inside this chat */
+  /** Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent */
   id: string;
   /**
    * Date the message was sent in Unix time. It is always a positive number, representing a valid date
@@ -4023,6 +4308,11 @@ export declare class Message extends Base {
     editedAt: Date;
   };
   /**
+   * Checking if the message video has been pending.
+   * @remarks The check will only be valid on December 1, 2024.
+   */
+  isPendingVideoMessage(): boolean;
+  /**
    * Return the timestamp message was sent, in milliseconds
    */
   get createdTimestamp(): number;
@@ -4112,7 +4402,7 @@ export declare class Message extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -4162,7 +4452,7 @@ export declare class Message extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         replyMarkup?: InlineKeyboardMarkup;
       },
       "text" | "chatId" | "messageId"
@@ -4208,7 +4498,7 @@ export declare class Message extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -4312,11 +4602,15 @@ export declare class Message extends Base {
   ): Promise<number>;
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param notification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - options for pinned message
    * @returns Returns True on success.
    */
-  pin(notification?: boolean, businessConnectionId?: string): Promise<true>;
+  pin(options?: {
+    /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+    notification?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
@@ -4711,7 +5005,7 @@ export declare class Chat extends Base {
   ): InlineKeyboardCollector;
   /**
    * Use this method to send text messages.
-   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
    * @param options - out parameters
    * @returns On success, the sent Message is returned.
    */
@@ -4725,7 +5019,7 @@ export declare class Chat extends Base {
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
-        linkPreviewOptions?: LinkPreviewOptions;
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
@@ -4736,12 +5030,108 @@ export declare class Chat extends Base {
           | ReplyKeyboardRemove
           | ForceReply;
       },
-      "text" | "chatId"
+      "text" | "chatId" | "messageThreadId"
     >,
   ): Promise<
     Message & {
       content: string;
     }
+  >;
+  send(
+    text: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  send(
+    text:
+      | string
+      | Omit<
+          {
+            businessConnectionId?: string;
+            chatId: number | string;
+            messageThreadId?: string | number;
+            media: ReadonlyArray<
+              | InputMediaAudio
+              | InputMediaDocument
+              | InputMediaPhoto
+              | InputMediaVideo
+            >;
+            disableNotification?: boolean;
+            protectContent?: boolean;
+            messageEffectId?: string;
+            replyParameters?: ReplyParameters;
+          },
+          "chatId" | "messageThreadId"
+        >,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    | (Message & {
+        content: string;
+      })
+    | Array<
+        | (Message & {
+            audio: Audio;
+          })
+        | (Message & {
+            document: Document;
+          })
+        | (Message & {
+            photo: Photo;
+          })
+        | (Message & {
+            video: Video;
+          })
+      >
   >;
   /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
@@ -5061,25 +5451,29 @@ export declare class Chat extends Base {
   /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param messageId - Identifier of a message to pin
-   * @param disableNotification - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param options - Options for pinned message
    * @returns Returns True on success.
    */
   pinMessage(
     messageId: string | number,
-    disableNotification?: boolean,
-    businessConnectionId?: string,
+    options?: {
+      /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+      notification?: boolean;
+      /** Unique identifier of the business connection on behalf of which the message will be pinned */
+      businessConnectionId?: string;
+    },
   ): Promise<true>;
   /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param messageId - Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned
-   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
+   * @param options - Options for unpinned message
    * @returns Returns True on success.
    */
-  unpinMessage(
-    messageId?: string | number,
-    businessConnectionId?: string,
-  ): Promise<true>;
+  unpinMessage(options?: {
+    /** Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned */
+    messageId?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
   /**
    * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @returns Returns True on success.
@@ -6075,8 +6469,8 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: ApiUser[],
-    cacheSize?: number,
+    iterable: ApiUser[],
+    options?: ICachedOptions<User>,
   );
   /**
    * Resolves a user from a ChatMember, Message, or user ID.
@@ -6112,12 +6506,12 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * @param client - The client instance.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
-    iterable?: ApiChat[],
-    cacheSize?: number,
+    iterable: ApiChat[],
+    options?: ICachedOptions<Chat>,
   );
   /**
    * Resolves a chat object.
@@ -6184,6 +6578,136 @@ export declare class BusinessConnection extends Base {
    * Date the connection was established
    */
   get createdAt(): Date;
+  /**
+   * Use this method to send text messages.
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  send(
+    text: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    Message & {
+      content: string;
+    }
+  >;
+  send(
+    text: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "chatId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  send(
+    text:
+      | string
+      | Omit<
+          {
+            businessConnectionId?: string;
+            chatId: number | string;
+            messageThreadId?: string | number;
+            media: ReadonlyArray<
+              | InputMediaAudio
+              | InputMediaDocument
+              | InputMediaPhoto
+              | InputMediaVideo
+            >;
+            disableNotification?: boolean;
+            protectContent?: boolean;
+            messageEffectId?: string;
+            replyParameters?: ReplyParameters;
+          },
+          "chatId"
+        >,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    | (Message & {
+        content: string;
+      })
+    | Array<
+        | (Message & {
+            audio: Audio;
+          })
+        | (Message & {
+            document: Document;
+          })
+        | (Message & {
+            photo: Photo;
+          })
+        | (Message & {
+            video: Video;
+          })
+      >
+  >;
 }
 
 export declare class BusinessMessagesDeleted extends Base {
@@ -6207,6 +6731,10 @@ export declare class BusinessMessagesDeleted extends Base {
    * The list of identifiers of deleted messages in the chat of the business account
    */
   ids: string[];
+  /**
+   * Makes the class iterable, returning each messages identifiers
+   */
+  [Symbol.iterator](): IterableIterator<string>;
 }
 
 export declare class ReactionCount {
@@ -6268,27 +6796,6 @@ export declare class InlineQuery extends Base {
   type?: "group" | "channel" | "private" | "supergroup" | "sender";
   /** Sender location, only for bots that request user location */
   location?: Location;
-}
-
-export declare class ChosenInlineResult extends Base {
-  /**
-   * @param client - The client that instantiated this
-   * @param data - Data about the Represents a result of an inline query that was chosen by the user and sent to their chat partner
-   */
-  constructor(
-    client: TelegramClient | BaseClient,
-    data: import("@telegram.ts/types").ChosenInlineResult,
-  );
-  /** The unique identifier for the result that was chosen */
-  id: string;
-  /** The user that chose the result */
-  author: User;
-  /** Sender location, only for bots that require user location */
-  location?: Location;
-  /** The query that was used to obtain the result */
-  query: string;
-  /** Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message */
-  inlineMessageId: string;
   /**
    * Use this method to send answers to an inline query.
    * @param results - An array of results for the inline query
@@ -6309,6 +6816,27 @@ export declare class ChosenInlineResult extends Base {
       "results" | "inlineQueryId"
     >,
   ): Promise<true>;
+}
+
+export declare class ChosenInlineResult extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the Represents a result of an inline query that was chosen by the user and sent to their chat partner
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").ChosenInlineResult,
+  );
+  /** The unique identifier for the result that was chosen */
+  id: string;
+  /** The user that chose the result */
+  author: User;
+  /** Sender location, only for bots that require user location */
+  location?: Location;
+  /** The query that was used to obtain the result */
+  query: string;
+  /** Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message */
+  inlineMessageId?: string;
 }
 
 export declare class ShippingQuery extends Base {
@@ -6591,9 +7119,7 @@ export declare class ChatBoostUpdated extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").ChatBoostUpdated,
   );
-  /**
-   * Chat which was boosted
-   */
+  /** Chat which was boosted */
   chat: Chat;
   /** Information about the chat boost */
   boost: ChatBoost;
@@ -6610,9 +7136,7 @@ export declare class ChatBoostRemoved extends Base {
   );
   /** Unique identifier of the boost */
   id: string;
-  /**
-   * Chat which was boosted
-   */
+  /** Chat which was boosted */
   chat: Chat;
   /** Source of the removed boost */
   source: ChatBoostSource;
@@ -6632,6 +7156,7 @@ export interface EventHandlers {
   ready: (telegram: TelegramClient) => PossiblyAsync<void>;
   disconnect: (telegram: TelegramClient) => PossiblyAsync<void>;
   error: (detalis: [number, unknown]) => PossiblyAsync<void>;
+  rawUpdate: (raw: Update & { client: TelegramClient }) => PossiblyAsync<void>;
   message: (message: Message) => PossiblyAsync<void>;
   channelPost: (message: Message) => PossiblyAsync<void>;
   businessMessage: (message: Message) => PossiblyAsync<void>;
@@ -6666,6 +7191,7 @@ export interface EventHandlers {
 }
 
 export type EventHandlerParameters =
+  | (Update & { client: TelegramClient })
   | Message
   | BusinessConnection
   | BusinessMessagesDeleted
@@ -7078,37 +7604,39 @@ export declare class BaseClient extends EventEmitter {
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
   deleteMyCommands(
     scope?: MethodParameters["deleteMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["deleteMyCommands"]>;
   /** Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned. */
   getMyCommands(
     scope?: MethodParameters["getMyCommands"]["scope"],
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyCommands"]>;
   /** Use this method to change the bot's name. Returns True on success. */
   setMyName(
     name?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyName"]>;
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
-  getMyName(languageCode?: string): Promise<MethodsLibReturnType["getMyName"]>;
+  getMyName(
+    languageCode?: LanguageCode,
+  ): Promise<MethodsLibReturnType["getMyName"]>;
   /** Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success. */
   setMyDescription(
     description?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyDescription"]>;
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
   getMyDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyDescription"]>;
   /** Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success. */
   setMyShortDescription(
     shortDescription?: string,
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["setMyShortDescription"]>;
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   getMyShortDescription(
-    languageCode?: string,
+    languageCode?: LanguageCode,
   ): Promise<MethodsLibReturnType["getMyShortDescription"]>;
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
   setChatMenuButton(
@@ -7136,7 +7664,7 @@ export declare class BaseClient extends EventEmitter {
   editMessageCaption(
     params: MethodParameters["editMessageCaption"],
   ): Promise<MethodsLibReturnType["editMessageCaption"]>;
-  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageMedia(
     params: MethodParameters["editMessageMedia"],
   ): Promise<MethodsLibReturnType["editMessageMedia"]>;
@@ -7360,7 +7888,7 @@ export declare class WebhookClient {
   /**
    * The HTTP or HTTPS server for handling webhook requests.
    */
-  webhookServer?: http.Server | https.Server;
+  webhookServer: http.Server | https.Server | null;
   /**
    * Filters incoming webhook requests to verify their authenticity.
    * @param request - The incoming request.
@@ -7661,14 +8189,17 @@ export declare class ClientUser extends User {
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
    * @param commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
-   * @param scope - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
-   * @param languageCode - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
+   * @param options - Options for setting commands, including scope and language code
    * @returns Returns True on success.
    */
   setCommands(
     commands: readonly BotCommand[],
-    scope?: BotCommandScope,
-    languageCode?: string,
+    options?: {
+      /** A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified */
+      cope?: BotCommandScope;
+      /** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
+      languageCode?: LanguageCode;
+    },
   ): Promise<true>;
   /**
    * Use this method to get the current list of the bot's commands for the given scope and user language.
@@ -7678,7 +8209,7 @@ export declare class ClientUser extends User {
    */
   getCommands(
     score?: BotCommandScope,
-    language?: string,
+    language?: LanguageCode,
   ): Promise<BotCommand[]>;
   /**
    * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users.
@@ -7686,46 +8217,52 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
    * @returns Returns True on success.
    */
-  deleteCommands(score?: BotCommandScope, language?: string): Promise<true>;
+  deleteCommands(
+    score?: BotCommandScope,
+    language?: LanguageCode,
+  ): Promise<true>;
   /**
    * Use this method to change the bot's name.
    * @param name - New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language
    * @param language - A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name
    * @returns Returns True on success.
    */
-  setName(name?: string, language?: string): Promise<true>;
+  setName(name?: string, language?: LanguageCode): Promise<true>;
   /**
    * Use this method to get the current bot name for the given user language.
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot name on success
    */
-  getName(language?: string): Promise<string>;
+  getName(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty.
    * @param description - New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language
    * @param language - A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description
    * @returns Returns True on success.
    */
-  setDescription(description?: string, language?: string): Promise<true>;
+  setDescription(description?: string, language?: LanguageCode): Promise<true>;
   /**
    * Use this method to get the current bot description for the given user language.
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot description on success.
    */
-  getDescription(language?: string): Promise<string>;
+  getDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot.
    * @param description - New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language
    * @param language - A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description
    * @returns Returns True on success.
    */
-  setShortDescription(description?: string, language?: string): Promise<true>;
+  setShortDescription(
+    description?: string,
+    language?: LanguageCode,
+  ): Promise<true>;
   /**
    * Use this method to get the current bot short description for the given user language.
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot short description on success
    */
-  getShortDescription(language?: string): Promise<string>;
+  getShortDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
@@ -7800,6 +8337,8 @@ export interface ClientOptions {
   restOptions?: IRestOptions;
   chatCacheMaxSize?: number;
   userCacheMaxSize?: number;
+  userCacheFilter?: (user: User) => boolean;
+  chatCacheFilter?: (chat: Chat) => boolean;
   pollingTimeout?: number;
   errorHandler?: boolean;
 }
@@ -7856,6 +8395,11 @@ export declare class TelegramClient extends BaseClient {
    * Destroys the client, closing all connections.
    */
   destroy(): void;
+  /**
+   * Asynchronously disposes of the client, closing all connections.
+   * Implements `Symbol.asyncDispose` by calling `destroy()`.
+   */
+  [Symbol.asyncDispose](): Promise<void>;
 }
 
 export declare class Base {
@@ -8178,6 +8722,10 @@ export declare class UserChatBoosts {
    * The boost count added to the chat by the user
    */
   count: number;
+  /**
+   * Makes the class iterable, returning each `ChatBoost` object.
+   */
+  [Symbol.iterator](): IterableIterator<ChatBoost>;
 }
 
 export declare class StickerSet {
@@ -8239,7 +8787,7 @@ export declare class TransactionPartner extends Base {
     data: import("@telegram.ts/types").TransactionPartner,
   );
   /** Type of the transaction partner */
-  type: "other" | "user" | "fragment" | "telegram_ads";
+  type: "other" | "user" | "fragment" | "telegram_ads" | "telegram_api";
   /**
    * @param data - Data about the describes the source of a transaction, or its recipient for outgoing transactions
    * @override
@@ -8267,17 +8815,33 @@ export declare class TransactionPartner extends Base {
    * Bot-specified invoice payload
    */
   payload?: string;
+  /**
+   * The number of successful requests that exceeded regular limits and were therefore billed
+   */
+  requestCount?: number;
 
   isUser(): this is this & {
+    withdrawal?: undefined;
     user: User;
     paidMedia?: PaidMedia[];
     paidMediaPayload?: string;
+    requestCount?: undefined;
   };
 
   isFragment(): this is this & {
     withdrawal: RevenueWithdrawalState;
+    user?: undefined;
     paidMedia?: undefined;
     paidMediaPayload?: undefined;
+    requestCount?: undefined;
+  };
+
+  isTelegramApi(): this is this & {
+    withdrawal?: undefined;
+    user?: undefined;
+    paidMedia?: undefined;
+    paidMediaPayload?: undefined;
+    requestCount: number;
   };
 }
 
@@ -8373,7 +8937,7 @@ export type PossiblyAsync<T> = T | Promise<T>;
 /**
  * Represents an inline keyboard for Telegram bots.
  */
-export declare class InlineKeyboard {
+export declare class InlineKeyboardBuilder {
   readonly inline_keyboard: InlineKeyboardButton[][];
   /**
    * Creates an instance of InlineKeyboard.
@@ -8503,6 +9067,23 @@ export declare class InlineKeyboard {
     query?: SwitchInlineQueryChosenChat,
   ): InlineKeyboardButton.SwitchInlineChosenChatButton;
   /**
+   * Adds a copy text button to the inline keyboard.
+   * @param text - The button text.
+   * @param copyText - The text copy or CopyTextButton object.
+   * @returns The current instance for chaining.
+   */
+  copyText(text: string, copyText?: string | CopyTextButton): this;
+  /**
+   * Creates a copy text button.
+   * @param text - The button text.
+   * @param copyText - The text copy or CopyTextButton object.
+   * @returns The created copy text button.
+   */
+  static copyText(
+    text: string,
+    copyText?: string | CopyTextButton,
+  ): InlineKeyboardButton.CopyTextButtonButton;
+  /**
    * Adds a game button to the inline keyboard.
    * @param text - The button text.
    * @returns The current instance for chaining.
@@ -8530,44 +9111,65 @@ export declare class InlineKeyboard {
    * Creates a deep copy of the current InlineKeyboard instance.
    * @returns A new instance of InlineKeyboard with the same buttons.
    */
-  clone(): InlineKeyboard;
+  clone(): InlineKeyboardBuilder;
+  /**
+   * Combines the current inline keyboard with another one.
+   * @param other - The other InlineKeyboard instance to combine with.
+   * @returns The current instance for chaining.
+   */
+  combine(
+    other:
+      | InlineKeyboardBuilder
+      | InlineKeyboardButton[][]
+      | { inline_keyboard: InlineKeyboardButton[][] }
+      | { toJSON(): { inline_keyboard: InlineKeyboardButton[][] } },
+  ): InlineKeyboardBuilder;
   /**
    * Creates an InlineKeyboard instance from another instance or a 2D array of buttons.
    * @param source - The source InlineKeyboard instance or 2D array of buttons.
    * @returns A new instance of InlineKeyboard.
    */
   static from(
-    source: InlineKeyboard | InlineKeyboardButton[][],
-  ): InlineKeyboard;
+    source: InlineKeyboardBuilder | InlineKeyboardButton[][],
+  ): InlineKeyboardBuilder;
   /**
    * Checks if this inline keyboard is equal to another inline keyboard.
    * @param other - The other inline keyboard to compare with.
    * @returns True if both keyboards are equal based on their structure and button properties, otherwise false.
    */
-  equals(other: InlineKeyboard): boolean;
+  equals(
+    other:
+      | InlineKeyboardBuilder
+      | { inline_keyboard: InlineKeyboardButton[][] },
+  ): boolean;
+  /**
+   * Converts the inline keyboard to a JSON format suitable for Telegram API.
+   * @returns An object representing the inline keyboard in JSON format.
+   */
+  toJSON(): { inline_keyboard: InlineKeyboardButton[][] };
 }
 
 /**
  * Represents a custom keyboard for Telegram bots.
  */
-export declare class Keyboard {
+export declare class KeyboardBuilder {
   readonly keyboard: KeyboardButton[][];
   /**
    * Indicates whether the keyboard is persistent.
    */
-  is_persistent: boolean;
+  is_persistent?: boolean;
   /**
    * Indicates whether the keyboard is selective.
    */
-  selective: boolean;
+  selective?: boolean;
   /**
    * Indicates whether the keyboard is a one-time keyboard.
    */
-  one_time_keyboard: boolean;
+  one_time_keyboard?: boolean;
   /**
    * Indicates whether the keyboard should be resized.
    */
-  resize_keyboard: boolean;
+  resize_keyboard?: boolean;
   /**
    * The placeholder text for the input field.
    */
@@ -8738,24 +9340,445 @@ export declare class Keyboard {
    * Creates a deep copy of the current Keyboard instance.
    * @returns A new instance of Keyboard with the same buttons and properties.
    */
-  clone(keyboard?: KeyboardButton[][]): Keyboard;
+  clone(keyboard?: KeyboardButton[][]): KeyboardBuilder;
   /**
    * Builds the keyboard structure.
    * @returns The built keyboard structure.
    */
   build(): KeyboardButton[][];
   /**
+   * Combines the current keyboard with another one.
+   * @param other - The other Keyboard instance to combine with.
+   * @returns The current instance for chaining.
+   */
+  combine(
+    keyboard:
+      | KeyboardBuilder
+      | ReplyKeyboardMarkup
+      | KeyboardButton[][]
+      | { keyboard: KeyboardButton[][] }
+      | {
+          toJSON: () => ReplyKeyboardMarkup;
+        },
+  ): KeyboardBuilder;
+  /**
    * Creates a Keyboard instance from another instance or a 2D array of buttons.
    * @param source - The source Keyboard instance or 2D array of buttons.
    * @returns A new instance of Keyboard.
    */
-  static from(source: (string | KeyboardButton)[][] | Keyboard): Keyboard;
+  static from(
+    source: (string | KeyboardButton)[][] | KeyboardBuilder,
+  ): KeyboardBuilder;
   /**
    * Checks if this keyboard is equal to another keyboard.
    * @param other - The other keyboard to compare with.
    * @returns True if both keyboards are equal based on their structure and properties, otherwise false.
    */
-  equals(other: Keyboard): boolean;
+  equals(other: KeyboardBuilder | ReplyKeyboardMarkup): boolean;
+  /**
+   * Converts the keyboard to a JSON format suitable for Telegram API.
+   * @returns An object representing the keyboard in JSON format.
+   */
+  toJSON(): ReplyKeyboardMarkup;
+}
+
+export declare class InlineQueryResultBuilder {
+  /** Cached result of InlineQuery builder */
+  static cached: typeof InlineQueryResultCachedBuilder;
+  /**
+   * Represents a link to an article or web page.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title of the result.
+   * @param inputMessageContent - Content of the message to be sent.
+   * @param options - out parameters.
+   */
+  static article(
+    id: string,
+    title: string,
+    inputMessageContent: InputMessageContent,
+    options?: Omit<
+      InlineQueryResultArticle,
+      "type" | "title" | "id" | "input_message_content"
+    >,
+  ): InlineQueryResultArticle;
+  /**
+   * Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the audio.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title.
+   * @param audioUrl - A valid URL for the audio file.
+   * @param options - out parameters.
+   */
+  static audio(
+    id: string,
+    title: string,
+    audioUrl: string,
+    options?: Omit<
+      InlineQueryResultAudio,
+      "type" | "title" | "id" | "audio_url"
+    >,
+  ): InlineQueryResultAudio;
+  /**
+   * Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the contact.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param phoneNumber - Contact's phone number.
+   * @param firstName - Contact's first name
+   * @param options - out parameters.
+   */
+  static contact(
+    id: string,
+    phoneNumber: string,
+    firstName: string,
+    options?: Omit<
+      InlineQueryResultContact,
+      "type" | "phone_number" | "id" | "first_name"
+    >,
+  ): InlineQueryResultContact;
+  /**
+   * Represents a [Game](https://core.telegram.org/bots/api/#games).
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param gameShortName - Short name of the game.
+   * @param replyMarkup - Inline keyboard attached to the message.
+   */
+  static game(
+    id: string,
+    gameShortName: string,
+    replyMarkup?: InlineQueryResultGame["reply_markup"],
+  ): InlineQueryResultGame;
+  /**
+   * Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title for the result.
+   * @param url - A valid URL for the file.
+   * @param options - out parameters.
+   */
+  static documentPdf(
+    id: string,
+    title: string,
+    url: string,
+    options?: Omit<
+      InlineQueryResultDocument,
+      "type" | "mime_type" | "id" | "title" | "document_url"
+    >,
+  ): InlineQueryResultDocument;
+  /**
+   * Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param title - Title for the result.
+   * @param url - A valid URL for the file.
+   * @param options - out parameters.
+   */
+  static documentZip(
+    id: string,
+    title: string,
+    url: string,
+    options?: Omit<
+      InlineQueryResultDocument,
+      "type" | "mime_type" | "id" | "title" | "document_url"
+    >,
+  ): InlineQueryResultDocument;
+  /**
+   * Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param gifUrl - A valid URL for the GIF file. File size must not exceed 1MB.
+   * @param thumbnailUrl - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result.
+   * @param options - out parameters.
+   */
+  static gif(
+    id: string,
+    gifUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultGif,
+      "type" | "gif_url" | "id" | "thumbnail_url"
+    >,
+  ): InlineQueryResultGif;
+  /**
+   * Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the location.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param latitude - Location latitude in degrees.
+   * @param longitude - Location longitude in degrees.
+   * @param title - Location title.
+   * @param options - out parameters
+   */
+  static location(
+    id: string,
+    latitude: number,
+    longitude: number,
+    title: string,
+    options?: Omit<
+      InlineQueryResultLocation,
+      "type" | "latitude" | "id" | "longitude" | "title"
+    >,
+  ): InlineQueryResultLocation;
+  /**
+   * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param mpeg4Url - A valid URL for the MPEG4 file. File size must not exceed 1MB.
+   * @param thumbnailUrl - URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result.
+   * @param options - out parameters.
+   */
+  static mpeg4Gif(
+    id: string,
+    mpeg4Url: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultMpeg4Gif,
+      "type" | "mpeg4_url" | "id" | "thumbnail_url"
+    >,
+  ): InlineQueryResultMpeg4Gif;
+  /**
+   * Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param photoUrl - A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB.
+   * @param thumbnailUrl - URL of the thumbnail for the photo.
+   * @param options - out parameters.
+   */
+  static photo(
+    id: string,
+    photoUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultPhoto,
+      "type" | "photo_url" | "id" | "thumbnail_url"
+    >,
+  ): InlineQueryResultPhoto;
+  /**
+   * Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the venue.
+   * @param id - Unique identifier for this result, 1-64 Bytes.
+   * @param options - out parameters.
+   */
+  static venue(
+    id: string,
+    options: Omit<InlineQueryResultVenue, "type" | "id">,
+  ): InlineQueryResultVenue;
+  /**
+   * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+   *
+   * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input\_message\_content*.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param videoUrl - A valid URL for the embedded video player or video file.
+   * @param thumbnailUrl - URL of the thumbnail (JPEG only) for the video.
+   * @param options - out parameters.
+   */
+  static videoHtml(
+    id: string,
+    title: string,
+    videoUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultVideo,
+      "type" | "video_url" | "id" | "thumbnail_url" | "mime_type" | "title"
+    >,
+  ): InlineQueryResultVideo;
+  /**
+   * Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+   *
+   * If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input\_message\_content*.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param videoUrl - A valid URL for the embedded video player or video file.
+   * @param thumbnailUrl - URL of the thumbnail (JPEG only) for the video.
+   * @param options - out parameters.
+   */
+  static videoMp4(
+    id: string,
+    title: string,
+    videoUrl: string,
+    thumbnailUrl: string,
+    options?: Omit<
+      InlineQueryResultVideo,
+      "type" | "video_url" | "id" | "thumbnail_url" | "mime_type" | "title"
+    >,
+  ): InlineQueryResultVideo;
+  /**
+   * Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the the voice message.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Recording title.
+   * @param url - A valid URL for the voice recording.
+   * @param options - out parameters.
+   */
+  static voice(
+    id: string,
+    title: string,
+    url: string,
+    options?: Omit<
+      InlineQueryResultVoice,
+      "type" | "voice_url" | "id" | "title"
+    >,
+  ): InlineQueryResultVoice;
+}
+
+export declare class InlineQueryResultCachedBuilder {
+  /**
+   * Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the audio.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier for the audio file.
+   * @param options - out parameters.
+   */
+  static audio(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedAudio,
+      "type" | "audio_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedAudio;
+  /**
+   * Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param fileId - A valid file identifier for the file.
+   * @param options - out parameters.
+   */
+  static document(
+    id: string,
+    title: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedDocument,
+      "type" | "document_file_id" | "id" | "title"
+    >,
+  ): InlineQueryResultCachedDocument;
+  /**
+   * Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier for the GIF file.
+   * @param options - out parameters.
+   */
+  static gif(
+    id: string,
+    fileId: string,
+    options?: Omit<InlineQueryResultCachedGif, "type" | "gif_file_id" | "id">,
+  ): InlineQueryResultCachedGif;
+  /**
+   * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier for the GIF file.
+   * @param options - out parameters.
+   */
+  static mpeg4Gif(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedMpeg4Gif,
+      "type" | "mpeg4_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedMpeg4Gif;
+  /**
+   * Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier of the photo.
+   * @param options - out parameters.
+   */
+  static photo(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedPhoto,
+      "type" | "photo_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedPhoto;
+  /**
+   * Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the sticker.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param fileId - A valid file identifier of the sticker.
+   * @param options - out parameters.
+   */
+  static sticker(
+    id: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedSticker,
+      "type" | "sticker_file_id" | "id"
+    >,
+  ): InlineQueryResultCachedSticker;
+  /**
+   * Represents a link to a video file stored on the Telegram servers. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Title for the result.
+   * @param fileId - A valid file identifier for the video file.
+   * @param options - out parameters.
+   */
+  static video(
+    id: string,
+    title: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedVideo,
+      "type" | "video_file_id" | "id" | "title"
+    >,
+  ): InlineQueryResultCachedVideo;
+  /**
+   * Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the voice message.
+   * @param id - Unique identifier for this result, 1-64 bytes.
+   * @param title - Voice message title.
+   * @param fileId - A valid file identifier for the voice message.
+   * @param options - out parameters.
+   */
+  static voice(
+    id: string,
+    title: string,
+    fileId: string,
+    options?: Omit<
+      InlineQueryResultCachedVoice,
+      "type" | "voice_file_id" | "id" | "title"
+    >,
+  ): InlineQueryResultCachedVoice;
+}
+
+export declare class InputMessageContentBuilder {
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a text message to be sent as the result of an inline query.
+   * @param text - Text of the message to be sent, 1-4096 characters.
+   * @param options - out parameters.
+   */
+  static text(
+    text: InputTextMessageContent["message_text"],
+    options?: Omit<InputTextMessageContent, "message_text">,
+  ): InputTextMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a location message to be sent as the result of an inline query.
+   * @param latitude - Latitude of the location in degrees.
+   * @param longitude - Longitude of the location in degrees.
+   * @param options - out parameters.
+   */
+  static location(
+    latitude: number,
+    longitude: number,
+    options?: Omit<InputLocationMessageContent, "latitude" | "longitude">,
+  ): InputLocationMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a venue message to be sent as the result of an inline query.
+   * @param latitude - Latitude of the venue in degrees.
+   * @param longitude - Longitude of the venue in degrees.
+   * @param title - Name of the venue.
+   * @param address - Address of the venue.
+   * @param options - out parameters.
+   */
+  static venue(
+    latitude: number,
+    longitude: number,
+    options?: Omit<InputVenueMessageContent, "latitude" | "longitude">,
+  ): InputLocationMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a contact message to be sent as the result of an inline query.
+   * @param phoneNumber - Contact's phone number.
+   * @param firstName - Contact's first name.
+   * @param options - out parameters.
+   */
+  static contact(
+    phoneNumber: string,
+    firstName: string,
+    options?: Omit<InputContactMessageContent, "phone_number" | "first_name">,
+  ): InputContactMessageContent;
+  /**
+   * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of an invoice message to be sent as the result of an inline query.
+   * @param options - out parameters.
+   */
+  static invoice(
+    options: InputInvoiceMessageContent,
+  ): InputInvoiceMessageContent;
 }
 
 export declare const DefaultPollingParameters: {
@@ -8789,6 +9812,7 @@ export declare const Events: {
   readonly Ready: "ready";
   readonly Error: "error";
   readonly Disconnect: "disconnect";
+  readonly RawUpdate: "rawUpdate";
   readonly Message: "message";
   readonly ChannelPost: "message";
   readonly BusinessMessage: "message";

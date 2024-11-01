@@ -1,5 +1,6 @@
 import type { ReadStream } from "node:fs";
 import type { Buffer, Blob } from "node:buffer";
+import type { LanguageCode } from "./Language";
 import type { PassportElementError } from "./Passport";
 import type { BotCommand, MenuButton, BotCommandScope } from "./Bot";
 import type {
@@ -119,6 +120,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -183,6 +186,8 @@ export type ApiMethods = {
     showCaptionAboveMedia?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -245,6 +250,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -305,6 +312,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -359,6 +368,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -423,6 +434,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -485,6 +498,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -529,6 +544,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -580,6 +597,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -600,9 +619,9 @@ export type ApiMethods = {
     businessConnectionId?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
-    /** An array describing messages to be sent, must include 2-10 items */
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** An array describing messages to be sent, must include 2-10 items */
     media: ReadonlyArray<
       InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo
     >;
@@ -610,6 +629,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent messages from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -653,6 +674,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -743,6 +766,8 @@ export type ApiMethods = {
     showCaptionAboveMedia?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -783,6 +808,8 @@ export type ApiMethods = {
     googlePlaceType?: string;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
@@ -819,6 +846,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -873,6 +902,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -901,6 +932,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -1390,7 +1423,7 @@ export type ApiMethods = {
     /** An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault. */
     scope?: BotCommandScope;
     /** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success. */
@@ -1398,7 +1431,7 @@ export type ApiMethods = {
     /** An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault. */
     scope?: BotCommandScope;
     /** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned. */
@@ -1406,7 +1439,7 @@ export type ApiMethods = {
     /** An object, describing scope of users. Defaults to BotCommandScopeDefault. */
     scope?: BotCommandScope;
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): BotCommand[];
 
   /** Use this method to change the bot's name. Returns True on success. */
@@ -1414,13 +1447,13 @@ export type ApiMethods = {
     /** New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language. */
     name?: string;
     /** A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name. */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current bot name for the given user language. Returns BotName on success. */
   getMyName(args: {
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): string;
 
   /** Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success. */
@@ -1428,13 +1461,13 @@ export type ApiMethods = {
     /** New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language. */
     description?: string;
     /** A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description. */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current bot description for the given user language. Returns BotDescription on success. */
   getMyDescription(args: {
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): string;
 
   /** Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success. */
@@ -1442,13 +1475,13 @@ export type ApiMethods = {
     /** New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language. */
     shortDescription?: string;
     /** A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description. */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): true;
 
   /** Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success. */
   getMyShortDescription(args: {
     /** A two-letter ISO 639-1 language code or an empty string */
-    languageCode?: string;
+    languageCode?: LanguageCode;
   }): string;
 
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
@@ -1537,7 +1570,7 @@ export type ApiMethods = {
       })
     | true;
 
-  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageMedia(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
@@ -1589,7 +1622,7 @@ export type ApiMethods = {
     messageId: string | number;
     /** An object for a new message inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
-  }): import("../index").Poll;
+  }): Omit<import("../index").Poll, "close">;
 
   /** Use this method to delete a message, including service messages, with the following limitations:
   - A message can only be deleted if it was sent less than 48 hours ago.
@@ -1640,6 +1673,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -1879,6 +1914,8 @@ export type ApiMethods = {
     isFlexible?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
@@ -1997,6 +2034,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */

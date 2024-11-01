@@ -1,4 +1,7 @@
 // @ts-check
+const { Base } = require("../Base");
+const { User } = require("../misc/User");
+
 /**
  * Represents a search result for a specific message entity type.
  * @typedef {Object} SearchResult
@@ -8,16 +11,19 @@
  * @property {string} search - The text that matches the entity.
  */
 
-class MessageEntities {
+class MessageEntities extends Base {
   /** @type {import("@telegram.ts/types").MessageEntity[]} */
   #entities;
 
   /**
    * Creates an instance of the MessageEntities class.
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {string} searchText - The text to search within.
    * @param {import("@telegram.ts/types").MessageEntity[]} entities - The array of message entities.
    */
-  constructor(searchText, entities) {
+  constructor(client, searchText, entities) {
+    super(client);
+
     /**
      * The text to search within.
      */
@@ -140,12 +146,48 @@ class MessageEntities {
   }
 
   /**
+   * Retrieves all pre entities from the message.
+   * @returns {(SearchResult & { language?: string })[]} An array of objects representing pre entities.
+   */
+  get pre() {
+    return this.searchEntity("pre");
+  }
+
+  /**
+   * Retrieves all text link entities from the message.
+   * @returns {(SearchResult & { url: string })[]} An array of objects representing text link entities.
+   */
+  get textLink() {
+    return this.searchEntity("text_link").filter((entity) => "url" in entity);
+  }
+
+  /**
+   * Retrieves all text mention entities from the message.
+   * @returns {(SearchResult & { user: User })[]} An array of objects representing text mention entities.
+   */
+  get textMention() {
+    return this.searchEntity("text_mention").filter(
+      (entity) => "user" in entity,
+    );
+  }
+
+  /**
+   * Retrieves all custom emoji entities from the message.
+   * @returns {(SearchResult & { customEmojiId: string })[]} An array of objects representing custom emoji entities.
+   */
+  get customEmoji() {
+    return this.searchEntity("custom_emoji").filter(
+      (entity) => "customEmojiId" in entity,
+    );
+  }
+
+  /**
    * Searches for a specific type of entity in the message.
-   * @param {"mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"} searchType - The type of entity to search for.
-   * @returns {SearchResult[]} An array of objects representing the found entities.
+   * @param {"mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji"} searchType - The type of entity to search for.
+   * @returns {(SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string }))[]} An array of objects representing the found entities.
    */
   searchEntity(searchType) {
-    /** @type {SearchResult[]} */
+    /** @type {(SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string }))[]} */
     const entities = [];
 
     this.#entities.forEach((entity, index) => {
@@ -155,6 +197,12 @@ class MessageEntities {
           index,
           offset,
           length,
+          ...("language" in entity && { language: entity.language }),
+          ...("url" in entity && { url: entity.url }),
+          ...("user" in entity && { user: new User(this.client, entity.user) }),
+          ...("custom_emoji_id" in entity && {
+            customEmojiId: entity.custom_emoji_id,
+          }),
           search: this.searchText.substring(offset, offset + length),
         });
       }
@@ -164,8 +212,8 @@ class MessageEntities {
 
   /**
    * Enables iteration over the message entities.
-   * @returns {Generator<(SearchResult & { type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"})>} An iterator over the message entities.
+   * @returns {Generator<(SearchResult & ({ type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: string } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))>} An iterator over the message entities.
    */
   *[Symbol.iterator]() {
     /** @type {(keyof MessageEntities)[]} */
@@ -184,10 +232,14 @@ class MessageEntities {
       "spoiler",
       "blockquote",
       "code",
+      "pre",
+      "textLink",
+      "textMention",
+      "customEmoji",
     ];
 
-    /** @type {(SearchResult & { type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code"})[]} */
+    /** @type {(SearchResult & ({ type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: string } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))[]} */
     const sortedEntities = [];
 
     for (const type of entityTypes) {

@@ -240,11 +240,19 @@ class Chat extends Base {
 
   /**
    * Use this method to send text messages.
-   * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
+   * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId" | "messageThreadId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { content: string }>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, the sent Message is returned.
    */
   send(text, options = {}) {
+    if (typeof text === "object") {
+      return this.client.sendMediaGroup({
+        chatId: this.id,
+        ...(this.threadId &&
+          this.inTopic && { messageThreadId: this.threadId }),
+        ...text,
+      });
+    }
     return this.client.sendMessage({
       text,
       chatId: this.id,
@@ -599,28 +607,38 @@ class Chat extends Base {
   }
 
   /**
+   * @typedef {Object} PinMessage
+   * @property {boolean} [notification] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
+   * @property {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
+   */
+
+  /**
    * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
    * @param {string | number} messageId - Identifier of a message to pin
-   * @param {boolean} [disableNotification] - Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats
-   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be pinned
+   * @param {PinMessage} [options] - Options for pinned message
    * @returns {Promise<true>} - Returns True on success.
    */
-  pinMessage(messageId, disableNotification, businessConnectionId) {
+  pinMessage(messageId, { notification, businessConnectionId } = {}) {
     return this.client.pinChatMessage({
       chatId: this.id,
       messageId,
-      ...(disableNotification && { disableNotification }),
+      ...(notification && { disableNotification: notification }),
       ...(businessConnectionId && { businessConnectionId }),
     });
   }
 
   /**
+   * @typedef {Object} UnpinMessage
+   * @property {string | number} [messageId] - Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned
+   * @property {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be unpinned
+   */
+
+  /**
    * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
-   * @param {string | number} [messageId] - Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned
-   * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be unpinned
+   * @param {UnpinMessage} [options] - Options for unpinned message
    * @returns {Promise<true>} - Returns True on success.
    */
-  unpinMessage(messageId, businessConnectionId) {
+  unpinMessage({ messageId, businessConnectionId } = {}) {
     return this.client.unpinChatMessage({
       chatId: this.id,
       ...(messageId && { messageId }),

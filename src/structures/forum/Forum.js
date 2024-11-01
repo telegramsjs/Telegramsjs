@@ -18,12 +18,17 @@ class Forum extends Base {
   }
 
   /**
+   * @typedef {Object} EditedForumTopic
+   * @property {string} [name] - New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
+   * @property {string} [customEmojiId] - New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept
+   */
+
+  /**
    * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic.
-   * @param {string} [name] - New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
-   * @param {string} [customEmojiId] - New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept
+   * @param {EditedForumTopic} [options] - Options for edited forum topic.
    * @returns {Promise<true>} - Returns True on success.
    */
-  edit(name, customEmojiId) {
+  edit({ name, customEmojiId } = {}) {
     return this.client.editForumTopic({
       chatId: this.chatId,
       messageThreadId: this.threadId,

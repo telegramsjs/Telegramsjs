@@ -19,6 +19,16 @@ class UserChatBoosts {
      */
     this.count = data.boosts.length;
   }
+
+  /**
+   * Makes the class iterable, returning each `ChatBoost` object.
+   * @returns {IterableIterator<ChatBoost>}
+   */
+  *[Symbol.iterator]() {
+    for (const boost of this.boosts) {
+      yield boost;
+    }
+  }
 }
 
 module.exports = { UserChatBoosts };

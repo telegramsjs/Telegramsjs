@@ -20,7 +20,7 @@ class WebhookClient {
   /**
    * The offset used to keep track of the latest updates.
    */
-  public offset: number;
+  public offset: number = 0;
 
   /**
    * Indicates whether the webhook client is closed.
@@ -30,7 +30,7 @@ class WebhookClient {
   /**
    * The HTTP or HTTPS server for handling webhook requests.
    */
-  webhookServer?: http.Server | https.Server;
+  public webhookServer: http.Server | https.Server | null = null;
 
   /**
    * Filters incoming webhook requests to verify their authenticity.
@@ -38,7 +38,7 @@ class WebhookClient {
    * @param options - The options for filtering the request.
    * @returns Whether the request is valid.
    */
-  webhookFilter = (
+  public webhookFilter = (
     request: IncomingMessage & { body?: Update },
     options: { path: string; token: string; secretToken?: string },
   ): boolean => {
@@ -59,9 +59,7 @@ class WebhookClient {
    * Creates an instance of WebhookClient.
    * @param client - The Telegram client instance.
    */
-  constructor(public readonly client: TelegramClient) {
-    this.offset = 0;
-  }
+  constructor(public readonly client: TelegramClient) {}
 
   /**
    * Starts the webhook server to receive updates from Telegram.

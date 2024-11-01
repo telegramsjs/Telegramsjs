@@ -34,6 +34,7 @@ const Events = {
   Ready: "ready",
   Error: "error",
   Disconnect: "disconnect",
+  RawUpdate: "rawUpdate",
   Message: "message",
   ChannelPost: "message",
   BusinessMessage: "message",

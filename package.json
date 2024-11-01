@@ -1,7 +1,7 @@
 {
   "name": "telegramsjs",
   "description": "Telegramsjs is a lightweight Node.js library for creating Telegram bots. It is designed to be a framework and does not rely on third-party libraries such as Telegraf.js or node-telegram-bot-api. This library provides a way to create Telegram bots with ease and flexibility.",
-  "version": "4.3.1",
+  "version": "4.4.0",
   "main": "./dist/src/index.js",
   "types": "./typings/index.d.ts",
   "scripts": {
@@ -53,16 +53,16 @@
   },
   "homepage": "https://docs-telegramsjs.vercel.app/",
   "devDependencies": {
-    "@telegram.ts/types": "^1.15.1",
-    "@types/node": "^18.19.39",
+    "@telegram.ts/types": "^1.17.2",
+    "@types/node": "^18.19.61",
     "@types/node-fetch": "^2.6.11",
-    "typescript": "5.5.4"
+    "typescript": "5.6.3"
   },
   "dependencies": {
     "@telegram.ts/collection": "^1.1.0",
     "node-fetch": "^2.7.0",
     "safe-compare": "^1.1.4",
     "sandwich-stream": "^2.0.2",
-    "tslib": "^2.7.0"
+    "tslib": "^2.8.0"
   }
 }
