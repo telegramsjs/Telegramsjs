@@ -212,8 +212,8 @@ class MessageEntities extends Base {
 
   /**
    * Enables iteration over the message entities.
-   * @returns {Generator<(SearchResult & { type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "pre" | "textLink" | "textMention" | "customEmoji"} & ({ type: "pre"; language?: string } | { type: "text_link"; url: string } | { type: "text_mention"; user: User } | { type: "customEmoji"; customEmojiId: string }))>} An iterator over the message entities.
+   * @returns {Generator<(SearchResult & ({ type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: string } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))>} An iterator over the message entities.
    */
   *[Symbol.iterator]() {
     /** @type {(keyof MessageEntities)[]} */
@@ -238,8 +238,8 @@ class MessageEntities extends Base {
       "customEmoji",
     ];
 
-    /** @type {(SearchResult & { type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "pre" | "textLink" | "textMention" | "customEmoji"})[]} */
+    /** @type {(SearchResult & ({ type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: string } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))[]} */
     const sortedEntities = [];
 
     for (const type of entityTypes) {

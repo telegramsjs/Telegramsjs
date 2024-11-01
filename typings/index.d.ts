@@ -1159,7 +1159,7 @@ export declare class MessageEntities extends Base {
    * @returns An array of objects representing text link entities.
    */
   get textLink(): (SearchResult & { url: string })[];
-    /**
+  /**
    * Retrieves all text mention entities from the message.
    * @returns An array of objects representing text mention entities.
    */
@@ -1193,14 +1193,20 @@ export declare class MessageEntities extends Base {
       | "pre"
       | "text_link"
       | "text_mention"
-      | "custom_emoji"
-  ): (SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string }))[];
+      | "custom_emoji",
+  ): (SearchResult &
+    (
+      | { language?: string }
+      | { url: string }
+      | { user: User }
+      | { customEmojiId: string }
+    ))[];
   /**
    * Enables iteration over the message entities.
    * @returns An iterator over the message entities.
    */
   [Symbol.iterator](): Generator<
-    (SearchResult & {
+    SearchResult & {
       type:
         | "mention"
         | "hashtag"
@@ -1215,12 +1221,13 @@ export declare class MessageEntities extends Base {
         | "strikethrough"
         | "spoiler"
         | "blockquote"
-        | "code"
-        | "pre"
-        | "textLink"
-        | "textMention"
-        | "customEmoji";
-    }  & ({ type: "pre"; language?: string } | { type: "text_link"; url: string } | { type: "text_mention"; user: User } | { type: "customEmoji"; customEmojiId: string }))[]
+        | "code";
+    } & (
+        | { type: "pre"; language?: string }
+        | { type: "textLink"; url: string }
+        | { type: "textMention"; user: User }
+        | { type: "customEmoji"; customEmojiId: string }
+      )
   >;
 }
 
@@ -2140,7 +2147,7 @@ export declare class MessageOrigin extends Base {
     data: import("@telegram.ts/types").MessageOrigin,
   ): import("@telegram.ts/types").MessageOrigin;
   /**
-   * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent 
+   * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
    */
   id?: string;
   /**
@@ -3342,7 +3349,10 @@ export declare class TextQuote {
    * @param client - The client that instantiated this.
    * @param data - Data about the contains information about the quoted part of a message that is replied to by the given message
    */
-  constructor(client: TelegramClient | BaseClient, data: import("@telegram.ts/types").TextQuote);
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").TextQuote,
+  );
   /** Text of the quoted part of a message that is replied to by the given message */
   text: string;
   /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes. */
@@ -8808,7 +8818,7 @@ export declare class TransactionPartner extends Base {
   /**
    * The number of successful requests that exceeded regular limits and were therefore billed
    */
-   requestCount?: number;
+  requestCount?: number;
 
   isUser(): this is this & {
     withdrawal?: undefined;
@@ -8825,14 +8835,14 @@ export declare class TransactionPartner extends Base {
     paidMediaPayload?: undefined;
     requestCount?: undefined;
   };
-  
+
   isTelegramApi(): this is this & {
     withdrawal?: undefined;
     user?: undefined;
     paidMedia?: undefined;
     paidMediaPayload?: undefined;
     requestCount: number;
-  }
+  };
 }
 
 export declare class StarTransaction extends Base {
