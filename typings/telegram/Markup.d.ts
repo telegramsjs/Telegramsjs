@@ -49,6 +49,10 @@ export declare namespace InlineKeyboardButton {
     NOTE: This type of button must always be the first button in the first row. */
     callback_game: {};
   }
+  export interface CopyTextButtonButton extends AbstractInlineKeyboardButton {
+    /**  Description of the button that copies the specified text to the clipboard. */
+    copy_text: CopyTextButton;
+  }
   export interface PayButton extends AbstractInlineKeyboardButton {
     /** Specify True, to send a Pay button. Substrings “⭐” and “XTR” in the buttons's text will be replaced with a Telegram Star icon.
 
@@ -66,8 +70,15 @@ export type InlineKeyboardButton =
   | InlineKeyboardButton.SwitchInlineButton
   | InlineKeyboardButton.SwitchInlineCurrentChatButton
   | InlineKeyboardButton.SwitchInlineChosenChatButton
+  | InlineKeyboardButton.CopyTextButtonButton
   | InlineKeyboardButton.UrlButton
   | InlineKeyboardButton.WebAppButton;
+  
+/** This object represents an inline keyboard button that copies specified text to the clipboard. */
+export interface CopyTextButton {
+  /** The text to be copied to the clipboard; 1-256 characters */
+  text: string;
+}
 
 /** Describes a Web App. */
 export interface WebAppInfo {

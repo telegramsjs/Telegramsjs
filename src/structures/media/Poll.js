@@ -45,6 +45,7 @@ class Poll extends Base {
        * @type {MessageEntities | undefined}
        */
       this.questionEntities = new MessageEntities(
+        this.client,
         this.question,
         data.question_entities,
       );
@@ -69,6 +70,7 @@ class Poll extends Base {
           result.text = opts.text;
           if ("text_entities" in opts) {
             result.entities = new MessageEntities(
+              this.client,
               opts.text,
               opts.text_entities,
             );
@@ -106,6 +108,7 @@ class Poll extends Base {
          * @type {MessageEntities | undefined}
          */
         this.explanationEntities = new MessageEntities(
+          this.client,
           data.explanation,
           data.explanation_entities,
         );

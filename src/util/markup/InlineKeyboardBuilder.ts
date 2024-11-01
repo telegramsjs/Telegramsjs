@@ -2,7 +2,9 @@ import type {
   InlineKeyboardButton,
   SwitchInlineQueryChosenChat,
   LoginUrl,
-} from "@telegram.ts/types";
+  WebAppInfo,
+  CopyTextButton,
+} from "../../client/interfaces/Markup";
 
 /**
  * Represents an inline keyboard for Telegram bots.
@@ -82,7 +84,7 @@ class InlineKeyboardBuilder {
    * @param url - The URL to the WebApp.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string): this {
+  webApp(text: string, url: string | WebAppInfo): this {
     return this.add(InlineKeyboardBuilder.webApp(text, url));
   }
 
@@ -92,8 +94,11 @@ class InlineKeyboardBuilder {
    * @param url - The URL to the WebApp.
    * @returns The created WebApp button.
    */
-  static webApp(text: string, url: string): InlineKeyboardButton.WebAppButton {
-    return { text, web_app: { url } };
+  static webApp(
+    text: string,
+    url: string | WebAppInfo,
+  ): InlineKeyboardButton.WebAppButton {
+    return { text, web_app: typeof url === "string" ? { url } : url };
   }
 
   /**
@@ -192,6 +197,32 @@ class InlineKeyboardBuilder {
     query: SwitchInlineQueryChosenChat = {},
   ): InlineKeyboardButton.SwitchInlineChosenChatButton {
     return { text, switch_inline_query_chosen_chat: query };
+  }
+
+  /**
+   * Adds a copy text button to the inline keyboard.
+   * @param text - The button text.
+   * @param copyText - The text copy or CopyTextButton object.
+   * @returns The current instance for chaining.
+   */
+  copyText(text: string, copyText: string | CopyTextButton = text): this {
+    return this.add(InlineKeyboardBuilder.copyText(text, copyText));
+  }
+
+  /**
+   * Creates a copy text button.
+   * @param text - The button text.
+   * @param copyText - The text copy or CopyTextButton object.
+   * @returns The created copy text button.
+   */
+  static copyText(
+    text: string,
+    copyText: string | CopyTextButton = text,
+  ): InlineKeyboardButton.CopyTextButtonButton {
+    return {
+      text,
+      copy_text: typeof copyText === "string" ? { text: copyText } : copyText,
+    };
   }
 
   /**
@@ -350,6 +381,12 @@ class InlineKeyboardBuilder {
             buttonA.text !== buttonB.text ||
             JSON.stringify(buttonA.switch_inline_query_chosen_chat) !==
               JSON.stringify(buttonB.switch_inline_query_chosen_chat)
+          )
+            return false;
+        } else if ("copy_text" in buttonA && "copy_text" in buttonB) {
+          if (
+            buttonA.text !== buttonB.text ||
+            buttonA.copy_text.text !== buttonB.copy_text.text
           )
             return false;
         } else if ("callback_game" in buttonA && "callback_game" in buttonB) {

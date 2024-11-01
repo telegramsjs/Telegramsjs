@@ -62,7 +62,7 @@ class Message extends Base {
   constructor(client, data) {
     super(client);
 
-    /** Unique message identifier inside this chat */
+    /** Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent */
     this.id = String(data.message_id);
 
     this._patch(data);
@@ -166,6 +166,7 @@ class Message extends Base {
        * @type {MessageEntities | undefined}
        */
       this.captionEntities = new MessageEntities(
+        this.client,
         data.caption,
         data.caption_entities,
       );
@@ -176,7 +177,11 @@ class Message extends Base {
        * For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
        * @type {MessageEntities | undefined}
        */
-      this.entities = new MessageEntities(data.text, data.entities);
+      this.entities = new MessageEntities(
+        this.client,
+        data.text,
+        data.entities,
+      );
     }
 
     if ("sender_boost_count" in data) {
@@ -235,7 +240,7 @@ class Message extends Base {
        * For replies that quote part of the original message, the quoted part of the message
        * @type {TextQuote | undefined}
        */
-      this.quote = new TextQuote(data.quote);
+      this.quote = new TextQuote(this.client, data.quote);
     }
 
     if ("story" in data) {
@@ -855,6 +860,15 @@ class Message extends Base {
   }
 
   /**
+   * Checking if the message video has been pending.
+   * @remarks The check will only be valid on December 1, 2024.
+   * @returns {boolean}
+   */
+  isPendingVideoMessage() {
+    return this.id === "0";
+  }
+
+  /**
    * Return the timestamp message was sent, in milliseconds
    */
   get createdTimestamp() {
@@ -1085,7 +1099,7 @@ class Message extends Base {
   }
 
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param {MethodParameters["editMessageMedia"]["media"]} media - An object for a new media content of the message
    * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<true | Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.

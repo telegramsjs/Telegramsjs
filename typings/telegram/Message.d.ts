@@ -64,7 +64,7 @@ export declare namespace MessageEntity {
   export interface PreMessageEntity extends AbstractMessageEntity {
     type: "pre";
     /** For “pre” only, the programming language of the entity text */
-    language?: LanguageCode;
+    language?: string;
   }
   export interface TextLinkMessageEntity extends AbstractMessageEntity {
     type: "text_link";
@@ -74,7 +74,7 @@ export declare namespace MessageEntity {
   export interface TextMentionMessageEntity extends AbstractMessageEntity {
     type: "text_mention";
     /** For “text_mention” only, the mentioned user */
-    user: { id: string };
+    user: User;
   }
   export interface CustomEmojiMessageEntity extends AbstractMessageEntity {
     type: "custom_emoji";

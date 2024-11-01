@@ -64,21 +64,36 @@ class TransactionPartner extends Base {
       this.payload = data.invoice_payload;
     }
 
+    if ("request_count" in data) {
+      /**
+       * The number of successful requests that exceeded regular limits and were therefore billed
+       * @type {number | undefined}
+       */
+      this.requestCount = data.request_count;
+    }
+
     return data;
   }
 
   /**
-   * @returns {this is this & { user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string }}
+   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; requestCount?: undefined }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @returns {this is this & { withdrawal: RevenueWithdrawalState; paidMedia?: undefined; paidMediaPayload?: undefined }}
+   * @returns {this is this & { withdrawal: RevenueWithdrawalState; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; requestCount?: undefined }}
    */
   isFragment() {
     return Boolean("withdrawal" in this && this.withdrawal);
+  }
+
+  /**
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; requestCount: number }}
+   */
+  isTelegramApi() {
+    return Boolean("requestCount" in this && this.requestCount !== undefined);
   }
 }
 

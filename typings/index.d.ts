@@ -47,6 +47,7 @@ import {
   ForceReply,
   ReplyKeyboardRemove,
   ReplyKeyboardMarkup,
+  CopyTextButton,
   InputMediaVideo,
   InputMediaPhoto,
   InputMediaDocument,
@@ -1062,13 +1063,15 @@ export type SearchResult = {
   search: string;
 };
 
-export declare class MessageEntities {
+export declare class MessageEntities extends Base {
   /**
    * Creates an instance of the MessageEntities class.
+   * @param client - The client that instantiated this.
    * @param searchText - The text to search within.
    * @param entities - The array of message entities.
    */
   constructor(
+    client: TelegramClient | BaseClient,
     searchText: string,
     entities: import("@telegram.ts/types").MessageEntity[],
   );
@@ -1147,6 +1150,26 @@ export declare class MessageEntities {
    */
   get code(): SearchResult[];
   /**
+   * Retrieves all pre entities from the message.
+   * @returns An array of objects representing pre entities.
+   */
+  get pre(): (SearchResult & { language?: string })[];
+  /**
+   * Retrieves all text link entities from the message.
+   * @returns An array of objects representing text link entities.
+   */
+  get textLink(): (SearchResult & { url: string })[];
+    /**
+   * Retrieves all text mention entities from the message.
+   * @returns An array of objects representing text mention entities.
+   */
+  get textMention(): (SearchResult & { user: User })[];
+  /**
+   * Retrieves all custom emoji entities from the message.
+   * @returns An array of objects representing custom emoji entities.
+   */
+  get customEmoji(): (SearchResult & { customEmojiId: string })[];
+  /**
    * Searches for a specific type of entity in the message.
    * @param searchType - The type of entity to search for.
    * @returns An array of objects representing the found entities.
@@ -1166,8 +1189,12 @@ export declare class MessageEntities {
       | "strikethrough"
       | "spoiler"
       | "blockquote"
-      | "code",
-  ): SearchResult[];
+      | "code"
+      | "pre"
+      | "text_link"
+      | "text_mention"
+      | "custom_emoji"
+  ): (SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string }))[];
   /**
    * Enables iteration over the message entities.
    * @returns An iterator over the message entities.
@@ -1188,8 +1215,12 @@ export declare class MessageEntities {
         | "strikethrough"
         | "spoiler"
         | "blockquote"
-        | "code";
-    })[]
+        | "code"
+        | "pre"
+        | "textLink"
+        | "textMention"
+        | "customEmoji";
+    }  & ({ type: "pre"; language?: string } | { type: "text_link"; url: string } | { type: "text_mention"; user: User } | { type: "customEmoji"; customEmojiId: string }))[]
   >;
 }
 
@@ -1896,7 +1927,7 @@ export declare class MessageReactionUpdated extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -2109,7 +2140,7 @@ export declare class MessageOrigin extends Base {
     data: import("@telegram.ts/types").MessageOrigin,
   ): import("@telegram.ts/types").MessageOrigin;
   /**
-   * Unique message identifier inside the chat
+   * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent 
    */
   id?: string;
   /**
@@ -2321,7 +2352,7 @@ export declare class MessageOrigin extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -3308,9 +3339,10 @@ export declare class ExternalReplyInfo extends Base {
 
 export declare class TextQuote {
   /**
+   * @param client - The client that instantiated this.
    * @param data - Data about the contains information about the quoted part of a message that is replied to by the given message
    */
-  constructor(data: import("@telegram.ts/types").TextQuote);
+  constructor(client: TelegramClient | BaseClient, data: import("@telegram.ts/types").TextQuote);
   /** Text of the quoted part of a message that is replied to by the given message */
   text: string;
   /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes. */
@@ -3878,7 +3910,7 @@ export declare class Message extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").Message,
   );
-  /** Unique message identifier inside this chat */
+  /** Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent */
   id: string;
   /**
    * Date the message was sent in Unix time. It is always a positive number, representing a valid date
@@ -4266,6 +4298,11 @@ export declare class Message extends Base {
     editedAt: Date;
   };
   /**
+   * Checking if the message video has been pending.
+   * @remarks The check will only be valid on December 1, 2024.
+   */
+  isPendingVideoMessage(): boolean;
+  /**
    * Return the timestamp message was sent, in milliseconds
    */
   get createdTimestamp(): number;
@@ -4451,7 +4488,7 @@ export declare class Message extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -7617,7 +7654,7 @@ export declare class BaseClient extends EventEmitter {
   editMessageCaption(
     params: MethodParameters["editMessageCaption"],
   ): Promise<MethodsLibReturnType["editMessageCaption"]>;
-  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageMedia(
     params: MethodParameters["editMessageMedia"],
   ): Promise<MethodsLibReturnType["editMessageMedia"]>;
@@ -8740,7 +8777,7 @@ export declare class TransactionPartner extends Base {
     data: import("@telegram.ts/types").TransactionPartner,
   );
   /** Type of the transaction partner */
-  type: "other" | "user" | "fragment" | "telegram_ads";
+  type: "other" | "user" | "fragment" | "telegram_ads" | "telegram_api";
   /**
    * @param data - Data about the describes the source of a transaction, or its recipient for outgoing transactions
    * @override
@@ -8768,18 +8805,34 @@ export declare class TransactionPartner extends Base {
    * Bot-specified invoice payload
    */
   payload?: string;
+  /**
+   * The number of successful requests that exceeded regular limits and were therefore billed
+   */
+   requestCount?: number;
 
   isUser(): this is this & {
+    withdrawal?: undefined;
     user: User;
     paidMedia?: PaidMedia[];
     paidMediaPayload?: string;
+    requestCount?: undefined;
   };
 
   isFragment(): this is this & {
     withdrawal: RevenueWithdrawalState;
+    user?: undefined;
     paidMedia?: undefined;
     paidMediaPayload?: undefined;
+    requestCount?: undefined;
   };
+  
+  isTelegramApi(): this is this & {
+    withdrawal?: undefined;
+    user?: undefined;
+    paidMedia?: undefined;
+    paidMediaPayload?: undefined;
+    requestCount: number;
+  }
 }
 
 export declare class StarTransaction extends Base {
@@ -9003,6 +9056,23 @@ export declare class InlineKeyboardBuilder {
     text: string,
     query?: SwitchInlineQueryChosenChat,
   ): InlineKeyboardButton.SwitchInlineChosenChatButton;
+  /**
+   * Adds a copy text button to the inline keyboard.
+   * @param text - The button text.
+   * @param copyText - The text copy or CopyTextButton object.
+   * @returns The current instance for chaining.
+   */
+  copyText(text: string, copyText?: string | CopyTextButton): this;
+  /**
+   * Creates a copy text button.
+   * @param text - The button text.
+   * @param copyText - The text copy or CopyTextButton object.
+   * @returns The created copy text button.
+   */
+  static copyText(
+    text: string,
+    copyText?: string | CopyTextButton,
+  ): InlineKeyboardButton.CopyTextButtonButton;
   /**
    * Adds a game button to the inline keyboard.
    * @param text - The button text.

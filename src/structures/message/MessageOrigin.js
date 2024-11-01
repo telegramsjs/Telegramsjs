@@ -38,7 +38,7 @@ class MessageOrigin extends Base {
   _patch(data) {
     if ("message_id" in data) {
       /**
-       * Unique message identifier inside the chat
+       * Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
        * @type {string | undefined}
        */
       this.id = String(data.message_id);

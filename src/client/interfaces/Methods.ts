@@ -120,6 +120,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -184,6 +186,8 @@ export type ApiMethods = {
     showCaptionAboveMedia?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -246,6 +250,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -306,6 +312,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -360,6 +368,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -424,6 +434,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -486,6 +498,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -530,6 +544,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -581,6 +597,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -611,6 +629,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent messages from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -654,6 +674,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -744,6 +766,8 @@ export type ApiMethods = {
     showCaptionAboveMedia?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -784,6 +808,8 @@ export type ApiMethods = {
     googlePlaceType?: string;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
@@ -820,6 +846,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -874,6 +902,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -902,6 +932,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -1540,7 +1572,7 @@ export type ApiMethods = {
       })
     | true;
 
-  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageMedia(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
@@ -1643,6 +1675,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -1882,6 +1916,8 @@ export type ApiMethods = {
     isFlexible?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
@@ -2000,6 +2036,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */

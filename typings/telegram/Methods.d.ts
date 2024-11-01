@@ -89,10 +89,10 @@ export type ApiMethods = {
   }): true;
 
   /** Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty. */
-  getWebhookInfo(): import("../index").WebhookInfo;
+  getWebhookInfo(): import("../../structures/misc/WebhookInfo").WebhookInfo;
 
   /** A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object. */
-  getMe(): import("../index").ClientUser;
+  getMe(): import("../../structures/misc/ClientUser").ClientUser;
 
   /** Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters. */
   logOut(): true;
@@ -120,6 +120,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -130,7 +132,7 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & { content: string };
+  }): import("../../structures/message/Message").Message & { content: string };
 
   /** Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned. */
   forwardMessage(args: {
@@ -146,7 +148,7 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Message identifier in the chat specified in fromChatId */
     messageId: string | number;
-  }): import("../index").Message;
+  }): import("../../structures/message/Message").Message;
 
   /** Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned. */
   forwardMessages(args: {
@@ -184,6 +186,8 @@ export type ApiMethods = {
     showCaptionAboveMedia?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -246,6 +250,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -256,8 +262,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    photo: import("../index").Photo;
+  }): import("../../structures/message/Message").Message & {
+    photo: import("../../structures/media/Photo").Photo;
   };
 
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -306,6 +312,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -316,8 +324,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    audio: import("../index").Audio;
+  }): import("../../structures/message/Message").Message & {
+    audio: import("../../structures/media/Audio").Audio;
   };
 
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
@@ -360,6 +368,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -370,8 +380,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    document: import("../index").Document;
+  }): import("../../structures/message/Message").Message & {
+    document: import("../../structures/media/Document").Document;
   };
 
   /** Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future. */
@@ -424,6 +434,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -434,8 +446,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    video: import("../index").Video;
+  }): import("../../structures/message/Message").Message & {
+    video: import("../../structures/media/Video").Video;
   };
 
   /** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future. */
@@ -486,6 +498,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -496,8 +510,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    animation: import("../index").Animation;
+  }): import("../../structures/message/Message").Message & {
+    animation: import("../../structures/media/Animation").Animation;
   };
 
   /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
@@ -530,6 +544,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -540,8 +556,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    voice: import("../index").Voice;
+  }): import("../../structures/message/Message").Message & {
+    voice: import("../../structures/media/Voice").Voice;
   };
 
   /** Use this method to send video messages. On success, the sent Message is returned.
@@ -581,6 +597,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -591,8 +609,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    videoNote: import("../index").VideoNote;
+  }): import("../../structures/message/Message").Message & {
+    videoNote: import("../../structures/media/VideoNote").VideoNote;
   };
 
   /** Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned. */
@@ -601,9 +619,9 @@ export type ApiMethods = {
     businessConnectionId?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
-    /** An array describing messages to be sent, must include 2-10 items */
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** An array describing messages to be sent, must include 2-10 items */
     media: ReadonlyArray<
       InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo
     >;
@@ -611,22 +629,24 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent messages from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
     replyParameters?: ReplyParameters;
   }): Array<
-    | (import("../index").Message & {
-        audio: import("../index").Audio;
+    | (import("../../structures/message/Message").Message & {
+        audio: import("../../structures/media/Audio").Audio;
       })
-    | (import("../index").Message & {
-        document: import("../index").Document;
+    | (import("../../structures/message/Message").Message & {
+        document: import("../../structures/media/Document").Document;
       })
-    | (import("../index").Message & {
-        photo: import("../index").Photo;
+    | (import("../../structures/message/Message").Message & {
+        photo: import("../../structures/media/Photo").Photo;
       })
-    | (import("../index").Message & {
-        video: import("../index").Video;
+    | (import("../../structures/message/Message").Message & {
+        video: import("../../structures/media/Video").Video;
       })
   >;
 
@@ -654,6 +674,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -664,8 +686,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    location: import("../index").Location;
+  }): import("../../structures/message/Message").Message & {
+    location: import("../../structures/misc/Location").Location;
   };
 
   /** Use this method to edit live location messages. A location can be edited until its livePeriod expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
@@ -693,8 +715,8 @@ export type ApiMethods = {
     /** An object for a new inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }):
-    | (import("../index").Message & {
-        location: import("../index").Location;
+    | (import("../../structures/message/Message").Message & {
+        location: import("../../structures/misc/Location").Location;
         editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
@@ -714,8 +736,8 @@ export type ApiMethods = {
     /** An object for a new inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }):
-    | (import("../index").Message & {
-        location: import("../index").Location;
+    | (import("../../structures/message/Message").Message & {
+        location: import("../../structures/misc/Location").Location;
         editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
@@ -744,6 +766,8 @@ export type ApiMethods = {
     showCaptionAboveMedia?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -754,8 +778,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    paidMedia: import("../index").PaidMedia;
+  }): import("../../structures/message/Message").Message & {
+    paidMedia: import("../../structures/media/paid/PaidMedia").PaidMedia;
   };
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
@@ -784,6 +808,8 @@ export type ApiMethods = {
     googlePlaceType?: string;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
@@ -796,8 +822,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    venue: import("../index").Venue;
+  }): import("../../structures/message/Message").Message & {
+    venue: import("../../structures/misc/Venue").Venue;
   };
 
   /** Use this method to send phone contacts. On success, the sent Message is returned. */
@@ -820,6 +846,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -830,8 +858,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    contact: import("../index").Contact;
+  }): import("../../structures/message/Message").Message & {
+    contact: import("../../structures/media/Contact").Contact;
   };
 
   /** Use this method to send a native poll. On success, the sent Message is returned. */
@@ -874,6 +902,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -884,8 +914,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    poll: import("../index").Poll;
+  }): import("../../structures/message/Message").Message & {
+    poll: import("../../structures/media/Poll").Poll;
   };
 
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
@@ -902,6 +932,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -912,8 +944,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    dice: import("../index").Dice;
+  }): import("../../structures/message/Message").Message & {
+    dice: import("../../structures/media/Dice").Dice;
   };
 
   /** Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -963,7 +995,7 @@ export type ApiMethods = {
     offset?: number;
     /** Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100. */
     limit?: number;
-  }): import("../index").UserProfilePhotos;
+  }): import("../../structures/misc/UserProfilePhotos").UserProfilePhotos;
 
   /** Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
 
@@ -971,7 +1003,7 @@ export type ApiMethods = {
   getFile(args: {
     /** File identifier to get information about */
     fileId: string;
-  }): import("../index").InputFile;
+  }): import("../../structures/misc/InputFile").InputFile;
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   kickChatMember: ApiMethods["banChatMember"];
@@ -1005,7 +1037,7 @@ export type ApiMethods = {
     /** Unique identifier of the target user */
     userId: string | number;
     /** An object for new user permissions */
-    permissions: import("../index").ChatPermissionFlags;
+    permissions: import("../../util/ChatPermissions").ChatPermissionFlags;
     /** Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission. */
     useIndependentChatPermissions?: boolean;
     /** Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever */
@@ -1021,7 +1053,7 @@ export type ApiMethods = {
     /** Pass True if the administrator's presence in the chat is hidden */
     isAnonymous?: boolean;
     /** An object for new user permissions */
-    permissions: import("../index").ChatPermissionFlags;
+    permissions: import("../../util/ChatPermissions").ChatPermissionFlags;
   }): true;
 
   /** Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success. */
@@ -1055,7 +1087,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** An object for new default chat permissions */
-    permissions: import("../index").ChatPermissionFlags;
+    permissions: import("../../util/ChatPermissions").ChatPermissionFlags;
     /** Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission. */
     useIndependentChatPermissions?: boolean;
   }): true;
@@ -1080,7 +1112,7 @@ export type ApiMethods = {
     memberLimit?: number;
     /** True, if users joining the chat via the link need to be approved by chat administrators. If True, memberLimit can't be specified */
     createsJoinRequest?: boolean;
-  }): import("../index").ChatInviteLink;
+  }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
 
   /** Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the edited invite link as a ChatInviteLink object. */
   editChatInviteLink(args: {
@@ -1096,7 +1128,7 @@ export type ApiMethods = {
     memberLimit?: number;
     /** True, if users joining the chat via the link need to be approved by chat administrators. If True, memberLimit can't be specified */
     createsJoinRequest?: boolean;
-  }): import("../index").ChatInviteLink;
+  }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
 
   /** Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object. */
   createChatSubscriptionInviteLink(args: {
@@ -1108,7 +1140,7 @@ export type ApiMethods = {
     subscriptionPeriod: number;
     /** The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500 */
     subscriptionPrice: number;
-  }): import("../index").ChatInviteLink;
+  }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
 
   /** Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object. */
   editChatSubscriptionInviteLink(args: {
@@ -1118,7 +1150,7 @@ export type ApiMethods = {
     inviteLink: string;
     /** Invite link name; 0-32 characters */
     name?: string;
-  }): import("../index").ChatInviteLink;
+  }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
 
   /** Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object. */
   revokeChatInviteLink(args: {
@@ -1126,7 +1158,7 @@ export type ApiMethods = {
     chatId: number | string;
     /** The invite link to revoke */
     inviteLink: string;
-  }): import("../index").ChatInviteLink;
+  }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
 
   /** Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   approveChatJoinRequest(args: {
@@ -1220,13 +1252,15 @@ export type ApiMethods = {
   getChat(args: {
     /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
     chatId: number | string;
-  }): import("../index").ChatFullInfo;
+  }): import("../../structures/chat/ChatFullInfo").ChatFullInfo;
 
   /** Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects. */
   getChatAdministrators(args: {
     /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
     chatId: number | string;
-  }): Array<import("../index").ChatAdministratorRights>;
+  }): Array<
+    import("../../structures/chat/ChatAdministratorRights").ChatAdministratorRights
+  >;
 
   /** Use this method to get the number of members in a chat. Returns Int on success. */
   getChatMemberCount(args: {
@@ -1240,7 +1274,7 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
-  }): import("../index").ChatMember;
+  }): import("../../structures/chat/ChatMember").ChatMember;
 
   /** Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method. Returns True on success. */
   setChatStickerSet(args: {
@@ -1257,7 +1291,7 @@ export type ApiMethods = {
   }): true;
 
   /** Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects. */
-  getForumTopicIconStickers(): import("../index").Sticker[];
+  getForumTopicIconStickers(): import("../../structures/media/Sticker").Sticker[];
   /** Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object. */
   createForumTopic(args: {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
@@ -1268,7 +1302,7 @@ export type ApiMethods = {
     iconColor?: 0x6fb9f0 | 0xffd67e | 0xcb86db | 0x8eee98 | 0xff93b2 | 0xfb6f5f;
     /** Unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. */
     iconCustomEmojiId?: string;
-  }): import("../index").ForumTopic;
+  }): import("../../structures/forum/ForumTopic").ForumTopic;
 
   /** Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
   editForumTopic(args: {
@@ -1376,13 +1410,13 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
-  }): import("../index").UserChatBoosts;
+  }): import("../../structures/boost/UserChatBoosts").UserChatBoosts;
 
   /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
   getBusinessConnection(args: {
     /** Unique identifier of the business connection */
     businessConnectionId: string;
-  }): import("../index").BusinessConnection;
+  }): import("../../structures/business/BusinessConnection").BusinessConnection;
 
   /** Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands. Returns True on success. */
   setMyCommands(args: {
@@ -1464,12 +1498,12 @@ export type ApiMethods = {
   getChatMenuButton(args: {
     /** Unique identifier for the target private chat. If not specified, default bot's menu button will be returned */
     chatId?: string | number;
-  }): import("../index").MenuButton;
+  }): import("../../structures/misc/MenuButton").MenuButton;
 
   /** Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success. */
   setMyDefaultAdministratorRights(args: {
     /** An object describing new default administrator rights. If not specified, the default administrator rights will be cleared. */
-    rights?: import("../index").ChatPermissionFlags;
+    rights?: import("../../util/ChatPermissions").ChatPermissionFlags;
     /** Pass True to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed. */
     forChannels?: boolean;
   }): true;
@@ -1478,7 +1512,7 @@ export type ApiMethods = {
   getMyDefaultAdministratorRights(args: {
     /** Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned. */
     forChannels?: boolean;
-  }): import("../index").ChatAdministratorRights;
+  }): import("../../structures/chat/ChatAdministratorRights").ChatAdministratorRights;
 
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageText(args: {
@@ -1501,7 +1535,7 @@ export type ApiMethods = {
     /** An object for an inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }):
-    | (import("../index").Message & {
+    | (import("../../structures/message/Message").Message & {
         content: string;
         editedUnixTime: number;
         editedTimestamp: number;
@@ -1530,7 +1564,7 @@ export type ApiMethods = {
     /** An object for an inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }):
-    | (import("../index").Message & {
+    | (import("../../structures/message/Message").Message & {
         caption?: string;
         editedUnixTime: number;
         editedTimestamp: number;
@@ -1538,7 +1572,7 @@ export type ApiMethods = {
       })
     | true;
 
-  /** Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageMedia(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
@@ -1553,7 +1587,7 @@ export type ApiMethods = {
     /** An object for a new inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }):
-    | (import("../index").Message & {
+    | (import("../../structures/message/Message").Message & {
         editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
@@ -1573,7 +1607,7 @@ export type ApiMethods = {
     /** An object for an inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
   }):
-    | (import("../index").Message & {
+    | (import("../../structures/message/Message").Message & {
         editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
@@ -1590,7 +1624,7 @@ export type ApiMethods = {
     messageId: string | number;
     /** An object for a new message inline keyboard. */
     replyMarkup?: InlineKeyboardMarkup;
-  }): Omit<import("../index").Poll, "close">;
+  }): Omit<import("../../structures/media/Poll").Poll, "close">;
 
   /** Use this method to delete a message, including service messages, with the following limitations:
   - A message can only be deleted if it was sent less than 48 hours ago.
@@ -1641,6 +1675,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -1651,21 +1687,21 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): import("../index").Message & {
-    sticker: import("../index").Sticker;
+  }): import("../../structures/message/Message").Message & {
+    sticker: import("../../structures/media/Sticker").Sticker;
   };
 
   /** Use this method to get a sticker set. On success, a StickerSet object is returned. */
   getStickerSet(args: {
     /** Name of the sticker set */
     name: string;
-  }): import("../index").StickerSet;
+  }): import("../../structures/media/StickerSet").StickerSet;
 
   /** Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects. */
   getCustomEmojiStickers(args: {
     /** A list of custom emoji identifiers. At most 200 custom emoji identifiers can be specified. */
     customEmojiIds: string[];
-  }): import("../index").Sticker[];
+  }): import("../../structures/media/Sticker").Sticker[];
 
   /** Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success. */
   uploadStickerFile(args: {
@@ -1683,7 +1719,7 @@ export type ApiMethods = {
       | ArrayBuffer
       | Uint8Array
       | string;
-  }): import("../index").InputFile;
+  }): import("../../structures/misc/InputFile").InputFile;
 
   /** Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns True on success. */
   createNewStickerSet(args: {
@@ -1880,6 +1916,8 @@ export type ApiMethods = {
     isFlexible?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
@@ -1888,8 +1926,8 @@ export type ApiMethods = {
     replyParameters?: ReplyParameters;
     /** An object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button. */
     replyMarkup?: InlineKeyboardMarkup;
-  }): import("../index").Message & {
-    invoice: import("../index").Invoice;
+  }): import("../../structures/message/Message").Message & {
+    invoice: import("../../structures/invoice/Invoice").Invoice;
   };
 
   /** Use this method to create a link for an invoice. Returns the created invoice link as String on success. */
@@ -1972,7 +2010,7 @@ export type ApiMethods = {
     offset?: number;
     /** The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100. */
     limit?: number;
-  }): import("../index").StarTransaction;
+  }): import("../../structures/invoice/StarTransaction").StarTransaction;
 
   /** Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
 
@@ -1998,14 +2036,16 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allowPaidBroadcast?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
     replyParameters?: ReplyParameters;
     /** An object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. */
     replyMarkup?: InlineKeyboardMarkup;
-  }): import("../index").Message & {
-    game: import("../index").Game;
+  }): import("../../structures/message/Message").Message & {
+    game: import("../../structures/game/Game").Game;
   };
 
   /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */
@@ -2025,8 +2065,8 @@ export type ApiMethods = {
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
     inlineMessageId?: string;
   }):
-    | (import("../index").Message & {
-        game: import("../index").Game;
+    | (import("../../structures/message/Message").Message & {
+        game: import("../../structures/game/Game").Game;
         editedUnixTime: number;
         editedTimestamp: number;
         editedAt: Date;
@@ -2045,7 +2085,7 @@ export type ApiMethods = {
     messageId?: string | number;
     /** Required if chatId and messageId are not specified. Identifier of the inline message */
     inlineMessageId?: string;
-  }): import("../index").GameHighScore[];
+  }): import("../../structures/game/GameHighScore").GameHighScore[];
 };
 
 /** This object describes a sticker to be added to a sticker set. */
