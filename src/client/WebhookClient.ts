@@ -78,12 +78,6 @@ class WebhookClient {
     } = {},
   ): Promise<void> {
     try {
-      await this.client.getMe().then((me) => {
-        this.client.user = me;
-        this.client.readyTimestamp = Date.now();
-        this.client.emit(Events.Ready, this.client);
-      });
-
       const { tlsOptions, port, host, requestCallback } = options;
       const webhookCallback = await this.createWebhookCallback(
         requestCallback,
@@ -102,8 +96,12 @@ class WebhookClient {
         throw new TelegramError(ErrorCodes.WebhookServerCreationFailed);
       }
 
-      this.webhookServer.listen(port, host, () => {
-        this.client.emit(Events.Ready, this.client);
+      this.webhookServer.listen(port, host, async () => {
+        await this.client.getMe().then((me) => {
+          this.client.user = me;
+          this.client.readyTimestamp = Date.now();
+          this.client.emit(Events.Ready, this.client);
+        });
       });
 
       this.webhookServer.on("error", (err) => {
@@ -129,7 +127,7 @@ class WebhookClient {
   /**
    * Creates a callback function for handling webhook requests.
    * @param requestCallback - The callback function to handle requests.
-   * @param {{ path?: string; secretToken?: string }} [options={}] - The options for creating the webhook callback.
+   * @param {{ path?: string; secretToken?: string }} options - The options for creating the webhook callback.
    * @returns The created callback function.
    */
   async createWebhookCallback(
