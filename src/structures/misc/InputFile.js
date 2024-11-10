@@ -62,6 +62,8 @@ class InputFile extends Base {
    * @returns {Promise<Buffer>} - A promise that resolves with the file data as a Buffer.
    */
   async download(filePath = this.path) {
+    filePath ??= (await this.fetch()).path;
+
     if (!filePath) {
       throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
@@ -104,18 +106,20 @@ class InputFile extends Base {
    * @returns {Promise<void>} A promise that resolves when the file has been written.
    */
   async write(path, writeType = "promise", options = {}) {
-    if (!this.path) {
+    const filePath = this.path || (await this.fetch()).path;
+
+    if (!filePath) {
       throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
 
     if (writeType === "promise") {
-      const fileData = await this.download(this.path);
+      const fileData = await this.download(filePath);
       await fs.promises.writeFile(path, fileData, options);
       return;
     }
 
     if (writeType === "stream") {
-      const fileData = await this.download(this.path);
+      const fileData = await this.download(filePath);
       const writeStream = fs.createWriteStream(path, {
         ...options,
         encoding: options.encoding ?? undefined,
