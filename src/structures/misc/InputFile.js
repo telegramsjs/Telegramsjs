@@ -49,6 +49,14 @@ class InputFile extends Base {
   }
 
   /**
+   * Fetch about the file
+   * @returns {Promise<InputFile>}
+   */
+  fetch() {
+    return this.client.getFile(this.id);
+  }
+
+  /**
    * Downloads the file from the Telegram server.
    * @param {string | null} [filePath=this.path] - The path of the file on the Telegram server.
    * @returns {Promise<Buffer>} - A promise that resolves with the file data as a Buffer.
