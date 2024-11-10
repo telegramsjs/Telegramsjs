@@ -29,7 +29,7 @@ class InputFile extends Base {
      * The size of the file in bytes, if available
      * @type {number | null}
      */
-    this.size = "size" in data ? Number(data.size) : null;
+    this.size = data.file_size || null;
 
     /**
      * The path to the file on the Telegram server, if available
@@ -54,7 +54,7 @@ class InputFile extends Base {
    * @returns {Promise<Buffer>} - A promise that resolves with the file data as a Buffer.
    */
   async download(filePath = this.path) {
-    if (!this.path) {
+    if (!filePath) {
       throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
 
