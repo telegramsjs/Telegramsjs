@@ -112,8 +112,8 @@ class WebhookClient {
         this.client.emit(Events.Error, [this.offset, err]);
       });
     } catch (err) {
+      this.client.emit(Events.Disconnect);
       if (this.client.eventNames().indexOf(Events.Error) === -1) {
-        this.client.emit(Events.Disconnect);
         throw err;
       }
       this.client.emit(Events.Error, [this.offset, err]);
