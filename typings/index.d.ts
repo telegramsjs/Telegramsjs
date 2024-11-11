@@ -413,10 +413,9 @@ export declare class InputFile extends Base {
   fetch(): Promise<InputFile>;
   /**
    * Downloads the file from the Telegram server.
-   * @param filePath - The path of the file on the Telegram server.
    * @returns A promise that resolves with the file data as a Buffer.
    */
-  download(filePath?: string | null): Promise<Buffer>;
+  download(): Promise<Buffer>;
 
   /**
    * Writes the file to the specified path.
