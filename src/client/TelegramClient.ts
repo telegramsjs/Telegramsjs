@@ -58,12 +58,10 @@ interface ClientOptions {
   userCacheFilter?: (user: User) => boolean;
   chatCacheFilter?: (chat: Chat) => boolean;
   pollingTimeout?: number;
-  errorHandler?: boolean;
 }
 
 /**
  * Represents a Telegram client for interacting with the Telegram API.
- * @extends {BaseClient}
  */
 class TelegramClient extends BaseClient {
   /**

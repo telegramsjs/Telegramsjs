@@ -8343,7 +8343,6 @@ export interface ClientOptions {
   userCacheFilter?: (user: User) => boolean;
   chatCacheFilter?: (chat: Chat) => boolean;
   pollingTimeout?: number;
-  errorHandler?: boolean;
 }
 
 /**

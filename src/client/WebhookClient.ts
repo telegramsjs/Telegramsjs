@@ -105,22 +105,18 @@ class WebhookClient {
       });
 
       this.webhookServer.on("error", (err) => {
-        if (
-          this.handlerError(err) &&
-          this.client.eventNames().indexOf(Events.Error) === -1
-        ) {
-          console.error(err);
+        if (this.client.eventNames().indexOf(Events.Error) === -1) {
+          this.client.emit(Events.Disconnect);
+          throw err;
         }
-        this.client.emit(Events.Disconnect);
+        this.client.emit(Events.Error, [this.offset, err]);
       });
     } catch (err) {
-      if (
-        this.handlerError(err) &&
-        this.client.eventNames().indexOf(Events.Error) === -1
-      ) {
-        console.log(err);
+      if (this.client.eventNames().indexOf(Events.Error) === -1) {
+        this.client.emit(Events.Disconnect);
+        throw err;
       }
-      this.client.emit(Events.Disconnect);
+      this.client.emit(Events.Error, [this.offset, err]);
     }
   }
 
@@ -192,23 +188,6 @@ class WebhookClient {
           response: ServerResponse,
         ) => callback(request, response)
       : callback;
-  }
-
-  /**
-   * Handles errors that occur during webhook processing.
-   * @param err - The error object.
-   */
-  private handlerError(err: unknown): boolean {
-    if (
-      this.client.options?.errorHandler &&
-      this.client.eventNames().indexOf(Events.Error) !== -1
-    ) {
-      this.client.emit(Events.Error, [this.offset, err]);
-      return true;
-    }
-
-    this.isClosed = true;
-    return false;
   }
 
   /**
