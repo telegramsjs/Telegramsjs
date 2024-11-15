@@ -47,10 +47,14 @@ class ClientUser extends User {
 
   /**
    * Fetch about the client/bot
-   * @returns {Promise<ClientUser>}
+   * @param {Omit<import("../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch client/bot
+   * @returns {Promise<ClientUser | import("../chat/ChatFullInfo").ChatFullInfo>}
    * @override
    */
-  fetch() {
+  fetch({ force = true, fullInfo = false } = {}) {
+    if (fullInfo) {
+      return this.client.users.fetch(this.id, { force, fullInfo });
+    }
     return this.client.fetchApplication();
   }
 
