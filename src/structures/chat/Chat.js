@@ -138,11 +138,11 @@ class Chat extends Base {
 
   /**
    * Fetches this chat
-   * @param {boolean} [force=true] - Whether to skip the cache check and request the API
-   * @returns {Promise<Chat>}
+   * @param {Omit<import("../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch chat
+   * @returns {Promise<Chat | import("./ChatFullInfo").ChatFullInfo>}
    */
-  fetch(force = true) {
-    return this.client.chats.fetch(this.id, { force });
+  fetch({ force = true, fullInfo = false } = {}) {
+    return this.client.chats.fetch(this.id, { force, fullInfo });
   }
 
   /**

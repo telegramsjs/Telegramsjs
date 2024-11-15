@@ -1,5 +1,10 @@
-import { BaseManager, type ICachedOptions } from "./BaseManager";
+import {
+  BaseManager,
+  type IFetchOptions,
+  type ICachedOptions,
+} from "./BaseManager";
 import { User } from "../structures/misc/User";
+import { ChatFullInfo } from "../structures/chat/ChatFullInfo";
 import type { MethodsApiReturnType } from "../types";
 import type { User as ApiUser } from "@telegram.ts/types";
 import { Message } from "../structures/message/Message";
@@ -59,10 +64,43 @@ class UserManager extends BaseManager<User, ApiUser> {
    * @param options - Options for fetching.
    * @returns The fetched User instance.
    */
+  fetch(
+    user: ChatMember | Message | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
+  ): Promise<User>;
+
+  /**
+   * Fetches a user by ID, optionally caching the result.
+   * @param user - The ChatMember, Message, or user ID to fetch.
+   * @param options - Options for fetching.
+   * @returns The fetched ChatFullInfo instance.
+   */
+  fetch(
+    user: ChatMember | Message | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+
+  /**
+   * Fetches a user by ID, optionally caching the result.
+   * @param user - The ChatMember, Message, or user ID to fetch.
+   * @param options - Options for fetching.
+   * @returns The fetched User or ChatFullInfo instance.
+   */
+  fetch(
+    user: ChatMember | Message | string,
+    options?: IFetchOptions,
+  ): Promise<User | ChatFullInfo>;
+
+  /**
+   * Fetches a user by ID, optionally caching the result.
+   * @param user - The ChatMember, Message, or user ID to fetch.
+   * @param options - Options for fetching.
+   * @returns The fetched User or ChatFullInfo instance.
+   */
   async fetch(
     user: ChatMember | Message | string,
-    { cache = true, force = false }: { cache?: boolean; force?: boolean } = {},
-  ): Promise<User> {
+    { cache = true, force = false, fullInfo }: IFetchOptions = {},
+  ): Promise<User | ChatFullInfo> {
     const id = this.resolveId(user);
 
     if (!force) {
@@ -78,6 +116,12 @@ class UserManager extends BaseManager<User, ApiUser> {
 
     if (data?.type !== "private") {
       throw new TelegramError(ErrorCodes.InvalidUserID);
+    }
+
+    if (fullInfo) {
+      // @ts-ignore
+      this._add(data, cache);
+      return new ChatFullInfo(this.client, data);
     }
 
     // @ts-ignore

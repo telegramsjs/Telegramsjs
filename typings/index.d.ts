@@ -548,9 +548,23 @@ export declare class User extends Base {
   inAttachmentMenu?: boolean;
   /**
    * Fetches this user
-   * @param force - Whether to skip the cache check and request the API
+   * @param options - options for fetch user
    */
-  fetch(force?: boolean): Promise<User>;
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<User>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(options?: Omit<IFetchOptions, "cache">): Promise<User | ChatFullInfo>;
   /**
    * Use this method to send text messages.
    * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
@@ -720,6 +734,23 @@ export interface ICachedOptions<T> {
    * Returns `true` to cache the item, `false` otherwise.
    */
   cacheFilter?: (holds: T) => boolean;
+}
+
+export interface IFetchOptions {
+  /**
+   * Whether to bypass the cache and fetch directly from the source.
+   * Defaults to `false`.
+   */
+  force?: boolean;
+  /**
+   * Whether to cache the fetched data. Defaults to `true`.
+   */
+  cache?: boolean;
+  /**
+   * Whether to retrieve complete, detailed information.
+   * Defaults to `false`.
+   */
+  fullInfo?: boolean;
 }
 
 export declare class BaseManager<
@@ -4957,9 +4988,23 @@ export declare class Chat extends Base {
   me(): Promise<ChatMember>;
   /**
    * Fetches this chat
-   * @param force - Whether to skip the cache check and request the API
+   * @param options - options for fetch chat
    */
-  fetch(force?: boolean): Promise<Chat>;
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<Chat>;
+  /**
+   * Fetches this chat
+   * @param options - options for fetch chat
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches this chat
+   * @param options - options for fetch chat
+   */
+  fetch(options?: Omit<IFetchOptions, "cache">): Promise<Chat | ChatFullInfo>;
   /**
    * Retrieves the permissions of a specific member in the chat.
    * @param member - The member object to check permissions for.
@@ -6495,14 +6540,28 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
    */
   fetch(
     user: ChatMember | Message | string,
-    {
-      cache,
-      force,
-    }?: {
-      cache?: boolean;
-      force?: boolean;
-    },
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<User>;
+  /**
+   * Fetches a user by ID, optionally caching the result.
+   * @param user - The ChatMember, Message, or user ID to fetch.
+   * @param options - Options for fetching.
+   * @returns The fetched ChatFullInfo instance.
+   */
+  fetch(
+    user: ChatMember | Message | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches a user by ID, optionally caching the result.
+   * @param user - The ChatMember, Message, or user ID to fetch.
+   * @param options - Options for fetching.
+   * @returns The fetched User or ChatFullInfo instance.
+   */
+  fetch(
+    user: ChatMember | Message | string,
+    options?: IFetchOptions,
+  ): Promise<User | ChatFullInfo>;
 }
 
 export declare class ChatManager extends BaseManager<Chat, ApiChat> {
@@ -6529,15 +6588,29 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
    * @returns The fetched chat object.
    */
   fetch(
-    chat: Chat | string,
-    {
-      cache,
-      force,
-    }?: {
-      cache?: boolean;
-      force?: boolean;
-    },
+    user: Chat | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<Chat>;
+  /**
+   * Fetches a chat object from the API.
+   * @param chat - The chat instance or ID.
+   * @param options - Additional options.
+   * @returns The fetched ChatFullInfo object.
+   */
+  fetch(
+    user: Chat | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches a chat object from the API.
+   * @param chat - The chat instance or ID.
+   * @param options - Additional options.
+   * @returns The fetched chat or full chat info object.
+   */
+  fetch(
+    user: Chat | string,
+    options?: IFetchOptions,
+  ): Promise<Chat | ChatFullInfo>;
 }
 
 export declare class BusinessConnection extends Base {
@@ -8187,8 +8260,25 @@ export declare class ClientUser extends User {
   get token(): string;
   /**
    * Fetch about the client/bot
+   * @param options - options for fetch client/bot
    */
-  override fetch(): Promise<ClientUser>;
+  override fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<ClientUser>;
+  /**
+   * Fetch about the client/bot
+   * @param options - options for fetch client/bot
+   */
+  override fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetch about the client/bot
+   * @param options - options for fetch client/bot
+   */
+  override fetch(
+    options?: Omit<IFetchOptions, "cache">,
+  ): Promise<ClientUser | ChatFullInfo>;
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
    * @param commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified

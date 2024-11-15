@@ -1,5 +1,10 @@
-import { BaseManager, type ICachedOptions } from "./BaseManager";
+import {
+  BaseManager,
+  type IFetchOptions,
+  type ICachedOptions,
+} from "./BaseManager";
 import { Chat } from "../structures/chat/Chat";
+import { ChatFullInfo } from "../structures/chat/ChatFullInfo";
 import type { MethodsApiReturnType } from "../types";
 import type { Chat as ApiChat } from "@telegram.ts/types";
 import { Message } from "../structures/message/Message";
@@ -44,10 +49,43 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
    * @param options - Additional options.
    * @returns The fetched chat object.
    */
+  fetch(
+    user: Chat | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
+  ): Promise<Chat>;
+
+  /**
+   * Fetches a chat object from the API.
+   * @param chat - The chat instance or ID.
+   * @param options - Additional options.
+   * @returns The fetched ChatFullInfo object.
+   */
+  fetch(
+    user: Chat | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+
+  /**
+   * Fetches a chat object from the API.
+   * @param chat - The chat instance or ID.
+   * @param options - Additional options.
+   * @returns The fetched chat or full chat info object.
+   */
+  fetch(
+    user: Chat | string,
+    options?: IFetchOptions,
+  ): Promise<Chat | ChatFullInfo>;
+
+  /**
+   * Fetches a chat object from the API.
+   * @param chat - The chat instance or ID.
+   * @param options - Additional options.
+   * @returns The fetched chat or full chat info object.
+   */
   async fetch(
     chat: Chat | string,
-    { cache = true, force = false }: { cache?: boolean; force?: boolean } = {},
-  ): Promise<Chat> {
+    { cache = true, force = false, fullInfo }: IFetchOptions = {},
+  ): Promise<Chat | ChatFullInfo> {
     const id = this.resolveId(chat);
 
     if (!force) {
@@ -63,6 +101,12 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
 
     if (data?.type === "private") {
       throw new TelegramError(ErrorCodes.InvalidChatID);
+    }
+
+    if (fullInfo) {
+      // @ts-ignore
+      this._add(data, cache);
+      return new ChatFullInfo(this.client, data);
     }
 
     // @ts-ignore
