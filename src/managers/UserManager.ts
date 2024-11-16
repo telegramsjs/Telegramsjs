@@ -115,7 +115,7 @@ class UserManager extends BaseManager<User, ApiUser> {
     });
 
     if (data?.type !== "private") {
-      throw new TelegramError(ErrorCodes.InvalidUserID);
+      throw new TelegramError(ErrorCodes.InvalidUserId);
     }
 
     if (fullInfo) {

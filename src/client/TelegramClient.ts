@@ -87,7 +87,7 @@ class TelegramClient extends BaseClient {
   /**
    * The authenticated user associated with the client.
    */
-  public user!: ClientUser;
+  public user: ClientUser | null = null;
 
   /**
    * Creates an instance of TelegramClient.

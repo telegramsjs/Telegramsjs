@@ -100,7 +100,7 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
     });
 
     if (data?.type === "private") {
-      throw new TelegramError(ErrorCodes.InvalidChatID);
+      throw new TelegramError(ErrorCodes.InvalidChatId);
     }
 
     if (fullInfo) {

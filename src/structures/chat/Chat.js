@@ -10,6 +10,8 @@ const {
   ReactionCollectorEvents,
 } = require("../../util/Constants");
 const { UserPermissions } = require("../../util/UserPermissions");
+const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 
 /**
  * @typedef {import("node:fs").ReadStream} ReadStream
@@ -133,6 +135,9 @@ class Chat extends Base {
    * @returns {Promise<import("./ChatMember").ChatMember>}
    */
   me() {
+    if (!this.client.user) {
+      throw new TelegramError(ErrorCodes.InvalidClientId);
+    }
     return this.client.getChatMember(this.id, this.client.user.id);
   }
 

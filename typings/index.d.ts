@@ -8460,7 +8460,7 @@ export declare class TelegramClient extends BaseClient {
   /**
    * The authenticated user associated with the client.
    */
-  user: ClientUser;
+  user: ClientUser | null;
   /**
    * Creates an instance of TelegramClient.
    * @param authToken - The authentication token for the Telegram bot.
@@ -10044,8 +10044,9 @@ export declare enum ErrorCodes {
   FileRetrievalFailed = "FILE_RETRIEVAL_FAILED",
   FileDownloadFailed = "FILE_DOWNLOAD_FAILED",
   FileWriteInvalidType = "FILE_WRITE_INVALID_TYPE",
-  InvalidUserID = "INVALID_USER_ID",
-  InvalidChatID = "INVALID_CHAT_ID",
+  InvalidUserId = "INVALID_USER_ID",
+  InvalidChatId = "INVALID_CHAT_ID",
+  InvalidClientId = "INVALID_CLIENT_ID",
 }
 
 export declare const ErrorMessages: {
@@ -10062,6 +10063,7 @@ export declare const ErrorMessages: {
   readonly FILE_WRITE_INVALID_TYPE: "Invalid file write type specified. Available types: 'stream' or 'promise'.";
   readonly INVALID_USER_ID: "The provided ID is invalid for retrieving user information; it does not correspond to a valid user ID.";
   readonly INVALID_CHAT_ID: "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.";
+  readonly INVALID_CLIENT_ID: "The bot ID is not available. Please check if the bot has been initialized";
 };
 
 /**

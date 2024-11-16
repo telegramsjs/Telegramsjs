@@ -368,8 +368,9 @@ class WorketClient {
     const message = new Message(this.client, data);
 
     if (
+      !this.client.user &&
       message.newChatMembers?.findIndex(
-        (user) => user.id === this.client.user.id,
+        (user) => user.id === this.client.user!.id,
       ) !== -1
     ) {
       this.client.emit(Events.ChatCreate, message);
@@ -389,7 +390,11 @@ class WorketClient {
 
     const message = new Message(this.client, data);
 
-    if (message.leftChatMember?.id === this.client.user.id) {
+    if (
+      message.leftChatMember !== undefined &&
+      this.client.user !== null &&
+      message.leftChatMember.id === this.client.user.id
+    ) {
       this.client.emit("chatDelete", message);
       return message;
     } else {
