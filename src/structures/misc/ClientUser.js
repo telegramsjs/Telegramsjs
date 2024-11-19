@@ -59,6 +59,14 @@ class ClientUser extends User {
   }
 
   /**
+   * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
+   * @returns {Promise<import("../gift/Gifts").Gifts>} - Returns a Gifts object.
+   */
+  async getGifts() {
+    return this.client.getAvailableGifts();
+  }
+
+  /**
    * @typedef {Object} SetMyCommands
    * @property {import("../../client/interfaces/Bot").BotCommandScope} [scope] - Describes the scope for which the commands apply. Defaults to BotCommandScopeDefault.
    * @property {LanguageCode} [languageCode] - Two-letter ISO 639-1 language code. If not specified, commands will apply to users without a dedicated language.

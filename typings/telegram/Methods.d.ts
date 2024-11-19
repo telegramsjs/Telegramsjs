@@ -997,6 +997,16 @@ export type ApiMethods = {
     limit?: number;
   }): import("../index").UserProfilePhotos;
 
+  /** Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success. */
+  setUserEmojiStatus(args: {
+    /** Unique identifier of the target user */
+    userId: string | number;
+    /** Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. */
+    emojiStatusCustomEmojiId?: string;
+    /** Expiration date of the emoji status, if any */
+    emojiStatusExpirationDate?: number;
+  }): true;
+
   /** Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
 
   Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
@@ -1837,6 +1847,23 @@ export type ApiMethods = {
     customEmojiId?: string;
   }): true;
 
+  /** Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object. */
+  getAvailableGifts(): import("../index").Gifts;
+
+  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success. */
+  sendGift(args: {
+    /** Unique identifier of the target user that will receive the gift */
+    userId: string | number;
+    /** Identifier of the gift */
+    giftId: string;
+    /** Text that will be shown along with the gift; 0-255 characters */
+    text?: string;
+    /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    textParseMode?: ParseMode;
+    /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    textEntities?: MessageEntity[];
+  }): true;
+
   /** Use this method to send answers to an inline query. On success, True is returned.
   No more than 50 results per query are allowed.
 
@@ -1863,6 +1890,22 @@ export type ApiMethods = {
     /** An object describing the message to be sent */
     result: InlineQueryResult;
   }): string;
+
+  /** Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object. */
+  savePreparedInlineMessage(args: {
+    /** Unique identifier of the target user that can use the prepared message */
+    userId: string | number;
+    /** An object describing the message to be sent */
+    result: InlineQueryResult;
+    /** Pass True if the message can be sent to private chats with users */
+    allowUserChats?: boolean;
+    /** Pass True if the message can be sent to private chats with bots */
+    allowBotChats?: boolean;
+    /** Pass True if the message can be sent to group and supergroup chats */
+    allowGroupChats?: boolean;
+    /** Pass True if the message can be sent to channel chats */
+    allowChannelChats?: boolean;
+  }): import("../index").PreparedInlineMessage;
 
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(args: {
@@ -1930,6 +1973,8 @@ export type ApiMethods = {
 
   /** Use this method to create a link for an invoice. Returns the created invoice link as String on success. */
   createInvoiceLink(args: {
+    /** Unique identifier of the business connection on behalf of which the link will be created */
+    businessConnectionId?: string;
     /** Product name, 1-32 characters */
     title: string;
     /** Product description, 1-255 characters */
@@ -1942,6 +1987,8 @@ export type ApiMethods = {
     currency: string;
     /** Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.) */
     prices: LabeledPrice[];
+    /** The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. */
+    subscriptionPeriod?: number;
     /** The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass maxTipAmount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0 */
     maxTipAmount?: number;
     /** An array of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed maxTipAmount. */
@@ -1971,6 +2018,16 @@ export type ApiMethods = {
     /** Pass True if the final price depends on the shipping method */
     isFlexible?: boolean;
   }): string;
+
+  /** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success. */
+  editUserStarSubscription(args: {
+    /** Identifier of the user whose subscription will be edited */
+    userId: string | number;
+    /** Telegram payment identifier for the subscription */
+    telegramPaymentChargeId: string;
+    /** Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot. */
+    isCanceled: boolean;
+  }): true;
 
   /** If you sent an invoice requesting a shipping address and the parameter isFlexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
   answerShippingQuery(args: {

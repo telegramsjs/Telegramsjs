@@ -105,6 +105,48 @@ class User extends Base {
   }
 
   /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param {string} giftId - Identifier of the gift.
+   * @param {Omit<MethodParameters["sendGift"], "giftId" | "userId">} [options] - out parameters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  sendGift(giftId, options = {}) {
+    return this.client.sendGift({
+      giftId,
+      userId: this.id,
+      ...options,
+    });
+  }
+
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param {import("../../client/interfaces/Inline").InlineQueryResult} result - An object describing the message to be sent.
+   * @param {Omit<MethodParameters["savePreparedInlineMessage"], "userId" | "result">} [options] - out parameters.
+   * @returns {Promise<import("./PreparedInlineMessage").PreparedInlineMessage>} - Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(result, options = {}) {
+    return this.client.savePreparedInlineMessage({
+      result,
+      userId: this.id,
+      ...options,
+    });
+  }
+
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param {string} telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param {boolean} isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  setStarSubscription(telegramPaymentChargeId, isCanceled) {
+    return this.client.editUserStarSubscription({
+      userId: this.id,
+      telegramPaymentChargeId,
+      isCanceled,
+    });
+  }
+
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param {string} telegramPaymentId - Telegram payment identifier
    * @returns {Promise<true>} - Returns True on success.
@@ -133,6 +175,24 @@ class User extends Base {
       userId: this.id,
       limit,
       offset,
+    });
+  }
+
+  /**
+   * @typedef {Object} EmojiStatus
+   * @property {string} [emojiStatusCustomEmojiId] - Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.
+   * @property {number} [emojiStatusExpirationDate] - Expiration date of the emoji status, if any.
+   */
+
+  /** Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param {EmojiStatus} [options] - out parameters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  setEmojiStatus({ emojiStatusCustomEmojiId, emojiStatusExpirationDate } = {}) {
+    return this.client.setUserEmojiStatus({
+      userId: this.id,
+      ...(emojiStatusCustomEmojiId && { emojiStatusCustomEmojiId }),
+      ...(emojiStatusExpirationDate && { emojiStatusExpirationDate }),
     });
   }
 

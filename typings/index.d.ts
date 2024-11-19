@@ -696,6 +696,39 @@ export declare class User extends Base {
       >
   >;
   /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param giftId - Identifier of the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    giftId: string,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param result - An object describing the message to be sent.
+   * @param options - out parameters.
+   * @returns Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(
+    result: InlineQueryResult,
+    options?: Omit<
+      MethodParameters["savePreparedInlineMessage"],
+      "userId" | "result"
+    >,
+  ): Promise<PreparedInlineMessage>;
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns Returns True on success.
+   */
+  setStarSubscription(
+    telegramPaymentChargeId: string,
+    isCanceled: boolean,
+  ): Promise<true>;
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param telegramPaymentId - Telegram payment identifier
    * @returns Returns True on success.
@@ -714,6 +747,17 @@ export declare class User extends Base {
    * @returns Returns a UserProfilePhotos object.
    */
   getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
+  /**
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  setEmojiStatus(options?: {
+    /** Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. */
+    emojiStatusCustomEmojiId?: string;
+    /** Expiration date of the emoji status, if any */
+    emojiStatusExpirationDate?: number;
+  }): Promise<true>;
   /**
    * Checks if this user is equal to another user.
    * @param other - The other object to compare with.
@@ -2894,6 +2938,65 @@ export declare class Game extends Base {
   ): Promise<GameHighScore[]>;
 }
 
+export declare class Gift extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the gift that can be sent by the bot.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").Gift,
+  );
+  /** Unique identifier of the gift */
+  id: string;
+  /** The sticker that represents the gift */
+  sticker: Sticker;
+  /** The number of Telegram Stars that must be paid to send the sticker */
+  startCount: number;
+  /** The total number of the gifts of this type that can be sent; for limited gifts only */
+  totalCount?: number;
+  /** The number of remaining gifts of this type that can be sent; for limited gifts only */
+  remainingCount?: number;
+  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param userId - Unique identifier of the target user that will receive the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    userId: string | number,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Checks if this gift is equal to another gift.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of Gift and are equal based on key properties, otherwise false.
+   */
+  equals(other: Gift): boolean;
+}
+
+export declare class Gifts {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the list of gifts.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").Gifts,
+  );
+  /** The list of gifts */
+  gifts: Gift[];
+  /**
+   * Checks if this gifts is equal to another gifts.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of Gifts and are equal based on key properties, otherwise false.
+   */
+  equals(other: Gifts): boolean;
+  /**
+   * Makes the class iterable, returning each `Gift` object.
+   */
+  [Symbol.iterator](): IterableIterator<Gift>;
+}
+
 export declare class Giveaway extends Base {
   /**
    * @param client - The client that instantiated this
@@ -3502,6 +3605,12 @@ export declare class SuccessfulPayment extends Base {
   totalAmount: number;
   /** Bot specified invoice payload */
   payload: string;
+  /** Expiration date of the subscription, in Unix time; for recurring payments only */
+  subscriptionExpirationUnixTime?: number;
+  /** True, if the payment is a recurring payment for a subscription */
+  isRecurring: boolean;
+  /** True, if the payment is the first payment for a subscription */
+  isFirstRecurring: boolean;
   /** Identifier of the shipping option chosen by the user */
   shippingId?: string;
   /** Order information provided by the user */
@@ -3511,11 +3620,29 @@ export declare class SuccessfulPayment extends Base {
   /** Provider payment identifier */
   providedPaymentId: string;
   /**
+   * Return the timestamp subscription, in milliseconds
+   */
+  get subscriptionExpirationTimestamp(): null | number;
+  /**
+   * Date the subscription
+   */
+  get editedAt(): null | Date;
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param userId - Identifier of the user whose payment will be refunded
    * @returns Returns True on success.
    */
   refundStarPayment(userId: string | number): Promise<true>;
+  /** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  editStarSubscription(options: {
+    /** Identifier of the user whose subscription will be edited. */
+    userId: number | string;
+    /** Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot. */
+    isCanceled: boolean;
+  }): Promise<true>;
 }
 
 export declare class RefundedPayment extends Base {
@@ -6784,6 +6911,50 @@ export declare class BusinessConnection extends Base {
           })
       >
   >;
+  /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param giftId - Identifier of the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    giftId: string,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param result - An object describing the message to be sent.
+   * @param options - out parameters.
+   * @returns Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(
+    result: InlineQueryResult,
+    options?: Omit<
+      MethodParameters["savePreparedInlineMessage"],
+      "userId" | "result"
+    >,
+  ): Promise<PreparedInlineMessage>;
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns Returns True on success.
+   */
+  setStarSubscription(
+    telegramPaymentChargeId: string,
+    isCanceled: boolean,
+  ): Promise<true>;
+  /**
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  setEmojiStatus(options?: {
+    /** Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. */
+    emojiStatusCustomEmojiId?: string;
+    /** Expiration date of the emoji status, if any */
+    emojiStatusExpirationDate?: number;
+  }): Promise<true>;
 }
 
 export declare class BusinessMessagesDeleted extends Base {
@@ -7445,6 +7616,10 @@ export declare class BaseClient extends EventEmitter {
   getUserProfilePhotos(
     params: MethodParameters["getUserProfilePhotos"],
   ): Promise<MethodsLibReturnType["getUserProfilePhotos"]>;
+  /** Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success. */
+  setUserEmojiStatus(
+    params: MethodParameters["setUserEmojiStatus"],
+  ): Promise<MethodsLibReturnType["setUserEmojiStatus"]>;
   /** Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
   
 	Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
@@ -7824,6 +7999,12 @@ export declare class BaseClient extends EventEmitter {
     name: string,
     customEmojiId?: string,
   ): Promise<MethodsLibReturnType["setCustomEmojiStickerSetThumbnail"]>;
+  /** Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object. */
+  getAvailableGifts(): Promise<MethodsLibReturnType["getAvailableGifts"]>;
+  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success. */
+  sendGift(
+    params: MethodParameters["sendGift"],
+  ): Promise<MethodsLibReturnType["sendGift"]>;
   /** Use this method to delete a sticker set that was created by the bot. Returns True on success. */
   deleteStickerSet(
     name: string,
@@ -7839,6 +8020,10 @@ export declare class BaseClient extends EventEmitter {
     webAppQueryId: string,
     result: MethodParameters["answerWebAppQuery"]["result"],
   ): Promise<MethodsLibReturnType["answerWebAppQuery"]>;
+  /** Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object. */
+  savePreparedInlineMessage(
+    params: MethodParameters["savePreparedInlineMessage"],
+  ): Promise<MethodsLibReturnType["savePreparedInlineMessage"]>;
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(
     params: MethodParameters["sendInvoice"],
@@ -7847,6 +8032,10 @@ export declare class BaseClient extends EventEmitter {
   createInvoiceLink(
     params: MethodParameters["createInvoiceLink"],
   ): Promise<MethodsLibReturnType["createInvoiceLink"]>;
+  /** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success. */
+  editUserStarSubscription(
+    params: MethodParameters["editUserStarSubscription"],
+  ): Promise<MethodsLibReturnType["editUserStarSubscription"]>;
   /** If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
   answerShippingQuery(
     params: MethodParameters["answerShippingQuery"],
@@ -8231,6 +8420,25 @@ export declare class MenuButton {
   };
 }
 
+export declare class PreparedInlineMessage {
+  /**
+   * @param data - Data about the inline message to be sent by a user of a Mini App.
+   */
+  constructor(data: import("@telegram.ts/types").PreparedInlineMessage);
+  /** Unique identifier of the prepared message */
+  id: string;
+  /** Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used */
+  expirationUnixTime: number;
+  /**
+   * Return the timestamp prepared message, in milliseconds
+   */
+  get expirationTimestamp(): number | null;
+  /**
+   * Date the prepared message
+   */
+  get expirationAt(): Date | null;
+}
+
 export declare class ClientUser extends User {
   /**
    * @param client - The client that instantiated this
@@ -8279,6 +8487,11 @@ export declare class ClientUser extends User {
   override fetch(
     options?: Omit<IFetchOptions, "cache">,
   ): Promise<ClientUser | ChatFullInfo>;
+  /**
+   * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
+   * @returns Returns a Gifts object.
+   */
+  getGifts(): Promise<Gifts>;
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
    * @param commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
@@ -8908,15 +9121,25 @@ export declare class TransactionPartner extends Base {
    */
   payload?: string;
   /**
+   * The duration of the paid subscription.
+   */
+  subscriptionPeriod?: number;
+  /**
    * The number of successful requests that exceeded regular limits and were therefore billed
    */
   requestCount?: number;
+  /**
+   * The gift sent to the user by the bot.
+   */
+  gift?: string;
 
   isUser(): this is this & {
     withdrawal?: undefined;
     user: User;
     paidMedia?: PaidMedia[];
     paidMediaPayload?: string;
+    gift?: string;
+    subscriptionPeriod?: number;
     requestCount?: undefined;
   };
 
@@ -8925,6 +9148,8 @@ export declare class TransactionPartner extends Base {
     user?: undefined;
     paidMedia?: undefined;
     paidMediaPayload?: undefined;
+    gift?: undefined;
+    subscriptionPeriod?: undefined;
     requestCount?: undefined;
   };
 
@@ -8933,6 +9158,8 @@ export declare class TransactionPartner extends Base {
     user?: undefined;
     paidMedia?: undefined;
     paidMediaPayload?: undefined;
+    gift?: undefined;
+    subscriptionPeriod?: undefined;
     requestCount: number;
   };
 }

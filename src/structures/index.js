@@ -108,3 +108,7 @@ module.exports.PaidMediaInfo =
   require("./media/paid/PaidMediaInfo").PaidMediaInfo;
 module.exports.PaidMediaPurchased =
   require("./PaidMediaPurchased").PaidMediaPurchased;
+module.exports.PreparedInlineMessage =
+  require("./misc/PreparedInlineMessage").PreparedInlineMessage;
+module.exports.Gift = require("./gift/Gift").Gift;
+module.exports.Gifts = require("./gift/Gifts").Gifts;
