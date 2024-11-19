@@ -53,7 +53,7 @@
   },
   "homepage": "https://docs-telegramsjs.vercel.app/",
   "devDependencies": {
-    "@telegram.ts/types": "^1.17.2",
+    "@telegram.ts/types": "^1.18.2",
     "@types/node": "^18.19.61",
     "@types/node-fetch": "^2.6.11",
     "typescript": "5.6.3"
