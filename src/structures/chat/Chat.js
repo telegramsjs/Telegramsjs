@@ -173,7 +173,9 @@ class Chat extends Base {
     const memberId = typeof member === "string" ? member : member.id;
     if (!memberId) return null;
 
-    const fetchMember = await this.client.getChatMember(this.id, memberId);
+    const fetchMember = await this.client
+      .getChatMember(this.id, memberId)
+      .catch(() => null);
 
     if (fetchMember && fetchMember.permissions) {
       if (Object.keys(fetchMember.permissions).length === 0) {

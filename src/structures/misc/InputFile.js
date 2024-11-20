@@ -61,7 +61,7 @@ class InputFile extends Base {
    * @returns {Promise<Buffer>} - A promise that resolves with the file data as a Buffer.
    */
   async download() {
-    const filePath = this.path || (await this.fetch()).path;
+    const filePath = this.path || (await this.fetch().catch(() => null))?.path;
 
     if (!filePath) {
       throw new TelegramError(ErrorCodes.FileRetrievalFailed);
