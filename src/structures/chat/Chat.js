@@ -351,6 +351,15 @@ class Chat extends Base {
   }
 
   /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param {string | number} userId - Unique identifier of the target user.
+   * @returns {Promise<import("../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
+   */
+  getUserBoosts(userId) {
+    return this.client.getUserChatBoosts(this.id, userId);
+  }
+
+  /**
    * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method
    * @param {string} name - Name of the sticker set to be set as the group sticker set.
    * @returns {Promise<true>} - Returns True on success.
