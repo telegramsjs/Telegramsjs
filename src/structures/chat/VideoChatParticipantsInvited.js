@@ -18,6 +18,16 @@ class VideoChatParticipantsInvited extends Base {
       data.users.map((user) => [String(user.id), this.client.users._add(user)]),
     );
   }
+
+  /**
+   * Makes the class iterable, returning each `User` object.
+   * @returns {IterableIterator<import("../misc/User").User>}
+   */
+  *[Symbol.iterator]() {
+    for (const [_, user] of this.users) {
+      yield user;
+    }
+  }
 }
 
 module.exports = { VideoChatParticipantsInvited };

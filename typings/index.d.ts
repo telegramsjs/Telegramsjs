@@ -4092,6 +4092,10 @@ export declare class VideoChatParticipantsInvited extends Base {
    * New members that were invited to the video chat
    */
   users: Collection<string, User>;
+  /**
+   * Makes the class iterable, returning each `User` object.
+   */
+  [Symbol.iterator](): IterableIterator<User>;
 }
 
 export declare class Message extends Base {
