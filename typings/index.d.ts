@@ -757,6 +757,12 @@ export declare class User extends Base {
    */
   getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
   /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @returns Returns a UserChatBoosts object.
+   */
+  getChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
+  /**
    * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
    * @param options - out parameters.
    * @returns Returns True on success.

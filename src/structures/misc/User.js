@@ -179,6 +179,15 @@ class User extends Base {
   }
 
   /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param {string | number} chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @returns {Promise<import("../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
+   */
+  getChatBoosts(chatId) {
+    return this.client.getUserChatBoosts(chatId, this.id);
+  }
+
+  /**
    * @typedef {Object} EmojiStatus
    * @property {string} [emojiStatusCustomEmojiId] - Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.
    * @property {number} [emojiStatusExpirationDate] - Expiration date of the emoji status, if any.
