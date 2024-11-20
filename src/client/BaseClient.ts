@@ -1764,13 +1764,7 @@ class BaseClient extends EventEmitter {
           limit,
         },
       )
-      .then(
-        (res) =>
-          new StarTransactions(
-            this,
-            res,
-          ) as unknown as MethodsLibReturnType["getStarTransactions"],
-      );
+      .then((res) => new StarTransactions(this, res));
   }
 
   /** Refunds a successful payment in Telegram Stars. Returns True on success */
