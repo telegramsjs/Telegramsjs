@@ -84,6 +84,15 @@ import {
 } from "./telegram/index";
 
 /**
+ * Represents an immutable version of a collection
+ */
+export type ReadonlyCollection<K, V> = Omit<
+  Collection<K, V>,
+  "delete" | "ensure" | "forEach" | "get" | "reverse" | "set" | "sort" | "sweep"
+> &
+  ReadonlyMap<K, V>;
+
+/**
  * Type representing the string literals for chat permissions.
  */
 export type ChatPermissionString =
@@ -975,7 +984,7 @@ export interface ICollectorOptions<EventCtx, Collected> {
   dispose?: boolean;
   filter?: (
     data: Collected,
-    collected: Collection<EventCtx, Collected>,
+    collected: ReadonlyCollection<EventCtx, Collected>,
   ) => PossiblyAsync<boolean>;
   idle?: number;
   max?: number;
@@ -995,7 +1004,7 @@ export interface ICollectorEvent<K, V> {
    * @param data - The data item to be collected.
    * @param collect - The collection where the data is stored.
    */
-  collect: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+  collect: (data: V, collect: ReadonlyCollection<K, V>) => PossiblyAsync<void>;
 
   /**
    * Triggered when a data item is ignored. The `ignore` function is called with
@@ -1015,7 +1024,7 @@ export interface ICollectorEvent<K, V> {
    * @param data - The data item to be disposed of.
    * @param collect - The collection where the data is stored.
    */
-  dispose: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+  dispose: (data: V, collect: ReadonlyCollection<K, V>) => PossiblyAsync<void>;
 
   /**
    * Triggered when the collection process ends. The `end` function receives the
@@ -1025,7 +1034,10 @@ export interface ICollectorEvent<K, V> {
    * @param collected - The collection of all collected data.
    * @param reason - The reason the collection process ended.
    */
-  end: (collected: Collection<K, V>, reason: string) => PossiblyAsync<void>;
+  end: (
+    collected: ReadonlyCollection<K, V>,
+    reason: string,
+  ) => PossiblyAsync<void>;
 }
 
 /**
@@ -1465,7 +1477,7 @@ export interface IReactionEventCollector
    * @param data - The collection of user reactions.
    */
   user: (
-    data: Collection<string, MessageReactionUpdated[]>,
+    data: ReadonlyCollection<string, MessageReactionUpdated[]>,
   ) => PossiblyAsync<void>;
   /**
    * Event emitted when a reaction is created.
