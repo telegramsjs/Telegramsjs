@@ -59,10 +59,25 @@ class ClientUser extends User {
   }
 
   /**
+   * @typedef {Object} StarTransactions
+   * @property {number} [limit] - The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+   * @property {number} [offset] - Number of transactions to skip in the response.
+   */
+
+  /**
+   * Returns the bot's Telegram Star transactions in chronological order.
+   * @param {StarTransactions} [options] - out parameters.
+   * @returns {Promise<import("../invoice/StarTransactions").StarTransactions>} - On success, returns a StarTransactions object.
+   */
+  fetchStarTransactions({ limit, offset } = {}) {
+    return this.client.getStarTransactions(offset, limit);
+  }
+
+  /**
    * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
    * @returns {Promise<import("../gift/Gifts").Gifts>} - Returns a Gifts object.
    */
-  async getGifts() {
+  getGifts() {
     return this.client.getAvailableGifts();
   }
 

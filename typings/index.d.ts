@@ -8520,6 +8520,17 @@ export declare class ClientUser extends User {
     options?: Omit<IFetchOptions, "cache">,
   ): Promise<ClientUser | ChatFullInfo>;
   /**
+   * Returns the bot's Telegram Star transactions in chronological order.
+   * @param options - out parameters.
+   * @returns On success, returns a StarTransactions object.
+   */
+  fetchStarTransactions(options?: {
+    /** The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100. */
+    limit?: number;
+    /** Number of transactions to skip in the response */
+    offset?: number;
+  }): Promise<StarTransactions>;
+  /**
    * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
    * @returns Returns a Gifts object.
    */
