@@ -10361,6 +10361,10 @@ export declare class StarTransactions {
   );
   /** The list of transactions */
   transactions: Collection<string, StarTransaction>;
+  /**
+   * Makes the class iterable, returning each `StarTransaction` object.
+   */
+  [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
 export * from "./telegram/index";

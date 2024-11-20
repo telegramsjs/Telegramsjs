@@ -19,6 +19,16 @@ class StarTransactions {
       ]),
     );
   }
+
+  /**
+   * Makes the class iterable, returning each `StarTransaction` object.
+   * @returns {IterableIterator<StarTransaction>}
+   */
+  *[Symbol.iterator]() {
+    for (const [_, transaction] of this.transactions) {
+      yield transaction;
+    }
+  }
 }
 
 module.exports = { StarTransactions };
