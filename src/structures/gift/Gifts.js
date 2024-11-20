@@ -1,5 +1,6 @@
 // @ts-check
 const { Gift } = require("./Gift");
+const { Collection } = require("@telegram.ts/collection");
 
 /**
  * @typedef {import("../../types").MethodParameters} MethodParameters
@@ -11,8 +12,13 @@ class Gifts {
    * @param {import("@telegram.ts/types").Gifts} data - Data about the list of gifts.
    */
   constructor(client, data) {
-    /** The list of gifts */
-    this.gifts = data.gifts.map((gift) => new Gift(client, gift));
+    /**
+     * The list of gifts
+     * @type {Collection<string, Gift>}
+     */
+    this.gifts = new Collection(
+      data.gifts.map((gift) => [gift.id, new Gift(client, gift)]),
+    );
   }
 
   /**
@@ -23,9 +29,12 @@ class Gifts {
   equals(other) {
     if (!other || !(other instanceof Gifts)) return false;
 
+    const thisGifts = Array.from(this.gifts).map(([_, gift]) => gift);
+    const otherGifts = Array.from(other.gifts).map(([_, gift]) => gift);
+
     return (
-      this.gifts.length === other.gifts.length &&
-      this.gifts.every((gift, i) => other.gifts[i]?.equals(gift))
+      thisGifts.length === otherGifts.length &&
+      thisGifts.every((gift, i) => otherGifts[i]?.equals(gift))
     );
   }
 
@@ -34,7 +43,7 @@ class Gifts {
    * @returns {IterableIterator<Gift>}
    */
   *[Symbol.iterator]() {
-    for (const gift of this.gifts) {
+    for (const [_, gift] of this.gifts) {
       yield gift;
     }
   }

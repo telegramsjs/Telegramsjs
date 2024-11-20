@@ -49,6 +49,7 @@ const {
 const { ReactionType } = require("../misc/ReactionType");
 const { TelegramError } = require("../../errors/TelegramError");
 const { ErrorCodes } = require("../../errors/ErrorCodes");
+const { Collection } = require("@telegram.ts/collection");
 
 /**
  * @typedef {import("../../types").MethodParameters} MethodParameters
@@ -332,10 +333,13 @@ class Message extends Base {
     if ("new_chat_members" in data) {
       /**
        * New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
-       * @type {import("../misc/User").User[] | undefined}
+       * @type {Collection<string, import("../misc/User").User> | undefined}
        */
-      this.newChatMembers = data.new_chat_members.map((user) =>
-        this.client.users._add(user),
+      this.newChatMembers = new Collection(
+        data.new_chat_members.map((user) => [
+          String(user.id),
+          this.client.users._add(user),
+        ]),
       );
     }
 

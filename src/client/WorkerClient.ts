@@ -368,10 +368,8 @@ class WorketClient {
     const message = new Message(this.client, data);
 
     if (
-      !this.client.user &&
-      message.newChatMembers?.findIndex(
-        (user) => user.id === this.client.user!.id,
-      ) !== -1
+      this.client.user !== null &&
+      message.newChatMembers?.some(({ id }) => id === this.client.user!.id)
     ) {
       this.client.emit(Events.ChatCreate, message);
       return message;

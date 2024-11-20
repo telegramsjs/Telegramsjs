@@ -3002,7 +3002,7 @@ export declare class Gifts {
     data: import("@telegram.ts/types").Gifts,
   );
   /** The list of gifts */
-  gifts: Gift[];
+  gifts: Collection<string, Gift>;
   /**
    * Checks if this gifts is equal to another gifts.
    * @param other - The other object to compare with.
@@ -3027,7 +3027,7 @@ export declare class Giveaway extends Base {
   /**
    * The list of chats which the user must join to participate in the giveaway
    */
-  chats: Chat[];
+  chats: Collection<string, Chat>;
   /** Point in time (Unix timestamp) when winners of the giveaway will be selected */
   selectedUnixTime: number;
   /** The number of users which are supposed to be selected as winners of the giveaway */
@@ -3082,7 +3082,7 @@ export declare class GiveawayWinners extends Base {
   /**
    * List of up to 100 winners of the giveaway
    */
-  winners: User[];
+  winners: Collection<string, User>;
   /**
    * @param data - Data about the represents a message about the completion of a giveaway with public winners
    * @override
@@ -3757,7 +3757,7 @@ export declare class UsersShared {
   /** Identifier of the request */
   requestId: number;
   /** Information about users shared with the bot. */
-  users: SharedUser[];
+  users: Collection<string, SharedUser>;
   /** Makes the class iterable, returning each `SharedUser` object. */
   [Symbol.iterator](): IterableIterator<SharedUser>;
 }
@@ -4087,7 +4087,7 @@ export declare class VideoChatParticipantsInvited extends Base {
   /**
    * New members that were invited to the video chat
    */
-  users: User[];
+  users: Collection<string, User>;
 }
 
 export declare class Message extends Base {
@@ -4227,7 +4227,7 @@ export declare class Message extends Base {
   /**
    * New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
    */
-  newChatMembers?: User[];
+  newChatMembers?: Collection<string, User>;
   /**
    * A member was removed from the group, information about them (this member may be the bot itself)
    */
@@ -9046,7 +9046,7 @@ export declare class UserChatBoosts {
   /**
    * The list of boosts added to the chat by the user
    */
-  boosts: ChatBoost[];
+  boosts: Collection<string, ChatBoost>;
   /**
    * The boost count added to the chat by the user
    */
@@ -10360,7 +10360,7 @@ export declare class StarTransactions {
     data: import("@telegram.ts/types").StarTransactions,
   );
   /** The list of transactions */
-  transactions: StarTransaction[];
+  transactions: Collection<string, StarTransaction>;
 }
 
 export * from "./telegram/index";

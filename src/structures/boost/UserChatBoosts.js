@@ -1,5 +1,6 @@
 // @ts-check
 const { ChatBoost } = require("./ChatBoost");
+const { Collection } = require("@telegram.ts/collection");
 
 class UserChatBoosts {
   /**
@@ -9,9 +10,14 @@ class UserChatBoosts {
   constructor(client, data) {
     /**
      * The list of boosts added to the chat by the user
-     * @type {ChatBoost[]}
+     * @type {Collection<string, ChatBoost>}
      */
-    this.boosts = data.boosts.map((boost) => new ChatBoost(client, boost));
+    this.boosts = new Collection(
+      data.boosts.map((boost) => [
+        boost.boost_id,
+        new ChatBoost(client, boost),
+      ]),
+    );
 
     /**
      * The boost count added to the chat by the user
@@ -25,7 +31,7 @@ class UserChatBoosts {
    * @returns {IterableIterator<ChatBoost>}
    */
   *[Symbol.iterator]() {
-    for (const boost of this.boosts) {
+    for (const [_, boost] of this.boosts) {
       yield boost;
     }
   }

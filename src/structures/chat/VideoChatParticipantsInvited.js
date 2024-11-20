@@ -1,5 +1,6 @@
 // @ts-check
 const { Base } = require("../Base");
+const { Collection } = require("@telegram.ts/collection");
 
 class VideoChatParticipantsInvited extends Base {
   /**
@@ -11,9 +12,11 @@ class VideoChatParticipantsInvited extends Base {
 
     /**
      * New members that were invited to the video chat
-     * @type {import("../misc/User").User[]}
+     * @type {Collection<string, import("../misc/User").User>}
      */
-    this.users = data.users.map((user) => this.client.users._add(user));
+    this.users = new Collection(
+      data.users.map((user) => [String(user.id), this.client.users._add(user)]),
+    );
   }
 }
 

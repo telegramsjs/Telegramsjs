@@ -1,5 +1,6 @@
 // @ts-check
 const { Base } = require("../Base");
+const { Collection } = require("@telegram.ts/collection");
 
 class Giveaway extends Base {
   /**
@@ -11,9 +12,11 @@ class Giveaway extends Base {
 
     /**
      * The list of chats which the user must join to participate in the giveaway
-     * @type {import("../chat/Chat").Chat[]}
+     * @type {Collection<string, import("../chat/Chat").Chat>}
      */
-    this.chats = data.chats.map((chat) => this.client.chats._add(chat));
+    this.chats = new Collection(
+      data.chats.map((chat) => [String(chat.id), this.client.chats._add(chat)]),
+    );
 
     /** Point in time (Unix timestamp) when winners of the giveaway will be selected */
     this.selectedUnixTime = data.winners_selection_date;
@@ -75,6 +78,9 @@ class Giveaway extends Base {
   equals(other) {
     if (!other || !(other instanceof Giveaway)) return false;
 
+    const thisChats = Array.from(this.chats).map(([_, chat]) => chat);
+    const otherChats = Array.from(other.chats).map(([_, chat]) => chat);
+
     return Boolean(
       this.selectedUnixTime === other.selectedUnixTime &&
         this.winnerCount === other.winnerCount &&
@@ -87,10 +93,9 @@ class Giveaway extends Base {
         this.countryCodes?.every?.(
           (code, index) => code === other.countryCodes?.[index],
         ) &&
-        this.chats.length === other.chats.length &&
-        this.chats.every(
-          (chat, index) =>
-            other.chats[index] && chat.equals(other.chats[index]),
+        thisChats.length === otherChats.length &&
+        thisChats.every(
+          (chat, index) => otherChats[index] && chat.equals(otherChats[index]),
         ),
     );
   }
