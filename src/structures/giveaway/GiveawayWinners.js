@@ -148,6 +148,16 @@ class GiveawayWinners extends Base {
       this.chat.equals(other.chat)
     );
   }
+
+  /**
+   * Makes the class iterable, returning each `User` object.
+   * @returns {IterableIterator<import("../misc/User").User>}
+   */
+  *[Symbol.iterator]() {
+    for (const [_, winner] of this.winners) {
+      yield winner;
+    }
+  }
 }
 
 module.exports = { GiveawayWinners };

@@ -3132,6 +3132,10 @@ export declare class GiveawayWinners extends Base {
    * @returns True if both objects are instances of GiveawayWinners and are equal based on key properties, otherwise false.
    */
   equals(other: GiveawayWinners): boolean;
+  /**
+   * Makes the class iterable, returning each `User` object.
+   */
+  [Symbol.iterator](): IterableIterator<User>;
 }
 
 export declare class Invoice extends Base {
