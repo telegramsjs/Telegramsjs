@@ -11725,4 +11725,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
+export declare const version: "4.5.0";
+
 export * from "./telegram/index";
