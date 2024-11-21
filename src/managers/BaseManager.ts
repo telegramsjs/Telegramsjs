@@ -172,4 +172,9 @@ class BaseManager<T extends Base, ApiObject extends { id: number }> {
   }
 }
 
-export { BaseManager, type IFetchOptions, type ICachedOptions };
+export {
+  BaseManager,
+  type Constructable,
+  type IFetchOptions,
+  type ICachedOptions,
+};

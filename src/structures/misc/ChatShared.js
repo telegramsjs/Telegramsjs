@@ -1,6 +1,9 @@
 // @ts-check
 const { Base } = require("../Base");
 const { Photo } = require("../media/Photo");
+const { Chat } = require("../chat/Chat");
+const { UserPermissions } = require("../../util/UserPermissions");
+const { isDeepStrictEqual } = require("../../util/Utils");
 
 class ChatShared extends Base {
   /**
@@ -31,6 +34,115 @@ class ChatShared extends Base {
       this.photo = data.photo.map((photo) => new Photo(client, photo));
     }
   }
+
+  /**
+   * Retrieves the permissions of a specific member in the chat.
+   * @param {import("../chat/ChatMember").ChatMember|string} member - The member object to check permissions for.
+   * @param {boolean} [checkAdmin] - A flag to check if the member is an admin or creator.
+   * @returns {Promise<UserPermissions|null>} The permissions object of the member or null if not available.
+   */
+  async memberPermissions(member, checkAdmin) {
+    if (
+      checkAdmin &&
+      typeof member !== "string" &&
+      member.status === "creator"
+    ) {
+      const permissions = Object.fromEntries(
+        Object.entries(UserPermissions.Flags).map(([key]) => [key, true]),
+      );
+      return new UserPermissions(permissions);
+    }
+
+    const memberId = typeof member === "string" ? member : member.id;
+    if (!memberId) return null;
+
+    const fetchMember = await this.client
+      .getChatMember(this.id, memberId)
+      .catch(() => null);
+
+    if (fetchMember && fetchMember.permissions) {
+      if (Object.keys(fetchMember.permissions).length === 0) {
+        return this.memberPermissions(fetchMember, checkAdmin);
+      }
+      return fetchMember.permissions;
+    }
+
+    return null;
+  }
+
+  /**
+   * Checks if this chat is equal to another chat.
+   * @param {ChatShared} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of ChatShared and are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof ChatShared)) return false;
+
+    return (
+      this.id === other.id &&
+      this.requestId === other.requestId &&
+      this.title === other.title &&
+      this.username === other.username &&
+      isDeepStrictEqual(this.photo, other.photo)
+    );
+  }
 }
+
+/**
+ * @param {import("../../managers/BaseManager").Constructable<any>} structure - class for apply.
+ * @returns {void}
+ */
+function applyToClass(structure) {
+  const props = [
+    "me",
+    "fetch",
+    "createMessageCollector",
+    "awaitMessages",
+    "createReactionCollector",
+    "awaitReactions",
+    "createMessageComponentCollector",
+    "send",
+    "leave",
+    "getAdmins",
+    "membersCount",
+    "getUserBoosts",
+    "forwardMessages",
+    "copyMessages",
+    "deleteMessage",
+    "deleteMessages",
+    "setMenuButton",
+    "pinMessage",
+    "unpinMessage",
+    "unpinAllMessages",
+    "sendPhoto",
+    "sendAudio",
+    "sendPaidMedia",
+    "sendDocument",
+    "sendVideo",
+    "sendAnimation",
+    "sendVoice",
+    "sendVideoNote",
+    "sendMediaGroup",
+    "sendLocation",
+    "sendVenue",
+    "sendContact",
+    "sendPoll",
+    "sendDice",
+    "sendAction",
+    "sendSticker",
+    "sendInvoice",
+    "sendGame",
+  ];
+
+  for (const prop of props) {
+    Object.defineProperty(
+      structure.prototype,
+      prop,
+      Object.getOwnPropertyDescriptor(Chat.prototype, prop) || {},
+    );
+  }
+}
+
+applyToClass(ChatShared);
 
 module.exports = { ChatShared };
