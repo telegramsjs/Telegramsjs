@@ -1,5 +1,44 @@
 # Changelog
 
+# **4.5.0 - (2024-11-20)**
+
+## **Bug Fixes**
+- **InputFile:** fixed field names and argument validation ([f05bf32](https://github.com/telegramsjs/Telegramsjs/commit/f05bf32f1093c9c5fa18e169a21adea279918abb)).
+- **WebhookClient:** resolved duplicate triggering of the "ready" event ([a820d97](https://github.com/telegramsjs/Telegramsjs/commit/a820d975a5cadf7a74c3df77677b1d372b382f8f)).
+- **getStarTransactions:** typings returned value `StarTransactions` ([165eb5c](https://github.com/telegramsjs/Telegramsjs/commit/165eb5cc975c9f7202cfeb24ee9315bc24d69ae2)).
+- **InlineKeyboardBuilder:** at least one optional field is required ([fc38ccb](https://github.com/telegramsjs/Telegramsjs/commit/fc38ccbcd34362f24cf66046b9c728f2e01ea97b)).
+- **Version:** missing type annotations ([d48f78f](https://github.com/telegramsjs/Telegramsjs/commit/d48f78fd4a80cb056c0bad1ee0014447b37eae1c)).
+
+## **Features**
+- **VideoChatParticipantsInvited:** add `Symbol.iterator` for users ([84ed997](https://github.com/telegramsjs/Telegramsjs/commit/84ed997669b78818b99f54e0f9bf1335b3574c52)).
+- **GiveawayWinners:** add `Symbol.iterator` for winners ([7a566e2](https://github.com/telegramsjs/Telegramsjs/commit/7a566e274ef1fe0a65c616201712553d8ff2ce94)).
+- **StarTransactions:** add `Symbol.iterator` for transactions ([4dea43e](https://github.com/telegramsjs/Telegramsjs/commit/4dea43ed366e434cae987d5534eb162faa7795ff)).
+- **Chat:** add `getUserBoosts` method ([d48d0ca](https://github.com/telegramsjs/Telegramsjs/commit/d48d0ca5824c515f268d25153bc67405c27ae7e4)).
+- **User:** add `getChatBoosts` method ([2d70754](https://github.com/telegramsjs/Telegramsjs/commit/2d707542d780987e21420f693ac9b4eda1c51b22)).
+- **ClientUser:** add `fetchStarTransactions` method ([d106fbc](https://github.com/telegramsjs/Telegramsjs/commit/d106fbc5261168606bee753e45e65257b16a4f8c)).
+- **ChatShared:** add new methods ([de09b20](https://github.com/telegramsjs/Telegramsjs/commit/de09b2075a328082ce3dce5f12e712e6e6e87c50)).
+- **SharedUser:** add `fetch`, `send`, `sendGift`, `saveInlineMessage`, `setStarSubscription`, `getChatBoosts` and `equals` method ([28117c1](https://github.com/telegramsjs/Telegramsjs/commit/28117c1f8364f21307ef612e8e74a7d7c3abc8fe))
+- **fetch:** add `fullInfo` options ([8da3c51](https://github.com/telegramsjs/Telegramsjs/commit/8da3c51abb1cc1b84c74c8314a0a1833cf26d72f)).
+- **ClientUser:** add fetch options ([23ac1ae](https://github.com/telegramsjs/Telegramsjs/commit/23ac1ae8a013c8cc3b17f15c9be9374ea5417349)).
+- **InputFile:** add `fetch` method ([1a1456b](https://github.com/telegramsjs/Telegramsjs/commit/1a1456b4dc6dad0bc583ea2352c71aee16edb2a8)).
+
+## **Refactor**
+- **Array:** converted some fields to `Collections` for improved data handling of large arrays ([9fc6037](https://github.com/telegramsjs/Telegramsjs/commit/9fc6037dad2233978ba71ab132a0a6800a6b9c43)).
+- **Collection:** introduced `ReadonlyCollection` to prevent mutation of essential data ([73a76f4](https://github.com/telegramsjs/Telegramsjs/commit/73a76f41271deae303e5cd53bc2bbb1105950bd2)).
+- **TelegramClient:** `user` field now supports `null` values ([cb49cf3](https://github.com/telegramsjs/Telegramsjs/commit/cb49cf37f9b1919dba66d3562baf95acd1b9b4d4)).
+- **disconnect:** now triggers even when using the error event ([86186ce](https://github.com/telegramsjs/Telegramsjs/commit/86186ce42288f7c317b186a483f7118518159692)).
+- **errorHandler:** update error handling logic ([f47e03b](https://github.com/telegramsjs/Telegramsjs/commit/f47e03bb2f12d78c8bc0a0119aca4fb893fac5ea)).
+- **Fetch data**: data retrieval logic ([3b978ee](https://github.com/telegramsjs/Telegramsjs/commit/3b978eed6a528d17743f584ef7688f30ad36cd1d)).
+- **Prefix names:** all methods for struct classes prefixed with 'get' have been changed to 'fetch' ([5619dd1](https://github.com/telegramsjs/Telegramsjs/commit/5619dd1b87370ec6a21803e28b0ed2e1abe6ab8f)).
+
+## **Updates**
+- Support for API 8.0 ([cec95aa](https://github.com/telegramsjs/Telegramsjs/commit/cec95aad043575dbebb653a2262558e0f8aa5283)).
+- **InputFile:** fix handling for download parameters to use class instances ([f32fb75](https://github.com/telegramsjs/Telegramsjs/commit/f32fb755fd564f3b224a190d8a9602a1384bd2d7)).
+- **InputFile:** add fallback to fetch if `filePath` is missing ([1ac66f2](https://github.com/telegramsjs/Telegramsjs/commit/1ac66f23bf65d47d8941d5d8d8d525f79f7355ab)).
+- Bump version of `@telegram.ts/types` to `1.18.2` ([04d68de](https://github.com/telegramsjs/Telegramsjs/commit/04d68de607fcf3a5544bc3f705b9d83df039df18)).
+
+----
+
 # **4.4.0 - (2024-11-01)**
 
 ## **Bug Fixes**
@@ -8,7 +47,6 @@
 - **Collector:** returns value for `asyncIterator` ([184070e](https://github.com/telegramsjs/Telegramsjs/commit/184070e23844dc4d1491498b50a6e08ca9170af4))
 - **ChosenInlineResult:** `inlineMessageId` optional. Remove `answerQuery` ([35780d5](https://github.com/telegramsjs/Telegramsjs/commit/35780d5c39b788bb83b7b80951c4379f6dafac6e))
 - **MediaData:** JSON fields parsing ([5e021fc](https://github.com/telegramsjs/Telegramsjs/commit/5e021fc31e8a19fd0e2be7a7f55699382bca8121))
-- 
 
 ## **Features**
 - Add events `rawUpdates` ([e92e0f1](https://github.com/telegramsjs/Telegramsjs/commit/e92e0f1de1a50eb1827b8542aa68c3e58b28cc21))
