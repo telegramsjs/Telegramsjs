@@ -64,6 +64,14 @@ class TransactionPartner extends Base {
       this.payload = data.invoice_payload;
     }
 
+    if ("subscription_period" in data) {
+      /**
+       * The duration of the paid subscription.
+       * @type {number | undefined}
+       */
+      this.subscriptionPeriod = data.subscription_period;
+    }
+
     if ("request_count" in data) {
       /**
        * The number of successful requests that exceeded regular limits and were therefore billed
@@ -72,25 +80,33 @@ class TransactionPartner extends Base {
       this.requestCount = data.request_count;
     }
 
+    if ("gift" in data) {
+      /**
+       * The gift sent to the user by the bot.
+       * @type {string | undefined}
+       */
+      this.gift = data.gift;
+    }
+
     return data;
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; requestCount?: undefined }}
+   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: string; subscriptionPeriod?: number; requestCount?: undefined }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @returns {this is this & { withdrawal: RevenueWithdrawalState; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; requestCount?: undefined }}
+   * @returns {this is this & { withdrawal: RevenueWithdrawalState; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; requestCount?: undefined }}
    */
   isFragment() {
     return Boolean("withdrawal" in this && this.withdrawal);
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; requestCount: number }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; requestCount: number }}
    */
   isTelegramApi() {
     return Boolean("requestCount" in this && this.requestCount !== undefined);

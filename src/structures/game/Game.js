@@ -57,7 +57,7 @@ class Game extends Base {
    * @returns {Promise<import("./GameHighScore").GameHighScore[]>} -  Returns an Array of GameHighScore objects.
    * This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
    */
-  getHighScores(userId, options = {}) {
+  fetchHighScores(userId, options = {}) {
     return this.client.getGameHighScores({
       userId,
       ...options,

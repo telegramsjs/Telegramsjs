@@ -29,7 +29,7 @@ class InputFile extends Base {
      * The size of the file in bytes, if available
      * @type {number | null}
      */
-    this.size = "size" in data ? Number(data.size) : null;
+    this.size = data.file_size || null;
 
     /**
      * The path to the file on the Telegram server, if available
@@ -49,12 +49,21 @@ class InputFile extends Base {
   }
 
   /**
+   * Fetch about the file
+   * @returns {Promise<InputFile>}
+   */
+  fetch() {
+    return this.client.getFile(this.id);
+  }
+
+  /**
    * Downloads the file from the Telegram server.
-   * @param {string | null} [filePath=this.path] - The path of the file on the Telegram server.
    * @returns {Promise<Buffer>} - A promise that resolves with the file data as a Buffer.
    */
-  async download(filePath = this.path) {
-    if (!this.path) {
+  async download() {
+    const filePath = this.path || (await this.fetch().catch(() => null))?.path;
+
+    if (!filePath) {
       throw new TelegramError(ErrorCodes.FileRetrievalFailed);
     }
 
@@ -96,18 +105,14 @@ class InputFile extends Base {
    * @returns {Promise<void>} A promise that resolves when the file has been written.
    */
   async write(path, writeType = "promise", options = {}) {
-    if (!this.path) {
-      throw new TelegramError(ErrorCodes.FileRetrievalFailed);
-    }
-
     if (writeType === "promise") {
-      const fileData = await this.download(this.path);
+      const fileData = await this.download();
       await fs.promises.writeFile(path, fileData, options);
       return;
     }
 
     if (writeType === "stream") {
-      const fileData = await this.download(this.path);
+      const fileData = await this.download();
       const writeStream = fs.createWriteStream(path, {
         ...options,
         encoding: options.encoding ?? undefined,

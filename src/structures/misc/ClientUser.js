@@ -47,11 +47,38 @@ class ClientUser extends User {
 
   /**
    * Fetch about the client/bot
-   * @returns {Promise<ClientUser>}
+   * @param {Omit<import("../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch client/bot
+   * @returns {Promise<ClientUser | import("../chat/ChatFullInfo").ChatFullInfo>}
    * @override
    */
-  fetch() {
+  fetch({ force = true, fullInfo = false } = {}) {
+    if (fullInfo) {
+      return this.client.users.fetch(this.id, { force, fullInfo });
+    }
     return this.client.fetchApplication();
+  }
+
+  /**
+   * @typedef {Object} StarTransactions
+   * @property {number} [limit] - The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+   * @property {number} [offset] - Number of transactions to skip in the response.
+   */
+
+  /**
+   * Returns the bot's Telegram Star transactions in chronological order.
+   * @param {StarTransactions} [options] - out parameters.
+   * @returns {Promise<import("../invoice/StarTransactions").StarTransactions>} - On success, returns a StarTransactions object.
+   */
+  fetchStarTransactions({ limit, offset } = {}) {
+    return this.client.getStarTransactions(offset, limit);
+  }
+
+  /**
+   * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
+   * @returns {Promise<import("../gift/Gifts").Gifts>} - Returns a Gifts object.
+   */
+  fetchGifts() {
+    return this.client.getAvailableGifts();
   }
 
   /**
@@ -80,7 +107,7 @@ class ClientUser extends User {
    * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<import("../../client/interfaces/Bot").BotCommand[]>} - Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
    */
-  getCommands(score, language) {
+  fetchCommands(score, language) {
     return this.client.getMyCommands(score, language);
   }
 
@@ -109,7 +136,7 @@ class ClientUser extends User {
    * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<string>} - Returns bot name on success
    */
-  getName(language) {
+  fetchName(language) {
     return this.client.getMyName(language);
   }
 
@@ -128,7 +155,7 @@ class ClientUser extends User {
    * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<string>} - Returns bot description on success.
    */
-  getDescription(language) {
+  fetchDescription(language) {
     return this.client.getMyDescription(language);
   }
 
@@ -147,7 +174,7 @@ class ClientUser extends User {
    * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
    * @returns {Promise<string>} - Returns bot short description on success
    */
-  getShortDescription(language) {
+  fetchShortDescription(language) {
     return this.client.getMyShortDescription(language);
   }
 
@@ -166,7 +193,7 @@ class ClientUser extends User {
    * @param {number} [chatId] - Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
    * @returns {Promise<import("./MenuButton").MenuButton>} - Returns MenuButton on success.
    */
-  getMenuButton(chatId) {
+  fetchMenuButton(chatId) {
     return this.client.getChatMenuButton(chatId);
   }
 
@@ -185,7 +212,7 @@ class ClientUser extends User {
    * @param {boolean} [forChannels] - Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned.
    * @returns {Promise<import("../chat/ChatAdministratorRights").ChatAdministratorRights>} - Returns ChatAdministratorRights on success.
    */
-  getAdministratorRigths(forChannels) {
+  fetchAdministratorRigths(forChannels) {
     return this.client.getMyDefaultAdministratorRights(forChannels);
   }
 

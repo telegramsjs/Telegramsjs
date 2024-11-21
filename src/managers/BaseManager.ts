@@ -17,6 +17,23 @@ interface ICachedOptions<T> {
   cacheFilter?: (holds: T) => boolean;
 }
 
+interface IFetchOptions {
+  /**
+   * Whether to bypass the cache and fetch directly from the source.
+   * Defaults to `false`.
+   */
+  force?: boolean;
+  /**
+   * Whether to cache the fetched data. Defaults to `true`.
+   */
+  cache?: boolean;
+  /**
+   * Whether to retrieve complete, detailed information.
+   * Defaults to `false`.
+   */
+  fullInfo?: boolean;
+}
+
 class BaseManager<T extends Base, ApiObject extends { id: number }> {
   #holds: Constructable<T>;
   #apiClient: TelegramClient | BaseClient;
@@ -155,4 +172,9 @@ class BaseManager<T extends Base, ApiObject extends { id: number }> {
   }
 }
 
-export { BaseManager, type ICachedOptions };
+export {
+  BaseManager,
+  type Constructable,
+  type IFetchOptions,
+  type ICachedOptions,
+};

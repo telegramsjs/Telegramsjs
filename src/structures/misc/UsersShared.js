@@ -1,5 +1,6 @@
 // @ts-check
 const { SharedUser } = require("./SharedUser");
+const { Collection } = require("@telegram.ts/collection");
 
 class UsersShared {
   /**
@@ -10,8 +11,16 @@ class UsersShared {
     /** Identifier of the request */
     this.requestId = data.request_id;
 
-    /** Information about users shared with the bot. */
-    this.users = data.users.map((user) => new SharedUser(client, user));
+    /**
+     * Information about users shared with the bot.
+     * @type {Collection<string, SharedUser>}
+     */
+    this.users = new Collection(
+      data.users.map((user) => [
+        String(user.user_id),
+        new SharedUser(client, user),
+      ]),
+    );
   }
 
   /**
@@ -19,7 +28,7 @@ class UsersShared {
    * @returns {IterableIterator<SharedUser>}
    */
   *[Symbol.iterator]() {
-    for (const user of this.users) {
+    for (const [_, user] of this.users) {
       yield user;
     }
   }

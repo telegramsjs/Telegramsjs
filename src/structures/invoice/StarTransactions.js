@@ -1,5 +1,6 @@
 // @ts-check
 const { StarTransaction } = require("./StarTransaction");
+const { Collection } = require("@telegram.ts/collection");
 
 class StarTransactions {
   /**
@@ -7,10 +8,26 @@ class StarTransactions {
    * @param {import("@telegram.ts/types").StarTransactions} data - Data about the contains a list of Telegram Star transactions
    */
   constructor(client, data) {
-    /** The list of transactions */
-    this.transactions = data.transactions.map(
-      (transaction) => new StarTransaction(client, transaction),
+    /**
+     * The list of transactions
+     * @type {Collection<string, StarTransaction>}
+     */
+    this.transactions = new Collection(
+      data.transactions.map((transaction) => [
+        transaction.id,
+        new StarTransaction(client, transaction),
+      ]),
     );
+  }
+
+  /**
+   * Makes the class iterable, returning each `StarTransaction` object.
+   * @returns {IterableIterator<StarTransaction>}
+   */
+  *[Symbol.iterator]() {
+    for (const [_, transaction] of this.transactions) {
+      yield transaction;
+    }
   }
 }
 

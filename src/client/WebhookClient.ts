@@ -78,12 +78,6 @@ class WebhookClient {
     } = {},
   ): Promise<void> {
     try {
-      await this.client.getMe().then((me) => {
-        this.client.user = me;
-        this.client.readyTimestamp = Date.now();
-        this.client.emit(Events.Ready, this.client);
-      });
-
       const { tlsOptions, port, host, requestCallback } = options;
       const webhookCallback = await this.createWebhookCallback(
         requestCallback,
@@ -102,34 +96,34 @@ class WebhookClient {
         throw new TelegramError(ErrorCodes.WebhookServerCreationFailed);
       }
 
-      this.webhookServer.listen(port, host, () => {
-        this.client.emit(Events.Ready, this.client);
+      this.webhookServer.listen(port, host, async () => {
+        await this.client.getMe().then((me) => {
+          this.client.user = me;
+          this.client.readyTimestamp = Date.now();
+          this.client.emit(Events.Ready, this.client);
+        });
       });
 
       this.webhookServer.on("error", (err) => {
-        if (
-          this.handlerError(err) &&
-          this.client.eventNames().indexOf(Events.Error) === -1
-        ) {
-          console.error(err);
+        if (this.client.eventNames().indexOf(Events.Error) === -1) {
+          this.client.emit(Events.Disconnect);
+          throw err;
         }
-        this.client.emit(Events.Disconnect);
+        this.client.emit(Events.Error, [this.offset, err]);
       });
     } catch (err) {
-      if (
-        this.handlerError(err) &&
-        this.client.eventNames().indexOf(Events.Error) === -1
-      ) {
-        console.log(err);
-      }
       this.client.emit(Events.Disconnect);
+      if (this.client.eventNames().indexOf(Events.Error) === -1) {
+        throw err;
+      }
+      this.client.emit(Events.Error, [this.offset, err]);
     }
   }
 
   /**
    * Creates a callback function for handling webhook requests.
    * @param requestCallback - The callback function to handle requests.
-   * @param {{ path?: string; secretToken?: string }} [options={}] - The options for creating the webhook callback.
+   * @param {{ path?: string; secretToken?: string }} options - The options for creating the webhook callback.
    * @returns The created callback function.
    */
   async createWebhookCallback(
@@ -194,23 +188,6 @@ class WebhookClient {
           response: ServerResponse,
         ) => callback(request, response)
       : callback;
-  }
-
-  /**
-   * Handles errors that occur during webhook processing.
-   * @param err - The error object.
-   */
-  private handlerError(err: unknown): boolean {
-    if (
-      this.client.options?.errorHandler &&
-      this.client.eventNames().indexOf(Events.Error) !== -1
-    ) {
-      this.client.emit(Events.Error, [this.offset, err]);
-      return true;
-    }
-
-    this.isClosed = true;
-    return false;
   }
 
   /**

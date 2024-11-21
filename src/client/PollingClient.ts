@@ -40,8 +40,11 @@ class PollingClient {
 
       await this.poll(options);
     } catch (err) {
-      this.handlerError(err);
-      this.client.emit(Events.Disconnect);
+      if (this.client.eventNames().indexOf(Events.Error) === -1) {
+        this.client.emit(Events.Disconnect);
+        throw err;
+      }
+      this.client.emit(Events.Error, [this.offset, err]);
     }
   }
 
@@ -70,15 +73,11 @@ class PollingClient {
         }
       }
     } catch (err) {
-      const returned = this.handlerError(err);
-      if (returned) {
-        if (this.client.eventNames().indexOf(Events.Error) === -1) {
-          console.error(err);
-        }
-        return;
-      } else this.client.emit(Events.Disconnect);
-
-      throw err;
+      this.client.emit(Events.Disconnect);
+      if (this.client.eventNames().indexOf(Events.Error) === -1) {
+        throw err;
+      }
+      this.client.emit(Events.Error, [this.offset, err]);
     } finally {
       if (!this.isClosed) {
         setTimeout(async () => {
@@ -86,23 +85,6 @@ class PollingClient {
         }, this.client.options?.pollingTimeout ?? 300);
       }
     }
-  }
-
-  /**
-   * Handles errors that occur during polling or initialization.
-   * @param err - The error object.
-   */
-  private handlerError(err: unknown): boolean {
-    if (
-      this.client.options?.errorHandler &&
-      this.client.eventNames().indexOf(Events.Error) !== -1
-    ) {
-      this.client.emit(Events.Error, [this.offset, err]);
-      return true;
-    }
-
-    this.isClosed = true;
-    return this.close();
   }
 
   /**

@@ -10,6 +10,8 @@ const {
   ReactionCollectorEvents,
 } = require("../../util/Constants");
 const { UserPermissions } = require("../../util/UserPermissions");
+const { TelegramError } = require("../../errors/TelegramError");
+const { ErrorCodes } = require("../../errors/ErrorCodes");
 
 /**
  * @typedef {import("node:fs").ReadStream} ReadStream
@@ -133,16 +135,19 @@ class Chat extends Base {
    * @returns {Promise<import("./ChatMember").ChatMember>}
    */
   me() {
+    if (!this.client.user) {
+      throw new TelegramError(ErrorCodes.InvalidClientId);
+    }
     return this.client.getChatMember(this.id, this.client.user.id);
   }
 
   /**
    * Fetches this chat
-   * @param {boolean} [force=true] - Whether to skip the cache check and request the API
-   * @returns {Promise<Chat>}
+   * @param {Omit<import("../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch chat
+   * @returns {Promise<Chat | import("./ChatFullInfo").ChatFullInfo>}
    */
-  fetch(force = true) {
-    return this.client.chats.fetch(this.id, { force });
+  fetch({ force = true, fullInfo = false } = {}) {
+    return this.client.chats.fetch(this.id, { force, fullInfo });
   }
 
   /**
@@ -168,7 +173,9 @@ class Chat extends Base {
     const memberId = typeof member === "string" ? member : member.id;
     if (!memberId) return null;
 
-    const fetchMember = await this.client.getChatMember(this.id, memberId);
+    const fetchMember = await this.client
+      .getChatMember(this.id, memberId)
+      .catch(() => null);
 
     if (fetchMember && fetchMember.permissions) {
       if (Object.keys(fetchMember.permissions).length === 0) {
@@ -333,7 +340,7 @@ class Chat extends Base {
    * Use this method to get a list of administrators in a chat, which aren't bots.
    * @returns {Promise<import("./ChatAdministratorRights").ChatAdministratorRights[]>} - Returns an Array of ChatAdministratorRights objects.
    */
-  getAdmins() {
+  fetchAdmins() {
     return this.client.getChatAdministrators(this.id);
   }
 
@@ -343,6 +350,15 @@ class Chat extends Base {
    */
   membersCount() {
     return this.client.getChatMemberCount(this.id);
+  }
+
+  /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param {string | number} userId - Unique identifier of the target user.
+   * @returns {Promise<import("../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
+   */
+  fetchUserBoosts(userId) {
+    return this.client.getUserChatBoosts(this.id, userId);
   }
 
   /**

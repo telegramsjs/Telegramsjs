@@ -1,3 +1,4 @@
+import { deepStrictEqual } from "node:assert";
 import { Collection } from "@telegram.ts/collection";
 
 const isObject = (obj: any): obj is Record<string, any> =>
@@ -66,4 +67,22 @@ function flatten(
   return out;
 }
 
-export { flatten };
+/**
+ * Compares two values for deep strict equality.
+ *
+ * Returns `true` if the values are deeply equal, otherwise `false`.
+ *
+ * @param current - The first value to compare.
+ * @param expect - The second value to compare against.
+ * @returns `true` if values are deeply equal, otherwise `false`.
+ */
+function isDeepStrictEqual(current: unknown, expect: unknown): boolean {
+  try {
+    deepStrictEqual(current, expect);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export { flatten, isDeepStrictEqual };

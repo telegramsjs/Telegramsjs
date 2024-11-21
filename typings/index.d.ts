@@ -84,6 +84,15 @@ import {
 } from "./telegram/index";
 
 /**
+ * Represents an immutable version of a collection
+ */
+export type ReadonlyCollection<K, V> = Omit<
+  Collection<K, V>,
+  "delete" | "ensure" | "forEach" | "get" | "reverse" | "set" | "sort" | "sweep"
+> &
+  ReadonlyMap<K, V>;
+
+/**
  * Type representing the string literals for chat permissions.
  */
 export type ChatPermissionString =
@@ -408,11 +417,14 @@ export declare class InputFile extends Base {
    */
   get url(): string | null;
   /**
+   * Fetch about the file
+   */
+  fetch(): Promise<InputFile>;
+  /**
    * Downloads the file from the Telegram server.
-   * @param filePath - The path of the file on the Telegram server.
    * @returns A promise that resolves with the file data as a Buffer.
    */
-  download(filePath?: string | null): Promise<Buffer>;
+  download(): Promise<Buffer>;
 
   /**
    * Writes the file to the specified path.
@@ -545,9 +557,23 @@ export declare class User extends Base {
   inAttachmentMenu?: boolean;
   /**
    * Fetches this user
-   * @param force - Whether to skip the cache check and request the API
+   * @param options - options for fetch user
    */
-  fetch(force?: boolean): Promise<User>;
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<User>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(options?: Omit<IFetchOptions, "cache">): Promise<User | ChatFullInfo>;
   /**
    * Use this method to send text messages.
    * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
@@ -679,6 +705,39 @@ export declare class User extends Base {
       >
   >;
   /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param giftId - Identifier of the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    giftId: string,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param result - An object describing the message to be sent.
+   * @param options - out parameters.
+   * @returns Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(
+    result: InlineQueryResult,
+    options?: Omit<
+      MethodParameters["savePreparedInlineMessage"],
+      "userId" | "result"
+    >,
+  ): Promise<PreparedInlineMessage>;
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns Returns True on success.
+   */
+  setStarSubscription(
+    telegramPaymentChargeId: string,
+    isCanceled: boolean,
+  ): Promise<true>;
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param telegramPaymentId - Telegram payment identifier
    * @returns Returns True on success.
@@ -696,7 +755,27 @@ export declare class User extends Base {
    * @param limit - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100
    * @returns Returns a UserProfilePhotos object.
    */
-  getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
+  fetchProfilePhotos(
+    offset?: number,
+    limit?: number,
+  ): Promise<UserProfilePhotos>;
+  /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @returns Returns a UserChatBoosts object.
+   */
+  fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
+  /**
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  setEmojiStatus(options?: {
+    /** Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. */
+    emojiStatusCustomEmojiId?: string;
+    /** Expiration date of the emoji status, if any */
+    emojiStatusExpirationDate?: number;
+  }): Promise<true>;
   /**
    * Checks if this user is equal to another user.
    * @param other - The other object to compare with.
@@ -717,6 +796,23 @@ export interface ICachedOptions<T> {
    * Returns `true` to cache the item, `false` otherwise.
    */
   cacheFilter?: (holds: T) => boolean;
+}
+
+export interface IFetchOptions {
+  /**
+   * Whether to bypass the cache and fetch directly from the source.
+   * Defaults to `false`.
+   */
+  force?: boolean;
+  /**
+   * Whether to cache the fetched data. Defaults to `true`.
+   */
+  cache?: boolean;
+  /**
+   * Whether to retrieve complete, detailed information.
+   * Defaults to `false`.
+   */
+  fullInfo?: boolean;
 }
 
 export declare class BaseManager<
@@ -897,7 +993,7 @@ export interface ICollectorOptions<EventCtx, Collected> {
   dispose?: boolean;
   filter?: (
     data: Collected,
-    collected: Collection<EventCtx, Collected>,
+    collected: ReadonlyCollection<EventCtx, Collected>,
   ) => PossiblyAsync<boolean>;
   idle?: number;
   max?: number;
@@ -917,7 +1013,7 @@ export interface ICollectorEvent<K, V> {
    * @param data - The data item to be collected.
    * @param collect - The collection where the data is stored.
    */
-  collect: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+  collect: (data: V, collect: ReadonlyCollection<K, V>) => PossiblyAsync<void>;
 
   /**
    * Triggered when a data item is ignored. The `ignore` function is called with
@@ -937,7 +1033,7 @@ export interface ICollectorEvent<K, V> {
    * @param data - The data item to be disposed of.
    * @param collect - The collection where the data is stored.
    */
-  dispose: (data: V, collect: Collection<K, V>) => PossiblyAsync<void>;
+  dispose: (data: V, collect: ReadonlyCollection<K, V>) => PossiblyAsync<void>;
 
   /**
    * Triggered when the collection process ends. The `end` function receives the
@@ -947,7 +1043,10 @@ export interface ICollectorEvent<K, V> {
    * @param collected - The collection of all collected data.
    * @param reason - The reason the collection process ended.
    */
-  end: (collected: Collection<K, V>, reason: string) => PossiblyAsync<void>;
+  end: (
+    collected: ReadonlyCollection<K, V>,
+    reason: string,
+  ) => PossiblyAsync<void>;
 }
 
 /**
@@ -1387,7 +1486,7 @@ export interface IReactionEventCollector
    * @param data - The collection of user reactions.
    */
   user: (
-    data: Collection<string, MessageReactionUpdated[]>,
+    data: ReadonlyCollection<string, MessageReactionUpdated[]>,
   ) => PossiblyAsync<void>;
   /**
    * Event emitted when a reaction is created.
@@ -2846,7 +2945,7 @@ export declare class Game extends Base {
    * @returns  Returns an Array of GameHighScore objects.
    * This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
    */
-  getHighScores(
+  fetchHighScores(
     userId: string | number,
     options?: Omit<
       {
@@ -2858,6 +2957,65 @@ export declare class Game extends Base {
       "userId"
     >,
   ): Promise<GameHighScore[]>;
+}
+
+export declare class Gift extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the gift that can be sent by the bot.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").Gift,
+  );
+  /** Unique identifier of the gift */
+  id: string;
+  /** The sticker that represents the gift */
+  sticker: Sticker;
+  /** The number of Telegram Stars that must be paid to send the sticker */
+  startCount: number;
+  /** The total number of the gifts of this type that can be sent; for limited gifts only */
+  totalCount?: number;
+  /** The number of remaining gifts of this type that can be sent; for limited gifts only */
+  remainingCount?: number;
+  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param userId - Unique identifier of the target user that will receive the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    userId: string | number,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Checks if this gift is equal to another gift.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of Gift and are equal based on key properties, otherwise false.
+   */
+  equals(other: Gift): boolean;
+}
+
+export declare class Gifts {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the list of gifts.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").Gifts,
+  );
+  /** The list of gifts */
+  gifts: Collection<string, Gift>;
+  /**
+   * Checks if this gifts is equal to another gifts.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of Gifts and are equal based on key properties, otherwise false.
+   */
+  equals(other: Gifts): boolean;
+  /**
+   * Makes the class iterable, returning each `Gift` object.
+   */
+  [Symbol.iterator](): IterableIterator<Gift>;
 }
 
 export declare class Giveaway extends Base {
@@ -2872,7 +3030,7 @@ export declare class Giveaway extends Base {
   /**
    * The list of chats which the user must join to participate in the giveaway
    */
-  chats: Chat[];
+  chats: Collection<string, Chat>;
   /** Point in time (Unix timestamp) when winners of the giveaway will be selected */
   selectedUnixTime: number;
   /** The number of users which are supposed to be selected as winners of the giveaway */
@@ -2927,7 +3085,7 @@ export declare class GiveawayWinners extends Base {
   /**
    * List of up to 100 winners of the giveaway
    */
-  winners: User[];
+  winners: Collection<string, User>;
   /**
    * @param data - Data about the represents a message about the completion of a giveaway with public winners
    * @override
@@ -2977,6 +3135,10 @@ export declare class GiveawayWinners extends Base {
    * @returns True if both objects are instances of GiveawayWinners and are equal based on key properties, otherwise false.
    */
   equals(other: GiveawayWinners): boolean;
+  /**
+   * Makes the class iterable, returning each `User` object.
+   */
+  [Symbol.iterator](): IterableIterator<User>;
 }
 
 export declare class Invoice extends Base {
@@ -3468,6 +3630,12 @@ export declare class SuccessfulPayment extends Base {
   totalAmount: number;
   /** Bot specified invoice payload */
   payload: string;
+  /** Expiration date of the subscription, in Unix time; for recurring payments only */
+  subscriptionExpirationUnixTime?: number;
+  /** True, if the payment is a recurring payment for a subscription */
+  isRecurring: boolean;
+  /** True, if the payment is the first payment for a subscription */
+  isFirstRecurring: boolean;
   /** Identifier of the shipping option chosen by the user */
   shippingId?: string;
   /** Order information provided by the user */
@@ -3477,11 +3645,29 @@ export declare class SuccessfulPayment extends Base {
   /** Provider payment identifier */
   providedPaymentId: string;
   /**
+   * Return the timestamp subscription, in milliseconds
+   */
+  get subscriptionExpirationTimestamp(): null | number;
+  /**
+   * Date the subscription
+   */
+  get editedAt(): null | Date;
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param userId - Identifier of the user whose payment will be refunded
    * @returns Returns True on success.
    */
   refundStarPayment(userId: string | number): Promise<true>;
+  /** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  editStarSubscription(options: {
+    /** Identifier of the user whose subscription will be edited. */
+    userId: number | string;
+    /** Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot. */
+    isCanceled: boolean;
+  }): Promise<true>;
 }
 
 export declare class RefundedPayment extends Base {
@@ -3546,6 +3732,188 @@ export declare class SharedUser extends Base {
    */
   photo?: Photo[];
   /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<User>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(options?: Omit<IFetchOptions, "cache">): Promise<User | ChatFullInfo>;
+  /**
+   * Use this method to send text messages.
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  send(
+    text: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    Message & {
+      content: string;
+    }
+  >;
+  send(
+    text: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "chatId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  send(
+    text:
+      | string
+      | Omit<
+          {
+            businessConnectionId?: string;
+            chatId: number | string;
+            messageThreadId?: string | number;
+            media: ReadonlyArray<
+              | InputMediaAudio
+              | InputMediaDocument
+              | InputMediaPhoto
+              | InputMediaVideo
+            >;
+            disableNotification?: boolean;
+            protectContent?: boolean;
+            messageEffectId?: string;
+            replyParameters?: ReplyParameters;
+          },
+          "chatId"
+        >,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    | (Message & {
+        content: string;
+      })
+    | Array<
+        | (Message & {
+            audio: Audio;
+          })
+        | (Message & {
+            document: Document;
+          })
+        | (Message & {
+            photo: Photo;
+          })
+        | (Message & {
+            video: Video;
+          })
+      >
+  >;
+  /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param giftId - Identifier of the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    giftId: string,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param result - An object describing the message to be sent.
+   * @param options - out parameters.
+   * @returns Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(
+    result: InlineQueryResult,
+    options?: Omit<
+      MethodParameters["savePreparedInlineMessage"],
+      "userId" | "result"
+    >,
+  ): Promise<PreparedInlineMessage>;
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns Returns True on success.
+   */
+  setStarSubscription(
+    telegramPaymentChargeId: string,
+    isCanceled: boolean,
+  ): Promise<true>;
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param telegramPaymentId - Telegram payment identifier
    * @returns Returns True on success.
@@ -3563,7 +3931,22 @@ export declare class SharedUser extends Base {
    * @param limit - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100
    * @returns Returns a UserProfilePhotos object.
    */
-  getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
+  fetchProfilePhotos(
+    offset?: number,
+    limit?: number,
+  ): Promise<UserProfilePhotos>;
+  /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @returns Returns a UserChatBoosts object.
+   */
+  fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
+  /**
+   * Checks if this user is equal to another user.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of User and are equal based on key properties, otherwise false.
+   */
+  equals(other: SharedUser): boolean;
 }
 
 export declare class UsersShared {
@@ -3578,7 +3961,7 @@ export declare class UsersShared {
   /** Identifier of the request */
   requestId: number;
   /** Information about users shared with the bot. */
-  users: SharedUser[];
+  users: Collection<string, SharedUser>;
   /** Makes the class iterable, returning each `SharedUser` object. */
   [Symbol.iterator](): IterableIterator<SharedUser>;
 }
@@ -3602,6 +3985,1145 @@ export declare class ChatShared extends Base {
   username?: string;
   /** Available sizes of the chat photo, if the photo was requested by the bot */
   photo?: Photo[];
+  me(): Promise<ChatMember>;
+  /**
+   * Fetches this chat
+   * @param options - options for fetch chat
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<Chat>;
+  /**
+   * Fetches this chat
+   * @param options - options for fetch chat
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches this chat
+   * @param options - options for fetch chat
+   */
+  fetch(options?: Omit<IFetchOptions, "cache">): Promise<Chat | ChatFullInfo>;
+  /**
+   * Retrieves the permissions of a specific member in the chat.
+   * @param member - The member object to check permissions for.
+   * @param checkAdmin - A flag to check if the member is an admin or creator.
+   * @returns The permissions object of the member or null if not available.
+   */
+  memberPermissions(
+    member: ChatMember | string,
+    checkAdmin?: boolean,
+  ): Promise<UserPermissions | null>;
+  /**
+   * @param options - message collector options
+   */
+  createMessageCollector(
+    options?: ICollectorOptions<string, Message>,
+  ): MessageCollector;
+  /**
+   * @param options - message collector options
+   */
+  awaitMessages(
+    options?: ICollectorOptions<string, Message> & {
+      errors?: string[];
+    },
+  ): Promise<import("@telegram.ts/collection").Collection<string, Message>>;
+  /**
+   * @param options - reaction collector options
+   */
+  createReactionCollector(
+    options?: ICollectorOptions<string, MessageReactionUpdated>,
+  ): ReactionCollector;
+  /**
+   * @param options - reaction collector options
+   */
+  awaitReactions(
+    options?: ICollectorOptions<string, MessageReactionUpdated> & {
+      errors?: string[];
+    },
+  ): Promise<
+    import("@telegram.ts/collection").Collection<string, MessageReactionUpdated>
+  >;
+  /**
+   * @param options - inline keyboard collector options
+   */
+  createMessageComponentCollector(
+    options?: ICollectorOptions<string, CallbackQuery>,
+  ): InlineKeyboardCollector;
+  /**
+   * Use this method to send text messages.
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  send(
+    text: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      content: string;
+    }
+  >;
+  send(
+    text: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  send(
+    text:
+      | string
+      | Omit<
+          {
+            businessConnectionId?: string;
+            chatId: number | string;
+            messageThreadId?: string | number;
+            media: ReadonlyArray<
+              | InputMediaAudio
+              | InputMediaDocument
+              | InputMediaPhoto
+              | InputMediaVideo
+            >;
+            disableNotification?: boolean;
+            protectContent?: boolean;
+            messageEffectId?: string;
+            replyParameters?: ReplyParameters;
+          },
+          "chatId" | "messageThreadId"
+        >,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    | (Message & {
+        content: string;
+      })
+    | Array<
+        | (Message & {
+            audio: Audio;
+          })
+        | (Message & {
+            document: Document;
+          })
+        | (Message & {
+            photo: Photo;
+          })
+        | (Message & {
+            video: Video;
+          })
+      >
+  >;
+  /**
+   * Use this method for your bot to leave this group, supergroup or channel.
+   * @returns Returns True on success.
+   */
+  leave(): Promise<true>;
+  /**
+   * Use this method to get a list of administrators in a chat, which aren't bots.
+   * @returns Returns an Array of ChatAdministratorRights objects.
+   */
+  fetchAdmins(): Promise<ChatAdministratorRights[]>;
+  /**
+   * Use this method to get the number of members in a chat.
+   * @returns Returns Int on success.
+   */
+  membersCount(): Promise<number>;
+  /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param userId - Unique identifier of the target user.
+   * @returns Returns a UserChatBoosts object.
+   */
+  fetchUserBoosts(userId: number | string): Promise<UserChatBoosts>;
+  /**
+   * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
+   * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param options - out parameters
+   * @returns On success, an array of MessageId of the sent messages is returned.
+   */
+  forwardMessages(
+    messageIds: (number | string)[],
+    chatId: number | string,
+    options?: Omit<
+      {
+        chatId: number | string;
+        messageThreadId?: string | number;
+        fromChatId: number | string;
+        messageIds: (string | number)[];
+        disableNotification?: boolean;
+        protectContent?: boolean;
+      },
+      "chatId" | "fromChatId" | "messageIds"
+    >,
+  ): Promise<number[]>;
+  /**
+   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages.
+   * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param options - out parameters
+   * @returns On success, an array of MessageId of the sent messages is returned.
+   */
+  copyMessages(
+    messageIds: (number | string)[],
+    chatId: number | string,
+    options?: Omit<
+      {
+        chatId: number | string;
+        messageThreadId?: string | number;
+        fromChatId: number | string;
+        messageIds: (string | number)[];
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        removeCaption?: boolean;
+      },
+      "chatId" | "fromChatId" | "messageIds"
+    >,
+  ): Promise<number[]>;
+  /**
+	 * Use this method to delete a message, including service messages, with the following limitations:
+	- A message can only be deleted if it was sent less than 48 hours ago.
+	- Service messages about a supergroup, channel, or forum topic creation can't be deleted.
+	- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.
+	- Bots can delete outgoing messages in private chats, groups, and supergroups.
+	- Bots can delete incoming messages in private chats.
+	- Bots granted can_post_messages permissions can delete outgoing messages in channels.
+	- If the bot is an administrator of a group, it can delete any message there.
+	- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+	 * @param id - Identifier of the message to delete
+	 * @returns Returns True on success.
+ */
+  deleteMessage(id: number | string): Promise<true>;
+  /**
+   * Use this method to delete multiple messages simultaneously.
+   * @param ids - A list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted
+   * @returns Returns True on success.
+   */
+  deleteMessages(ids: (number | string)[]): Promise<true>;
+  /**
+   * Use this method to change the bot's menu button in a private chat, or the default menu button.
+   * @param menuButton - An object for the bot's new menu button. Defaults to MenuButtonDefault
+   * @returns Returns True on success.
+   */
+  setMenuButton(menuButton?: MenuButton): Promise<true>;
+  /**
+   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * @param messageId - Identifier of a message to pin
+   * @param options - Options for pinned message
+   * @returns Returns True on success.
+   */
+  pinMessage(
+    messageId: string | number,
+    options?: {
+      /** Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats */
+      notification?: boolean;
+      /** Unique identifier of the business connection on behalf of which the message will be pinned */
+      businessConnectionId?: string;
+    },
+  ): Promise<true>;
+  /**
+   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * @param options - Options for unpinned message
+   * @returns Returns True on success.
+   */
+  unpinMessage(options?: {
+    /** Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned */
+    messageId?: boolean;
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    businessConnectionId?: string;
+  }): Promise<true>;
+  /**
+   * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * @returns Returns True on success.
+   */
+  unpinAllMessages(): Promise<true>;
+  /**
+   * Use this method to send photos.
+   * @param photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendPhoto(
+    photo:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        photo:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        caption?: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        captionEntities?: MessageEntity[];
+        showCaptionAboveMedia?: boolean;
+        hasSpoiler?: boolean;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "photo" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      photo: Photo[];
+    }
+  >;
+  /**
+   * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+   * @param audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendAudio(
+    audio:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        audio:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        caption?: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        captionEntities?: MessageEntity[];
+        duration?: number;
+        performer?: string;
+        title?: string;
+        thumbnail?:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "audio" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      audio: Audio;
+    }
+  >;
+  /**
+   * Use this method to send paid media to channel chats.
+   * @param media - An array describing the media to be sent; up to 10 items
+   * @param starCount - The number of Telegram Stars that must be paid to buy access to the media
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendPaidMedia(
+    media: MethodParameters["sendPaidMedia"]["media"],
+    starCount: number,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        starCount: number;
+        media: InputPaidMedia[];
+        caption?: string;
+        parseMode?: string;
+        captionEntities?: MessageEntity[];
+        showCaptionAboveMedia?: boolean;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "media" | "chatId" | "starCount"
+    >,
+  ): Promise<
+    Message & {
+      paidMedia: PaidMediaInfo;
+    }
+  >;
+  /**
+   * Use this method to send general files.
+   * @param document - File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+   */
+  sendDocument(
+    document:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        document:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        thumbnail?:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        caption?: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        captionEntities?: MessageEntity[];
+        disableContentTypeDetection?: boolean;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "document" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      document: Document;
+    }
+  >;
+  /**
+   * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document).
+   * @param video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data.
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+   */
+  sendVideo(
+    video:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        video:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        duration?: number;
+        width?: number;
+        height?: number;
+        thumbnail?:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        caption?: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        captionEntities?: MessageEntity[];
+        showCaptionAboveMedia?: boolean;
+        hasSpoiler?: boolean;
+        supportsStreaming?: boolean;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "video" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      video: Video;
+    }
+  >;
+  /**
+   * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound).
+   * @param animation - Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+   */
+  sendAnimation(
+    animation:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        animation:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        duration?: number;
+        width?: number;
+        height?: number;
+        thumbnail?:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        caption?: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        captionEntities?: MessageEntity[];
+        showCaptionAboveMedia?: boolean;
+        hasSpoiler?: boolean;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "animation" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      animation: Animation;
+    }
+  >;
+  /**
+   * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document).
+   * @param voice - Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+   */
+  sendVoice(
+    voice:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        voice:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        caption?: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        captionEntities?: MessageEntity[];
+        duration?: number;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "voice" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      voice: Voice;
+    }
+  >;
+  /**
+   * Use this method to send video messages.
+   * @param videoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendVideoNote(
+    videoNote:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        videoNote:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        duration?: number;
+        length?: number;
+        thumbnail?:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "videoNote" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      videoNote: VideoNote;
+    }
+  >;
+  /**
+   * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type.
+   * @param media - media
+   * @param options - out parameters
+   * @returns On success, an array of Messages that were sent is returned.
+   */
+  sendMediaGroup(
+    media: MethodParameters["sendMediaGroup"]["media"],
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "media" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  /**
+   * Use this method to send point on the map.
+   * @param latitude - Latitude of the location
+   * @param longitude - Longitude of the location
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendLocation(
+    latitude: number,
+    longitude: number,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        latitude: number;
+        longitude: number;
+        horizontalAccuracy?: number;
+        livePeriod?: number;
+        heading?: number;
+        proximityAlertRadius?: number;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "chatId" | "messageThreadId" | "latitude" | "longitude"
+    >,
+  ): Promise<
+    Message & {
+      location: Location;
+    }
+  >;
+  /**
+   * Use this method to send information about a venue.
+   * @param latitude - Latitude of the location
+   * @param longitude - Longitude of the location
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendVenue(
+    latitude: number,
+    longitude: number,
+    options: Omit<
+      MethodParameters["sendVenue"],
+      "latitude" | "longitude" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      venue: Venue;
+    }
+  >;
+  /**
+   * Use this method to send phone contacts.
+   * @param phoneNumber - Contact's phone number
+   * @param firstName - Contact's first name
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendContact(
+    phoneNumber: string,
+    firstName: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        phoneNumber: string;
+        firstName: string;
+        lastName?: string;
+        vcard?: string;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "chatId" | "phoneNumber" | "firstName"
+    >,
+  ): Promise<
+    Message & {
+      contact: Contact;
+    }
+  >;
+  /**
+   * Use this method to send a native poll.
+   * @param question - Poll question, 1-300 characters
+   * @param options - A list of 2-10 answer options
+   * @param other - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendPoll(
+    question: string,
+    options: InputPollOption[],
+    other?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        question: string;
+        questionParseMode?: string;
+        questionEntities?: MessageEntity[];
+        options: InputPollOption[];
+        isAnonymous?: boolean;
+        type?: "quiz" | "regular";
+        allowsMultipleAnswers?: boolean;
+        correctOptionId?: number;
+        explanation?: string;
+        explanationParseMode?: import("@telegram.ts/types").ParseMode;
+        explanationEntities?: MessageEntity[];
+        openPeriod?: number;
+        closeDate?: number;
+        isClosed?: boolean;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "options" | "chatId" | "messageThreadId" | "question"
+    >,
+  ): Promise<
+    Message & {
+      poll: Poll;
+    }
+  >;
+  /**
+   * Use this method to send an animated emoji that will display a random value.
+   * @param emoji - Emoji on which the dice throw animation is based. Currently, must be one of "🎲", "🎯", "🏀", "⚽", "🎳", or "🎰". Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and values 1-64 for "🎰".
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendDice(
+    emoji: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        emoji?: string;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "emoji" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      dice: Dice;
+    }
+  >;
+  /**
+   * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status).
+   * @param action - Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes
+   * @returns Returns True on success.
+   */
+  sendAction(
+    action?:
+      | "typing"
+      | "upload_photo"
+      | "record_video"
+      | "upload_video"
+      | "record_voice"
+      | "upload_voice"
+      | "upload_document"
+      | "choose_sticker"
+      | "find_location"
+      | "record_video_note"
+      | "upload_video_note",
+  ): Promise<true>;
+  /**
+   * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers.
+   * @param sticker - Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendSticker(
+    sticker:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        sticker:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        emoji?: string;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "sticker" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      sticker: Sticker;
+    }
+  >;
+  /**
+   * Use this method to send invoices.
+   * @param title - Product name, 1-32 characters
+   * @param description - Product description, 1-255 characters
+   * @param payload - Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes
+   * @param currency - Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars
+   * @param prices - Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendInvoice(
+    title: string,
+    description: string,
+    payload: string,
+    currency: string,
+    prices: import("@telegram.ts/types").LabeledPrice[],
+    options?: Omit<
+      {
+        chatId: number | string;
+        messageThreadId?: string | number;
+        title: string;
+        description: string;
+        payload: string;
+        providerToken?: string;
+        currency: string;
+        prices: readonly LabeledPrice[];
+        maxTipAmount?: number;
+        suggestedTipAmounts?: number[];
+        startParameter?: string;
+        providerData?: string;
+        photoUrl?: string;
+        photoSize?: number;
+        photoWidth?: number;
+        photoHeight?: number;
+        needName?: boolean;
+        needPhoneNumber?: boolean;
+        needEmail?: boolean;
+        needShippingAddress?: boolean;
+        sendPhoneNumberToProvider?: boolean;
+        sendEmailToProvider?: boolean;
+        isFlexible?: boolean;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?: InlineKeyboardMarkup;
+      },
+      | "currency"
+      | "description"
+      | "title"
+      | "chatId"
+      | "messageThreadId"
+      | "payload"
+      | "prices"
+    >,
+  ): Promise<
+    Message & {
+      invoice: Invoice;
+    }
+  >;
+  /**
+   * Use this method to send a game.
+   * @param gameShortName - Short name of the game, serves as the unique identifier for the game. Set up your games via BotFather.
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendGame(
+    gameShortName: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: string | number;
+        messageThreadId?: string | number;
+        gameShortName: string;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?: InlineKeyboardMarkup;
+      },
+      "chatId" | "messageThreadId" | "gameShortName"
+    >,
+  ): Promise<
+    Message & {
+      game: Game;
+    }
+  >;
+  /**
+   * Checks if this chat is equal to another chat.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of ChatShared and are equal based on key properties, otherwise false.
+   */
+  equals(other: ChatShared): boolean;
 }
 
 export declare class PassportFile extends InputFile {
@@ -3908,7 +5430,11 @@ export declare class VideoChatParticipantsInvited extends Base {
   /**
    * New members that were invited to the video chat
    */
-  users: User[];
+  users: Collection<string, User>;
+  /**
+   * Makes the class iterable, returning each `User` object.
+   */
+  [Symbol.iterator](): IterableIterator<User>;
 }
 
 export declare class Message extends Base {
@@ -4048,7 +5574,7 @@ export declare class Message extends Base {
   /**
    * New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
    */
-  newChatMembers?: User[];
+  newChatMembers?: Collection<string, User>;
   /**
    * A member was removed from the group, information about them (this member may be the bot itself)
    */
@@ -4954,9 +6480,23 @@ export declare class Chat extends Base {
   me(): Promise<ChatMember>;
   /**
    * Fetches this chat
-   * @param force - Whether to skip the cache check and request the API
+   * @param options - options for fetch chat
    */
-  fetch(force?: boolean): Promise<Chat>;
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<Chat>;
+  /**
+   * Fetches this chat
+   * @param options - options for fetch chat
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches this chat
+   * @param options - options for fetch chat
+   */
+  fetch(options?: Omit<IFetchOptions, "cache">): Promise<Chat | ChatFullInfo>;
   /**
    * Retrieves the permissions of a specific member in the chat.
    * @param member - The member object to check permissions for.
@@ -5197,12 +6737,18 @@ export declare class Chat extends Base {
    * Use this method to get a list of administrators in a chat, which aren't bots.
    * @returns Returns an Array of ChatAdministratorRights objects.
    */
-  getAdmins(): Promise<ChatAdministratorRights[]>;
+  fetchAdmins(): Promise<ChatAdministratorRights[]>;
   /**
    * Use this method to get the number of members in a chat.
    * @returns Returns Int on success.
    */
   membersCount(): Promise<number>;
+  /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param userId - Unique identifier of the target user.
+   * @returns Returns a UserChatBoosts object.
+   */
+  fetchUserBoosts(userId: number | string): Promise<UserChatBoosts>;
   /**
    * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method
    * @param name - Name of the sticker set to be set as the group sticker set.
@@ -6492,14 +8038,28 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
    */
   fetch(
     user: ChatMember | Message | string,
-    {
-      cache,
-      force,
-    }?: {
-      cache?: boolean;
-      force?: boolean;
-    },
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<User>;
+  /**
+   * Fetches a user by ID, optionally caching the result.
+   * @param user - The ChatMember, Message, or user ID to fetch.
+   * @param options - Options for fetching.
+   * @returns The fetched ChatFullInfo instance.
+   */
+  fetch(
+    user: ChatMember | Message | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches a user by ID, optionally caching the result.
+   * @param user - The ChatMember, Message, or user ID to fetch.
+   * @param options - Options for fetching.
+   * @returns The fetched User or ChatFullInfo instance.
+   */
+  fetch(
+    user: ChatMember | Message | string,
+    options?: IFetchOptions,
+  ): Promise<User | ChatFullInfo>;
 }
 
 export declare class ChatManager extends BaseManager<Chat, ApiChat> {
@@ -6526,15 +8086,29 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
    * @returns The fetched chat object.
    */
   fetch(
-    chat: Chat | string,
-    {
-      cache,
-      force,
-    }?: {
-      cache?: boolean;
-      force?: boolean;
-    },
+    user: Chat | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<Chat>;
+  /**
+   * Fetches a chat object from the API.
+   * @param chat - The chat instance or ID.
+   * @param options - Additional options.
+   * @returns The fetched ChatFullInfo object.
+   */
+  fetch(
+    user: Chat | string,
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches a chat object from the API.
+   * @param chat - The chat instance or ID.
+   * @param options - Additional options.
+   * @returns The fetched chat or full chat info object.
+   */
+  fetch(
+    user: Chat | string,
+    options?: IFetchOptions,
+  ): Promise<Chat | ChatFullInfo>;
 }
 
 export declare class BusinessConnection extends Base {
@@ -6708,6 +8282,50 @@ export declare class BusinessConnection extends Base {
           })
       >
   >;
+  /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param giftId - Identifier of the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    giftId: string,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param result - An object describing the message to be sent.
+   * @param options - out parameters.
+   * @returns Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(
+    result: InlineQueryResult,
+    options?: Omit<
+      MethodParameters["savePreparedInlineMessage"],
+      "userId" | "result"
+    >,
+  ): Promise<PreparedInlineMessage>;
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns Returns True on success.
+   */
+  setStarSubscription(
+    telegramPaymentChargeId: string,
+    isCanceled: boolean,
+  ): Promise<true>;
+  /**
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  setEmojiStatus(options?: {
+    /** Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. */
+    emojiStatusCustomEmojiId?: string;
+    /** Expiration date of the emoji status, if any */
+    emojiStatusExpirationDate?: number;
+  }): Promise<true>;
 }
 
 export declare class BusinessMessagesDeleted extends Base {
@@ -7369,6 +8987,10 @@ export declare class BaseClient extends EventEmitter {
   getUserProfilePhotos(
     params: MethodParameters["getUserProfilePhotos"],
   ): Promise<MethodsLibReturnType["getUserProfilePhotos"]>;
+  /** Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success. */
+  setUserEmojiStatus(
+    params: MethodParameters["setUserEmojiStatus"],
+  ): Promise<MethodsLibReturnType["setUserEmojiStatus"]>;
   /** Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
   
 	Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
@@ -7748,6 +9370,12 @@ export declare class BaseClient extends EventEmitter {
     name: string,
     customEmojiId?: string,
   ): Promise<MethodsLibReturnType["setCustomEmojiStickerSetThumbnail"]>;
+  /** Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object. */
+  getAvailableGifts(): Promise<MethodsLibReturnType["getAvailableGifts"]>;
+  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success. */
+  sendGift(
+    params: MethodParameters["sendGift"],
+  ): Promise<MethodsLibReturnType["sendGift"]>;
   /** Use this method to delete a sticker set that was created by the bot. Returns True on success. */
   deleteStickerSet(
     name: string,
@@ -7763,6 +9391,10 @@ export declare class BaseClient extends EventEmitter {
     webAppQueryId: string,
     result: MethodParameters["answerWebAppQuery"]["result"],
   ): Promise<MethodsLibReturnType["answerWebAppQuery"]>;
+  /** Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object. */
+  savePreparedInlineMessage(
+    params: MethodParameters["savePreparedInlineMessage"],
+  ): Promise<MethodsLibReturnType["savePreparedInlineMessage"]>;
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(
     params: MethodParameters["sendInvoice"],
@@ -7771,6 +9403,10 @@ export declare class BaseClient extends EventEmitter {
   createInvoiceLink(
     params: MethodParameters["createInvoiceLink"],
   ): Promise<MethodsLibReturnType["createInvoiceLink"]>;
+  /** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success. */
+  editUserStarSubscription(
+    params: MethodParameters["editUserStarSubscription"],
+  ): Promise<MethodsLibReturnType["editUserStarSubscription"]>;
   /** If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
   answerShippingQuery(
     params: MethodParameters["answerShippingQuery"],
@@ -8155,6 +9791,25 @@ export declare class MenuButton {
   };
 }
 
+export declare class PreparedInlineMessage {
+  /**
+   * @param data - Data about the inline message to be sent by a user of a Mini App.
+   */
+  constructor(data: import("@telegram.ts/types").PreparedInlineMessage);
+  /** Unique identifier of the prepared message */
+  id: string;
+  /** Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used */
+  expirationUnixTime: number;
+  /**
+   * Return the timestamp prepared message, in milliseconds
+   */
+  get expirationTimestamp(): number | null;
+  /**
+   * Date the prepared message
+   */
+  get expirationAt(): Date | null;
+}
+
 export declare class ClientUser extends User {
   /**
    * @param client - The client that instantiated this
@@ -8184,8 +9839,41 @@ export declare class ClientUser extends User {
   get token(): string;
   /**
    * Fetch about the client/bot
+   * @param options - options for fetch client/bot
    */
-  override fetch(): Promise<ClientUser>;
+  override fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<ClientUser>;
+  /**
+   * Fetch about the client/bot
+   * @param options - options for fetch client/bot
+   */
+  override fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetch about the client/bot
+   * @param options - options for fetch client/bot
+   */
+  override fetch(
+    options?: Omit<IFetchOptions, "cache">,
+  ): Promise<ClientUser | ChatFullInfo>;
+  /**
+   * Returns the bot's Telegram Star transactions in chronological order.
+   * @param options - out parameters.
+   * @returns On success, returns a StarTransactions object.
+   */
+  fetchStarTransactions(options?: {
+    /** The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100. */
+    limit?: number;
+    /** Number of transactions to skip in the response */
+    offset?: number;
+  }): Promise<StarTransactions>;
+  /**
+   * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
+   * @returns Returns a Gifts object.
+   */
+  fetchGifts(): Promise<Gifts>;
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
    * @param commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
@@ -8207,7 +9895,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
    */
-  getCommands(
+  fetchCommands(
     score?: BotCommandScope,
     language?: LanguageCode,
   ): Promise<BotCommand[]>;
@@ -8233,7 +9921,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot name on success
    */
-  getName(language?: LanguageCode): Promise<string>;
+  fetchName(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty.
    * @param description - New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language
@@ -8246,7 +9934,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot description on success.
    */
-  getDescription(language?: LanguageCode): Promise<string>;
+  fetchDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot.
    * @param description - New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language
@@ -8262,7 +9950,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot short description on success
    */
-  getShortDescription(language?: LanguageCode): Promise<string>;
+  fetchShortDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
@@ -8275,7 +9963,7 @@ export declare class ClientUser extends User {
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
    * @returns Returns MenuButton on success.
    */
-  getMenuButton(chatId?: number): Promise<MenuButton>;
+  fetchMenuButton(chatId?: number): Promise<MenuButton>;
   /**
    * Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot.
    * @param rights - An object describing new default administrator rights. If not specified, the default administrator rights will be cleared
@@ -8291,7 +9979,7 @@ export declare class ClientUser extends User {
    * @param forChannels - Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned.
    * @returns Returns ChatAdministratorRights on success.
    */
-  getAdministratorRigths(
+  fetchAdministratorRigths(
     forChannels?: boolean,
   ): Promise<ChatAdministratorRights>;
   /**
@@ -8340,7 +10028,6 @@ export interface ClientOptions {
   userCacheFilter?: (user: User) => boolean;
   chatCacheFilter?: (chat: Chat) => boolean;
   pollingTimeout?: number;
-  errorHandler?: boolean;
 }
 
 /**
@@ -8368,7 +10055,7 @@ export declare class TelegramClient extends BaseClient {
   /**
    * The authenticated user associated with the client.
    */
-  user: ClientUser;
+  user: ClientUser | null;
   /**
    * Creates an instance of TelegramClient.
    * @param authToken - The authentication token for the Telegram bot.
@@ -8717,7 +10404,7 @@ export declare class UserChatBoosts {
   /**
    * The list of boosts added to the chat by the user
    */
-  boosts: ChatBoost[];
+  boosts: Collection<string, ChatBoost>;
   /**
    * The boost count added to the chat by the user
    */
@@ -8816,15 +10503,25 @@ export declare class TransactionPartner extends Base {
    */
   payload?: string;
   /**
+   * The duration of the paid subscription.
+   */
+  subscriptionPeriod?: number;
+  /**
    * The number of successful requests that exceeded regular limits and were therefore billed
    */
   requestCount?: number;
+  /**
+   * The gift sent to the user by the bot.
+   */
+  gift?: string;
 
   isUser(): this is this & {
     withdrawal?: undefined;
     user: User;
     paidMedia?: PaidMedia[];
     paidMediaPayload?: string;
+    gift?: string;
+    subscriptionPeriod?: number;
     requestCount?: undefined;
   };
 
@@ -8833,6 +10530,8 @@ export declare class TransactionPartner extends Base {
     user?: undefined;
     paidMedia?: undefined;
     paidMediaPayload?: undefined;
+    gift?: undefined;
+    subscriptionPeriod?: undefined;
     requestCount?: undefined;
   };
 
@@ -8841,6 +10540,8 @@ export declare class TransactionPartner extends Base {
     user?: undefined;
     paidMedia?: undefined;
     paidMediaPayload?: undefined;
+    gift?: undefined;
+    subscriptionPeriod?: undefined;
     requestCount: number;
   };
 }
@@ -9952,8 +11653,9 @@ export declare enum ErrorCodes {
   FileRetrievalFailed = "FILE_RETRIEVAL_FAILED",
   FileDownloadFailed = "FILE_DOWNLOAD_FAILED",
   FileWriteInvalidType = "FILE_WRITE_INVALID_TYPE",
-  InvalidUserID = "INVALID_USER_ID",
-  InvalidChatID = "INVALID_CHAT_ID",
+  InvalidUserId = "INVALID_USER_ID",
+  InvalidChatId = "INVALID_CHAT_ID",
+  InvalidClientId = "INVALID_CLIENT_ID",
 }
 
 export declare const ErrorMessages: {
@@ -9970,6 +11672,7 @@ export declare const ErrorMessages: {
   readonly FILE_WRITE_INVALID_TYPE: "Invalid file write type specified. Available types: 'stream' or 'promise'.";
   readonly INVALID_USER_ID: "The provided ID is invalid for retrieving user information; it does not correspond to a valid user ID.";
   readonly INVALID_CHAT_ID: "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.";
+  readonly INVALID_CLIENT_ID: "The bot ID is not available. Please check if the bot has been initialized";
 };
 
 /**
@@ -10015,7 +11718,13 @@ export declare class StarTransactions {
     data: import("@telegram.ts/types").StarTransactions,
   );
   /** The list of transactions */
-  transactions: StarTransaction[];
+  transactions: Collection<string, StarTransaction>;
+  /**
+   * Makes the class iterable, returning each `StarTransaction` object.
+   */
+  [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
+
+export declare const version: "4.5.0";
 
 export * from "./telegram/index";

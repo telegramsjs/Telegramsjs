@@ -181,7 +181,7 @@ class InlineKeyboardBuilder {
    */
   switchInlineChosen(
     text: string,
-    query: SwitchInlineQueryChosenChat = {},
+    query: SwitchInlineQueryChosenChat = { allow_user_chats: true },
   ): this {
     return this.add(InlineKeyboardBuilder.switchInlineChosen(text, query));
   }
@@ -194,7 +194,7 @@ class InlineKeyboardBuilder {
    */
   static switchInlineChosen(
     text: string,
-    query: SwitchInlineQueryChosenChat = {},
+    query: SwitchInlineQueryChosenChat = { allow_user_chats: true },
   ): InlineKeyboardButton.SwitchInlineChosenChatButton {
     return { text, switch_inline_query_chosen_chat: query };
   }

@@ -1,5 +1,6 @@
 // @ts-check
 const { Base } = require("../Base");
+const { Collection } = require("@telegram.ts/collection");
 
 class GiveawayWinners extends Base {
   /**
@@ -26,9 +27,14 @@ class GiveawayWinners extends Base {
 
     /**
      * List of up to 100 winners of the giveaway
-     * @type {import("../misc/User").User[]}
+     * @type {Collection<string, import("../misc/User").User>}
      */
-    this.winners = data.winners.map((user) => this.client.users._add(user));
+    this.winners = new Collection(
+      data.winners.map((user) => [
+        String(user.id),
+        this.client.users._add(user),
+      ]),
+    );
 
     this._patch(data);
   }
@@ -120,6 +126,9 @@ class GiveawayWinners extends Base {
   equals(other) {
     if (!other || !(other instanceof GiveawayWinners)) return false;
 
+    const thisWinners = Array.from(this.winners).map(([_, winner]) => winner);
+    const otherWinners = Array.from(other.winners).map(([_, winner]) => winner);
+
     return (
       this.messageId === other.messageId &&
       this.selectionUnixTime === other.selectionUnixTime &&
@@ -131,13 +140,23 @@ class GiveawayWinners extends Base {
       this.onlyNewMembers === other.onlyNewMembers &&
       this.refunded === other.refunded &&
       this.description === other.description &&
-      this.winners.length === other.winners.length &&
-      this.winners.every(
+      thisWinners.length === otherWinners.length &&
+      thisWinners.every(
         (winner, index) =>
-          other.winners[index] && winner.equals(other.winners[index]),
+          otherWinners[index] && winner.equals(otherWinners[index]),
       ) &&
       this.chat.equals(other.chat)
     );
+  }
+
+  /**
+   * Makes the class iterable, returning each `User` object.
+   * @returns {IterableIterator<import("../misc/User").User>}
+   */
+  *[Symbol.iterator]() {
+    for (const [_, winner] of this.winners) {
+      yield winner;
+    }
   }
 }
 
