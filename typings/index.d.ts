@@ -3729,6 +3729,188 @@ export declare class SharedUser extends Base {
    */
   photo?: Photo[];
   /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo?: false },
+  ): Promise<User>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(
+    options?: Omit<IFetchOptions, "cache" | "fullInfo"> & { fullInfo: true },
+  ): Promise<ChatFullInfo>;
+  /**
+   * Fetches this user
+   * @param options - options for fetch user
+   */
+  fetch(options?: Omit<IFetchOptions, "cache">): Promise<User | ChatFullInfo>;
+  /**
+   * Use this method to send text messages.
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing and media group options
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  send(
+    text: string,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    Message & {
+      content: string;
+    }
+  >;
+  send(
+    text: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        media: ReadonlyArray<
+          | InputMediaAudio
+          | InputMediaDocument
+          | InputMediaPhoto
+          | InputMediaVideo
+        >;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+      },
+      "chatId"
+    >,
+  ): Promise<
+    Array<
+      | (Message & {
+          audio: Audio;
+        })
+      | (Message & {
+          document: Document;
+        })
+      | (Message & {
+          photo: Photo;
+        })
+      | (Message & {
+          video: Video;
+        })
+    >
+  >;
+  send(
+    text:
+      | string
+      | Omit<
+          {
+            businessConnectionId?: string;
+            chatId: number | string;
+            messageThreadId?: string | number;
+            media: ReadonlyArray<
+              | InputMediaAudio
+              | InputMediaDocument
+              | InputMediaPhoto
+              | InputMediaVideo
+            >;
+            disableNotification?: boolean;
+            protectContent?: boolean;
+            messageEffectId?: string;
+            replyParameters?: ReplyParameters;
+          },
+          "chatId"
+        >,
+    options?: Omit<
+      {
+        businessConnectionId?: string;
+        chatId: number | string;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+        linkPreviewOptions?: import("@telegram.ts/types").LinkPreviewOptions;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "text" | "chatId"
+    >,
+  ): Promise<
+    | (Message & {
+        content: string;
+      })
+    | Array<
+        | (Message & {
+            audio: Audio;
+          })
+        | (Message & {
+            document: Document;
+          })
+        | (Message & {
+            photo: Photo;
+          })
+        | (Message & {
+            video: Video;
+          })
+      >
+  >;
+  /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param giftId - Identifier of the gift.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  sendGift(
+    giftId: string,
+    options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param result - An object describing the message to be sent.
+   * @param options - out parameters.
+   * @returns Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(
+    result: InlineQueryResult,
+    options?: Omit<
+      MethodParameters["savePreparedInlineMessage"],
+      "userId" | "result"
+    >,
+  ): Promise<PreparedInlineMessage>;
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns Returns True on success.
+   */
+  setStarSubscription(
+    telegramPaymentChargeId: string,
+    isCanceled: boolean,
+  ): Promise<true>;
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param telegramPaymentId - Telegram payment identifier
    * @returns Returns True on success.
@@ -3747,6 +3929,18 @@ export declare class SharedUser extends Base {
    * @returns Returns a UserProfilePhotos object.
    */
   getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
+  /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @returns Returns a UserChatBoosts object.
+   */
+  getChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
+  /**
+   * Checks if this user is equal to another user.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of User and are equal based on key properties, otherwise false.
+   */
+  equals(other: SharedUser): boolean;
 }
 
 export declare class UsersShared {

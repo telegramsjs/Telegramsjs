@@ -1,6 +1,11 @@
 // @ts-check
 const { Base } = require("../Base");
 const { Photo } = require("../media/Photo");
+const { isDeepStrictEqual } = require("../../util/Utils");
+
+/**
+ * @typedef {import("../../types").MethodParameters} MethodParameters
+ */
 
 class SharedUser extends Base {
   /**
@@ -57,6 +62,77 @@ class SharedUser extends Base {
   }
 
   /**
+   * Fetches this user
+   * @param {Omit<import("../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch user
+   * @returns {Promise<import("./User").User | import("../chat/ChatFullInfo").ChatFullInfo>}
+   */
+  fetch({ force = true, fullInfo = false } = {}) {
+    return this.client.users.fetch(this.userId, { force, fullInfo });
+  }
+
+  /**
+   * Use this method to send text messages.
+   * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
+   * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
+   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, the sent Message is returned.
+   */
+  send(text, options = {}) {
+    if (typeof text === "object") {
+      return this.client.sendMediaGroup({
+        chatId: this.userId,
+        ...text,
+      });
+    }
+    return this.client.sendMessage({
+      text,
+      chatId: this.userId,
+      ...options,
+    });
+  }
+
+  /**
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * @param {string} giftId - Identifier of the gift.
+   * @param {Omit<MethodParameters["sendGift"], "giftId" | "userId">} [options] - out parameters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  sendGift(giftId, options = {}) {
+    return this.client.sendGift({
+      giftId,
+      userId: this.userId,
+      ...options,
+    });
+  }
+
+  /**
+   * Stores a message that can be sent by a user of a Mini App.
+   * @param {import("../../client/interfaces/Inline").InlineQueryResult} result - An object describing the message to be sent.
+   * @param {Omit<MethodParameters["savePreparedInlineMessage"], "userId" | "result">} [options] - out parameters.
+   * @returns {Promise<import("./PreparedInlineMessage").PreparedInlineMessage>} - Returns a PreparedInlineMessage object.
+   */
+  saveInlineMessage(result, options = {}) {
+    return this.client.savePreparedInlineMessage({
+      result,
+      userId: this.userId,
+      ...options,
+    });
+  }
+
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
+   * @param {string} telegramPaymentChargeId - Telegram payment identifier for the subscription.
+   * @param {boolean} isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  setStarSubscription(telegramPaymentChargeId, isCanceled) {
+    return this.client.editUserStarSubscription({
+      userId: this.userId,
+      telegramPaymentChargeId,
+      isCanceled,
+    });
+  }
+
+  /**
    * Refunds a successful payment in Telegram Stars.
    * @param {string} telegramPaymentId - Telegram payment identifier
    * @returns {Promise<true>} - Returns True on success.
@@ -86,6 +162,58 @@ class SharedUser extends Base {
       limit,
       offset,
     });
+  }
+
+  /**
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * @param {string | number} chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @returns {Promise<import("../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
+   */
+  getChatBoosts(chatId) {
+    return this.client.getUserChatBoosts(chatId, this.userId);
+  }
+
+  /**
+   * @typedef {Object} EmojiStatus
+   * @property {string} [emojiStatusCustomEmojiId] - Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.
+   * @property {number} [emojiStatusExpirationDate] - Expiration date of the emoji status, if any.
+   */
+
+  /** Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param {EmojiStatus} [options] - out parameters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  setEmojiStatus({ emojiStatusCustomEmojiId, emojiStatusExpirationDate } = {}) {
+    return this.client.setUserEmojiStatus({
+      userId: this.userId,
+      ...(emojiStatusCustomEmojiId && { emojiStatusCustomEmojiId }),
+      ...(emojiStatusExpirationDate && { emojiStatusExpirationDate }),
+    });
+  }
+
+  /**
+   * Checks if this user is equal to another user.
+   * @param {SharedUser} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of SharedUser and are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof SharedUser)) return false;
+
+    return (
+      this.userId === other.userId &&
+      this.firstName === other.firstName &&
+      this.lastName === other.lastName &&
+      this.username === other.username &&
+      isDeepStrictEqual(this.photo, other.photo)
+    );
+  }
+
+  /**
+   * Return this user username, otherwise just an empty string
+   * @override
+   */
+  toString() {
+    return this.username ?? "";
   }
 }
 
