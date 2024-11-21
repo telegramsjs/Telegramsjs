@@ -755,13 +755,16 @@ export declare class User extends Base {
    * @param limit - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100
    * @returns Returns a UserProfilePhotos object.
    */
-  getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
+  fetchProfilePhotos(
+    offset?: number,
+    limit?: number,
+  ): Promise<UserProfilePhotos>;
   /**
    * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
    * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
    * @returns Returns a UserChatBoosts object.
    */
-  getChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
+  fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
   /**
    * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
    * @param options - out parameters.
@@ -2942,7 +2945,7 @@ export declare class Game extends Base {
    * @returns  Returns an Array of GameHighScore objects.
    * This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
    */
-  getHighScores(
+  fetchHighScores(
     userId: string | number,
     options?: Omit<
       {
@@ -3928,13 +3931,16 @@ export declare class SharedUser extends Base {
    * @param limit - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100
    * @returns Returns a UserProfilePhotos object.
    */
-  getProfilePhotos(offset?: number, limit?: number): Promise<UserProfilePhotos>;
+  fetchProfilePhotos(
+    offset?: number,
+    limit?: number,
+  ): Promise<UserProfilePhotos>;
   /**
    * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
    * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
    * @returns Returns a UserChatBoosts object.
    */
-  getChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
+  fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
   /**
    * Checks if this user is equal to another user.
    * @param other - The other object to compare with.
@@ -4184,7 +4190,7 @@ export declare class ChatShared extends Base {
    * Use this method to get a list of administrators in a chat, which aren't bots.
    * @returns Returns an Array of ChatAdministratorRights objects.
    */
-  getAdmins(): Promise<ChatAdministratorRights[]>;
+  fetchAdmins(): Promise<ChatAdministratorRights[]>;
   /**
    * Use this method to get the number of members in a chat.
    * @returns Returns Int on success.
@@ -4195,7 +4201,7 @@ export declare class ChatShared extends Base {
    * @param userId - Unique identifier of the target user.
    * @returns Returns a UserChatBoosts object.
    */
-  getUserBoosts(userId: number | string): Promise<UserChatBoosts>;
+  fetchUserBoosts(userId: number | string): Promise<UserChatBoosts>;
   /**
    * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
    * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
@@ -6731,7 +6737,7 @@ export declare class Chat extends Base {
    * Use this method to get a list of administrators in a chat, which aren't bots.
    * @returns Returns an Array of ChatAdministratorRights objects.
    */
-  getAdmins(): Promise<ChatAdministratorRights[]>;
+  fetchAdmins(): Promise<ChatAdministratorRights[]>;
   /**
    * Use this method to get the number of members in a chat.
    * @returns Returns Int on success.
@@ -6742,7 +6748,7 @@ export declare class Chat extends Base {
    * @param userId - Unique identifier of the target user.
    * @returns Returns a UserChatBoosts object.
    */
-  getUserBoosts(userId: number | string): Promise<UserChatBoosts>;
+  fetchUserBoosts(userId: number | string): Promise<UserChatBoosts>;
   /**
    * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method
    * @param name - Name of the sticker set to be set as the group sticker set.
@@ -9867,7 +9873,7 @@ export declare class ClientUser extends User {
    * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
    * @returns Returns a Gifts object.
    */
-  getGifts(): Promise<Gifts>;
+  fetchGifts(): Promise<Gifts>;
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
    * @param commands - A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified
@@ -9889,7 +9895,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
    */
-  getCommands(
+  fetchCommands(
     score?: BotCommandScope,
     language?: LanguageCode,
   ): Promise<BotCommand[]>;
@@ -9915,7 +9921,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot name on success
    */
-  getName(language?: LanguageCode): Promise<string>;
+  fetchName(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty.
    * @param description - New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language
@@ -9928,7 +9934,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot description on success.
    */
-  getDescription(language?: LanguageCode): Promise<string>;
+  fetchDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot.
    * @param description - New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language
@@ -9944,7 +9950,7 @@ export declare class ClientUser extends User {
    * @param language - A two-letter ISO 639-1 language code or an empty string
    * @returns Returns bot short description on success
    */
-  getShortDescription(language?: LanguageCode): Promise<string>;
+  fetchShortDescription(language?: LanguageCode): Promise<string>;
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
@@ -9957,7 +9963,7 @@ export declare class ClientUser extends User {
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
    * @returns Returns MenuButton on success.
    */
-  getMenuButton(chatId?: number): Promise<MenuButton>;
+  fetchMenuButton(chatId?: number): Promise<MenuButton>;
   /**
    * Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot.
    * @param rights - An object describing new default administrator rights. If not specified, the default administrator rights will be cleared
@@ -9973,7 +9979,7 @@ export declare class ClientUser extends User {
    * @param forChannels - Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned.
    * @returns Returns ChatAdministratorRights on success.
    */
-  getAdministratorRigths(
+  fetchAdministratorRigths(
     forChannels?: boolean,
   ): Promise<ChatAdministratorRights>;
   /**

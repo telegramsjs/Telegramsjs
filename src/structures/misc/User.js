@@ -170,7 +170,7 @@ class User extends Base {
    * @param {number} [limit=100] - Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100
    * @returns {Promise<import("./UserProfilePhotos").UserProfilePhotos>} - Returns a UserProfilePhotos object.
    */
-  getProfilePhotos(offset = 0, limit = 100) {
+  fetchProfilePhotos(offset = 0, limit = 100) {
     return this.client.getUserProfilePhotos({
       userId: this.id,
       limit,
@@ -183,7 +183,7 @@ class User extends Base {
    * @param {string | number} chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
    * @returns {Promise<import("../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
    */
-  getChatBoosts(chatId) {
+  fetchChatBoosts(chatId) {
     return this.client.getUserChatBoosts(chatId, this.id);
   }
 

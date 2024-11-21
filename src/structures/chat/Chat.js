@@ -340,7 +340,7 @@ class Chat extends Base {
    * Use this method to get a list of administrators in a chat, which aren't bots.
    * @returns {Promise<import("./ChatAdministratorRights").ChatAdministratorRights[]>} - Returns an Array of ChatAdministratorRights objects.
    */
-  getAdmins() {
+  fetchAdmins() {
     return this.client.getChatAdministrators(this.id);
   }
 
@@ -357,7 +357,7 @@ class Chat extends Base {
    * @param {string | number} userId - Unique identifier of the target user.
    * @returns {Promise<import("../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
    */
-  getUserBoosts(userId) {
+  fetchUserBoosts(userId) {
     return this.client.getUserChatBoosts(this.id, userId);
   }
 
