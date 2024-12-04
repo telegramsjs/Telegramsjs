@@ -26,7 +26,7 @@
     "newLine": "lf",
     "noEmitHelpers": true,
     "outDir": "dist",
-    "removeComments": false,
+    "removeComments": true,
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
