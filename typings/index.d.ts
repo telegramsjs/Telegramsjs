@@ -1078,12 +1078,12 @@ export declare abstract class Collector<K, V> extends EventEmitter {
    * @param options - The options for the collector.
    */
   constructor(options: ICollectorOptions<K, V>);
-  on(event: string, listener: (...data: any[]) => void): this;
+
   on<T extends keyof ICollectorEvent<K, V>>(
     event: T,
     listener: ICollectorEvent<K, V>[T],
   ): this;
-  once(event: string, listener: (...data: any[]) => void): this;
+
   once<T extends keyof ICollectorEvent<K, V>>(
     event: T,
     listener: ICollectorEvent<K, V>[T],
@@ -3139,6 +3139,27 @@ export declare class GiveawayWinners extends Base {
    * Makes the class iterable, returning each `User` object.
    */
   [Symbol.iterator](): IterableIterator<User>;
+}
+
+export declare class AffiliateInfo {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the affiliate that received a commission via this transaction.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").AffiliateInfo,
+  );
+  /** The bot or the user that received an affiliate commission if it was received by a bot or a user */
+  user?: User;
+  /** The chat that received an affiliate commission if it was received by a chat */
+  chat?: Chat;
+  /** The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the bot from referred users */
+  commissionRate: number;
+  /** Integer amount of Telegram Stars received by the affiliate from the transaction, rounded to 0; can be negative for refunds */
+  amount: number;
+  /** The number of 1/1000000000 shares of Telegram Stars received by the affiliate; can be negative for refunds */
+  nanostarAmount?: number;
 }
 
 export declare class Invoice extends Base {
@@ -10474,7 +10495,13 @@ export declare class TransactionPartner extends Base {
     data: import("@telegram.ts/types").TransactionPartner,
   );
   /** Type of the transaction partner */
-  type: "other" | "user" | "fragment" | "telegram_ads" | "telegram_api";
+  type:
+    | "other"
+    | "user"
+    | "fragment"
+    | "telegram_ads"
+    | "telegram_api"
+    | "affiliate_program";
   /**
    * @param data - Data about the describes the source of a transaction, or its recipient for outgoing transactions
    * @override
@@ -10514,6 +10541,18 @@ export declare class TransactionPartner extends Base {
    * The gift sent to the user by the bot.
    */
   gift?: string;
+  /**
+   * Information about the affiliate that received a commission via this transaction.
+   */
+  affiliate?: AffiliateInfo;
+  /**
+   * Information about the bot that sponsored the affiliate program.
+   */
+  sponsorUser?: User;
+  /**
+   * The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users.
+   */
+  commissionRate?: number;
 
   isUser(): this is this & {
     withdrawal?: undefined;
@@ -10523,6 +10562,9 @@ export declare class TransactionPartner extends Base {
     gift?: string;
     subscriptionPeriod?: number;
     requestCount?: undefined;
+    affiliate?: AffiliateInfo;
+    sponsorUser?: undefined;
+    commissionRate?: undefined;
   };
 
   isFragment(): this is this & {
@@ -10533,6 +10575,9 @@ export declare class TransactionPartner extends Base {
     gift?: undefined;
     subscriptionPeriod?: undefined;
     requestCount?: undefined;
+    affiliate?: undefined;
+    sponsorUser?: undefined;
+    commissionRate?: undefined;
   };
 
   isTelegramApi(): this is this & {
@@ -10543,6 +10588,22 @@ export declare class TransactionPartner extends Base {
     gift?: undefined;
     subscriptionPeriod?: undefined;
     requestCount: number;
+    affiliate?: undefined;
+    sponsorUser?: undefined;
+    commissionRate?: undefined;
+  };
+
+  isAffiliateProgram(): this is this & {
+    withdrawal?: undefined;
+    user?: undefined;
+    paidMedia?: undefined;
+    paidMediaPayload?: undefined;
+    gift?: undefined;
+    subscriptionPeriod?: undefined;
+    requestCount: undefined;
+    affiliate?: undefined;
+    sponsorUser?: User;
+    commissionRate?: number;
   };
 }
 
@@ -10557,8 +10618,12 @@ export declare class StarTransaction extends Base {
   );
   /** Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
   id: string;
-  /** Number of Telegram Stars transferred by the transaction */
+  /** Integer amount Telegram Stars transferred by the transaction */
   amount: number;
+  /**
+   * The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999
+   */
+  nanostarAmount?: number;
   /** Date the transaction was created in Unix time */
   createdUnixTime: number;
   /**
@@ -11725,6 +11790,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.5.0";
+export declare const version: "4.6.0";
 
 export * from "./telegram/index";

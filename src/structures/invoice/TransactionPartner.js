@@ -1,6 +1,7 @@
 // @ts-check
 const { Base } = require("../Base");
 const { PaidMedia } = require("../media/paid/PaidMedia");
+const { AffiliateInfo } = require("./AffiliateInfo");
 const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");
 
 class TransactionPartner extends Base {
@@ -88,28 +89,61 @@ class TransactionPartner extends Base {
       this.gift = data.gift;
     }
 
+    if ("affiliate" in data) {
+      /**
+       * Information about the affiliate that received a commission via this transaction.
+       * @type {AffiliateInfo | undefined}
+       */
+      this.affiliate = new AffiliateInfo(this.client, data.affiliate);
+    }
+
+    if ("sponsor_user" in data) {
+      /**
+       * Information about the bot that sponsored the affiliate program.
+       * @type {import("../misc/User").User | undefined}
+       */
+      this.sponsorUser = this.client.users._add(data.sponsor_user);
+    }
+
+    if ("commission_per_mille" in data) {
+      /**
+       * The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users.
+       * @type {number | undefined}
+       */
+      this.commissionRate = data.commission_per_mille;
+    }
+
     return data;
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: string; subscriptionPeriod?: number; requestCount?: undefined }}
+   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: string; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @returns {this is this & { withdrawal: RevenueWithdrawalState; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; requestCount?: undefined }}
+   * @returns {this is this & { withdrawal: RevenueWithdrawalState; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined;  affiliate?: undefined; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined }}
    */
   isFragment() {
     return Boolean("withdrawal" in this && this.withdrawal);
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; requestCount: number }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: undefined; commissionRate?: undefined; requestCount: number }}
    */
   isTelegramApi() {
     return Boolean("requestCount" in this && this.requestCount !== undefined);
+  }
+
+  /**
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: import("../misc/User").User; commissionRate?: number; requestCount?: undefined }}
+   */
+  isAffiliateProgram() {
+    return Boolean(
+      "commissionRate" in this && this.commissionRate !== undefined,
+    );
   }
 }
 

@@ -50,6 +50,7 @@ module.exports.GiveawayCompleted =
   require("./giveaway/GiveawayCompleted").GiveawayCompleted;
 module.exports.GiveawayWinners =
   require("./giveaway/GiveawayWinners").GiveawayWinners;
+module.exports.AffiliateInfo = require("./invoice/AffiliateInfo").AffiliateInfo;
 module.exports.Invoice = require("./invoice/Invoice").Invoice;
 module.exports.OrderInfo = require("./invoice/OrderInfo").OrderInfo;
 module.exports.RefundedPayment =
