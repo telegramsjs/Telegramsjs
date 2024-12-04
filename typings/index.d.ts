@@ -1078,12 +1078,12 @@ export declare abstract class Collector<K, V> extends EventEmitter {
    * @param options - The options for the collector.
    */
   constructor(options: ICollectorOptions<K, V>);
-  on(event: string, listener: (...data: any[]) => void): this;
+
   on<T extends keyof ICollectorEvent<K, V>>(
     event: T,
     listener: ICollectorEvent<K, V>[T],
   ): this;
-  once(event: string, listener: (...data: any[]) => void): this;
+
   once<T extends keyof ICollectorEvent<K, V>>(
     event: T,
     listener: ICollectorEvent<K, V>[T],
