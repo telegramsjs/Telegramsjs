@@ -13,8 +13,16 @@ class StarTransaction extends Base {
     /** Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
     this.id = data.id;
 
-    /** Number of Telegram Stars transferred by the transaction */
+    /** Integer amount of Telegram Stars transferred by the transaction */
     this.amount = data.amount;
+
+    if ("nanostar_amount" in data) {
+      /**
+       * The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999
+       * @type {number | undefined}
+       */
+      this.nanostarAmount = data.nanostar_amount;
+    }
 
     /** Date the transaction was created in Unix time */
     this.createdUnixTime = data.date;
