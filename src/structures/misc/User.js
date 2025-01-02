@@ -206,6 +206,23 @@ class User extends Base {
   }
 
   /**
+   * Verifies a user on behalf of the organization which is represented by the bot.
+   * @param {string} [description] - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  verify(description) {
+    return this.client.verifyUser(this.id, description);
+  }
+
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  removeVerification() {
+    return this.client.removeUserVerification(this.id);
+  }
+
+  /**
    * Checks if this user is equal to another user.
    * @param {User | import("./ClientUser").ClientUser} other - The other object to compare with.
    * @returns {boolean} True if both objects are instances of User and are equal based on key properties, otherwise false.

@@ -83,8 +83,6 @@ export interface InlineQueryResultArticle {
   reply_markup?: InlineKeyboardMarkup;
   /** URL of the result */
   url?: string;
-  /** Pass True if you don't want the URL to be shown in the message */
-  hide_url?: boolean;
   /** Short description of the result */
   description?: string;
   /** Url of the thumbnail for the result */
@@ -131,7 +129,7 @@ export interface InlineQueryResultGif {
   type: "gif";
   /** Unique identifier for this result, 1-64 bytes */
   id: string;
-  /** A valid URL for the GIF file. File size must not exceed 1MB */
+  /** A valid URL for the GIF file */
   gif_url: string;
   /** Width of the GIF */
   gif_width?: number;
@@ -164,7 +162,7 @@ export interface InlineQueryResultMpeg4Gif {
   type: "mpeg4_gif";
   /** Unique identifier for this result, 1-64 bytes */
   id: string;
-  /** A valid URL for the MPEG4 file. File size must not exceed 1MB */
+  /** A valid URL for the MPEG4 file */
   mpeg4_url: string;
   /** Video width */
   mpeg4_width?: number;

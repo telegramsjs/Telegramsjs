@@ -144,6 +144,23 @@ class BusinessConnection extends Base {
       ...(emojiStatusExpirationDate && { emojiStatusExpirationDate }),
     });
   }
+
+  /**
+   * Verifies a user on behalf of the organization which is represented by the bot.
+   * @param {string} [description] - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  verify(description) {
+    return this.client.verifyUser(this.userChatId, description);
+  }
+
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  removeVerification() {
+    return this.client.removeUserVerification(this.userChatId);
+  }
 }
 
 module.exports = { BusinessConnection };

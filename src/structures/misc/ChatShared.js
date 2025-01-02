@@ -103,6 +103,8 @@ function applyToClass(structure) {
     "createMessageComponentCollector",
     "send",
     "leave",
+    "verify",
+    "removeVerification",
     "fetchAdmins",
     "membersCount",
     "fetchUserBoosts",
