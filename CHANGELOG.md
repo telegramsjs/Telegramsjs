@@ -3,7 +3,7 @@
 # **4.7.0 - (2025-01-02)**
 
 ## **Updates**
-- Support for API 8.1 ([e38f043](https://github.com/telegramsjs/Telegramsjs/commit/e38f04392110a1505a6abb0d47cf140f262b419e))
+- Support for API 8.2 ([e38f043](https://github.com/telegramsjs/Telegramsjs/commit/e38f04392110a1505a6abb0d47cf140f262b419e))
 
 ## **Typings**
 - **SharedUser:** missing description for `setEmojiStatus` ([f2ea7ff](https://github.com/telegramsjs/Telegramsjs/commit/f2ea7ff412a3abe280b1e04cd0910d6ab7ee3b1f))
