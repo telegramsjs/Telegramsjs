@@ -269,6 +269,23 @@ class Chat extends Base {
   }
 
   /**
+   * Verifies a chat on behalf of the organization which is represented by the bot.
+   * @param {string} [description] - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  verify(description) {
+    return this.client.verifyChat(this.id, description);
+  }
+
+  /**
+   * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  removeVerification() {
+    return this.client.removeChatVerification(this.id);
+  }
+
+  /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {string | number} userId - Unique identifier of the target user
    * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]

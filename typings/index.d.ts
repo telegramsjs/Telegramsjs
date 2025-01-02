@@ -777,6 +777,17 @@ export declare class User extends Base {
     emojiStatusExpirationDate?: number;
   }): Promise<true>;
   /**
+   * Verifies a user on behalf of the organization which is represented by the bot.
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns Returns True on success.
+   */
+  verify(description?: string): Promise<true>;
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot.
+   * @returns Returns True on success.
+   */
+  removeVerification(): Promise<true>;
+  /**
    * Checks if this user is equal to another user.
    * @param other - The other object to compare with.
    * @returns True if both objects are instances of User and are equal based on key properties, otherwise false.
@@ -2974,6 +2985,8 @@ export declare class Gift extends Base {
   sticker: Sticker;
   /** The number of Telegram Stars that must be paid to send the sticker */
   startCount: number;
+  /** The number of Telegram Stars that must be paid to upgrade the gift to a unique one */
+  upgradeStarCount?: number;
   /** The total number of the gifts of this type that can be sent; for limited gifts only */
   totalCount?: number;
   /** The number of remaining gifts of this type that can be sent; for limited gifts only */
@@ -3963,6 +3976,28 @@ export declare class SharedUser extends Base {
    */
   fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
   /**
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  setEmojiStatus(options?: {
+    /** Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. */
+    emojiStatusCustomEmojiId?: string;
+    /** Expiration date of the emoji status, if any */
+    emojiStatusExpirationDate?: number;
+  }): Promise<true>;
+  /**
+   * Verifies a user on behalf of the organization which is represented by the bot.
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns Returns True on success.
+   */
+  verify(description?: string): Promise<true>;
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot.
+   * @returns Returns True on success.
+   */
+  removeVerification(): Promise<true>;
+  /**
    * Checks if this user is equal to another user.
    * @param other - The other object to compare with.
    * @returns True if both objects are instances of User and are equal based on key properties, otherwise false.
@@ -4202,6 +4237,17 @@ export declare class ChatShared extends Base {
           })
       >
   >;
+  /**
+   * Verifies a chat on behalf of the organization which is represented by the bot.
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns Returns True on success.
+   */
+  verify(description?: string): Promise<true>;
+  /**
+   * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @returns Returns True on success.
+   */
+  removeVerification(): Promise<true>;
   /**
    * Use this method for your bot to leave this group, supergroup or channel.
    * @returns Returns True on success.
@@ -6695,6 +6741,17 @@ export declare class Chat extends Base {
       >
   >;
   /**
+   * Verifies a chat on behalf of the organization which is represented by the bot.
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns Returns True on success.
+   */
+  verify(description?: string): Promise<true>;
+  /**
+   * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @returns Returns True on success.
+   */
+  removeVerification(): Promise<true>;
+  /**
    * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param userId - Unique identifier of the target user
    * @param options - out parameters
@@ -8347,6 +8404,17 @@ export declare class BusinessConnection extends Base {
     /** Expiration date of the emoji status, if any */
     emojiStatusExpirationDate?: number;
   }): Promise<true>;
+  /**
+   * Verifies a user on behalf of the organization which is represented by the bot.
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   * @returns Returns True on success.
+   */
+  verify(description?: string): Promise<true>;
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot.
+   * @returns Returns True on success.
+   */
+  removeVerification(): Promise<true>;
 }
 
 export declare class BusinessMessagesDeleted extends Base {
@@ -9428,6 +9496,38 @@ export declare class BaseClient extends EventEmitter {
   editUserStarSubscription(
     params: MethodParameters["editUserStarSubscription"],
   ): Promise<MethodsLibReturnType["editUserStarSubscription"]>;
+  /**
+   * Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.
+   * @param userId - Unique identifier of the target user.
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   */
+  verifyUser(
+    userId: string | number,
+    description?: string,
+  ): Promise<MethodsLibReturnType["verifyUser"]>;
+  /**
+   * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   */
+  verifyChat(
+    chatId: string | number,
+    description?: string,
+  ): Promise<MethodsLibReturnType["verifyChat"]>;
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @param userId - Unique identifier of the target user.
+   */
+  removeUserVerification(
+    userId: number | string,
+  ): Promise<MethodsLibReturnType["removeUserVerification"]>;
+  /**
+   * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   */
+  removeChatVerification(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["removeChatVerification"]>;
   /** If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
   answerShippingQuery(
     params: MethodParameters["answerShippingQuery"],

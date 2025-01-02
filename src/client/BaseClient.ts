@@ -1731,6 +1731,62 @@ class BaseClient extends EventEmitter {
     );
   }
 
+  /**
+   * Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.
+   * @param userId - Unique identifier of the target user.
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   */
+  async verifyUser(
+    userId: string | number,
+    description?: string,
+  ): Promise<MethodsLibReturnType["verifyUser"]> {
+    return this.rest.request<MethodsApiReturnType["verifyUser"]>("verifyUser", {
+      user_id: userId,
+      ...(description && { custom_description: description }),
+    });
+  }
+
+  /**
+   * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+   * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   */
+  async verifyChat(
+    chatId: string | number,
+    description?: string,
+  ): Promise<MethodsLibReturnType["verifyChat"]> {
+    return this.rest.request<MethodsApiReturnType["verifyChat"]>("verifyChat", {
+      chat_id: chatId,
+      ...(description && { custom_description: description }),
+    });
+  }
+
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @param userId - Unique identifier of the target user.
+   */
+  async removeUserVerification(
+    userId: number | string,
+  ): Promise<MethodsLibReturnType["removeUserVerification"]> {
+    return this.rest.request<MethodsApiReturnType["removeUserVerification"]>(
+      "removeUserVerification",
+      { user_id: userId },
+    );
+  }
+
+  /**
+   * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   */
+  async removeChatVerification(
+    chatId: number | string,
+  ): Promise<MethodsLibReturnType["removeChatVerification"]> {
+    return this.rest.request<MethodsApiReturnType["removeChatVerification"]>(
+      "removeChatVerification",
+      { chat_id: chatId },
+    );
+  }
+
   /** If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
   async answerShippingQuery(
     params: MethodParameters["answerShippingQuery"],

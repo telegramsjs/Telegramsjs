@@ -24,6 +24,11 @@ class Gift extends Base {
     /** The number of Telegram Stars that must be paid to send the sticker */
     this.startCount = data.star_count;
 
+    if ("upgrade_star_count" in data) {
+      /** The number of Telegram Stars that must be paid to upgrade the gift to a unique one */
+      this.upgradeStarCount = data.upgrade_star_count;
+    }
+
     if ("total_count" in data) {
       /** The total number of the gifts of this type that can be sent; for limited gifts only */
       this.totalCount = data.total_count;
@@ -61,6 +66,7 @@ class Gift extends Base {
       isDeepStrictEqual(this.sticker, other.sticker) &&
       this.startCount === other.startCount &&
       this.totalCount === other.totalCount &&
+      this.upgradeStarCount === other.upgradeStarCount &&
       this.remainingCount === other.remainingCount
     );
   }
