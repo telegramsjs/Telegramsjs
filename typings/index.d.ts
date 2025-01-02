@@ -3976,6 +3976,17 @@ export declare class SharedUser extends Base {
    */
   fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
   /**
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  setEmojiStatus(options?: {
+    /** Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status. */
+    emojiStatusCustomEmojiId?: string;
+    /** Expiration date of the emoji status, if any */
+    emojiStatusExpirationDate?: number;
+  }): Promise<true>;
+  /**
    * Verifies a user on behalf of the organization which is represented by the bot.
    * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
    * @returns Returns True on success.
