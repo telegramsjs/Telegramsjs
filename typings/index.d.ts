@@ -1,5 +1,5 @@
-import http from "node:http";
-import https from "node:https";
+import * as http from "node:http";
+import * as https from "node:https";
 import { Collection } from "@telegram.ts/collection";
 import {
   ApiMethods as Methods,
@@ -11890,6 +11890,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.6.0";
+export declare const version: "4.7.1";
 
 export * from "./telegram/index";

@@ -1,3 +1,4 @@
+import path from "node:path";
 import { Agent } from "node:https";
 import { Buffer } from "node:buffer";
 import { randomBytes } from "node:crypto";
@@ -313,7 +314,7 @@ class MediaData {
     media: string | Buffer | ReadStream,
     id: string,
   ): Promise<void> {
-    const filename = `${id}.${this.extensions[id] || "txt"}`;
+    const filename = `${id}.${this.extensions[id] || path.parse(`${media}`).ext || "txt"}`;
 
     if (typeof media === "string") {
       if (await fileExists(media)) {
