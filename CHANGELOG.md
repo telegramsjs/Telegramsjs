@@ -1,11 +1,14 @@
 # Changelog
 
 # **4.7.1 - (2025-01-16)**
+
 ## **Bug Fixes**
 - **ReactionCollector:** array mutation ([01ebd49](https://github.com/telegramsjs/Telegramsjs/commit/01ebd49341fd6b92f24bd3ba2cf8e138b64c617d))
 
 ## **Updates**
 - **MediaData:** auto-detects file extensions ([0049e20](https://github.com/telegramsjs/Telegramsjs/commit/0049e20488ad1f6e9f463206bd71b3d2cb307181))
+
+---
 
 # **4.7.0 - (2025-01-02)**
 
