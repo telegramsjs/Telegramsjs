@@ -129,7 +129,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
     this.received++;
     this.handleUsers(reaction);
 
-    return addedEmoji.shift() || removedEmoji.shift() || null;
+    return addedEmoji[0] || removedEmoji[0] || null;
   }
 
   /**
@@ -153,7 +153,7 @@ class ReactionCollector extends Collector<string, MessageReactionUpdated> {
       addedEmoji.length > 0 || removedEmoji.length > 0;
 
     if (isReactionInCorrectChat && hasNewOrOldReaction) {
-      return addedEmoji.shift() || removedEmoji.shift() || null;
+      return addedEmoji[0] || removedEmoji[0] || null;
     } else {
       return null;
     }
