@@ -1,5 +1,11 @@
 # Changelog
 
+# **4.8.1 - (2025-02-12)**
+
+## **Updates**
+
+- **ChatFullInfo:** add the missing property `giftSendingEnabled` ([3894c50](https://github.com/telegramsjs/Telegramsjs/commit/3894c500ba7ce44fb32b94d998384bc90945a0e3))
+
 # **4.8.0 - (2025-02-12)**
 
 ## **Bug Fixes**

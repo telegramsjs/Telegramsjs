@@ -358,6 +358,14 @@ class ChatFullInfo extends Chat {
       this.permissions = new ChatPermissions(permissions);
     }
 
+    if ("can_send_gift" in data) {
+      /**
+       * True, if gifts can be sent to the chat
+       * @type {true}
+       */
+      this.giftSendingEnabled = data.can_send_gift;
+    }
+
     if ("slow_mode_delay" in data) {
       /**
        * The slow mode delay in the chat.
