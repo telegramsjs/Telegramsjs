@@ -1,10 +1,10 @@
-import type { ReadStream } from "node:fs";
 import { EventEmitter } from "node:events";
 import { Rest } from "../rest/Rest";
 import { Collection } from "@telegram.ts/collection";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
 import type { LanguageCode } from "./interfaces/Language";
+import type { MediaDataParam } from "./interfaces/Methods";
 import type { ClientOptions, TelegramClient } from "./TelegramClient";
 import {
   Message,
@@ -598,7 +598,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
+  /** Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
   async setMessageReaction(
     params: MethodParameters["setMessageReaction"],
   ): Promise<MethodsLibReturnType["setMessageReaction"]> {
@@ -845,15 +845,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatPhoto(
     chatId: number | string,
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    photo: MediaDataParam,
   ): Promise<MethodsLibReturnType["setChatPhoto"]> {
     return this.rest.request<MethodsApiReturnType["setChatPhoto"]>(
       "setChatPhoto",
@@ -1634,7 +1626,7 @@ class BaseClient extends EventEmitter {
     });
   }
 
-  /** Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object. */
+  /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   async getAvailableGifts(): Promise<
     MethodsLibReturnType["getAvailableGifts"]
   > {
@@ -1643,7 +1635,7 @@ class BaseClient extends EventEmitter {
       .then((res) => new Gifts(this, res));
   }
 
-  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success. */
+  /** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive. Returns True on success. */
   async sendGift(
     params: MethodParameters["sendGift"],
   ): Promise<MethodsLibReturnType["sendGift"]> {

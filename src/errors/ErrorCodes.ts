@@ -13,6 +13,7 @@ enum ErrorCodes {
   InvalidUserId = "INVALID_USER_ID",
   InvalidChatId = "INVALID_CHAT_ID",
   InvalidClientId = "INVALID_CLIENT_ID",
+  InvalidFileName = "INVALID_FILE_NAME",
 }
 
 const ErrorMessages = {
@@ -43,6 +44,8 @@ const ErrorMessages = {
     "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.",
   [ErrorCodes.InvalidClientId]:
     "The bot ID is not available. Please check if the bot has been initialized",
+  [ErrorCodes.InvalidFileName]:
+    "The name file is not valid. Please open issue https://github.com/telegramsjs/Telegramsjs/issues",
 } as const;
 
 export { ErrorCodes, ErrorMessages };

@@ -74,7 +74,7 @@ class ClientUser extends User {
   }
 
   /**
-   * Returns the list of gifts that can be sent by the bot to users. Requires no parameters.
+   * Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters.
    * @returns {Promise<import("../gift/Gifts").Gifts>} - Returns a Gifts object.
    */
   fetchGifts() {

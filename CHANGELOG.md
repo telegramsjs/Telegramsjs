@@ -1,11 +1,29 @@
 # Changelog
 
+# **4.8.0 - (2025-02-12)**
+
+## **Bug Fixes**
+
+- **tsconfig.test.json:** esModuleInterop enable ([0cb33c6](https://github.com/telegramsjs/Telegramsjs/commit/0cb33c65467b96c5a851e80435c68c309c6e1ff6))
+
+## **Updates**
+
+- **Support for API 8.3** ([df8dbcc](https://github.com/telegramsjs/Telegramsjs/commit/df8dbccf2ee6f64d97a1613d4d7f6c2e6b848024))
+
+## **Features**
+
+- **MediaData:** custom filename for media content ([f8a18ae](https://github.com/telegramsjs/Telegramsjs/commit/f8a18ae9b16b5bef0f20d990d28a05c6401a661f))
+
+---
+
 # **4.7.1 - (2025-01-16)**
 
 ## **Bug Fixes**
+
 - **ReactionCollector:** array mutation ([01ebd49](https://github.com/telegramsjs/Telegramsjs/commit/01ebd49341fd6b92f24bd3ba2cf8e138b64c617d))
 
 ## **Updates**
+
 - **MediaData:** auto-detects file extensions ([0049e20](https://github.com/telegramsjs/Telegramsjs/commit/0049e20488ad1f6e9f463206bd71b3d2cb307181))
 
 ---
@@ -13,9 +31,11 @@
 # **4.7.0 - (2025-01-02)**
 
 ## **Updates**
+
 - Support for API 8.2 ([e38f043](https://github.com/telegramsjs/Telegramsjs/commit/e38f04392110a1505a6abb0d47cf140f262b419e))
 
 ## **Typings**
+
 - **SharedUser:** missing description for `setEmojiStatus` ([f2ea7ff](https://github.com/telegramsjs/Telegramsjs/commit/f2ea7ff412a3abe280b1e04cd0910d6ab7ee3b1f))
 
 ---

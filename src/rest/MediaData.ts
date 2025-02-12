@@ -9,6 +9,8 @@ import fetch, {
   type HeadersInit,
 } from "node-fetch";
 import { MultipartStream } from "./MultipartStream";
+import { ErrorCodes } from "../errors/ErrorCodes";
+import { TelegramError } from "../errors/TelegramError";
 
 /**
  * Interface representing the configuration for an API request.
@@ -82,7 +84,7 @@ class MediaData {
    * @param value - The value to check.
    * @returns `true` if the value is a media-related object; otherwise, `false`.
    */
-  isMediaType(value: any) {
+  isMediaType(value: any): boolean {
     return Boolean(
       typeof value === "object" &&
         value !== null &&
@@ -94,7 +96,8 @@ class MediaData {
           value instanceof Blob ||
           value instanceof FormData ||
           value instanceof Uint8Array ||
-          value instanceof DataView),
+          value instanceof DataView ||
+          this.isMediaType(value.source)),
     );
   }
 
@@ -211,14 +214,14 @@ class MediaData {
 
     if (typeof value === "string") {
       if (await fileExists(value)) {
-        await this.attachFormMedia(form, value, id);
+        await this.attachFormMedia(form, value, { id });
         return;
       } else if (id === "thumbnail" && value.startsWith("http")) {
         const attachmentId = randomBytes(16).toString("hex");
         const response = await fetch(value, { agent });
         value = Buffer.from(await response.arrayBuffer());
 
-        await this.attachFormMedia(form, value, attachmentId);
+        await this.attachFormMedia(form, value, { id: attachmentId });
         form.addPart({
           headers: { "content-disposition": `form-data; name="${id}"` },
           body: `attach://${attachmentId}`,
@@ -233,6 +236,16 @@ class MediaData {
       }
     }
 
+    if (typeof value === "object" && value !== null && "source" in value) {
+      await this.attachFormMedia(form, value.source.media, {
+        id,
+        ...("filename" in (value.source || {}) && {
+          filename: value.source.filename,
+        }),
+      });
+      return;
+    }
+
     if (typeof value === "boolean" || typeof value === "number") {
       form.addPart({
         headers: { "content-disposition": `form-data; name="${id}"` },
@@ -244,7 +257,18 @@ class MediaData {
     if (id === "thumbnail") {
       const attachmentId = randomBytes(16).toString("hex");
 
-      await this.attachFormMedia(form, value, attachmentId);
+      await this.attachFormMedia(form, value, { id: attachmentId });
+      form.addPart({
+        headers: { "content-disposition": `form-data; name="${id}"` },
+        body: `attach://${attachmentId}`,
+      });
+      return;
+    }
+
+    if (id === "cover") {
+      const attachmentId = randomBytes(16).toString("hex");
+
+      await this.attachFormMedia(form, value, { id: attachmentId });
       form.addPart({
         headers: { "content-disposition": `form-data; name="${id}"` },
         body: `attach://${attachmentId}`,
@@ -255,14 +279,27 @@ class MediaData {
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {
-          if (!this.isMediaType(item.media)) {
-            if (!(await fileExists(item.media))) {
-              return item;
+          const media = item.media?.source ? item.media.source : item;
+          if (!this.isMediaType(media.media)) {
+            if (!(await fileExists(media.media))) {
+              return media;
             }
           }
           const attachmentId = randomBytes(16).toString("hex");
-          await this.attachFormMedia(form, item.media, attachmentId);
-          return { ...item, media: `attach://${attachmentId}` };
+
+          await this.attachFormMedia(form, media.media, {
+            id: attachmentId,
+            ...(typeof media.media === "object" &&
+              "filename" in (media.media || {}) && {
+                filename: media.media.filename,
+              }),
+          });
+
+          if (item.media.source) {
+            return { type: item.type, media: `attach://${attachmentId}` };
+          }
+
+          return { ...media, media: `attach://${attachmentId}` };
         }),
       );
 
@@ -277,13 +314,13 @@ class MediaData {
       const buffer = ArrayBuffer.isView(value)
         ? Buffer.from(value.buffer, value.byteOffset, value.byteLength)
         : Buffer.from(value);
-      await this.attachFormMedia(form, buffer, id);
+      await this.attachFormMedia(form, buffer, { id });
       return;
     }
 
     if (value instanceof Blob) {
       const buffer = Buffer.from(await value.arrayBuffer());
-      await this.attachFormMedia(form, buffer, id);
+      await this.attachFormMedia(form, buffer, { id });
       return;
     }
 
@@ -296,11 +333,11 @@ class MediaData {
     }
 
     if (value instanceof Uint8Array || value instanceof DataView) {
-      await this.attachFormMedia(form, Buffer.from(value.buffer), id);
+      await this.attachFormMedia(form, Buffer.from(value.buffer), { id });
       return;
     }
 
-    await this.attachFormMedia(form, value, id);
+    await this.attachFormMedia(form, value, { id });
   }
 
   /**
@@ -312,9 +349,23 @@ class MediaData {
   async attachFormMedia(
     form: MultipartStream,
     media: string | Buffer | ReadStream,
-    id: string,
+    options: { id: string; filename?: string },
   ): Promise<void> {
-    const filename = `${id}.${this.extensions[id] || path.parse(`${media}`).ext || "txt"}`;
+    let filename = null;
+
+    if (options.filename) {
+      filename = options.filename;
+    } else if (options.id) {
+      if (typeof media === "string") {
+        filename = media;
+      } else {
+        filename = `${options.id}.${this.extensions[options.id] || path.parse(`${media}`).ext || "txt"}`;
+      }
+    }
+
+    if (!filename) {
+      throw new TelegramError(ErrorCodes.InvalidFileName);
+    }
 
     if (typeof media === "string") {
       if (await fileExists(media)) {
@@ -325,7 +376,7 @@ class MediaData {
     if (MultipartStream.isStream(media) || Buffer.isBuffer(media)) {
       await form.addPart({
         headers: {
-          "content-disposition": `form-data; name="${id}"; filename="${filename}"`,
+          "content-disposition": `form-data; name="${options.id}"; filename="${filename}"`,
         },
         body: media,
       });
