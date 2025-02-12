@@ -81,6 +81,7 @@ import {
   InlineQueryResultVideo,
   InlineQueryResultVoice,
   InputMessageContent,
+  MediaDataParam,
 } from "./telegram/index";
 
 /**
@@ -305,12 +306,12 @@ export declare class MediaData {
    * Attaches media to the form data.
    * @param form - The form to which the media should be attached.
    * @param media - The media to attach, can be a string path, buffer, or read stream.
-   * @param id - The name of the form field.
+   * @param options - The options of the form field.
    */
   attachFormMedia(
     form: MultipartStream,
     media: string | Buffer | ReadStream,
-    id: string,
+    options: { id: string; filename?: string },
   ): Promise<void>;
 }
 
@@ -4378,29 +4379,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendPhoto(
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    photo: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        photo:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        photo: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -4430,29 +4415,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendAudio(
-    audio:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    audio: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        audio:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        audio: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -4528,29 +4497,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
    */
   sendDocument(
-    document:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    document: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        document:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        document: MediaDataParam;
         thumbnail?:
           | Buffer
           | import("fs").ReadStream
@@ -4588,29 +4541,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
    */
   sendVideo(
-    video:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    video: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        video:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        video: MediaDataParam;
         duration?: number;
         width?: number;
         height?: number;
@@ -4653,29 +4590,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
    */
   sendAnimation(
-    animation:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    animation: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        animation:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        animation: MediaDataParam;
         duration?: number;
         width?: number;
         height?: number;
@@ -4717,29 +4638,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
    */
   sendVoice(
-    voice:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    voice: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        voice:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        voice: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -4768,29 +4673,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendVideoNote(
-    videoNote:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    videoNote: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        videoNote:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        videoNote: MediaDataParam;
         duration?: number;
         length?: number;
         thumbnail?:
@@ -5057,29 +4946,13 @@ export declare class ChatShared extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendSticker(
-    sticker:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    sticker: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        sticker:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        sticker: MediaDataParam;
         emoji?: string;
         disableNotification?: boolean;
         protectContent?: boolean;
@@ -7044,17 +6917,7 @@ export declare class Chat extends Base {
    * @param photo - New chat photo, uploaded using multipart/form-data
    * @returns Returns True on success.
    */
-  setPhoto(
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
-  ): Promise<true>;
+  setPhoto(photo: MediaDataParam): Promise<true>;
   /**
    * Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @returns Returns True on success.
@@ -7110,29 +6973,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendPhoto(
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    photo: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        photo:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        photo: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -7162,29 +7009,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendAudio(
-    audio:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    audio: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        audio:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        audio: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -7260,29 +7091,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
    */
   sendDocument(
-    document:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    document: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        document:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        document: MediaDataParam;
         thumbnail?:
           | Buffer
           | import("fs").ReadStream
@@ -7320,29 +7135,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
    */
   sendVideo(
-    video:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    video: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        video:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        video: MediaDataParam;
         duration?: number;
         width?: number;
         height?: number;
@@ -7385,29 +7184,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
    */
   sendAnimation(
-    animation:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    animation: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        animation:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        animation: MediaDataParam;
         duration?: number;
         width?: number;
         height?: number;
@@ -7449,29 +7232,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
    */
   sendVoice(
-    voice:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    voice: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        voice:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        voice: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -7500,29 +7267,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendVideoNote(
-    videoNote:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    videoNote: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        videoNote:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        videoNote: MediaDataParam;
         duration?: number;
         length?: number;
         thumbnail?:
@@ -7789,29 +7540,13 @@ export declare class Chat extends Base {
    * @returns On success, the sent Message is returned.
    */
   sendSticker(
-    sticker:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    sticker: MediaDataParam,
     options?: Omit<
       {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
-        sticker:
-          | Buffer
-          | import("fs").ReadStream
-          | import("buffer").Blob
-          | FormData
-          | DataView
-          | ArrayBuffer
-          | Uint8Array
-          | string;
+        sticker: MediaDataParam;
         emoji?: string;
         disableNotification?: boolean;
         protectContent?: boolean;
@@ -9171,15 +8906,7 @@ export declare class BaseClient extends EventEmitter {
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   setChatPhoto(
     chatId: number | string,
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    photo: MediaDataParam,
   ): Promise<MethodsLibReturnType["setChatPhoto"]>;
   /** Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   deleteChatPhoto(
@@ -11821,6 +11548,7 @@ export declare enum ErrorCodes {
   InvalidUserId = "INVALID_USER_ID",
   InvalidChatId = "INVALID_CHAT_ID",
   InvalidClientId = "INVALID_CLIENT_ID",
+  InvalidFileName = "INVALID_FILE_NAME",
 }
 
 export declare const ErrorMessages: {
@@ -11838,6 +11566,7 @@ export declare const ErrorMessages: {
   readonly INVALID_USER_ID: "The provided ID is invalid for retrieving user information; it does not correspond to a valid user ID.";
   readonly INVALID_CHAT_ID: "The provided ID is invalid for retrieving chat information; it does not correspond to a valid chat ID.";
   readonly INVALID_CLIENT_ID: "The bot ID is not available. Please check if the bot has been initialized";
+  readonly INVALID_FILE_NAME: "The name file is not valid. Please open issue https://github.com/telegramsjs/Telegramsjs/issues";
 };
 
 /**

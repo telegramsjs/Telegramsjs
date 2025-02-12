@@ -25,6 +25,30 @@ import type {
 } from "./Markup";
 import type { ParseMode, Update } from "@telegram.ts/types";
 
+export type MediaDataParam =
+  | Buffer
+  | ReadStream
+  | Blob
+  | FormData
+  | DataView
+  | ArrayBuffer
+  | Uint8Array
+  | string
+  | {
+      source: {
+        media:
+          | Buffer
+          | ReadStream
+          | Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        filename?: string;
+      };
+    };
+
 /** Wrapper type to bundle all methods of the TelegramsJS */
 export type ApiMethods = {
   /** Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects.
@@ -227,15 +251,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** Photo to send. Pass a fileId as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. */
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    photo: MediaDataParam;
     /** Photo caption (may also be used when resending photos by fileId), 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the photo caption. See formatting options for more details. */
@@ -277,15 +293,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** Audio file to send. Pass a fileId as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. */
-    audio:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    audio: MediaDataParam;
     /** Audio caption, 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the audio caption. See formatting options for more details. */
@@ -337,15 +345,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** File to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
-    document:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    document: MediaDataParam;
     /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
     thumbnail?:
       | Buffer
@@ -393,15 +393,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** Video to send. Pass a fileId as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. */
-    video:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    video: MediaDataParam;
     /** Duration of sent video in seconds */
     duration?: number;
     /** Video width */
@@ -459,15 +451,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** Animation to send. Pass a fileId as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. */
-    animation:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    animation: MediaDataParam;
     /** Duration of sent animation in seconds */
     duration?: number;
     /** Animation width */
@@ -523,15 +507,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** Audio file to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
-    voice:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    voice: MediaDataParam;
     /** Voice message caption, 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the voice message caption. See formatting options for more details. */
@@ -570,15 +546,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** Video note to send. Pass a fileId as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported */
-    videoNote:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    videoNote: MediaDataParam;
     /** Duration of sent video in seconds */
     duration?: number;
     /** Video width and height, i.e. diameter of the video message */
@@ -1191,15 +1159,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
     /** New chat photo, uploaded using multipart/form-data */
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    photo: MediaDataParam;
   }): true;
 
   /** Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -1668,15 +1628,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
     /** Sticker to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL. */
-    sticker:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    sticker: MediaDataParam;
     /** Emoji associated with the sticker; only for just uploaded stickers */
     emoji?: string;
     /** Sends the message silently. Users will receive a notification with no sound. */
@@ -1718,15 +1670,7 @@ export type ApiMethods = {
     /** Format of the sticker, must be one of “static”, “animated”, “video” */
     stickerFormat: "static" | "animated" | "video";
     /** A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See https://core.telegram.org/stickers for technical requirements. */
-    sticker:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string;
+    sticker: MediaDataParam;
   }): import("../index").InputFile;
 
   /** Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns True on success. */
@@ -2176,15 +2120,7 @@ export type ApiMethods = {
 /** This object describes a sticker to be added to a sticker set. */
 export interface InputSticker {
   /** The added sticker. Pass a fileId as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. Animated and video stickers can't be uploaded via HTTP URL. */
-  sticker:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  sticker: MediaDataParam;
   /** Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a .WEBM video */
   format: "static" | "animated" | "video";
   /** List of 1-20 emoji associated with the sticker */
@@ -2213,15 +2149,7 @@ export interface InputMediaPhoto {
   /** Type of the result, must be photo */
   type: "photo";
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
-  media:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  media: MediaDataParam;
   /** Caption of the photo to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Pass True, if the caption must be shown above the message media */
@@ -2239,15 +2167,7 @@ export interface InputMediaVideo {
   /** Type of the result, must be video */
   type: "video";
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
-  media:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
   thumbnail?:
     | Buffer
@@ -2283,15 +2203,7 @@ export interface InputMediaAnimation {
   /** Type of the result, must be animation */
   type: "animation";
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
-  media:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
   thumbnail?:
     | Buffer
@@ -2325,15 +2237,7 @@ export interface InputMediaAudio {
   /** Type of the result, must be audio */
   type: "audio";
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
-  media:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
   thumbnail?:
     | Buffer
@@ -2363,15 +2267,7 @@ export interface InputMediaDocument {
   /** Type of the result, must be document */
   type: "document";
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
-  media:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
   thumbnail?:
     | Buffer
@@ -2402,15 +2298,7 @@ export interface InputPaidMediaPhoto {
   /** Type of the media, must be photo */
   type: "photo";
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » */
-  media:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  media: MediaDataParam;
 }
 
 /** The paid media to send is a video. */
@@ -2418,15 +2306,7 @@ export interface InputPaidMediaVideo {
   /** Type of the media, must be video */
   type: "video";
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » */
-  media:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
   thumbnail?:
     | Buffer

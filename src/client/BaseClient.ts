@@ -1,10 +1,10 @@
-import type { ReadStream } from "node:fs";
 import { EventEmitter } from "node:events";
 import { Rest } from "../rest/Rest";
 import { Collection } from "@telegram.ts/collection";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
 import type { LanguageCode } from "./interfaces/Language";
+import type { MediaDataParam } from "./interfaces/Methods";
 import type { ClientOptions, TelegramClient } from "./TelegramClient";
 import {
   Message,
@@ -845,15 +845,7 @@ class BaseClient extends EventEmitter {
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatPhoto(
     chatId: number | string,
-    photo:
-      | Buffer
-      | ReadStream
-      | Blob
-      | FormData
-      | DataView
-      | ArrayBuffer
-      | Uint8Array
-      | string,
+    photo: MediaDataParam,
   ): Promise<MethodsLibReturnType["setChatPhoto"]> {
     return this.rest.request<MethodsApiReturnType["setChatPhoto"]>(
       "setChatPhoto",
