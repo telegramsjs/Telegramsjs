@@ -265,6 +265,17 @@ class MediaData {
       return;
     }
 
+    if (id === "cover") {
+      const attachmentId = randomBytes(16).toString("hex");
+
+      await this.attachFormMedia(form, value, { id: attachmentId });
+      form.addPart({
+        headers: { "content-disposition": `form-data; name="${id}"` },
+        body: `attach://${attachmentId}`,
+      });
+      return;
+    }
+
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {

@@ -166,6 +166,8 @@ export type ApiMethods = {
     messageThreadId?: string | number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
+    /** New start timestamp for the copied video in the message */
+    videoStartTimestamp?: number;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
     /** Protects the contents of the forwarded message from forwarding and saving */
@@ -198,6 +200,8 @@ export type ApiMethods = {
     messageThreadId?: string | number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
+    /** New start timestamp for the copied video in the message */
+    videoStartTimestamp?: number;
     /** Message identifier in the chat specified in fromChatId */
     messageId: string | number;
     /** New caption for media, 0-1024 characters after entities parsing. If not specified, the original caption is kept */
@@ -410,6 +414,18 @@ export type ApiMethods = {
       | ArrayBuffer
       | Uint8Array
       | string;
+    /** Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
+    cover?:
+      | Buffer
+      | ReadStream
+      | Blob
+      | FormData
+      | DataView
+      | ArrayBuffer
+      | Uint8Array
+      | string;
+    /** Start timestamp for the video in the message */
+    startTimestamp?: number;
     /** Video caption (may also be used when resending videos by fileId), 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the video caption. See formatting options for more details. */
@@ -943,7 +959,7 @@ export type ApiMethods = {
     messageThreadId?: string | number;
   }): true;
 
-  /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
+  /** Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
   setMessageReaction(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
@@ -1793,13 +1809,15 @@ export type ApiMethods = {
     customEmojiId?: string;
   }): true;
 
-  /** Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object. */
+  /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   getAvailableGifts(): import("../../structures/gift/Gifts").Gifts;
 
-  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success. */
+  /** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive. Returns True on success. */
   sendGift(args: {
-    /** Unique identifier of the target user that will receive the gift */
-    userId: string | number;
+    /** Required if chat_id is not specified. Unique identifier of the target user who will receive the gift. */
+    userId?: number | string;
+    /** Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift. */
+    chatId?: number | string;
     /** Identifier of the gift */
     giftId: string;
     /** Pass True to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver */
@@ -2180,6 +2198,18 @@ export interface InputMediaVideo {
     | ArrayBuffer
     | Uint8Array
     | string;
+  /** Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
+  cover?:
+    | Buffer
+    | ReadStream
+    | Blob
+    | FormData
+    | DataView
+    | ArrayBuffer
+    | Uint8Array
+    | string;
+  /** Start timestamp for the video in the message */
+  start_timestamp?: number;
   /** Caption of the video to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Pass True, if the caption must be shown above the message media */
@@ -2319,6 +2349,18 @@ export interface InputPaidMediaVideo {
     | ArrayBuffer
     | Uint8Array
     | string;
+  /** Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
+  cover?:
+    | Buffer
+    | ReadStream
+    | Blob
+    | FormData
+    | DataView
+    | ArrayBuffer
+    | Uint8Array
+    | string;
+  /** Start timestamp for the video in the message */
+  start_timestamp?: number;
   /** Video width */
   width?: number;
   /** Video height */

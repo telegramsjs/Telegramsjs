@@ -598,7 +598,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
+  /** Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
   async setMessageReaction(
     params: MethodParameters["setMessageReaction"],
   ): Promise<MethodsLibReturnType["setMessageReaction"]> {
@@ -1626,7 +1626,7 @@ class BaseClient extends EventEmitter {
     });
   }
 
-  /** Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object. */
+  /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   async getAvailableGifts(): Promise<
     MethodsLibReturnType["getAvailableGifts"]
   > {
@@ -1635,7 +1635,7 @@ class BaseClient extends EventEmitter {
       .then((res) => new Gifts(this, res));
   }
 
-  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success. */
+  /** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive. Returns True on success. */
   async sendGift(
     params: MethodParameters["sendGift"],
   ): Promise<MethodsLibReturnType["sendGift"]> {

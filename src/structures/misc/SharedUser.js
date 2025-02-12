@@ -91,7 +91,7 @@ class SharedUser extends Base {
   }
 
   /**
-   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param {string} giftId - Identifier of the gift.
    * @param {Omit<MethodParameters["sendGift"], "giftId" | "userId">} [options] - out parameters.
    * @returns {Promise<true>} - Returns True on success.

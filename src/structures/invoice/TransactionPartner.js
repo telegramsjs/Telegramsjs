@@ -1,5 +1,6 @@
 // @ts-check
 const { Base } = require("../Base");
+const { Gift } = require("../gift/Gift");
 const { PaidMedia } = require("../media/paid/PaidMedia");
 const { AffiliateInfo } = require("./AffiliateInfo");
 const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");
@@ -84,9 +85,17 @@ class TransactionPartner extends Base {
     if ("gift" in data) {
       /**
        * The gift sent to the user by the bot.
-       * @type {string | undefined}
+       * @type {Gift | undefined}
        */
-      this.gift = data.gift;
+      this.gift = new Gift(this.client, data.gift);
+    }
+
+    if ("chat" in data) {
+      /**
+       * Information about the chat.
+       * @type {import("../chat/Chat").Chat | undefined}
+       */
+      this.chat = this.client.chats._add(data.chat);
     }
 
     if ("affiliate" in data) {
@@ -117,28 +126,35 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: string; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined }}
+   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat?: undefined }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @returns {this is this & { withdrawal: RevenueWithdrawalState; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined;  affiliate?: undefined; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat: import("../misc/Chat").Chat }}
+   */
+  isChat() {
+    return Boolean("chat" in this && this.chat);
+  }
+
+  /**
+   * @returns {this is this & { withdrawal: RevenueWithdrawalState; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined;  affiliate?: undefined; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat?: undefined }}
    */
   isFragment() {
     return Boolean("withdrawal" in this && this.withdrawal);
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: undefined; commissionRate?: undefined; requestCount: number }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: undefined; commissionRate?: undefined; requestCount: number; chat?: undefined }}
    */
   isTelegramApi() {
     return Boolean("requestCount" in this && this.requestCount !== undefined);
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: import("../misc/User").User; commissionRate?: number; requestCount?: undefined }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: import("../misc/User").User; commissionRate?: number; requestCount?: undefined; chat?: undefined }}
    */
   isAffiliateProgram() {
     return Boolean(

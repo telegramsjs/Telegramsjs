@@ -706,7 +706,7 @@ export declare class User extends Base {
       >
   >;
   /**
-   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param giftId - Identifier of the gift.
    * @param options - out parameters.
    * @returns Returns True on success.
@@ -2110,6 +2110,7 @@ export declare class MessageReactionUpdated extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         fromChatId: number | string;
+        videoStartTimestamp?: number;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageId: string | number;
@@ -2130,6 +2131,7 @@ export declare class MessageReactionUpdated extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         fromChatId: number | string;
+        videoStartTimestamp?: number;
         messageId: string | number;
         caption?: string;
         parseMode?: string;
@@ -2535,6 +2537,7 @@ export declare class MessageOrigin extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         fromChatId: number | string;
+        videoStartTimestamp?: number;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageId: string | number;
@@ -2555,6 +2558,7 @@ export declare class MessageOrigin extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         fromChatId: number | string;
+        videoStartTimestamp?: number;
         messageId: string | number;
         caption?: string;
         parseMode?: string;
@@ -2815,12 +2819,21 @@ export declare class Video extends InputFile {
   height: number;
   /** Duration of the video in seconds as defined by sender */
   duration: number;
+  /** Available sizes of the cover of the video in the message */
+  cover?: Photo[];
+  /** Timestamp in seconds from which the video will play in the message */
+  startedTimestamp?: number;
   /** Original filename as defined by sender */
   name?: string;
   /** Video thumbnail */
   thumbnail?: Photo;
   /** MIME type of the file as defined by sender */
   mimeType?: string;
+
+  /**
+   * Date the video was sent. Timestamp in seconds from which the video will play in the message
+   */
+  get createdAt(): Date | null;
 }
 
 export declare class VideoNote extends InputFile {
@@ -3916,7 +3929,7 @@ export declare class SharedUser extends Base {
       >
   >;
   /**
-   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param giftId - Identifier of the gift.
    * @param options - out parameters.
    * @returns Returns True on success.
@@ -4560,6 +4573,16 @@ export declare class ChatShared extends Base {
           | ArrayBuffer
           | Uint8Array
           | string;
+        cover?:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        startTimestamp?: number;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -6029,6 +6052,7 @@ export declare class Message extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         fromChatId: number | string;
+        videoStartTimestamp?: number;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageId: string | number;
@@ -6049,6 +6073,7 @@ export declare class Message extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         fromChatId: number | string;
+        videoStartTimestamp?: number;
         messageId: string | number;
         caption?: string;
         parseMode?: string;
@@ -7154,6 +7179,16 @@ export declare class Chat extends Base {
           | ArrayBuffer
           | Uint8Array
           | string;
+        cover?:
+          | Buffer
+          | import("fs").ReadStream
+          | import("buffer").Blob
+          | FormData
+          | DataView
+          | ArrayBuffer
+          | Uint8Array
+          | string;
+        startTimestamp?: number;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         captionEntities?: MessageEntity[];
@@ -8096,7 +8131,7 @@ export declare class BusinessConnection extends Base {
       >
   >;
   /**
-   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param giftId - Identifier of the gift.
    * @param options - out parameters.
    * @returns Returns True on success.
@@ -9186,9 +9221,9 @@ export declare class BaseClient extends EventEmitter {
     name: string,
     customEmojiId?: string,
   ): Promise<MethodsLibReturnType["setCustomEmojiStickerSetThumbnail"]>;
-  /** Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object. */
+  /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   getAvailableGifts(): Promise<MethodsLibReturnType["getAvailableGifts"]>;
-  /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success. */
+  /** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive. Returns True on success. */
   sendGift(
     params: MethodParameters["sendGift"],
   ): Promise<MethodsLibReturnType["sendGift"]>;
@@ -10369,6 +10404,10 @@ export declare class TransactionPartner extends Base {
    */
   gift?: string;
   /**
+   * Information about the chat.
+   */
+  chat?: Chat;
+  /**
    * Information about the affiliate that received a commission via this transaction.
    */
   affiliate?: AffiliateInfo;
@@ -10386,12 +10425,27 @@ export declare class TransactionPartner extends Base {
     user: User;
     paidMedia?: PaidMedia[];
     paidMediaPayload?: string;
-    gift?: string;
+    gift?: Gift;
     subscriptionPeriod?: number;
     requestCount?: undefined;
     affiliate?: AffiliateInfo;
     sponsorUser?: undefined;
     commissionRate?: undefined;
+    chat?: undefined;
+  };
+
+  isChat(): this is this & {
+    withdrawal?: undefined;
+    user?: undefined;
+    paidMedia?: undefined;
+    paidMediaPayload?: string;
+    gift?: Gift;
+    subscriptionPeriod?: number;
+    requestCount?: undefined;
+    affiliate?: AffiliateInfo;
+    sponsorUser?: undefined;
+    commissionRate?: undefined;
+    chat: Chat;
   };
 
   isFragment(): this is this & {
@@ -10405,6 +10459,7 @@ export declare class TransactionPartner extends Base {
     affiliate?: undefined;
     sponsorUser?: undefined;
     commissionRate?: undefined;
+    chat?: undefined;
   };
 
   isTelegramApi(): this is this & {
@@ -10418,6 +10473,7 @@ export declare class TransactionPartner extends Base {
     affiliate?: undefined;
     sponsorUser?: undefined;
     commissionRate?: undefined;
+    chat?: undefined;
   };
 
   isAffiliateProgram(): this is this & {
@@ -10431,6 +10487,7 @@ export declare class TransactionPartner extends Base {
     affiliate?: undefined;
     sponsorUser?: User;
     commissionRate?: number;
+    chat?: undefined;
   };
 }
 
@@ -11619,6 +11676,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.7.1";
+export declare const version: "4.8.0";
 
 export * from "./telegram/index";

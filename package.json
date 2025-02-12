@@ -1,7 +1,7 @@
 {
   "name": "telegramsjs",
   "description": "A powerful library for interacting with the Telegram Bot API",
-  "version": "4.7.1",
+  "version": "4.8.0",
   "main": "./dist/src/index.js",
   "types": "./typings/index.d.ts",
   "scripts": {
@@ -53,10 +53,10 @@
   },
   "homepage": "https://docs-telegramsjs.vercel.app/",
   "devDependencies": {
-    "@telegram.ts/types": "^1.20.0",
+    "@telegram.ts/types": "^1.21.1",
     "@types/node": "^18.19.61",
     "@types/node-fetch": "^2.6.11",
-    "typescript": "5.7.2"
+    "typescript": "5.7.3"
   },
   "dependencies": {
     "@telegram.ts/collection": "^1.1.0",
