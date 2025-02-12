@@ -10223,6 +10223,10 @@ export declare class ChatFullInfo extends Chat {
    */
   permissions?: ChatPermissions;
   /**
+   * True, if gifts can be sent to the chat
+   */
+  giftSendingEnabled?: true;
+  /**
    * The slow mode delay in the chat.
    */
   slowModeDelay?: number;
@@ -11676,6 +11680,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.8.0";
+export declare const version: "4.8.1";
 
 export * from "./telegram/index";
