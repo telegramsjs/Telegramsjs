@@ -8,7 +8,7 @@
 
 ## **Updates**
 
-- Support for API 8.2 ([df8dbcc](https://github.com/telegramsjs/Telegramsjs/commit/df8dbccf2ee6f64d97a1613d4d7f6c2e6b848024))
+- **Support for API 8.3** ([df8dbcc](https://github.com/telegramsjs/Telegramsjs/commit/df8dbccf2ee6f64d97a1613d4d7f6c2e6b848024))
 
 ## **Features**
 
