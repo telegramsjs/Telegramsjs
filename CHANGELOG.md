@@ -4,7 +4,7 @@
 
 ## **Bug Fixes**
 
-- **BaseClient:** `createForumTopic` params not found ([cd6724e](https://github.com/telegramsjs/Telegramsjs/commit/cd6724ea70271c9d025002005a7b0b9cf1a92eab))
+- **BaseClient:** `createForumTopic` params not found ([cd6724e](https://github.com/telegramsjs/Telegramsjs/commit/cd6724ea70271c9d025002005a7b0b9cf1a92eab)) ([#46](https://github.com/telegramsjs/Telegramsjs/issues/46))
 
 ---
 
