@@ -1047,7 +1047,9 @@ class BaseClient extends EventEmitter {
     params: MethodParameters["createForumTopic"],
   ): Promise<MethodsLibReturnType["createForumTopic"]> {
     return this.rest
-      .request<MethodsApiReturnType["createForumTopic"]>("createForumTopic")
+      .request<
+        MethodsApiReturnType["createForumTopic"]
+      >("createForumTopic", toSnakeCase(params))
       .then(
         (res) =>
           new ForumTopic(this, res.message_thread_id, params.chatId, res),
