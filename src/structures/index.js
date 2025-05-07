@@ -92,7 +92,8 @@ module.exports.Location = require("./misc/Location").Location;
 module.exports.MenuButton = require("./misc/MenuButton").MenuButton;
 module.exports.ReactionType = require("./misc/ReactionType").ReactionType;
 module.exports.SharedUser = require("./misc/SharedUser").SharedUser;
-module.exports.Story = require("./misc/Story").Story;
+module.exports.StarAmount = require("./misc/StarAmount").StarAmount;
+module.exports.Story = require("./story/Story").Story;
 module.exports.TextQuote = require("./misc/TextQuote").TextQuote;
 module.exports.User = require("./misc/User").User;
 module.exports.UserProfilePhotos =
@@ -113,3 +114,10 @@ module.exports.PreparedInlineMessage =
   require("./misc/PreparedInlineMessage").PreparedInlineMessage;
 module.exports.Gift = require("./gift/Gift").Gift;
 module.exports.Gifts = require("./gift/Gifts").Gifts;
+module.exports.OwnedGifts = require("./gift/OwnedGifts").OwnedGifts;
+module.exports.OwnedGiftRegular =
+  require("./gift/OwnedGiftRegular").OwnedGiftRegular;
+module.exports.OwnedGiftUnique =
+  require("./gift/OwnedGiftUnique").OwnedGiftUnique;
+module.exports.GiftInfo = require("./gift/GiftInfo").GiftInfo;
+module.exports.UniqueGiftInfo = require("./gift/UniqueGiftInfo").UniqueGiftInfo;

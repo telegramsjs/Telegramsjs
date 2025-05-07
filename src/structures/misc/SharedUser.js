@@ -105,6 +105,22 @@ class SharedUser extends Base {
   }
 
   /**
+   * Gifts a Telegram Premium subscription to the given user.
+   * @param {3 | 6 | 12} monthCount - Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12.
+   * @param {1000 | 1500 | 2500} starCount - Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months.
+   * @param {Omit<MethodParameters["giftPremiumSubscription"], "monthCount" | "starCount" | "userId">} [options={}] - out parameters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  giftPremiumSubscription(monthCount, starCount, options = {}) {
+    return this.client.giftPremiumSubscription({
+      ...options,
+      monthCount,
+      starCount,
+      userId: this.userId,
+    });
+  }
+
+  /**
    * Stores a message that can be sent by a user of a Mini App.
    * @param {import("../../client/interfaces/Inline").InlineQueryResult} result - An object describing the message to be sent.
    * @param {Omit<MethodParameters["savePreparedInlineMessage"], "userId" | "result">} [options] - out parameters.

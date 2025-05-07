@@ -3,7 +3,7 @@ const { Base } = require("../Base");
 const { UsersShared } = require("../misc/UsersShared");
 const { ChatShared } = require("../misc/ChatShared");
 const { ChatMember } = require("../chat/ChatMember");
-const { Story } = require("../misc/Story");
+const { Story } = require("../story/Story");
 const {
   VideoChatParticipantsInvited,
 } = require("../chat/VideoChatParticipantsInvited");
@@ -47,6 +47,8 @@ const {
   ReactionCollectorEvents,
 } = require("../../util/Constants");
 const { ReactionType } = require("../misc/ReactionType");
+const { GiftInfo } = require("../gift/GiftInfo");
+const { UniqueGiftInfo } = require("../gift/UniqueGiftInfo");
 const { TelegramError } = require("../../errors/TelegramError");
 const { ErrorCodes } = require("../../errors/ErrorCodes");
 const { Collection } = require("@telegram.ts/collection");
@@ -306,6 +308,14 @@ class Message extends Base {
        * @type {string | undefined}
        */
       this.effectId = data.effect_id;
+    }
+
+    if ("paid_star_count" in data) {
+      /**
+       * The number of Telegram Stars that were paid by the sender of the message to send it.
+       * @type {number | undefined}
+       */
+      this.paidStarCount = data.paid_star_count;
     }
 
     if ("sender_chat" in data) {
@@ -668,6 +678,28 @@ class Message extends Base {
         this.client,
         data.giveaway_completed,
       );
+    }
+
+    if ("gift" in data) {
+      /**
+       * Service message: a regular gift was sent or received
+       * @type {GiftInfo | undefined}
+       */
+      this.gift = new GiftInfo(this.client, data.gift);
+    }
+
+    if ("unique_gift" in data) {
+      /**
+       * Service message: a unique gift was sent or received
+       * @type {UniqueGiftInfo | undefined}
+       */
+      this.uniqueGift = new UniqueGiftInfo(this.client, data.unique_gift);
+    }
+
+    if ("paid_message_price_changed" in data) {
+      /** Service message: the price for paid messages has changed in the chat; The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message */
+      this.paidPriceStartCount =
+        data.paid_message_price_changed.paid_message_star_count;
     }
 
     if ("video_chat_scheduled" in data) {

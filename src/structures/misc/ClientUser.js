@@ -199,7 +199,7 @@ class ClientUser extends User {
 
   /**
    * Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot.
-   * @param {import("../../util/ChatPermissions").ChatPermissionFlags} [rights] - An object describing new default administrator rights. If not specified, the default administrator rights will be cleared
+   * @param {import("../../util/permission/ChatPermissions").ChatPermissionFlags} [rights] - An object describing new default administrator rights. If not specified, the default administrator rights will be cleared
    * @param {boolean} [forChannels] - Pass True to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed
    * @returns {Promise<true>} - Returns True on success.
    */

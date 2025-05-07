@@ -27,12 +27,15 @@ import {
   ChatInviteLink,
   Gifts,
   PreparedInlineMessage,
+  StarAmount,
+  OwnedGifts,
+  Story,
 } from "../structures/index";
 import {
   ChatPermissions,
   type ChatPermissionFlags,
-} from "../util/ChatPermissions";
-import { toApiFormat } from "../util/ApiPermissions";
+} from "../util/permission/ChatPermissions";
+import { toApiFormat } from "../util/permission/ApiPermissions";
 import type {
   MethodsApiReturnType,
   MethodsLibReturnType,
@@ -594,6 +597,16 @@ class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["sendChatAction"]> {
     return this.rest.request<MethodsApiReturnType["sendChatAction"]>(
       "sendChatAction",
+      toSnakeCase(params),
+    );
+  }
+
+  /** Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success. */
+  async readBusinessMessage(
+    params: MethodParameters["readBusinessMessage"],
+  ): Promise<MethodsLibReturnType["readBusinessMessage"]> {
+    return this.rest.request<MethodsApiReturnType["readBusinessMessage"]>(
+      "readBusinessMessage",
       toSnakeCase(params),
     );
   }
@@ -1347,6 +1360,130 @@ class BaseClient extends EventEmitter {
       .then((res) => new ChatAdministratorRights(res));
   }
 
+  /** Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success. */
+  async setBusinessAccountName(
+    params: MethodParameters["setBusinessAccountName"],
+  ) {
+    return this.rest.request<MethodsApiReturnType["setBusinessAccountName"]>(
+      "setBusinessAccountName",
+      toSnakeCase(params),
+    );
+  }
+
+  /** Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success. */
+  async setBusinessAccountUsername(
+    businessConnectionId: string,
+    username?: string,
+  ): Promise<MethodsLibReturnType["setBusinessAccountUsername"]> {
+    return this.rest.request<
+      MethodsApiReturnType["setBusinessAccountUsername"]
+    >("setBusinessAccountUsername", {
+      business_connection_id: businessConnectionId,
+      ...(username && { username }),
+    });
+  }
+
+  /** Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.. */
+  async setBusinessAccountBio(
+    businessConnectionId: string,
+    bio?: string,
+  ): Promise<MethodsLibReturnType["setBusinessAccountBio"]> {
+    return this.rest.request<MethodsApiReturnType["setBusinessAccountBio"]>(
+      "setBusinessAccountBio",
+      {
+        business_connection_id: businessConnectionId,
+        ...(bio && { bio }),
+      },
+    );
+  }
+
+  /** Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  async setBusinessAccountProfilePhoto(
+    params: MethodParameters["setBusinessAccountProfilePhoto"],
+  ): Promise<MethodsLibReturnType["setBusinessAccountProfilePhoto"]> {
+    return this.rest.request<
+      MethodsApiReturnType["setBusinessAccountProfilePhoto"]
+    >("setBusinessAccountProfilePhoto", toSnakeCase(params));
+  }
+
+  /** Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  async removeBusinessAccountProfilePhoto(
+    businessConnectionId: string,
+    isPublic?: boolean,
+  ): Promise<MethodsLibReturnType["removeBusinessAccountProfilePhoto"]> {
+    return this.rest.request<
+      MethodsApiReturnType["removeBusinessAccountProfilePhoto"]
+    >("removeBusinessAccountProfilePhoto", {
+      business_connection_id: businessConnectionId,
+      ...(typeof isPublic !== "undefined" && { is_public: isPublic }),
+    });
+  }
+
+  /** Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success. */
+  async setBusinessAccountGiftSettings(
+    params: MethodParameters["setBusinessAccountGiftSettings"],
+  ): Promise<MethodsLibReturnType["setBusinessAccountGiftSettings"]> {
+    return this.rest.request<
+      MethodsApiReturnType["setBusinessAccountGiftSettings"]
+    >("setBusinessAccountGiftSettings", toSnakeCase(params));
+  }
+
+  /** Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success. */
+  async getBusinessAccountStarBalance(
+    businessConnectionId: string,
+  ): Promise<MethodsLibReturnType["getBusinessAccountStarBalance"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["getBusinessAccountStarBalance"]
+      >("getBusinessAccountStarBalance", { business_connection_id: businessConnectionId })
+      .then((res) => new StarAmount(res));
+  }
+
+  /** Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success. */
+  async getBusinessAccountGifts(
+    params: MethodParameters["getBusinessAccountGifts"],
+  ): Promise<MethodsLibReturnType["getBusinessAccountGifts"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["getBusinessAccountGifts"]
+      >("getBusinessAccountGifts", toSnakeCase(params))
+      .then((res) => new OwnedGifts(this, res));
+  }
+
+  /** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success. */
+  async convertGiftToStars(
+    businessConnectionId: string,
+    ownedGiftId: string,
+  ): Promise<MethodsLibReturnType["convertGiftToStars"]> {
+    return this.rest.request<MethodsApiReturnType["convertGiftToStars"]>(
+      "convertGiftToStars",
+      {
+        business_connection_id: businessConnectionId,
+        owned_gift_id: ownedGiftId,
+      },
+    );
+  }
+
+  /** Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success. */
+  async upgradeGift(
+    params: MethodParameters["upgradeGift"],
+  ): Promise<MethodsLibReturnType["upgradeGift"]> {
+    return this.rest.request<MethodsApiReturnType["upgradeGift"]>(
+      "upgradeGift",
+      toSnakeCase(params),
+    );
+  }
+
+  /** Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.  */
+  async transferGift(
+    params: MethodParameters["transferGift"],
+  ): Promise<MethodsLibReturnType["transferGift"]> {
+    return this.rest.request<MethodsApiReturnType["transferGift"]>(
+      "transferGift",
+      toSnakeCase(params),
+    );
+  }
+
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   async editMessageText(
     params: MethodParameters["editMessageText"],
@@ -1628,6 +1765,42 @@ class BaseClient extends EventEmitter {
     });
   }
 
+  /** Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  async postStory(
+    args: MethodParameters["postStory"],
+  ): Promise<MethodsLibReturnType["postStory"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["postStory"]
+      >("postStory", toSnakeCase(args))
+      .then((res) => new Story(this, res));
+  }
+
+  /** Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  async editStory(
+    args: MethodParameters["editStory"],
+  ): Promise<MethodsLibReturnType["editStory"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["editStory"]
+      >("editStory", toSnakeCase(args))
+      .then((res) => new Story(this, res));
+  }
+
+  /** Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success. */
+  async deleteStory(
+    businessConnectionId: string,
+    storyId: number,
+  ): Promise<MethodsLibReturnType["deleteStory"]> {
+    return this.rest.request<MethodsApiReturnType["deleteStory"]>(
+      "deleteStory",
+      {
+        business_connection_id: businessConnectionId,
+        story_id: storyId,
+      },
+    );
+  }
+
   /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   async getAvailableGifts(): Promise<
     MethodsLibReturnType["getAvailableGifts"]
@@ -1645,6 +1818,29 @@ class BaseClient extends EventEmitter {
       "sendGift",
       toSnakeCase(params),
     );
+  }
+
+  /** Gifts a Telegram Premium subscription to the given user. Returns True on success. */
+  async giftPremiumSubscription(
+    args: MethodParameters["giftPremiumSubscription"],
+  ): Promise<MethodsLibReturnType["giftPremiumSubscription"]> {
+    return this.rest.request<MethodsApiReturnType["giftPremiumSubscription"]>(
+      "giftPremiumSubscription",
+      toSnakeCase(args),
+    );
+  }
+
+  /** Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success. */
+  async transferBusinessAccountStars(
+    businessConnectionId: string,
+    starCount: number,
+  ): Promise<MethodsLibReturnType["transferBusinessAccountStars"]> {
+    return this.rest.request<
+      MethodsApiReturnType["transferBusinessAccountStars"]
+    >("transferBusinessAccountStars", {
+      business_connection_id: businessConnectionId,
+      star_count: starCount,
+    });
   }
 
   /** Use this method to delete a sticker set that was created by the bot. Returns True on success. */
@@ -1914,6 +2110,17 @@ class BaseClient extends EventEmitter {
     return this.rest.request<MethodsApiReturnType["deleteMessages"]>(
       "deleteMessages",
       { chat_id: chatId, message_ids: messageIds },
+    );
+  }
+
+  /** Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success. */
+  async deleteBusinessMessages(
+    businessConnectionId: string,
+    messageIds: (number | string)[],
+  ): Promise<MethodsLibReturnType["deleteBusinessMessages"]> {
+    return this.rest.request<MethodsApiReturnType["deleteBusinessMessages"]>(
+      "deleteBusinessMessages",
+      { business_connection_id: businessConnectionId, message_ids: messageIds },
     );
   }
 }

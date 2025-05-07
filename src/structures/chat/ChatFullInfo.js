@@ -5,7 +5,7 @@ const { Location } = require("../misc/Location");
 const { Sticker } = require("../media/Sticker");
 const { ReactionType } = require("../misc/ReactionType");
 const { Message } = require("../message/Message");
-const { ChatPermissions } = require("../../util/ChatPermissions");
+const { ChatPermissions } = require("../../util/permission/ChatPermissions");
 
 class ChatFullInfo extends Chat {
   /**
@@ -358,12 +358,20 @@ class ChatFullInfo extends Chat {
       this.permissions = new ChatPermissions(permissions);
     }
 
-    if ("can_send_gift" in data) {
+    if ("accepted_gift_types" in data) {
       /**
-       * True, if gifts can be sent to the chat
-       * @type {true}
+       * Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
        */
-      this.giftSendingEnabled = data.can_send_gift;
+      this.acceptedGiftTypes = {
+        /** True, if unlimited regular gifts are accepted */
+        unlimited: data.accepted_gift_types.unlimited_gifts,
+        /** True, if limited regular gifts are accepted */
+        limited: data.accepted_gift_types.limited_gifts,
+        /** True, if unique gifts or gifts that can be upgraded to unique for free are accepted */
+        unique: data.accepted_gift_types.unique_gifts,
+        /** True, if a Telegram Premium subscription is accepted */
+        premiumSubscription: data.accepted_gift_types.premium_subscription,
+      };
     }
 
     if ("slow_mode_delay" in data) {

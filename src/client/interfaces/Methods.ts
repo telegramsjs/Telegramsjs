@@ -2,7 +2,12 @@ import type { ReadStream } from "node:fs";
 import type { Buffer, Blob } from "node:buffer";
 import type { LanguageCode } from "./Language";
 import type { PassportElementError } from "./Passport";
-import type { BotCommand, MenuButton, BotCommandScope } from "./Bot";
+import type {
+  AcceptedGiftTypes,
+  BotCommand,
+  MenuButton,
+  BotCommandScope,
+} from "./Bot";
 import type {
   InlineQueryResult,
   InlineQueryResultsButton,
@@ -23,6 +28,7 @@ import type {
   ReplyKeyboardMarkup,
   ReplyKeyboardRemove,
 } from "./Markup";
+import type { StoryArea } from "./Story";
 import type { ParseMode, Update } from "@telegram.ts/types";
 
 export type MediaDataParam =
@@ -207,7 +213,7 @@ export type ApiMethods = {
     /** New caption for media, 0-1024 characters after entities parsing. If not specified, the original caption is kept */
     caption?: string;
     /** Mode for parsing entities in the new caption. See formatting options for more details. */
-    parseMode?: string;
+    parseMode?: ParseMode;
     /** A list of special entities that appear in the new caption, which can be specified instead of parseMode */
     captionEntities?: MessageEntity[];
     /** Pass True, if the caption must be shown above the message media. Ignored if a new caption isn't specified. */
@@ -743,7 +749,7 @@ export type ApiMethods = {
     /** Media caption, 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the media caption. See formatting options for more details. */
-    parseMode?: string;
+    parseMode?: ParseMode;
     /** A list of special entities that appear in the caption, which can be specified instead of parseMode */
     captionEntities?: MessageEntity[];
     /** Pass True, if the caption must be shown above the message media */
@@ -857,7 +863,7 @@ export type ApiMethods = {
     /** Poll question, 1-300 characters */
     question: string;
     /** Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed */
-    questionParseMode?: string;
+    questionParseMode?: ParseMode;
     /** A list of special entities that appear in the poll question. It can be specified instead of questionParseMode */
     questionEntities?: MessageEntity[];
     /** A list of 2-10 answer options */
@@ -959,6 +965,16 @@ export type ApiMethods = {
     messageThreadId?: string | number;
   }): true;
 
+  /** Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success. */
+  readBusinessMessage(args: {
+    /** Unique identifier of the business connection on behalf of which to read the message */
+    businessConnectionId: string;
+    /** Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours. */
+    chatId: string | number;
+    /** Unique identifier of the message to mark as read */
+    messageId: string | number;
+  }): true;
+
   /** Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
   setMessageReaction(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
@@ -1031,7 +1047,7 @@ export type ApiMethods = {
     /** Unique identifier of the target user */
     userId: string | number;
     /** An object for new user permissions */
-    permissions: import("../../util/ChatPermissions").ChatPermissionFlags;
+    permissions: import("../../util/permission/ChatPermissions").ChatPermissionFlags;
     /** Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission. */
     useIndependentChatPermissions?: boolean;
     /** Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever */
@@ -1047,7 +1063,7 @@ export type ApiMethods = {
     /** Pass True if the administrator's presence in the chat is hidden */
     isAnonymous?: boolean;
     /** An object for new user permissions */
-    permissions: import("../../util/ChatPermissions").ChatPermissionFlags;
+    permissions: import("../../util/permission/ChatPermissions").ChatPermissionFlags;
   }): true;
 
   /** Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success. */
@@ -1081,7 +1097,7 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chatId: number | string;
     /** An object for new default chat permissions */
-    permissions: import("../../util/ChatPermissions").ChatPermissionFlags;
+    permissions: import("../../util/permission/ChatPermissions").ChatPermissionFlags;
     /** Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission. */
     useIndependentChatPermissions?: boolean;
   }): true;
@@ -1489,7 +1505,7 @@ export type ApiMethods = {
   /** Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success. */
   setMyDefaultAdministratorRights(args: {
     /** An object describing new default administrator rights. If not specified, the default administrator rights will be cleared. */
-    rights?: import("../../util/ChatPermissions").ChatPermissionFlags;
+    rights?: import("../../util/permission/ChatPermissions").ChatPermissionFlags;
     /** Pass True to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed. */
     forChannels?: boolean;
   }): true;
@@ -1499,6 +1515,120 @@ export type ApiMethods = {
     /** Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned. */
     forChannels?: boolean;
   }): import("../../structures/chat/ChatAdministratorRights").ChatAdministratorRights;
+
+  /** Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success. */
+  setBusinessAccountName(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** The new value of the first name for the business account; 1-64 characters */
+    firstName: string;
+    /** The new value of the last name for the business account; 0-64 characters */
+    lastName?: string;
+  }): true;
+
+  /** Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success. */
+  setBusinessAccountUsername(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** The new value of the username for the business account; 0-32 characters */
+    username?: string;
+  }): true;
+
+  /** Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success. */
+  setBusinessAccountBio(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** The new value of the bio for the business account; 0-140 characters */
+    bio?: string;
+  }): true;
+
+  /** Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  setBusinessAccountProfilePhoto(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** The new profile photo to set */
+    photo: InputProfilePhoto;
+    /** Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo. */
+    isPublic?: boolean;
+  }): true;
+
+  /** Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  removeBusinessAccountProfilePhoto(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo. */
+    isPublic?: boolean;
+  }): true;
+
+  /** Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success. */
+  setBusinessAccountGiftSettings(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field */
+    showGiftButton: boolean;
+    /** Types of gifts accepted by the business account */
+    acceptedGiftTypes: AcceptedGiftTypes;
+  }): true;
+
+  /** Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success. */
+  getBusinessAccountStarBalance(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+  }): import("../../structures/misc/StarAmount").StarAmount;
+
+  /** Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success. */
+  getBusinessAccountGifts(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Pass True to exclude gifts that aren't saved to the account's profile page */
+    excludeUnsaved?: boolean;
+    /** Pass True to exclude gifts that are saved to the account's profile page */
+    excludeSaved?: boolean;
+    /** Pass True to exclude gifts that can be purchased an unlimited number of times */
+    excludeUnlimited?: boolean;
+    /** Pass True to exclude gifts that can be purchased a limited number of times */
+    excludeLimited?: boolean;
+    /** Pass True to exclude unique gifts */
+    excludeUnique?: boolean;
+    /** Pass True to sort results by gift price instead of send date. Sorting is applied before pagination. */
+    sortByPrice?: boolean;
+    /** Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results */
+    offset?: string;
+    /** The maximum number of gifts to be returned; 1-100. Defaults to 100 */
+    limit?: number;
+  }): import("../../structures/gift/OwnedGifts").OwnedGifts;
+
+  /** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success. */
+  convertGiftToStars(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Unique identifier of the regular gift that should be converted to Telegram Stars */
+    ownedGiftId: string;
+  }): true;
+
+  /** Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success. */
+  upgradeGift(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Unique identifier of the regular gift that should be upgraded to a unique one */
+    ownedGiftId: string;
+    /** Pass True to keep the original gift text, sender and receiver in the upgraded gift */
+    keepOriginalDetails?: boolean;
+    /** The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed. */
+    sttrCount?: number;
+  }): true;
+
+  /** Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success. */
+  transferGift(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Unique identifier of the regular gift that should be transferred */
+    ownedGiftId: string;
+    /** Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours. */
+    newOwnerChatId: number;
+    /** The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the can_transfer_stars business bot right is required. */
+    starCount: number;
+  }): true;
 
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageText(args: {
@@ -1635,6 +1765,14 @@ export type ApiMethods = {
     chatId: number | string;
     /** A list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted */
     messageIds: (string | number)[];
+  }): true;
+
+  /** Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success. */
+  deleteBusinessMessages(args: {
+    /** Unique identifier of the business connection on behalf of which to delete the messages */
+    businessConnectionId: string;
+    /** A list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See deleteMessage for limitations on which messages can be deleted */
+    messageIds: number[];
   }): true;
 
   /** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned. */
@@ -1809,6 +1947,54 @@ export type ApiMethods = {
     customEmojiId?: string;
   }): true;
 
+  /** Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  postStory(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Content of the story */
+    content: InputStoryContent;
+    /** Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 */
+    activePeriod: number;
+    /** Caption of the story, 0-2048 characters after entities parsing */
+    caption?: string;
+    /** Mode for parsing entities in the story caption. See formatting options for more details. */
+    parseMode?: ParseMode;
+    /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
+    captionEntities?: MessageEntity[];
+    /** A list of clickable areas to be shown on the story */
+    areas?: StoryArea[];
+    /** Pass True to keep the story accessible after it expires */
+    postToChatPage?: boolean;
+    /** Pass True if the content of the story must be protected from forwarding and screenshotting */
+    protectContent?: boolean;
+  }): import("../../structures/story/Story").Story;
+
+  /** Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  editStory(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Unique identifier of the story to edit */
+    storyId: number;
+    /** Content of the story */
+    content: InputStoryContent;
+    /** Caption of the story, 0-2048 characters after entities parsing */
+    caption?: string;
+    /** Mode for parsing entities in the story caption. See formatting options for more details. */
+    parseMode?: ParseMode;
+    /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
+    captionEntities?: MessageEntity[];
+    /** A list of clickable areas to be shown on the story */
+    areas?: StoryArea;
+  }): import("../../structures/story/Story").Story;
+
+  /** Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success. */
+  deleteStory(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Unique identifier of the story to delete */
+    storyId: number;
+  }): true;
+
   /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   getAvailableGifts(): import("../../structures/gift/Gifts").Gifts;
 
@@ -1821,13 +2007,37 @@ export type ApiMethods = {
     /** Identifier of the gift */
     giftId: string;
     /** Pass True to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver */
-    pay_for_upgrade?: boolean;
+    payForUpgrade?: boolean;
     /** Text that will be shown along with the gift; 0-255 characters */
     text?: string;
     /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
     textParseMode?: ParseMode;
     /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
     textEntities?: MessageEntity[];
+  }): true;
+
+  /** Gifts a Telegram Premium subscription to the given user. Returns True on success. */
+  giftPremiumSubscription(args: {
+    /** Unique identifier of the target user who will receive a Telegram Premium subscription */
+    userId: string | number;
+    /** Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12 */
+    monthCount: 3 | 6 | 12;
+    /** Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months */
+    starCount: 1000 | 1500 | 2500;
+    /** Text that will be shown along with the service message about the subscription; 0-128 characters */
+    text?: string;
+    /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    textParseMode?: ParseMode;
+    /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    textEntities?: MessageEntity[];
+  }): true;
+
+  /** Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success. */
+  transferBusinessAccountStars(args: {
+    /** Unique identifier of the business connection */
+    businessConnectionId: string;
+    /** Number of Telegram Stars to transfer; 1-10000 */
+    starCount: number;
   }): true;
 
   /** Use this method to send answers to an inline query. On success, True is returned.
@@ -1998,29 +2208,29 @@ export type ApiMethods = {
   /** Verifies a user on behalf of the organization which is represented by the bot. Returns True on success. */
   verifyUser(args: {
     /** Unique identifier of the target user */
-    user_id: number;
+    userId: string | number;
     /** Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description. */
-    custom_description?: string;
+    customDescription?: string;
   }): true;
 
   /** Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success. */
   verifyChat(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
-    chat_id: number | string;
+    chatId: number | string;
     /** Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description. */
-    custom_description?: string;
+    customDescription?: string;
   }): true;
 
   /** Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success. */
   removeUserVerification(args: {
     /** Unique identifier of the target user */
-    user_id: number;
+    userId: string | number;
   }): true;
 
   /** Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success. */
   removeChatVerification(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
-    chat_id: number | string;
+    chatId: number | string;
   }): true;
 
   /** If you sent an invoice requesting a shipping address and the parameter isFlexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
@@ -2369,4 +2579,88 @@ export interface InputPaidMediaVideo {
   duration?: number;
   /** Pass True if the uploaded video is suitable for streaming */
   supports_streaming?: boolean;
+}
+
+/** This object describes a profile photo to set. Currently, it can be one of
+- InputProfilePhotoStatic
+- InputProfilePhotoAnimated */
+export type InputProfilePhoto =
+  | InputProfilePhotoStatic
+  | InputProfilePhotoAnimated;
+
+/** A static profile photo in the .JPG format. */
+export interface InputProfilePhotoStatic {
+  /** Type of the profile photo, must be “static” */
+  type: "static";
+  /** The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  photo:
+    | Buffer
+    | ReadStream
+    | Blob
+    | FormData
+    | DataView
+    | ArrayBuffer
+    | Uint8Array
+    | string;
+}
+
+/** An animated profile photo in the MPEG4 format. */
+export interface InputProfilePhotoAnimated {
+  /** Type of the profile photo, must be “animated” */
+  type: "animated";
+  /** The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  animation:
+    | Buffer
+    | ReadStream
+    | Blob
+    | FormData
+    | DataView
+    | ArrayBuffer
+    | Uint8Array
+    | string;
+  /** Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0. */
+  main_frame_timestamp?: number;
+}
+
+/** This object describes the content of a story to post. Currently, it can be one of
+- InputStoryContentPhoto
+- InputStoryContentVideo */
+export type InputStoryContent = InputStoryContentPhoto | InputStoryContentVideo;
+
+/** Describes a photo to post as a story. */
+export interface InputStoryContentPhoto {
+  /** Type of the content, must be “photo” */
+  type: "photo";
+  /** The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  photo:
+    | Buffer
+    | ReadStream
+    | Blob
+    | FormData
+    | DataView
+    | ArrayBuffer
+    | Uint8Array
+    | string;
+}
+
+/** Describes a video to post as a story. */
+export interface InputStoryContentVideo {
+  /** Type of the content, must be “video” */
+  type: "video";
+  /** The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  video:
+    | Buffer
+    | ReadStream
+    | Blob
+    | FormData
+    | DataView
+    | ArrayBuffer
+    | Uint8Array
+    | string;
+  /** Precise duration of the video in seconds; 0-60 */
+  duration?: number;
+  /** Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0. */
+  cover_frame_timestamp?: number;
+  /** Pass True if the video has no sound */
+  is_animation?: boolean;
 }
