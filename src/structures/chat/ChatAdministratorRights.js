@@ -1,5 +1,5 @@
 // @ts-check
-const { ChatPermissions } = require("../../util/ChatPermissions");
+const { ChatPermissions } = require("../../util/permission/ChatPermissions");
 
 class ChatAdministratorRights {
   /**

@@ -34,6 +34,7 @@ import {
   KeyboardButtonRequestUsers,
   SwitchInlineQueryChosenChat,
   BotCommandScope,
+  AcceptedGiftTypes,
   BotCommand,
   WebAppInfo,
   InlineQueryResult,
@@ -82,6 +83,7 @@ import {
   InlineQueryResultVoice,
   InputMessageContent,
   MediaDataParam,
+  InputStoryContent,
 } from "./telegram/index";
 
 /**
@@ -716,6 +718,21 @@ export declare class User extends Base {
     options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
   ): Promise<true>;
   /**
+   * Gifts a Telegram Premium subscription to the given user.
+   * @param monthCount - Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12.
+   * @param starCount - Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  giftPremiumSubscription(
+    monthCount: 3 | 6 | 12,
+    starCount: 1000 | 1500 | 2500,
+    options?: Omit<
+      MethodParameters["giftPremiumSubscription"],
+      "monthCount" | "starCount" | "userId"
+    >,
+  ): Promise<true>;
+  /**
    * Stores a message that can be sent by a user of a Mini App.
    * @param result - An object describing the message to be sent.
    * @param options - out parameters.
@@ -974,6 +991,103 @@ export declare class UserPermissions {
    */
   equals(other: UserPermissions): boolean;
   /**
+   * A mapping of user permission strings to their numeric equivalents.
+   */
+  static Flags: Record<UserPermissionString, number>;
+}
+
+/**
+ * Type representing a value that can be resolved to user permissions.
+ */
+export type UserPermissionResolvable =
+  | UserPermissionString
+  | UserPermissionFlags
+  | UserPermissions;
+
+/**
+ * Type representing the string literals for user permissions.
+ */
+export type BusinessPermissionString =
+  | "canReply"
+  | "readMessages"
+  | "deleteOutgoingMessages"
+  | "deleteAllMessages"
+  | "editName"
+  | "editBio"
+  | "editProfilePhoto"
+  | "editUsername"
+  | "editStories"
+  | "changeGiftSettings"
+  | "viewGiftsAndStars"
+  | "postMessages"
+  | "convertGiftsToStars"
+  | "transferAndUpgradeGifts"
+  | "transferStars"
+  | "manageStories";
+
+/**
+ * Interface representing the user permission flags.
+ */
+export interface BusinessPermissionFlags {
+  canReply?: boolean;
+  readMessages?: boolean;
+  deleteOutgoingMessages?: boolean;
+  deleteAllMessages?: boolean;
+  editName?: boolean;
+  editBio?: boolean;
+  editProfilePhoto?: boolean;
+  editUsername?: boolean;
+  editStories?: boolean;
+  changeGiftSettings?: boolean;
+  viewGiftsAndStars?: boolean;
+  postMessages?: boolean;
+  convertGiftsToStars?: boolean;
+  transferAndUpgradeGifts?: boolean;
+  transferStars?: boolean;
+  manageStories?: boolean;
+}
+
+/**
+ * Represents a set of user permissions and provides methods to manage them.
+ */
+export declare class BusinessPermissions {
+  private allowed;
+  private denied;
+  /**
+   * Constructs a new instance of BusinessPermissions with optional initial data.
+   * @param data - An object containing the initial permissions.
+   */
+  constructor(data?: BusinessPermissionFlags);
+  /**
+   * Grants the specified permissions.
+   * @param permissions - The permissions to grant.
+   * @returns The updated BusinessPermissions instance.
+   */
+  allow(permissions: BusinessPermissionResolvable): BusinessPermissions;
+  /**
+   * Denies the specified permissions.
+   * @param permissions - The permissions to deny.
+   * @returns The updated BusinessPermissions instance.
+   */
+  deny(permissions: BusinessPermissionResolvable): BusinessPermissions;
+  /**
+   * Checks if the specified permission is granted.
+   * @param permission - The permission to check.
+   * @returns `true` if the permission is granted, otherwise `false`.
+   */
+  has(permission: BusinessPermissionString): boolean;
+  /**
+   * Converts the permissions to a plain object representation.
+   * @returns An object with permissions and their status.
+   */
+  toObject(): BusinessPermissionFlags;
+  /**
+   * Checks if this instance is equal to another BusinessPermissions instance.
+   * @param other - The other instance to compare.
+   * @returns `true` if both instances are equal, otherwise `false`.
+   */
+  equals(other: BusinessPermissions): boolean;
+  /**
    * Updates the permissions based on the provided data.
    * @param data - An object containing permission states.
    */
@@ -987,16 +1101,16 @@ export declare class UserPermissions {
   /**
    * A mapping of user permission strings to their numeric equivalents.
    */
-  static Flags: Record<UserPermissionString, number>;
+  static Flags: Record<BusinessPermissionString, number>;
 }
 
 /**
  * Type representing a value that can be resolved to user permissions.
  */
-export type UserPermissionResolvable =
-  | UserPermissionString
-  | UserPermissionFlags
-  | UserPermissions;
+export type BusinessPermissionResolvable =
+  | BusinessPermissionString
+  | BusinessPermissionFlags
+  | BusinessPermissions;
 
 /**
  * Interface representing the options for the collector.
@@ -2134,7 +2248,7 @@ export declare class MessageReactionUpdated extends Base {
         videoStartTimestamp?: number;
         messageId: string | number;
         caption?: string;
-        parseMode?: string;
+        parseMode?: ParseMode;
         captionEntities?: MessageEntity[];
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
@@ -2561,7 +2675,7 @@ export declare class MessageOrigin extends Base {
         videoStartTimestamp?: number;
         messageId: string | number;
         caption?: string;
-        parseMode?: string;
+        parseMode?: ParseMode;
         captionEntities?: MessageEntity[];
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
@@ -3022,6 +3136,33 @@ export declare class Gift extends Base {
   equals(other: Gift): boolean;
 }
 
+export class GiftInfo extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the message about a regular gift that was sent or received.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").GiftInfo,
+  );
+  /** Information about the regular gift */
+  gift: Gift;
+  /** Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only */
+  ownedGiftId?: string;
+  /** Text of the message that was added to the gift */
+  content?: string;
+  /** Special entities that appear in the text */
+  entities?: MessageEntities;
+  /** True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them */
+  isPrivate?: true;
+  /** True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only */
+  beUpgraded?: true;
+  /** Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars */
+  convertStarCount?: number;
+  /** Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift */
+  prepaidUpgradeStarCount?: number;
+}
+
 export declare class Gifts {
   /**
    * @param client - The client that instantiated this
@@ -3043,6 +3184,177 @@ export declare class Gifts {
    * Makes the class iterable, returning each `Gift` object.
    */
   [Symbol.iterator](): IterableIterator<Gift>;
+}
+
+export class OwnedGiftRegular extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the regular gift owned by a user or a chat.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").OwnedGiftRegular,
+  );
+  /** Type of the gift, always “regular” */
+  type: "regular";
+  /** Information about the regular gift */
+  gift: Gift;
+  /** Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only */
+  ownedGiftId?: string;
+  /** Sender of the gift if it is a known user */
+  senderUser: User;
+  /** Date the gift was sent in Unix time */
+  senderUnixTime: number;
+  /** Text of the message that was added to the gift */
+  content?: string;
+  /** Special entities that appear in the text */
+  entities?: MessageEntities;
+  /** True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them */
+  isPrivate?: true;
+  /** True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only */
+  isSaved?: true;
+  /** True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only */
+  beUpgraded?: true;
+  /** True, if the gift was refunded and isn't available anymore */
+  wasRefunded?: true;
+  /** Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars */
+  convertStarCount?: number;
+  /** Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift */
+  prepaidUpgradeStarCount?: number;
+  /**
+   * Return the timestamp message was sent, in milliseconds
+   */
+  get senderTimestamp(): number;
+  /**
+   * Date the message was sent. It is always a positive number, representing a valid date
+   */
+  get senderAt(): Date;
+}
+
+export class OwnedGifts extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the list of gifts received and owned by a user or a chat.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").OwnedGifts,
+  );
+  /** The total number of gifts owned by the user or the chat */
+  totalCount: number;
+  /** The list of gifts */
+  gifts?: (OwnedGiftUnique | OwnedGiftRegular)[];
+  /** Offset for the next request. If empty, then there are no more results */
+  nextOffset?: string;
+}
+
+export class OwnedGiftUnique extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the unique gift received and owned by a user or a chat.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").OwnedGiftUnique,
+  );
+  /** Type of the gift, always “unique” */
+  type: "unique";
+  /** Information about the unique gift */
+  gift: UniqueGift;
+  /** Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only */
+  ownedGiftId?: string;
+  /**
+   * Sender of the gift if it is a known user
+   */
+  senderUser: User;
+  /** Date the gift was sent in Unix time */
+  senderUnixTime: number;
+  /** True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only */
+  isSaved?: true;
+  /** True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only */
+  beTransferred?: true;
+  /** Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift */
+  transferStarCount?: number;
+  /**
+   * Return the timestamp message was sent, in milliseconds
+   */
+  get senderTimestamp(): number;
+  /**
+   * Date the message was sent. It is always a positive number, representing a valid date
+   */
+  get senderAt(): Date;
+}
+
+export class UniqueGift extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about unique gift that was upgraded from a regular gift.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").UniqueGift,
+  );
+  /** Human-readable name of the regular gift from which this unique gift was upgraded */
+  baseName: string;
+  /** Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas */
+  name: string;
+  /** Unique number of the upgraded gift among gifts upgraded from the same regular gift */
+  number: number;
+  /** Model of the gift */
+  model: {
+    /** Name of the model */
+    name: string;
+    /** The sticker that represents the unique gift */
+    sticker: Sticker;
+    /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+    rarityPerMille: number;
+  };
+  /** Symbol of the gift */
+  symbol: {
+    /** Name of the model */
+    name: string;
+    /** The sticker that represents the unique gift */
+    sticker: Sticker;
+    /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+    rarityPerMille: number;
+  };
+  /** Backdrop of the gift */
+  backdrop: {
+    /** Name of the backdrop */
+    name: string;
+    /** Colors of the backdrop */
+    colors: {
+      /** The color in the center of the backdrop in RGB format */
+      center: number;
+      /** The color on the edges of the backdrop in RGB format */
+      edge: number;
+      /** The color to be applied to the symbol in RGB format */
+      symbol: number;
+      /** The color for the text on the backdrop in RGB format */
+      text: number;
+    };
+    /** The number of unique gifts that receive this backdrop for every 1000 gifts upgraded */
+    rarityPerMille: number;
+  };
+}
+
+export class UniqueGiftInfo extends Base {
+  /**
+   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("@telegram.ts/types").UniqueGiftInfo} data - Data about the message about a unique gift that was sent or received.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").UniqueGiftInfo,
+  );
+  /** Information about the gift */
+  gift: UniqueGift;
+  /** Origin of the gift. Currently, either “upgrade” or “transfer” */
+  origin: "upgrade" | "transfer";
+  /** Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts */
+  ownedGiftId?: string;
+  /** Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift */
+  transferStarCount?: number;
 }
 
 export declare class Giveaway extends Base {
@@ -3939,6 +4251,21 @@ export declare class SharedUser extends Base {
     options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
   ): Promise<true>;
   /**
+   * Gifts a Telegram Premium subscription to the given user.
+   * @param monthCount - Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12.
+   * @param starCount - Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  giftPremiumSubscription(
+    monthCount: 3 | 6 | 12,
+    starCount: 1000 | 1500 | 2500,
+    options?: Omit<
+      MethodParameters["giftPremiumSubscription"],
+      "monthCount" | "starCount" | "userId"
+    >,
+  ): Promise<true>;
+  /**
    * Stores a message that can be sent by a user of a Mini App.
    * @param result - An object describing the message to be sent.
    * @param options - out parameters.
@@ -4017,6 +4344,17 @@ export declare class SharedUser extends Base {
    * @returns True if both objects are instances of User and are equal based on key properties, otherwise false.
    */
   equals(other: SharedUser): boolean;
+}
+
+export class StarAmount {
+  /**
+   * @param data - Data about the describes an amount of Telegram Stars.
+   */
+  constructor(data: import("@telegram.ts/types").StarAmount);
+  /** Integer amount of Telegram Stars, rounded to 0; can be negative */
+  amount: number;
+  /** The number of 1/1000000000 shares of Telegram Stars; from -999999999 to 999999999; can be negative if and only if amount is non-positive */
+  nanostarAmount?: number;
 }
 
 export declare class UsersShared {
@@ -4484,7 +4822,7 @@ export declare class ChatShared extends Base {
         starCount: number;
         media: InputPaidMedia[];
         caption?: string;
-        parseMode?: string;
+        parseMode?: ParseMode;
         captionEntities?: MessageEntity[];
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
@@ -4882,7 +5220,7 @@ export declare class ChatShared extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         question: string;
-        questionParseMode?: string;
+        questionParseMode?: ParseMode;
         questionEntities?: MessageEntity[];
         options: InputPollOption[];
         isAnonymous?: boolean;
@@ -5519,6 +5857,10 @@ export declare class Message extends Base {
    */
   effectId?: string;
   /**
+   * The number of Telegram Stars that were paid by the sender of the message to send it
+   */
+  paidStarCount?: number;
+  /**
    * Chat that sent the message originally
    */
   senderChat?: Chat;
@@ -5695,6 +6037,18 @@ export declare class Message extends Base {
    * Service message: a giveaway without public winners was completed
    */
   giveawayCompleted?: GiveawayCompleted;
+  /**
+   * Service message: a regular gift was sent or received
+   */
+  gift?: GiftInfo;
+  /**
+   * Service message: a unique gift was sent or received
+   */
+  uniqueGift?: UniqueGiftInfo;
+  /**
+   * Service message: the price for paid messages has changed in the chat; The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message
+   */
+  paidPriceStartCount?: number;
   /**
    * Service message: video chat scheduled
    */
@@ -6076,7 +6430,7 @@ export declare class Message extends Base {
         videoStartTimestamp?: number;
         messageId: string | number;
         caption?: string;
-        parseMode?: string;
+        parseMode?: ParseMode;
         captionEntities?: MessageEntity[];
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
@@ -7090,7 +7444,7 @@ export declare class Chat extends Base {
         starCount: number;
         media: InputPaidMedia[];
         caption?: string;
-        parseMode?: string;
+        parseMode?: ParseMode;
         captionEntities?: MessageEntity[];
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
@@ -7488,7 +7842,7 @@ export declare class Chat extends Base {
         chatId: number | string;
         messageThreadId?: string | number;
         question: string;
-        questionParseMode?: string;
+        questionParseMode?: ParseMode;
         questionEntities?: MessageEntity[];
         options: InputPollOption[];
         isAnonymous?: boolean;
@@ -7985,9 +8339,9 @@ export declare class BusinessConnection extends Base {
    */
   createdUnixTime: number;
   /**
-   * True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
+   * Permissions of the business bot
    */
-  replyed: boolean;
+  permissions?: BusinessPermissions;
   /**
    * True, if the connection is active
    */
@@ -8131,6 +8485,31 @@ export declare class BusinessConnection extends Base {
       >
   >;
   /**
+   * Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right.
+   * @param messageId - Unique identifier of the message to mark as read.
+   * @param chatId - Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours.
+   * @returns Returns True on success.
+   */
+  readMessage(
+    messageId: string | number,
+    chatId?: string | number,
+  ): Promise<true>;
+  /**
+   * Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right.
+   * @param content - Content of the story.
+   * @param activePeriod - Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400.
+   * @param options - out parameters.
+   * @returns Returns Story on success.
+   */
+  postStory(
+    content: InputStoryContent,
+    activePeriod: number,
+    options?: Omit<
+      MethodParameters["postStory"],
+      "businessConnectionId" | "content" | "activePeriod"
+    >,
+  ): Promise<Story>;
+  /**
    * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param giftId - Identifier of the gift.
    * @param options - out parameters.
@@ -8139,6 +8518,21 @@ export declare class BusinessConnection extends Base {
   sendGift(
     giftId: string,
     options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
+  ): Promise<true>;
+  /**
+   * Gifts a Telegram Premium subscription to the given user.
+   * @param monthCount - Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12.
+   * @param starCount - Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  giftPremiumSubscription(
+    monthCount: 3 | 6 | 12,
+    starCount: 1000 | 1500 | 2500,
+    options?: Omit<
+      MethodParameters["giftPremiumSubscription"],
+      "monthCount" | "starCount" | "userId"
+    >,
   ): Promise<true>;
   /**
    * Stores a message that can be sent by a user of a Mini App.
@@ -8174,6 +8568,106 @@ export declare class BusinessConnection extends Base {
     /** Expiration date of the emoji status, if any */
     emojiStatusExpirationDate?: number;
   }): Promise<true>;
+  /**
+   * Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.
+   * @param firstName - The new value of the first name for the business account; 1-64 characters.
+   * @param lastName - The new value of the last name for the business account; 0-64 characters.
+   * @returns Returns True on success.
+   */
+  setAccountName(firstName: string, lastName?: string): Promise<true>;
+  /**
+   * Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.
+   * @param username - The new value of the username for the business account; 0-32 characters.
+   * @returns Returns True on success.
+   */
+  setAccountUsername(username?: string): Promise<true>;
+  /**
+   * Changes the bio of a managed business account. Requires the can_change_bio business bot right.
+   * @param bio - The new value of the bio for the business account; 0-140 characters.
+   * @returns Returns True on success.
+   */
+  setAccountBio(bio?: string): Promise<true>;
+  /**
+   * Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right.
+   * @param photo - The new profile photo to set.
+   * @param isPublic - Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo.
+   * @returns Returns True on success.
+   */
+  setAccountProfilePhoto(
+    photo: MethodParameters["setBusinessAccountProfilePhoto"]["photo"],
+    isPublic?: boolean,
+  ): Promise<true>;
+  /**
+   * Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right.
+   * @param isPublic - Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo.
+   * @returns Returns True on success.
+   */
+  deleteAccountProfilePhoto(isPublic?: boolean): Promise<true>;
+  /**
+   * Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right.
+   * @param showGiftButton - Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field.
+   * @param acceptedGiftTypes - Types of gifts accepted by the business account
+   *  Returns True on success.
+   */
+  setAccountGiftSettings(
+    showGiftButton: boolean,
+    acceptedGiftTypes: MethodParameters["setBusinessAccountGiftSettings"]["acceptedGiftTypes"],
+  ): Promise<true>;
+  /**
+   * Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right.
+   * @returns Returns StarAmount on success.
+   */
+  fetchAccountStarBalance(): Promise<StarAmount>;
+  /**
+   * Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right.
+   * @param options - out parameters.
+   * @returns Returns OwnedGifts on success.
+   */
+  fetchAccountGifts(
+    options?: Omit<
+      MethodParameters["getBusinessAccountGifts"],
+      "businessConnectionId"
+    >,
+  ): Promise<OwnedGifts>;
+  /**
+   * Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right.
+   * @param ownedGiftId - Unique identifier of the regular gift that should be converted to Telegram Stars.
+   * @returns Returns True on success.
+   */
+  convertGiftsToStars(ownedGiftId: string): Promise<true>;
+  /**
+   * Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid.
+   * @param ownedGiftId - Unique identifier of the regular gift that should be upgraded to a unique one.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  upgradeGift(
+    ownedGiftId: string,
+    options?: Omit<
+      MethodParameters["upgradeGift"],
+      "businessConnectionId" | "ownedGiftId"
+    >,
+  ): Promise<true>;
+  /**
+   * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid.
+   * @param options - out parameters.
+   * @returns Returns True on success.
+   */
+  transferGift(
+    options: Omit<MethodParameters["transferGift"], "businessConnectionId">,
+  ): Promise<true>;
+  /**
+   * Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right.
+   * @param starCount - Number of Telegram Stars to transfer; 1-10000.
+   * @returns Returns True on success.
+   */
+  transferAccountStars(starCount: number): Promise<true>;
+  /**
+   * Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message.
+   * @param messageIds - A list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See deleteMessage for limitations on which messages can be deleted.
+   * @returns Returns True on success.
+   */
+  deleteMessages(messageIds: (string | number)[]): Promise<true>;
   /**
    * Verifies a user on behalf of the organization which is represented by the bot.
    * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
@@ -8818,7 +9312,7 @@ export declare class BaseClient extends EventEmitter {
   copyMessages(
     params: MethodParameters["copyMessages"],
   ): Promise<MethodsLibReturnType["copyMessages"]>;
-  /** Use this method to send phone contacts. On success, the sent Message is returned. */
+  /** Use this method to phone contacts. On success, the sent Message is returned. */
   sendContact(
     params: MethodParameters["sendContact"],
   ): Promise<MethodsLibReturnType["sendContact"]>;
@@ -8838,6 +9332,10 @@ export declare class BaseClient extends EventEmitter {
   sendChatAction(
     params: MethodParameters["sendChatAction"],
   ): Promise<MethodsLibReturnType["sendChatAction"]>;
+  /** Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success. */
+  readBusinessMessage(
+    params: MethodParameters["readBusinessMessage"],
+  ): Promise<MethodsLibReturnType["readBusinessMessage"]>;
   /** Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
   setMessageReaction(
     params: MethodParameters["setMessageReaction"],
@@ -9129,6 +9627,54 @@ export declare class BaseClient extends EventEmitter {
   getMyDefaultAdministratorRights(
     forChannels?: boolean,
   ): Promise<MethodsLibReturnType["getMyDefaultAdministratorRights"]>;
+  /** Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success. */
+  setBusinessAccountName(
+    params: MethodParameters["setBusinessAccountName"],
+  ): Promise<true>;
+  /** Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success. */
+  setBusinessAccountUsername(
+    businessConnectionId: string,
+    username?: string,
+  ): Promise<MethodsLibReturnType["setBusinessAccountUsername"]>;
+  /** Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.. */
+  setBusinessAccountBio(
+    businessConnectionId: string,
+    bio?: string,
+  ): Promise<MethodsLibReturnType["setBusinessAccountBio"]>;
+  /** Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  setBusinessAccountProfilePhoto(
+    params: MethodParameters["setBusinessAccountProfilePhoto"],
+  ): Promise<MethodsLibReturnType["setBusinessAccountProfilePhoto"]>;
+  /** Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  removeBusinessAccountProfilePhoto(
+    businessConnectionId: string,
+    isPublic?: boolean,
+  ): Promise<MethodsLibReturnType["removeBusinessAccountProfilePhoto"]>;
+  /** Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success. */
+  setBusinessAccountGiftSettings(
+    params: MethodParameters["setBusinessAccountGiftSettings"],
+  ): Promise<MethodsLibReturnType["setBusinessAccountGiftSettings"]>;
+  /** Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success. */
+  getBusinessAccountStarBalance(
+    businessConnectionId: string,
+  ): Promise<MethodsLibReturnType["getBusinessAccountStarBalance"]>;
+  /** Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success. */
+  getBusinessAccountGifts(
+    params: MethodParameters["getBusinessAccountGifts"],
+  ): Promise<MethodsLibReturnType["getBusinessAccountGifts"]>;
+  /** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success. */
+  convertGiftToStars(
+    businessConnectionId: string,
+    ownedGiftId: string,
+  ): Promise<MethodsLibReturnType["convertGiftToStars"]>;
+  /** Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success. */
+  upgradeGift(
+    params: MethodParameters["upgradeGift"],
+  ): Promise<MethodsLibReturnType["upgradeGift"]>;
+  /** Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.  */
+  transferGift(
+    params: MethodParameters["transferGift"],
+  ): Promise<MethodsLibReturnType["transferGift"]>;
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageText(
     params: MethodParameters["editMessageText"],
@@ -9221,12 +9767,34 @@ export declare class BaseClient extends EventEmitter {
     name: string,
     customEmojiId?: string,
   ): Promise<MethodsLibReturnType["setCustomEmojiStickerSetThumbnail"]>;
+  /** Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  postStory(
+    args: MethodParameters["postStory"],
+  ): Promise<MethodsLibReturnType["postStory"]>;
+  /** Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  editStory(
+    args: MethodParameters["editStory"],
+  ): Promise<MethodsLibReturnType["editStory"]>;
+  /** Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success. */
+  deleteStory(
+    businessConnectionId: string,
+    storyId: number,
+  ): Promise<MethodsLibReturnType["deleteStory"]>;
   /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   getAvailableGifts(): Promise<MethodsLibReturnType["getAvailableGifts"]>;
   /** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive. Returns True on success. */
   sendGift(
     params: MethodParameters["sendGift"],
   ): Promise<MethodsLibReturnType["sendGift"]>;
+  /** Gifts a Telegram Premium subscription to the given user. Returns True on success. */
+  giftPremiumSubscription(
+    args: MethodParameters["giftPremiumSubscription"],
+  ): Promise<MethodsLibReturnType["giftPremiumSubscription"]>;
+  /** Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success. */
+  transferBusinessAccountStars(
+    businessConnectionId: string,
+    starCount: number,
+  ): Promise<MethodsLibReturnType["transferBusinessAccountStars"]>;
   /** Use this method to delete a sticker set that was created by the bot. Returns True on success. */
   deleteStickerSet(
     name: string,
@@ -9348,6 +9916,11 @@ export declare class BaseClient extends EventEmitter {
     chatId: number | string,
     messageIds: (number | string)[],
   ): Promise<MethodsLibReturnType["deleteMessages"]>;
+  /** Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success. */
+  deleteBusinessMessages(
+    businessConnectionId: string,
+    messageIds: (number | string)[],
+  ): Promise<MethodsLibReturnType["deleteBusinessMessages"]>;
 }
 
 /**
@@ -10223,9 +10796,18 @@ export declare class ChatFullInfo extends Chat {
    */
   permissions?: ChatPermissions;
   /**
-   * True, if gifts can be sent to the chat
+   * Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
    */
-  giftSendingEnabled?: true;
+  acceptedGiftTypes?: {
+    /** True, if unlimited regular gifts are accepted */
+    unlimited: boolean;
+    /** True, if limited regular gifts are accepted */
+    limited: boolean;
+    /** True, if unique gifts or gifts that can be upgraded to unique for free are accepted */
+    unique: boolean;
+    /** True, if a Telegram Premium subscription is accepted */
+    premiumSubscription: boolean;
+  };
   /**
    * The slow mode delay in the chat.
    */
@@ -10368,6 +10950,13 @@ export declare class TransactionPartner extends Base {
     | "telegram_ads"
     | "telegram_api"
     | "affiliate_program";
+  /** Type of the transaction, currently one of “invoice_payment” for payments via invoices, “paid_media_payment” for payments for paid media, “gift_purchase” for gifts sent by the bot, “premium_purchase” for Telegram Premium subscriptions gifted by the bot, “business_account_transfer” for direct transfers from managed business accounts */
+  transactionType?:
+    | "invoice_payment"
+    | "paid_media_payment"
+    | "gift_purchase"
+    | "premium_purchase"
+    | "business_account_transfer";
   /**
    * @param data - Data about the describes the source of a transaction, or its recipient for outgoing transactions
    * @override
@@ -10384,27 +10973,27 @@ export declare class TransactionPartner extends Base {
    */
   user?: User;
   /**
-   * Information about the paid media bought by the user
+   * Information about the paid media bought by the user. Can be available only for “invoice_payment” transactions.
    */
   paidMedia?: PaidMedia[];
   /**
-   * Bot-specified paid media payload
+   * Bot-specified paid media payload. Can be available only for “invoice_payment” transactions.
    */
   paidMediaPayload?: string;
   /**
-   * Bot-specified invoice payload
+   * Bot-specified invoice payload. Can be available only for “invoice_payment” transactions.
    */
   payload?: string;
   /**
-   * The duration of the paid subscription.
+   * The duration of the paid subscription. Can be available only for “invoice_payment” transactions.
    */
   subscriptionPeriod?: number;
   /**
-   * The number of successful requests that exceeded regular limits and were therefore billed
+   * The number of successful requests that exceeded regular limits and were therefore billed.
    */
   requestCount?: number;
   /**
-   * The gift sent to the user by the bot.
+   * The gift sent to the user by the bot; for “gift_purchase” transactions only.
    */
   gift?: string;
   /**
@@ -10412,7 +11001,7 @@ export declare class TransactionPartner extends Base {
    */
   chat?: Chat;
   /**
-   * Information about the affiliate that received a commission via this transaction.
+   * Information about the affiliate that received a commission via this transaction. Can be available only for “invoice_payment” and “paid_media_payment” transactions.
    */
   affiliate?: AffiliateInfo;
   /**
@@ -10423,6 +11012,8 @@ export declare class TransactionPartner extends Base {
    * The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users.
    */
   commissionRate?: number;
+  /** Number of months the gifted Telegram Premium subscription will be active for; for “premium_purchase” transactions only */
+  premiumSubscriptionDuration?: number;
 
   isUser(): this is this & {
     withdrawal?: undefined;
@@ -10436,6 +11027,7 @@ export declare class TransactionPartner extends Base {
     sponsorUser?: undefined;
     commissionRate?: undefined;
     chat?: undefined;
+    premiumSubscriptionDuration?: number;
   };
 
   isChat(): this is this & {
@@ -10450,6 +11042,7 @@ export declare class TransactionPartner extends Base {
     sponsorUser?: undefined;
     commissionRate?: undefined;
     chat: Chat;
+    premiumSubscriptionDuration?: undefined;
   };
 
   isFragment(): this is this & {
@@ -10464,6 +11057,7 @@ export declare class TransactionPartner extends Base {
     sponsorUser?: undefined;
     commissionRate?: undefined;
     chat?: undefined;
+    premiumSubscriptionDuration?: undefined;
   };
 
   isTelegramApi(): this is this & {
@@ -10478,6 +11072,7 @@ export declare class TransactionPartner extends Base {
     sponsorUser?: undefined;
     commissionRate?: undefined;
     chat?: undefined;
+    premiumSubscriptionDuration?: undefined;
   };
 
   isAffiliateProgram(): this is this & {
@@ -10492,6 +11087,7 @@ export declare class TransactionPartner extends Base {
     sponsorUser?: User;
     commissionRate?: number;
     chat?: undefined;
+    premiumSubscriptionDuration?: undefined;
   };
 }
 
@@ -11680,6 +12276,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.8.2";
+export declare const version: "4.9.0";
 
 export * from "./telegram/index";

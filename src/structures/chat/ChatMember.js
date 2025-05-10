@@ -2,7 +2,7 @@
 const { Base } = require("../Base");
 const { TelegramError } = require("../../errors/TelegramError");
 const { ErrorCodes } = require("../../errors/ErrorCodes");
-const { UserPermissions } = require("../../util/UserPermissions");
+const { UserPermissions } = require("../../util/permission/UserPermissions");
 const { isDeepStrictEqual } = require("../../util/Utils");
 
 /**
@@ -299,7 +299,7 @@ class ChatMember extends Base {
 
   /**
    * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
-   * @param {import("../../util/ChatPermissions").ChatPermissionFlags} perms - An object for new user permissions
+   * @param {import("../../util/permission/ChatPermissions").ChatPermissionFlags} perms - An object for new user permissions
    * @param {Omit<MethodParameters["restrictChatMember"], "userId" | "chatId" | "permissions">} [options={}] - out parameters
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -318,7 +318,7 @@ class ChatMember extends Base {
 
   /**
    * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user.
-   * @param {import("../../util/ChatPermissions").ChatPermissionFlags} persm - An object for new user permissions
+   * @param {import("../../util/permission/ChatPermissions").ChatPermissionFlags} persm - An object for new user permissions
    * @param {boolean} [isAnonymous] - Pass True if the administrator's presence in the chat is hidden
    * @returns {Promise<true>} - Returns True on success.
    */

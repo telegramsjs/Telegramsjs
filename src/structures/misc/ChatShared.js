@@ -2,7 +2,7 @@
 const { Base } = require("../Base");
 const { Photo } = require("../media/Photo");
 const { Chat } = require("../chat/Chat");
-const { UserPermissions } = require("../../util/UserPermissions");
+const { UserPermissions } = require("../../util/permission/UserPermissions");
 const { isDeepStrictEqual } = require("../../util/Utils");
 
 class ChatShared extends Base {
