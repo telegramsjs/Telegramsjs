@@ -7004,24 +7004,6 @@ export declare class Chat extends Base {
    */
   removeVerification(): Promise<true>;
   /**
-   * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param userId - Unique identifier of the target user
-   * @param options - out parameters
-   * @returns Returns True on success.
-   */
-  kick(
-    userId: string | number,
-    options?: Omit<
-      {
-        chatId: number | string;
-        userId: string | number;
-        untilDate?: number;
-        revokeMessages?: boolean;
-      },
-      "chatId" | "userId"
-    >,
-  ): Promise<true>;
-  /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param userId - Unique identifier of the target user
    * @param options - out parameters
@@ -8119,22 +8101,6 @@ export declare class ChatMember extends Base {
     channel: ChatMember | string,
     checkAdmin?: boolean,
   ): Promise<UserPermissions | null>;
-  /**
-   * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param options
-   * @returns Returns True on success.
-   */
-  kick(
-    options?: Omit<
-      {
-        chatId: number | string;
-        userId: string | number;
-        untilDate?: number;
-        revokeMessages?: boolean;
-      },
-      "chatId" | "userId"
-    >,
-  ): Promise<true>;
   /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param options
@@ -9352,10 +9318,6 @@ export declare class BaseClient extends EventEmitter {
   
 	Note: This function may not preserve the original file name and MIME type. You should save the file's MIME type and name (if available) when the File object is received. */
   getFile(fileId: string): Promise<MethodsLibReturnType["getFile"]>;
-  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  kickChatMember(
-    params: MethodParameters["kickChatMember"],
-  ): Promise<MethodsLibReturnType["kickChatMember"]>;
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   banChatMember(
     params: MethodParameters["banChatMember"],

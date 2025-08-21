@@ -286,20 +286,6 @@ class Chat extends Base {
   }
 
   /**
-   * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {string | number} userId - Unique identifier of the target user
-   * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]
-   * @returns {Promise<true>} - Returns True on success.
-   */
-  kick(userId, options = {}) {
-    return this.client.kickChatMember({
-      userId,
-      chatId: this.id,
-      ...options,
-    });
-  }
-
-  /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {string | number} userId - Unique identifier of the target user
    * @param {Omit<MethodParameters["banChatMember"], "userId" | "chatId">} [options={}]

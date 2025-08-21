@@ -229,23 +229,6 @@ class ChatMember extends Base {
   }
 
   /**
-   * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]
-   * @returns {Promise<true>} - Returns True on success.
-   */
-  kick(options = {}) {
-    if (!this.id) {
-      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
-    }
-
-    return this.client.kickChatMember({
-      userId: this.id,
-      chatId: this.chatId,
-      ...options,
-    });
-  }
-
-  /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {Omit<MethodParameters["banChatMember"], "userId" | "chatId">} [options={}]
    * @returns {Promise<true>} - Returns True on success.

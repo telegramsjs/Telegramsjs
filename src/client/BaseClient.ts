@@ -656,16 +656,6 @@ class BaseClient extends EventEmitter {
   }
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  async kickChatMember(
-    params: MethodParameters["kickChatMember"],
-  ): Promise<MethodsLibReturnType["kickChatMember"]> {
-    return this.rest.request<MethodsApiReturnType["kickChatMember"]>(
-      "kickChatMember",
-      toSnakeCase(params),
-    );
-  }
-
-  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async banChatMember(
     params: MethodParameters["banChatMember"],
   ): Promise<MethodsLibReturnType["banChatMember"]> {

@@ -1016,9 +1016,6 @@ export type ApiMethods = {
   }): import("../../structures/misc/InputFile").InputFile;
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  kickChatMember: ApiMethods["banChatMember"];
-
-  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   banChatMember(args: {
     /** Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername) */
     chatId: number | string;
@@ -2399,25 +2396,9 @@ export interface InputMediaVideo {
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
   media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
-  thumbnail?:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  thumbnail?: MediaDataParam;
   /** Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
-  cover?:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  cover?: MediaDataParam;
   /** Start timestamp for the video in the message */
   start_timestamp?: number;
   /** Caption of the video to be sent, 0-1024 characters after entities parsing */
@@ -2447,15 +2428,7 @@ export interface InputMediaAnimation {
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
   media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
-  thumbnail?:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  thumbnail?: MediaDataParam;
   /** Caption of the animation to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Pass True, if the caption must be shown above the message media */
@@ -2481,15 +2454,7 @@ export interface InputMediaAudio {
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
   media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
-  thumbnail?:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  thumbnail?: MediaDataParam;
   /** Caption of the audio to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Mode for parsing entities in the audio caption. See formatting options for more details. */
@@ -2511,15 +2476,7 @@ export interface InputMediaDocument {
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. */
   media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
-  thumbnail?:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  thumbnail?: MediaDataParam;
   /** Caption of the document to be sent, 0-1024 characters after entities parsing */
   caption?: string;
   /** Mode for parsing entities in the document caption. See formatting options for more details. */
@@ -2550,25 +2507,9 @@ export interface InputPaidMediaVideo {
   /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » */
   media: MediaDataParam;
   /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
-  thumbnail?:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  thumbnail?: MediaDataParam;
   /** Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
-  cover?:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  cover?: MediaDataParam;
   /** Start timestamp for the video in the message */
   start_timestamp?: number;
   /** Video width */
@@ -2593,15 +2534,7 @@ export interface InputProfilePhotoStatic {
   /** Type of the profile photo, must be “static” */
   type: "static";
   /** The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
-  photo:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  photo: MediaDataParam;
 }
 
 /** An animated profile photo in the MPEG4 format. */
@@ -2609,15 +2542,7 @@ export interface InputProfilePhotoAnimated {
   /** Type of the profile photo, must be “animated” */
   type: "animated";
   /** The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
-  animation:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  animation: MediaDataParam;
   /** Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0. */
   main_frame_timestamp?: number;
 }
@@ -2632,15 +2557,7 @@ export interface InputStoryContentPhoto {
   /** Type of the content, must be “photo” */
   type: "photo";
   /** The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
-  photo:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  photo: MediaDataParam;
 }
 
 /** Describes a video to post as a story. */
@@ -2648,15 +2565,7 @@ export interface InputStoryContentVideo {
   /** Type of the content, must be “video” */
   type: "video";
   /** The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
-  video:
-    | Buffer
-    | ReadStream
-    | Blob
-    | FormData
-    | DataView
-    | ArrayBuffer
-    | Uint8Array
-    | string;
+  video: MediaDataParam;
   /** Precise duration of the video in seconds; 0-60 */
   duration?: number;
   /** Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0. */
