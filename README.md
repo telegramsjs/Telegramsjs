@@ -81,7 +81,7 @@ client.login();
 
 ## Documentation
 
-For more information and detailed documentation, please visit the [documentation](https://docs-telegramsjs.vercel.app/).
+For more information and detailed documentation, please visit the [documentation](https://telegramsjs.vercel.app/).
 
 ## Contributions
 
