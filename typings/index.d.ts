@@ -12159,7 +12159,6 @@ export declare function toApiFormat(
  * Extends the base `TelegramError` class to include specific details about the error response.
  */
 export declare class HTTPResponseError extends Error {
-  #private;
   description: string;
   code: string | number;
   parameters: IRequestFailt["parameters"];
