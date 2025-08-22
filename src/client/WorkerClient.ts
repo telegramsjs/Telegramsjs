@@ -393,7 +393,7 @@ class WorkerClient {
       this.client.user !== null &&
       message.leftChatMember.id === this.client.user.id
     ) {
-      this.client.emit("chatDelete", message);
+      this.client.emit(Events.ChatDelete, message);
       return message;
     } else {
       this.client.emit(Events.ChatMemberRemove, message);
