@@ -10019,10 +10019,10 @@ export declare class WebhookClient {
 /**
  * Handles incoming updates from the Telegram API and routes them to the appropriate event handlers.
  */
-export declare class WorketClient {
+export declare class WorkerClient {
   readonly client: TelegramClient;
   /**
-   * Creates an instance of WorketClient.
+   * Creates an instance of WorkerClient.
    * @param client - The Telegram client instance.
    */
   constructor(client: TelegramClient);
@@ -10465,7 +10465,7 @@ export declare class TelegramClient extends BaseClient {
   /**
    * The worket client for handling updates.
    */
-  readonly worket: WorketClient;
+  readonly worker: WorkerClient;
   /**
    * The timestamp when the client became ready.
    */

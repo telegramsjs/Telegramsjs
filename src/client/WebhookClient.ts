@@ -176,7 +176,7 @@ class WebhookClient {
         this.offset = update.update_id + 1;
       }
 
-      const res = await this.client.worket.processUpdate(update);
+      const res = await this.client.worker.processUpdate(update);
       if (res) {
         this.client.updates.set(this.offset, res);
       }
