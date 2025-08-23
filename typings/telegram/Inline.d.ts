@@ -739,3 +739,19 @@ export interface InlineQueryResultsButton {
   /** Deep-linking parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only `A-Z`, `a-z`, `0-9`, `_` and `-` are allowed. */
   start_parameter?: string;
 }
+
+/** Desribes price of a suggested post. */
+export interface SuggestedPostPrice {
+  /** Currency in which the post will be paid. Currently, must be one of “XTR” for Telegram Stars or “TON” for toncoins */
+  currency: "XTR" | "TON";
+  /** The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000. */
+  amount: number;
+}
+
+/** Contains parameters of a post that is being suggested by the bot. */
+export interface SuggestedPostParameters {
+  /** Proposed price for the post. If the field is omitted, then the post is unpaid. */
+  price?: SuggestedPostPrice;
+  /** Proposed send date of the post. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it. */
+  send_date?: number;
+}

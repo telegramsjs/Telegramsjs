@@ -20,6 +20,7 @@ const { Invoice } = require("../invoice/Invoice");
 const { Location } = require("./Location");
 const { Poll } = require("../media/Poll");
 const { Venue } = require("./Venue");
+const { Checklist } = require("../checklist/Checklist");
 const { MessageOrigin } = require("../message/MessageOrigin");
 
 class ExternalReplyInfo extends Base {
@@ -218,6 +219,14 @@ class ExternalReplyInfo extends Base {
        * @type {Poll | undefined}
        */
       this.poll = new Poll(this.client, data.poll);
+    }
+
+    if ("checklist" in data) {
+      /**
+       * Message is a checklist
+       * @type {Checklist | undefined}
+       */
+      this.checklist = new Checklist(this.client, data.checklist);
     }
 
     if ("venue" in data) {

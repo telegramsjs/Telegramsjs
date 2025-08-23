@@ -1,4 +1,5 @@
 export * from "./Bot";
+export * from "./Checklist";
 export * from "./Inline";
 export * from "./Language";
 export * from "./Markup";

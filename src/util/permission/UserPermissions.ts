@@ -15,7 +15,8 @@ type UserPermissionString =
   | "postMessages"
   | "editMessages"
   | "pinMessages"
-  | "manageTopics";
+  | "manageTopics"
+  | "manageDirectMessages";
 
 /**
  * Interface representing the user permission flags.
@@ -35,6 +36,7 @@ interface UserPermissionFlags {
   editMessages?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageDirectMessages?: boolean;
 }
 
 /**
@@ -190,6 +192,7 @@ class UserPermissions {
     editMessages: 12,
     pinMessages: 13,
     manageTopics: 14,
+    manageDirectMessages: 15,
   };
 }
 

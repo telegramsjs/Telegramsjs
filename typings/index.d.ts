@@ -84,6 +84,8 @@ import {
   InputMessageContent,
   MediaDataParam,
   InputStoryContent,
+  SuggestedPostParameters,
+  InputChecklist,
 } from "./telegram/index";
 
 /**
@@ -113,7 +115,8 @@ export type ChatPermissionString =
   | "changeInfo"
   | "inviteUsers"
   | "pinMessages"
-  | "manageTopics";
+  | "manageTopics"
+  | "manageDirectMessages";
 
 /**
  * Interface representing the chat permission flags.
@@ -134,6 +137,7 @@ export interface ChatPermissionFlags {
   inviteUsers?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageDirectMessages?: boolean;
 }
 
 /**
@@ -590,6 +594,7 @@ export declare class User extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -597,6 +602,7 @@ export declare class User extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -617,6 +623,7 @@ export declare class User extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
@@ -626,6 +633,7 @@ export declare class User extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
       },
       "chatId"
@@ -654,6 +662,7 @@ export declare class User extends Base {
             businessConnectionId?: string;
             chatId: number | string;
             messageThreadId?: string | number;
+            directMessagesTopicId?: number;
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
@@ -663,6 +672,7 @@ export declare class User extends Base {
             disableNotification?: boolean;
             protectContent?: boolean;
             messageEffectId?: string;
+            suggestedPostParameters?: SuggestedPostParameters;
             replyParameters?: ReplyParameters;
           },
           "chatId"
@@ -672,6 +682,7 @@ export declare class User extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -679,6 +690,7 @@ export declare class User extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -928,7 +940,8 @@ export type UserPermissionString =
   | "postMessages"
   | "editMessages"
   | "pinMessages"
-  | "manageTopics";
+  | "manageTopics"
+  | "manageDirectMessages";
 
 /**
  * Interface representing the user permission flags.
@@ -948,6 +961,7 @@ export interface UserPermissionFlags {
   editMessages?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageDirectMessages?: boolean;
 }
 
 /**
@@ -2060,6 +2074,7 @@ export declare class MessageReactionUpdated extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -2067,6 +2082,7 @@ export declare class MessageReactionUpdated extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -2223,10 +2239,12 @@ export declare class MessageReactionUpdated extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         videoStartTimestamp?: number;
         disableNotification?: boolean;
         protectContent?: boolean;
+        suggestedPostParameters?: SuggestedPostParameters;
         messageId: string | number;
       },
       "chatId" | "messageId" | "fromChatId"
@@ -2244,6 +2262,7 @@ export declare class MessageReactionUpdated extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         videoStartTimestamp?: number;
         messageId: string | number;
@@ -2253,6 +2272,7 @@ export declare class MessageReactionUpdated extends Base {
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
         protectContent?: boolean;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -2264,7 +2284,7 @@ export declare class MessageReactionUpdated extends Base {
     >,
   ): Promise<number>;
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
    * @param options - options for pinned message
    * @returns Returns True on success.
    */
@@ -2275,7 +2295,7 @@ export declare class MessageReactionUpdated extends Base {
     businessConnectionId?: string;
   }): Promise<true>;
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @returns Returns True on success.
    */
@@ -2289,10 +2309,36 @@ export declare class MessageReactionUpdated extends Base {
 	- Bots can delete incoming messages in private chats.
 	- Bots granted can_post_messages permissions can delete outgoing messages in channels.
 	- If the bot is an administrator of a group, it can delete any message there.
-	- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+	- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
 	 * @returns Returns True on success.
  */
   delete(): Promise<true>;
+  /**
+   * Use this method to edit a checklist on behalf of a connected business account.
+   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param checklist - An object for the new checklist.
+   * @param options - out parameters.
+   * @returns On success, the edited Message is returned.
+   */
+  editChecklist(
+    businessConnectionId: string,
+    checklist: InputChecklist,
+    options?: Omit<
+      {
+        businessConnectionId: string;
+        chatId: number | string;
+        messageId: number | string;
+        checklist: InputChecklist;
+        replyMarkup?: InlineKeyboardMarkup;
+      },
+      "messageId" | "chatId" | "checklist" | "businessConnectionId"
+    >,
+  ): Promise<
+    Message & {
+      checklist: Checklist;
+    }
+  >;
   /**
    * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation.
    * @param latitude - Latitude of new location
@@ -2487,6 +2533,7 @@ export declare class MessageOrigin extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -2494,6 +2541,7 @@ export declare class MessageOrigin extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -2650,10 +2698,12 @@ export declare class MessageOrigin extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         videoStartTimestamp?: number;
         disableNotification?: boolean;
         protectContent?: boolean;
+        suggestedPostParameters?: SuggestedPostParameters;
         messageId: string | number;
       },
       "chatId" | "messageId" | "fromChatId"
@@ -2671,6 +2721,7 @@ export declare class MessageOrigin extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         videoStartTimestamp?: number;
         messageId: string | number;
@@ -2680,6 +2731,7 @@ export declare class MessageOrigin extends Base {
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
         protectContent?: boolean;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -2691,7 +2743,7 @@ export declare class MessageOrigin extends Base {
     >,
   ): Promise<number>;
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
    * @param options - options for pinned message
    * @returns Returns True on success.
    */
@@ -2702,7 +2754,7 @@ export declare class MessageOrigin extends Base {
     businessConnectionId?: string;
   }): Promise<true>;
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @returns Returns True on success.
    */
@@ -2716,10 +2768,48 @@ export declare class MessageOrigin extends Base {
 	- Bots can delete incoming messages in private chats.
 	- Bots granted can_post_messages permissions can delete outgoing messages in channels.
 	- If the bot is an administrator of a group, it can delete any message there.
-	- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+	- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
 	 * @returns Returns True on success.
  */
   delete(): Promise<true>;
+  /**
+   * Use this method to edit a checklist on behalf of a connected business account.
+   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param checklist - An object for the new checklist.
+   * @param options - out parameters.
+   * @returns On success, the edited Message is returned.
+   */
+  editChecklist(
+    businessConnectionId: string,
+    checklist: InputChecklist,
+    options?: Omit<
+      {
+        businessConnectionId: string;
+        chatId: number | string;
+        messageId: number | string;
+        checklist: InputChecklist;
+        replyMarkup?: InlineKeyboardMarkup;
+      },
+      "messageId" | "chatId" | "checklist" | "businessConnectionId"
+    >,
+  ): Promise<
+    Message & {
+      checklist: Checklist;
+    }
+  >;
+  /**
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat.
+   * @param sendDate - Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+   * @retutns Returns True on success.
+   */
+  approveSuggestedPost(sendDate?: number): Promise<true>;
+  /**
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat.
+   * @param comment - Comment for the creator of the suggested post; 0-128 characters.
+   * @returns Returns True on success.
+   */
+  declineSuggestedPost(comment?: string): Promise<true>;
   /**
    * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation.
    * @param latitude - Latitude of new location
@@ -3109,6 +3199,8 @@ export declare class Gift extends Base {
   );
   /** Unique identifier of the gift */
   id: string;
+  /** Information about the chat that published the gift */
+  publisherChat?: Chat;
   /** The sticker that represents the gift */
   sticker: Sticker;
   /** The number of Telegram Stars that must be paid to send the sticker */
@@ -3275,6 +3367,16 @@ export class OwnedGiftUnique extends Base {
   beTransferred?: true;
   /** Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift */
   transferStarCount?: number;
+  /** Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now */
+  nextTransferUnixTime?: number;
+  /**
+   * Return the timestamp gift can be transferred. If it is in the past, then the gift can be transferred now
+   */
+  get nextTransferTimestamp(): number | null;
+  /**
+   * Date the gift can be transferred. If it is in the past, then the gift can be transferred now
+   */
+  get nextTransferAt(): null | Date;
   /**
    * Return the timestamp message was sent, in milliseconds
    */
@@ -3298,6 +3400,8 @@ export class UniqueGift extends Base {
   baseName: string;
   /** Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas */
   name: string;
+  /** Information about the chat that published the gift */
+  publisherChat?: Chat;
   /** Unique number of the upgraded gift among gifts upgraded from the same regular gift */
   number: number;
   /** Model of the gift */
@@ -3340,7 +3444,7 @@ export class UniqueGift extends Base {
 
 export class UniqueGiftInfo extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param client - The client that instantiated this
    * @param {import("@telegram.ts/types").UniqueGiftInfo} data - Data about the message about a unique gift that was sent or received.
    */
   constructor(
@@ -3349,12 +3453,24 @@ export class UniqueGiftInfo extends Base {
   );
   /** Information about the gift */
   gift: UniqueGift;
-  /** Origin of the gift. Currently, either “upgrade” or “transfer” */
-  origin: "upgrade" | "transfer";
+  /** Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, or “resale” for gifts bought from other users */
+  origin: "upgrade" | "transfer" | "resale";
   /** Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts */
   ownedGiftId?: string;
   /** Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift */
   transferStarCount?: number;
+  /**  For gifts bought from other users, the price paid for the gift */
+  lastResaleStarCount?: number;
+  /**  Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now */
+  nextTransferUnixTime?: number;
+  /**
+   * Return the timestamp gift can be transferred. If it is in the past, then the gift can be transferred now
+   */
+  get nextTransferTimestamp(): number | null;
+  /**
+   * Date the gift can be transferred. If it is in the past, then the gift can be transferred now
+   */
+  get nextTransferAt(): null | Date;
 }
 
 export declare class Giveaway extends Base {
@@ -3927,7 +4043,7 @@ export declare class Forum extends Base {
    */
   delete(): Promise<true>;
   /**
-   * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup.
+   * Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively.
    * @returns Returns True on success.
    */
   unpinAllMessages(): Promise<true>;
@@ -4123,6 +4239,7 @@ export declare class SharedUser extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -4130,6 +4247,7 @@ export declare class SharedUser extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4150,6 +4268,7 @@ export declare class SharedUser extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
@@ -4159,6 +4278,7 @@ export declare class SharedUser extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
       },
       "chatId"
@@ -4187,6 +4307,7 @@ export declare class SharedUser extends Base {
             businessConnectionId?: string;
             chatId: number | string;
             messageThreadId?: string | number;
+            directMessagesTopicId?: number;
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
@@ -4196,6 +4317,7 @@ export declare class SharedUser extends Base {
             disableNotification?: boolean;
             protectContent?: boolean;
             messageEffectId?: string;
+            suggestedPostParameters?: SuggestedPostParameters;
             replyParameters?: ReplyParameters;
           },
           "chatId"
@@ -4205,6 +4327,7 @@ export declare class SharedUser extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -4212,6 +4335,7 @@ export declare class SharedUser extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4472,6 +4596,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -4479,6 +4604,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4499,6 +4625,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
@@ -4508,6 +4635,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
       },
       "chatId" | "messageThreadId"
@@ -4536,6 +4664,7 @@ export declare class ChatShared extends Base {
             businessConnectionId?: string;
             chatId: number | string;
             messageThreadId?: string | number;
+            directMessagesTopicId?: number;
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
@@ -4545,6 +4674,7 @@ export declare class ChatShared extends Base {
             disableNotification?: boolean;
             protectContent?: boolean;
             messageEffectId?: string;
+            suggestedPostParameters?: SuggestedPostParameters;
             replyParameters?: ReplyParameters;
           },
           "chatId" | "messageThreadId"
@@ -4554,6 +4684,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -4561,6 +4692,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4606,6 +4738,48 @@ export declare class ChatShared extends Base {
    */
   leave(): Promise<true>;
   /**
+   * Use this method to send a checklist on behalf of a connected business account.
+   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param checklist - An object for the new checklist.
+   * @param options - out parameters.
+   * @returns On success, the sent Message is returned.
+   */
+  sendChecklist(
+    businessConnectionId: string,
+    checklist: InputChecklist,
+    options?: Omit<
+      {
+        businessConnectionId: string;
+        chatId: number | string;
+        checklist: InputChecklist;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?: InlineKeyboardMarkup;
+      },
+      "chatId" | "checklist" | "businessConnectionId"
+    >,
+  ): Promise<
+    Message & {
+      checklist: Checklist;
+    }
+  >;
+  /**
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat.
+   * @param id - Unique identifier for the target direct messages chat.
+   * @param sendDate - Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+   * @retutns Returns True on success.
+   */
+  approveSuggestedPost(id: number | string, sendDate?: number): Promise<true>;
+  /**
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat.
+   * @param id - Identifier of a suggested post message to decline.
+   * @param comment - Comment for the creator of the suggested post; 0-128 characters.
+   * @returns Returns True on success.
+   */
+  declineSuggestedPost(id: number | string, comment?: string): Promise<true>;
+  /**
    * Use this method to get a list of administrators in a chat, which aren't bots.
    * @returns Returns an Array of ChatAdministratorRights objects.
    */
@@ -4635,6 +4809,7 @@ export declare class ChatShared extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         messageIds: (string | number)[];
         disableNotification?: boolean;
@@ -4657,6 +4832,7 @@ export declare class ChatShared extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         messageIds: (string | number)[];
         disableNotification?: boolean;
@@ -4675,7 +4851,8 @@ export declare class ChatShared extends Base {
 	- Bots can delete incoming messages in private chats.
 	- Bots granted can_post_messages permissions can delete outgoing messages in channels.
 	- If the bot is an administrator of a group, it can delete any message there.
-	- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+	- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
 	 * @param id - Identifier of the message to delete
 	 * @returns Returns True on success.
  */
@@ -4693,7 +4870,7 @@ export declare class ChatShared extends Base {
    */
   setMenuButton(menuButton?: MenuButton): Promise<true>;
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
    * @param messageId - Identifier of a message to pin
    * @param options - Options for pinned message
    * @returns Returns True on success.
@@ -4708,7 +4885,7 @@ export declare class ChatShared extends Base {
     },
   ): Promise<true>;
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param options - Options for unpinned message
    * @returns Returns True on success.
    */
@@ -4719,7 +4896,7 @@ export declare class ChatShared extends Base {
     businessConnectionId?: string;
   }): Promise<true>;
   /**
-   * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively.
    * @returns Returns True on success.
    */
   unpinAllMessages(): Promise<true>;
@@ -4736,6 +4913,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         photo: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
@@ -4745,6 +4923,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4772,6 +4951,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         audio: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
@@ -4791,6 +4971,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4854,6 +5035,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         document: MediaDataParam;
         thumbnail?:
           | Buffer
@@ -4871,6 +5053,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4898,6 +5081,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         video: MediaDataParam;
         duration?: number;
         width?: number;
@@ -4930,6 +5114,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -4957,6 +5142,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         animation: MediaDataParam;
         duration?: number;
         width?: number;
@@ -4978,6 +5164,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -5005,6 +5192,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         voice: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
@@ -5013,6 +5201,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -5040,6 +5229,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         videoNote: MediaDataParam;
         duration?: number;
         length?: number;
@@ -5055,6 +5245,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -5082,6 +5273,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
@@ -5126,6 +5318,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         latitude: number;
         longitude: number;
         horizontalAccuracy?: number;
@@ -5135,6 +5328,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -5183,6 +5377,7 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         phoneNumber: string;
         firstName: string;
         lastName?: string;
@@ -5190,6 +5385,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -5263,10 +5459,12 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         emoji?: string;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -5313,11 +5511,13 @@ export declare class ChatShared extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         sticker: MediaDataParam;
         emoji?: string;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -5352,6 +5552,7 @@ export declare class ChatShared extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         title: string;
         description: string;
         payload: string;
@@ -5376,6 +5577,7 @@ export declare class ChatShared extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?: InlineKeyboardMarkup;
       },
@@ -5719,6 +5921,183 @@ export declare class VideoChatScheduled {
   get startedAt(): Date;
 }
 
+export class Checklist extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about a checklist.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").Checklist,
+  );
+  /** Title of the checklist */
+  title: string;
+  /** Special entities that appear in the checklist title */
+  entities?: MessageEntities;
+  /** List of tasks in the checklist */
+  tasks: ChecklistTask[];
+  /** True, if users other than the creator of the list can add tasks to the list */
+  othersCanAddTasks?: true;
+  /** True, if users other than the creator of the list can mark tasks as done or not done */
+  othersCanMarkTasksAsDone?: true;
+  /**
+   * Get completed tasks
+   */
+  get completedTasks(): ChecklistTask[];
+  /**
+   * Get pending tasks
+   */
+  get pendingTasks(): ChecklistTask[];
+  /**
+   * Get total number of tasks
+   */
+  get totalTasks(): number;
+  /**
+   * Get number of completed tasks
+   */
+  get completedTasksCount(): number;
+  /**
+   * Makes the class iterable, returning each check task list
+   */
+  [Symbol.iterator](): IterableIterator<ChecklistTask>;
+}
+
+export class ChecklistTask extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about a task in a checklist.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").ChecklistTask,
+  );
+  /** Unique identifier of the task */
+  id: number;
+  /** Text of the task */
+  text: string;
+  /** Special entities that appear in the task text */
+  entities?: MessageEntities;
+  /**
+   * User that completed the task; omitted if the task wasn't completed
+   */
+  completedByUser?: User;
+  /** Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed */
+  completionUnixTime?: number;
+  /**
+   * Return the timestamp task was completed, in milliseconds
+   */
+  get completionTimestamp(): number | null;
+  /**
+   * Date the task was completed
+   */
+  get completedAt(): null | Date;
+  /**
+   * True if the task is completed
+   */
+  get isCompleted(): boolean;
+}
+
+export class ChecklistTasksAdded extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about a service message about tasks added to a checklist.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").ChecklistTasksAdded,
+  );
+  /**
+   * Message containing the checklist to which the tasks were added
+   */
+  checklistMessage?: Message;
+  /** List of tasks added to the checklist */
+  tasks: ChecklistTask[];
+  /**
+   * Get number of tasks added
+   */
+  get addedTasksCount(): number;
+  /**
+   * Get task IDs that were added
+   */
+  get addedTaskIds(): number[];
+  /**
+   * Get task by ID
+   * @param id - Task ID
+   */
+  getTaskById(id: number): ChecklistTask | null;
+  /**
+   * Get tasks by completion status
+   * @param completed - Whether to get completed or pending tasks
+   */
+  getTasksByStatus(completed: boolean): ChecklistTask[];
+  /**
+   * Get completed tasks from added tasks
+   */
+  get completedTasks(): ChecklistTask[];
+  /**
+   * Get pending tasks from added tasks
+   */
+  get pendingTasks(): ChecklistTask[];
+  /**
+   * Makes the class iterable, returning each check task list
+   */
+  [Symbol.iterator](): IterableIterator<ChecklistTask>;
+}
+
+export class ChecklistTasksDone extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about a service message about checklist tasks marked as done or not done.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").ChecklistTasksDone,
+  );
+  /**
+   * Message containing the checklist whose tasks were marked as done or not done
+   */
+  checklistMessage?: Message;
+  /** Identifiers of the tasks that were marked as done */
+  markedAsDoneTaskIds?: number[];
+  /** Identifiers of the tasks that were marked as not done */
+  markedAsNotDoneTaskIds?: number[];
+  /**
+   * Get all affected task IDs
+   */
+  get allAffectedTaskIds(): number[];
+  /**
+   * Get total number of tasks affected
+   */
+  get totalAffectedTasks(): number;
+  /**
+   * Get number of tasks marked as done
+   */
+  get doneTasksCount(): number;
+  /**
+   * Get number of tasks marked as not done
+   */
+  get notDoneTasksCount(): number;
+}
+
+export class InputChecklistTask extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about a task to add to a checklist.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").InputChecklistTask,
+  );
+  /** Unique identifier of the task; must be positive and unique among all task identifiers currently present in the checklist */
+  id: number;
+  /** Text of the task; 1-100 characters after entities parsing */
+  text: string;
+  /** Mode for parsing entities in the text. See formatting options for more details. */
+  parseMode?: import("@telegram.ts/types").ParseMode;
+  /** List of special entities that appear in the text, which can be specified instead of parse_mode */
+  entities?: MessageEntities;
+}
+
 export declare class VideoChatParticipantsInvited extends Base {
   /**
    * @param client - The client that instantiated this
@@ -5817,6 +6196,14 @@ export declare class Message extends Base {
    */
   originalMessage?: Message;
   /**
+   * Identifier of the specific checklist task that is being replied to
+   */
+  checklistTaskId?: number;
+  /**
+   * True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
+   */
+  isPaidPost?: true;
+  /**
    * Information about the message that is being replied to, which may come from another chat or forum topic
    */
   externalReply?: ExternalReplyInfo;
@@ -5876,6 +6263,19 @@ export declare class Message extends Base {
    * True, if the message is sent to a forum topic
    */
   inTopic?: boolean;
+  /**
+   * Information about the direct messages chat topic that contains the message.
+   */
+  directMessagesTopic?: {
+    /**
+     * Unique identifier of the topic.
+     */
+    id: number;
+    /**
+     * Information about the user that created the topic. Currently, it is always present.
+     */
+    user: User;
+  };
   /**
    * New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
    */
@@ -6050,6 +6450,19 @@ export declare class Message extends Base {
    */
   paidPriceStartCount?: number;
   /**
+   * Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
+   */
+  directMessagePriceChanged?: {
+    /**
+     * - True, if direct messages are enabled for the channel chat; false otherwise.
+     */
+    messagesEnabled: boolean;
+    /**
+     * - The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Defaults to 0.
+     */
+    messageStarCount?: number;
+  };
+  /**
    * Service message: video chat scheduled
    */
   videoChatScheduled?: VideoChatScheduled;
@@ -6091,6 +6504,34 @@ export declare class Message extends Base {
    * Message contains paid media; information about the paid media
    */
   paidMedia?: PaidMediaInfo;
+  /** Service message: some tasks in a checklist were marked as done or not done */
+  checklistTasksDone?: ChecklistTasksDone;
+  /** Service message: tasks were added to a checklist */
+  checklistTasksAdded?: ChecklistTasksAdded;
+  /**
+   * Information about suggested post parameters if the message is a suggested post in a channel direct messages chat. If the message is an approved or declined suggested post, then it can't be edited.
+   */
+  suggestedPostInfo?: SuggestedPostInfo;
+  /**
+   * Service message: a suggested post was approved
+   */
+  suggestedPostApproved?: SuggestedPostApproved;
+  /**
+   * Service message: approval of a suggested post has failed
+   */
+  suggestedPostApprovalFailed?: SuggestedPostApprovalFailed;
+  /**
+   * Service message: a suggested post was declined
+   */
+  suggestedPostDeclined?: SuggestedPostDeclined;
+  /**
+   * Service message: payment for a suggested post was received
+   */
+  suggestedPostPaid?: SuggestedPostPaid;
+  /**
+   * Service message: payment for a suggested post was refunded
+   */
+  suggestedPostRefunded?: SuggestedPostRefunded;
   /**
    * Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set
    */
@@ -6131,6 +6572,10 @@ export declare class Message extends Base {
    * Message is a native poll, information about the poll
    */
   poll?: Poll;
+  /**
+   * Message is a checklist
+   */
+  checklist?: Checklist;
   /**
    * Message is a venue, information about the venue
    */
@@ -6242,6 +6687,7 @@ export declare class Message extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -6249,6 +6695,7 @@ export declare class Message extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -6405,10 +6852,12 @@ export declare class Message extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         videoStartTimestamp?: number;
         disableNotification?: boolean;
         protectContent?: boolean;
+        suggestedPostParameters?: SuggestedPostParameters;
         messageId: string | number;
       },
       "chatId" | "messageThreadId" | "messageId" | "fromChatId"
@@ -6426,6 +6875,7 @@ export declare class Message extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         videoStartTimestamp?: number;
         messageId: string | number;
@@ -6435,6 +6885,7 @@ export declare class Message extends Base {
         showCaptionAboveMedia?: boolean;
         disableNotification?: boolean;
         protectContent?: boolean;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -6446,7 +6897,7 @@ export declare class Message extends Base {
     >,
   ): Promise<number>;
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
    * @param options - options for pinned message
    * @returns Returns True on success.
    */
@@ -6457,7 +6908,7 @@ export declare class Message extends Base {
     businessConnectionId?: string;
   }): Promise<true>;
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @returns Returns True on success.
    */
@@ -6471,10 +6922,48 @@ export declare class Message extends Base {
 	- Bots can delete incoming messages in private chats.
 	- Bots granted can_post_messages permissions can delete outgoing messages in channels.
 	- If the bot is an administrator of a group, it can delete any message there.
-	- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+	- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
 	 * @returns Returns True on success.
  */
   delete(): Promise<true>;
+  /**
+   * Use this method to edit a checklist on behalf of a connected business account.
+   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param checklist - An object for the new checklist.
+   * @param options - out parameters.
+   * @returns On success, the edited Message is returned.
+   */
+  editChecklist(
+    businessConnectionId: string,
+    checklist: InputChecklist,
+    options?: Omit<
+      {
+        businessConnectionId: string;
+        chatId: number | string;
+        messageId: number | string;
+        checklist: InputChecklist;
+        replyMarkup?: InlineKeyboardMarkup;
+      },
+      "messageId" | "chatId" | "checklist" | "businessConnectionId"
+    >,
+  ): Promise<
+    Message & {
+      checklist: Checklist;
+    }
+  >;
+  /**
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat.
+   * @param sendDate - Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+   * @retutns Returns True on success.
+   */
+  approveSuggestedPost(sendDate?: number): Promise<true>;
+  /**
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat.
+   * @param comment - Comment for the creator of the suggested post; 0-128 characters.
+   * @returns Returns True on success.
+   */
+  declineSuggestedPost(comment?: string): Promise<true>;
   /**
    * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation.
    * @param latitude - Latitude of new location
@@ -6755,6 +7244,10 @@ export declare class Chat extends Base {
    * True, if the message is sent to a forum topic
    */
   inTopic?: boolean;
+  /**
+   * True, if the chat is the direct messages chat of a channel
+   */
+  isDirectMessages: boolean;
 
   isChannel(): this is this & {
     title: string;
@@ -6764,6 +7257,7 @@ export declare class Chat extends Base {
     forum?: undefined;
     threadId?: undefined;
     inTopic?: undefined;
+    isDirectMessages: false;
   };
 
   isSupergroup(): this is this & {
@@ -6774,6 +7268,7 @@ export declare class Chat extends Base {
     forum?: true;
     threadId?: string;
     inTopic?: boolean;
+    isDirectMessages: false;
   };
 
   isGroup(): this is this & {
@@ -6784,6 +7279,7 @@ export declare class Chat extends Base {
     forum?: undefined;
     threadId?: undefined;
     inTopic?: undefined;
+    isDirectMessages: boolean;
   };
 
   isPrivate(): this is this & {
@@ -6794,6 +7290,7 @@ export declare class Chat extends Base {
     forum?: undefined;
     threadId?: undefined;
     inTopic?: undefined;
+    isDirectMessages: false;
   };
 
   me(): Promise<ChatMember>;
@@ -6875,6 +7372,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -6882,6 +7380,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -6902,6 +7401,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
@@ -6911,6 +7411,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
       },
       "chatId" | "messageThreadId"
@@ -6939,6 +7440,7 @@ export declare class Chat extends Base {
             businessConnectionId?: string;
             chatId: number | string;
             messageThreadId?: string | number;
+            directMessagesTopicId?: number;
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
@@ -6948,6 +7450,7 @@ export declare class Chat extends Base {
             disableNotification?: boolean;
             protectContent?: boolean;
             messageEffectId?: string;
+            suggestedPostParameters?: SuggestedPostParameters;
             replyParameters?: ReplyParameters;
           },
           "chatId" | "messageThreadId"
@@ -6957,6 +7460,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -6964,6 +7468,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7046,6 +7551,20 @@ export declare class Chat extends Base {
    */
   leave(): Promise<true>;
   /**
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat.
+   * @param id - Unique identifier for the target direct messages chat.
+   * @param sendDate - Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+   * @retutns {Promise<true>} - Returns True on success.
+   */
+  approveSuggestedPost(id: number | string, sendDate?: number): Promise<true>;
+  /**
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat.
+   * @param id - Identifier of a suggested post message to decline.
+   * @param comment - Comment for the creator of the suggested post; 0-128 characters.
+   * @returns Returns True on success.
+   */
+  declineSuggestedPost(id: number | string, comment?: string): Promise<true>;
+  /**
    * Use this method to get a list of administrators in a chat, which aren't bots.
    * @returns Returns an Array of ChatAdministratorRights objects.
    */
@@ -7086,6 +7605,7 @@ export declare class Chat extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         messageIds: (string | number)[];
         disableNotification?: boolean;
@@ -7108,6 +7628,7 @@ export declare class Chat extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         fromChatId: number | string;
         messageIds: (string | number)[];
         disableNotification?: boolean;
@@ -7126,7 +7647,8 @@ export declare class Chat extends Base {
 	- Bots can delete incoming messages in private chats.
 	- Bots granted can_post_messages permissions can delete outgoing messages in channels.
 	- If the bot is an administrator of a group, it can delete any message there.
-	- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+	- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
 	 * @param id - Identifier of the message to delete
 	 * @returns Returns True on success.
  */
@@ -7297,7 +7819,7 @@ export declare class Chat extends Base {
    */
   setDescription(description?: string): Promise<true>;
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success.
    * @param messageId - Identifier of a message to pin
    * @param options - Options for pinned message
    * @returns Returns True on success.
@@ -7312,7 +7834,7 @@ export declare class Chat extends Base {
     },
   ): Promise<true>;
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param options - Options for unpinned message
    * @returns Returns True on success.
    */
@@ -7323,7 +7845,7 @@ export declare class Chat extends Base {
     businessConnectionId?: string;
   }): Promise<true>;
   /**
-   * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively.
    * @returns Returns True on success.
    */
   unpinAllMessages(): Promise<true>;
@@ -7340,6 +7862,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         photo: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
@@ -7349,6 +7872,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7376,6 +7900,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         audio: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
@@ -7395,6 +7920,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7458,6 +7984,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         document: MediaDataParam;
         thumbnail?:
           | Buffer
@@ -7475,6 +8002,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7502,6 +8030,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         video: MediaDataParam;
         duration?: number;
         width?: number;
@@ -7534,6 +8063,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7561,6 +8091,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         animation: MediaDataParam;
         duration?: number;
         width?: number;
@@ -7582,6 +8113,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7609,6 +8141,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         voice: MediaDataParam;
         caption?: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
@@ -7617,6 +8150,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7644,6 +8178,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         videoNote: MediaDataParam;
         duration?: number;
         length?: number;
@@ -7659,6 +8194,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7686,6 +8222,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
@@ -7730,6 +8267,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         latitude: number;
         longitude: number;
         horizontalAccuracy?: number;
@@ -7739,6 +8277,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7787,6 +8326,7 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         phoneNumber: string;
         firstName: string;
         lastName?: string;
@@ -7794,6 +8334,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7855,6 +8396,34 @@ export declare class Chat extends Base {
     }
   >;
   /**
+   * Use this method to send a checklist on behalf of a connected business account.
+   * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param checklist - An object for the new checklist.
+   * @param options - out parameters.
+   * @returns On success, the sent Message is returned.
+   */
+  sendChecklist(
+    businessConnectionId: string,
+    checklist: InputChecklist,
+    options?: Omit<
+      {
+        businessConnectionId: string;
+        chatId: number | string;
+        checklist: InputChecklist;
+        disableNotification?: boolean;
+        protectContent?: boolean;
+        messageEffectId?: string;
+        replyParameters?: ReplyParameters;
+        replyMarkup?: InlineKeyboardMarkup;
+      },
+      "chatId" | "checklist" | "businessConnectionId"
+    >,
+  ): Promise<
+    Message & {
+      checklist: Checklist;
+    }
+  >;
+  /**
    * Use this method to send an animated emoji that will display a random value.
    * @param emoji - Emoji on which the dice throw animation is based. Currently, must be one of "🎲", "🎯", "🏀", "⚽", "🎳", or "🎰". Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and values 1-64 for "🎰".
    * @param options - out parameters
@@ -7867,10 +8436,12 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         emoji?: string;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7917,11 +8488,13 @@ export declare class Chat extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         sticker: MediaDataParam;
         emoji?: string;
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -7956,6 +8529,7 @@ export declare class Chat extends Base {
       {
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         title: string;
         description: string;
         payload: string;
@@ -7980,6 +8554,7 @@ export declare class Chat extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?: InlineKeyboardMarkup;
       },
@@ -8333,6 +8908,7 @@ export declare class BusinessConnection extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -8340,6 +8916,7 @@ export declare class BusinessConnection extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -8360,6 +8937,7 @@ export declare class BusinessConnection extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
@@ -8369,6 +8947,7 @@ export declare class BusinessConnection extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
       },
       "chatId"
@@ -8397,6 +8976,7 @@ export declare class BusinessConnection extends Base {
             businessConnectionId?: string;
             chatId: number | string;
             messageThreadId?: string | number;
+            directMessagesTopicId?: number;
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
@@ -8406,6 +8986,7 @@ export declare class BusinessConnection extends Base {
             disableNotification?: boolean;
             protectContent?: boolean;
             messageEffectId?: string;
+            suggestedPostParameters?: SuggestedPostParameters;
             replyParameters?: ReplyParameters;
           },
           "chatId"
@@ -8415,6 +8996,7 @@ export declare class BusinessConnection extends Base {
         businessConnectionId?: string;
         chatId: number | string;
         messageThreadId?: string | number;
+        directMessagesTopicId?: number;
         text: string;
         parseMode?: import("@telegram.ts/types").ParseMode;
         entities?: MessageEntity[];
@@ -8422,6 +9004,7 @@ export declare class BusinessConnection extends Base {
         disableNotification?: boolean;
         protectContent?: boolean;
         messageEffectId?: string;
+        suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
         replyMarkup?:
           | InlineKeyboardMarkup
@@ -9286,6 +9869,14 @@ export declare class BaseClient extends EventEmitter {
   sendPoll(
     params: MethodParameters["sendPoll"],
   ): Promise<MethodsLibReturnType["sendPoll"]>;
+  /** Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned. */
+  sendChecklist(
+    params: MethodParameters["sendChecklist"],
+  ): Promise<MethodsLibReturnType["sendChecklist"]>;
+  /** Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned. */
+  editMessageChecklist(
+    params: MethodParameters["editMessageChecklist"],
+  ): Promise<MethodsLibReturnType["editMessageChecklist"]>;
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
   sendDice(
     params: MethodParameters["sendDice"],
@@ -9398,6 +9989,14 @@ export declare class BaseClient extends EventEmitter {
     chatId: number | string,
     userId: number | string,
   ): Promise<MethodsLibReturnType["declineChatJoinRequest"]>;
+  /** Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  approveSuggestedPost(
+    params: MethodParameters["approveSuggestedPost"],
+  ): Promise<MethodsLibReturnType["approveSuggestedPost"]>;
+  /** Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  declineSuggestedPost(
+    params: MethodParameters["declineSuggestedPost"],
+  ): Promise<MethodsLibReturnType["declineSuggestedPost"]>;
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   setChatPhoto(
     chatId: number | string,
@@ -9417,15 +10016,15 @@ export declare class BaseClient extends EventEmitter {
     chatId: number | string,
     description?: string,
   ): Promise<MethodsLibReturnType["setChatDescription"]>;
-  /** Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success. */
   pinChatMessage(
     params: MethodParameters["pinChatMessage"],
   ): Promise<MethodsLibReturnType["pinChatMessage"]>;
-  /** Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively. Returns True on success. */
   unpinChatMessage(
     params: MethodParameters["unpinChatMessage"],
   ): Promise<MethodsLibReturnType["unpinChatMessage"]>;
-  /** Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively.  Returns True on success. */
   unpinAllChatMessages(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["unpinAllChatMessages"]>;
@@ -9637,6 +10236,8 @@ export declare class BaseClient extends EventEmitter {
   transferGift(
     params: MethodParameters["transferGift"],
   ): Promise<MethodsLibReturnType["transferGift"]>;
+  /** A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object. */
+  getMyStarBalance(): Promise<MethodsLibReturnType["getMyStarBalance"]>;
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageText(
     params: MethodParameters["editMessageText"],
@@ -9867,7 +10468,8 @@ export declare class BaseClient extends EventEmitter {
 	- Bots can delete incoming messages in private chats.
 	- Bots granted can_post_messages permissions can delete outgoing messages in channels.
 	- If the bot is an administrator of a group, it can delete any message there.
-	- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+	- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
 	Returns True on success. */
   deleteMessage(
     chatId: number | string,
@@ -10401,6 +11003,11 @@ export declare class ClientUser extends User {
     forChannels?: boolean,
   ): Promise<ChatAdministratorRights>;
   /**
+   * A method to get the current Telegram Stars balance of the bot. Requires no parameters.
+   * @returns On success, returns a StarAmount object.
+   */
+  fetchStarBalance(): Promise<StarAmount>;
+  /**
    * Checks if this ClientUser is equal to another ClientUser.
    * @param other - The other object to compare with.
    * @returns True if both objects are instances of ClientUser and are equal based on key properties, otherwise false.
@@ -10815,6 +11422,10 @@ export declare class ChatFullInfo extends Chat {
    */
   linkedId?: string;
   /**
+   * Information about the corresponding channel chat; for direct messages chats only
+   */
+  parentChat?: Chat;
+  /**
    * The location of the chat.
    */
   location?: {
@@ -11094,6 +11705,163 @@ export declare class StarTransaction extends Base {
    * Date the transaction was created
    */
   get createdAt(): Date;
+}
+
+export class SuggestedPostApprovalFailed {
+  /**
+   * @param client - The client that instantiated this.
+   * @param data - Data about the failed approval of a suggested post. Currently, only caused by insufficient user funds at the time of approval.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").SuggestedPostApprovalFailed,
+  );
+  /**
+   * Expected price of the post.
+   */
+  price?: SuggestedPostPrice;
+  /**
+   * Message containing the suggested post whose approval has failed. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+   */
+  postMessage?: Message;
+}
+
+export class SuggestedPostApproved {
+  /**
+   * @param client - The client that instantiated this.
+   * @param data - Data about the approval of a suggested post.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").SuggestedPostApproved,
+  );
+  /**
+   * Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+   */
+  postMessage?: Message;
+  /**
+   * Proposed price of the post. If the field is omitted, then the post is unpaid.
+   */
+  price?: SuggestedPostPrice;
+  /**
+   * Date when the post will be published.
+   */
+  createdUnixTime?: number;
+  /**
+   * Return the timestamp post will be published, in milliseconds
+   */
+  get createdTimestamp(): number | null;
+  /**
+   * Date the post will be published
+   */
+  get createdAt(): null | Date;
+}
+
+export class SuggestedPostDeclined {
+  /**
+   * @param client - The client that instantiated this.
+   * @param data - Data about the the rejection of a suggested post.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").SuggestedPostDeclined,
+  );
+  /**
+   * Comment with which the post was declined.
+   */
+  comment?: string;
+  /**
+   * Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+   */
+  postMessage?: Message;
+}
+
+export class SuggestedPostInfo {
+  /**
+   * @param data - Data about the contains information about a suggested post.
+   */
+  constructor(data: import("@telegram.ts/types").SuggestedPostInfo);
+  /**
+   * State of the suggested post. Currently, it can be one of “pending”, “approved”, “declined”.
+   */
+  state: "pending" | "approved" | "declined";
+  /**
+   * Proposed price of the post. If the field is omitted, then the post is unpaid.
+   */
+  price?: SuggestedPostPrice;
+  /**
+   * Proposed send date of the post. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user or administrator who approves it.
+   */
+  createdUnixTime?: number;
+  /**
+   * Return the timestamp withdrawal was completed, in milliseconds
+   */
+  get createdTimestamp(): number | null;
+  /**
+   * Date the withdrawal was completed
+   */
+  get createdAt(): null | Date;
+}
+
+export class SuggestedPostPaid {
+  /**
+   * @param client - The client that instantiated this.
+   * @param data - Data about the successful payment for a suggested post
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").SuggestedPostPaid,
+  );
+  /**
+   * Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+   */
+  postMessage?: Message;
+  /**
+   * Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins
+   */
+  currency: string;
+  /**
+   * The amount of the currency that was received by the channel in nanotoncoins; for payments in toncoins only.
+   */
+  amount?: number;
+  /**
+   * The amount of Telegram Stars that was received by the channel; for payments in Telegram Stars only.
+   */
+  starAmount?: StarAmount;
+}
+
+export class SuggestedPostPrice {
+  /**
+   * @param data - Data about the desribes price of a suggested post
+   */
+  constructor(data: import("@telegram.ts/types").SuggestedPostPrice);
+  /**
+   * Currency in which the post will be paid. Currently, must be one of “XTR” for Telegram Stars or “TON” for toncoins
+   */
+  currency: "XTR" | "TON";
+  /**
+   * The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000.
+   */
+  amount: number;
+}
+
+export class SuggestedPostRefunded {
+  /**
+   * @param client - The client that instantiated this.
+   * @param data - Data about the payment refund for a suggested post.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").SuggestedPostRefunded,
+  );
+  /**
+   * Reason for the refund. Currently, one of “post_deleted” if the post was deleted within 24 hours of being posted or removed from scheduled messages without being posted, or “payment_refunded” if the payer refunded their payment.
+   */
+  reason: string;
+  /**
+   * Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+   */
+  postMessage?: Message;
 }
 
 export class PaidMediaPurchased extends Base {
@@ -12099,6 +12867,7 @@ export declare const ApiPermissionsFlags: {
   readonly editStories: "can_edit_stories";
   readonly deleteStories: "can_delete_stories";
   readonly manageTopics: "can_manage_topics";
+  readonly manageDirectMessages: "can_manage_direct_messages";
 };
 
 /**
@@ -12237,6 +13006,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.9.0";
+export declare const version: "4.10.0";
 
 export * from "./telegram/index";

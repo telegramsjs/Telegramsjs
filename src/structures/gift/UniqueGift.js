@@ -16,6 +16,14 @@ class UniqueGift extends Base {
     /** Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas */
     this.name = data.name;
 
+    if ("publisher_chat" in data) {
+      /**
+       * Information about the chat that published the gift
+       * @type {import("../chat/Chat").Chat | undefined}
+       */
+      this.publisherChat = this.client.chats._add(data.publisher_chat);
+    }
+
     /** Unique number of the upgraded gift among gifts upgraded from the same regular gift */
     this.number = data.number;
 

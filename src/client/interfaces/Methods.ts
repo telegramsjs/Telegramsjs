@@ -2,6 +2,7 @@ import type { ReadStream } from "node:fs";
 import type { Buffer, Blob } from "node:buffer";
 import type { LanguageCode } from "./Language";
 import type { PassportElementError } from "./Passport";
+import type { InputChecklist } from "./Checklist";
 import type {
   AcceptedGiftTypes,
   BotCommand,
@@ -13,6 +14,7 @@ import type {
   InlineQueryResultsButton,
   LabeledPrice,
   ShippingOption,
+  SuggestedPostParameters,
 } from "./Inline";
 import type {
   MessageEntity,
@@ -138,6 +140,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Text of the message to be sent, 1-4096 characters after entities parsing */
     text: string;
     /** Mode for parsing entities in the message text. See formatting options for more details. */
@@ -152,6 +156,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -170,6 +176,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** New start timestamp for the copied video in the message */
@@ -188,6 +196,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order. */
@@ -204,6 +214,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** New start timestamp for the copied video in the message */
@@ -222,6 +234,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -240,6 +254,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     fromChatId: number | string;
     /** A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order. */
@@ -260,6 +276,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Photo to send. Pass a fileId as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. */
     photo: MediaDataParam;
     /** Photo caption (may also be used when resending photos by fileId), 0-1024 characters after entities parsing */
@@ -278,6 +296,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -302,6 +322,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Audio file to send. Pass a fileId as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. */
     audio: MediaDataParam;
     /** Audio caption, 0-1024 characters after entities parsing */
@@ -332,6 +354,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -354,6 +378,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** File to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     document: MediaDataParam;
     /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
@@ -380,6 +406,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -402,6 +430,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Video to send. Pass a fileId as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. */
     video: MediaDataParam;
     /** Duration of sent video in seconds */
@@ -450,6 +480,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -472,6 +504,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Animation to send. Pass a fileId as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. */
     animation: MediaDataParam;
     /** Duration of sent animation in seconds */
@@ -506,6 +540,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -528,6 +564,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Audio file to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     voice: MediaDataParam;
     /** Voice message caption, 0-1024 characters after entities parsing */
@@ -544,6 +582,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -589,6 +629,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -611,6 +653,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** An array describing messages to be sent, must include 2-10 items */
     media: ReadonlyArray<
       InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo
@@ -648,6 +692,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Latitude of the location */
     latitude: number;
     /** Longitude of the location */
@@ -666,6 +712,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -758,6 +806,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Description of the message to reply to */
@@ -780,6 +830,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Latitude of the venue */
     latitude: number;
     /** Longitude of the venue */
@@ -800,6 +852,8 @@ export type ApiMethods = {
     disableNotification?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Protects the contents of the sent message from forwarding and saving */
     protectContent?: boolean;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
@@ -824,6 +878,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Contact's phone number */
     phoneNumber: string;
     /** Contact's first name */
@@ -838,6 +894,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -856,7 +914,7 @@ export type ApiMethods = {
   sendPoll(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername). Polls can't be sent to channel direct messages chats. */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
@@ -908,6 +966,44 @@ export type ApiMethods = {
     poll: import("../../structures/media/Poll").Poll;
   };
 
+  /** Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned. */
+  sendChecklist(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    businessConnectionId: string;
+    /** Unique identifier for the target chat */
+    chatId: number | string;
+    /** An object for the checklist to send */
+    checklist: InputChecklist;
+    /** Sends the message silently. Users will receive a notification with no sound. */
+    disableNotification?: boolean;
+    /** Protects the contents of the sent message from forwarding and saving */
+    protectContent?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    messageEffectId?: string;
+    /** An object for description of the message to reply to */
+    replyParameters?: ReplyParameters;
+    /** An object for an inline keyboard */
+    replyMarkup?: InlineKeyboardMarkup;
+  }): import("../../structures/message/Message").Message & {
+    checklist: import("../../structures/checklist/Checklist").Checklist;
+  };
+
+  /** Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned. */
+  editMessageChecklist(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    businessConnectionId: string;
+    /** Unique identifier for the target chat */
+    chatId: number | string;
+    /** Unique identifier for the target message */
+    messageId: number | string;
+    /** An object for the new checklist */
+    checklist: InputChecklist;
+    /** An object for the new inline keyboard for the message */
+    replyMarkup?: InlineKeyboardMarkup;
+  }): import("../../structures/message/Message").Message & {
+    checklist: import("../../structures/checklist/Checklist").Checklist;
+  };
+
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
   sendDice(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
@@ -916,6 +1012,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Emoji on which the dice throw animation is based. Currently, must be one of "🎲", "🎯", "🏀", "⚽", "🎳", or "🎰". Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and values 1-64 for "🎰". Defaults to "🎲" */
     emoji?: string;
     /** Sends the message silently. Users will receive a notification with no sound. */
@@ -924,6 +1022,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -946,7 +1046,7 @@ export type ApiMethods = {
   sendChatAction(args: {
     /** Unique identifier of the business connection on behalf of which the action will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel chats and channel direct messages chats aren't supported. */
     chatId: number | string;
     /** Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes. */
     action:
@@ -1183,6 +1283,26 @@ export type ApiMethods = {
     userId: string | number;
   }): true;
 
+  /** Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  approveSuggestedPost(args: {
+    /** Unique identifier for the target direct messages chat */
+    chatId: number | string;
+    /** Identifier of a suggested post message to approve */
+    messageId: number | string;
+    /** Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future */
+    send_date?: number;
+  }): true;
+
+  /** Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  declineSuggestedPost(args: {
+    /** Unique identifier for the target direct messages chat */
+    chatId: number | string;
+    /** Identifier of a suggested post message to decline */
+    messageId: number | string;
+    /** Comment for the creator of the suggested post; 0-128 characters */
+    comment?: string;
+  }): true;
+
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   setChatPhoto(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
@@ -1213,7 +1333,7 @@ export type ApiMethods = {
     description?: string;
   }): true;
 
-  /** Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success. */
   pinChatMessage(args: {
     /** Unique identifier of the business connection on behalf of which the message will be pinned */
     businessConnectionId?: string;
@@ -1225,7 +1345,7 @@ export type ApiMethods = {
     disableNotification?: boolean;
   }): true;
 
-  /** Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively. Returns True on success. */
   unpinChatMessage(args: {
     /** Unique identifier of the business connection on behalf of which the message will be unpinned */
     businessConnectionId?: string;
@@ -1235,7 +1355,7 @@ export type ApiMethods = {
     messageId?: string | number;
   }): true;
 
-  /** Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success. */
   unpinAllChatMessages(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chatId: number | string;
@@ -1243,7 +1363,7 @@ export type ApiMethods = {
 
   /** Use this method for your bot to leave a group, supergroup or channel. Returns True on success. */
   leaveChat(args: {
-    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername). Channel direct messages chats aren't supported; leave the corresponding channel instead. */
     chatId: number | string;
   }): true;
 
@@ -1627,6 +1747,9 @@ export type ApiMethods = {
     starCount: number;
   }): true;
 
+  /** A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object. */
+  getMyStarBalance(): import("../../structures/misc/StarAmount").StarAmount;
+
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageText(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
@@ -1747,7 +1870,8 @@ export type ApiMethods = {
   - Bots can delete incoming messages in private chats.
   - Bots granted can_post_messages permissions can delete outgoing messages in channels.
   - If the bot is an administrator of a group, it can delete any message there.
-  - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
   Returns True on success. */
   deleteMessage(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
@@ -1780,6 +1904,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Sticker to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL. */
     sticker: MediaDataParam;
     /** Emoji associated with the sticker; only for just uploaded stickers */
@@ -1790,6 +1916,8 @@ export type ApiMethods = {
     protectContent?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allowPaidBroadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     messageEffectId?: string;
     /** Description of the message to reply to */
@@ -2086,6 +2214,8 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number;
     /** Product name, 1-32 characters */
     title: string;
     /** Product description, 1-255 characters */
@@ -2128,6 +2258,8 @@ export type ApiMethods = {
     sendEmailToProvider?: boolean;
     /** Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars. */
     isFlexible?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
@@ -2212,7 +2344,7 @@ export type ApiMethods = {
 
   /** Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success. */
   verifyChat(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can't be verified. */
     chatId: number | string;
     /** Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description. */
     customDescription?: string;
@@ -2282,7 +2414,7 @@ export type ApiMethods = {
   sendGame(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat */
+    /** Unique identifier for the target chat. Games can't be sent to channel direct messages chats and channel chats. */
     chatId: string | number;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     messageThreadId?: string | number;

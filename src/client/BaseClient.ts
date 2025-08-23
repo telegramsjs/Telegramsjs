@@ -574,6 +574,37 @@ class BaseClient extends EventEmitter {
       );
   }
 
+  /** Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned. */
+  async sendChecklist(
+    params: MethodParameters["sendChecklist"],
+  ): Promise<MethodsLibReturnType["sendChecklist"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["sendChecklist"]
+      >("sendChecklist", toSnakeCase(params))
+      .then(
+        (res) =>
+          new Message(this, res) as MethodsLibReturnType["sendChecklist"],
+      );
+  }
+
+  /** Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned. */
+  async editMessageChecklist(
+    params: MethodParameters["editMessageChecklist"],
+  ): Promise<MethodsLibReturnType["editMessageChecklist"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["editMessageChecklist"]
+      >("editMessageChecklist", toSnakeCase(params))
+      .then(
+        (res) =>
+          new Message(
+            this,
+            res,
+          ) as MethodsLibReturnType["editMessageChecklist"],
+      );
+  }
+
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
   async sendDice(
     params: MethodParameters["sendDice"],
@@ -845,6 +876,25 @@ class BaseClient extends EventEmitter {
     );
   }
 
+  /** Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  async approveSuggestedPost(
+    params: MethodParameters["approveSuggestedPost"],
+  ): Promise<MethodsLibReturnType["approveSuggestedPost"]> {
+    return this.rest.request<MethodsApiReturnType["approveSuggestedPost"]>(
+      "approveSuggestedPost",
+      toSnakeCase(params),
+    );
+  }
+
+  /** Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  async declineSuggestedPost(
+    params: MethodParameters["declineSuggestedPost"],
+  ): Promise<MethodsLibReturnType["declineSuggestedPost"]> {
+    return this.rest.request<MethodsApiReturnType["declineSuggestedPost"]>(
+      "declineSuggestedPost",
+      toSnakeCase(params),
+    );
+  }
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   async setChatPhoto(
     chatId: number | string,
@@ -891,7 +941,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success. */
   async pinChatMessage(
     params: MethodParameters["pinChatMessage"],
   ): Promise<MethodsLibReturnType["pinChatMessage"]> {
@@ -901,7 +951,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively. Returns True on success. */
   async unpinChatMessage(
     params: MethodParameters["unpinChatMessage"],
   ): Promise<MethodsLibReturnType["unpinChatMessage"]> {
@@ -911,7 +961,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success. */
   async unpinAllChatMessages(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["unpinAllChatMessages"]> {
@@ -1472,6 +1522,13 @@ class BaseClient extends EventEmitter {
       "transferGift",
       toSnakeCase(params),
     );
+  }
+
+  /** A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object. */
+  async getMyStarBalance(): Promise<MethodsLibReturnType["getMyStarBalance"]> {
+    return this.rest
+      .request<MethodsApiReturnType["getMyStarBalance"]>("getMyStarBalance")
+      .then((res) => new StarAmount(res));
   }
 
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
@@ -2080,7 +2137,8 @@ class BaseClient extends EventEmitter {
   - Bots can delete incoming messages in private chats.
   - Bots granted can_post_messages permissions can delete outgoing messages in channels.
   - If the bot is an administrator of a group, it can delete any message there.
-  - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
   Returns True on success. */
   async deleteMessage(
     chatId: number | string,

@@ -217,6 +217,14 @@ class ClientUser extends User {
   }
 
   /**
+   * A method to get the current Telegram Stars balance of the bot. Requires no parameters.
+   * @returns {Promise<import("./StarAmount").StarAmount>} - On success, returns a StarAmount object.
+   */
+  fetchStarBalance() {
+    return this.client.getMyStarBalance();
+  }
+
+  /**
    * Checks if this ClientUser is equal to another ClientUser.
    * @param {ClientUser} other - The other object to compare with.
    * @returns {boolean} True if both objects are instances of ClientUser and are equal based on key properties, otherwise false.

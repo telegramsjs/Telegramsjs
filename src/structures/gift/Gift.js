@@ -18,6 +18,14 @@ class Gift extends Base {
     /** Unique identifier of the gift */
     this.id = data.id;
 
+    if ("publisher_chat" in data) {
+      /**
+       * Information about the chat that published the gift
+       * @type {import("../chat/Chat").Chat | undefined}
+       */
+      this.publisherChat = this.client.chats._add(data.publisher_chat);
+    }
+
     /** The sticker that represents the gift */
     this.sticker = new Sticker(client, data.sticker);
 

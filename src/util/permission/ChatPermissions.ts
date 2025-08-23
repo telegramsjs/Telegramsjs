@@ -16,7 +16,8 @@ type ChatPermissionString =
   | "changeInfo"
   | "inviteUsers"
   | "pinMessages"
-  | "manageTopics";
+  | "manageTopics"
+  | "manageDirectMessages";
 
 /**
  * Interface representing the chat permission flags.
@@ -37,6 +38,7 @@ interface ChatPermissionFlags {
   inviteUsers?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageDirectMessages?: boolean;
 }
 
 /**
@@ -192,7 +194,8 @@ class ChatPermissions {
     inviteUsers: 12,
     pinMessages: 13,
     manageTopics: 14,
-    isAnonymous: 15,
+    manageDirectMessages: 15,
+    isAnonymous: 16,
   };
 }
 
