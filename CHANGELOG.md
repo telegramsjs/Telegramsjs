@@ -1,5 +1,17 @@
 # Changelog
 
+# **4.10.1 - (2025-08-24)**
+
+## **Updates**
+
+- Bump version `typescript@5.8.3` ([3c5a444](https://github.com/telegramsjs/Telegramsjs/commit/3c5a444efbe2dfb88f357d5ff5f9854a64553fcd))
+
+## **Typings**
+
+- **WebhookClient:** return type `close` methods ([53e4c19](https://github.com/telegramsjs/Telegramsjs/commit/53e4c19605cd86c84ac86698359579cc88ec0f15))
+
+---
+
 # **4.10.0 - (2025-08-24)**
 
 ## **Updates**
@@ -19,7 +31,7 @@
 
 - **WorkerClient:** corrent `ChatDelete` event name ([86a2433](https://github.com/telegramsjs/Telegramsjs/commit/86a2433d045cfd4b2cce7aa6449319f7e1e8f50b))
 - **WorkerClient:** type in the name `worket` ([5ff4122](https://github.com/telegramsjs/Telegramsjs/commit/5ff4122d6c98ed5b5e3d2385916276aa79f3f7b1))
-- **WebhookClient:** async close now waits for server shutdown ([e2605d8](https://github.com/telegramsjs/Telegramsjs/commit/e2605d8717a3d039b818d308d42a2f642dbaf581))
+- **WebhookClient:** async `close` now waits for server shutdown ([e2605d8](https://github.com/telegramsjs/Telegramsjs/commit/e2605d8717a3d039b818d308d42a2f642dbaf581))
 
 
 ## **Typings**
