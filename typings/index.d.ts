@@ -10766,7 +10766,7 @@ export declare class WebhookClient {
    * Closes the webhook server.
    * @returns The closed state of the webhook client.
    */
-  close(): boolean;
+  close(): Promise<boolean>;
 }
 
 /**
@@ -13157,6 +13157,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.10.0";
+export declare const version: "4.10.1";
 
 export * from "./telegram/index";
