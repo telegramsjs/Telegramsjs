@@ -197,13 +197,17 @@ class WebhookClient {
    * Closes the webhook server.
    * @returns The closed state of the webhook client.
    */
-  close(): boolean {
-    if (this.webhookServer && !this.isClosed) {
-      this.webhookServer.close(() => {
-        this.isClosed = true;
-      });
+  async close(): Promise<boolean> {
+    if (!this.webhookServer || this.isClosed) {
+      return true;
     }
-    return this.isClosed;
+
+    return new Promise((resolve) => {
+      this.webhookServer!.close(() => {
+        this.isClosed = true;
+        resolve(true);
+      });
+    });
   }
 }
 

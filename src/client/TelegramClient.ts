@@ -179,10 +179,16 @@ class TelegramClient extends BaseClient {
   /**
    * Destroys the client, closing all connections.
    */
-  destroy(): void {
-    this.polling.close();
-    this.webhook.close();
-    this.emit(Events.Disconnect, this);
+  async destroy(): Promise<void> {
+    if (this.polling) {
+      this.polling.close();
+      this.emit(Events.Disconnect, this);
+      return;
+    }
+    await this.webhook.close().then(() => {
+      this.emit(Events.Disconnect, this);
+      return;
+    });
   }
 
   /**

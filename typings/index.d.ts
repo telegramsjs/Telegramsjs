@@ -11257,7 +11257,7 @@ export declare class TelegramClient extends BaseClient {
   /**
    * Destroys the client, closing all connections.
    */
-  destroy(): void;
+  destroy(): Promise<void>;
   /**
    * Asynchronously disposes of the client, closing all connections.
    * Implements `Symbol.asyncDispose` by calling `destroy()`.
