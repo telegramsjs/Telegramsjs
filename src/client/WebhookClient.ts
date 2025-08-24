@@ -180,6 +180,9 @@ class WebhookClient {
       if (res) {
         this.client.updates.set(this.offset, res);
       }
+
+      response.statusCode = 200;
+      response.end("OK");
     };
 
     return requestCallback
