@@ -1127,6 +1127,157 @@ export type BusinessPermissionResolvable =
   | BusinessPermissions;
 
 /**
+ * Builder for creating Telegram checklist inputs
+ * @example
+ * ```ts
+ * const checklist = new InputChecklistBuilder()
+ *   .setTitle('My Checklist')
+ *   .addTask('Task 1')
+ *   .addTask('Task 2')
+ *   .setOthersCanAddTasks(true);
+ * ```
+ */
+export class InputChecklistBuilder {
+  private nextTaskId;
+  readonly data: Partial<InputChecklist>;
+
+  constructor(data?: Partial<InputChecklist>);
+  /**
+   * Set the checklist title
+   * @param title Title text (1-255 characters)
+   * @param parseMode Optional parse mode
+   * @param entities Optional title entities
+   */
+  setTitle(
+    title: string,
+    parseMode?: ParseMode,
+    entities?: MessageEntity[],
+  ): this;
+  /**
+   * Set the parse mode for the title
+   * @param parseMode Parse mode to use
+   */
+  setParseMode(parseMode: ParseMode): this;
+  /**
+   * Set title entities
+   * @param entities Message entities for the title
+   */
+  setTitleEntities(entities: MessageEntity[]): this;
+  /**
+   * Add a single task to the checklist
+   * @param text Task text (1-100 characters)
+   * @param options Optional task configuration
+   */
+  addTask(
+    text: string,
+    options?: {
+      id?: number;
+      parseMode?: ParseMode;
+      entities?: MessageEntity[];
+    },
+  ): this;
+  /**
+   * Add multiple tasks at once
+   * @param tasks Array of task definitions
+   */
+  addTasks(
+    ...tasks: Array<
+      | string
+      | InputChecklistTask
+      | {
+          text: string;
+          id?: number;
+          parseMode?: ParseMode;
+          entities?: MessageEntity[];
+        }
+    >
+  ): this;
+  /**
+   * Remove a task by ID
+   * @param id Task ID to remove
+   */
+  removeTask(id: number): this;
+  /**
+   * Update an existing task
+   * @param id Task ID to update
+   * @param updates Partial task updates
+   */
+  updateTask(
+    id: number,
+    updates: Partial<Omit<InputChecklistTask, "id">>,
+  ): this;
+  /**
+   * Clear all tasks
+   */
+  clearTasks(): this;
+  /**
+   * Set whether others can add tasks
+   * @param canAdd Whether others can add tasks
+   */
+  setOthersCanAddTasks(canAdd?: boolean): this;
+  /**
+   * Set whether others can mark tasks as done
+   * @param canMark Whether others can mark tasks as done
+   */
+  setOthersCanMarkTasksAsDone(canMark?: boolean): this;
+  /**
+   * Get a task by ID
+   * @param id Task ID to find
+   */
+  getTask(id: number): InputChecklistTask | undefined;
+  /**
+   * Get all tasks
+   */
+  getTasks(): readonly InputChecklistTask[];
+  /**
+   * Get task count
+   */
+  getTaskCount(): number;
+  /**
+   * Create a deep clone of this builder
+   */
+  clone(): InputChecklistBuilder;
+  /**
+   * Merge tasks from another source
+   * @param source Source of tasks to merge
+   */
+  merge(
+    source: InputChecklistBuilder | InputChecklist | InputChecklistTask[],
+  ): this;
+  /**
+   * Convert to API-ready JSON format
+   * @throws Error if validation fails
+   */
+  toJSON(): InputChecklist;
+  /**
+   * Check equality with another checklist
+   * @param other Other checklist to compare
+   */
+  equals(other: InputChecklistBuilder | InputChecklist): boolean;
+  /**
+   * Create builder from existing checklist
+   * @param source Source checklist or builder
+   */
+  static from(
+    source: InputChecklistBuilder | InputChecklist,
+  ): InputChecklistBuilder;
+  /**
+   * Create a task object
+   * @param text Task text
+   * @param id Task ID
+   * @param options Optional task configuration
+   */
+  static createTask(
+    text: string,
+    id: number,
+    options?: {
+      parseMode?: ParseMode;
+      entities?: MessageEntity[];
+    },
+  ): InputChecklistTask;
+}
+
+/**
  * Interface representing the options for the collector.
  */
 export interface ICollectorOptions<EventCtx, Collected> {

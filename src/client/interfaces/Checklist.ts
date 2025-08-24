@@ -8,7 +8,7 @@ export interface InputChecklistTask {
   /** Text of the task; 1-100 characters after entities parsing */
   text: string;
   /** Mode for parsing entities in the text. See formatting options for more details. */
-  parse_mode?: string;
+  parse_mode?: ParseMode;
   /** List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed. */
   text_entities?: MessageEntity[];
 }

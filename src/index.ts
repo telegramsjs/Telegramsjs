@@ -4,6 +4,7 @@ Symbol.dispose ??= Symbol("Symbol.dispose");
 Symbol.asyncDispose ??= Symbol("Symbol.asyncDispose");
 
 export * from "./types";
+export * from "./util/checklist/InputChecklistBuilder";
 export * from "./util/collector/Collector";
 export * from "./util/collector/MessageCollector";
 export * from "./util/collector/InlineKeyboardCollector";
