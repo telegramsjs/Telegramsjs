@@ -1,4 +1,4 @@
-import { deepStrictEqual } from "node:assert";
+import { isDeepStrictEqual } from "../Utils";
 import type { ParseMode } from "@telegram.ts/types";
 import type { MessageEntity } from "../../client/interfaces/Message";
 import type {
@@ -381,30 +381,23 @@ class InputChecklistBuilder {
   equals(other: InputChecklistBuilder | InputChecklist): boolean {
     if (!other) return false;
 
-    try {
-      const otherData =
-        other instanceof InputChecklistBuilder ? other.data : other;
-      const thisData = this.data;
+    const otherData =
+      other instanceof InputChecklistBuilder ? other.data : other;
+    const thisData = this.data;
 
-      const normalizeData = (
-        data: Partial<InputChecklist> | InputChecklist,
-      ) => ({
-        title: data.title,
-        parse_mode: data.parse_mode,
-        title_entities: data.title_entities,
-        tasks: data.tasks ? [...data.tasks].sort((a, b) => a.id - b.id) : [],
-        others_can_add_tasks: data.others_can_add_tasks,
-        others_can_mark_tasks_as_done: data.others_can_mark_tasks_as_done,
-      });
+    const normalizeData = (data: Partial<InputChecklist> | InputChecklist) => ({
+      title: data.title,
+      parse_mode: data.parse_mode,
+      title_entities: data.title_entities,
+      tasks: data.tasks ? [...data.tasks].sort((a, b) => a.id - b.id) : [],
+      others_can_add_tasks: data.others_can_add_tasks,
+      others_can_mark_tasks_as_done: data.others_can_mark_tasks_as_done,
+    });
 
-      const normalizedThis = normalizeData(thisData);
-      const normalizedOther = normalizeData(otherData);
+    const normalizedThis = normalizeData(thisData);
+    const normalizedOther = normalizeData(otherData);
 
-      deepStrictEqual(normalizedThis, normalizedOther);
-      return true;
-    } catch {
-      return false;
-    }
+    return isDeepStrictEqual(normalizedThis, normalizedOther);
   }
 
   /**
