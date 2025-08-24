@@ -53,7 +53,7 @@ class Gift extends Base {
    * @param {Omit<MethodParameters["sendGift"], "giftId" | "userId"> } options - out parameters.
    * @returns {Promise<true>} - Returns True on success.
    */
-  sendGift(userId, options = {}) {
+  send(userId, options = {}) {
     return this.client.sendGift({
       userId,
       giftId: this.id,

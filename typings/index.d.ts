@@ -3367,7 +3367,7 @@ export declare class Gift extends Base {
    * @param options - out parameters.
    * @returns Returns True on success.
    */
-  sendGift(
+  send(
     userId: string | number,
     options?: Omit<MethodParameters["sendGift"], "giftId" | "userId">,
   ): Promise<true>;
