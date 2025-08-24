@@ -126,7 +126,7 @@ export interface BotCommandScopeAllChatAdministrators {
 export interface BotCommandScopeChat {
   /** The scope type, must be "chat". */
   type: "chat";
-  /** The unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). */
+  /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported. */
   chat_id: number | string;
 }
 
@@ -136,7 +136,7 @@ export interface BotCommandScopeChat {
 export interface BotCommandScopeChatAdministrators {
   /** The scope type, must be "chat_administrators". */
   type: "chat_administrators";
-  /** The unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). */
+  /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported. */
   chat_id: number | string;
 }
 
@@ -146,7 +146,7 @@ export interface BotCommandScopeChatAdministrators {
 export interface BotCommandScopeChatMember {
   /** The scope type, must be "chat_member". */
   type: "chat_member";
-  /** The unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). */
+  /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported. */
   chat_id: number | string;
   /** The unique identifier of the target user. */
   user_id: number;

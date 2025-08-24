@@ -98,34 +98,40 @@ class Chat extends Base {
          */
         this.inTopic = data.inTopic;
       }
+
+      /**
+       * True, if the chat is the direct messages chat of a channel
+       * @type {boolean}
+       */
+      this.isDirectMessage = Boolean(data.is_direct_messages);
     }
 
     return data;
   }
 
   /**
-   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined; inTopic?: undefined; }}
+   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined; inTopic?: undefined; isDirectMessage: false }}
    */
   isChannel() {
     return this.#chatType === "channel";
   }
 
   /**
-   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: true;  threadId?: string; inTopic?: boolean; }}
+   * @returns {this is this & {  title: string;  username?: string;  firstName?: undefined;  lastName?: undefined;  forum?: true;  threadId?: string; inTopic?: boolean; isDirectMessage: false }}
    */
   isSupergroup() {
     return this.#chatType === "supergroup";
   }
 
   /**
-   * @returns {this is this & {  title: string;  username?: undefined;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined; inTopic?: undefined;}}
+   * @returns {this is this & {  title: string;  username?: undefined;  firstName?: undefined;  lastName?: undefined;  forum?: undefined;  threadId?: undefined; inTopic?: undefined; isDirectMessage: boolean }}
    */
   isGroup() {
     return this.#chatType === "group";
   }
 
   /**
-   * @returns {this is this & {  title?: undefined;  username?: string;  firstName: string;  lastName?: string;  forum?: undefined;  threadId?: undefined; inTopic?: undefined; }}
+   * @returns {this is this & {  title?: undefined;  username?: string;  firstName: string;  lastName?: string;  forum?: undefined;  threadId?: undefined; inTopic?: undefined; isDirectMessage: false }}
    */
   isPrivate() {
     return this.#chatType === "private";
@@ -286,20 +292,6 @@ class Chat extends Base {
   }
 
   /**
-   * Use this method to kick a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
-   * @param {string | number} userId - Unique identifier of the target user
-   * @param {Omit<MethodParameters["kickChatMember"], "userId" | "chatId">} [options={}]
-   * @returns {Promise<true>} - Returns True on success.
-   */
-  kick(userId, options = {}) {
-    return this.client.kickChatMember({
-      userId,
-      chatId: this.id,
-      ...options,
-    });
-  }
-
-  /**
    * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
    * @param {string | number} userId - Unique identifier of the target user
    * @param {Omit<MethodParameters["banChatMember"], "userId" | "chatId">} [options={}]
@@ -442,6 +434,34 @@ class Chat extends Base {
    */
   deleteMessage(id) {
     return this.client.deleteMessage(this.id, id);
+  }
+
+  /**
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat.
+   * @param {number | string} id - Unique identifier for the target direct messages chat.
+   * @param {number} [sendDate] - Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+   * @retutns {Promise<true>} - Returns True on success.
+   */
+  approveSuggestedPost(id, sendDate) {
+    return this.client.approveSuggestedPost({
+      messageId: id,
+      chatId: this.id,
+      ...(sendDate && { sendDate }),
+    });
+  }
+
+  /**
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat.
+   * @param {number | string} id - Identifier of a suggested post message to decline.
+   * @param {string} [comment] - Comment for the creator of the suggested post; 0-128 characters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  declineSuggestedPost(id, comment) {
+    return this.client.declineSuggestedPost({
+      messageId: id,
+      chatId: this.id,
+      ...(comment && { comment }),
+    });
   }
 
   /**
@@ -646,7 +666,7 @@ class Chat extends Base {
    */
 
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively.
    * @param {string | number} messageId - Identifier of a message to pin
    * @param {PinMessage} [options] - Options for pinned message
    * @returns {Promise<true>} - Returns True on success.
@@ -667,7 +687,7 @@ class Chat extends Base {
    */
 
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param {UnpinMessage} [options] - Options for unpinned message
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -680,7 +700,7 @@ class Chat extends Base {
   }
 
   /**
-   * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively.
    * @returns {Promise<true>} - Returns True on success.
    */
   unpinAllMessages() {
@@ -888,6 +908,22 @@ class Chat extends Base {
       chatId: this.id,
       ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...other,
+    });
+  }
+
+  /**
+   * Use this method to send a checklist on behalf of a connected business account.
+   * @param {string} businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param {import("../../client/interfaces/Checklist").InputChecklist} checklist - An object for the new checklist.
+   * @param {Omit<MethodParameters["sendChecklist"], "chatId" | "checklist" | "businessConnectionId">} [options] - out parameters.
+   * @returns {Promise<import("../message/Message").Message & { checklist: import("../checklist/Checklist").Checklist }>} - On success, the sent Message is returned.
+   */
+  sendChecklist(businessConnectionId, checklist, options = {}) {
+    return this.client.sendChecklist({
+      chatId: this.id,
+      checklist,
+      businessConnectionId,
+      ...options,
     });
   }
 

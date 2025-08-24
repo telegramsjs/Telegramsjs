@@ -3,6 +3,7 @@ const { Base } = require("../Base");
 const { UsersShared } = require("../misc/UsersShared");
 const { ChatShared } = require("../misc/ChatShared");
 const { ChatMember } = require("../chat/ChatMember");
+const { Checklist } = require("../checklist/Checklist");
 const { Story } = require("../story/Story");
 const {
   VideoChatParticipantsInvited,
@@ -122,6 +123,23 @@ class Message extends Base {
       this.inTopic = data.is_topic_message;
     }
 
+    if ("direct_messages_topic" in data) {
+      /**
+       * @typedef {Object} DirectMessagesTopic
+       * @property {number} id - Unique identifier of the topic.
+       * @property {import("../misc/User").User} user - Information about the user that created the topic. Currently, it is always present.
+       */
+
+      /**
+       * Information about the direct messages chat topic that contains the message.
+       * @type {DirectMessagesTopic | undefined}
+       */
+      this.directMessagesTopic = {
+        id: data.direct_messages_topic.topic_id,
+        user: this.client.users._add(data.direct_messages_topic.user),
+      };
+    }
+
     if ("chat" in data) {
       /**
        * Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field *from* contains a fake sender user in non-channel chats.
@@ -225,6 +243,22 @@ class Message extends Base {
        * @type {Message | undefined}
        */
       this.originalMessage = new Message(this.client, data.reply_to_message);
+    }
+
+    if ("reply_to_checklist_task_id" in data) {
+      /**
+       * Identifier of the specific checklist task that is being replied to
+       * @type {number | undefined}
+       */
+      this.checklistTaskId = data.reply_to_checklist_task_id;
+    }
+
+    if ("is_paid_post" in data) {
+      /**
+       * True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
+       * @type {true | undefined}
+       */
+      this.isPaidPost = data.is_paid_post;
     }
 
     if ("external_reply" in data) {
@@ -702,6 +736,27 @@ class Message extends Base {
         data.paid_message_price_changed.paid_message_star_count;
     }
 
+    if ("direct_message_price_changed" in data) {
+      /**
+       * @typedef {Object} DirectMessagePriceChanged
+       * @property {boolean} messagesEnabled - True, if direct messages are enabled for the channel chat; false otherwise.
+       * @property {number} [messageStarCount] - The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Defaults to 0.
+       */
+
+      /**
+       * Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
+       * @type {DirectMessagePriceChanged | undefined}
+       */
+      this.directMessagePriceChanged = {
+        messagesEnabled:
+          data.direct_message_price_changed.are_direct_messages_enabled,
+        ...(data.direct_message_price_changed.direct_message_star_count && {
+          messageStarCount:
+            data.direct_message_price_changed.direct_message_star_count,
+        }),
+      };
+    }
+
     if ("video_chat_scheduled" in data) {
       /**
        * Service message: video chat scheduled
@@ -776,6 +831,99 @@ class Message extends Base {
        * @type {PaidMediaInfo | undefined}
        */
       this.paidMedia = new PaidMediaInfo(this.client, data.paid_media);
+    }
+
+    if ("checklist" in data) {
+      /**
+       * Message is a checklist
+       * @type {Checklist | undefined}
+       */
+      this.checklist = new Checklist(this.client, data.checklist);
+    }
+
+    if ("checklist_tasks_done" in data) {
+      /**
+       * Service message: some tasks in a checklist were marked as done or not done
+       * @type {ChecklistTasksDone | undefined}
+       */
+      this.checklistTasksDone = new ChecklistTasksDone(
+        this.client,
+        data.checklist_tasks_done,
+      );
+    }
+
+    if ("checklist_tasks_added" in data) {
+      /**
+       * Service message: tasks were added to a checklist
+       * @type {ChecklistTasksAdded | undefined}
+       */
+      this.checklistTasksAdded = new ChecklistTasksAdded(
+        this.client,
+        data.checklist_tasks_added,
+      );
+    }
+
+    if ("suggested_post_info" in data) {
+      /**
+       * Information about suggested post parameters if the message is a suggested post in a channel direct messages chat. If the message is an approved or declined suggested post, then it can't be edited.
+       * @type {SuggestedPostInfo | undefined}
+       */
+      this.suggestedPostInfo = new SuggestedPostInfo(data.suggested_post_info);
+    }
+
+    if ("suggested_post_approved" in data) {
+      /**
+       * Service message: a suggested post was approved
+       * @type {SuggestedPostApproved | undefined}
+       */
+      this.suggestedPostApproved = new SuggestedPostApproved(
+        this.client,
+        data.suggested_post_approved,
+      );
+    }
+
+    if ("suggested_post_approval_failed" in data) {
+      /**
+       * Service message: approval of a suggested post has failed
+       * @type {SuggestedPostApprovalFailed | undefined}
+       */
+      this.suggestedPostApprovalFailed = new SuggestedPostApprovalFailed(
+        this.client,
+        data.suggested_post_approval_failed,
+      );
+    }
+
+    if ("suggested_post_declined" in data) {
+      /**
+       * Service message: a suggested post was declined
+       * @type {SuggestedPostDeclined | undefined}
+       */
+      this.suggestedPostDeclined = new SuggestedPostDeclined(
+        this.client,
+        data.suggested_post_declined,
+      );
+    }
+
+    if ("suggested_post_paid" in data) {
+      /**
+       * Service message: payment for a suggested post was received
+       * @type {SuggestedPostPaid | undefined}
+       */
+      this.suggestedPostPaid = new SuggestedPostPaid(
+        this.client,
+        data.suggested_post_paid,
+      );
+    }
+
+    if ("suggested_post_refunded" in data) {
+      /**
+       * Service message: payment for a suggested post was refunded
+       * @type {SuggestedPostRefunded | undefined}
+       */
+      this.suggestedPostRefunded = new SuggestedPostRefunded(
+        this.client,
+        data.suggested_post_refunded,
+      );
     }
 
     if ("animation" in data) {
@@ -1045,6 +1193,7 @@ class Message extends Base {
       ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       replyParameters: {
         message_id: this.id,
+        ...(this.checklistTaskId && { checklistTaskId: this.checklistTaskId }),
       },
       ...options,
     });
@@ -1218,7 +1367,7 @@ class Message extends Base {
    */
 
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively.
    * @param {PinMessage} [options] - options for pinned message
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -1236,7 +1385,7 @@ class Message extends Base {
   }
 
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -1261,7 +1410,8 @@ class Message extends Base {
   - Bots can delete incoming messages in private chats.
   - Bots granted can_post_messages permissions can delete outgoing messages in channels.
   - If the bot is an administrator of a group, it can delete any message there.
-  - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
    * @returns {Promise<true>} - Returns True on success.
    */
   delete() {
@@ -1270,6 +1420,61 @@ class Message extends Base {
     }
 
     return this.client.deleteMessage(this.chat.id, this.id);
+  }
+
+  /**
+   * Use this method to edit a checklist on behalf of a connected business account.
+   * @param {string} businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param {import("../../client/interfaces/Checklist").InputChecklist} checklist - An object for the new checklist.
+   * @param {Omit<MethodParameters["editMessageChecklist"], "messageId" | "chatId" | "checklist" | "businessConnectionId">} [options] - out parameters.
+   * @returns {Promise<Message & { checklist: Checklist }>} - On success, the edited Message is returned.
+   */
+  editChecklist(businessConnectionId, checklist, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.editMessageChecklist({
+      checklist,
+      messageId: this.id,
+      chatId: this.chat.id,
+      businessConnectionId,
+      ...options,
+    });
+  }
+
+  /**
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat.
+   * @param {number} [sendDate] - Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  approveSuggestedPost(sendDate) {
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.approveSuggestedPost({
+      messageId: this.id,
+      chatId: this.chat.id,
+      ...(sendDate && { sendDate }),
+    });
+  }
+
+  /**
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat.
+   * @param {string} [comment] - Comment for the creator of the suggested post; 0-128 characters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  declineSuggestedPost(comment) {
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.declineSuggestedPost({
+      messageId: this.id,
+      chatId: this.chat.id,
+      ...(comment && { comment }),
+    });
   }
 
   /**
@@ -1320,3 +1525,14 @@ class Message extends Base {
 }
 
 module.exports = { Message };
+
+const { ChecklistTasksAdded } = require("../checklist/ChecklistTasksAdded");
+const { ChecklistTasksDone } = require("../checklist/ChecklistTasksDone");
+const {
+  SuggestedPostApprovalFailed,
+} = require("../invoice/SuggestedPostApprovalFailed");
+const { SuggestedPostApproved } = require("../invoice/SuggestedPostApproved");
+const { SuggestedPostDeclined } = require("../invoice/SuggestedPostDeclined");
+const { SuggestedPostInfo } = require("../invoice/SuggestedPostInfo");
+const { SuggestedPostPaid } = require("../invoice/SuggestedPostPaid");
+const { SuggestedPostRefunded } = require("../invoice/SuggestedPostRefunded");

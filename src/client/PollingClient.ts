@@ -67,7 +67,7 @@ class PollingClient {
       }
 
       for (const data of response) {
-        const update = await this.client.worket.processUpdate(data);
+        const update = await this.client.worker.processUpdate(data);
         if (update) {
           this.client.updates.set(this.offset, update);
         }

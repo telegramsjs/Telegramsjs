@@ -15,6 +15,8 @@ module.exports.MessageReactionCountUpdated =
   require("./MessageReactionCountUpdated").MessageReactionCountUpdated;
 module.exports.MessageReactionUpdated =
   require("./MessageReactionUpdated").MessageReactionUpdated;
+module.exports.PaidMediaPurchased =
+  require("./PaidMediaPurchased").PaidMediaPurchased;
 module.exports.PollAnswer = require("./PollAnswer").PollAnswer;
 module.exports.PreCheckoutQuery =
   require("./PreCheckoutQuery").PreCheckoutQuery;
@@ -41,10 +43,29 @@ module.exports.VideoChatParticipantsInvited =
   require("./chat/VideoChatParticipantsInvited").VideoChatParticipantsInvited;
 module.exports.VideoChatScheduled =
   require("./chat/VideoChatScheduled").VideoChatScheduled;
+module.exports.Checklist = require("./checklist/Checklist").Checklist;
+module.exports.ChecklistTask =
+  require("./checklist/ChecklistTask").ChecklistTask;
+module.exports.ChecklistTasksAdded =
+  require("./checklist/ChecklistTasksAdded").ChecklistTasksAdded;
+module.exports.ChecklistTasksDone =
+  require("./checklist/ChecklistTasksDone").ChecklistTasksDone;
+module.exports.InputChecklistTask =
+  require("./checklist/InputChecklistTask").InputChecklistTask;
 module.exports.Forum = require("./forum/Forum").Forum;
 module.exports.ForumTopic = require("./forum/ForumTopic").ForumTopic;
 module.exports.Game = require("./game/Game").Game;
 module.exports.GameHighScore = require("./game/GameHighScore").GameHighScore;
+module.exports.Gift = require("./gift/Gift").Gift;
+module.exports.GiftInfo = require("./gift/GiftInfo").GiftInfo;
+module.exports.Gifts = require("./gift/Gifts").Gifts;
+module.exports.OwnedGiftRegular =
+  require("./gift/OwnedGiftRegular").OwnedGiftRegular;
+module.exports.OwnedGiftUnique =
+  require("./gift/OwnedGiftUnique").OwnedGiftUnique;
+module.exports.OwnedGifts = require("./gift/OwnedGifts").OwnedGifts;
+module.exports.UniqueGift = require("./gift/UniqueGift").UniqueGift;
+module.exports.UniqueGiftInfo = require("./gift/UniqueGiftInfo").UniqueGiftInfo;
 module.exports.Giveaway = require("./giveaway/Giveaway").Giveaway;
 module.exports.GiveawayCompleted =
   require("./giveaway/GiveawayCompleted").GiveawayCompleted;
@@ -63,6 +84,20 @@ module.exports.StarTransactions =
   require("./invoice/StarTransactions").StarTransactions;
 module.exports.SuccessfulPayment =
   require("./invoice/SuccessfulPayment").SuccessfulPayment;
+module.exports.SuggestedPostApprovalFailed =
+  require("./invoice/SuggestedPostApprovalFailed").SuggestedPostApprovalFailed;
+module.exports.SuggestedPostApproved =
+  require("./invoice/SuggestedPostApproved").SuggestedPostApproved;
+module.exports.SuggestedPostDeclined =
+  require("./invoice/SuggestedPostDeclined").SuggestedPostDeclined;
+module.exports.SuggestedPostInfo =
+  require("./invoice/SuggestedPostInfo").SuggestedPostInfo;
+module.exports.SuggestedPostPaid =
+  require("./invoice/SuggestedPostPaid").SuggestedPostPaid;
+module.exports.SuggestedPostPrice =
+  require("./invoice/SuggestedPostPrice").SuggestedPostPrice;
+module.exports.SuggestedPostRefunded =
+  require("./invoice/SuggestedPostRefunded").SuggestedPostRefunded;
 module.exports.TransactionPartner =
   require("./invoice/TransactionPartner").TransactionPartner;
 module.exports.Animation = require("./media/Animation").Animation;
@@ -90,10 +125,12 @@ module.exports.LinkPreviewOptions =
   require("./misc/LinkPreviewOptions").LinkPreviewOptions;
 module.exports.Location = require("./misc/Location").Location;
 module.exports.MenuButton = require("./misc/MenuButton").MenuButton;
+module.exports.PreparedInlineMessage =
+  require("./misc/PreparedInlineMessage").PreparedInlineMessage;
+module.exports.ReactionCount = require("./misc/ReactionCount").ReactionCount;
 module.exports.ReactionType = require("./misc/ReactionType").ReactionType;
 module.exports.SharedUser = require("./misc/SharedUser").SharedUser;
 module.exports.StarAmount = require("./misc/StarAmount").StarAmount;
-module.exports.Story = require("./story/Story").Story;
 module.exports.TextQuote = require("./misc/TextQuote").TextQuote;
 module.exports.User = require("./misc/User").User;
 module.exports.UserProfilePhotos =
@@ -105,19 +142,7 @@ module.exports.EncryptedPassportElement =
   require("./passport/EncryptedPassportElement").EncryptedPassportElement;
 module.exports.PassportData = require("./passport/PassportData").PassportData;
 module.exports.PassportFile = require("./passport/PassportFile").PassportFile;
+module.exports.Story = require("./story/Story").Story;
 module.exports.PaidMedia = require("./media/paid/PaidMedia").PaidMedia;
 module.exports.PaidMediaInfo =
   require("./media/paid/PaidMediaInfo").PaidMediaInfo;
-module.exports.PaidMediaPurchased =
-  require("./PaidMediaPurchased").PaidMediaPurchased;
-module.exports.PreparedInlineMessage =
-  require("./misc/PreparedInlineMessage").PreparedInlineMessage;
-module.exports.Gift = require("./gift/Gift").Gift;
-module.exports.Gifts = require("./gift/Gifts").Gifts;
-module.exports.OwnedGifts = require("./gift/OwnedGifts").OwnedGifts;
-module.exports.OwnedGiftRegular =
-  require("./gift/OwnedGiftRegular").OwnedGiftRegular;
-module.exports.OwnedGiftUnique =
-  require("./gift/OwnedGiftUnique").OwnedGiftUnique;
-module.exports.GiftInfo = require("./gift/GiftInfo").GiftInfo;
-module.exports.UniqueGiftInfo = require("./gift/UniqueGiftInfo").UniqueGiftInfo;

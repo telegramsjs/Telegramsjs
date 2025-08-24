@@ -308,6 +308,31 @@ class MessageOrigin extends Base {
   }
 
   /**
+   * Use this method to edit a checklist on behalf of a connected business account.
+   * @param {string} businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
+   * @param {import("@telegram.ts/types").InputChecklist} checklist - An object for the new checklist.
+   * @param {Omit<MethodParameters["editMessageChecklist"], "messageId" | "chatId" | "checklist" | "businessConnectionId">} [options] - out parameters.
+   * @returns {Promise<import("./Message").Message & { checklist: import("../checklist/Checklist").Checklist }>} - On success, the edited Message is returned.
+   */
+  editChecklist(businessConnectionId, checklist, options = {}) {
+    if (!this.id) {
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
+    }
+
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.editMessageChecklist({
+      checklist,
+      messageId: this.id,
+      chatId: this.chat.id,
+      businessConnectionId,
+      ...options,
+    });
+  }
+
+  /**
    * Use this method to edit captions of messages.
    * @param {string} [caption] - New caption of the message, 0-1024 characters after entities parsing
    * @param {Omit<MethodParameters["editMessageCaption"], "caption" | "chatId" | "messageId">} [options={}] - out parameters
@@ -429,7 +454,7 @@ class MessageOrigin extends Base {
    */
 
   /**
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively.
    * @param {PinMessage} [options] - Options for pinned message.
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -451,7 +476,7 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel.
+   * Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively.
    * @param {string} [businessConnectionId] - Unique identifier of the business connection on behalf of which the message will be unpinned
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -480,7 +505,8 @@ class MessageOrigin extends Base {
   - Bots can delete incoming messages in private chats.
   - Bots granted can_post_messages permissions can delete outgoing messages in channels.
   - If the bot is an administrator of a group, it can delete any message there.
-  - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
    * @returns {Promise<true>} - Returns True on success.
    */
   delete() {
@@ -493,6 +519,48 @@ class MessageOrigin extends Base {
     }
 
     return this.client.deleteMessage(this.chat.id, this.id);
+  }
+
+  /**
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat.
+   * @param {number} [sendDate] - Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+   * @retutns {Promise<true>} - Returns True on success.
+   */
+  approveSuggestedPost(sendDate) {
+    if (!this.id) {
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
+    }
+
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.approveSuggestedPost({
+      messageId: this.id,
+      chatId: this.chat.id,
+      ...(sendDate && { sendDate }),
+    });
+  }
+
+  /**
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat.
+   * @param {string} [comment] - Comment for the creator of the suggested post; 0-128 characters.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  declineSuggestedPost(comment) {
+    if (!this.id) {
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
+    }
+
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.declineSuggestedPost({
+      messageId: this.id,
+      chatId: this.chat.id,
+      ...(comment && { comment }),
+    });
   }
 
   /**

@@ -22,9 +22,9 @@ import type { TelegramClient } from "./TelegramClient";
 /**
  * Handles incoming updates from the Telegram API and routes them to the appropriate event handlers.
  */
-class WorketClient {
+class WorkerClient {
   /**
-   * Creates an instance of WorketClient.
+   * Creates an instance of WorkerClient.
    * @param client - The Telegram client instance.
    */
   constructor(public readonly client: TelegramClient) {}
@@ -393,7 +393,7 @@ class WorketClient {
       this.client.user !== null &&
       message.leftChatMember.id === this.client.user.id
     ) {
-      this.client.emit("chatDelete", message);
+      this.client.emit(Events.ChatDelete, message);
       return message;
     } else {
       this.client.emit(Events.ChatMemberRemove, message);
@@ -460,4 +460,4 @@ class WorketClient {
   }
 }
 
-export { WorketClient };
+export { WorkerClient };

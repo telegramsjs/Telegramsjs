@@ -8,7 +8,7 @@ import type { IRestOptions } from "../rest/Rest";
 import { BaseClient } from "./BaseClient";
 import { PollingClient } from "./PollingClient";
 import { WebhookClient } from "./WebhookClient";
-import { WorketClient } from "./WorkerClient";
+import { WorkerClient } from "./WorkerClient";
 import { TelegramError } from "../errors/TelegramError";
 import { ErrorCodes } from "../errors/ErrorCodes";
 import type { ClientUser } from "../structures/misc/ClientUser";
@@ -75,9 +75,9 @@ class TelegramClient extends BaseClient {
   public readonly webhook: WebhookClient;
 
   /**
-   * The worket client for handling updates.
+   * The worker client for handling updates.
    */
-  public readonly worket: WorketClient;
+  public readonly worker: WorkerClient;
 
   /**
    * The timestamp when the client became ready.
@@ -109,7 +109,7 @@ class TelegramClient extends BaseClient {
 
     this.polling = new PollingClient(this, options?.offset);
     this.webhook = new WebhookClient(this);
-    this.worket = new WorketClient(this);
+    this.worker = new WorkerClient(this);
   }
 
   /**
@@ -179,10 +179,16 @@ class TelegramClient extends BaseClient {
   /**
    * Destroys the client, closing all connections.
    */
-  destroy(): void {
-    this.polling.close();
-    this.webhook.close();
-    this.emit(Events.Disconnect, this);
+  async destroy(): Promise<void> {
+    if (this.polling) {
+      this.polling.close();
+      this.emit(Events.Disconnect, this);
+      return;
+    }
+    await this.webhook.close().then(() => {
+      this.emit(Events.Disconnect, this);
+      return;
+    });
   }
 
   /**

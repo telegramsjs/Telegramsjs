@@ -462,6 +462,14 @@ class ChatFullInfo extends Chat {
       this.linkedId = String(data.linked_chat_id);
     }
 
+    if ("parent_chat" in data && data.parent_chat) {
+      /**
+       * Information about the corresponding channel chat; for direct messages chats only
+       * @type {import("./Chat").Chat | undefined}
+       */
+      this.parentChat = this.client.chats._add(data.parent_chat);
+    }
+
     if ("location" in data && data.location) {
       /**
        * The location of the chat.

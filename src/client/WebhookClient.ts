@@ -1,5 +1,4 @@
 import https from "node:https";
-// @ts-ignore
 import safeCompare from "safe-compare";
 import type { TlsOptions } from "node:tls";
 import { Events } from "../util/Constants";
@@ -42,17 +41,20 @@ class WebhookClient {
     request: IncomingMessage & { body?: Update },
     options: { path: string; token: string; secretToken?: string },
   ): boolean => {
-    if (safeCompare(options.path, request.url)) {
-      if (!options.secretToken) {
-        return true;
-      } else {
-        const token = request.headers["x-telegram-bot-api-secret-token"];
-        if (safeCompare(options.secretToken, token as string)) {
-          return true;
-        }
-      }
+    if (request.url !== options.path) {
+      return false;
     }
-    return false;
+
+    if (!options.secretToken) {
+      return true;
+    }
+
+    const token = request.headers["x-telegram-bot-api-secret-token"];
+    if (!token || typeof token !== "string") {
+      return false;
+    }
+
+    return safeCompare(options.secretToken, token);
   };
 
   /**
@@ -176,10 +178,13 @@ class WebhookClient {
         this.offset = update.update_id + 1;
       }
 
-      const res = await this.client.worket.processUpdate(update);
+      const res = await this.client.worker.processUpdate(update);
       if (res) {
         this.client.updates.set(this.offset, res);
       }
+
+      response.statusCode = 200;
+      response.end("OK");
     };
 
     return requestCallback
@@ -194,13 +199,17 @@ class WebhookClient {
    * Closes the webhook server.
    * @returns The closed state of the webhook client.
    */
-  close(): boolean {
-    if (this.webhookServer && !this.isClosed) {
-      this.webhookServer.close(() => {
-        this.isClosed = true;
-      });
+  async close(): Promise<boolean> {
+    if (!this.webhookServer || this.isClosed) {
+      return true;
     }
-    return this.isClosed;
+
+    return new Promise((resolve) => {
+      this.webhookServer!.close(() => {
+        this.isClosed = true;
+        resolve(true);
+      });
+    });
   }
 }
 

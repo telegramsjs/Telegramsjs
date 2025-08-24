@@ -1,5 +1,33 @@
 # Changelog
 
+# **4.10.0 - (2025-08-24)**
+
+## **Updates**
+
+- **Support for API 9.1 and 9.2** ([5683cbf](https://github.com/telegramsjs/Telegramsjs/commit/5683cbf938a86dd3d90b7927a32e21549540bc09))
+- **InputChecklistBuilder:** add builder for creating checklist inputs ([69f9e79](https://github.com/telegramsjs/Telegramsjs/commit/69f9e79044cc49dbb79132b9d9cb970a2e4bee11))
+- **WebhookClient:** processing response from Telegram ([f204610](https://github.com/telegramsjs/Telegramsjs/commit/f204610b120cfcff24155c4d3f6787af1a1f7c46))
+- **package.json:** add `safe-compare` types ([5bb6c07](https://github.com/telegramsjs/Telegramsjs/commit/5bb6c070f8b085a25307db2020c0f7dc08fde87a))
+
+## **Refactor**
+
+- **Gift:** rename `sendGift` method to `send` ([b74d139](https://github.com/telegramsjs/Telegramsjs/commit/b74d139d817a63b0a12d97a0f902be6da4a9dd9e))
+- **kickChatMember:** delete deprecated methods ([8da75ef](https://github.com/telegramsjs/Telegramsjs/commit/8da75efd1cb8846866a7082213567b1d47a984e1))
+- **WebhookClient:** simplify `webhookFilter` logic and add token check ([a075c81](https://github.com/telegramsjs/Telegramsjs/commit/a075c814b4e2df1251e09596d51d89d8dd6fe71d))
+
+## **Bug Fixes**
+
+- **WorkerClient:** corrent `ChatDelete` event name ([86a2433](https://github.com/telegramsjs/Telegramsjs/commit/86a2433d045cfd4b2cce7aa6449319f7e1e8f50b))
+- **WorkerClient:** type in the name `worket` ([5ff4122](https://github.com/telegramsjs/Telegramsjs/commit/5ff4122d6c98ed5b5e3d2385916276aa79f3f7b1))
+- **WebhookClient:** async close now waits for server shutdown ([e2605d8](https://github.com/telegramsjs/Telegramsjs/commit/e2605d8717a3d039b818d308d42a2f642dbaf581))
+
+
+## **Typings**
+
+- Fix build `#private` fields ([c1dcc8d](https://github.com/telegramsjs/Telegramsjs/commit/c1dcc8d92fd3269196a3ec516d3e868f9e10b0bb))
+
+---
+
 # **4.9.0 - (2025-05-10)**
 
 ## **Updates**
