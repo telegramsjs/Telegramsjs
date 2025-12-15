@@ -8977,7 +8977,7 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
    * @returns The fetched chat object.
    */
   fetch(
-    user: Chat | string,
+    chat: Chat | string,
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<Chat>;
   /**
@@ -8987,7 +8987,7 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
    * @returns The fetched ChatFullInfo object.
    */
   fetch(
-    user: Chat | string,
+    chat: Chat | string,
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
   ): Promise<ChatFullInfo>;
   /**
@@ -8997,7 +8997,7 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
    * @returns The fetched chat or full chat info object.
    */
   fetch(
-    user: Chat | string,
+    chat: Chat | string,
     options?: IFetchOptions,
   ): Promise<Chat | ChatFullInfo>;
 }
