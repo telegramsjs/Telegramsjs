@@ -54,13 +54,13 @@
   "homepage": "https://docs-telegramsjs.vercel.app/",
   "devDependencies": {
     "@telegram.ts/types": "^1.23.5",
-    "@types/node": "^18.19.61",
+    "@types/node": "^25.0.2",
     "@types/node-fetch": "^2.6.11",
     "@types/safe-compare": "^1.1.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.3"
   },
   "dependencies": {
-    "@telegram.ts/collection": "^1.1.0",
+    "@telegram.ts/collection": "^2.0.0",
     "@telegram.ts/formatters": "^2.0.1",
     "node-fetch": "^2.7.0",
     "safe-compare": "^1.1.4",
