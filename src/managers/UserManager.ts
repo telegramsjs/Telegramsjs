@@ -129,6 +129,60 @@ class UserManager extends BaseManager<User, ApiUser> {
     // @ts-ignore
     return this._add(data, cache);
   }
+
+  /**
+   * Fetches multiple users at once.
+   * @param users - Array of users to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched users (nulls for failed fetches).
+   */
+  fetchMany(
+    users: UserResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
+  ): Promise<(User | null)[]>;
+
+  /**
+   * Fetches multiple users at once.
+   * @param users - Array of users to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched users (nulls for failed fetches).
+   */
+  fetchMany(
+    users: UserResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<(ChatFullInfo | null)[]>;
+
+  /**
+   * Fetches multiple users at once.
+   * @param users - Array of users to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched users (nulls for failed fetches).
+   */
+  fetchMany(
+    users: UserResolvable[],
+    options?: IFetchOptions,
+  ): Promise<(User | ChatFullInfo | null)[]>;
+
+  /**
+   * Fetches multiple users at once.
+   * @param users - Array of users to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched users (nulls for failed fetches).
+   */
+  async fetchMany(
+    users: UserResolvable[],
+    { cache = true, force = false, fullInfo }: IFetchOptions = {},
+  ): Promise<(User | ChatFullInfo | null)[]> {
+    const results = await Promise.allSettled(
+      users.map((user) =>
+        this.fetch(user, { cache, force, ...(fullInfo && { fullInfo }) }),
+      ),
+    );
+
+    return results.map((result) =>
+      result.status === "fulfilled" ? result.value : null,
+    );
+  }
 }
 
 export { UserManager, type UserResolvable };

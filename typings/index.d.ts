@@ -8949,6 +8949,36 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
     user: ChatMember | Message | string,
     options?: IFetchOptions,
   ): Promise<User | ChatFullInfo>;
+  /**
+   * Fetches multiple users at once.
+   * @param users - Array of users to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched users (nulls for failed fetches).
+   */
+  fetchMany(
+    users: UserResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
+  ): Promise<(User | null)[]>;
+  /**
+   * Fetches multiple users at once.
+   * @param users - Array of users to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched users (nulls for failed fetches).
+   */
+  fetchMany(
+    users: UserResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<(ChatFullInfo | null)[]>;
+  /**
+   * Fetches multiple users at once.
+   * @param users - Array of users to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched users (nulls for failed fetches).
+   */
+  fetchMany(
+    users: UserResolvable[],
+    options?: IFetchOptions,
+  ): Promise<(User | ChatFullInfo | null)[]>;
 }
 
 export type ChatResolvable = ChatMember | Message | Chat | string;
@@ -9000,6 +9030,36 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
     chat: ChatResolvable,
     options?: IFetchOptions,
   ): Promise<Chat | ChatFullInfo>;
+  /**
+   * Fetches multiple chats at once.
+   * @param chats - Array of chats to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched chats (nulls for failed fetches).
+   */
+  fetchMany(
+    chats: ChatResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
+  ): Promise<(Chat | null)[]>;
+  /**
+   * Fetches multiple chats at once.
+   * @param chats - Array of chats to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched chats (nulls for failed fetches).
+   */
+  fetchMany(
+    chats: ChatResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<(ChatFullInfo | null)[]>;
+  /**
+   * Fetches multiple chats at once.
+   * @param chats - Array of chats to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched chats (nulls for failed fetches).
+   */
+  fetchMany(
+    chats: ChatResolvable[],
+    options?: IFetchOptions,
+  ): Promise<(Chat | ChatFullInfo | null)[]>;
 }
 
 export declare class BusinessConnection extends Base {

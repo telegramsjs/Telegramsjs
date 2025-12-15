@@ -114,6 +114,60 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
     // @ts-ignore
     return this._add(data, cache);
   }
+
+  /**
+   * Fetches multiple chats at once.
+   * @param chats - Array of chats to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched chats (nulls for failed fetches).
+   */
+  fetchMany(
+    chats: ChatResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
+  ): Promise<(Chat | null)[]>;
+
+  /**
+   * Fetches multiple chats at once.
+   * @param chats - Array of chats to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched chats (nulls for failed fetches).
+   */
+  fetchMany(
+    chats: ChatResolvable[],
+    options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
+  ): Promise<(ChatFullInfo | null)[]>;
+
+  /**
+   * Fetches multiple chats at once.
+   * @param chats - Array of chats to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched chats (nulls for failed fetches).
+   */
+  fetchMany(
+    chats: ChatResolvable[],
+    options?: IFetchOptions,
+  ): Promise<(Chat | ChatFullInfo | null)[]>;
+
+  /**
+   * Fetches multiple chats at once.
+   * @param chats - Array of chats to fetch.
+   * @param options - Options for fetching.
+   * @returns Array of fetched chats (nulls for failed fetches).
+   */
+  async fetchMany(
+    chats: ChatResolvable[],
+    { cache = true, force = false, fullInfo }: IFetchOptions = {},
+  ): Promise<(Chat | ChatFullInfo | null)[]> {
+    const results = await Promise.allSettled(
+      chats.map((chat) =>
+        this.fetch(chat, { cache, force, ...(fullInfo && { fullInfo }) }),
+      ),
+    );
+
+    return results.map((result) =>
+      result.status === "fulfilled" ? result.value : null,
+    );
+  }
 }
 
 export { ChatManager, type ChatResolvable };
