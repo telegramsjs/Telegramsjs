@@ -1,0 +1,73 @@
+// @ts-check
+class BackgroundFill {
+  /**
+   * @param {import("@telegram.ts/types").BackgroundFill} data - Data about the describes the way a background is filled based on the selected colors
+   */
+  constructor(data) {
+    if (data.type === "solid") {
+      /**
+       * The color of the background fill in the RGB24 format
+       * @type {number | undefined}
+       */
+      this.color = data.color;
+    }
+
+    if (data.type === "gradient") {
+      /**
+       * Top color of the gradient in the RGB24 format
+       * @type {number | undefined}
+       */
+      this.topColor = data.top_color;
+
+      /**
+       * Bottom color of the gradient in the RGB24 format
+       * @type {number | undefined}
+       */
+      this.bottomColor = data.bottom_color;
+
+      /**
+       * Clockwise rotation angle of the background fill in degrees; 0-359
+       * @type {number | undefined}
+       */
+      this.rotationAngle = data.rotation_angle;
+    }
+
+    if (data.type === "freeform_gradient") {
+      /**
+       * A list of the 3 or 4 base colors that are used to generate the freeform gradient in the RGB24 format
+       * @type {number[] | undefined}
+       */
+      this.colors = data.colors;
+    }
+  }
+
+  /**
+   * @returns {this is this & { color: number; }}
+   */
+  isSolid() {
+    return Boolean("color" in this && this.color);
+  }
+
+  /**
+   * @returns {this is this & { topColor: number; bottomColor: number; rotationAngle: number; }}
+   */
+  isGradient() {
+    return Boolean(
+      "topColor" in this &&
+      this.topColor &&
+      "bottomColor" in this &&
+      this.bottomColor &&
+      "rotationAngle" in this &&
+      this.rotationAngle,
+    );
+  }
+
+  /**
+   * @returns {this is this & { colors: number[] }}
+   */
+  isFreeformGradient() {
+    return Boolean("colors" in this && this.colors);
+  }
+}
+
+module.exports = { BackgroundFill };
