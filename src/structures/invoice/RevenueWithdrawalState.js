@@ -46,15 +46,9 @@ class RevenueWithdrawalState {
   isSucceeded() {
     return Boolean(
       "createdTimestamp" in this &&
-<<<<<<< HEAD
-        this.createdTimestamp &&
-        "url" in this &&
-        this.url,
-=======
       this.createdTimestamp &&
       "url" in this &&
       this.url,
->>>>>>> v4
     );
   }
 }

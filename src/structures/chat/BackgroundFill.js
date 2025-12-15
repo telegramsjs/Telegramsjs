@@ -54,19 +54,11 @@ class BackgroundFill {
   isGradient() {
     return Boolean(
       "topColor" in this &&
-<<<<<<< HEAD
-        this.topColor &&
-        "bottomColor" in this &&
-        this.bottomColor &&
-        "rotationAngle" in this &&
-        this.rotationAngle,
-=======
       this.topColor &&
       "bottomColor" in this &&
       this.bottomColor &&
       "rotationAngle" in this &&
       this.rotationAngle,
->>>>>>> v4
     );
   }
 

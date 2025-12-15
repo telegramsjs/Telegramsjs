@@ -1,10 +1,6 @@
 import * as http from "node:http";
 import * as https from "node:https";
-<<<<<<< HEAD
-import { Collection } from "@telegram.ts/collection";
-=======
 import { Collection, type ReadonlyCollection } from "@telegram.ts/collection";
->>>>>>> v4
 import {
   ApiMethods as Methods,
   Chat as ApiChat,
@@ -93,18 +89,6 @@ import {
 } from "./telegram/index";
 
 /**
-<<<<<<< HEAD
- * Represents an immutable version of a collection
- */
-export type ReadonlyCollection<K, V> = Omit<
-  Collection<K, V>,
-  "delete" | "ensure" | "forEach" | "get" | "reverse" | "set" | "sort" | "sweep"
-> &
-  ReadonlyMap<K, V>;
-
-/**
-=======
->>>>>>> v4
  * Type representing the string literals for chat permissions.
  */
 export type ChatPermissionString =
@@ -1777,15 +1761,10 @@ export declare class MessageCollector extends Collector<string, Message> {
 /**
  * Interface for reaction event collector.
  */
-<<<<<<< HEAD
-export interface IReactionEventCollector
-  extends ICollectorEvent<string, MessageReactionUpdated> {
-=======
 export interface IReactionEventCollector extends ICollectorEvent<
   string,
   MessageReactionUpdated
 > {
->>>>>>> v4
   /**
    * Event emitted when a user reacts.
    * @param data - The collection of user reactions.
@@ -8915,11 +8894,8 @@ export declare class ChatMember extends Base {
   equals(other: ChatMember): boolean;
 }
 
-<<<<<<< HEAD
-=======
 export type UserResolvable = ChatMember | Message | User | string;
 
->>>>>>> v4
 export declare class UserManager extends BaseManager<User, ApiUser> {
   /**
    * @param client - The client instance.
@@ -8932,19 +8908,6 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
     options?: ICachedOptions<User>,
   );
   /**
-<<<<<<< HEAD
-   * Resolves a user from a ChatMember, Message, or user ID.
-   * @param user - The ChatMember, Message, or user ID to resolve.
-   * @returns The resolved User instance or null if not found.
-   */
-  override resolve(user: ChatMember | Message | string): User | null;
-  /**
-   * Resolves the user ID from a ChatMember, Message, or user ID.
-   * @param user - The ChatMember, Message, or user ID to resolve.
-   * @returns The resolved user ID or null if not found.
-   */
-  override resolveId(user: ChatMember | Message | string): string | null;
-=======
    * Resolves a user from a ChatMember, Message, User or user ID.
    * @param user - The ChatMember, Message, User or user ID to resolve.
    * @returns The resolved User instance or null if not found.
@@ -8956,7 +8919,6 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
    * @returns The resolved user ID or null if not found.
    */
   override resolveId(user: any): string | null;
->>>>>>> v4
   /**
    * Fetches a user by ID, optionally caching the result.
    * @param user - The ChatMember, Message, or user ID to fetch.
@@ -8987,10 +8949,6 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
     user: ChatMember | Message | string,
     options?: IFetchOptions,
   ): Promise<User | ChatFullInfo>;
-<<<<<<< HEAD
-}
-
-=======
   /**
    * Fetches multiple users at once.
    * @param users - Array of users to fetch.
@@ -9025,7 +8983,6 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
 
 export type ChatResolvable = ChatMember | Message | Chat | string;
 
->>>>>>> v4
 export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * @param client - The client instance.
@@ -9039,15 +8996,6 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   );
   /**
    * Resolves a chat object.
-<<<<<<< HEAD
-   * @param chat - The chat instance, chat member, message, or ID.
-   * @returns - The resolved chat object or null if not found.
-   */
-  override resolve(chat: Chat | ChatMember | Message | string): Chat | null;
-  /**
-   * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
-=======
    * @param chat - The chat instance, ChatMember, Message, Chat or ID.
    * @returns - The resolved chat object or null if not found.
    */
@@ -9055,52 +9003,30 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * Fetches a chat object from the API.
    * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
->>>>>>> v4
    * @param options - Additional options.
    * @returns The fetched chat object.
    */
   fetch(
-<<<<<<< HEAD
-    user: Chat | string,
-=======
     chat: ChatResolvable,
->>>>>>> v4
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<Chat>;
   /**
    * Fetches a chat object from the API.
-<<<<<<< HEAD
-   * @param chat - The chat instance or ID.
-=======
    * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
->>>>>>> v4
    * @param options - Additional options.
    * @returns The fetched ChatFullInfo object.
    */
   fetch(
-<<<<<<< HEAD
-    user: Chat | string,
-=======
     chat: ChatResolvable,
->>>>>>> v4
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
   ): Promise<ChatFullInfo>;
   /**
    * Fetches a chat object from the API.
-<<<<<<< HEAD
-   * @param chat - The chat instance or ID.
-=======
    * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
->>>>>>> v4
    * @param options - Additional options.
    * @returns The fetched chat or full chat info object.
    */
   fetch(
-<<<<<<< HEAD
-    user: Chat | string,
-    options?: IFetchOptions,
-  ): Promise<Chat | ChatFullInfo>;
-=======
     chat: ChatResolvable,
     options?: IFetchOptions,
   ): Promise<Chat | ChatFullInfo>;
@@ -9134,7 +9060,6 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
     chats: ChatResolvable[],
     options?: IFetchOptions,
   ): Promise<(Chat | ChatFullInfo | null)[]>;
->>>>>>> v4
 }
 
 export declare class BusinessConnection extends Base {
@@ -13289,10 +13214,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-<<<<<<< HEAD
-export declare const version: "4.10.1";
-=======
 export declare const version: "4.11.0";
->>>>>>> v4
 
 export * from "./telegram/index";

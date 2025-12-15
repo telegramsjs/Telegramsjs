@@ -14,10 +14,7 @@ enum ErrorCodes {
   InvalidChatId = "INVALID_CHAT_ID",
   InvalidClientId = "INVALID_CLIENT_ID",
   InvalidFileName = "INVALID_FILE_NAME",
-<<<<<<< HEAD
-=======
   LoginTimeout = "LOGIN_TIMEOUT",
->>>>>>> v4
 }
 
 const ErrorMessages = {
@@ -50,11 +47,8 @@ const ErrorMessages = {
     "The bot ID is not available. Please check if the bot has been initialized",
   [ErrorCodes.InvalidFileName]:
     "The name file is not valid. Please open issue https://github.com/telegramsjs/Telegramsjs/issues",
-<<<<<<< HEAD
-=======
   [ErrorCodes.LoginTimeout]:
     "Failed to connect to Telegram BotAPI: connection timeout exceeded",
->>>>>>> v4
 } as const;
 
 export { ErrorCodes, ErrorMessages };

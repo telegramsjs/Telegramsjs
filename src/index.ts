@@ -34,8 +34,4 @@ export * from "./rest/Rest";
 export * from "./rest/MediaData";
 export * from "./rest/MultipartStream";
 export * from "./structures/index";
-<<<<<<< HEAD
-// export { version } from "../package.json";
-=======
 export { version } from "../package.json";
->>>>>>> v4

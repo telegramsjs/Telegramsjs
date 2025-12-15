@@ -15,15 +15,10 @@ import {
 /**
  * Interface for reaction event collector.
  */
-<<<<<<< HEAD
-interface IReactionEventCollector
-  extends ICollectorEvent<string, MessageReactionUpdated> {
-=======
 interface IReactionEventCollector extends ICollectorEvent<
   string,
   MessageReactionUpdated
 > {
->>>>>>> v4
   /**
    * Event emitted when a user reacts.
    * @param data - The collection of user reactions.
