@@ -87,6 +87,7 @@ class MediaData {
   isMediaType(value: any): boolean {
     return Boolean(
       typeof value === "object" &&
+<<<<<<< HEAD
         value !== null &&
         value.constructor &&
         (value instanceof Buffer ||
@@ -98,6 +99,19 @@ class MediaData {
           value instanceof Uint8Array ||
           value instanceof DataView ||
           this.isMediaType(value.source)),
+=======
+      value !== null &&
+      value.constructor &&
+      (value instanceof Buffer ||
+        value instanceof ReadStream ||
+        value instanceof ArrayBuffer ||
+        ArrayBuffer.isView(value) ||
+        value instanceof Blob ||
+        value instanceof FormData ||
+        value instanceof Uint8Array ||
+        value instanceof DataView ||
+        this.isMediaType(value.source)),
+>>>>>>> v4
     );
   }
 

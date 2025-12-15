@@ -45,6 +45,10 @@ interface ILoginOptions {
     dropPendingUpdates?: boolean;
     secretToken?: string;
   };
+<<<<<<< HEAD
+=======
+  timeout?: number;
+>>>>>>> v4
 }
 
 /**
@@ -139,10 +143,41 @@ class TelegramClient extends BaseClient {
   ): Promise<void> {
     if ("polling" in options) {
       await this.deleteWebhook(options.polling?.dropPendingUpdates);
+<<<<<<< HEAD
       await this.polling.startPolling({
         ...DefaultPollingParameters,
         ...options.polling,
       });
+=======
+
+      const readyPromise = Promise.race([
+        new Promise<void>((resolve) => {
+          this.once(Events.Ready, () => resolve());
+        }),
+        new Promise<void>((_, reject) => {
+          setTimeout(
+            () => reject(new TelegramError(ErrorCodes.LoginTimeout)),
+            options.timeout ?? 30000,
+          );
+        }),
+      ]);
+
+      this.polling
+        .startPolling({
+          ...DefaultPollingParameters,
+          ...options.polling,
+        })
+        .catch((err) => {
+          if (this.eventNames().indexOf(Events.Error) === -1) {
+            this.emit(Events.Disconnect);
+            throw err;
+          }
+          this.emit(Events.Error, [this.polling.offset, err]);
+        });
+
+      await readyPromise;
+
+>>>>>>> v4
       return;
     }
 
@@ -152,7 +187,10 @@ class TelegramClient extends BaseClient {
       }
 
       const parsedUrl = url.parse(options.webhook.url);
+<<<<<<< HEAD
 
+=======
+>>>>>>> v4
       options.webhook.path ??= parsedUrl.path ?? "/";
       if (parsedUrl.port) {
         options.webhook.port ??= Number(parsedUrl.port);
@@ -165,11 +203,43 @@ class TelegramClient extends BaseClient {
         allowedUpdates: DefaultPollingParameters.allowedUpdates,
         ...options.webhook,
       });
+<<<<<<< HEAD
       await this.webhook.startWebhook(
         options.webhook.path,
         options.webhook.secretToken,
         options.webhook,
       );
+=======
+
+      const readyPromise = Promise.race([
+        new Promise<void>((resolve) => {
+          this.once(Events.Ready, () => resolve());
+        }),
+        new Promise<void>((_, reject) => {
+          setTimeout(
+            () => reject(new TelegramError(ErrorCodes.LoginTimeout)),
+            options.timeout ?? 30000,
+          );
+        }),
+      ]);
+
+      this.webhook
+        .startWebhook(
+          options.webhook.path,
+          options.webhook.secretToken,
+          options.webhook,
+        )
+        .catch((err) => {
+          if (this.eventNames().indexOf(Events.Error) === -1) {
+            this.emit(Events.Disconnect);
+            throw err;
+          }
+          this.emit(Events.Error, [this.polling.offset, err]);
+        });
+
+      await readyPromise;
+
+>>>>>>> v4
       return;
     }
 

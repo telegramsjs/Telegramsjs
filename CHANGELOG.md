@@ -1,5 +1,30 @@
 # Changelog
 
+<<<<<<< HEAD
+=======
+# **4.11.0 - (2025-12-15)**
+
+## **Updates**
+
+- Bump version `typescript@5.9.3` ([08a29e9](https://github.com/telegramsjs/Telegramsjs/compare/66b98b88325a...2d2221cd7a7d))
+- Bump version `@telegram.ts/collection@2.0.0` ([08a29e9](https://github.com/telegramsjs/Telegramsjs/compare/66b98b88325a...2d2221cd7a7d))
+  - Bump version `typescript@5.9.3`
+  - Major release (feature parity with [`@discordjs/collection`](https://github.com/discordjs/discord.js/tree/main/packages/collection))
+
+## Features
+
+- **TelegramClient:** resolve login timing issue with async ready handling ([39726ee](https://github.com/telegramsjs/Telegramsjs/commit/39726ee189b1575e0200763c0245179dd3ec5d62))
+- **BaseManager:** allow fetch via resolved chat object ([fe95849](https://github.com/telegramsjs/Telegramsjs/commit/fe95849120b89c39d37050c1db4e747552a5bbb4))
+- **BaseManager:** fetches multiple users or chats at once ([19180de](https://github.com/telegramsjs/Telegramsjs/commit/19180de54a9564417f9be5448b819bdcd69f5ce9))
+
+## Typings
+
+- **ChatManager:** correct name parameters ([a874d79](https://github.com/telegramsjs/Telegramsjs/commit/a874d7942194c44229856a8fc4111245f0113c93))
+- **BaseManager:** add UserResolvable and ChatResolvable typings ([49a57ad](https://github.com/telegramsjs/Telegramsjs/commit/49a57ad6cdb550616ef60de39e49b03b5008c69b))
+
+---
+
+>>>>>>> v4
 # **4.10.1 - (2025-08-24)**
 
 ## **Updates**

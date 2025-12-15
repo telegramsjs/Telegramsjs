@@ -112,9 +112,15 @@ class BackgroundType {
   isWallpaper() {
     return Boolean(
       "document" in this &&
+<<<<<<< HEAD
         this.document &&
         "darkDimming" in this &&
         this.darkDimming,
+=======
+      this.document &&
+      "darkDimming" in this &&
+      this.darkDimming,
+>>>>>>> v4
     );
   }
 
@@ -124,11 +130,19 @@ class BackgroundType {
   isPattern() {
     return Boolean(
       "fill" in this &&
+<<<<<<< HEAD
         this.fill &&
         "document" in this &&
         this.document &&
         "intensity" in this &&
         this.intensity,
+=======
+      this.fill &&
+      "document" in this &&
+      this.document &&
+      "intensity" in this &&
+      this.intensity,
+>>>>>>> v4
     );
   }
 }

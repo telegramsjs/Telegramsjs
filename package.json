@@ -1,7 +1,11 @@
 {
   "name": "telegramsjs",
   "description": "A powerful library for interacting with the Telegram Bot API",
+<<<<<<< HEAD
   "version": "4.10.1",
+=======
+  "version": "4.11.0",
+>>>>>>> v4
   "main": "./dist/src/index.js",
   "types": "./typings/index.d.ts",
   "scripts": {
@@ -57,10 +61,17 @@
     "@types/node": "^18.19.61",
     "@types/node-fetch": "^2.6.11",
     "@types/safe-compare": "^1.1.2",
+<<<<<<< HEAD
     "typescript": "5.8.3"
   },
   "dependencies": {
     "@telegram.ts/collection": "^1.1.0",
+=======
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@telegram.ts/collection": "^2.0.1",
+>>>>>>> v4
     "@telegram.ts/formatters": "^2.0.1",
     "node-fetch": "^2.7.0",
     "safe-compare": "^1.1.4",

@@ -83,6 +83,7 @@ class Giveaway extends Base {
 
     return Boolean(
       this.selectedUnixTime === other.selectedUnixTime &&
+<<<<<<< HEAD
         this.winnerCount === other.winnerCount &&
         this.onlyNewMembers === other.onlyNewMembers &&
         this.publicWinners === other.publicWinners &&
@@ -97,6 +98,22 @@ class Giveaway extends Base {
         thisChats.every(
           (chat, index) => otherChats[index] && chat.equals(otherChats[index]),
         ),
+=======
+      this.winnerCount === other.winnerCount &&
+      this.onlyNewMembers === other.onlyNewMembers &&
+      this.publicWinners === other.publicWinners &&
+      this.description === other.description &&
+      this.starCount === other.starCount &&
+      this.subscriptionMonthCount === other.subscriptionMonthCount &&
+      this.countryCodes?.length === other.countryCodes?.length &&
+      this.countryCodes?.every?.(
+        (code, index) => code === other.countryCodes?.[index],
+      ) &&
+      thisChats.length === otherChats.length &&
+      thisChats.every(
+        (chat, index) => otherChats[index] && chat.equals(otherChats[index]),
+      ),
+>>>>>>> v4
     );
   }
 }
