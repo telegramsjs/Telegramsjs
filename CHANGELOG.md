@@ -20,6 +20,8 @@
 - **ChatManager:** correct name parameters ([a874d79](https://github.com/telegramsjs/Telegramsjs/commit/a874d7942194c44229856a8fc4111245f0113c93))
 - **BaseManager:** add UserResolvable and ChatResolvable typings ([49a57ad](https://github.com/telegramsjs/Telegramsjs/commit/49a57ad6cdb550616ef60de39e49b03b5008c69b))
 
+---
+
 # **4.10.1 - (2025-08-24)**
 
 ## **Updates**
