@@ -32,7 +32,7 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
 
   /**
    * Resolves a chat object.
-   * @param chat - The chat instance, ChatMember, Message, Chat or ID.
+   * @param chat - The The ChatMember, Message, Chat or chat ID.
    * @returns - The resolved chat object or null if not found.
    */
   override resolve(chat: ChatResolvable): Chat | null {
@@ -47,48 +47,48 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
 
   /**
    * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
+   * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
    * @param options - Additional options.
    * @returns The fetched chat object.
    */
   fetch(
-    chat: Chat | string,
+    chat: ChatResolvable,
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<Chat>;
 
   /**
    * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
+   * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
    * @param options - Additional options.
    * @returns The fetched ChatFullInfo object.
    */
   fetch(
-    chat: Chat | string,
+    chat: ChatResolvable,
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
   ): Promise<ChatFullInfo>;
 
   /**
    * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
+   * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
    * @param options - Additional options.
    * @returns The fetched chat or full chat info object.
    */
   fetch(
-    chat: Chat | string,
+    chat: ChatResolvable,
     options?: IFetchOptions,
   ): Promise<Chat | ChatFullInfo>;
 
   /**
    * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
+   * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
    * @param options - Additional options.
    * @returns The fetched chat or full chat info object.
    */
   async fetch(
-    chat: Chat | string,
+    chat: ChatResolvable,
     { cache = true, force = false, fullInfo }: IFetchOptions = {},
   ): Promise<Chat | ChatFullInfo> {
-    const id = this.resolveId(chat);
+    const id = this.resolveId(this.resolve(chat));
 
     if (!force) {
       const existing = this.cache.get(String(id));

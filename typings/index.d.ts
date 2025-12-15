@@ -8918,7 +8918,7 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
    * @param user - The ChatMember, Message, User or user ID to resolve.
    * @returns The resolved user ID or null if not found.
    */
-  override resolveId(user: UserResolvable): string | null;
+  override resolveId(user: any): string | null;
   /**
    * Fetches a user by ID, optionally caching the result.
    * @param user - The ChatMember, Message, or user ID to fetch.
@@ -8972,32 +8972,32 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   override resolve(chat: ChatResolvable): Chat | null;
   /**
    * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
+   * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
    * @param options - Additional options.
    * @returns The fetched chat object.
    */
   fetch(
-    chat: Chat | string,
+    chat: ChatResolvable,
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo?: false },
   ): Promise<Chat>;
   /**
    * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
+   * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
    * @param options - Additional options.
    * @returns The fetched ChatFullInfo object.
    */
   fetch(
-    chat: Chat | string,
+    chat: ChatResolvable,
     options?: Omit<IFetchOptions, "fullInfo"> & { fullInfo: true },
   ): Promise<ChatFullInfo>;
   /**
    * Fetches a chat object from the API.
-   * @param chat - The chat instance or ID.
+   * @param chat - The ChatMember, Message, Chat or chat ID for fetch.
    * @param options - Additional options.
    * @returns The fetched chat or full chat info object.
    */
   fetch(
-    chat: Chat | string,
+    chat: ChatResolvable,
     options?: IFetchOptions,
   ): Promise<Chat | ChatFullInfo>;
 }
