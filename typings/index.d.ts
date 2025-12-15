@@ -8894,6 +8894,8 @@ export declare class ChatMember extends Base {
   equals(other: ChatMember): boolean;
 }
 
+export type UserResolvable = ChatMember | Message | User | string;
+
 export declare class UserManager extends BaseManager<User, ApiUser> {
   /**
    * @param client - The client instance.
@@ -8906,17 +8908,17 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
     options?: ICachedOptions<User>,
   );
   /**
-   * Resolves a user from a ChatMember, Message, or user ID.
-   * @param user - The ChatMember, Message, or user ID to resolve.
+   * Resolves a user from a ChatMember, Message, User or user ID.
+   * @param user - The ChatMember, Message, User or user ID to resolve.
    * @returns The resolved User instance or null if not found.
    */
-  override resolve(user: ChatMember | Message | string): User | null;
+  override resolve(user: UserResolvable): User | null;
   /**
-   * Resolves the user ID from a ChatMember, Message, or user ID.
-   * @param user - The ChatMember, Message, or user ID to resolve.
+   * Resolves the user ID from a ChatMember, Message, User or user ID.
+   * @param user - The ChatMember, Message, User or user ID to resolve.
    * @returns The resolved user ID or null if not found.
    */
-  override resolveId(user: ChatMember | Message | string): string | null;
+  override resolveId(user: UserResolvable): string | null;
   /**
    * Fetches a user by ID, optionally caching the result.
    * @param user - The ChatMember, Message, or user ID to fetch.
@@ -8949,6 +8951,8 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
   ): Promise<User | ChatFullInfo>;
 }
 
+export type ChatResolvable = ChatMember | Message | Chat | string;
+
 export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * @param client - The client instance.
@@ -8962,10 +8966,10 @@ export declare class ChatManager extends BaseManager<Chat, ApiChat> {
   );
   /**
    * Resolves a chat object.
-   * @param chat - The chat instance, chat member, message, or ID.
+   * @param chat - The chat instance, ChatMember, Message, Chat or ID.
    * @returns - The resolved chat object or null if not found.
    */
-  override resolve(chat: Chat | ChatMember | Message | string): Chat | null;
+  override resolve(chat: ChatResolvable): Chat | null;
   /**
    * Fetches a chat object from the API.
    * @param chat - The chat instance or ID.

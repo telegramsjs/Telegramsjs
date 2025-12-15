@@ -14,6 +14,8 @@ import { ErrorCodes } from "../errors/ErrorCodes";
 import type { TelegramClient } from "../client/TelegramClient";
 import type { BaseClient } from "../client/BaseClient";
 
+type ChatResolvable = ChatMember | Message | Chat | string;
+
 class ChatManager extends BaseManager<Chat, ApiChat> {
   /**
    * @param client - The client instance.
@@ -30,10 +32,10 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
 
   /**
    * Resolves a chat object.
-   * @param chat - The chat instance, chat member, message, or ID.
+   * @param chat - The chat instance, ChatMember, Message, Chat or ID.
    * @returns - The resolved chat object or null if not found.
    */
-  override resolve(chat: Chat | ChatMember | Message | string): Chat | null {
+  override resolve(chat: ChatResolvable): Chat | null {
     if (chat instanceof ChatMember) {
       return super.resolve(chat.chatId);
     }
@@ -114,4 +116,4 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
   }
 }
 
-export { ChatManager };
+export { ChatManager, type ChatResolvable };

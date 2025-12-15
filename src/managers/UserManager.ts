@@ -14,6 +14,8 @@ import { ErrorCodes } from "../errors/ErrorCodes";
 import type { TelegramClient } from "../client/TelegramClient";
 import type { BaseClient } from "../client/BaseClient";
 
+type UserResolvable = ChatMember | Message | User | string;
+
 class UserManager extends BaseManager<User, ApiUser> {
   /**
    * @param client - The client instance.
@@ -29,11 +31,11 @@ class UserManager extends BaseManager<User, ApiUser> {
   }
 
   /**
-   * Resolves a user from a ChatMember, Message, or user ID.
+   * Resolves a user from a ChatMember, Message, User or user ID.
    * @param user - The ChatMember, Message, or user ID to resolve.
    * @returns The resolved User instance or null if not found.
    */
-  override resolve(user: ChatMember | Message | string): User | null {
+  override resolve(user: UserResolvable): User | null {
     if (user instanceof ChatMember && user.user) {
       return user.user;
     }
@@ -44,11 +46,11 @@ class UserManager extends BaseManager<User, ApiUser> {
   }
 
   /**
-   * Resolves the user ID from a ChatMember, Message, or user ID.
+   * Resolves the user ID from a ChatMember, Message, User or user ID.
    * @param user - The ChatMember, Message, or user ID to resolve.
    * @returns The resolved user ID or null if not found.
    */
-  override resolveId(user: ChatMember | Message | string): string | null {
+  override resolveId(user: UserResolvable): string | null {
     if (user instanceof ChatMember && user.id) {
       return user.id;
     }
@@ -129,4 +131,4 @@ class UserManager extends BaseManager<User, ApiUser> {
   }
 }
 
-export { UserManager };
+export { UserManager, type UserResolvable };
