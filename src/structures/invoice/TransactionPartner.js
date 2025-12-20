@@ -143,7 +143,7 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat: import("../misc/Chat").Chat; premiumSubscriptionDuration?: undefined; }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat: import("../chat/Chat").Chat; premiumSubscriptionDuration?: undefined; }}
    */
   isChat() {
     return Boolean("chat" in this && this.chat);
