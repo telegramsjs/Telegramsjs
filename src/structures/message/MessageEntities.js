@@ -149,7 +149,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all pre entities from the message.
-   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { language?: string }>} A collection of pre entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { language?: import("../../client/interfaces/Language").LanguageCode }>} A collection of pre entities.
    */
   get pre() {
     return this.searchEntity("pre");
@@ -186,7 +186,7 @@ class MessageEntities extends Base {
   /**
    * Searches for a specific type of entity in the message.
    * @param {"mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji"} searchType - The type of entity to search for.
-   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string })>} A collection of found entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & ({ language?: import("../../client/interfaces/Language").LanguageCode } | { url: string } | { user: User } | { customEmojiId: string })>} A collection of found entities.
    */
   searchEntity(searchType) {
     const results = new Collection();
@@ -215,7 +215,7 @@ class MessageEntities extends Base {
   /**
    * Enables iteration over the message entities.
    * @returns {Generator<(SearchResult & ({ type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: string } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))>} An iterator over the message entities.
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: import("../../client/interfaces/Language").LanguageCode } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))>} An iterator over the message entities.
    */
   *[Symbol.iterator]() {
     /** @type {(keyof MessageEntities)[]} */

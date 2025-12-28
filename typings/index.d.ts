@@ -1534,7 +1534,10 @@ export declare class MessageEntities extends Base {
    * Retrieves all pre entities from the message.
    * @returns A collection of pre entities.
    */
-  get pre(): ReadonlyCollection<number, SearchResult & { language?: string }>;
+  get pre(): ReadonlyCollection<
+    number,
+    SearchResult & { language?: LanguageCode }
+  >;
   /**
    * Retrieves all text link entities from the message.
    * @returns A collection of text link entities.
@@ -1581,7 +1584,7 @@ export declare class MessageEntities extends Base {
     number,
     SearchResult &
       (
-        | { language?: string }
+        | { language?: LanguageCode }
         | { url: string }
         | { user: User }
         | { customEmojiId: string }
@@ -1609,7 +1612,7 @@ export declare class MessageEntities extends Base {
         | "blockquote"
         | "code";
     } & (
-        | { type: "pre"; language?: string }
+        | { type: "pre"; language?: LanguageCode }
         | { type: "textLink"; url: string }
         | { type: "textMention"; user: User }
         | { type: "customEmoji"; customEmojiId: string }
