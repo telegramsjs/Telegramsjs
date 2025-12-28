@@ -8924,7 +8924,7 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
   /**
    * @param client - The client instance.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
@@ -12153,7 +12153,7 @@ export declare class InlineKeyboardBuilder {
   readonly inline_keyboard: InlineKeyboardButton[][];
   /**
    * Creates an instance of InlineKeyboard.
-   * @param inlineKeyboard - A 2D array of inline keyboard buttons.
+   * @param inline_keyboard - A 2D array of inline keyboard buttons.
    */
   constructor(inline_keyboard?: InlineKeyboardButton[][]);
   /**
@@ -12560,7 +12560,7 @@ export declare class KeyboardBuilder {
   build(): KeyboardButton[][];
   /**
    * Combines the current keyboard with another one.
-   * @param other - The other Keyboard instance to combine with.
+   * @param keyboard - The other Keyboard instance to combine with.
    * @returns The current instance for chaining.
    */
   combine(
@@ -12964,8 +12964,6 @@ export declare class InputMessageContentBuilder {
    * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a venue message to be sent as the result of an inline query.
    * @param latitude - Latitude of the venue in degrees.
    * @param longitude - Longitude of the venue in degrees.
-   * @param title - Name of the venue.
-   * @param address - Address of the venue.
    * @param options - out parameters.
    */
   static venue(
