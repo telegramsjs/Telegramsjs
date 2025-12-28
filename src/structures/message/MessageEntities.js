@@ -1,6 +1,7 @@
 // @ts-check
 const { Base } = require("../Base");
 const { User } = require("../misc/User");
+const { Collection } = require("@telegram.ts/collection");
 
 /**
  * Represents a search result for a specific message entity type.
@@ -12,7 +13,7 @@ const { User } = require("../misc/User");
  */
 
 class MessageEntities extends Base {
-  /** @type {import("@telegram.ts/types").MessageEntity[]} */
+  /** @type {Collection<number, import("@telegram.ts/types").MessageEntity>} */
   #entities;
 
   /**
@@ -29,13 +30,14 @@ class MessageEntities extends Base {
      */
     this.searchText = searchText;
 
-    /** @type {import("@telegram.ts/types").MessageEntity[]} */
-    this.#entities = entities;
+    this.#entities = new Collection(
+      entities.map((entity, index) => [index, entity]),
+    );
   }
 
   /**
    * Retrieves all mention entities from the message.
-   * @returns {SearchResult[]} An array of objects representing mention entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of mention entities.
    */
   get mention() {
     return this.searchEntity("mention");
@@ -43,7 +45,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all hashtag entities from the message.
-   * @returns {SearchResult[]} An array of objects representing hashtag entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of hashtag entities.
    */
   get hashtag() {
     return this.searchEntity("hashtag");
@@ -51,7 +53,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all cashtag entities from the message.
-   * @returns {SearchResult[]} An array of objects representing cashtag entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of cashtag entities.
    */
   get cashtag() {
     return this.searchEntity("cashtag");
@@ -59,7 +61,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all bot command entities from the message.
-   * @returns {SearchResult[]} An array of objects representing bot command entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of bot command entities.
    */
   get botCommand() {
     return this.searchEntity("bot_command");
@@ -67,7 +69,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all URL entities from the message.
-   * @returns {SearchResult[]} An array of objects representing URL entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of URL entities.
    */
   get url() {
     return this.searchEntity("url");
@@ -75,7 +77,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all email entities from the message.
-   * @returns {SearchResult[]} An array of objects representing email entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of email entities.
    */
   get email() {
     return this.searchEntity("email");
@@ -83,7 +85,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all phone number entities from the message.
-   * @returns {SearchResult[]} An array of objects representing phone number entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of phone number entities.
    */
   get phoneNumber() {
     return this.searchEntity("phone_number");
@@ -91,7 +93,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all bold entities from the message.
-   * @returns {SearchResult[]} An array of objects representing bold entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of bold entities.
    */
   get bold() {
     return this.searchEntity("bold");
@@ -99,7 +101,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all italic entities from the message.
-   * @returns {SearchResult[]} An array of objects representing italic entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of italic entities.
    */
   get italic() {
     return this.searchEntity("italic");
@@ -107,7 +109,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all underline entities from the message.
-   * @returns {SearchResult[]} An array of objects representing underline entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of underline entities.
    */
   get underline() {
     return this.searchEntity("underline");
@@ -115,7 +117,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all strikethrough entities from the message.
-   * @returns {SearchResult[]} An array of objects representing strikethrough entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of strikethrough entities.
    */
   get strikethrough() {
     return this.searchEntity("strikethrough");
@@ -123,7 +125,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all spoiler entities from the message.
-   * @returns {SearchResult[]} An array of objects representing spoiler entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of spoiler entities.
    */
   get spoiler() {
     return this.searchEntity("spoiler");
@@ -131,7 +133,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all blockquote entities from the message.
-   * @returns {SearchResult[]} An array of objects representing blockquote entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of blockquote entities.
    */
   get blockquote() {
     return this.searchEntity("blockquote");
@@ -139,7 +141,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all code entities from the message.
-   * @returns {SearchResult[]} An array of objects representing code entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult>} A collection of code entities.
    */
   get code() {
     return this.searchEntity("code");
@@ -147,7 +149,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all pre entities from the message.
-   * @returns {(SearchResult & { language?: string })[]} An array of objects representing pre entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { language?: string }>} A collection of pre entities.
    */
   get pre() {
     return this.searchEntity("pre");
@@ -155,7 +157,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all text link entities from the message.
-   * @returns {(SearchResult & { url: string })[]} An array of objects representing text link entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { url: string }>} A collection of text link entities.
    */
   get textLink() {
     return this.searchEntity("text_link").filter((entity) => "url" in entity);
@@ -163,7 +165,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all text mention entities from the message.
-   * @returns {(SearchResult & { user: User })[]} An array of objects representing text mention entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { user: User }>} A collection of text mention entities.
    */
   get textMention() {
     return this.searchEntity("text_mention").filter(
@@ -173,7 +175,7 @@ class MessageEntities extends Base {
 
   /**
    * Retrieves all custom emoji entities from the message.
-   * @returns {(SearchResult & { customEmojiId: string })[]} An array of objects representing custom emoji entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { customEmojiId: string }>} A collection of custom emoji entities.
    */
   get customEmoji() {
     return this.searchEntity("custom_emoji").filter(
@@ -184,16 +186,15 @@ class MessageEntities extends Base {
   /**
    * Searches for a specific type of entity in the message.
    * @param {"mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji"} searchType - The type of entity to search for.
-   * @returns {(SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string }))[]} An array of objects representing the found entities.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string })>} A collection of found entities.
    */
   searchEntity(searchType) {
-    /** @type {(SearchResult & ({ language?: string } | { url: string } | { user: User } | { customEmojiId: string }))[]} */
-    const entities = [];
+    const results = new Collection();
 
     this.#entities.forEach((entity, index) => {
       const { offset, length, type } = entity;
       if (type === searchType) {
-        entities.push({
+        results.set(index, {
           index,
           offset,
           length,
@@ -207,7 +208,8 @@ class MessageEntities extends Base {
         });
       }
     });
-    return entities;
+
+    return results;
   }
 
   /**
@@ -238,23 +240,20 @@ class MessageEntities extends Base {
       "customEmoji",
     ];
 
-    /** @type {(SearchResult & ({ type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: string } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))[]} */
-    const sortedEntities = [];
+    const allEntities = new Collection();
 
     for (const type of entityTypes) {
-      if (this[type] && Array.isArray(this[type])) {
-        const results = this[type].map((entity) => ({
-          ...entity,
-          type,
-        }));
-        sortedEntities.push(...results);
+      const typeEntities = this[type];
+      if (typeEntities instanceof Collection) {
+        typeEntities.forEach((entity, key) => {
+          allEntities.set(key, { ...entity, type });
+        });
       }
     }
 
-    sortedEntities.sort((a, b) => a.index - b.index);
+    const sorted = allEntities.sort((a, b) => a.index - b.index).values();
 
-    for (const entity of sortedEntities) {
+    for (const entity of sorted) {
       yield entity;
     }
   }

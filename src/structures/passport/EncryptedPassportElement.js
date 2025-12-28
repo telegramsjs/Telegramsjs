@@ -2,6 +2,7 @@
 const { Base } = require("../Base");
 const { PassportFile } = require("./PassportFile");
 const { InputFile } = require("../misc/InputFile");
+const { Collection } = require("@telegram.ts/collection");
 
 class EncryptedPassportElement extends Base {
   /**
@@ -50,11 +51,14 @@ class EncryptedPassportElement extends Base {
 
     if ("files" in data) {
       /**
-       * Array of encrypted files with documents provided by the user; This array is available only for types "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The files can be decrypted and verified using the accompanying EncryptedCredentials
-       * @type {InputFile[] | undefined}
+       * Collection of encrypted files with documents provided by the user; This array is available only for types "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The files can be decrypted and verified using the accompanying EncryptedCredentials
+       * @type {import("@telegram.ts/collection").ReadonlyCollection<string, InputFile> | undefined}
        */
-      this.files = data.files.map(
-        (file) => new PassportFile(this.client, file),
+      this.files = new Collection(
+        data.files.map((file) => [
+          file.file_id,
+          new PassportFile(this.client, file),
+        ]),
       );
     }
 
@@ -84,12 +88,15 @@ class EncryptedPassportElement extends Base {
 
     if ("translation" in data) {
       /**
-       * Array of encrypted files with translated versions of documents provided by the user; This array is available only for types "passport", "driver_license", "identity_card", "internal_passport", "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration".
+       * Collection of encrypted files with translated versions of documents provided by the user; This array is available only for types "passport", "driver_license", "identity_card", "internal_passport", "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration".
        * The files can be decrypted and verified using the accompanying EncryptedCredentials
-       * @type {PassportFile[] | undefined}
+       * @type {import("@telegram.ts/collection").ReadonlyCollection<string, PassportFile> | undefined}
        */
-      this.translation = data.translation.map(
-        (translated) => new PassportFile(this.client, translated),
+      this.translation = new Collection(
+        data.translation.map((translated) => [
+          translated.file_id,
+          new PassportFile(this.client, translated),
+        ]),
       );
     }
 

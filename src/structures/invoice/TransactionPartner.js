@@ -4,6 +4,7 @@ const { Gift } = require("../gift/Gift");
 const { PaidMedia } = require("../media/paid/PaidMedia");
 const { AffiliateInfo } = require("./AffiliateInfo");
 const { RevenueWithdrawalState } = require("./RevenueWithdrawalState");
+const { Collection } = require("@telegram.ts/collection");
 
 class TransactionPartner extends Base {
   /**
@@ -48,10 +49,13 @@ class TransactionPartner extends Base {
     if ("paid_media" in data) {
       /**
        * Information about the paid media bought by the user. Can be available only for “invoice_payment” transactions.
-       * @type {PaidMedia[] | undefined}
+       * @type {import("@telegram.ts/collection").ReadonlyCollection<number, PaidMedia> | undefined}
        */
-      this.paidMedia = data.paid_media.map(
-        (media) => new PaidMedia(this.client, media),
+      this.paidMedia = new Collection(
+        data.paid_media.map((media, index) => [
+          index,
+          new PaidMedia(this.client, media),
+        ]),
       );
     }
 
@@ -136,14 +140,14 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat?: undefined; premiumSubscriptionDuration?: number; }}
+   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: import("@telegram.ts/collection").ReadonlyCollection<number, PaidMedia>; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat?: undefined; premiumSubscriptionDuration?: number; }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: PaidMedia[]; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat: import("../chat/Chat").Chat; premiumSubscriptionDuration?: undefined; }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat: import("../chat/Chat").Chat; premiumSubscriptionDuration?: undefined; }}
    */
   isChat() {
     return Boolean("chat" in this && this.chat);

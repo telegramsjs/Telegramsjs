@@ -1,6 +1,7 @@
 // @ts-check
 const { Base } = require("../Base");
 const { EncryptedPassportElement } = require("./EncryptedPassportElement");
+const { Collection } = require("@telegram.ts/collection");
 
 class PassportData extends Base {
   /**
@@ -10,9 +11,15 @@ class PassportData extends Base {
   constructor(client, data) {
     super(client);
 
-    /** Array containing information about documents and other Telegram Passport elements shared with the bot. */
-    this.data = data.data.map(
-      (data) => new EncryptedPassportElement(client, data),
+    /**
+     * Collection containing information about documents and other Telegram Passport elements shared with the bot.
+     * @type {import("@telegram.ts/collection").ReadonlyCollection<number, EncryptedPassportElement>}
+     */
+    this.data = new Collection(
+      data.data.map((data, index) => [
+        index,
+        new EncryptedPassportElement(client, data),
+      ]),
     );
 
     /** Encrypted credentials required to decrypt the data. */
