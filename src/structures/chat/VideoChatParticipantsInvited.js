@@ -24,9 +24,7 @@ class VideoChatParticipantsInvited extends Base {
    * @returns {IterableIterator<import("../misc/User").User>}
    */
   *[Symbol.iterator]() {
-    for (const [_, user] of this.users) {
-      yield user;
-    }
+    yield* this.users.values();
   }
 }
 

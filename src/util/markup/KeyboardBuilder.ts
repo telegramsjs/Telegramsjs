@@ -306,7 +306,7 @@ class KeyboardBuilder {
 
   /**
    * Combines the current keyboard with another one.
-   * @param other - The other Keyboard instance to combine with.
+   * @param keyboard - The other Keyboard instance to combine with.
    * @returns The current instance for chaining.
    */
   combine(

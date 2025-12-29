@@ -154,9 +154,7 @@ class GiveawayWinners extends Base {
    * @returns {IterableIterator<import("../misc/User").User>}
    */
   *[Symbol.iterator]() {
-    for (const [_, winner] of this.winners) {
-      yield winner;
-    }
+    yield* this.winners.values();
   }
 }
 

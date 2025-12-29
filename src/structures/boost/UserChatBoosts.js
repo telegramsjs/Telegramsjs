@@ -31,9 +31,7 @@ class UserChatBoosts {
    * @returns {IterableIterator<ChatBoost>}
    */
   *[Symbol.iterator]() {
-    for (const [_, boost] of this.boosts) {
-      yield boost;
-    }
+    yield* this.boosts.values();
   }
 }
 

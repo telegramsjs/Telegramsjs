@@ -37,8 +37,6 @@ class InputMessageContentBuilder {
    * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a venue message to be sent as the result of an inline query.
    * @param latitude - Latitude of the venue in degrees.
    * @param longitude - Longitude of the venue in degrees.
-   * @param title - Name of the venue.
-   * @param address - Address of the venue.
    * @param options - out parameters.
    */
   static venue(

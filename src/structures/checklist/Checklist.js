@@ -2,6 +2,25 @@
 const { Base } = require("../Base");
 const { ChecklistTask } = require("./ChecklistTask");
 const { MessageEntities } = require("../message/MessageEntities");
+const { Collection } = require("@telegram.ts/collection");
+
+/**
+ * Type guard for completed tasks
+ * @param {ChecklistTask} task
+ * @returns {task is ChecklistTask & { completionUnixTime: number; completionTimestamp: number; isCompleted: true; completedByUser: import("../misc/User").User }}
+ */
+function isCompletedTask(task) {
+  return task.isCompleted === true;
+}
+
+/**
+ * Type guard for pending tasks
+ * @param {ChecklistTask} task
+ * @returns {task is ChecklistTask & { completionUnixTime: undefined; completionTimestamp: undefined; isCompleted: false; completedByUser: undefined }}
+ */
+function isPendingTask(task) {
+  return task.isCompleted === false;
+}
 
 class Checklist extends Base {
   /**
@@ -23,8 +42,13 @@ class Checklist extends Base {
       );
     }
 
-    /** List of tasks in the checklist */
-    this.tasks = data.tasks.map((task) => new ChecklistTask(client, task));
+    /**
+     * Collection of tasks in the checklist
+     * @type {import("@telegram.ts/collection").ReadonlyCollection<number, ChecklistTask>}
+     */
+    this.tasks = new Collection(
+      data.tasks.map((task, index) => [index, new ChecklistTask(client, task)]),
+    );
 
     if ("others_can_add_tasks" in data) {
       /** True, if users other than the creator of the list can add tasks to the list */
@@ -39,18 +63,18 @@ class Checklist extends Base {
 
   /**
    * Get completed tasks
-   * @type {ChecklistTask[]}
+   * @type {import("@telegram.ts/collection").ReadonlyCollection<number, ChecklistTask & { completionUnixTime: number; completionTimestamp: number; isCompleted: true; completedByUser: import("../misc/User").User }>}
    */
   get completedTasks() {
-    return this.tasks.filter((task) => task.isCompleted);
+    return this.tasks.filter(isCompletedTask);
   }
 
   /**
    * Get pending tasks
-   * @type {ChecklistTask[]}
+   * @type {import("@telegram.ts/collection").ReadonlyCollection<number, ChecklistTask & { completionUnixTime: undefined; completionTimestamp: undefined; isCompleted: false; completedByUser: undefined }>}
    */
   get pendingTasks() {
-    return this.tasks.filter((task) => !task.isCompleted);
+    return this.tasks.filter(isPendingTask);
   }
 
   /**
@@ -58,7 +82,7 @@ class Checklist extends Base {
    * @type {number}
    */
   get totalTasks() {
-    return this.tasks.length;
+    return this.tasks.size;
   }
 
   /**
@@ -66,7 +90,7 @@ class Checklist extends Base {
    * @type {number}
    */
   get completedTasksCount() {
-    return this.completedTasks.length;
+    return this.completedTasks.size;
   }
 
   /**
@@ -74,9 +98,7 @@ class Checklist extends Base {
    * @returns {IterableIterator<ChecklistTask>}
    */
   *[Symbol.iterator]() {
-    for (const task of this.tasks) {
-      yield task;
-    }
+    yield* this.tasks.values();
   }
 }
 

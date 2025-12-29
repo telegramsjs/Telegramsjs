@@ -1462,98 +1462,103 @@ export declare class MessageEntities extends Base {
   public readonly searchText: string;
   /**
    * Retrieves all mention entities from the message.
-   * @returns An array of objects representing mention entities.
+   * @returns A collection of mention entities.
    */
-  get mention(): SearchResult[];
+  get mention(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all hashtag entities from the message.
-   * @returns An array of objects representing hashtag entities.
+   * @returns A collection of hashtag entities.
    */
-  get hashtag(): SearchResult[];
+  get hashtag(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all cashtag entities from the message.
-   * @returns An array of objects representing cashtag entities.
+   * @returns A collection of cashtag entities.
    */
-  get cashtag(): SearchResult[];
+  get cashtag(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all bot command entities from the message.
-   * @returns An array of objects representing bot command entities.
+   * @returns A collection of bot command entities.
    */
-  get botCommand(): SearchResult[];
+  get botCommand(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all URL entities from the message.
-   * @returns An array of objects representing URL entities.
+   * @returns A collection of url entities.
    */
-  get url(): SearchResult[];
+  get url(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all email entities from the message.
-   * @returns An array of objects representing email entities.
+   * @returns A collection of email entities.
    */
-  get email(): SearchResult[];
+  get email(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all phone number entities from the message.
-   * @returns An array of objects representing phone number entities.
+   * @returns A collection of phone number entities.
    */
-  get phoneNumber(): SearchResult[];
+  get phoneNumber(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all bold entities from the message.
-   * @returns An array of objects representing bold entities.
+   * @returns A collection of bold entities.
    */
-  get bold(): SearchResult[];
+  get bold(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all italic entities from the message.
-   * @returns An array of objects representing italic entities.
+   * @returns A collection of italic entities.
    */
-  get italic(): SearchResult[];
+  get italic(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all underline entities from the message.
-   * @returns An array of objects representing underline entities.
+   * @returns A collection of underline entities.
    */
-  get underline(): SearchResult[];
+  get underline(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all strikethrough entities from the message.
-   * @returns An array of objects representing strikethrough entities.
+   * @returns A collection of strikethrough entities.
    */
-  get strikethrough(): SearchResult[];
+  get strikethrough(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all spoiler entities from the message.
-   * @returns An array of objects representing spoiler entities.
+   * @returns A collection of spoiler entities.
    */
-  get spoiler(): SearchResult[];
+  get spoiler(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all blockquote entities from the message.
    * @returns An array of objects representing blockquote entities.
    */
-  get blockquote(): SearchResult[];
+  get blockquote(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all code entities from the message.
-   * @returns An array of objects representing code entities.
+   * @returns A collection of code entities.
    */
-  get code(): SearchResult[];
+  get code(): ReadonlyCollection<number, SearchResult>;
   /**
    * Retrieves all pre entities from the message.
-   * @returns An array of objects representing pre entities.
+   * @returns A collection of pre entities.
    */
-  get pre(): (SearchResult & { language?: string })[];
+  get pre(): ReadonlyCollection<
+    number,
+    SearchResult & { language?: LanguageCode }
+  >;
   /**
    * Retrieves all text link entities from the message.
-   * @returns An array of objects representing text link entities.
+   * @returns A collection of text link entities.
    */
-  get textLink(): (SearchResult & { url: string })[];
+  get textLink(): ReadonlyCollection<number, SearchResult & { url: string }>;
   /**
    * Retrieves all text mention entities from the message.
-   * @returns An array of objects representing text mention entities.
+   * @returns A collection of text mention entities.
    */
-  get textMention(): (SearchResult & { user: User })[];
+  get textMention(): ReadonlyCollection<number, SearchResult & { user: User }>;
   /**
    * Retrieves all custom emoji entities from the message.
-   * @returns An array of objects representing custom emoji entities.
+   * @returns A collection of custom emoji entities.
    */
-  get customEmoji(): (SearchResult & { customEmojiId: string })[];
-  /**
+  get customEmoji(): ReadonlyCollection<
+    number,
+    SearchResult & { customEmojiId: string }
+  >; /**
    * Searches for a specific type of entity in the message.
    * @param searchType - The type of entity to search for.
-   * @returns An array of objects representing the found entities.
+   * @returns A collection of found entities.
    */
   searchEntity(
     searchType:
@@ -1575,13 +1580,16 @@ export declare class MessageEntities extends Base {
       | "text_link"
       | "text_mention"
       | "custom_emoji",
-  ): (SearchResult &
-    (
-      | { language?: string }
-      | { url: string }
-      | { user: User }
-      | { customEmojiId: string }
-    ))[];
+  ): ReadonlyCollection<
+    number,
+    SearchResult &
+      (
+        | { language?: LanguageCode }
+        | { url: string }
+        | { user: User }
+        | { customEmojiId: string }
+      )
+  >;
   /**
    * Enables iteration over the message entities.
    * @returns An iterator over the message entities.
@@ -1604,7 +1612,7 @@ export declare class MessageEntities extends Base {
         | "blockquote"
         | "code";
     } & (
-        | { type: "pre"; language?: string }
+        | { type: "pre"; language?: LanguageCode }
         | { type: "textLink"; url: string }
         | { type: "textMention"; user: User }
         | { type: "customEmoji"; customEmojiId: string }
@@ -3886,7 +3894,7 @@ export declare class PaidMediaInfo {
   /** The number of Telegram Stars that must be paid to buy access to the media */
   starCount: number;
   /** Information about the paid media */
-  media: PaidMedia[];
+  media: ReadonlyCollection<number, PaidMedia>;
   /** Makes the class iterable, returning each `PaidMedia` object. */
   [Symbol.iterator](): IterableIterator<PaidMedia>;
 }
@@ -5840,9 +5848,9 @@ export declare class EncryptedPassportElement extends Base {
    */
   email?: string;
   /**
-   * Array of encrypted files with documents provided by the user; This array is available only for types "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The files can be decrypted and verified using the accompanying EncryptedCredentials
+   * Collection of encrypted files with documents provided by the user; This array is available only for types "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The files can be decrypted and verified using the accompanying EncryptedCredentials
    */
-  files?: InputFile[];
+  files?: ReadonlyCollection<string, InputFile>;
   /**
    * Encrypted file with the front side of the document, provided by the user; This file is available only for types "passport", "driver_license", "identity_card", and "internal_passport". It can be decrypted and verified using the accompanying EncryptedCredentials
    */
@@ -5856,13 +5864,13 @@ export declare class EncryptedPassportElement extends Base {
    */
   selfie?: PassportFile;
   /**
-   * Array of encrypted files with translated versions of documents provided by the user; This array is available only for types "passport", "driver_license", "identity_card", "internal_passport", "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration".
+   * Collection of encrypted files with translated versions of documents provided by the user; This array is available only for types "passport", "driver_license", "identity_card", "internal_passport", "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration".
    * The files can be decrypted and verified using the accompanying EncryptedCredentials
    */
-  translation?: PassportFile[];
+  translation?: ReadonlyCollection<string, PassportFile>;
 }
 
-export declare class PassportData extends Base {
+export class PassportData extends Base {
   /**
    * @param client - The client that instantiated this
    * @param data - Data about the describes the user's Telegram Passport data shared with the bot
@@ -5871,8 +5879,8 @@ export declare class PassportData extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").PassportData,
   );
-  /** Array containing information about documents and other Telegram Passport elements shared with the bot. */
-  data: EncryptedPassportElement[];
+  /** Collection containing information about documents and other Telegram Passport elements shared with the bot. */
+  data: ReadonlyCollection<number, EncryptedPassportElement>;
   /** Encrypted credentials required to decrypt the data. */
   credentials: {
     data: string;
@@ -6078,8 +6086,8 @@ export class Checklist extends Base {
   title: string;
   /** Special entities that appear in the checklist title */
   entities?: MessageEntities;
-  /** List of tasks in the checklist */
-  tasks: ChecklistTask[];
+  /** Collection of tasks in the checklist */
+  tasks: ReadonlyCollection<number, ChecklistTask>;
   /** True, if users other than the creator of the list can add tasks to the list */
   othersCanAddTasks?: true;
   /** True, if users other than the creator of the list can mark tasks as done or not done */
@@ -6087,11 +6095,27 @@ export class Checklist extends Base {
   /**
    * Get completed tasks
    */
-  get completedTasks(): ChecklistTask[];
+  get completedTasks(): ReadonlyCollection<
+    number,
+    ChecklistTask & {
+      completionUnixTime: number;
+      completionTimestamp: number;
+      isCompleted: true;
+      completedByUser: User;
+    }
+  >;
   /**
    * Get pending tasks
    */
-  get pendingTasks(): ChecklistTask[];
+  get pendingTasks(): ReadonlyCollection<
+    number,
+    ChecklistTask & {
+      completionUnixTime: undefined;
+      completionTimestamp: undefined;
+      isCompleted: false;
+      completedByUser: undefined;
+    }
+  >;
   /**
    * Get total number of tasks
    */
@@ -8900,7 +8924,7 @@ export declare class UserManager extends BaseManager<User, ApiUser> {
   /**
    * @param client - The client instance.
    * @param iterable - Data iterable.
-   * @param cacheSize - The maximum size of the cache. Default is unlimited.
+   * @param options - Options for save cached.
    */
   constructor(
     client: TelegramClient | BaseClient,
@@ -11756,7 +11780,7 @@ export declare class TransactionPartner extends Base {
   /**
    * Information about the paid media bought by the user. Can be available only for “invoice_payment” transactions.
    */
-  paidMedia?: PaidMedia[];
+  paidMedia?: ReadonlyCollection<number, PaidMedia>;
   /**
    * Bot-specified paid media payload. Can be available only for “invoice_payment” transactions.
    */
@@ -11799,7 +11823,7 @@ export declare class TransactionPartner extends Base {
   isUser(): this is this & {
     withdrawal?: undefined;
     user: User;
-    paidMedia?: PaidMedia[];
+    paidMedia?: ReadonlyCollection<number, PaidMedia>;
     paidMediaPayload?: string;
     gift?: Gift;
     subscriptionPeriod?: number;
@@ -12129,7 +12153,7 @@ export declare class InlineKeyboardBuilder {
   readonly inline_keyboard: InlineKeyboardButton[][];
   /**
    * Creates an instance of InlineKeyboard.
-   * @param inlineKeyboard - A 2D array of inline keyboard buttons.
+   * @param inline_keyboard - A 2D array of inline keyboard buttons.
    */
   constructor(inline_keyboard?: InlineKeyboardButton[][]);
   /**
@@ -12536,7 +12560,7 @@ export declare class KeyboardBuilder {
   build(): KeyboardButton[][];
   /**
    * Combines the current keyboard with another one.
-   * @param other - The other Keyboard instance to combine with.
+   * @param keyboard - The other Keyboard instance to combine with.
    * @returns The current instance for chaining.
    */
   combine(
@@ -12940,8 +12964,6 @@ export declare class InputMessageContentBuilder {
    * Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a venue message to be sent as the result of an inline query.
    * @param latitude - Latitude of the venue in degrees.
    * @param longitude - Longitude of the venue in degrees.
-   * @param title - Name of the venue.
-   * @param address - Address of the venue.
    * @param options - out parameters.
    */
   static venue(
@@ -13214,6 +13236,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.11.0";
+export declare const version: "4.12.0";
 
 export * from "./telegram/index";

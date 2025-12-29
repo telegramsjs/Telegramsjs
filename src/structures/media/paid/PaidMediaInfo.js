@@ -1,5 +1,6 @@
 // @ts-check
 const { PaidMedia } = require("./PaidMedia");
+const { Collection } = require("@telegram.ts/collection");
 
 class PaidMediaInfo {
   /**
@@ -10,8 +11,16 @@ class PaidMediaInfo {
     /** The number of Telegram Stars that must be paid to buy access to the media */
     this.starCount = data.star_count;
 
-    /** Information about the paid media */
-    this.media = data.paid_media.map((media) => new PaidMedia(client, media));
+    /**
+     * Information about the paid media
+     * @type {import("@telegram.ts/collection").ReadonlyCollection<number, PaidMedia>}
+     */
+    this.media = new Collection(
+      data.paid_media.map((media, index) => [
+        index,
+        new PaidMedia(client, media),
+      ]),
+    );
   }
 
   /**
@@ -19,9 +28,7 @@ class PaidMediaInfo {
    * @returns {IterableIterator<PaidMedia>}
    */
   *[Symbol.iterator]() {
-    for (const media of this.media) {
-      yield media;
-    }
+    yield* this.media.values();
   }
 }
 

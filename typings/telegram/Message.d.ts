@@ -64,7 +64,7 @@ export declare namespace MessageEntity {
   export interface PreMessageEntity extends AbstractMessageEntity {
     type: "pre";
     /** For “pre” only, the programming language of the entity text */
-    language?: string;
+    language?: LanguageCode;
   }
   export interface TextLinkMessageEntity extends AbstractMessageEntity {
     type: "text_link";

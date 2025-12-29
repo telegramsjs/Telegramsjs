@@ -216,24 +216,25 @@ class MediaData {
       if (await fileExists(value)) {
         await this.attachFormMedia(form, value, { id });
         return;
-      } else if (id === "thumbnail" && value.startsWith("http")) {
+      }
+
+      if (id === "thumbnail" && value.startsWith("http")) {
         const attachmentId = randomBytes(16).toString("hex");
         const response = await fetch(value, { agent });
-        value = Buffer.from(await response.arrayBuffer());
-
-        await this.attachFormMedia(form, value, { id: attachmentId });
+        const buffer = Buffer.from(await response.arrayBuffer());
+        await this.attachFormMedia(form, buffer, { id: attachmentId });
         form.addPart({
           headers: { "content-disposition": `form-data; name="${id}"` },
           body: `attach://${attachmentId}`,
         });
         return;
-      } else {
-        form.addPart({
-          headers: { "content-disposition": `form-data; name="${id}"` },
-          body: String(value),
-        });
-        return;
       }
+
+      form.addPart({
+        headers: { "content-disposition": `form-data; name="${id}"` },
+        body: String(value),
+      });
+      return;
     }
 
     if (typeof value === "object" && value !== null && "source" in value) {
@@ -279,27 +280,57 @@ class MediaData {
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {
-          const media = item.media?.source ? item.media.source : item;
-          if (!this.isMediaType(media.media)) {
-            if (!(await fileExists(media.media))) {
-              return media;
-            }
-          }
-          const attachmentId = randomBytes(16).toString("hex");
+          const media = item.media?.source ?? item;
 
+          if (
+            !this.isMediaType(media.media) &&
+            !(await fileExists(media.media))
+          ) {
+            return media;
+          }
+
+          const attachmentId = randomBytes(16).toString("hex");
           await this.attachFormMedia(form, media.media, {
             id: attachmentId,
             ...(typeof media.media === "object" &&
-              "filename" in (media.media || {}) && {
+              "filename" in media.media && {
                 filename: media.media.filename,
               }),
           });
 
-          if (item.media.source) {
-            return { type: item.type, media: `attach://${attachmentId}` };
+          let coverId = null;
+          if ("cover" in item && !item.cover?.startsWith?.("http")) {
+            coverId = randomBytes(16).toString("hex");
+            await this.attachFormMedia(form, item.cover, { id: coverId });
           }
 
-          return { ...media, media: `attach://${attachmentId}` };
+          let thumbnailId = null;
+          if ("thumbnail" in item) {
+            thumbnailId = randomBytes(16).toString("hex");
+
+            if (item.thumbnail?.startsWith?.("http")) {
+              const response = await fetch(item.thumbnail, { agent });
+              const buffer = Buffer.from(await response.arrayBuffer());
+              await this.attachFormMedia(form, buffer, { id: thumbnailId });
+            } else {
+              await this.attachFormMedia(form, item.thumbnail, {
+                id: thumbnailId,
+              });
+            }
+          }
+
+          const result = {
+            ...(item.media.source ? item : media),
+            media: `attach://${attachmentId}`,
+            ...(coverId && { cover: `attach://${coverId}` }),
+            ...(thumbnailId && { thumbnail: `attach://${thumbnailId}` }),
+          };
+
+          if (item.media.source) {
+            result.type = item.type;
+          }
+
+          return result;
         }),
       );
 
