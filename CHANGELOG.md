@@ -1,5 +1,31 @@
 # Changelog
 
+# **4.12.0 - (2025-12-29)**
+
+## **Updates**
+
+- Bump version `@telegram.ts/formatters@2.1.0` ([v2.1.0](https://github.com/telegramsjs/formatters))
+  - Major release
+  - Bump version `typescript@5.9.3`
+  - Bump version `@telegram.ts/types@1.24.0` (`MessageEntity` add `languageCode` union type)
+
+## **Bug Fixes**
+
+- **MediaData:** parsing inside array fields cover and thumbnail ([3a3bb6a](https://github.com/telegramsjs/Telegramsjs/commit/3a3bb6ab470191f5afbde0c0d3212de896fec3c2))
+
+## **Refactor**
+
+- **Array:** use Collection instead of Array ([8c36298](https://github.com/telegramsjs/Telegramsjs/commit/8c36298080442b93cd89941a0e591f2d377f601f))
+- **MessageEntities:** add `languageCode` union type ((457959c)[https://github.com/telegramsjs/Telegramsjs/commit/457959c6ce531ca4318fb4cf0213897e8bcf2e61])
+- **Symbol.iterator:** refactored to a unified style ([846b90d](https://github.com/telegramsjs/Telegramsjs/commit/846b90df8de01bbc2ad4b1ac2c4bc3b6f8d1f459))
+
+## **Typings**
+
+- **TransactionPartner:** fix find module `Chat` ([db7d3af](https://github.com/telegramsjs/Telegramsjs/commit/db7d3af6e01d9cc0857cc699b40b697a8a9d7ed7))
+- **Markup:** fix unused `@param` warnings in signatures ((2905ef4)[https://github.com/telegramsjs/Telegramsjs/commit/2905ef446d223f1ddd4c5039c9dc488a35333065])
+
+---
+
 # **4.11.0 - (2025-12-15)**
 
 ## **Updates**
@@ -9,13 +35,13 @@
   - Bump version `typescript@5.9.3`
   - Major release (feature parity with [`@discordjs/collection`](https://github.com/discordjs/discord.js/tree/main/packages/collection))
 
-## Features
+## **Features**
 
 - **TelegramClient:** resolve login timing issue with async ready handling ([39726ee](https://github.com/telegramsjs/Telegramsjs/commit/39726ee189b1575e0200763c0245179dd3ec5d62))
 - **BaseManager:** allow fetch via resolved chat object ([fe95849](https://github.com/telegramsjs/Telegramsjs/commit/fe95849120b89c39d37050c1db4e747552a5bbb4))
 - **BaseManager:** fetches multiple users or chats at once ([19180de](https://github.com/telegramsjs/Telegramsjs/commit/19180de54a9564417f9be5448b819bdcd69f5ce9))
 
-## Typings
+## **Typings**
 
 - **ChatManager:** correct name parameters ([a874d79](https://github.com/telegramsjs/Telegramsjs/commit/a874d7942194c44229856a8fc4111245f0113c93))
 - **BaseManager:** add UserResolvable and ChatResolvable typings ([49a57ad](https://github.com/telegramsjs/Telegramsjs/commit/49a57ad6cdb550616ef60de39e49b03b5008c69b))
