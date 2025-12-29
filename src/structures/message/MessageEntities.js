@@ -251,11 +251,7 @@ class MessageEntities extends Base {
       }
     }
 
-    const sorted = allEntities.sort((a, b) => a.index - b.index).values();
-
-    for (const entity of sorted) {
-      yield entity;
-    }
+    yield* allEntities.sort((a, b) => a.index - b.index).values();
   }
 }
 

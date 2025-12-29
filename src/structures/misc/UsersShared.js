@@ -28,9 +28,7 @@ class UsersShared {
    * @returns {IterableIterator<SharedUser>}
    */
   *[Symbol.iterator]() {
-    for (const [_, user] of this.users) {
-      yield user;
-    }
+    yield* this.users.values();
   }
 }
 

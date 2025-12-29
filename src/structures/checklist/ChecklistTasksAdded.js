@@ -78,9 +78,7 @@ class ChecklistTasksAdded extends Base {
    * @returns {IterableIterator<ChecklistTask>}
    */
   *[Symbol.iterator]() {
-    for (const task of this.tasks) {
-      yield task;
-    }
+    yield* this.tasks;
   }
 }
 

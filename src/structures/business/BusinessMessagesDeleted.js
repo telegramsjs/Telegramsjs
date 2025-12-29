@@ -33,9 +33,7 @@ class BusinessMessagesDeleted extends Base {
    * @returns {IterableIterator<string>}
    */
   *[Symbol.iterator]() {
-    for (const id of this.ids) {
-      yield id;
-    }
+    yield* this.ids;
   }
 }
 

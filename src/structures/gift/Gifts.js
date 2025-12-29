@@ -43,9 +43,7 @@ class Gifts {
    * @returns {IterableIterator<Gift>}
    */
   *[Symbol.iterator]() {
-    for (const [_, gift] of this.gifts) {
-      yield gift;
-    }
+    yield* this.gifts.values();
   }
 }
 

@@ -98,9 +98,7 @@ class Checklist extends Base {
    * @returns {IterableIterator<ChecklistTask>}
    */
   *[Symbol.iterator]() {
-    for (const task of this.tasks.values()) {
-      yield task;
-    }
+    yield* this.tasks.values();
   }
 }
 

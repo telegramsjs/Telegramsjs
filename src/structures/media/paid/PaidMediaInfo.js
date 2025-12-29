@@ -28,9 +28,7 @@ class PaidMediaInfo {
    * @returns {IterableIterator<PaidMedia>}
    */
   *[Symbol.iterator]() {
-    for (const media of this.media.values()) {
-      yield media;
-    }
+    yield* this.media.values();
   }
 }
 
