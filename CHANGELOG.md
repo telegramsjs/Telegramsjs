@@ -16,7 +16,7 @@
 ## **Refactor**
 
 - **Array:** use Collection instead of Array ([8c36298](https://github.com/telegramsjs/Telegramsjs/commit/8c36298080442b93cd89941a0e591f2d377f601f))
-- **MessageEntities:** add `languageCode` union type ((457959c)[https://github.com/telegramsjs/Telegramsjs/commit/457959c6ce531ca4318fb4cf0213897e8bcf2e61])
+- **MessageEntities:** add `languageCode` union type ([457959c](https://github.com/telegramsjs/Telegramsjs/commit/457959c6ce531ca4318fb4cf0213897e8bcf2e61))
 - **Symbol.iterator:** refactored to a unified style ([846b90d](https://github.com/telegramsjs/Telegramsjs/commit/846b90df8de01bbc2ad4b1ac2c4bc3b6f8d1f459))
 
 ## **Typings**
