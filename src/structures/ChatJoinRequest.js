@@ -10,7 +10,7 @@ class ChatJoinRequest extends Base {
   constructor(client, data) {
     super(client);
 
-    /** Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user. */
+    /** Identifier of a private chat with the user who sent the join request. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrato */
     this.userChatId = String(data.user_chat_id);
 
     /**
