@@ -22,7 +22,7 @@
 ## **Typings**
 
 - **TransactionPartner:** fix find module `Chat` ([db7d3af](https://github.com/telegramsjs/Telegramsjs/commit/db7d3af6e01d9cc0857cc699b40b697a8a9d7ed7))
-- **Markup:** fix unused `@param` warnings in signatures ((2905ef4)[https://github.com/telegramsjs/Telegramsjs/commit/2905ef446d223f1ddd4c5039c9dc488a35333065])
+- **Markup:** fix unused `@param` warnings in signatures ([2905ef4](https://github.com/telegramsjs/Telegramsjs/commit/2905ef446d223f1ddd4c5039c9dc488a35333065))
 
 ---
 
