@@ -1,6 +1,7 @@
 // @ts-check
 const { Base } = require("../Base");
 const { Sticker } = require("../media/Sticker");
+const { isDeepStrictEqual } = require("../../util/Utils");
 
 class UniqueGift extends Base {
   /**
@@ -9,6 +10,9 @@ class UniqueGift extends Base {
    */
   constructor(client, data) {
     super(client);
+
+    /** Identifier of the regular gift from which the gift was upgraded */
+    this.id = data.gift_id;
 
     /** Human-readable name of the regular gift from which this unique gift was upgraded */
     this.baseName = data.base_name;
@@ -22,6 +26,16 @@ class UniqueGift extends Base {
        * @type {import("../chat/Chat").Chat | undefined}
        */
       this.publisherChat = this.client.chats._add(data.publisher_chat);
+    }
+
+    if ("is_premium" in data) {
+      /** True, if the original regular gift was exclusively purchaseable by Telegram Premium subscribers */
+      this.isPremium = data.is_premium;
+    }
+
+    if ("is_from_blockchain" in data) {
+      /** True, if the gift is assigned from the TON blockchain and can't be resold or transferred in Telegram */
+      this.isAuthorBlockchain = data.is_from_blockchain;
     }
 
     /** Unique number of the upgraded gift among gifts upgraded from the same regular gift */
@@ -65,6 +79,52 @@ class UniqueGift extends Base {
       /** The number of unique gifts that receive this backdrop for every 1000 gifts upgraded */
       rarityPerMille: data.backdrop.rarity_per_mille,
     };
+
+    if ("colors" in data) {
+      /** The color scheme that can be used by the gift's owner for the chat's name, replies to messages and link previews */
+      this.colors = {
+        /** Custom emoji identifier of the unique gift's model */
+        modelCustomEmojiId: data.colors.model_custom_emoji_id,
+        /** Custom emoji identifier of the unique gift's symbol */
+        symbolCustomEmojiId: data.colors.symbol_custom_emoji_id,
+        /** Light theme colors */
+        lightTheme: {
+          /** Main color used in light theme; RGB format */
+          mainColor: data.colors.light_theme_main_color,
+          /** List of 1-3 additional colors used in light theme; RGB format */
+          otherColors: data.colors.light_theme_other_colors,
+        },
+        /** Dark theme colors */
+        darkTheme: {
+          /** Main color used in dark theme; RGB format */
+          mainColor: data.colors.dark_theme_main_color,
+          /** List of 1-3 additional colors used in dark theme; RGB format */
+          otherColors: data.colors.dark_theme_other_colors,
+        },
+      };
+    }
+  }
+
+  /**
+   * Checks if this unique gift is equal to another unique gift.
+   * @param {UniqueGift} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of UniqueGift and are equal based on key properties, otherwise false.
+   */
+  equals(other) {
+    if (!other || !(other instanceof UniqueGift)) return false;
+
+    return (
+      this.id === other.id &&
+      this.baseName === other.baseName &&
+      this.name === other.name &&
+      this.isPremium === other.isPremium &&
+      this.isAuthorBlockchain === other.isAuthorBlockchain &&
+      this.number === other.number &&
+      isDeepStrictEqual(this.model, other.model) &&
+      isDeepStrictEqual(this.symbol, other.symbol) &&
+      isDeepStrictEqual(this.backdrop, other.backdrop) &&
+      isDeepStrictEqual(this.colors, other.colors)
+    );
   }
 }
 

@@ -4,13 +4,13 @@ const { Base } = require("../Base");
 class Forum extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {number | string} threadId - Unique identifier of the forum topic
+   * @param {number | string} threadId - Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
    * @param {number | string} chatId - Unique identifier for this chat
    */
   constructor(client, threadId, chatId) {
     super(client);
 
-    /** Unique identifier of the forum topic */
+    /** Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only */
     this.threadId = String(threadId);
 
     /** Unique identifier for this chat */
@@ -54,7 +54,7 @@ class Forum extends Base {
   }
 
   /**
-   * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights.
+   * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights.
    * @returns {Promise<true>} - Returns True on success.
    */
   delete() {
@@ -62,7 +62,7 @@ class Forum extends Base {
   }
 
   /**
-   * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup.
+   * Use this method to clear the list of pinned messages in a forum topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup.
    * @returns {Promise<true>} - Returns True on success.
    */
   unpinAllMessages() {

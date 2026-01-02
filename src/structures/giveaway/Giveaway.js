@@ -95,6 +95,7 @@ class Giveaway extends Base {
       ) &&
       thisChats.length === otherChats.length &&
       thisChats.every(
+        // @ts-ignore
         (chat, index) => otherChats[index] && chat.equals(otherChats[index]),
       ),
     );

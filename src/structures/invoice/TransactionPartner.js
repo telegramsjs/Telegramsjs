@@ -48,7 +48,7 @@ class TransactionPartner extends Base {
 
     if ("paid_media" in data) {
       /**
-       * Information about the paid media bought by the user. Can be available only for “invoice_payment” transactions.
+       * Information about the paid media bought by the user; for “paid_media_payment” transactions only.
        * @type {import("@telegram.ts/collection").ReadonlyCollection<number, PaidMedia> | undefined}
        */
       this.paidMedia = new Collection(
@@ -61,7 +61,7 @@ class TransactionPartner extends Base {
 
     if ("paid_media_payload" in data) {
       /**
-       * Bot-specified paid media payload. Can be available only for “invoice_payment” transactions.
+       * Bot-specified paid media payload. Can be available only for “paid_media_payment” transactions.
        * @type {string | undefined}
        */
       this.paidMediaPayload = data.paid_media_payload;

@@ -190,6 +190,18 @@ class SharedUser extends Base {
   }
 
   /**
+   * Returns the gifts owned and hosted by a user.
+   * @param {Omit<MethodParameters["getUserGifts"], "userId">} [options={}] - out parameters.
+   * @returns {Promise<import("../gift/OwnedGifts").OwnedGifts>} - Returns OwnedGifts on success.
+   */
+  fetchUserGifts(options = {}) {
+    return this.client.getUserGifts({
+      userId: this.userId,
+      ...options,
+    });
+  }
+
+  /**
    * @typedef {Object} EmojiStatus
    * @property {string} [emojiStatusCustomEmojiId] - Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.
    * @property {number} [emojiStatusExpirationDate] - Expiration date of the emoji status, if any.

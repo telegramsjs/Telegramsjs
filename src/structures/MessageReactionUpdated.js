@@ -483,6 +483,7 @@ function reactions(messageReaction) {
  */
 function isEmoji(reaction) {
   const reactionTypeEmojis = reaction.filter((react) => react.isEmoji());
+  // @ts-ignore
   return reactionTypeEmojis.map((react) => react.emoji);
 }
 
@@ -494,6 +495,7 @@ function isCustomEmoji(reaction) {
   const reactionTypeCustomEmojis = reaction.filter((react) =>
     react.isCustomEmoji(),
   );
+  // @ts-ignore
   return reactionTypeCustomEmojis.map((react) => react.customEmojiId);
 }
 

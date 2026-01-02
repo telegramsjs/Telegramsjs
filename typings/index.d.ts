@@ -787,6 +787,14 @@ export declare class User extends Base {
    */
   fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
   /**
+   * Returns the gifts owned and hosted by a user.
+   * @param options - out parameters.
+   * @returns Returns OwnedGifts on success.
+   */
+  fetchUserGifts(
+    options?: Omit<MethodParameters["getUserGifts"], "userId">,
+  ): Promise<OwnedGifts>;
+  /**
    * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
    * @param options - out parameters.
    * @returns Returns True on success.
@@ -3355,14 +3363,34 @@ export declare class Gift extends Base {
   publisherChat?: Chat;
   /** The sticker that represents the gift */
   sticker: Sticker;
+  /** Background of the gift */
+  backgroundColor?: {
+    /** Center color of the background in RGB format */
+    center: number;
+    /** Edge color of the background in RGB format */
+    edge: number;
+    /** Text color of the background in RGB format */
+    text: number;
+  };
+  /** True, if the gift can only be purchased by Telegram Premium subscribers */
+  isPremium?: true;
+  /** True, if the gift can be used (after being upgraded) to customize a user's appearance */
+  hasColors?: true;
   /** The number of Telegram Stars that must be paid to send the sticker */
   startCount: number;
   /** The number of Telegram Stars that must be paid to upgrade the gift to a unique one */
   upgradeStarCount?: number;
-  /** The total number of the gifts of this type that can be sent; for limited gifts only */
+  /** The total number of different unique gifts that can be obtained by upgrading the gift */
+  uniqueGiftVariantCount?: number;
+  /** The total number of gifts of this type that can be sent by all users; for limited gifts only */
   totalCount?: number;
-  /** The number of remaining gifts of this type that can be sent; for limited gifts only */
+  /** The number of remaining gifts of this type that can be sent by all users; for limited gifts only */
   remainingCount?: number;
+  /** The total number of gifts of this type that can be sent by the bot; for limited gifts only */
+  personalTotalCount?: number;
+  /** The number of remaining gifts of this type that can be sent by the bot; for limited gifts only */
+  personalRemainingCount?: number;
+
   /** Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
    * @param userId - Unique identifier of the target user that will receive the gift.
    * @param options - out parameters.
@@ -3393,6 +3421,10 @@ export class GiftInfo extends Base {
   gift: Gift;
   /** Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only */
   ownedGiftId?: string;
+  /** True, if the gift's upgrade was purchased after the gift was sent */
+  isUpgradeSeparate?: true;
+  /** Unique number reserved for this gift when upgraded. See the number field in UniqueGift */
+  uniqueGiftNumber?: number;
   /** Text of the message that was added to the gift */
   content?: string;
   /** Special entities that appear in the text */
@@ -3449,6 +3481,8 @@ export class OwnedGiftRegular extends Base {
   senderUser: User;
   /** Date the gift was sent in Unix time */
   senderUnixTime: number;
+  /** Unique number reserved for this gift when upgraded. See the number field in UniqueGift */
+  uniqueGiftNumber?: number;
   /** Text of the message that was added to the gift */
   content?: string;
   /** Special entities that appear in the text */
@@ -3459,6 +3493,8 @@ export class OwnedGiftRegular extends Base {
   isSaved?: true;
   /** True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only */
   beUpgraded?: true;
+  /** True, if the gift's upgrade was purchased after the gift was sent */
+  isUpgradeSeparate?: true;
   /** True, if the gift was refunded and isn't available anymore */
   wasRefunded?: true;
   /** Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars */
@@ -3548,12 +3584,18 @@ export class UniqueGift extends Base {
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").UniqueGift,
   );
+  /** Identifier of the regular gift from which the gift was upgraded */
+  id: string;
   /** Human-readable name of the regular gift from which this unique gift was upgraded */
   baseName: string;
   /** Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas */
   name: string;
   /** Information about the chat that published the gift */
   publisherChat?: Chat;
+  /** True, if the original regular gift was exclusively purchaseable by Telegram Premium subscribers */
+  isPremium?: true;
+  /** True, if the gift is assigned from the TON blockchain and can't be resold or transferred in Telegram */
+  isAuthorBlockchain?: true;
   /** Unique number of the upgraded gift among gifts upgraded from the same regular gift */
   number: number;
   /** Model of the gift */
@@ -3592,6 +3634,36 @@ export class UniqueGift extends Base {
     /** The number of unique gifts that receive this backdrop for every 1000 gifts upgraded */
     rarityPerMille: number;
   };
+  /**
+   * The color scheme that can be used by the gift's owner for the chat's name, replies to messages and link previews
+   */
+  colors?: {
+    /** Custom emoji identifier of the unique gift's model */
+    modelCustomEmojiId: string;
+    /** Custom emoji identifier of the unique gift's symbol */
+    symbolCustomEmojiId: string;
+    /** Light theme colors */
+    lightTheme: {
+      /** Main color used in light theme; RGB format */
+      mainColor: number;
+      /** List of 1-3 additional colors used in light theme; RGB format */
+      otherColors: number[];
+    };
+    /** Dark theme colors */
+    darkTheme: {
+      /** Main color used in dark theme; RGB format */
+      mainColor: number;
+      /** List of 1-3 additional colors used in dark theme; RGB format */
+      otherColors: number[];
+    };
+  };
+
+  /**
+   * Checks if this unique gift is equal to another unique gift.
+   * @param other - The other object to compare with.
+   * @returns True if both objects are instances of UniqueGift and are equal based on key properties, otherwise false.
+   */
+  equals(other: UniqueGift): boolean;
 }
 
 export class UniqueGiftInfo extends Base {
@@ -3605,14 +3677,16 @@ export class UniqueGiftInfo extends Base {
   );
   /** Information about the gift */
   gift: UniqueGift;
-  /** Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, or “resale” for gifts bought from other users */
-  origin: "upgrade" | "transfer" | "resale";
+  /** Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, “resale” for gifts bought from other users, “gifted_upgrade” for upgrades purchased after the gift was sent, or “offer” for gifts bought or sold through gift purchase offers */
+  origin: "upgrade" | "transfer" | "resale" | "gifted_upgrade" | "offer";
   /** Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts */
   ownedGiftId?: string;
   /** Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift */
   transferStarCount?: number;
-  /**  For gifts bought from other users, the price paid for the gift */
-  lastResaleStarCount?: number;
+  /** For gifts bought from other users, the currency in which the payment for the gift was done. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins. */
+  lastResaleCurrency?: "XTR" | "TON";
+  /** For gifts bought from other users, the price paid for the gift in either Telegram Stars or nanotoncoins */
+  lastResaleAmount?: number;
   /**  Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now */
   nextTransferUnixTime?: number;
   /**
@@ -4156,7 +4230,7 @@ export declare class TextQuote {
 export declare class Forum extends Base {
   /**
    * @param client - The client that instantiated this
-   * @param threadId - Unique identifier of the forum topic
+   * @param threadId - Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
    * @param chatId - Unique identifier for this chat
    */
   constructor(
@@ -4164,7 +4238,7 @@ export declare class Forum extends Base {
     threadId: number | string,
     chatId: number | string,
   );
-  /** Unique identifier of the forum topic */
+  /** Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only */
   threadId: string;
   /** Unique identifier for this chat */
   chatId: string;
@@ -4246,7 +4320,7 @@ export declare class OrderInfo {
 export declare class SuccessfulPayment extends Base {
   /**
    * @param client - The client that instantiated this
-   * @param data - Data about the contains basic information about a successful payment
+   * @param data - Data about the contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.
    */
   constructor(
     client: TelegramClient | BaseClient,
@@ -4592,6 +4666,14 @@ export declare class SharedUser extends Base {
    * @returns Returns a UserChatBoosts object.
    */
   fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
+  /**
+   * Returns the gifts owned and hosted by a user.
+   * @param options - out parameters.
+   * @returns Returns OwnedGifts on success.
+   */
+  fetchUserGifts(
+    options?: Omit<MethodParameters["getUserGifts"], "userId">,
+  ): Promise<OwnedGifts>;
   /**
    * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess.
    * @param options - out parameters.
@@ -4947,6 +5029,14 @@ export declare class ChatShared extends Base {
    * @returns Returns a UserChatBoosts object.
    */
   fetchUserBoosts(userId: number | string): Promise<UserChatBoosts>;
+  /**
+   * Returns the gifts owned and hosted by a chat.
+   * @param options - out parameters.
+   * @returns Returns OwnedGifts on success.
+   */
+  fetchChatGifts(
+    options?: Omit<MethodParameters["getChatGifts"], "chatId">,
+  ): Promise<OwnedGifts>;
   /**
    * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
    * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
@@ -6015,7 +6105,7 @@ export declare class ChatBackground {
 export declare class ForumTopic extends Forum {
   /**
    * @param client - The client that instantiated this
-   * @param threadId - Unique identifier of the forum topic
+   * @param threadId - Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
    * @param chatId - Unique identifier for this chat
    * @param data - Unique identifier for this
    */
@@ -6029,6 +6119,8 @@ export declare class ForumTopic extends Forum {
   );
   /** Name of the topic */
   name: string | null;
+  /** True, if the name of the topic wasn't specified explicitly by its creator and likely needs to be changed by the bot */
+  nameImplicit?: true;
   /** Color of the topic icon in RGB format */
   iconColor: number | null;
   /** Unique identifier of the custom emoji shown as the topic icon */
@@ -6146,9 +6238,13 @@ export class ChecklistTask extends Base {
   /** Special entities that appear in the task text */
   entities?: MessageEntities;
   /**
-   * User that completed the task; omitted if the task wasn't completed
+   * User that completed the task; omitted if the task wasn't completed by a user
    */
   completedByUser?: User;
+  /**
+   * Chat that completed the task; omitted if the task wasn't completed by a chat
+   */
+  completedByChat?: Chat;
   /** Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed */
   completionUnixTime?: number;
   /**
@@ -6312,7 +6408,7 @@ export declare class Message extends Base {
     data: import("@telegram.ts/types").Message,
   ): import("@telegram.ts/types").Message;
   /**
-   * Unique identifier of a message thread or a forum topic to which the message belongs; for supergroups only
+   * Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
    */
   threadId?: string;
   /**
@@ -6428,7 +6524,7 @@ export declare class Message extends Base {
    */
   forum?: Forum;
   /**
-   * True, if the message is sent to a forum topic
+   * True, if the message is sent to a topic in a forum supergroup or a private chat with the bot
    */
   inTopic?: boolean;
   /**
@@ -6609,6 +6705,10 @@ export declare class Message extends Base {
    * Service message: a regular gift was sent or received
    */
   gift?: GiftInfo;
+  /**
+   * Service message: upgrade of a gift was purchased after the gift was sent
+   */
+  giftUpgradeSent?: GiftInfo;
   /**
    * Service message: a unique gift was sent or received
    */
@@ -6878,6 +6978,28 @@ export declare class Message extends Base {
       content: string;
     }
   >;
+  /**
+   * Use this method to stream a partial message to a user while the message is being generated; supported only for bots with forum topic mode enabled.
+   * @param text - Text of the message to be sent, 1-4096 characters after entities parsing
+   * @param draftId - Unique identifier of the message draft; must be non-zero. Changes of drafts with the same identifier are animated
+   * @param options - out parameters
+   * @returns True on success.
+   */
+  sendDraft(
+    text: string,
+    draftId: string,
+    options?: Omit<
+      {
+        chatId: number | string;
+        draftId: number;
+        messageThreadId?: string | number;
+        text: string;
+        parseMode?: import("@telegram.ts/types").ParseMode;
+        entities?: MessageEntity[];
+      },
+      "text" | "chatId" | "draftId"
+    >,
+  ): Promise<true>;
   /**
    * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message.
    * @param reaction - A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots
@@ -7405,11 +7527,11 @@ export declare class Chat extends Base {
    */
   forum?: boolean;
   /**
-   * Unique identifier of the forum topic
+   * Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
    */
   threadId?: string;
   /**
-   * True, if the message is sent to a forum topic
+   * True, if the message is sent to a topic in a forum supergroup or a private chat with the bot
    */
   inTopic?: boolean;
   /**
@@ -7748,6 +7870,14 @@ export declare class Chat extends Base {
    * @returns Returns a UserChatBoosts object.
    */
   fetchUserBoosts(userId: number | string): Promise<UserChatBoosts>;
+  /**
+   * Returns the gifts owned and hosted by a chat.
+   * @param options - out parameters.
+   * @returns Returns OwnedGifts on success.
+   */
+  fetchChatGifts(
+    options?: Omit<MethodParameters["getChatGifts"], "chatId">,
+  ): Promise<OwnedGifts>;
   /**
    * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method
    * @param name - Name of the sticker set to be set as the group sticker set.
@@ -9291,6 +9421,14 @@ export declare class BusinessConnection extends Base {
     >,
   ): Promise<Story>;
   /**
+   * Reposts a story on behalf of a business account from another business account. Both business accounts must be managed by the same bot, and the story on the source account must have been posted (or reposted) by the bot. Requires the can_manage_stories business bot right for both business accounts.
+   * @param options - out parameters.
+   * @returns Returns Story on success.
+   */
+  repostStory(
+    options: Omit<MethodParameters["repostStory"], "businessConnectionId">,
+  ): Promise<Story>;
+  /**
    * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param giftId - Identifier of the gift.
    * @param options - out parameters.
@@ -10030,6 +10168,10 @@ export declare class BaseClient extends EventEmitter {
   sendMessage(
     params: MethodParameters["sendMessage"],
   ): Promise<MethodsLibReturnType["sendMessage"]>;
+  /** Use this method to stream a partial message to a user while the message is being generated; supported only for bots with forum topic mode enabled. */
+  sendMessageDraft(
+    params: MethodParameters["sendMessageDraft"],
+  ): Promise<MethodsLibReturnType["sendMessageDraft"]>;
   /** Use this method to send photos. On success, the sent Message is returned. */
   sendPhoto(
     params: MethodParameters["sendPhoto"],
@@ -10279,6 +10421,14 @@ export declare class BaseClient extends EventEmitter {
     chatId: number | string,
     userId: number | string,
   ): Promise<MethodsLibReturnType["getUserChatBoosts"]>;
+  /** Returns the gifts owned and hosted by a user. Returns OwnedGifts on success. */
+  getUserGifts(
+    params: MethodParameters["getUserGifts"],
+  ): Promise<MethodsLibReturnType["getUserGifts"]>;
+  /** Returns the gifts owned by a chat. Returns OwnedGifts on success. */
+  getChatGifts(
+    params: MethodParameters["getChatGifts"],
+  ): Promise<MethodsLibReturnType["getChatGifts"]>;
   /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
   getBusinessConnection(
     businessConnectionId: string,
@@ -10566,6 +10716,10 @@ export declare class BaseClient extends EventEmitter {
   postStory(
     args: MethodParameters["postStory"],
   ): Promise<MethodsLibReturnType["postStory"]>;
+  /** Reposts a story on behalf of a business account from another business account. Both business accounts must be managed by the same bot, and the story on the source account must have been posted (or reposted) by the bot. Requires the can_manage_stories business bot right for both business accounts. Returns Story on success. */
+  repostStory(
+    args: MethodParameters["repostStory"],
+  ): Promise<MethodsLibReturnType["repostStory"]>;
   /** Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
   editStory(
     args: MethodParameters["editStory"],
@@ -11608,6 +11762,8 @@ export declare class ChatFullInfo extends Chat {
     unique: boolean;
     /** True, if a Telegram Premium subscription is accepted */
     premiumSubscription: boolean;
+    /** True, if transfers of unique gifts from channels are accepted */
+    authorChannels: boolean;
   };
   /**
    * The slow mode delay in the chat.
@@ -11778,11 +11934,11 @@ export declare class TransactionPartner extends Base {
    */
   user?: User;
   /**
-   * Information about the paid media bought by the user. Can be available only for “invoice_payment” transactions.
+   * Information about the paid media bought by the user; for “paid_media_payment” transactions only.
    */
   paidMedia?: ReadonlyCollection<number, PaidMedia>;
   /**
-   * Bot-specified paid media payload. Can be available only for “invoice_payment” transactions.
+   * Bot-specified paid media payload. Can be available only for “paid_media_payment” transactions.
    */
   paidMediaPayload?: string;
   /**
@@ -11899,13 +12055,13 @@ export declare class TransactionPartner extends Base {
 export declare class StarTransaction extends Base {
   /**
    * @param client - The client that instantiated this
-   * @param data - Data about the describes a Telegram Star transaction
+   * @param data - Data about the describes a Telegram Star transaction. Note that if the buyer initiates a chargeback with the payment provider from whom they acquired Stars (e.g., Apple, Google) following this transaction, the refunded Stars will be deducted from the bot's balance. This is outside of Telegram's control.
    */
   constructor(
     client: TelegramClient | BaseClient,
     data: import("@telegram.ts/types").StarTransaction,
   );
-  /** Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
+  /** Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
   id: string;
   /** Integer amount Telegram Stars transferred by the transaction */
   amount: number;
@@ -12064,7 +12220,7 @@ export class SuggestedPostPaid {
 
 export class SuggestedPostPrice {
   /**
-   * @param data - Data about the desribes price of a suggested post
+   * @param data - Data about the describes price of a suggested post
    */
   constructor(data: import("@telegram.ts/types").SuggestedPostPrice);
   /**
@@ -13236,6 +13392,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.12.0";
+export declare const version: "4.13.0";
 
 export * from "./telegram/index";

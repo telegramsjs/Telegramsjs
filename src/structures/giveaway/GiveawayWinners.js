@@ -143,6 +143,7 @@ class GiveawayWinners extends Base {
       thisWinners.length === otherWinners.length &&
       thisWinners.every(
         (winner, index) =>
+          //  @ts-ignore
           otherWinners[index] && winner.equals(otherWinners[index]),
       ) &&
       this.chat.equals(other.chat)

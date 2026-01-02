@@ -4,6 +4,7 @@ const { Photo } = require("../media/Photo");
 const { Location } = require("../misc/Location");
 const { Sticker } = require("../media/Sticker");
 const { ReactionType } = require("../misc/ReactionType");
+const { UserRating } = require("../misc/UserRating");
 const { Message } = require("../message/Message");
 const { ChatPermissions } = require("../../util/permission/ChatPermissions");
 
@@ -162,6 +163,38 @@ class ChatFullInfo extends Chat {
             closing: closing_minute,
           }),
         ),
+      };
+    }
+
+    if ("rating" in data && data.rating) {
+      /**
+       * For private chats, the rating of the user if any
+       * @type {UserRating}
+       */
+      this.userRating = new UserRating(data.rating);
+    }
+
+    if ("unique_gift_colors" in data) {
+      /** The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews */
+      this.uniqueGiftColors = {
+        /** Custom emoji identifier of the unique gift's model */
+        modelCustomEmojiId: data.unique_gift_colors.model_custom_emoji_id,
+        /** Custom emoji identifier of the unique gift's symbol */
+        symbolCustomEmojiId: data.unique_gift_colors.symbol_custom_emoji_id,
+        /** Light theme colors */
+        lightTheme: {
+          /** Main color used in light theme; RGB format */
+          mainColor: data.unique_gift_colors.light_theme_main_color,
+          /** List of 1-3 additional colors used in light theme; RGB format */
+          otherColors: data.unique_gift_colors.light_theme_other_colors,
+        },
+        /** Dark theme colors */
+        darkTheme: {
+          /** Main color used in dark theme; RGB format */
+          mainColor: data.unique_gift_colors.dark_theme_main_color,
+          /** List of 1-3 additional colors used in dark theme; RGB format */
+          otherColors: data.unique_gift_colors.dark_theme_other_colors,
+        },
       };
     }
 
@@ -371,6 +404,8 @@ class ChatFullInfo extends Chat {
         unique: data.accepted_gift_types.unique_gifts,
         /** True, if a Telegram Premium subscription is accepted */
         premiumSubscription: data.accepted_gift_types.premium_subscription,
+        /** True, if transfers of unique gifts from channels are accepted */
+        authorChannels: data.accepted_gift_types.gifts_from_channels,
       };
     }
 

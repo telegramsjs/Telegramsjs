@@ -108,6 +108,7 @@ function applyToClass(structure) {
     "fetchAdmins",
     "membersCount",
     "fetchUserBoosts",
+    "fetchChatGifts",
     "forwardMessages",
     "copyMessages",
     "deleteMessage",

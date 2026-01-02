@@ -5,12 +5,12 @@ const { TransactionPartner } = require("./TransactionPartner");
 class StarTransaction extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").StarTransaction} data - Data about the describes a Telegram Star transaction
+   * @param {import("@telegram.ts/types").StarTransaction} data - Data about the describes a Telegram Star transaction. Note that if the buyer initiates a chargeback with the payment provider from whom they acquired Stars (e.g., Apple, Google) following this transaction, the refunded Stars will be deducted from the bot's balance. This is outside of Telegram's control.
    */
   constructor(client, data) {
     super(client);
 
-    /** Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
+    /** Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
     this.id = data.id;
 
     /** Integer amount of Telegram Stars transferred by the transaction */

@@ -1,7 +1,7 @@
 // @ts-check
 class SuggestedPostPrice {
   /**
-   * @param {import("@telegram.ts/types").SuggestedPostPrice} data - Data about the desribes price of a suggested post
+   * @param {import("@telegram.ts/types").SuggestedPostPrice} data - Data about the describes price of a suggested post
    */
   constructor(data) {
     /**
