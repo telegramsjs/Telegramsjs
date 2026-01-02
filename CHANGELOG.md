@@ -1,5 +1,13 @@
 # Changelog
 
+# **4.13.0 - (2026-01-02)**
+
+## **Updates**
+
+- **Support for API 9.3** ([0a4525d](https://github.com/telegramsjs/Telegramsjs/commit/0a4525d5203f4b0880e70a4e1430f8fee1c0c4e9))
+
+---
+
 # **4.12.0 - (2025-12-29)**
 
 ## **Updates**

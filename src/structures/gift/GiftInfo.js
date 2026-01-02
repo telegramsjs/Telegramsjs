@@ -19,6 +19,16 @@ class GiftInfo extends Base {
       this.ownedGiftId = data.owned_gift_id;
     }
 
+    if ("is_upgrade_separate" in data) {
+      /** True, if the gift's upgrade was purchased after the gift was sent */
+      this.isUpgradeSeparate = data.is_upgrade_separate;
+    }
+
+    if ("unique_gift_number" in data) {
+      /** Unique number reserved for this gift when upgraded. See the number field in UniqueGift */
+      this.uniqueGiftNumber = data.unique_gift_number;
+    }
+
     if ("text" in data) {
       /** Text of the message that was added to the gift */
       this.content = data.text;

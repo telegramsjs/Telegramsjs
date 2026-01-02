@@ -180,6 +180,18 @@ class BusinessConnection extends Base {
   }
 
   /**
+   * Reposts a story on behalf of a business account from another business account. Both business accounts must be managed by the same bot, and the story on the source account must have been posted (or reposted) by the bot. Requires the can_manage_stories business bot right for both business accounts.
+   * @param {Omit<MethodParameters["repostStory"], "businessConnectionId">} options - out parameters.
+   * @returns {Promise<import("../story/Story").Story>} - Returns Story on success.
+   */
+  repostStory(options) {
+    return this.client.repostStory({
+      ...options,
+      businessConnectionId: this.id,
+    });
+  }
+
+  /**
    * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param {string} giftId - Identifier of the gift.
    * @param {Omit<MethodParameters["sendGift"], "giftId" | "userId">} [options] - out parameters.

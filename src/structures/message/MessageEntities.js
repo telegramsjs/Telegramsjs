@@ -160,6 +160,7 @@ class MessageEntities extends Base {
    * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { url: string }>} A collection of text link entities.
    */
   get textLink() {
+    // @ts-ignore
     return this.searchEntity("text_link").filter((entity) => "url" in entity);
   }
 
@@ -168,6 +169,7 @@ class MessageEntities extends Base {
    * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { user: User }>} A collection of text mention entities.
    */
   get textMention() {
+    // @ts-ignore
     return this.searchEntity("text_mention").filter(
       (entity) => "user" in entity,
     );
@@ -178,6 +180,7 @@ class MessageEntities extends Base {
    * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { customEmojiId: string }>} A collection of custom emoji entities.
    */
   get customEmoji() {
+    // @ts-ignore
     return this.searchEntity("custom_emoji").filter(
       (entity) => "customEmojiId" in entity,
     );

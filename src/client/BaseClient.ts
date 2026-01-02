@@ -352,6 +352,16 @@ class BaseClient extends EventEmitter {
       );
   }
 
+  /** Use this method to stream a partial message to a user while the message is being generated; supported only for bots with forum topic mode enabled. Returns True on success. */
+  async sendMessageDraft(
+    params: MethodParameters["sendMessageDraft"],
+  ): Promise<MethodsLibReturnType["sendMessageDraft"]> {
+    return this.rest.request<MethodsApiReturnType["sendMessageDraft"]>(
+      "sendMessage",
+      toSnakeCase(params),
+    );
+  }
+
   /** Use this method to send photos. On success, the sent Message is returned. */
   async sendPhoto(
     params: MethodParameters["sendPhoto"],
@@ -1035,6 +1045,28 @@ class BaseClient extends EventEmitter {
       .then((res) => new UserChatBoosts(this, res));
   }
 
+  /** Returns the gifts owned and hosted by a user. Returns OwnedGifts on success. */
+  async getUserGifts(
+    params: MethodParameters["getUserGifts"],
+  ): Promise<MethodsLibReturnType["getUserGifts"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["getUserGifts"]
+      >("getUserGifts", toSnakeCase(params))
+      .then((res) => new OwnedGifts(this, res));
+  }
+
+  /** Returns the gifts owned by a chat. Returns OwnedGifts on success. */
+  async getChatGifts(
+    params: MethodParameters["getChatGifts"],
+  ): Promise<MethodsLibReturnType["getChatGifts"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["getChatGifts"]
+      >("getChatGifts", toSnakeCase(params))
+      .then((res) => new OwnedGifts(this, res));
+  }
+
   /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
   async getBusinessConnection(
     businessConnectionId: string,
@@ -1141,7 +1173,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success. */
+  /** Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success. */
   async deleteForumTopic(
     chatId: number | string,
     messageThreadId: number | string,
@@ -1152,7 +1184,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success. */
+  /** Use this method to clear the list of pinned messages in a forum topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success. */
   async unpinAllForumTopicMessages(
     chatId: number | string,
     messageThreadId: number | string,
@@ -1820,6 +1852,17 @@ class BaseClient extends EventEmitter {
       .request<
         MethodsApiReturnType["postStory"]
       >("postStory", toSnakeCase(args))
+      .then((res) => new Story(this, res));
+  }
+
+  /** Reposts a story on behalf of a business account from another business account. Both business accounts must be managed by the same bot, and the story on the source account must have been posted (or reposted) by the bot. Requires the can_manage_stories business bot right for both business accounts. Returns Story on success. */
+  async repostStory(
+    args: MethodParameters["repostStory"],
+  ): Promise<MethodsLibReturnType["repostStory"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["repostStory"]
+      >("repostStory", toSnakeCase(args))
       .then((res) => new Story(this, res));
   }
 

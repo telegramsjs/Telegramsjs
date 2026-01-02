@@ -93,7 +93,7 @@ class Message extends Base {
   _patch(data) {
     if ("message_thread_id" in data) {
       /**
-       * Unique identifier of a message thread or a forum topic to which the message belongs; for supergroups only
+       * Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
        * @type {string | undefined}
        */
       this.threadId = String(data.message_thread_id);
@@ -117,7 +117,7 @@ class Message extends Base {
       }
 
       /**
-       * True, if the message is sent to a forum topic
+       * True, if the message is sent to a topic in a forum supergroup or a private chat with the bot
        * @type {boolean | undefined}
        */
       this.inTopic = data.is_topic_message;
@@ -722,6 +722,14 @@ class Message extends Base {
       this.gift = new GiftInfo(this.client, data.gift);
     }
 
+    if ("gift_upgrade_sent" in data) {
+      /**
+       * Service message: upgrade of a gift was purchased after the gift was sent
+       * @type {GiftInfo | undefined}
+       */
+      this.giftUpgradeSent = new GiftInfo(this.client, data.gift_upgrade_sent);
+    }
+
     if ("unique_gift" in data) {
       /**
        * Service message: a unique gift was sent or received
@@ -1195,6 +1203,27 @@ class Message extends Base {
         message_id: this.id,
         ...(this.checklistTaskId && { checklistTaskId: this.checklistTaskId }),
       },
+      ...options,
+    });
+  }
+
+  /**
+   * Use this method to stream a partial message to a user while the message is being generated; supported only for bots with forum topic mode enabled.
+   * @param {string} text - Text of the message to be sent, 1-4096 characters after entities parsing
+   * @param {number} draftId - Unique identifier of the message draft; must be non-zero. Changes of drafts with the same identifier are animated.
+   * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId" | "draftId">} [options={}] - out parameters
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  sendDraft(text, draftId, options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.sendMessageDraft({
+      text,
+      draftId,
+      chatId: this.chat.id,
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
       ...options,
     });
   }

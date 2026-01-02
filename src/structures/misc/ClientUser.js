@@ -34,6 +34,9 @@ class ClientUser extends User {
     /** Indicates if the bot has a main Web App */
     this.mainWebApp = data.has_main_web_app;
 
+    /** True, if the bot has forum topic mode enabled in private chats. Returned only in getMe. */
+    this.topicsEnabled = data.has_topics_enabled;
+
     this._patch(data);
   }
 

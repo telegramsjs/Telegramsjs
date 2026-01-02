@@ -27,10 +27,18 @@ class ChecklistTask extends Base {
 
     if ("completed_by_user" in data) {
       /**
-       * User that completed the task; omitted if the task wasn't completed
+       * User that completed the task; omitted if the task wasn't completed by a user
        * @type {import("../misc/User").User | undefined}
        */
       this.completedByUser = client.users._add(data.completed_by_user);
+    }
+
+    if ("completed_by_chat" in data) {
+      /**
+       * Chat that completed the task; omitted if the task wasn't completed by a chat
+       * @type {import("../chat/Chat").Chat | undefined}
+       */
+      this.completedByChat = client.chats._add(data.completed_by_chat);
     }
 
     if ("completion_date" in data) {

@@ -85,7 +85,7 @@ class Chat extends Base {
       this.forum = data.is_forum;
       if ("threadId" in data && data.threadId) {
         /**
-         * Unique identifier of the forum topic
+         * Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
          * @type {string | undefined}
          */
         this.threadId = data.threadId;
@@ -93,7 +93,7 @@ class Chat extends Base {
 
       if ("inTopic" in data) {
         /**
-         * True, if the message is sent to a forum topic
+         * True, if the message is sent to a topic in a forum supergroup or a private chat with the bot
          * @type {boolean | undefined}
          */
         this.inTopic = data.inTopic;
@@ -368,6 +368,18 @@ class Chat extends Base {
    */
   fetchUserBoosts(userId) {
     return this.client.getUserChatBoosts(this.id, userId);
+  }
+
+  /**
+   * Returns the gifts owned and hosted by a chat.
+   * @param {Omit<MethodParameters["getChatGifts"], "chatId">} [options={}] - out parameters.
+   * @returns {Promise<import("../gift/OwnedGifts").OwnedGifts>} - Returns OwnedGifts on success.
+   */
+  fetchChatGifts(options = {}) {
+    return this.client.getChatGifts({
+      chatId: this.id,
+      ...options,
+    });
   }
 
   /**

@@ -33,6 +33,11 @@ class OwnedGiftRegular extends Base {
     /** Date the gift was sent in Unix time */
     this.senderUnixTime = data.send_date;
 
+    if ("unique_gift_number" in data) {
+      /** Unique number reserved for this gift when upgraded. See the number field in UniqueGift */
+      this.uniqueGiftNumber = data.unique_gift_number;
+    }
+
     if ("text" in data) {
       /** Text of the message that was added to the gift */
       this.content = data.text;
@@ -56,6 +61,11 @@ class OwnedGiftRegular extends Base {
     if ("can_be_upgraded" in data) {
       /** True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only */
       this.beUpgraded = data.can_be_upgraded;
+    }
+
+    if ("is_upgrade_separate" in data) {
+      /** True, if the gift's upgrade was purchased after the gift was sent */
+      this.isUpgradeSeparate = data.is_upgrade_separate;
     }
 
     if ("was_refunded" in data) {

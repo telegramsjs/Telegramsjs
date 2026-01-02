@@ -5,7 +5,7 @@ const { OrderInfo } = require("./OrderInfo");
 class SuccessfulPayment extends Base {
   /**
    * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").SuccessfulPayment} data - Data about the contains basic information about a successful payment
+   * @param {import("@telegram.ts/types").SuccessfulPayment} data - Data about the contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.
    */
   constructor(client, data) {
     super(client);
