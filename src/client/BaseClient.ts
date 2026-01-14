@@ -357,7 +357,7 @@ class BaseClient extends EventEmitter {
     params: MethodParameters["sendMessageDraft"],
   ): Promise<MethodsLibReturnType["sendMessageDraft"]> {
     return this.rest.request<MethodsApiReturnType["sendMessageDraft"]>(
-      "sendMessage",
+      "sendMessageDraft",
       toSnakeCase(params),
     );
   }
