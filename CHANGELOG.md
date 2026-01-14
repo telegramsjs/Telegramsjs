@@ -1,5 +1,13 @@
 # Changelog
 
+# **4.13.1 - (2026-01-14)**
+
+## **Bug Fixes**
+
+- **BaseClient:** correct method `sendMessageDraft` ([df555ec](https://github.com/telegramsjs/Telegramsjs/commit/df555ec5f55dd55e009f3de9bcc10036a781f7ca))
+
+---
+
 # **4.13.0 - (2026-01-02)**
 
 ## **Updates**
