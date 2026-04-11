@@ -544,7 +544,7 @@ export declare class User extends Base {
   /**
    * IETF language tag of the user's language
    */
-  language?: LanguageCode;
+  language?: string;
   /**
    * True, if this user is a Telegram Premium user
    */

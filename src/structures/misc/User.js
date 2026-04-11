@@ -55,7 +55,7 @@ class User extends Base {
     if ("language_code" in data) {
       /**
        * IETF language tag of the user's language
-       * @type {LanguageCode | undefined}
+       * @type {string | undefined}
        */
       this.language = data.language_code;
     }
