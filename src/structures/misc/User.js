@@ -21,9 +21,7 @@ class User extends Base {
     this.id = String(data.id);
 
     /** True, if this user is a bot */
-    this.isBot = Boolean(
-      data.id == ("user" in client ? client.user?.id : 0) ? true : data.is_bot,
-    );
+    this.isBot = data.is_bot;
 
     this._patch(data);
   }
