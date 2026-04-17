@@ -66,7 +66,9 @@ function toSnakeCase<T extends Record<string, any>>(
 
 interface EventHandlers {
   ready: (
-    telegram: import("./TelegramClient").TelegramClient,
+    telegram: import("./TelegramClient").TelegramClient & {
+      user: typeof ClientUser;
+    },
   ) => PossiblyAsync<void>;
   disconnect: (
     telegram: import("./TelegramClient").TelegramClient,

@@ -10087,7 +10087,9 @@ export declare class ChatBoostRemoved extends Base {
 }
 
 export interface EventHandlers {
-  ready: (telegram: TelegramClient) => PossiblyAsync<void>;
+  ready: (
+    telegram: TelegramClient & { user: typeof ClientUser },
+  ) => PossiblyAsync<void>;
   disconnect: (telegram: TelegramClient) => PossiblyAsync<void>;
   error: (detalis: [number, unknown]) => PossiblyAsync<void>;
   rawUpdate: (raw: Update & { client: TelegramClient }) => PossiblyAsync<void>;
