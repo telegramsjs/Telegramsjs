@@ -1,3 +1,4 @@
+import { replacedMarkupOptions, type MarkupOptions } from "./utils";
 import type {
   InlineKeyboardButton,
   SwitchInlineQueryChosenChat,
@@ -42,88 +43,127 @@ class InlineKeyboardBuilder {
    * Adds a URL button to the inline keyboard.
    * @param text - The button text.
    * @param url - The URL to be opened when the button is pressed.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  url(text: string, url: string): this {
-    return this.add(InlineKeyboardBuilder.url(text, url));
+  url(text: string, url: string, options?: MarkupOptions): this {
+    return this.add(InlineKeyboardBuilder.url(text, url, options));
   }
 
   /**
    * Creates a URL button.
    * @param text - The button text.
    * @param url - The URL to be opened when the button is pressed.
+   * @param options - Additional button style and icon.
    * @returns The created URL button.
    */
-  static url(text: string, url: string): InlineKeyboardButton.UrlButton {
-    return { text, url };
+  static url(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.UrlButton {
+    return {
+      text,
+      url,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
    * Adds a callback button to the inline keyboard.
    * @param text - The button text.
    * @param data - The callback data.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  text(text: string, data = text): this {
-    return this.add(InlineKeyboardBuilder.text(text, data));
+  text(text: string, data = text, options?: MarkupOptions): this {
+    return this.add(InlineKeyboardBuilder.text(text, data, options));
   }
 
   /**
    * Creates a callback button.
    * @param text - The button text.
    * @param data - The callback data.
+   * @param options - Additional button style and icon.
    * @returns The created callback button.
    */
-  static text(text: string, data = text): InlineKeyboardButton.CallbackButton {
-    return { text, callback_data: data };
+  static text(
+    text: string,
+    data = text,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.CallbackButton {
+    return {
+      text,
+      callback_data: data,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
    * Adds a WebApp button to the inline keyboard.
    * @param text - The button text.
    * @param url - The URL to the WebApp.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string | WebAppInfo): this {
-    return this.add(InlineKeyboardBuilder.webApp(text, url));
+  webApp(
+    text: string,
+    url: string | WebAppInfo,
+    options?: MarkupOptions,
+  ): this {
+    return this.add(InlineKeyboardBuilder.webApp(text, url, options));
   }
 
   /**
    * Creates a WebApp button.
    * @param text - The button text.
    * @param url - The URL to the WebApp.
+   * @param options - Additional button style and icon.
    * @returns The created WebApp button.
    */
   static webApp(
     text: string,
     url: string | WebAppInfo,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.WebAppButton {
-    return { text, web_app: typeof url === "string" ? { url } : url };
+    return {
+      text,
+      web_app: typeof url === "string" ? { url } : url,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
    * Adds a login button to the inline keyboard.
    * @param text - The button text.
    * @param loginUrl - The login URL or LoginUrl object.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  login(text: string, loginUrl: string | LoginUrl): this {
-    return this.add(InlineKeyboardBuilder.login(text, loginUrl));
+  login(
+    text: string,
+    loginUrl: string | LoginUrl,
+    options?: MarkupOptions,
+  ): this {
+    return this.add(InlineKeyboardBuilder.login(text, loginUrl, options));
   }
 
   /**
    * Creates a login button.
    * @param text - The button text.
    * @param loginUrl - The login URL or LoginUrl object.
+   * @param options - Additional button style and icon.
    * @returns The created login button.
    */
   static login(
     text: string,
     loginUrl: string | LoginUrl,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.LoginButton {
     return {
       text,
       login_url: typeof loginUrl === "string" ? { url: loginUrl } : loginUrl,
+      ...replacedMarkupOptions(options),
     };
   }
 
@@ -131,134 +171,186 @@ class InlineKeyboardBuilder {
    * Adds a switch inline button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInline(text: string, query = ""): this {
-    return this.add(InlineKeyboardBuilder.switchInline(text, query));
+  switchInline(text: string, query = "", options?: MarkupOptions): this {
+    return this.add(InlineKeyboardBuilder.switchInline(text, query, options));
   }
 
   /**
    * Creates a switch inline button.
    * @param text - The button text.
    * @param query - The inline query to switch to.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline button.
    */
   static switchInline(
     text: string,
     query = "",
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineButton {
-    return { text, switch_inline_query: query };
+    return {
+      text,
+      switch_inline_query: query,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
    * Adds a switch inline current chat button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to in the current chat.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInlineCurrent(text: string, query = ""): this {
-    return this.add(InlineKeyboardBuilder.switchInlineCurrent(text, query));
+  switchInlineCurrent(text: string, query = "", options?: MarkupOptions): this {
+    return this.add(
+      InlineKeyboardBuilder.switchInlineCurrent(text, query, options),
+    );
   }
 
   /**
    * Creates a switch inline current chat button.
    * @param text - The button text.
    * @param query - The inline query to switch to in the current chat.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline current chat button.
    */
   static switchInlineCurrent(
     text: string,
     query = "",
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineCurrentChatButton {
-    return { text, switch_inline_query_current_chat: query };
+    return {
+      text,
+      switch_inline_query_current_chat: query,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
    * Adds a switch inline chosen chat button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to in the chosen chat.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
   switchInlineChosen(
     text: string,
     query: SwitchInlineQueryChosenChat = { allow_user_chats: true },
+    options?: MarkupOptions,
   ): this {
-    return this.add(InlineKeyboardBuilder.switchInlineChosen(text, query));
+    return this.add(
+      InlineKeyboardBuilder.switchInlineChosen(text, query, options),
+    );
   }
 
   /**
    * Creates a switch inline chosen chat button.
    * @param text - The button text.
    * @param query - The inline query to switch to in the chosen chat.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline chosen chat button.
    */
   static switchInlineChosen(
     text: string,
     query: SwitchInlineQueryChosenChat = { allow_user_chats: true },
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineChosenChatButton {
-    return { text, switch_inline_query_chosen_chat: query };
+    return {
+      text,
+      switch_inline_query_chosen_chat: query,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
    * Adds a copy text button to the inline keyboard.
    * @param text - The button text.
    * @param copyText - The text copy or CopyTextButton object.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  copyText(text: string, copyText: string | CopyTextButton = text): this {
-    return this.add(InlineKeyboardBuilder.copyText(text, copyText));
+  copyText(
+    text: string,
+    copyText: string | CopyTextButton = text,
+    options?: MarkupOptions,
+  ): this {
+    return this.add(InlineKeyboardBuilder.copyText(text, copyText, options));
   }
 
   /**
    * Creates a copy text button.
    * @param text - The button text.
    * @param copyText - The text copy or CopyTextButton object.
+   * @param options - Additional button style and icon.
    * @returns The created copy text button.
    */
   static copyText(
     text: string,
     copyText: string | CopyTextButton = text,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.CopyTextButtonButton {
     return {
       text,
       copy_text: typeof copyText === "string" ? { text: copyText } : copyText,
+      ...replacedMarkupOptions(options),
     };
   }
 
   /**
    * Adds a game button to the inline keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  game(text: string): this {
-    return this.add(InlineKeyboardBuilder.game(text));
+  game(text: string, options?: MarkupOptions): this {
+    return this.add(InlineKeyboardBuilder.game(text, options));
   }
 
   /**
    * Creates a game button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created game button.
    */
-  static game(text: string): InlineKeyboardButton.GameButton {
-    return { text, callback_game: {} };
+  static game(
+    text: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.GameButton {
+    return {
+      text,
+      callback_game: {},
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
    * Adds a pay button to the inline keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  pay(text: string): this {
-    return this.add(InlineKeyboardBuilder.pay(text));
+  pay(text: string, options?: MarkupOptions): this {
+    return this.add(InlineKeyboardBuilder.pay(text, options));
   }
 
   /**
    * Creates a pay button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created pay button.
    */
-  static pay(text: string): InlineKeyboardButton.PayButton {
-    return { text, pay: true };
+  static pay(
+    text: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.PayButton {
+    return {
+      text,
+      pay: true,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
@@ -284,12 +376,12 @@ class InlineKeyboardBuilder {
       | { toJSON(): { inline_keyboard: InlineKeyboardButton[][] } },
   ): InlineKeyboardBuilder {
     const json = "toJSON" in other ? other.toJSON() : other;
-
     const buttons = Array.isArray(json) ? json : json.inline_keyboard;
 
     for (const row of buttons) {
       this.row().add(...row);
     }
+
     return this;
   }
 
@@ -327,72 +419,64 @@ class InlineKeyboardBuilder {
       if (!row || !otherRow || row.length !== otherRow.length) return false;
 
       for (let j = 0; j < row.length; j++) {
-        const buttonA = row[j];
-        const buttonB = otherRow[j];
+        const a = row[j];
+        const b = otherRow[j];
 
-        if (!buttonA || !buttonB) return false;
+        if (!a || !b) return false;
 
-        if ("url" in buttonA && "url" in buttonB) {
-          if (buttonA.text !== buttonB.text || buttonA.url !== buttonB.url)
+        if (
+          a.icon_custom_emoji_id !== b.icon_custom_emoji_id ||
+          a.style !== b.style
+        )
+          return false;
+
+        if ("url" in a && "url" in b) {
+          if (a.text !== b.text || a.url !== b.url) return false;
+        } else if ("callback_data" in a && "callback_data" in b) {
+          if (a.text !== b.text || a.callback_data !== b.callback_data)
             return false;
-        } else if ("callback_data" in buttonA && "callback_data" in buttonB) {
+        } else if ("web_app" in a && "web_app" in b) {
+          if (a.text !== b.text || a.web_app.url !== b.web_app.url)
+            return false;
+        } else if ("login_url" in a && "login_url" in b) {
           if (
-            buttonA.text !== buttonB.text ||
-            buttonA.callback_data !== buttonB.callback_data
+            a.text !== b.text ||
+            JSON.stringify(a.login_url) !== JSON.stringify(b.login_url)
           )
             return false;
-        } else if ("web_app" in buttonA && "web_app" in buttonB) {
+        } else if ("switch_inline_query" in a && "switch_inline_query" in b) {
           if (
-            buttonA.text !== buttonB.text ||
-            buttonA.web_app.url !== buttonB.web_app.url
-          )
-            return false;
-        } else if ("login_url" in buttonA && "login_url" in buttonB) {
-          if (
-            buttonA.text !== buttonB.text ||
-            JSON.stringify(buttonA.login_url) !==
-              JSON.stringify(buttonB.login_url)
-          )
-            return false;
-        } else if (
-          "switch_inline_query" in buttonA &&
-          "switch_inline_query" in buttonB
-        ) {
-          if (
-            buttonA.text !== buttonB.text ||
-            buttonA.switch_inline_query !== buttonB.switch_inline_query
+            a.text !== b.text ||
+            a.switch_inline_query !== b.switch_inline_query
           )
             return false;
         } else if (
-          "switch_inline_query_current_chat" in buttonA &&
-          "switch_inline_query_current_chat" in buttonB
+          "switch_inline_query_current_chat" in a &&
+          "switch_inline_query_current_chat" in b
         ) {
           if (
-            buttonA.text !== buttonB.text ||
-            buttonA.switch_inline_query_current_chat !==
-              buttonB.switch_inline_query_current_chat
+            a.text !== b.text ||
+            a.switch_inline_query_current_chat !==
+              b.switch_inline_query_current_chat
           )
             return false;
         } else if (
-          "switch_inline_query_chosen_chat" in buttonA &&
-          "switch_inline_query_chosen_chat" in buttonB
+          "switch_inline_query_chosen_chat" in a &&
+          "switch_inline_query_chosen_chat" in b
         ) {
           if (
-            buttonA.text !== buttonB.text ||
-            JSON.stringify(buttonA.switch_inline_query_chosen_chat) !==
-              JSON.stringify(buttonB.switch_inline_query_chosen_chat)
+            a.text !== b.text ||
+            JSON.stringify(a.switch_inline_query_chosen_chat) !==
+              JSON.stringify(b.switch_inline_query_chosen_chat)
           )
             return false;
-        } else if ("copy_text" in buttonA && "copy_text" in buttonB) {
-          if (
-            buttonA.text !== buttonB.text ||
-            buttonA.copy_text.text !== buttonB.copy_text.text
-          )
+        } else if ("copy_text" in a && "copy_text" in b) {
+          if (a.text !== b.text || a.copy_text.text !== b.copy_text.text)
             return false;
-        } else if ("callback_game" in buttonA && "callback_game" in buttonB) {
-          if (buttonA.text !== buttonB.text) return false;
-        } else if ("pay" in buttonA && "pay" in buttonB) {
-          if (buttonA.text !== buttonB.text) return false;
+        } else if ("callback_game" in a && "callback_game" in b) {
+          if (a.text !== b.text) return false;
+        } else if ("pay" in a && "pay" in b) {
+          if (a.text !== b.text) return false;
         } else {
           return false;
         }

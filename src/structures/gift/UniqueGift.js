@@ -47,7 +47,7 @@ class UniqueGift extends Base {
       name: data.model.name,
       /** The sticker that represents the unique gift */
       sticker: new Sticker(client, data.model.sticker),
-      /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+      /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
       rarityPerMille: data.model.rarity_per_mille,
     };
 
@@ -57,7 +57,7 @@ class UniqueGift extends Base {
       name: data.symbol.name,
       /** The sticker that represents the unique gift */
       sticker: new Sticker(client, data.symbol.sticker),
-      /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+      /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
       rarityPerMille: data.symbol.rarity_per_mille,
     };
 
@@ -103,6 +103,11 @@ class UniqueGift extends Base {
         },
       };
     }
+
+    if ("is_burned" in data) {
+      /** True, if the gift was used to craft another gift and isn't available anymore */
+      this.isBurned = data.is_burned;
+    }
   }
 
   /**
@@ -123,7 +128,8 @@ class UniqueGift extends Base {
       isDeepStrictEqual(this.model, other.model) &&
       isDeepStrictEqual(this.symbol, other.symbol) &&
       isDeepStrictEqual(this.backdrop, other.backdrop) &&
-      isDeepStrictEqual(this.colors, other.colors)
+      isDeepStrictEqual(this.colors, other.colors) &&
+      this.isBurned === other.isBurned
     );
   }
 }

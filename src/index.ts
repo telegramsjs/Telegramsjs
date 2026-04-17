@@ -13,6 +13,7 @@ export * from "./util/inline/InlineQueryResultCachedBuilder";
 export * from "./util/inline/InputMessageContentBuilder";
 export * from "./util/markup/InlineKeyboardBuilder";
 export * from "./util/markup/KeyboardBuilder";
+export { type MarkupOptions } from "./util/markup/utils";
 export * from "./util/permission/ChatPermissions";
 export * from "./util/permission/UserPermissions";
 export * from "./util/permission/BusinessPermissions";

@@ -2,7 +2,7 @@
   <h1>Telegramsjs</h1><br>
   <img src="https://raw.githubusercontent.com/Sempai-07/Telegramsjs/main/docs/avatar.png"><br>
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-v.9.3-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
+[![Bot API](https://img.shields.io/badge/Bot%20API-v.9.4-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
 [![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
 [![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
 
@@ -50,9 +50,9 @@ Afterwards we can create a quite simple example bot:
 
 ```js
 // ECMAscript/TypeScript
-import { TelegramClient } from "telegramsjs";
+import { TelegramClient, InlineKeyboardBuilder, MarkupStyles } from "telegramsjs";
 // CommonJS
-const { TelegramClient } = require("telegramsjs");
+const { TelegramClient, InlineKeyboardBuilder, MarkupStyles } = require("telegramsjs");
 
 const client = new TelegramClient("TELEGRAM_BOT_TOKEN");
 
@@ -73,6 +73,26 @@ client.on("message", async (message) => {
       `Hello ${message.author.username ? `@${message.author.username}` : message.author.firstName}!`,
     );
     return;
+  }
+
+  if (message.content === "/menu") {
+    const menu = new InlineKeyboardBuilder()
+      .text("Pay", "menu_pay", {
+        style: MarkupStyles.Green,
+        icon: "5463122435425448565",
+      })
+      .text("Rules", "menu_rules", {
+        style: MarkupStyles.Danger,
+        icon: "5465154440287757794",
+      }).row()
+      .text("Home", "menu_home", {
+        style: MarkupStyles.Primary,
+        icon: "5253997076169115797",
+      });
+
+    await msg.chat.send("Payment panel", {
+      replyMarkup: menu,
+    });
   }
 });
 

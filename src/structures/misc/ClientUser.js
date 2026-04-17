@@ -34,8 +34,11 @@ class ClientUser extends User {
     /** Indicates if the bot has a main Web App */
     this.mainWebApp = data.has_main_web_app;
 
-    /** True, if the bot has forum topic mode enabled in private chats. Returned only in getMe. */
+    /** True, if the bot has forum topic mode enabled in private chats */
     this.topicsEnabled = data.has_topics_enabled;
+
+    /** True, if the bot allows users to create and delete topics in private chats */
+    this.allowUserTopicCreation = data.allows_users_to_create_topics;
 
     this._patch(data);
   }
@@ -179,6 +182,23 @@ class ClientUser extends User {
    */
   fetchShortDescription(language) {
     return this.client.getMyShortDescription(language);
+  }
+
+  /**
+   * Changes the profile photo of the bot.
+   * @param {import("../../client/interfaces/Methods").InputProfilePhoto} photo - The new profile photo to set.
+   * @returns {Promise<true>} - Returns True on success.
+   **/
+  setProfilePhoto(photo) {
+    return this.client.setMyProfilePhoto(photo);
+  }
+
+  /**
+   * Removes the profile photo of the bot.
+   * @returns {Promise<true>} - Returns True on success.
+   **/
+  removeProfilePhoto() {
+    return this.client.removeMyProfilePhoto();
   }
 
   /**

@@ -1,3 +1,4 @@
+import { replacedMarkupOptions, type MarkupOptions } from "./utils";
 import type {
   KeyboardButton,
   KeyboardButtonPollType,
@@ -64,19 +65,27 @@ class KeyboardBuilder {
   /**
    * Adds a text button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  text(text: string): this {
-    return this.add(KeyboardBuilder.text(text));
+  text(text: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.text(text, options));
   }
 
   /**
    * Creates a text button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created text button.
    */
-  static text(text: string): KeyboardButton.CommonButton {
-    return { text };
+  static text(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.CommonButton {
+    return {
+      text,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
@@ -84,14 +93,18 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The current instance for chaining.
    */
   requestUsers(
     text: string,
     requestId: number,
     options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
+    buttonOptions?: MarkupOptions,
   ): this {
-    return this.add(KeyboardBuilder.requestUsers(text, requestId, options));
+    return this.add(
+      KeyboardBuilder.requestUsers(text, requestId, options, buttonOptions),
+    );
   }
 
   /**
@@ -99,14 +112,20 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The created request users button.
    */
   static requestUsers(
     text: string,
     requestId: number,
     options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestUsersButton {
-    return { text, request_users: { request_id: requestId, ...options } };
+    return {
+      text,
+      request_users: { request_id: requestId, ...options },
+      ...replacedMarkupOptions(buttonOptions),
+    };
   }
 
   /**
@@ -114,6 +133,7 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The current instance for chaining.
    */
   requestChat(
@@ -122,8 +142,11 @@ class KeyboardBuilder {
     options: Omit<KeyboardButtonRequestChat, "request_id"> = {
       chat_is_channel: false,
     },
+    buttonOptions?: MarkupOptions,
   ): this {
-    return this.add(KeyboardBuilder.requestChat(text, requestId, options));
+    return this.add(
+      KeyboardBuilder.requestChat(text, requestId, options, buttonOptions),
+    );
   }
 
   /**
@@ -131,6 +154,7 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The created request chat button.
    */
   static requestChat(
@@ -139,87 +163,115 @@ class KeyboardBuilder {
     options: Omit<KeyboardButtonRequestChat, "request_id"> = {
       chat_is_channel: false,
     },
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestChatButton {
-    return { text, request_chat: { request_id: requestId, ...options } };
+    return {
+      text,
+      request_chat: { request_id: requestId, ...options },
+      ...replacedMarkupOptions(buttonOptions),
+    };
   }
 
   /**
    * Adds a request contact button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestContact(text: string): this {
-    return this.add(KeyboardBuilder.requestContact(text));
+  requestContact(text: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.requestContact(text, options));
   }
 
   /**
    * Creates a request contact button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created request contact button.
    */
-  static requestContact(text: string): KeyboardButton.RequestContactButton {
-    return { text, request_contact: true };
+  static requestContact(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestContactButton {
+    return { text, request_contact: true, ...replacedMarkupOptions(options) };
   }
 
   /**
    * Adds a request location button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestLocation(text: string): this {
-    return this.add(KeyboardBuilder.requestLocation(text));
+  requestLocation(text: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.requestLocation(text, options));
   }
 
   /**
    * Creates a request location button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created request location button.
    */
-  static requestLocation(text: string): KeyboardButton.RequestLocationButton {
-    return { text, request_location: true };
+  static requestLocation(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestLocationButton {
+    return { text, request_location: true, ...replacedMarkupOptions(options) };
   }
 
   /**
    * Adds a request poll button to the keyboard.
    * @param text - The button text.
    * @param type - The type of the poll button.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestPoll(text: string, type?: KeyboardButtonPollType["type"]): this {
-    return this.add(KeyboardBuilder.requestPoll(text, type));
+  requestPoll(
+    text: string,
+    type?: KeyboardButtonPollType["type"],
+    options?: MarkupOptions,
+  ): this {
+    return this.add(KeyboardBuilder.requestPoll(text, type, options));
   }
 
   /**
    * Creates a request poll button.
    * @param text - The button text.
    * @param type - The type of the poll button.
+   * @param options - Additional button style and icon.
    * @returns The created request poll button.
    */
   static requestPoll(
     text: string,
     type: KeyboardButtonPollType["type"] = "regular",
+    options?: MarkupOptions,
   ): KeyboardButton.RequestPollButton {
-    return { text, request_poll: { type } };
+    return { text, request_poll: { type }, ...replacedMarkupOptions(options) };
   }
 
   /**
    * Adds a web app button to the keyboard.
    * @param text - The button text.
    * @param url - The URL of the web app.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string): this {
-    return this.add(KeyboardBuilder.webApp(text, url));
+  webApp(text: string, url: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.webApp(text, url, options));
   }
 
   /**
    * Creates a web app button.
    * @param text - The button text.
    * @param url - The URL of the web app.
+   * @param options - Additional button style and icon.
    * @returns The created web app button.
    */
-  static webApp(text: string, url: string): KeyboardButton.WebAppButton {
-    return { text, web_app: { url } };
+  static webApp(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.WebAppButton {
+    return { text, web_app: { url }, ...replacedMarkupOptions(options) };
   }
 
   /**
@@ -377,6 +429,12 @@ class KeyboardBuilder {
         if (typeof buttonA === "string" && typeof buttonB === "string") {
           if (buttonA !== buttonB) return false;
         } else if (typeof buttonA === "object" && typeof buttonB === "object") {
+          if (
+            buttonA.icon_custom_emoji_id !== buttonB.icon_custom_emoji_id ||
+            buttonA.style !== buttonB.style
+          )
+            return false;
+
           if ("text" in buttonA && "text" in buttonB) {
             if (buttonA.text !== buttonB.text) return false;
           } else {

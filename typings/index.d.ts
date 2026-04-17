@@ -86,6 +86,7 @@ import {
   InputStoryContent,
   SuggestedPostParameters,
   InputChecklist,
+  InputProfilePhoto,
 } from "./telegram/index";
 
 /**
@@ -488,6 +489,25 @@ export declare class Photo extends InputFile {
   width: number;
   /** Photo height */
   height: number;
+}
+
+export declare class UserProfileAudios extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the audios displayed on a user's profile
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").UserProfileAudios,
+  );
+  /** Total number of profile audios for the target user */
+  count: number;
+  /** Requested profile audios */
+  audios: Collection<string, Audio>;
+  /**
+   * Makes the class iterable, returning each `Audio` object.
+   */
+  [Symbol.iterator](): IterableIterator<Audio>;
 }
 
 export declare class UserProfilePhotos extends Base {
@@ -3193,11 +3213,29 @@ export declare class Video extends InputFile {
   thumbnail?: Photo;
   /** MIME type of the file as defined by sender */
   mimeType?: string;
-
+  /** */
+  qualities?: Collection<string, VideoQuality>;
   /**
    * Date the video was sent. Timestamp in seconds from which the video will play in the message
    */
   get createdAt(): Date | null;
+}
+
+export declare class VideoQuality extends InputFile {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the represents video file of a specific quality
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").VideoQuality,
+  );
+  /** Photo width */
+  width: number;
+  /** Photo height */
+  height: number;
+  /** Codec that was used to encode the video, for example, “h264”, “h265”, or “av01” */
+  codec: string;
 }
 
 export declare class VideoNote extends InputFile {
@@ -3604,7 +3642,7 @@ export class UniqueGift extends Base {
     name: string;
     /** The sticker that represents the unique gift */
     sticker: Sticker;
-    /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+    /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
     rarityPerMille: number;
   };
   /** Symbol of the gift */
@@ -3613,7 +3651,7 @@ export class UniqueGift extends Base {
     name: string;
     /** The sticker that represents the unique gift */
     sticker: Sticker;
-    /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+    /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
     rarityPerMille: number;
   };
   /** Backdrop of the gift */
@@ -3631,7 +3669,7 @@ export class UniqueGift extends Base {
       /** The color for the text on the backdrop in RGB format */
       text: number;
     };
-    /** The number of unique gifts that receive this backdrop for every 1000 gifts upgraded */
+    /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
     rarityPerMille: number;
   };
   /**
@@ -3657,6 +3695,8 @@ export class UniqueGift extends Base {
       otherColors: number[];
     };
   };
+  /** True, if the gift was used to craft another gift and isn't available anymore */
+  isBurned?: true;
 
   /**
    * Checks if this unique gift is equal to another unique gift.
@@ -6796,6 +6836,10 @@ export declare class Message extends Base {
    * Service message: payment for a suggested post was received
    */
   suggestedPostPaid?: SuggestedPostPaid;
+  /** Service message: chat owner has left */
+  ownerLeft?: User;
+  /** Service message: chat owner has changed */
+  ownerChanged?: User;
   /**
    * Service message: payment for a suggested post was refunded
    */
@@ -7964,7 +8008,7 @@ export declare class Chat extends Base {
    */
   setMenuButton(menuButton?: MenuButton): Promise<true>;
   /**
-   * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights.
+   * Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right.
    * @param name - Topic name, 1-128 characters
    * @param options - out parameters
    * @returns Returns information about the created topic as a ForumTopic object.
@@ -10451,7 +10495,7 @@ export declare class BaseClient extends EventEmitter {
   getForumTopicIconStickers(): Promise<
     MethodsLibReturnType["getForumTopicIconStickers"]
   >;
-  /** Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object. */
+  /** Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. */
   createForumTopic(
     params: MethodParameters["createForumTopic"],
   ): Promise<MethodsLibReturnType["createForumTopic"]>;
@@ -11239,6 +11283,10 @@ export declare class ClientUser extends User {
   connectBusiness: boolean;
   /** Indicates if the bot has a main Web App */
   mainWebApp: boolean;
+  /** True, if the bot has forum topic mode enabled in private chats. Returned only in getMe. */
+  topicsEnabled: boolean;
+  /** True, if the bot allows users to create and delete topics in private chats. Returned only in getMe. */
+  allowUserTopicCreation: boolean;
   /**
    * The authentication token for the Telegram bot
    */
@@ -11357,6 +11405,17 @@ export declare class ClientUser extends User {
    * @returns Returns bot short description on success
    */
   fetchShortDescription(language?: LanguageCode): Promise<string>;
+  /**
+   * Changes the profile photo of the bot.
+   * @param photo - The new profile photo to set.
+   * @returns Returns True on success.
+   **/
+  setProfilePhoto(photo: InputProfilePhoto): Promise<true>;
+  /**
+   * Removes the profile photo of the bot.
+   * @returns Returns True on success.
+   **/
+  removeProfilePhoto(): Promise<true>;
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
@@ -11649,6 +11708,10 @@ export declare class ChatFullInfo extends Chat {
     smail: Photo;
     big: Photo;
   };
+  /**
+   * For private chats, the first audio added to the profile of the user
+   */
+  firstProfileAudio?: Audio;
   /**
    * The active usernames of the chat.
    */
@@ -12302,6 +12365,17 @@ export type Awaitable<V> = PromiseLike<V> | V;
 
 export type PossiblyAsync<T> = T | Promise<T>;
 
+export type MarkupOptions = {
+  /**
+   * The custom emoji id shown before the button text.
+   */
+  icon?: string;
+  /**
+   * The style of the button.
+   */
+  style?: "danger" | "success" | "primary" | "red" | "green" | "blue";
+};
+
 /**
  * Represents an inline keyboard for Telegram bots.
  */
@@ -12328,153 +12402,212 @@ export declare class InlineKeyboardBuilder {
    * Adds a URL button to the inline keyboard.
    * @param text - The button text.
    * @param url - The URL to be opened when the button is pressed.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  url(text: string, url: string): this;
+  url(text: string, url: string, options?: MarkupOptions): this;
   /**
    * Creates a URL button.
    * @param text - The button text.
    * @param url - The URL to be opened when the button is pressed.
+   * @param options - Additional button style and icon.
    * @returns The created URL button.
    */
-  static url(text: string, url: string): InlineKeyboardButton.UrlButton;
+  static url(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.UrlButton;
   /**
    * Adds a callback button to the inline keyboard.
    * @param text - The button text.
    * @param data - The callback data.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  text(text: string, data?: string): this;
+  text(text: string, data?: string, options?: MarkupOptions): this;
   /**
    * Creates a callback button.
    * @param text - The button text.
    * @param data - The callback data.
+   * @param options - Additional button style and icon.
    * @returns The created callback button.
    */
-  static text(text: string, data?: string): InlineKeyboardButton.CallbackButton;
+  static text(
+    text: string,
+    data?: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.CallbackButton;
   /**
    * Adds a WebApp button to the inline keyboard.
    * @param text - The button text.
    * @param url - The URL to the WebApp.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string): this;
+  webApp(text: string, url: string, options?: MarkupOptions): this;
   /**
    * Creates a WebApp button.
    * @param text - The button text.
    * @param url - The URL to the WebApp.
+   * @param options - Additional button style and icon.
    * @returns The created WebApp button.
    */
-  static webApp(text: string, url: string): InlineKeyboardButton.WebAppButton;
+  static webApp(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.WebAppButton;
   /**
    * Adds a login button to the inline keyboard.
    * @param text - The button text.
    * @param loginUrl - The login URL or LoginUrl object.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  login(text: string, loginUrl: string | LoginUrl): this;
+  login(
+    text: string,
+    loginUrl: string | LoginUrl,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a login button.
    * @param text - The button text.
    * @param loginUrl - The login URL or LoginUrl object.
+   * @param options - Additional button style and icon.
    * @returns The created login button.
    */
   static login(
     text: string,
     loginUrl: string | LoginUrl,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.LoginButton;
   /**
    * Adds a switch inline button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInline(text: string, query?: string): this;
+  switchInline(text: string, query?: string, options?: MarkupOptions): this;
   /**
    * Creates a switch inline button.
    * @param text - The button text.
    * @param query - The inline query to switch to.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline button.
    */
   static switchInline(
     text: string,
     query?: string,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineButton;
   /**
    * Adds a switch inline current chat button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to in the current chat.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInlineCurrent(text: string, query?: string): this;
+  switchInlineCurrent(
+    text: string,
+    query?: string,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a switch inline current chat button.
    * @param text - The button text.
    * @param query - The inline query to switch to in the current chat.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline current chat button.
    */
   static switchInlineCurrent(
     text: string,
     query?: string,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineCurrentChatButton;
   /**
    * Adds a switch inline chosen chat button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to in the chosen chat.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInlineChosen(text: string, query?: SwitchInlineQueryChosenChat): this;
+  switchInlineChosen(
+    text: string,
+    query?: SwitchInlineQueryChosenChat,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a switch inline chosen chat button.
    * @param text - The button text.
    * @param query - The inline query to switch to in the chosen chat.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline chosen chat button.
    */
   static switchInlineChosen(
     text: string,
     query?: SwitchInlineQueryChosenChat,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineChosenChatButton;
   /**
    * Adds a copy text button to the inline keyboard.
    * @param text - The button text.
    * @param copyText - The text copy or CopyTextButton object.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  copyText(text: string, copyText?: string | CopyTextButton): this;
+  copyText(
+    text: string,
+    copyText?: string | CopyTextButton,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a copy text button.
    * @param text - The button text.
    * @param copyText - The text copy or CopyTextButton object.
+   * @param options - Additional button style and icon.
    * @returns The created copy text button.
    */
   static copyText(
     text: string,
     copyText?: string | CopyTextButton,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.CopyTextButtonButton;
   /**
    * Adds a game button to the inline keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  game(text: string): this;
+  game(text: string, options?: MarkupOptions): this;
   /**
    * Creates a game button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created game button.
    */
-  static game(text: string): InlineKeyboardButton.GameButton;
+  static game(
+    text: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.GameButton;
   /**
    * Adds a pay button to the inline keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  pay(text: string): this;
+  pay(text: string, options?: MarkupOptions): this;
   /**
    * Creates a pay button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created pay button.
    */
-  static pay(text: string): InlineKeyboardButton.PayButton;
+  static pay(
+    text: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.PayButton;
   /**
    * Creates a deep copy of the current InlineKeyboard instance.
    * @returns A new instance of InlineKeyboard with the same buttons.
@@ -12562,118 +12695,154 @@ export declare class KeyboardBuilder {
   /**
    * Adds a text button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  text(text: string): this;
+  text(text: string, options?: MarkupOptions): this;
   /**
    * Creates a text button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created text button.
    */
-  static text(text: string): KeyboardButton.CommonButton;
+  static text(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.CommonButton;
   /**
    * Adds a request users button to the keyboard.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The current instance for chaining.
    */
   requestUsers(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestUsers, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): this;
   /**
    * Creates a request users button.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The created request users button.
    */
   static requestUsers(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestUsers, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestUsersButton;
   /**
    * Adds a request chat button to the keyboard.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The current instance for chaining.
    */
   requestChat(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestChat, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): this;
   /**
    * Creates a request chat button.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The created request chat button.
    */
   static requestChat(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestChat, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestChatButton;
   /**
    * Adds a request contact button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestContact(text: string): this;
+  requestContact(text: string, options?: MarkupOptions): this;
   /**
    * Creates a request contact button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created request contact button.
    */
-  static requestContact(text: string): KeyboardButton.RequestContactButton;
+  static requestContact(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestContactButton;
   /**
    * Adds a request location button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestLocation(text: string): this;
+  requestLocation(text: string, options?: MarkupOptions): this;
   /**
    * Creates a request location button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created request location button.
    */
-  static requestLocation(text: string): KeyboardButton.RequestLocationButton;
+  static requestLocation(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestLocationButton;
   /**
    * Adds a request poll button to the keyboard.
    * @param text - The button text.
    * @param type - The type of the poll button.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestPoll(text: string, type?: KeyboardButtonPollType["type"]): this;
+  requestPoll(
+    text: string,
+    type?: KeyboardButtonPollType["type"],
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a request poll button.
    * @param text - The button text.
    * @param type - The type of the poll button.
+   * @param options - Additional button style and icon.
    * @returns The created request poll button.
    */
   static requestPoll(
     text: string,
     type?: KeyboardButtonPollType["type"],
+    options?: MarkupOptions,
   ): KeyboardButton.RequestPollButton;
   /**
    * Adds a web app button to the keyboard.
    * @param text - The button text.
    * @param url - The URL of the web app.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string): this;
+  webApp(text: string, url: string, options?: MarkupOptions): this;
   /**
    * Creates a web app button.
    * @param text - The button text.
    * @param url - The URL of the web app.
+   * @param options - Additional button style and icon.
    * @returns The created web app button.
    */
-  static webApp(text: string, url: string): KeyboardButton.WebAppButton;
+  static webApp(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.WebAppButton;
   /**
    * Sets the keyboard as persistent or not.
    * @param isEnabled - Indicates whether the keyboard should be persistent.
@@ -13227,6 +13396,15 @@ export declare const RestEvents: {
   readonly RateLimit: "rateLimit";
   readonly ApiRequest: "apiRequest";
   readonly ApiResponse: "apiResponse";
+};
+
+export declare const MarkupStyles: {
+  readonly Red: "danger";
+  readonly Green: "success";
+  readonly Blue: "primary";
+  readonly Danger: "danger";
+  readonly Success: "success";
+  readonly Primary: "primary";
 };
 
 /**

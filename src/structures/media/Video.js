@@ -1,5 +1,7 @@
 // @ts-check
 const { Photo } = require("./Photo");
+const { Collection } = require("@telegram.ts/collection");
+const { VideoQuality } = require("./VideoQuality");
 const { InputFile } = require("../misc/InputFile");
 
 class Video extends InputFile {
@@ -42,6 +44,16 @@ class Video extends InputFile {
     if ("mime_type" in data) {
       /** MIME type of the file as defined by sender */
       this.mimeType = data.mime_type;
+    }
+
+    if ("qualities" in data) {
+      /** List of available qualities of the video. */
+      this.qualities = new Collection(
+        data.qualities.map((quality) => [
+          quality.file_id,
+          new VideoQuality(client, quality),
+        ]),
+      );
     }
   }
 

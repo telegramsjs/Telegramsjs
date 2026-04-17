@@ -923,6 +923,22 @@ class Message extends Base {
       );
     }
 
+    if ("chat_owner_left" in data && data.chat_owner_left?.new_owner) {
+      /**
+       * Service message: chat owner has left
+       */
+      this.ownerLeft = this.client.users._add(data.chat_owner_left.new_owner);
+    }
+
+    if ("chat_owner_changed" in data) {
+      /**
+       * Service message: chat owner has changed
+       */
+      this.ownerChanged = this.client.users._add(
+        data.chat_owner_changed.new_owner,
+      );
+    }
+
     if ("suggested_post_refunded" in data) {
       /**
        * Service message: payment for a suggested post was refunded

@@ -4,7 +4,7 @@ import { Collection } from "@telegram.ts/collection";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
 import type { LanguageCode } from "./interfaces/Language";
-import type { MediaDataParam } from "./interfaces/Methods";
+import type { MediaDataParam, InputProfilePhoto } from "./interfaces/Methods";
 import type { ClientOptions, TelegramClient } from "./TelegramClient";
 import {
   Message,
@@ -14,6 +14,7 @@ import {
   WebhookInfo,
   UserChatBoosts,
   UserProfilePhotos,
+  UserProfileAudios,
   BusinessConnection,
   ChatAdministratorRights,
   InputFile,
@@ -673,6 +674,17 @@ class BaseClient extends EventEmitter {
       .then((res) => new UserProfilePhotos(this, res));
   }
 
+  /** Use this method to get a list of profile audios for a user. Returns a UserProfileAudios object. */
+  async getUserProfileAudios(
+    params: MethodParameters["getUserProfileAudios"],
+  ): Promise<MethodsLibReturnType["getUserProfileAudios"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["getUserProfileAudios"]
+      >("getUserProfileAudios", toSnakeCase(params))
+      .then((res) => new UserProfileAudios(this, res));
+  }
+
   /** Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success. */
   async setUserEmojiStatus(
     params: MethodParameters["setUserEmojiStatus"],
@@ -1111,7 +1123,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects. */
+  /** Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns information about the created topic as a ForumTopic object. */
   async getForumTopicIconStickers(): Promise<
     MethodsLibReturnType["getForumTopicIconStickers"]
   > {
@@ -1378,6 +1390,25 @@ class BaseClient extends EventEmitter {
         MethodsApiReturnType["getMyShortDescription"]
       >("getMyShortDescription", { ...(languageCode && { language_code: languageCode }) })
       .then((res) => res.short_description);
+  }
+
+  /** Changes the profile photo of the bot. Returns True on success. */
+  async setMyProfilePhoto(
+    photo: InputProfilePhoto,
+  ): Promise<MethodsLibReturnType["setMyProfilePhoto"]> {
+    return this.rest.request<MethodsApiReturnType["setMyProfilePhoto"]>(
+      "setMyProfilePhoto",
+      { photo },
+    );
+  }
+
+  /** Removes the profile photo of the bot. Requires no parameters. Returns True on success. */
+  async removeMyProfilePhoto(): Promise<
+    MethodsApiReturnType["removeMyProfilePhoto"]
+  > {
+    return this.rest.request<MethodsApiReturnType["removeMyProfilePhoto"]>(
+      "removeMyProfilePhoto",
+    );
   }
 
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
