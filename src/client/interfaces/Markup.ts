@@ -153,6 +153,10 @@ export declare namespace KeyboardButton {
   export interface CommonButton {
     /** Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed */
     text: string;
+    /** Custom emoji identifier shown before the button text. */
+    icon_custom_emoji_id?: string;
+    /** Optional visual button style. */
+    style?: "default" | "primary" | "success" | "danger";
   }
   export interface RequestUsersButton extends CommonButton {
     /** If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in private chats only. */

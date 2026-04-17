@@ -6,6 +6,46 @@ import type {
   ReplyKeyboardMarkup,
 } from "../../client/interfaces/Markup";
 
+const styleMap = {
+  red: "danger",
+  green: "success",
+  blue: "primary",
+} as const;
+/**
+ * Additional keyboard button options.
+ */
+type MarkupOptions = {
+  /**
+   * The custom emoji id shown before the button text.
+   */
+  icon?: string;
+
+  /**
+   * The style of the button.
+   */
+  style?: KeyboardButton.CommonButton["style"] | "red" | "green" | "blue";
+};
+
+function replacedMarkupOptions(options?: MarkupOptions) {
+  if (!options) return {};
+
+  let style: KeyboardButton.CommonButton["style"] | undefined;
+  switch (options.style) {
+    case "red":
+    case "green":
+    case "blue":
+      style = styleMap[options.style];
+      break;
+    default:
+      style = options.style;
+  }
+
+  return {
+    ...(options.icon ? { icon_custom_emoji_id: options.icon } : {}),
+    ...(style ? { style } : {}),
+  };
+}
+
 /**
  * Represents a custom keyboard for Telegram bots.
  */
@@ -66,8 +106,8 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  text(text: string): this {
-    return this.add(KeyboardBuilder.text(text));
+  text(text: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.text(text, options));
   }
 
   /**
@@ -75,8 +115,14 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @returns The created text button.
    */
-  static text(text: string): KeyboardButton.CommonButton {
-    return { text };
+  static text(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.CommonButton {
+    return {
+      text,
+      ...replacedMarkupOptions(options),
+    };
   }
 
   /**
@@ -90,8 +136,11 @@ class KeyboardBuilder {
     text: string,
     requestId: number,
     options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
+    buttonOptions?: MarkupOptions,
   ): this {
-    return this.add(KeyboardBuilder.requestUsers(text, requestId, options));
+    return this.add(
+      KeyboardBuilder.requestUsers(text, requestId, options, buttonOptions),
+    );
   }
 
   /**
@@ -105,8 +154,13 @@ class KeyboardBuilder {
     text: string,
     requestId: number,
     options: Omit<KeyboardButtonRequestUsers, "request_id"> = {},
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestUsersButton {
-    return { text, request_users: { request_id: requestId, ...options } };
+    return {
+      text,
+      request_users: { request_id: requestId, ...options },
+      ...replacedMarkupOptions(buttonOptions),
+    };
   }
 
   /**
@@ -122,8 +176,11 @@ class KeyboardBuilder {
     options: Omit<KeyboardButtonRequestChat, "request_id"> = {
       chat_is_channel: false,
     },
+    buttonOptions?: MarkupOptions,
   ): this {
-    return this.add(KeyboardBuilder.requestChat(text, requestId, options));
+    return this.add(
+      KeyboardBuilder.requestChat(text, requestId, options, buttonOptions),
+    );
   }
 
   /**
@@ -139,8 +196,13 @@ class KeyboardBuilder {
     options: Omit<KeyboardButtonRequestChat, "request_id"> = {
       chat_is_channel: false,
     },
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestChatButton {
-    return { text, request_chat: { request_id: requestId, ...options } };
+    return {
+      text,
+      request_chat: { request_id: requestId, ...options },
+      ...replacedMarkupOptions(buttonOptions),
+    };
   }
 
   /**
@@ -148,8 +210,8 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  requestContact(text: string): this {
-    return this.add(KeyboardBuilder.requestContact(text));
+  requestContact(text: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.requestContact(text, options));
   }
 
   /**
@@ -157,8 +219,11 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @returns The created request contact button.
    */
-  static requestContact(text: string): KeyboardButton.RequestContactButton {
-    return { text, request_contact: true };
+  static requestContact(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestContactButton {
+    return { text, request_contact: true, ...replacedMarkupOptions(options) };
   }
 
   /**
@@ -166,8 +231,8 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @returns The current instance for chaining.
    */
-  requestLocation(text: string): this {
-    return this.add(KeyboardBuilder.requestLocation(text));
+  requestLocation(text: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.requestLocation(text, options));
   }
 
   /**
@@ -175,8 +240,11 @@ class KeyboardBuilder {
    * @param text - The button text.
    * @returns The created request location button.
    */
-  static requestLocation(text: string): KeyboardButton.RequestLocationButton {
-    return { text, request_location: true };
+  static requestLocation(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestLocationButton {
+    return { text, request_location: true, ...replacedMarkupOptions(options) };
   }
 
   /**
@@ -185,8 +253,12 @@ class KeyboardBuilder {
    * @param type - The type of the poll button.
    * @returns The current instance for chaining.
    */
-  requestPoll(text: string, type?: KeyboardButtonPollType["type"]): this {
-    return this.add(KeyboardBuilder.requestPoll(text, type));
+  requestPoll(
+    text: string,
+    type?: KeyboardButtonPollType["type"],
+    options?: MarkupOptions,
+  ): this {
+    return this.add(KeyboardBuilder.requestPoll(text, type, options));
   }
 
   /**
@@ -198,8 +270,9 @@ class KeyboardBuilder {
   static requestPoll(
     text: string,
     type: KeyboardButtonPollType["type"] = "regular",
+    options?: MarkupOptions,
   ): KeyboardButton.RequestPollButton {
-    return { text, request_poll: { type } };
+    return { text, request_poll: { type }, ...replacedMarkupOptions(options) };
   }
 
   /**
@@ -208,8 +281,8 @@ class KeyboardBuilder {
    * @param url - The URL of the web app.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string): this {
-    return this.add(KeyboardBuilder.webApp(text, url));
+  webApp(text: string, url: string, options?: MarkupOptions): this {
+    return this.add(KeyboardBuilder.webApp(text, url, options));
   }
 
   /**
@@ -218,8 +291,12 @@ class KeyboardBuilder {
    * @param url - The URL of the web app.
    * @returns The created web app button.
    */
-  static webApp(text: string, url: string): KeyboardButton.WebAppButton {
-    return { text, web_app: { url } };
+  static webApp(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.WebAppButton {
+    return { text, web_app: { url }, ...replacedMarkupOptions(options) };
   }
 
   /**
@@ -377,6 +454,12 @@ class KeyboardBuilder {
         if (typeof buttonA === "string" && typeof buttonB === "string") {
           if (buttonA !== buttonB) return false;
         } else if (typeof buttonA === "object" && typeof buttonB === "object") {
+          if (
+            buttonA.icon_custom_emoji_id !== buttonB.icon_custom_emoji_id ||
+            buttonA.style !== buttonB.style
+          )
+            return false;
+
           if ("text" in buttonA && "text" in buttonB) {
             if (buttonA.text !== buttonB.text) return false;
           } else {
