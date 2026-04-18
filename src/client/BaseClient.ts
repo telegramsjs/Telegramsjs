@@ -773,7 +773,7 @@ class BaseClient extends EventEmitter {
   async setChatMemberTag(
     params: MethodParameters["setChatMemberTag"],
   ): Promise<MethodsLibReturnType["setChatMemberTag"]> {
-    return this.rest.request<true>("setChatMemberTag", toSnakeCase(params));
+    return this.rest.request<MethodsApiReturnType["setChatMemberTag"]>("setChatMemberTag", toSnakeCase(params));
   }
 
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
