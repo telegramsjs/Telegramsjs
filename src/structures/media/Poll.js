@@ -57,6 +57,10 @@ class Poll extends Base {
        * @property {string} text - Option text, 1-100 characters
        * @property {MessageEntities} entities - Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts
        * @property {number} voterCount - Number of users that voted for this option
+       * @property {string} [persistentId] - Persistent identifier for the option
+       * @property {import("../misc/User").User} [addedByUser] - User who added the option
+       * @property {import("../chat/Chat").Chat} [addedByChat] - Chat which added the option
+       * @property {number} [additionDate] - Date when the option was added
        */
 
       /** @type {PollOptions[]} */
@@ -64,18 +68,23 @@ class Poll extends Base {
 
       if (Array.isArray(data.options)) {
         for (const opts of data.options) {
+          const optionData = /** @type {any} */ (opts);
           /** @type {PollOptions} */
           const result = {};
 
-          result.text = opts.text;
-          if ("text_entities" in opts) {
+          result.text = optionData.text;
+          if ("text_entities" in optionData) {
             result.entities = new MessageEntities(
               this.client,
-              opts.text,
-              opts.text_entities,
+              optionData.text,
+              optionData.text_entities,
             );
           }
-          result.voterCount = opts.voter_count;
+          result.voterCount = optionData.voter_count;
+          if ("persistent_id" in optionData) result.persistentId = optionData.persistent_id;
+          if ("added_by_user" in optionData) result.addedByUser = this.client.users._add(optionData.added_by_user);
+          if ("added_by_chat" in optionData) result.addedByChat = this.client.chats._add(optionData.added_by_chat);
+          if ("addition_date" in optionData) result.additionDate = optionData.addition_date;
           options.push(result);
         }
       }
@@ -87,12 +96,12 @@ class Poll extends Base {
       this.options = options;
     }
 
-    if ("correct_option_id" in data) {
+    if ("correct_option_ids" in data) {
       /**
-       * 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot
-       * @type {number | undefined}
+       * 0-based identifiers of the correct answer options. Available only for polls in the quiz mode
+       * @type {number[] | undefined}
        */
-      this.correctId = data.correct_option_id;
+      this.correctIds = /** @type {number[]} */ ((/** @type {any} */ (data)).correct_option_ids);
     }
 
     if ("explanation" in data) {
@@ -111,6 +120,30 @@ class Poll extends Base {
           this.client,
           data.explanation,
           data.explanation_entities,
+        );
+      }
+    }
+
+    if ("allows_revoting" in data) {
+      /**
+       * True, if users can change their answers after voting
+       * @type {boolean | undefined}
+       */
+      this.allowsRevoting = /** @type {boolean} */ ((/** @type {any} */ (data)).allows_revoting);
+    }
+
+    if ("description" in data) {
+      /**
+       * Poll description
+       * @type {string | undefined}
+       */
+      this.description = /** @type {string} */ ((/** @type {any} */ (data)).description);
+
+      if ("description_entities" in data) {
+        this.descriptionEntities = new MessageEntities(
+          this.client,
+          /** @type {any} */ (data).description,
+          /** @type {any} */ (data).description_entities,
         );
       }
     }

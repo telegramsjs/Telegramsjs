@@ -50,6 +50,9 @@ const {
 const { ReactionType } = require("../misc/ReactionType");
 const { GiftInfo } = require("../gift/GiftInfo");
 const { UniqueGiftInfo } = require("../gift/UniqueGiftInfo");
+const { ManagedBotCreated } = require("../ManagedBotCreated");
+const { PollOptionAdded } = require("../PollOptionAdded");
+const { PollOptionDeleted } = require("../PollOptionDeleted");
 const { TelegramError } = require("../../errors/TelegramError");
 const { ErrorCodes } = require("../../errors/ErrorCodes");
 const { Collection } = require("@telegram.ts/collection");
@@ -251,6 +254,14 @@ class Message extends Base {
        * @type {number | undefined}
        */
       this.checklistTaskId = data.reply_to_checklist_task_id;
+    }
+
+    if ("reply_to_poll_option_id" in data) {
+      /**
+       * Identifier of the specific poll option that is being replied to
+       * @type {number | undefined}
+       */
+      this.pollOptionId = /** @type {number} */ ((/** @type {any} */ (data)).reply_to_poll_option_id);
     }
 
     if ("is_paid_post" in data) {
@@ -507,6 +518,30 @@ class Message extends Base {
        * @type {ChatShared | undefined}
        */
       this.chatShared = new ChatShared(this.client, data.chat_shared);
+    }
+
+    if ("managed_bot_created" in data) {
+      /**
+       * Service message: a managed bot was created
+       * @type {ManagedBotCreated | undefined}
+       */
+      this.managedBotCreated = new ManagedBotCreated(this.client, data.managed_bot_created);
+    }
+
+    if ("poll_option_added" in data) {
+      /**
+       * Service message: a poll option was added
+       * @type {PollOptionAdded | undefined}
+       */
+      this.pollOptionAdded = new PollOptionAdded(this.client, data.poll_option_added);
+    }
+
+    if ("poll_option_deleted" in data) {
+      /**
+       * Service message: a poll option was deleted
+       * @type {PollOptionDeleted | undefined}
+       */
+      this.pollOptionDeleted = new PollOptionDeleted(this.client, data.poll_option_deleted);
     }
 
     if ("connected_website" in data) {
@@ -1202,6 +1237,7 @@ class Message extends Base {
       replyParameters: {
         message_id: this.id,
         ...(this.checklistTaskId && { checklistTaskId: this.checklistTaskId }),
+        ...(this.pollOptionId && { pollOptionId: this.pollOptionId }),
       },
       ...options,
     });

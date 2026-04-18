@@ -57,7 +57,7 @@ class User extends Base {
        * IETF language tag of the user's language
        * @type {LanguageCode | undefined}
        */
-      this.language = data.language_code;
+      this.language = /** @type {LanguageCode} */ (data.language_code);
     }
 
     /**
@@ -71,6 +71,12 @@ class User extends Base {
      * @type {boolean}
      */
     this.inAttachmentMenu = Boolean(data.added_to_attachment_menu);
+
+    /**
+     * True, if this user can manage bots
+     * @type {boolean}
+     */
+    this.canManageBots = Boolean((/** @type {any} */ (data)).can_manage_bots);
 
     return data;
   }

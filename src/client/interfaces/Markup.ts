@@ -174,6 +174,10 @@ export declare namespace KeyboardButton {
     /** If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only. */
     request_poll: KeyboardButtonPollType;
   }
+  export interface RequestManagedBotButton extends CommonButton {
+    /** If specified, pressing the button will allow the user to select a manager bot and create a managed bot in a service message. Available in private chats only. */
+    request_managed_bot: KeyboardButtonRequestManagedBot;
+  }
   export interface WebAppButton extends CommonButton {
     /** If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a “web_app_data” service message. Available in private chats only. */
     web_app: WebAppInfo;
@@ -188,6 +192,7 @@ export type KeyboardButton =
   | KeyboardButton.RequestContactButton
   | KeyboardButton.RequestLocationButton
   | KeyboardButton.RequestPollButton
+  | KeyboardButton.RequestManagedBotButton
   | KeyboardButton.WebAppButton
   | string;
 
@@ -195,6 +200,19 @@ export type KeyboardButton =
 export interface KeyboardButtonPollType {
   /** If quiz is passed, the user will be allowed to create only polls in the quiz mode. If regular is passed, only regular polls will be allowed. Otherwise, the user will be allowed to create a poll of any type. */
   type?: "quiz" | "regular";
+}
+
+
+/** This object defines the criteria used to request a managed bot. Information about the selected manager bot and created managed bot will be shared with the bot when the corresponding button is pressed. */
+export interface KeyboardButtonRequestManagedBot {
+  /** Signed 32-bit identifier of the request, which will be received back in the ManagedBotCreated object. Must be unique within the message */
+  request_id: number;
+  /** The username of the manager bot that can be used to create the managed bot. */
+  manager_bot_username?: string;
+  /** Suggested username for the managed bot. */
+  bot_username?: string;
+  /** Suggested name for the managed bot. */
+  bot_name?: string;
 }
 
 /** Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup). Not supported in channels and for messages sent on behalf of a Telegram Business account. */

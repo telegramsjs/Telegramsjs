@@ -62,6 +62,7 @@ const Events = {
   ChatBoost: "chatBoost",
   RemovedChatBoost: "removedChatBoost",
   PurchasedPaidMedia: "purchasedPaidMedia",
+  ManagedBot: "managedBot",
 } as const;
 
 const RestEvents = {

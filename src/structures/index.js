@@ -146,3 +146,9 @@ module.exports.Story = require("./story/Story").Story;
 module.exports.PaidMedia = require("./media/paid/PaidMedia").PaidMedia;
 module.exports.PaidMediaInfo =
   require("./media/paid/PaidMediaInfo").PaidMediaInfo;
+module.exports.ManagedBotCreated = require("./ManagedBotCreated").ManagedBotCreated;
+module.exports.ManagedBotUpdated = require("./ManagedBotUpdated").ManagedBotUpdated;
+module.exports.PollOptionAdded = require("./PollOptionAdded").PollOptionAdded;
+module.exports.PollOptionDeleted = require("./PollOptionDeleted").PollOptionDeleted;
+module.exports.PreparedKeyboardButton =
+  require("./misc/PreparedKeyboardButton").PreparedKeyboardButton;

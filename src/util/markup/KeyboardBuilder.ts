@@ -3,6 +3,7 @@ import type {
   KeyboardButtonPollType,
   KeyboardButtonRequestChat,
   KeyboardButtonRequestUsers,
+  KeyboardButtonRequestManagedBot,
   ReplyKeyboardMarkup,
 } from "../../client/interfaces/Markup";
 
@@ -200,6 +201,39 @@ class KeyboardBuilder {
     type: KeyboardButtonPollType["type"] = "regular",
   ): KeyboardButton.RequestPollButton {
     return { text, request_poll: { type } };
+  }
+
+
+  /**
+   * Adds a request managed bot button to the keyboard.
+   * @param text - The button text.
+   * @param requestId - The request ID.
+   * @param options - Additional options for the button.
+   * @returns The current instance for chaining.
+   */
+  requestManagedBot(
+    text: string,
+    requestId: number,
+    options: Omit<KeyboardButtonRequestManagedBot, "request_id"> = {},
+  ): this {
+    return this.add(
+      KeyboardBuilder.requestManagedBot(text, requestId, options),
+    );
+  }
+
+  /**
+   * Creates a request managed bot button.
+   * @param text - The button text.
+   * @param requestId - The request ID.
+   * @param options - Additional options for the button.
+   * @returns The created request managed bot button.
+   */
+  static requestManagedBot(
+    text: string,
+    requestId: number,
+    options: Omit<KeyboardButtonRequestManagedBot, "request_id"> = {},
+  ): KeyboardButton.RequestManagedBotButton {
+    return { text, request_managed_bot: { request_id: requestId, ...options } };
   }
 
   /**

@@ -30,6 +30,9 @@ class PollAnswer extends Base {
 
     /** 0-based identifiers of chosen answer options. May be empty if the vote was retracted */
     this.ids = data.option_ids;
+
+    /** Persistent identifiers of chosen answer options. May be empty if the vote was retracted */
+    this.persistentIds = (/** @type {any} */ (data)).option_persistent_ids || [];
   }
 }
 
