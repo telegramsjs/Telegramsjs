@@ -3,6 +3,7 @@
  */
 type ChatPermissionString =
   | "isAnonymous"
+  | "editTag"
   | "sendMessages"
   | "sendAudios"
   | "sendDocuments"
@@ -17,6 +18,7 @@ type ChatPermissionString =
   | "inviteUsers"
   | "pinMessages"
   | "manageTopics"
+  | "manageTags"
   | "manageDirectMessages";
 
 /**
@@ -24,6 +26,7 @@ type ChatPermissionString =
  */
 interface ChatPermissionFlags {
   isAnonymous?: boolean;
+  editTag?: boolean;
   sendMessages?: boolean;
   sendAudios?: boolean;
   sendDocuments?: boolean;
@@ -38,6 +41,7 @@ interface ChatPermissionFlags {
   inviteUsers?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageTags?: boolean;
   manageDirectMessages?: boolean;
 }
 
@@ -194,8 +198,10 @@ class ChatPermissions {
     inviteUsers: 12,
     pinMessages: 13,
     manageTopics: 14,
-    manageDirectMessages: 15,
-    isAnonymous: 16,
+    manageTags: 15,
+    manageDirectMessages: 16,
+    isAnonymous: 17,
+    editTag: 18,
   };
 }
 

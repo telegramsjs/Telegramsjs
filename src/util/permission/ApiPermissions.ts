@@ -25,6 +25,9 @@ const ApiPermissionsFlags = {
   editStories: "can_edit_stories",
   deleteStories: "can_delete_stories",
   manageTopics: "can_manage_topics",
+  manageTags: "can_manage_tags",
+  editTag: "can_edit_tag",
+  manageDirectMessages: "can_manage_direct_messages",
 } as const;
 
 /**

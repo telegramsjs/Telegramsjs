@@ -187,9 +187,20 @@ class MessageEntities extends Base {
   }
 
   /**
+   * Retrieves all date_time entities from the message.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & { unixTime: number; timeFormat: "r" | `${"w" | ""}${"d" | "D" | ""}${"t" | "T" | ""}` }>} A collection of date_time entities.
+   */
+  get dateTime() {
+    // @ts-ignore
+    return this.searchEntity("date_time").filter(
+      (entity) => "unixTime" in entity && "timeFormat" in entity,
+    );
+  }
+
+  /**
    * Searches for a specific type of entity in the message.
-   * @param {"mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji"} searchType - The type of entity to search for.
-   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & ({ language?: import("../../client/interfaces/Language").LanguageCode } | { url: string } | { user: User } | { customEmojiId: string })>} A collection of found entities.
+   * @param {"mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji" | "date_time"} searchType - The type of entity to search for.
+   * @returns {import("@telegram.ts/collection").ReadonlyCollection<number, SearchResult & ({ language?: import("../../client/interfaces/Language").LanguageCode } | { url: string } | { user: User } | { customEmojiId: string } | { unixTime: number; timeFormat: "r" | `${"w" | ""}${"d" | "D" | ""}${"t" | "T" | ""}` })>} A collection of found entities.
    */
   searchEntity(searchType) {
     const results = new Collection();
@@ -207,6 +218,12 @@ class MessageEntities extends Base {
           ...("custom_emoji_id" in entity && {
             customEmojiId: entity.custom_emoji_id,
           }),
+          ...("unix_time" in entity && {
+            unixTime: entity.unix_time,
+          }),
+          ...("date_time_format" in entity && {
+            timeFormat: entity.date_time_format,
+          }),
           search: this.searchText.substring(offset, offset + length),
         });
       }
@@ -218,7 +235,7 @@ class MessageEntities extends Base {
   /**
    * Enables iteration over the message entities.
    * @returns {Generator<(SearchResult & ({ type: "mention" | "hashtag" | "cashtag" | "botCommand" | "url" | "email" |
-      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | { type: "pre", language?: import("../../client/interfaces/Language").LanguageCode } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string }}))>} An iterator over the message entities.
+      "phoneNumber" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "code" | "dateTime" | { type: "pre", language?: import("../../client/interfaces/Language").LanguageCode } | { type: "text_link", url: string } | { type: "text_mention", user: User } | { type: "customEmoji", customEmojiId: string } | { type: "dateTime"; unixTime: number; timeFormat: "r" | `${"w" | ""}${"d" | "D" | ""}${"t" | "T" | ""}` } }))>} An iterator over the message entities.
    */
   *[Symbol.iterator]() {
     /** @type {(keyof MessageEntities)[]} */
@@ -241,6 +258,7 @@ class MessageEntities extends Base {
       "textLink",
       "textMention",
       "customEmoji",
+      "dateTime",
     ];
 
     const allEntities = new Collection();

@@ -161,6 +161,7 @@ class Message extends Base {
         this.member = new ChatMember(this.client, this.chat.id, {
           user: data.from,
           status: "member",
+          ...(data.sender_tag && { tag: data.sender_tag }),
         });
       }
     }
@@ -219,6 +220,14 @@ class Message extends Base {
        * @type {import("../misc/User").User | undefined}
        */
       this.senderBusinessBot = this.client.users._add(data.sender_business_bot);
+    }
+
+    if ("sender_tag" in data) {
+      /**
+       * For messages in channels and replies to channel messages in supergroups, the tag of the message sender
+       * @type {string | undefined}
+       */
+      this.senderTag = data.sender_tag;
     }
 
     if ("forward_origin" in data) {
