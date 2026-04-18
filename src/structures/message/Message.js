@@ -221,6 +221,15 @@ class Message extends Base {
       this.senderBusinessBot = this.client.users._add(data.sender_business_bot);
     }
 
+    if ("sender_tag" in data) {
+      /**
+       * For messages in channels and replies to channel messages in supergroups, the tag of the message sender
+       * @type {string | undefined}
+       */
+      this.senderTag =
+        typeof data.sender_tag === "string" ? data.sender_tag : undefined;
+    }
+
     if ("forward_origin" in data) {
       /**
        * Information about the original message for forwarded messages

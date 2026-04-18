@@ -87,6 +87,10 @@ class ChatMember extends Base {
       permissions.manageTopics = data.can_manage_topics;
     }
 
+    if ("can_manage_tags" in data) {
+      permissions.manageTags = Boolean(data.can_manage_tags);
+    }
+
     if ("can_send_messages" in data) {
       permissions.sendMessages = data.can_send_messages;
     }
@@ -127,6 +131,10 @@ class ChatMember extends Base {
       permissions.addWebPagePreviews = data.can_add_web_page_previews;
     }
 
+    if ("can_edit_tag" in data) {
+      permissions.editTag = Boolean(data.can_edit_tag);
+    }
+
     /** Represents the rights of an administrator in a chat */
     this.permissions = new UserPermissions(
       this.status === "creator" ? UserPermissions.Flags : permissions,
@@ -160,6 +168,14 @@ class ChatMember extends Base {
        * @type {string | undefined}
        */
       this.nickName = data.custom_title;
+    }
+
+    if ("tag" in data) {
+      /**
+       * Custom tag for this member
+       * @type {string | undefined}
+       */
+      this.tag = typeof data.tag === "string" ? data.tag : undefined;
     }
 
     if ("is_member" in data) {
@@ -336,6 +352,23 @@ class ChatMember extends Base {
   }
 
   /**
+   * Use this method to set a custom tag for a member of a supergroup.
+   * @param {string} [tag] - New tag for the member; 0-32 characters
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  setTag(tag) {
+    if (!this.id) {
+      throw new TelegramError(ErrorCodes.UserIdNotAvailable);
+    }
+
+    return this.client.setChatMemberTag({
+      chatId: this.chatId,
+      userId: this.id,
+      ...(tag !== undefined && { tag }),
+    });
+  }
+
+  /**
    * Checks if this member is equal to another member.
    * @param {ChatMember} other - The other object to compare with.
    * @returns {boolean} True if both objects are instances of ChatMember and are equal based on key properties, otherwise false.
@@ -353,6 +386,7 @@ class ChatMember extends Base {
       this.user.equals(other.user) &&
       this.anonymous === other.anonymous &&
       this.nickName === other.nickName &&
+      this.tag === other.tag &&
       this.isMember === other.isMember &&
       this.untilUnixTime === other.untilUnixTime
     );

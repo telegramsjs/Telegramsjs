@@ -13,7 +13,7 @@ export interface User {
   /** User's or bot's username */
   username?: string;
   /** IETF language tag of the user's language */
-  language_code?: LanguageCode;
+  language_code?: string;
   /** True, if this user is a Telegram Premium user */
   is_premium?: true;
   /** True, if this user added the bot to the attachment menu */
@@ -36,7 +36,7 @@ export interface LinkPreviewOptions {
 
 export declare namespace MessageEntity {
   interface AbstractMessageEntity {
-    /** Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers) */
+    /** Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), “date_time” (for a formatted date and time) */
     type: string;
     /** Offset in UTF-16 code units to the start of the entity */
     offset: number;
@@ -59,7 +59,8 @@ export declare namespace MessageEntity {
       | "spoiler"
       | "blockquote"
       | "expandable_blockquote"
-      | "code";
+      | "code"
+      | "date_time";
   }
   export interface PreMessageEntity extends AbstractMessageEntity {
     type: "pre";

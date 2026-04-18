@@ -93,6 +93,7 @@ import {
  */
 export type ChatPermissionString =
   | "isAnonymous"
+  | "editTag"
   | "sendMessages"
   | "sendAudios"
   | "sendDocuments"
@@ -107,6 +108,7 @@ export type ChatPermissionString =
   | "inviteUsers"
   | "pinMessages"
   | "manageTopics"
+  | "manageTags"
   | "manageDirectMessages";
 
 /**
@@ -114,6 +116,7 @@ export type ChatPermissionString =
  */
 export interface ChatPermissionFlags {
   isAnonymous?: boolean;
+  editTag?: boolean;
   sendMessages?: boolean;
   sendAudios?: boolean;
   sendDocuments?: boolean;
@@ -128,6 +131,7 @@ export interface ChatPermissionFlags {
   inviteUsers?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageTags?: boolean;
   manageDirectMessages?: boolean;
 }
 
@@ -544,7 +548,7 @@ export declare class User extends Base {
   /**
    * IETF language tag of the user's language
    */
-  language?: LanguageCode;
+  language?: string;
   /**
    * True, if this user is a Telegram Premium user
    */
@@ -940,6 +944,7 @@ export type UserPermissionString =
   | "editMessages"
   | "pinMessages"
   | "manageTopics"
+  | "manageTags"
   | "manageDirectMessages";
 
 /**
@@ -960,6 +965,7 @@ export interface UserPermissionFlags {
   editMessages?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageTags?: boolean;
   manageDirectMessages?: boolean;
 }
 
@@ -1563,7 +1569,13 @@ export declare class MessageEntities extends Base {
   get customEmoji(): ReadonlyCollection<
     number,
     SearchResult & { customEmojiId: string }
-  >; /**
+  >;
+  /**
+   * Retrieves all date_time entities from the message.
+   * @returns A collection of date_time entities.
+   */
+  get dateTime(): ReadonlyCollection<number, SearchResult>;
+  /**
    * Searches for a specific type of entity in the message.
    * @param searchType - The type of entity to search for.
    * @returns A collection of found entities.
@@ -1587,7 +1599,8 @@ export declare class MessageEntities extends Base {
       | "pre"
       | "text_link"
       | "text_mention"
-      | "custom_emoji",
+      | "custom_emoji"
+      | "date_time",
   ): ReadonlyCollection<
     number,
     SearchResult &
@@ -1618,7 +1631,8 @@ export declare class MessageEntities extends Base {
         | "strikethrough"
         | "spoiler"
         | "blockquote"
-        | "code";
+        | "code"
+        | "dateTime";
     } & (
         | { type: "pre"; language?: LanguageCode }
         | { type: "textLink"; url: string }
@@ -6448,6 +6462,10 @@ export declare class Message extends Base {
    */
   senderBusinessBot?: User;
   /**
+   * For messages in channels and replies to channel messages in supergroups, the tag of the message sender
+   */
+  senderTag?: string;
+  /**
    * Information about the original message for forwarded messages
    */
   forwardOrigin?: MessageOrigin;
@@ -8941,6 +8959,10 @@ export declare class ChatMember extends Base {
    */
   nickName?: string;
   /**
+   * Custom tag for this member
+   */
+  tag?: string;
+  /**
    * True, if the user is a member of the chat at the moment of the request
    */
   isMember?: boolean;
@@ -9040,6 +9062,12 @@ export declare class ChatMember extends Base {
    * @returns Returns True on success.
    */
   setNikeName(name: string): Promise<true>;
+  /**
+   * Use this method to set a custom tag for a member of a supergroup.
+   * @param tag - New tag for the member; 0-32 characters
+   * @returns Returns True on success.
+   */
+  setTag(tag?: string): Promise<true>;
   /**
    * Checks if this member is equal to another member.
    * @param other - The other object to compare with.
@@ -10310,6 +10338,10 @@ export declare class BaseClient extends EventEmitter {
   setChatAdministratorCustomTitle(
     params: MethodParameters["setChatAdministratorCustomTitle"],
   ): Promise<MethodsLibReturnType["setChatAdministratorCustomTitle"]>;
+  /** Use this method to set a custom tag for a member of a supergroup. Returns True on success. */
+  setChatMemberTag(
+    params: MethodParameters["setChatMemberTag"],
+  ): Promise<MethodsLibReturnType["setChatMemberTag"]>;
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
   banChatSenderChat(
     chatId: number | string,

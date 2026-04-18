@@ -47,6 +47,10 @@ class ChatAdministratorRights {
       permissions.manageTopics = data.can_manage_topics;
     }
 
+    if ("can_manage_tags" in data) {
+      permissions.manageTags = Boolean(data.can_manage_tags);
+    }
+
     /** Represents the rights of an administrator in a chat */
     this.permissions = new ChatPermissions(permissions);
   }
