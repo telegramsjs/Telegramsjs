@@ -17,6 +17,7 @@ import { CallbackQuery } from "../structures/CallbackQuery";
 import { BusinessConnection } from "../structures/business/BusinessConnection";
 import { BusinessMessagesDeleted } from "../structures/business/BusinessMessagesDeleted";
 import { PaidMediaPurchased } from "../structures/PaidMediaPurchased";
+import { ManagedBotUpdated } from "../structures/ManagedBotUpdated";
 import type { TelegramClient } from "./TelegramClient";
 
 /**
@@ -53,6 +54,7 @@ class WorkerClient {
     | ChatBoostUpdated
     | ChatBoostRemoved
     | PaidMediaPurchased
+    | ManagedBotUpdated
     | undefined {
     this.client.emit(
       Events.RawUpdate,
@@ -135,6 +137,9 @@ class WorkerClient {
     }
     if ("purchased_paid_media" in data) {
       return this.onPurchasedPaidMedia(data.purchased_paid_media);
+    }
+    if ("managed_bot" in (data as unknown as Record<string, unknown>)) {
+      return this.onManagedBot((data as any).managed_bot);
     }
     return;
   }
@@ -457,6 +462,15 @@ class WorkerClient {
     this.client.emit(Events.PurchasedPaidMedia, paidMedia);
 
     return paidMedia;
+  }
+
+  onManagedBot(data: any): ManagedBotUpdated | undefined {
+    if (!data) return;
+
+    const managedBot = new ManagedBotUpdated(this.client, data);
+    this.client.emit(Events.ManagedBot, managedBot);
+
+    return managedBot;
   }
 }
 

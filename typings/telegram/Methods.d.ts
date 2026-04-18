@@ -952,19 +952,33 @@ export type ApiMethods = {
     isAnonymous?: boolean;
     /** Poll type, “quiz” or “regular”, defaults to “regular” */
     type?: "quiz" | "regular";
-    /** True, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to False */
+    /** True, if the poll allows multiple answers, defaults to False */
     allowsMultipleAnswers?: boolean;
-    /** 0-based identifier of the correct answer option, required for polls in quiz mode */
-    correctOptionId?: number;
+    /** 0-based identifiers of the correct answer options, required for polls in quiz mode */
+    correctOptionIds?: number[];
+    /** True, if users can change their answers after voting */
+    allowsRevoting?: boolean;
+    /** True, if poll options should be shuffled */
+    shuffleOptions?: boolean;
+    /** True, if users are allowed to add options */
+    allowAddingOptions?: boolean;
+    /** True, if results should be hidden until the poll is closed */
+    hideResultsUntilCloses?: boolean;
     /** Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing */
     explanation?: string;
     /** Mode for parsing entities in the explanation. See formatting options for more details. */
     explanationParseMode?: ParseMode;
     /** A list of special entities that appear in the poll explanation. It can be specified instead of explanationParseMode */
     explanationEntities?: MessageEntity[];
-    /** Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with closeDate. */
+    /** Poll description, 0-200 characters */
+    description?: string;
+    /** Mode for parsing entities in the poll description */
+    descriptionParseMode?: ParseMode;
+    /** List of special entities that appear in the poll description */
+    descriptionEntities?: MessageEntity[];
+    /** Amount of time in seconds the poll will be active after creation, 5-2628000. Can't be used together with closeDate. */
     openPeriod?: number;
-    /** Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 600 seconds in the future. Can't be used together with openPeriod. */
+    /** Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 2628000 seconds in the future. Can't be used together with openPeriod. */
     closeDate?: number;
     /** Pass True if the poll needs to be immediately closed. This can be useful for poll preview. */
     isClosed?: boolean;
@@ -2295,6 +2309,35 @@ export type ApiMethods = {
     /** Pass True if the message can be sent to channel chats */
     allowChannelChats?: boolean;
   }): import("../index").PreparedInlineMessage;
+
+  
+  /** Use this method to get the current token of a managed bot. */
+  getManagedBotToken(args: {
+    /** Identifier of the managed bot */
+    botId: number | string;
+  }): string;
+
+  /** Use this method to replace the token of a managed bot. */
+  replaceManagedBotToken(args: {
+    /** Identifier of the managed bot */
+    botId: number | string;
+  }): string;
+
+  /** Stores a keyboard button that can be sent by a user of a Mini App. */
+  savePreparedKeyboardButton(args: {
+    /** Unique identifier of the target user that can use the prepared button */
+    userId: string | number;
+    /** The keyboard button to prepare */
+    button: import("./Markup").KeyboardButton;
+    /** Pass True if the button can be sent to private chats with users */
+    allowUserChats?: boolean;
+    /** Pass True if the button can be sent to private chats with bots */
+    allowBotChats?: boolean;
+    /** Pass True if the button can be sent to group and supergroup chats */
+    allowGroupChats?: boolean;
+    /** Pass True if the button can be sent to channel chats */
+    allowChannelChats?: boolean;
+  }): import("../../structures/misc/PreparedKeyboardButton").PreparedKeyboardButton;
 
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(args: {

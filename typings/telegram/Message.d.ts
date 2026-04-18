@@ -13,11 +13,13 @@ export interface User {
   /** User's or bot's username */
   username?: string;
   /** IETF language tag of the user's language */
-  language_code?: LanguageCode;
+  language_code?: LanguageCode | string;
   /** True, if this user is a Telegram Premium user */
   is_premium?: true;
   /** True, if this user added the bot to the attachment menu */
   added_to_attachment_menu?: true;
+  /** True, if the bot can be invited to create managed bots */
+  can_manage_bots?: true;
 }
 
 /** Describes the options used for link preview generation. */
@@ -121,6 +123,8 @@ export interface ReplyParameters {
   chat_id?: number | string;
   /** Identifier of the specific checklist task to be replied to */
   checklist_task_id?: number;
+  /** Identifier of the poll option to be replied to */
+  poll_option_id?: number;
   /** Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic. Always True for messages sent on behalf of a business account. */
   allow_sending_without_reply?: boolean;
   /** Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message. */

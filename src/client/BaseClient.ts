@@ -27,6 +27,7 @@ import {
   ChatInviteLink,
   Gifts,
   PreparedInlineMessage,
+  PreparedKeyboardButton,
   StarAmount,
   OwnedGifts,
   Story,
@@ -153,6 +154,9 @@ interface EventHandlers {
   purchasedPaidMedia: (
     paidMedia: import("../structures/PaidMediaPurchased").PaidMediaPurchased,
   ) => PossiblyAsync<void>;
+  managedBot: (
+    managedBot: import("../structures/ManagedBotUpdated").ManagedBotUpdated,
+  ) => PossiblyAsync<void>;
 }
 
 type EventHandlerParameters =
@@ -173,7 +177,8 @@ type EventHandlerParameters =
   | import("../structures/ChatJoinRequest").ChatJoinRequest
   | import("../structures/ChatBoostUpdated").ChatBoostUpdated
   | import("../structures/ChatBoostRemoved").ChatBoostRemoved
-  | import("../structures/PaidMediaPurchased").PaidMediaPurchased;
+  | import("../structures/PaidMediaPurchased").PaidMediaPurchased
+  | import("../structures/ManagedBotUpdated").ManagedBotUpdated;
 
 class BaseClient extends EventEmitter {
   public readonly rest: Rest;
@@ -1976,6 +1981,36 @@ class BaseClient extends EventEmitter {
         MethodsApiReturnType["savePreparedInlineMessage"]
       >("savePreparedInlineMessage", toSnakeCase(params))
       .then((res) => new PreparedInlineMessage(res));
+  }
+
+
+  /** Use this method to get the current token of a managed bot. Returns the token on success. */
+  async getManagedBotToken(
+    params: MethodParameters["getManagedBotToken"],
+  ): Promise<MethodsLibReturnType["getManagedBotToken"]> {
+    return this.rest.request<string>(
+      "getManagedBotToken",
+      toSnakeCase(params),
+    );
+  }
+
+  /** Use this method to replace the token of a managed bot. Returns the new token on success. */
+  async replaceManagedBotToken(
+    params: MethodParameters["replaceManagedBotToken"],
+  ): Promise<MethodsLibReturnType["replaceManagedBotToken"]> {
+    return this.rest.request<string>(
+      "replaceManagedBotToken",
+      toSnakeCase(params),
+    );
+  }
+
+  /** Stores a keyboard button that can be sent by a user of a Mini App. Returns a PreparedKeyboardButton object. */
+  async savePreparedKeyboardButton(
+    params: MethodParameters["savePreparedKeyboardButton"],
+  ): Promise<MethodsLibReturnType["savePreparedKeyboardButton"]> {
+    return this.rest
+      .request<any>("savePreparedKeyboardButton", toSnakeCase(params))
+      .then((res) => new PreparedKeyboardButton(this, res));
   }
 
   /** Use this method to send invoices. On success, the sent Message is returned. */
