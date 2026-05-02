@@ -17,7 +17,28 @@ import { CallbackQuery } from "../structures/CallbackQuery";
 import { BusinessConnection } from "../structures/business/BusinessConnection";
 import { BusinessMessagesDeleted } from "../structures/business/BusinessMessagesDeleted";
 import { PaidMediaPurchased } from "../structures/PaidMediaPurchased";
+import { ManagedBotUpdated } from "../structures/ManagedBotUpdated";
 import type { TelegramClient } from "./TelegramClient";
+
+type UpdateResult =
+  | Message
+  | BusinessConnection
+  | BusinessMessagesDeleted
+  | MessageReactionUpdated
+  | MessageReactionCountUpdated
+  | InlineQuery
+  | ChosenInlineResult
+  | CallbackQuery
+  | ShippingQuery
+  | PreCheckoutQuery
+  | Poll
+  | PollAnswer
+  | ChatMemberUpdated
+  | ChatJoinRequest
+  | ChatBoostUpdated
+  | ChatBoostRemoved
+  | PaidMediaPurchased
+  | ManagedBotUpdated;
 
 /**
  * Handles incoming updates from the Telegram API and routes them to the appropriate event handlers.
@@ -33,27 +54,7 @@ class WorkerClient {
    * Processes an incoming update and emits the corresponding event.
    * @param data - The update data received from Telegram.
    */
-  processUpdate(
-    data: Update,
-  ):
-    | Message
-    | BusinessConnection
-    | BusinessMessagesDeleted
-    | MessageReactionUpdated
-    | MessageReactionCountUpdated
-    | InlineQuery
-    | ChosenInlineResult
-    | CallbackQuery
-    | ShippingQuery
-    | PreCheckoutQuery
-    | Poll
-    | PollAnswer
-    | ChatMemberUpdated
-    | ChatJoinRequest
-    | ChatBoostUpdated
-    | ChatBoostRemoved
-    | PaidMediaPurchased
-    | undefined {
+  processUpdate(data: Update): UpdateResult | void {
     this.client.emit(
       Events.RawUpdate,
       Object.assign({}, data, { client: this.client }),
@@ -71,72 +72,93 @@ class WorkerClient {
         return this.onChatMemberRemove(data.message!);
       }
       return this.onMessage(
-        data.message || data.channel_post || data.business_message,
+        (data.message || data.channel_post || data.business_message)!,
       );
     }
-    if ("business_connection" in data) {
+
+    if ("business_connection" in data && data.business_connection) {
       return this.onBusinessConnection(data.business_connection);
     }
+
     if (
       "edited_message" in data ||
       "edited_channel_post" in data ||
       "edited_business_message" in data
     ) {
-      return this.onMessageEdit(
+      const edited =
         data.edited_message ||
-          data.edited_channel_post ||
-          data.edited_business_message,
-      );
+        data.edited_channel_post ||
+        data.edited_business_message;
+      if (edited) return this.onMessageEdit(edited);
     }
-    if ("deleted_business_messages" in data) {
+
+    if ("deleted_business_messages" in data && data.deleted_business_messages) {
       return this.onDeletedBusinessMessages(data.deleted_business_messages);
     }
-    if ("message_reaction" in data) {
+
+    if ("message_reaction" in data && data.message_reaction) {
       return this.onMessageReaction(data.message_reaction);
     }
-    if ("message_reaction_count" in data) {
+
+    if ("message_reaction_count" in data && data.message_reaction_count) {
       return this.onMessageReactionCount(data.message_reaction_count);
     }
-    if ("inline_query" in data) {
+
+    if ("inline_query" in data && data.inline_query) {
       return this.onInlineQuery(data.inline_query);
     }
-    if ("chosen_inline_result" in data) {
+
+    if ("chosen_inline_result" in data && data.chosen_inline_result) {
       return this.onChosenInlineResult(data.chosen_inline_result);
     }
-    if ("callback_query" in data) {
+
+    if ("callback_query" in data && data.callback_query) {
       return this.onCallbackQuery(data.callback_query);
     }
-    if ("shipping_query" in data) {
+
+    if ("shipping_query" in data && data.shipping_query) {
       return this.onShippingQuery(data.shipping_query);
     }
-    if ("pre_checkout_query" in data) {
+
+    if ("pre_checkout_query" in data && data.pre_checkout_query) {
       return this.onPreCheckoutQuery(data.pre_checkout_query);
     }
-    if ("poll" in data) {
+
+    if ("poll" in data && data.poll) {
       return this.onPoll(data.poll);
     }
-    if ("poll_answer" in data) {
+
+    if ("poll_answer" in data && data.poll_answer) {
       return this.onPollAnswer(data.poll_answer);
     }
-    if ("my_chat_member" in data) {
+
+    if ("my_chat_member" in data && data.my_chat_member) {
       return this.onMyChatMember(data.my_chat_member);
     }
-    if ("chat_member" in data) {
+
+    if ("chat_member" in data && data.chat_member) {
       return this.onChatMember(data.chat_member);
     }
-    if ("chat_join_request" in data) {
+
+    if ("chat_join_request" in data && data.chat_join_request) {
       return this.onChatJoinRequest(data.chat_join_request);
     }
-    if ("chat_boost" in data) {
+
+    if ("chat_boost" in data && data.chat_boost) {
       return this.onChatBoost(data.chat_boost);
     }
-    if ("removed_chat_boost" in data) {
+
+    if ("removed_chat_boost" in data && data.removed_chat_boost) {
       return this.onRemovedChatBoost(data.removed_chat_boost);
     }
-    if ("purchased_paid_media" in data) {
+
+    if ("purchased_paid_media" in data && data.purchased_paid_media) {
       return this.onPurchasedPaidMedia(data.purchased_paid_media);
     }
-    return;
+
+    if ("managed_bot" in data && data.managed_bot) {
+      return this.onManagedUpdatedBot(data.managed_bot);
+    }
   }
 
   /**
@@ -144,16 +166,12 @@ class WorkerClient {
    * @param data - The message data.
    */
   onMessage(
-    data:
-      | Update["message"]
-      | Update["channel_post"]
-      | Update["business_message"],
-  ): Message | undefined {
-    if (!data) return;
-
+    data: NonNullable<
+      Update["message"] | Update["channel_post"] | Update["business_message"]
+    >,
+  ): Message {
     const message = new Message(this.client, data);
     this.client.emit(Events.Message, message);
-
     return message;
   }
 
@@ -162,13 +180,10 @@ class WorkerClient {
    * @param data - The business connection data.
    */
   onBusinessConnection(
-    data: Update["business_connection"],
-  ): BusinessConnection | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["business_connection"]>,
+  ): BusinessConnection {
     const business = new BusinessConnection(this.client, data);
     this.client.emit(Events.BusinessConnection, business);
-
     return business;
   }
 
@@ -177,17 +192,15 @@ class WorkerClient {
    * @param data - The edited message data.
    */
   onMessageEdit(
-    data:
+    data: NonNullable<
       | Update["edited_message"]
       | Update["edited_channel_post"]
-      | Update["edited_business_message"],
-  ): Message | undefined {
-    if (!data) return;
-
-    const newMessage = new Message(this.client, data);
-    this.client.emit(Events.EditedMessage, newMessage);
-
-    return newMessage;
+      | Update["edited_business_message"]
+    >,
+  ): Message {
+    const message = new Message(this.client, data);
+    this.client.emit(Events.EditedMessage, message);
+    return message;
   }
 
   /**
@@ -195,13 +208,10 @@ class WorkerClient {
    * @param data - The deleted business messages data.
    */
   onDeletedBusinessMessages(
-    data: Update["deleted_business_messages"],
-  ): BusinessMessagesDeleted | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["deleted_business_messages"]>,
+  ): BusinessMessagesDeleted {
     const businessMessage = new BusinessMessagesDeleted(this.client, data);
     this.client.emit(Events.DeletedBusinessMessages, businessMessage);
-
     return businessMessage;
   }
 
@@ -210,13 +220,10 @@ class WorkerClient {
    * @param data - The message reaction data.
    */
   onMessageReaction(
-    data: Update["message_reaction"],
-  ): MessageReactionUpdated | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["message_reaction"]>,
+  ): MessageReactionUpdated {
     const messageReaction = new MessageReactionUpdated(this.client, data);
     this.client.emit(Events.MessageReaction, messageReaction);
-
     return messageReaction;
   }
 
@@ -225,13 +232,10 @@ class WorkerClient {
    * @param data - The message reaction count data.
    */
   onMessageReactionCount(
-    data: Update["message_reaction_count"],
-  ): MessageReactionCountUpdated | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["message_reaction_count"]>,
+  ): MessageReactionCountUpdated {
     const messageReaction = new MessageReactionCountUpdated(this.client, data);
     this.client.emit(Events.MessageReactionCount, messageReaction);
-
     return messageReaction;
   }
 
@@ -239,12 +243,9 @@ class WorkerClient {
    * Handles incoming inline queries.
    * @param data - The inline query data.
    */
-  onInlineQuery(data: Update["inline_query"]): InlineQuery | undefined {
-    if (!data) return;
-
+  onInlineQuery(data: NonNullable<Update["inline_query"]>): InlineQuery {
     const inline = new InlineQuery(this.client, data);
     this.client.emit(Events.InlineQuery, inline);
-
     return inline;
   }
 
@@ -253,13 +254,10 @@ class WorkerClient {
    * @param data - The chosen inline result data.
    */
   onChosenInlineResult(
-    data: Update["chosen_inline_result"],
-  ): ChosenInlineResult | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["chosen_inline_result"]>,
+  ): ChosenInlineResult {
     const chosenInline = new ChosenInlineResult(this.client, data);
     this.client.emit(Events.ChosenInlineResult, chosenInline);
-
     return chosenInline;
   }
 
@@ -267,12 +265,9 @@ class WorkerClient {
    * Handles incoming callback queries.
    * @param data - The callback query data.
    */
-  onCallbackQuery(data: Update["callback_query"]): CallbackQuery | undefined {
-    if (!data) return;
-
+  onCallbackQuery(data: NonNullable<Update["callback_query"]>): CallbackQuery {
     const callback = new CallbackQuery(this.client, data);
     this.client.emit(Events.CallbackQuery, callback);
-
     return callback;
   }
 
@@ -280,12 +275,9 @@ class WorkerClient {
    * Handles incoming shipping queries.
    * @param data - The shipping query data.
    */
-  onShippingQuery(data: Update["shipping_query"]): ShippingQuery | undefined {
-    if (!data) return;
-
+  onShippingQuery(data: NonNullable<Update["shipping_query"]>): ShippingQuery {
     const shipping = new ShippingQuery(this.client, data);
     this.client.emit(Events.ShippingQuery, shipping);
-
     return shipping;
   }
 
@@ -294,13 +286,10 @@ class WorkerClient {
    * @param data - The pre-checkout query data.
    */
   onPreCheckoutQuery(
-    data: Update["pre_checkout_query"],
-  ): PreCheckoutQuery | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["pre_checkout_query"]>,
+  ): PreCheckoutQuery {
     const preCheckout = new PreCheckoutQuery(this.client, data);
     this.client.emit(Events.PreCheckoutQuery, preCheckout);
-
     return preCheckout;
   }
 
@@ -308,12 +297,9 @@ class WorkerClient {
    * Handles new polls.
    * @param data - The poll data.
    */
-  onPoll(data: Update["poll"]): Poll | undefined {
-    if (!data) return;
-
+  onPoll(data: NonNullable<Update["poll"]>): Poll {
     const poll = new Poll(this.client, data);
     this.client.emit(Events.Poll, poll);
-
     return poll;
   }
 
@@ -321,12 +307,9 @@ class WorkerClient {
    * Handles new poll answers.
    * @param data - The poll answer data.
    */
-  onPollAnswer(data: Update["poll_answer"]): PollAnswer | undefined {
-    if (!data) return;
-
+  onPollAnswer(data: NonNullable<Update["poll_answer"]>): PollAnswer {
     const poll = new PollAnswer(this.client, data);
     this.client.emit(Events.PollAnswer, poll);
-
     return poll;
   }
 
@@ -335,13 +318,10 @@ class WorkerClient {
    * @param data - The chat member update data.
    */
   onMyChatMember(
-    data: Update["my_chat_member"],
-  ): ChatMemberUpdated | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["my_chat_member"]>,
+  ): ChatMemberUpdated {
     const myChat = new ChatMemberUpdated(this.client, data);
     this.client.emit(Events.MyChatMember, myChat);
-
     return myChat;
   }
 
@@ -349,12 +329,9 @@ class WorkerClient {
    * Handles updates to chat members.
    * @param data - The chat member update data.
    */
-  onChatMember(data: Update["chat_member"]): ChatMemberUpdated | undefined {
-    if (!data) return;
-
+  onChatMember(data: NonNullable<Update["chat_member"]>): ChatMemberUpdated {
     const chatMember = new ChatMemberUpdated(this.client, data);
     this.client.emit(Events.ChatMember, chatMember);
-
     return chatMember;
   }
 
@@ -362,43 +339,39 @@ class WorkerClient {
    * Handles new chat members being added.
    * @param data - The message data containing new chat members.
    */
-  onChatMemberAdd(data: Update["message"]): Message | undefined {
-    if (!data) return;
-
+  onChatMemberAdd(data: NonNullable<Update["message"]>): Message {
     const message = new Message(this.client, data);
 
     if (
-      this.client.user !== null &&
+      this.client.user &&
       message.newChatMembers?.some(({ id }) => id === this.client.user!.id)
     ) {
       this.client.emit(Events.ChatCreate, message);
-      return message;
     } else {
       this.client.emit(Events.ChatMemberAdd, message);
-      return message;
     }
+
+    return message;
   }
 
   /**
    * Handles chat members being removed.
    * @param data - The message data containing removed chat members.
    */
-  onChatMemberRemove(data: Update["message"]): Message | undefined {
-    if (!data) return;
-
+  onChatMemberRemove(data: NonNullable<Update["message"]>): Message {
     const message = new Message(this.client, data);
 
     if (
-      message.leftChatMember !== undefined &&
-      this.client.user !== null &&
+      message.leftChatMember &&
+      this.client.user &&
       message.leftChatMember.id === this.client.user.id
     ) {
       this.client.emit(Events.ChatDelete, message);
-      return message;
     } else {
       this.client.emit(Events.ChatMemberRemove, message);
-      return message;
     }
+
+    return message;
   }
 
   /**
@@ -406,13 +379,10 @@ class WorkerClient {
    * @param data - The chat join request data.
    */
   onChatJoinRequest(
-    data: Update["chat_join_request"],
-  ): ChatJoinRequest | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["chat_join_request"]>,
+  ): ChatJoinRequest {
     const chatJoin = new ChatJoinRequest(this.client, data);
     this.client.emit(Events.ChatJoinRequest, chatJoin);
-
     return chatJoin;
   }
 
@@ -420,12 +390,9 @@ class WorkerClient {
    * Handles updates to chat boosts.
    * @param data - The chat boost update data.
    */
-  onChatBoost(data: Update["chat_boost"]): ChatBoostUpdated | undefined {
-    if (!data) return;
-
+  onChatBoost(data: NonNullable<Update["chat_boost"]>): ChatBoostUpdated {
     const chatBoost = new ChatBoostUpdated(this.client, data);
     this.client.emit(Events.ChatBoost, chatBoost);
-
     return chatBoost;
   }
 
@@ -434,29 +401,35 @@ class WorkerClient {
    * @param data - The removed chat boost data.
    */
   onRemovedChatBoost(
-    data: Update["removed_chat_boost"],
-  ): ChatBoostRemoved | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["removed_chat_boost"]>,
+  ): ChatBoostRemoved {
     const chatBoost = new ChatBoostRemoved(this.client, data);
     this.client.emit(Events.RemovedChatBoost, chatBoost);
-
     return chatBoost;
   }
 
   /**
    * Handles purchased paid media.
-   * @param data - The purchased paid media.
+   * @param data - The purchased paid media data.
    */
   onPurchasedPaidMedia(
-    data: Update["purchased_paid_media"],
-  ): PaidMediaPurchased | undefined {
-    if (!data) return;
-
+    data: NonNullable<Update["purchased_paid_media"]>,
+  ): PaidMediaPurchased {
     const paidMedia = new PaidMediaPurchased(this.client, data);
     this.client.emit(Events.PurchasedPaidMedia, paidMedia);
-
     return paidMedia;
+  }
+
+  /**
+   * Handles managed bot events.
+   * @param data - The managed bot data.
+   */
+  onManagedUpdatedBot(
+    data: NonNullable<Update["managed_bot"]>,
+  ): ManagedBotUpdated {
+    const managedBot = new ManagedBotUpdated(this.client, data);
+    this.client.emit(Events.ManagedBotUpdated, managedBot);
+    return managedBot;
   }
 }
 

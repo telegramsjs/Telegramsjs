@@ -32,6 +32,7 @@ import {
   KeyboardButtonPollType,
   KeyboardButtonRequestChat,
   KeyboardButtonRequestUsers,
+  KeyboardButtonRequestManagedBot,
   SwitchInlineQueryChosenChat,
   BotCommandScope,
   AcceptedGiftTypes,
@@ -945,6 +946,91 @@ export declare class BaseManager<
    */
   [Symbol.iterator](): IterableIterator<[string, T]>;
 }
+
+/**
+ * Type representing the string literals for bot capabilities.
+ */
+export type ClientCapabilityString =
+  | "joinGroups"
+  | "readAllMessages"
+  | "inlineQueries"
+  | "connectBusiness"
+  | "mainWebApp"
+  | "topicsEnabled"
+  | "userTopicCreation"
+  | "manageBots";
+
+/**
+ * Interface representing the bot capability flags.
+ */
+export interface ClientCapabilityFlags {
+  joinGroups?: boolean;
+  readAllMessages?: boolean;
+  inlineQueries?: boolean;
+  connectBusiness?: boolean;
+  mainWebApp?: boolean;
+  topicsEnabled?: boolean;
+  userTopicCreation?: boolean;
+  manageBots?: boolean;
+}
+/**
+ * Represents a set of bot capabilities and provides methods to manage them.
+ */
+declare class ClientCapabilities {
+  private allowed;
+  private denied;
+  /**
+   * Constructs a new instance of ClientCapabilities with optional initial data.
+   * @param data - An object containing the initial capabilities.
+   */
+  constructor(data?: ClientCapabilityFlags);
+  /**
+   * Grants the specified capabilities.
+   * @param capabilities - The capabilities to grant.
+   * @returns The updated ClientCapabilities instance.
+   */
+  allow(capabilities: ClientCapabilityResolvable): ClientCapabilities;
+  /**
+   * Denies the specified capabilities.
+   * @param capabilities - The capabilities to deny.
+   * @returns The updated ClientCapabilities instance.
+   */
+  deny(capabilities: ClientCapabilityResolvable): ClientCapabilities;
+  /**
+   * Checks if the specified capability is granted.
+   * @param capability - The capability to check.
+   * @returns `true` if the capability is granted, otherwise `false`.
+   */
+  has(capability: ClientCapabilityString): boolean;
+  /**
+   * Converts the capabilities to a plain object representation.
+   * @returns An object with capabilities and their status.
+   */
+  toObject(): ClientCapabilityFlags;
+  /**
+   * Checks if this instance is equal to another ClientCapabilities instance.
+   * @param other - The other instance to compare.
+   * @returns `true` if both instances are equal, otherwise `false`.
+   */
+  equals(other: ClientCapabilities): boolean;
+  /**
+   * Checks if the provided capability is valid.
+   * @param capability - The capability to validate.
+   * @returns `true` if the capability is valid, otherwise `false`.
+   */
+  static isValid(capability: string): boolean;
+  /**
+   * A mapping of bot capability strings to their numeric equivalents.
+   */
+  static Flags: Record<ClientCapabilityString, number>;
+}
+/**
+ * Type representing a value that can be resolved to bot capabilities.
+ */
+export type ClientCapabilityResolvable =
+  | ClientCapabilityString
+  | ClientCapabilityFlags
+  | ClientCapabilities;
 
 /**
  * Type representing the string literals for user permissions.
@@ -4094,9 +4180,15 @@ export declare class Poll extends Base {
     voterCount: number;
   }[];
   /**
-   * 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot
+   * Array of 0-based identifiers of the correct answer options. Available only for polls in quiz mode which are closed or were sent (not forwarded) by the bot or to the private chat with the bot.
    */
-  correctId?: number;
+  correctIds?: number[];
+  /** True, if the poll allows to change the chosen answer options */
+  allowsRevoting: boolean;
+  /** Description of the poll; for polls inside the Message object only */
+  description?: string;
+  /** Special entities like usernames, URLs, bot commands, etc. that appear in the description */
+  descriptionEntities?: MessageEntity[];
   /**
    * Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
    */
@@ -4288,7 +4380,7 @@ export declare class TextQuote {
   );
   /** Text of the quoted part of a message that is replied to by the given message */
   text: string;
-  /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes. */
+  /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are kept in quotes. */
   entities?: MessageEntities;
   /** Approximate quote position in the original message in UTF-16 code units as specified by the sender */
   position: number;
@@ -5733,9 +5825,16 @@ export declare class ChatShared extends Base {
         isAnonymous?: boolean;
         type?: "quiz" | "regular";
         allowsMultipleAnswers?: boolean;
-        correctOptionId?: number;
+        allowsRevoting?: boolean;
+        shuffleOptions?: boolean;
+        allowAddingOptions?: boolean;
+        hideResultsUntilCloses?: boolean;
+        correctOptionIds?: number[];
         explanation?: string;
         explanationParseMode?: import("@telegram.ts/types").ParseMode;
+        description?: string;
+        descriptionParseMode?: import("@telegram.ts/types").ParseMode;
+        descriptionEntities?: MessageEntity[];
         explanationEntities?: MessageEntity[];
         openPeriod?: number;
         closeDate?: number;
@@ -6537,6 +6636,10 @@ export declare class Message extends Base {
    */
   checklistTaskId?: number;
   /**
+   * Persistent identifier of the specific poll option that is being replied to
+   */
+  pollOptionId?: string;
+  /**
    * True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
    */
   isPaidPost?: true;
@@ -6645,6 +6748,52 @@ export declare class Message extends Base {
    * Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel
    */
   channelChatCreated?: true;
+  /**
+   * User created a bot that will be managed by the current bot.
+   */
+  managedBotCreated?: User;
+  /**
+   * Answer option was added to a poll
+   */
+  pollOptionAdded?: {
+    /**
+     * - Message containing the poll to which the option was added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+     */
+    message?: Message;
+    /**
+     * - Unique identifier of the added option.
+     */
+    persistentId: string;
+    /**
+     * - Optional text
+     */
+    text: string;
+    /**
+     * - Special entities that appear in the option_text.
+     */
+    entities?: MessageEntities;
+  };
+  /**
+   * Answer option was deleted from a poll
+   */
+  pollOptionDeleted?: {
+    /**
+     * - Message containing the poll from which the option was deleted. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+     */
+    message?: Message;
+    /**
+     * - Unique identifier of the deleted option.
+     */
+    persistentId: string;
+    /**
+     * - Option text
+     */
+    text: string;
+    /**
+     * - Special entities that appear in the option_text.
+     */
+    entities?: MessageEntities;
+  };
   /**
    * Service message: auto-delete timer settings changed in the chat
    */
@@ -8746,9 +8895,16 @@ export declare class Chat extends Base {
         isAnonymous?: boolean;
         type?: "quiz" | "regular";
         allowsMultipleAnswers?: boolean;
-        correctOptionId?: number;
+        allowsRevoting?: boolean;
+        shuffleOptions?: boolean;
+        allowAddingOptions?: boolean;
+        hideResultsUntilCloses?: boolean;
+        correctOptionIds?: number[];
         explanation?: string;
         explanationParseMode?: import("@telegram.ts/types").ParseMode;
+        description?: string;
+        descriptionParseMode?: import("@telegram.ts/types").ParseMode;
+        descriptionEntities?: MessageEntity[];
         explanationEntities?: MessageEntity[];
         openPeriod?: number;
         closeDate?: number;
@@ -9795,6 +9951,35 @@ export declare class InlineQuery extends Base {
   ): Promise<true>;
 }
 
+export declare class ManagedBotUpdated extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the creation, token update, or owner update of a bot that is managed by the current bot.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").ManagedBotUpdated,
+  );
+  /**
+   * User that created the bot
+   */
+  author: User;
+  /**
+   * Information about the bot.
+   */
+  bot: User;
+  /**
+   * Use this method to get the token of a managed bot.
+   * @returns the token as String on success.
+   */
+  fetchBotToken(): Promise<string>;
+  /**
+   * Use this method to revoke the current token of a managed bot and generate a new one.
+   * @returns the new token as String on success.
+   */
+  replaceBotToken(): Promise<string>;
+}
+
 export declare class ChosenInlineResult extends Base {
   /**
    * @param client - The client that instantiated this
@@ -10167,6 +10352,9 @@ export interface EventHandlers {
   chatBoost: (boostChat: ChatBoostUpdated) => PossiblyAsync<void>;
   removedChatBoost: (chatBoost: ChatBoostRemoved) => PossiblyAsync<void>;
   purchasedPaidMedia: (paidMedia: PaidMediaPurchased) => PossiblyAsync<void>;
+  managedBotUpdated: (
+    managedBotUpdated: ManagedBotUpdated,
+  ) => PossiblyAsync<void>;
 }
 
 export type EventHandlerParameters =
@@ -10187,6 +10375,7 @@ export type EventHandlerParameters =
   | ChatJoinRequest
   | ChatBoostUpdated
   | ChatBoostRemoved
+  | ManagedBotUpdated
   | PaidMediaPurchased;
 
 export declare class BaseClient extends EventEmitter {
@@ -10446,6 +10635,14 @@ export declare class BaseClient extends EventEmitter {
     inviteLink: string,
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["revokeChatInviteLink"]>;
+  /** Use this method to get the token of a managed bot. Returns the token as String on success. */
+  getManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["getManagedBotToken"]>;
+  /** Use this method to revoke the current token of a managed bot and generate a new one. Returns the new token as String on success. */
+  replaceManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["replaceManagedBotToken"]>;
   /** Use this method to approve a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   approveChatJoinRequest(
     userId: number | string,
@@ -10856,6 +11053,10 @@ export declare class BaseClient extends EventEmitter {
   savePreparedInlineMessage(
     params: MethodParameters["savePreparedInlineMessage"],
   ): Promise<MethodsLibReturnType["savePreparedInlineMessage"]>;
+  /** Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object. */
+  savePreparedKeyboardButton(
+    params: MethodParameters["savePreparedKeyboardButton"],
+  ): Promise<MethodsLibReturnType["savePreparedKeyboardButton"]>;
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(
     params: MethodParameters["sendInvoice"],
@@ -11322,20 +11523,8 @@ export declare class ClientUser extends User {
   isBot: true;
   /** The bot's or user's username */
   username: string;
-  /** Indicates if the bot can be invited to groups */
-  canJoinGroups: boolean;
-  /** Indicates if privacy mode is disabled for the bot */
-  canReadAllMessages: boolean;
-  /** Indicates if the bot supports inline queries */
-  inlineQueries: boolean;
-  /** Indicates if the bot can be connected to a Telegram Business account */
-  connectBusiness: boolean;
-  /** Indicates if the bot has a main Web App */
-  mainWebApp: boolean;
-  /** True, if the bot has forum topic mode enabled in private chats. Returned only in getMe. */
-  topicsEnabled: boolean;
-  /** True, if the bot allows users to create and delete topics in private chats. Returned only in getMe. */
-  allowUserTopicCreation: boolean;
+  /** Represents a set of bot capabilities and provides methods to manage them. */
+  capabilities: ClientCapabilities;
   /**
    * The authentication token for the Telegram bot
    */
@@ -12873,6 +13062,34 @@ export declare class KeyboardBuilder {
     options?: MarkupOptions,
   ): KeyboardButton.RequestPollButton;
   /**
+   * Adds a request managed bot to the keyboard.
+   * @param text - The button text.
+   * @param requestId - Signed 32-bit identifier of the request. Must be unique within the message.
+   * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
+   * @returns The created instance for chaining.
+   */
+  requestManagedBot(
+    text: string,
+    requestId: number,
+    options?: Omit<KeyboardButtonRequestManagedBot, "request_id">,
+    buttonOptions?: MarkupOptions,
+  ): this;
+  /**
+   * Creates a request managed bot button.
+   * @param text - The button text.
+   * @param requestId - Signed 32-bit identifier of the request. Must be unique within the message.
+   * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
+   * @returns The created request managed bot button.
+   */
+  static requestManagedBot(
+    text: string,
+    requestId: number,
+    options?: Omit<KeyboardButtonRequestManagedBot, "request_id">,
+    buttonOptions?: MarkupOptions,
+  ): KeyboardButton.RequestManagedBotButton;
+  /**
    * Adds a web app button to the keyboard.
    * @param text - The button text.
    * @param url - The URL of the web app.
@@ -13423,6 +13640,7 @@ export declare const Events: {
   readonly ChatJoinRequest: "chatJoinRequest";
   readonly ChatBoost: "chatBoost";
   readonly RemovedChatBoost: "removedChatBoost";
+  readonly ManagedBotUpdated: "managedBotUpdated";
 };
 
 export declare const CollectorEvents: {
@@ -13619,6 +13837,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.13.1";
+export declare const version: "4.14.0";
 
 export * from "./telegram/index";

@@ -2,7 +2,7 @@
   <h1>Telegramsjs</h1><br>
   <img src="https://raw.githubusercontent.com/Sempai-07/Telegramsjs/main/docs/avatar.png"><br>
 
-[![Bot API](https://img.shields.io/badge/Bot%20API-v.9.4-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
+[![Bot API](https://img.shields.io/badge/Bot%20API-v.9.6-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
 [![NPM Version](https://img.shields.io/npm/v/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
 [![NPM Downloads](https://img.shields.io/npm/dt/telegramsjs.svg?maxAge=3600)](https://www.npmjs.com/package/telegramsjs)
 
@@ -50,9 +50,17 @@ Afterwards we can create a quite simple example bot:
 
 ```js
 // ECMAscript/TypeScript
-import { TelegramClient, InlineKeyboardBuilder, MarkupStyles } from "telegramsjs";
+import {
+  TelegramClient,
+  InlineKeyboardBuilder,
+  MarkupStyles,
+} from "telegramsjs";
 // CommonJS
-const { TelegramClient, InlineKeyboardBuilder, MarkupStyles } = require("telegramsjs");
+const {
+  TelegramClient,
+  InlineKeyboardBuilder,
+  MarkupStyles,
+} = require("telegramsjs");
 
 const client = new TelegramClient("TELEGRAM_BOT_TOKEN");
 
@@ -64,18 +72,18 @@ client.on("ready", async ({ user }) => {
     },
   ]);
 
+  if (user.capabilities.allow("joinGroups")) {
+    console.log("The bot has permission to be added to other groups. 🔓");
+  }
+  
   console.log(`Bot @${user.username} is the ready status!`);
+
 });
 
-client.on("message", async (message) => {
-  if (message.content === "/start" && message.author) {
-    await message.reply(
-      `Hello ${message.author.username ? `@${message.author.username}` : message.author.firstName}!`,
-    );
-    return;
-  }
+client.on("message", async (msg) => {
+  if (!msg.content) return;
 
-  if (message.content === "/menu") {
+  if (msg.content === "/menu" || msg.content === "/start") {
     const menu = new InlineKeyboardBuilder()
       .text("Pay", "menu_pay", {
         style: MarkupStyles.Green,
@@ -84,15 +92,35 @@ client.on("message", async (message) => {
       .text("Rules", "menu_rules", {
         style: MarkupStyles.Danger,
         icon: "5465154440287757794",
-      }).row()
+      })
+      .row()
       .text("Home", "menu_home", {
         style: MarkupStyles.Primary,
         icon: "5253997076169115797",
       });
 
-    await msg.chat.send("Payment panel", {
+    await msg.chat.send("Panel for payment", {
       replyMarkup: menu,
     });
+  }
+
+  if (msg.content.startsWith("/tag")) {
+    if (!msg.chat.isGroup()) {
+      return msg.reply(`Changing your nickname is only available in groups.`);
+    }
+
+    const [, newTag] = msg.content.split(" ");
+
+    try {
+      await msg.member.setTag(newTag);
+      return msg.chat.send(
+        `${msg.author.firstName} Your custom tag has been changed to: ${newTag}`,
+      );
+    } catch (err) {
+      condole.log(err);
+
+      return msg.chat.send("Error when changing custom tag.");
+    }
   }
 });
 

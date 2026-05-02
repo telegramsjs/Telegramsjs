@@ -17,6 +17,8 @@ module.exports.MessageReactionUpdated =
   require("./MessageReactionUpdated").MessageReactionUpdated;
 module.exports.PaidMediaPurchased =
   require("./PaidMediaPurchased").PaidMediaPurchased;
+module.exports.ManagedBotUpdated =
+  require("./ManagedBotUpdated").ManagedBotUpdated;
 module.exports.PollAnswer = require("./PollAnswer").PollAnswer;
 module.exports.PreCheckoutQuery =
   require("./PreCheckoutQuery").PreCheckoutQuery;

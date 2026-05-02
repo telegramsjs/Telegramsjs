@@ -156,6 +156,9 @@ interface EventHandlers {
   purchasedPaidMedia: (
     paidMedia: import("../structures/PaidMediaPurchased").PaidMediaPurchased,
   ) => PossiblyAsync<void>;
+  managedBotUpdated: (
+    managedBotUpdated: import("../structures/ManagedBotUpdated").ManagedBotUpdated,
+  ) => PossiblyAsync<void>;
 }
 
 type EventHandlerParameters =
@@ -176,7 +179,8 @@ type EventHandlerParameters =
   | import("../structures/ChatJoinRequest").ChatJoinRequest
   | import("../structures/ChatBoostUpdated").ChatBoostUpdated
   | import("../structures/ChatBoostRemoved").ChatBoostRemoved
-  | import("../structures/PaidMediaPurchased").PaidMediaPurchased;
+  | import("../structures/PaidMediaPurchased").PaidMediaPurchased
+  | import("../structures/ManagedBotUpdated").ManagedBotUpdated;
 
 class BaseClient extends EventEmitter {
   public readonly rest: Rest;
@@ -773,7 +777,10 @@ class BaseClient extends EventEmitter {
   async setChatMemberTag(
     params: MethodParameters["setChatMemberTag"],
   ): Promise<MethodsLibReturnType["setChatMemberTag"]> {
-    return this.rest.request<MethodsApiReturnType["setChatMemberTag"]>("setChatMemberTag", toSnakeCase(params));
+    return this.rest.request<MethodsApiReturnType["setChatMemberTag"]>(
+      "setChatMemberTag",
+      toSnakeCase(params),
+    );
   }
 
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -880,6 +887,26 @@ class BaseClient extends EventEmitter {
         MethodsApiReturnType["revokeChatInviteLink"]
       >("revokeChatInviteLink", { invite_link: inviteLink, ...(chatId && { chat_id: chatId }) })
       .then((res) => new ChatInviteLink(this, res));
+  }
+
+  /** Use this method to get the token of a managed bot. Returns the token as String on success. */
+  async getManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["getManagedBotToken"]> {
+    return this.rest.request<MethodsApiReturnType["getManagedBotToken"]>(
+      "getManagedBotToken",
+      { user_id: userId },
+    );
+  }
+
+  /** Use this method to revoke the current token of a managed bot and generate a new one. Returns the new token as String on success. */
+  async replaceManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["replaceManagedBotToken"]> {
+    return this.rest.request<MethodsApiReturnType["replaceManagedBotToken"]>(
+      "replaceManagedBotToken",
+      { user_id: userId },
+    );
   }
 
   /** Use this method to approve a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
@@ -2016,6 +2043,17 @@ class BaseClient extends EventEmitter {
         MethodsApiReturnType["savePreparedInlineMessage"]
       >("savePreparedInlineMessage", toSnakeCase(params))
       .then((res) => new PreparedInlineMessage(res));
+  }
+
+  /** Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object. */
+  async savePreparedKeyboardButton(
+    params: MethodParameters["savePreparedKeyboardButton"],
+  ): Promise<MethodsLibReturnType["savePreparedKeyboardButton"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["savePreparedKeyboardButton"]
+      >("savePreparedKeyboardButton", toSnakeCase(params))
+      .then((res) => res.id);
   }
 
   /** Use this method to send invoices. On success, the sent Message is returned. */

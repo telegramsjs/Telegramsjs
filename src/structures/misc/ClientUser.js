@@ -1,5 +1,8 @@
 // @ts-check
 const { User } = require("./User");
+const {
+  ClientCapabilities,
+} = require("../../util/permission/ClientCapabilities");
 
 /**
  * @typedef {import("../../client/interfaces/Language").LanguageCode} LanguageCode
@@ -19,26 +22,17 @@ class ClientUser extends User {
     /** The bot's or user's username */
     this.username = data.username;
 
-    /** Indicates if the bot can be invited to groups */
-    this.canJoinGroups = data.can_join_groups;
-
-    /** Indicates if privacy mode is disabled for the bot */
-    this.canReadAllMessages = data.can_read_all_group_messages;
-
-    /** Indicates if the bot supports inline queries */
-    this.inlineQueries = data.supports_inline_queries;
-
-    /** Indicates if the bot can be connected to a Telegram Business account */
-    this.connectBusiness = data.can_connect_to_business;
-
-    /** Indicates if the bot has a main Web App */
-    this.mainWebApp = data.has_main_web_app;
-
-    /** True, if the bot has forum topic mode enabled in private chats */
-    this.topicsEnabled = data.has_topics_enabled;
-
-    /** True, if the bot allows users to create and delete topics in private chats */
-    this.allowUserTopicCreation = data.allows_users_to_create_topics;
+    /** Represents a set of bot capabilities and provides methods to manage them. */
+    this.capabilities = new ClientCapabilities({
+      joinGroups: data.can_join_groups,
+      readAllMessages: data.can_read_all_group_messages,
+      inlineQueries: data.supports_inline_queries,
+      connectBusiness: data.can_connect_to_business,
+      mainWebApp: data.has_main_web_app,
+      topicsEnabled: data.has_topics_enabled,
+      userTopicCreation: data.allows_users_to_create_topics,
+      manageBots: data.can_manage_bots,
+    });
 
     this._patch(data);
   }
@@ -258,13 +252,7 @@ class ClientUser extends User {
 
     if (!super.equals(other)) return false;
 
-    return (
-      this.canJoinGroups === other.canJoinGroups &&
-      this.canReadAllMessages === other.canReadAllMessages &&
-      this.inlineQueries === other.inlineQueries &&
-      this.connectBusiness === other.connectBusiness &&
-      this.mainWebApp === other.mainWebApp
-    );
+    return this.capabilities.equals(other.capabilities);
   }
 }
 

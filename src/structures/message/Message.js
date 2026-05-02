@@ -262,6 +262,14 @@ class Message extends Base {
       this.checklistTaskId = data.reply_to_checklist_task_id;
     }
 
+    if ("reply_to_poll_option_id" in data) {
+      /**
+       * Persistent identifier of the specific poll option that is being replied to
+       * @type {string | undefined}
+       */
+      this.pollOptionId = data.reply_to_poll_option_id;
+    }
+
     if ("is_paid_post" in data) {
       /**
        * True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
@@ -452,6 +460,80 @@ class Message extends Base {
        * @type {true | undefined}
        */
       this.channelChatCreated = data.channel_chat_created;
+    }
+
+    if ("managed_bot_created" in data) {
+      /**
+       * User created a bot that will be managed by the current bot.
+       * @type {import("../misc/User").User|undefined}
+       */
+      this.managedBotCreated = this.client.users._add(
+        data.managed_bot_created.bot,
+      );
+    }
+
+    if ("poll_option_added" in data) {
+      /**
+       * @typedef {Object} PollOptionAdded
+       * @property {Message} [message] - Message containing the poll to which the option was added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+       * @property {string} persistentId - Unique identifier of the added option.
+       * @property {string} text - Optional text
+       * @property {MessageEntities} [entities] - Special entities that appear in the option_text.
+       */
+
+      /**
+       * Answer option was added to a poll
+       * @type {PollOptionAdded|undefined}
+       */
+      this.pollOptionAdded = {
+        ...(data.poll_option_added.poll_message && {
+          message: new Message(
+            this.client,
+            data.poll_option_added.poll_message,
+          ),
+        }),
+        persistentId: data.poll_option_added.option_persistent_id,
+        text: data.poll_option_added.option_text,
+        ...(data.poll_option_added.option_text_entities && {
+          entities: new MessageEntities(
+            this.client,
+            data.poll_option_added.option_text,
+            data.poll_option_added.option_text_entities,
+          ),
+        }),
+      };
+    }
+
+    if ("poll_option_deleted" in data) {
+      /**
+       * @typedef {Object} PollOptionDeleted
+       * @property {Message} [message] - Message containing the poll from which the option was deleted. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+       * @property {string} persistentId - Unique identifier of the deleted option.
+       * @property {string} text - Option text
+       * @property {MessageEntities} [entities] - Special entities that appear in the option_text.
+       */
+
+      /**
+       * Answer option was deleted from a poll
+       * @type {PollOptionDeleted|undefined}
+       */
+      this.pollOptionDeleted = {
+        ...(data.poll_option_deleted.poll_message && {
+          message: new Message(
+            this.client,
+            data.poll_option_deleted.poll_message,
+          ),
+        }),
+        persistentId: data.poll_option_deleted.option_persistent_id,
+        text: data.poll_option_deleted.option_text,
+        ...(data.poll_option_deleted.option_text_entities && {
+          entities: new MessageEntities(
+            this.client,
+            data.poll_option_deleted.option_text,
+            data.poll_option_deleted.option_text_entities,
+          ),
+        }),
+      };
     }
 
     if ("message_auto_delete_timer_changed" in data) {

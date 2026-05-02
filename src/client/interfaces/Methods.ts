@@ -29,6 +29,7 @@ import type {
   ForceReply,
   ReplyKeyboardMarkup,
   ReplyKeyboardRemove,
+  KeyboardButton,
 } from "./Markup";
 import type { StoryArea } from "./Story";
 import type { ParseMode, Update } from "@telegram.ts/types";
@@ -952,19 +953,33 @@ export type ApiMethods = {
     isAnonymous?: boolean;
     /** Poll type, “quiz” or “regular”, defaults to “regular” */
     type?: "quiz" | "regular";
-    /** True, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to False */
+    /** Pass True, if the poll allows multiple answers, defaults to False */
     allowsMultipleAnswers?: boolean;
-    /** 0-based identifier of the correct answer option, required for polls in quiz mode */
-    correctOptionId?: number;
+    /** Pass True, if the poll allows to change chosen answer options, defaults to False for quizzes and to True for regular polls */
+    allowsRevoting?: boolean;
+    /** Pass True, if the poll options must be shown in random order */
+    shuffleOptions?: boolean;
+    /** Pass True, if answer options can be added to the poll after creation; not supported for anonymous polls and quizzes */
+    allowAddingOptions?: boolean;
+    /** Pass True, if poll results must be shown only after the poll closes */
+    hideResultsUntilCloses?: boolean;
+    /** A list of monotonically increasing 0-based identifiers of the correct answer options, required for polls in quiz mode */
+    correctOptionIds?: number[];
     /** Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing */
     explanation?: string;
     /** Mode for parsing entities in the explanation. See formatting options for more details. */
     explanationParseMode?: ParseMode;
     /** A list of special entities that appear in the poll explanation. It can be specified instead of explanationParseMode */
     explanationEntities?: MessageEntity[];
-    /** Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with closeDate. */
+    /** Description of the poll to be sent, 0-1024 characters after entities parsing */
+    description?: string;
+    /** Mode for parsing entities in the poll description. See formatting options for more details. */
+    descriptionParseMode?: string;
+    /** A list of special entities that appear in the poll description, which can be specified instead of description_parse_mode */
+    descriptionEntities?: MessageEntity[];
+    /** Amount of time in seconds the poll will be active after creation, 5-2628000. Can't be used together with close_date. */
     openPeriod?: number;
-    /** Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 600 seconds in the future. Can't be used together with openPeriod. */
+    /** Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 2628000 seconds in the future. Can't be used together with open_period. */
     closeDate?: number;
     /** Pass True if the poll needs to be immediately closed. This can be useful for poll preview. */
     isClosed?: boolean;
@@ -1308,6 +1323,18 @@ export type ApiMethods = {
     /** The invite link to revoke */
     inviteLink: string;
   }): import("../../structures/chat/ChatInviteLink").ChatInviteLink;
+
+  /** Use this method to get the token of a managed bot. Returns the token as String on success. */
+  getManagedBotToken(args: {
+    /** User identifier of the managed bot whose token will be returned */
+    userId: number | string;
+  }): string;
+
+  /** Use this method to revoke the current token of a managed bot and generate a new one. Returns the new token as String on success. */
+  replaceManagedBotToken(args: {
+    /** User identifier of the managed bot whose token will be replaced */
+    userId: number | string;
+  }): string;
 
   /** Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   approveChatJoinRequest(args: {
@@ -2254,9 +2281,9 @@ export type ApiMethods = {
     payForUpgrade?: boolean;
     /** Text that will be shown along with the gift; 0-255 characters */
     text?: string;
-    /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, “custom_emoji”, and “date_time” are ignored. */
     textParseMode?: ParseMode;
-    /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, “custom_emoji”, and “date_time” are ignored. */
     textEntities?: MessageEntity[];
   }): true;
 
@@ -2270,9 +2297,9 @@ export type ApiMethods = {
     starCount: 1000 | 1500 | 2500;
     /** Text that will be shown along with the service message about the subscription; 0-128 characters */
     text?: string;
-    /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, “custom_emoji”, and “date_time” are ignored. */
     textParseMode?: ParseMode;
-    /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
+    /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, “custom_emoji”, and “date_time” are ignored. */
     textEntities?: MessageEntity[];
   }): true;
 
@@ -2326,6 +2353,17 @@ export type ApiMethods = {
     /** Pass True if the message can be sent to channel chats */
     allowChannelChats?: boolean;
   }): import("../../structures/misc/PreparedInlineMessage").PreparedInlineMessage;
+
+  /** Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object. */
+  savePreparedKeyboardButton(args: {
+    /** Unique identifier of the target user that can use the button */
+    userId: number | string;
+    /** An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot */
+    button:
+      | KeyboardButton.RequestUsersButton
+      | KeyboardButton.RequestChatButton
+      | KeyboardButton.RequestManagedBotButton;
+  }): string;
 
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(args: {

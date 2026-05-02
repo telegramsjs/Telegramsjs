@@ -4,6 +4,7 @@ import type {
   KeyboardButtonPollType,
   KeyboardButtonRequestChat,
   KeyboardButtonRequestUsers,
+  KeyboardButtonRequestManagedBot,
   ReplyKeyboardMarkup,
 } from "../../client/interfaces/Markup";
 
@@ -246,6 +247,54 @@ class KeyboardBuilder {
     options?: MarkupOptions,
   ): KeyboardButton.RequestPollButton {
     return { text, request_poll: { type }, ...replacedMarkupOptions(options) };
+  }
+
+  /**
+   * Adds a request managed bot to the keyboard.
+   * @param text - The button text.
+   * @param requestId - Signed 32-bit identifier of the request. Must be unique within the message.
+   * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
+   * @returns The created instance for chaining.
+   */
+  requestManagedBot(
+    text: string,
+    requestId: number,
+    options: Omit<KeyboardButtonRequestManagedBot, "request_id"> = {},
+    buttonOptions: MarkupOptions = {},
+  ): this {
+    return this.add(
+      KeyboardBuilder.requestManagedBot(
+        text,
+        requestId,
+        options,
+        buttonOptions,
+      ),
+    );
+  }
+
+  /**
+   * Creates a request managed bot button.
+   * @param text - The button text.
+   * @param requestId - Signed 32-bit identifier of the request. Must be unique within the message.
+   * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
+   * @returns The created request managed bot button.
+   */
+  static requestManagedBot(
+    text: string,
+    requestId: number,
+    options: Omit<KeyboardButtonRequestManagedBot, "request_id"> = {},
+    buttonOptions: MarkupOptions = {},
+  ): KeyboardButton.RequestManagedBotButton {
+    return {
+      text,
+      request_managed_bot: {
+        request_id: requestId,
+        ...options,
+      },
+      ...replacedMarkupOptions(buttonOptions),
+    };
   }
 
   /**

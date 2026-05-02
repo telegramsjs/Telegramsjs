@@ -16,6 +16,7 @@ export * from "./util/markup/KeyboardBuilder";
 export { type MarkupOptions } from "./util/markup/utils";
 export * from "./util/permission/ChatPermissions";
 export * from "./util/permission/UserPermissions";
+export * from "./util/permission/ClientCapabilities";
 export * from "./util/permission/BusinessPermissions";
 export * from "./util/Constants";
 export { flatten } from "./util/Utils";

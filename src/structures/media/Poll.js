@@ -54,9 +54,13 @@ class Poll extends Base {
     if ("options" in data) {
       /**
        * @typedef {Object} PollOptions
+       * @property {string} persistentId - Unique identifier of the option, persistent on option addition and deletion.
        * @property {string} text - Option text, 1-100 characters
        * @property {MessageEntities} entities - Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts
-       * @property {number} voterCount - Number of users that voted for this option
+       * @property {number} voterCount - Number of users who voted for this option; may be 0 if unknown.
+       * @property {import("../misc/User").User|undefined} addedUser - User who added the option; omitted if the option wasn't added by a user after poll creation.
+       * @property {import("../chat/Chat").Chat|undefined} addedChat - Chat that added the option; omitted if the option wasn't added by a chat after poll creation.
+       * @property {number|undefined} additionUnixTime - Point in time (Unix timestamp) when the option was added; omitted if the option existed in the original poll.
        */
 
       /** @type {PollOptions[]} */
@@ -67,6 +71,7 @@ class Poll extends Base {
           /** @type {PollOptions} */
           const result = {};
 
+          result.persistentId = opts.persistent_id;
           result.text = opts.text;
           if ("text_entities" in opts) {
             result.entities = new MessageEntities(
@@ -76,6 +81,19 @@ class Poll extends Base {
             );
           }
           result.voterCount = opts.voter_count;
+
+          if ("added_by_user" in opts) {
+            result.addedUser = this.client.users._add(opts.added_by_user);
+          }
+
+          if ("added_by_chat" in opts) {
+            result.addedChat = this.client.chats._add(opts.added_by_chat);
+          }
+
+          if ("addition_date" in opts) {
+            result.additionUnixTime = opts.addition_date;
+          }
+
           options.push(result);
         }
       }
@@ -85,14 +103,6 @@ class Poll extends Base {
        * @type {PollOptions[] | undefined}
        */
       this.options = options;
-    }
-
-    if ("correct_option_id" in data) {
-      /**
-       * 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot
-       * @type {number | undefined}
-       */
-      this.correctId = data.correct_option_id;
     }
 
     if ("explanation" in data) {

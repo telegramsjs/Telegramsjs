@@ -9,7 +9,7 @@ export interface InputChecklistTask {
   text: string;
   /** Mode for parsing entities in the text. See formatting options for more details. */
   parse_mode?: ParseMode;
-  /** List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed. */
+  /** List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are allowed. */
   text_entities?: MessageEntity[];
 }
 
@@ -19,7 +19,7 @@ export interface InputChecklist {
   title: string;
   /** Mode for parsing entities in the title. See formatting options for more details. */
   parse_mode?: ParseMode;
-  /** List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed. */
+  /** List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are allowed.  */
   title_entities?: MessageEntity[];
   /** List of 1-30 tasks in the checklist */
   tasks: InputChecklistTask[];

@@ -28,8 +28,8 @@ class PollAnswer extends Base {
       this.user = this.client.users._add(data.user);
     }
 
-    /** 0-based identifiers of chosen answer options. May be empty if the vote was retracted */
-    this.ids = data.option_ids;
+    /** Persistent identifiers of the chosen answer options. May be empty if the vote was retracted. */
+    this.persistentIds = data.option_persistent_ids;
   }
 }
 
