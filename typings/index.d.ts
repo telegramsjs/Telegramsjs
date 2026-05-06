@@ -774,6 +774,14 @@ export declare class User extends Base {
     >,
   ): Promise<PreparedInlineMessage>;
   /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(
+    button: MethodParameters["savePreparedKeyboardButton"]["button"],
+  ): Promise<string>;
+  /**
    * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
    * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
    * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
@@ -4791,6 +4799,14 @@ export declare class SharedUser extends Base {
       "userId" | "result"
     >,
   ): Promise<PreparedInlineMessage>;
+  /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(
+    button: MethodParameters["savePreparedKeyboardButton"]["button"],
+  ): Promise<string>;
   /**
    * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
    * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
@@ -9711,6 +9727,14 @@ export declare class BusinessConnection extends Base {
       "userId" | "result"
     >,
   ): Promise<PreparedInlineMessage>;
+  /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(
+    button: MethodParameters["savePreparedKeyboardButton"]["button"],
+  ): Promise<string>;
   /**
    * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
    * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.

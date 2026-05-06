@@ -135,6 +135,18 @@ class SharedUser extends Base {
   }
 
   /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param {MethodParameters["savePreparedKeyboardButton"]["button"]} button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns {Promise<string>} - Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(button) {
+    return this.client.savePreparedKeyboardButton({
+      userId: this.userId,
+      button,
+    });
+  }
+
+  /**
    * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
    * @param {string} telegramPaymentChargeId - Telegram payment identifier for the subscription.
    * @param {boolean} isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
