@@ -974,7 +974,7 @@ export type ApiMethods = {
     /** Description of the poll to be sent, 0-1024 characters after entities parsing */
     description?: string;
     /** Mode for parsing entities in the poll description. See formatting options for more details. */
-    descriptionParseMode?: string;
+    descriptionParseMode?: ParseMode;
     /** A list of special entities that appear in the poll description, which can be specified instead of description_parse_mode */
     descriptionEntities?: MessageEntity[];
     /** Amount of time in seconds the poll will be active after creation, 5-2628000. Can't be used together with close_date. */

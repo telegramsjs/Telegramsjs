@@ -4187,6 +4187,8 @@ export declare class Poll extends Base {
   allowsRevoting: boolean;
   /** Description of the poll; for polls inside the Message object only */
   description?: string;
+  /** Mode for parsing entities in the poll description. See formatting options for more details. */
+  descriptionParseMode?: ParseMode;
   /** Special entities like usernames, URLs, bot commands, etc. that appear in the description */
   descriptionEntities?: MessageEntity[];
   /**
