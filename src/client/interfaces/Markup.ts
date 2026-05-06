@@ -237,7 +237,7 @@ export interface KeyboardButtonRequestUsers {
   /** Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied. */
   user_is_bot?: boolean;
   /** Pass True to request premium users, pass False to request non-premium users. If not specified, no additional restrictions are applied. */
-  user_is_remium?: boolean;
+  user_is_premium?: boolean;
   /** The maximum number of users to be selected; 1-10. Defaults to 1. */
   max_quantity?: boolean;
   /** Pass True to request the users' first and last names */
