@@ -105,7 +105,7 @@ client.on("message", async (msg) => {
   }
 
   if (msg.content.startsWith("/tag")) {
-    if (!msg.chat.isGroup()) {
+    if (!msg.chat.isSupergroup()) {
       return msg.reply(`Changing your nickname is only available in groups.`);
     }
 
@@ -117,7 +117,7 @@ client.on("message", async (msg) => {
         `${msg.author.firstName} Your custom tag has been changed to: ${newTag}`,
       );
     } catch (err) {
-      condole.log(err);
+      console.log(err);
 
       return msg.chat.send("Error when changing custom tag.");
     }
