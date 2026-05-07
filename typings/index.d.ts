@@ -141,8 +141,6 @@ export interface ChatPermissionFlags {
  * Represents a set of chat permissions and provides methods to manage them.
  */
 export declare class ChatPermissions {
-  private allowed;
-  private denied;
   /**
    * Constructs a new instance of ChatPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
@@ -177,11 +175,6 @@ export declare class ChatPermissions {
    * @returns `true` if both instances are equal, otherwise `false`.
    */
   equals(other: ChatPermissions): boolean;
-  /**
-   * Updates the permissions based on the provided data.
-   * @param data - An object containing permission states.
-   */
-  private _patch;
   /**
    * Checks if the provided permission is valid.
    * @param permission - The permission to validate.
@@ -985,8 +978,6 @@ export interface ClientCapabilityFlags {
  * Represents a set of bot capabilities and provides methods to manage them.
  */
 declare class ClientCapabilities {
-  private allowed;
-  private denied;
   /**
    * Constructs a new instance of ClientCapabilities with optional initial data.
    * @param data - An object containing the initial capabilities.
@@ -1087,8 +1078,6 @@ export interface UserPermissionFlags {
  * Represents a set of user permissions and provides methods to manage them.
  */
 export declare class UserPermissions {
-  private allowed;
-  private denied;
   /**
    * Constructs a new instance of UserPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
@@ -1184,8 +1173,6 @@ export interface BusinessPermissionFlags {
  * Represents a set of user permissions and provides methods to manage them.
  */
 export declare class BusinessPermissions {
-  private allowed;
-  private denied;
   /**
    * Constructs a new instance of BusinessPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
@@ -1221,11 +1208,6 @@ export declare class BusinessPermissions {
    */
   equals(other: BusinessPermissions): boolean;
   /**
-   * Updates the permissions based on the provided data.
-   * @param data - An object containing permission states.
-   */
-  private _patch;
-  /**
    * Checks if the provided permission is valid.
    * @param permission - The permission to validate.
    * @returns `true` if the permission is valid, otherwise `false`.
@@ -1257,7 +1239,6 @@ export type BusinessPermissionResolvable =
  * ```
  */
 export class InputChecklistBuilder {
-  private nextTaskId;
   readonly data: Partial<InputChecklist>;
 
   constructor(data?: Partial<InputChecklist>);
@@ -1480,9 +1461,6 @@ export declare abstract class Collector<K, V> extends EventEmitter {
    * Timestamp of the last collected item.
    */
   lastCollectedTimestamp: number | Date | null;
-  private _timeout;
-  private _idleTimeout;
-  private _endReason;
   /**
    * Creates an instance of Collector.
    * @param options - The options for the collector.
@@ -11223,11 +11201,6 @@ export declare class PollingClient {
    */
   poll(options: ILoginOptions["polling"]): Promise<void>;
   /**
-   * Handles errors that occur during polling or initialization.
-   * @param err - The error object.
-   */
-  private handlerError;
-  /**
    * Closes the polling client, stopping further updates.
    * @returns The closed state of the polling client.
    */
@@ -11312,11 +11285,6 @@ export declare class WebhookClient {
         response: ServerResponse,
       ) => void)
   >;
-  /**
-   * Handles errors that occur during webhook processing.
-   * @param err - The error object.
-   */
-  private handlerError;
   /**
    * Closes the webhook server.
    * @returns The closed state of the webhook client.
