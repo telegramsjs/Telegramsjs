@@ -1,5 +1,32 @@
 # Changelog
 
+# **4.14.0 - (2026-05-06)**
+
+## **Updates**
+
+- Support api `9.4`, `9.5`, `9.6` ([00268d1](https://github.com/telegramsjs/Telegramsjs/commit/00268d1a895644a8be654e86127837b6de6d0e36), [cf48906](https://github.com/telegramsjs/Telegramsjs/commit/cf4890611978f04aa28f0f18a30d78cfb910bace), [0f710dd](https://github.com/telegramsjs/Telegramsjs/commit/0f710dd7262dafb3ccbb25ebd2c2e5e0ec4f84bb))
+- **User:** removed the check due to the introduction of (Bot-to-Bot) ([371f2ee](https://github.com/telegramsjs/Telegramsjs/commit/371f2ee0ea5fbabae9de89cb57ddf67085802cfc))
+
+## **Bug Fixes**
+
+- **LanguageCode:** `user.language` is not compatible with ISO 639-1 ([c19f0ee](https://github.com/telegramsjs/Telegramsjs/commit/c19f0eeec737cc7a1d156177bd28efad395901c5))
+- **ManagerCached:** `fullInfo` flag will be fetched instead of being taken from the cache of the regular `User` object ([aa97e17](https://github.com/telegramsjs/Telegramsjs/commit/aa97e171e52dc2c084f19b38c70bd802bf032334))
+- **Ready:** ready event no longer returns nullable `ClientUser` ([9a63d3e](https://github.com/telegramsjs/Telegramsjs/commit/9a63d3e1694e0b8d7e4062790380a8bff4b30273))
+
+## **Features**
+
+- **PermissionManager**: deduplicate code with base `PermissionManager` class ([e838533](https://github.com/telegramsjs/Telegramsjs/commit/e838533bf983b587b5eb2ca51deee8c37a148aea), [01f459b](https://github.com/telegramsjs/Telegramsjs/commit/01f459b0533add328eae8a5ea7e9e1b543e310de))
+- **ClientUser:** replace plain fields with a `ClientCapabilities` class ([0f710dd](https://github.com/telegramsjs/Telegramsjs/commit/0f710dd7262dafb3ccbb25ebd2c2e5e0ec4f84bb))
+- **KeyboardBuilder:** `equals` deep property comparison ([07de1b9](https://github.com/telegramsjs/Telegramsjs/commit/07de1b9079c877c6c862020b9b4c5323a8b21d33))
+
+## **Typings**
+
+- **Remove private members from typings** ([c7e6ef7](https://github.com/telegramsjs/Telegramsjs/commit/c7e6ef742613f206b7ad364e8473ad9d3f49981b))
+- **Collector:** normalize `lastCollectedAt` to `Date | null` ([f6c50ef](https://github.com/telegramsjs/Telegramsjs/commit/f6c50ef078431bda17cade31095c83fefdf408aa))
+- **KeyboardButtonRequestUsers:** correct fields `user_is_premium` ([5c98de3](https://github.com/telegramsjs/Telegramsjs/commit/5c98de38373afebf7e299e724d4e7ff42270c86a))
+
+---
+
 # **4.13.1 - (2026-01-14)**
 
 ## **Bug Fixes**
@@ -27,11 +54,11 @@
 
 ## **Bug Fixes**
 
-- **MediaData:** parsing inside array fields cover and thumbnail ([3a3bb6a](https://github.com/telegramsjs/Telegramsjs/commit/3a3bb6ab470191f5afbde0c0d3212de896fec3c2))
+- **MediaData:** parsing inside array fields `cover` and `thumbnail` ([3a3bb6a](https://github.com/telegramsjs/Telegramsjs/commit/3a3bb6ab470191f5afbde0c0d3212de896fec3c2))
 
 ## **Refactor**
 
-- **Array:** use Collection instead of Array ([8c36298](https://github.com/telegramsjs/Telegramsjs/commit/8c36298080442b93cd89941a0e591f2d377f601f))
+- **Array:** use `Collection` instead of Array ([8c36298](https://github.com/telegramsjs/Telegramsjs/commit/8c36298080442b93cd89941a0e591f2d377f601f))
 - **MessageEntities:** add `languageCode` union type ([457959c](https://github.com/telegramsjs/Telegramsjs/commit/457959c6ce531ca4318fb4cf0213897e8bcf2e61))
 - **Symbol.iterator:** refactored to a unified style ([846b90d](https://github.com/telegramsjs/Telegramsjs/commit/846b90df8de01bbc2ad4b1ac2c4bc3b6f8d1f459))
 
@@ -53,14 +80,14 @@
 
 ## **Features**
 
-- **TelegramClient:** resolve login timing issue with async ready handling ([39726ee](https://github.com/telegramsjs/Telegramsjs/commit/39726ee189b1575e0200763c0245179dd3ec5d62))
+- **TelegramClient:** resolve `login` timing issue with async ready handling ([39726ee](https://github.com/telegramsjs/Telegramsjs/commit/39726ee189b1575e0200763c0245179dd3ec5d62))
 - **BaseManager:** allow fetch via resolved chat object ([fe95849](https://github.com/telegramsjs/Telegramsjs/commit/fe95849120b89c39d37050c1db4e747552a5bbb4))
 - **BaseManager:** fetches multiple users or chats at once ([19180de](https://github.com/telegramsjs/Telegramsjs/commit/19180de54a9564417f9be5448b819bdcd69f5ce9))
 
 ## **Typings**
 
 - **ChatManager:** correct name parameters ([a874d79](https://github.com/telegramsjs/Telegramsjs/commit/a874d7942194c44229856a8fc4111245f0113c93))
-- **BaseManager:** add UserResolvable and ChatResolvable typings ([49a57ad](https://github.com/telegramsjs/Telegramsjs/commit/49a57ad6cdb550616ef60de39e49b03b5008c69b))
+- **BaseManager:** add `UserResolvable` and `ChatResolvable` typings ([49a57ad](https://github.com/telegramsjs/Telegramsjs/commit/49a57ad6cdb550616ef60de39e49b03b5008c69b))
 
 ---
 
@@ -97,7 +124,6 @@
 - **WorkerClient:** type in the name `worket` ([5ff4122](https://github.com/telegramsjs/Telegramsjs/commit/5ff4122d6c98ed5b5e3d2385916276aa79f3f7b1))
 - **WebhookClient:** async `close` now waits for server shutdown ([e2605d8](https://github.com/telegramsjs/Telegramsjs/commit/e2605d8717a3d039b818d308d42a2f642dbaf581))
 
-
 ## **Typings**
 
 - Fix build `#private` fields ([c1dcc8d](https://github.com/telegramsjs/Telegramsjs/commit/c1dcc8d92fd3269196a3ec516d3e868f9e10b0bb))
@@ -132,7 +158,7 @@
 
 ## **Bug Fixes**
 
-- **tsconfig.test.json:** esModuleInterop enable ([0cb33c6](https://github.com/telegramsjs/Telegramsjs/commit/0cb33c65467b96c5a851e80435c68c309c6e1ff6))
+- **tsconfig.test.json:** `esModuleInterop` enable ([0cb33c6](https://github.com/telegramsjs/Telegramsjs/commit/0cb33c65467b96c5a851e80435c68c309c6e1ff6))
 
 ## **Updates**
 
@@ -176,7 +202,7 @@
 
 ## **Updates**
 
-- Support for API 8.1 ([8b2bb08](https://github.com/telegramsjs/Telegramsjs/commit/8b2bb080deebaf2da11cbdb88e7031c2c254d4eb)).
+- **Support for API 8.1** ([8b2bb08](https://github.com/telegramsjs/Telegramsjs/commit/8b2bb080deebaf2da11cbdb88e7031c2c254d4eb)).
 - `removeComments` parameter (to reduce package size) ([430f34d](https://github.com/telegramsjs/Telegramsjs/commit/430f34d226144258a72b4ce495a56222d189b602)).
 
 ---
@@ -186,7 +212,7 @@
 ## **Bug Fixes**
 
 - **InputFile:** fixed field names and argument validation ([f05bf32](https://github.com/telegramsjs/Telegramsjs/commit/f05bf32f1093c9c5fa18e169a21adea279918abb)).
-- **WebhookClient:** resolved duplicate triggering of the "ready" event ([a820d97](https://github.com/telegramsjs/Telegramsjs/commit/a820d975a5cadf7a74c3df77677b1d372b382f8f)).
+- **WebhookClient:** resolved duplicate triggering of the `ready` event ([a820d97](https://github.com/telegramsjs/Telegramsjs/commit/a820d975a5cadf7a74c3df77677b1d372b382f8f)).
 - **getStarTransactions:** typings returned value `StarTransactions` ([165eb5c](https://github.com/telegramsjs/Telegramsjs/commit/165eb5cc975c9f7202cfeb24ee9315bc24d69ae2)).
 - **InlineKeyboardBuilder:** at least one optional field is required ([fc38ccb](https://github.com/telegramsjs/Telegramsjs/commit/fc38ccbcd34362f24cf66046b9c728f2e01ea97b)).
 - **Version:** missing type annotations ([d48f78f](https://github.com/telegramsjs/Telegramsjs/commit/d48f78fd4a80cb056c0bad1ee0014447b37eae1c)).
@@ -210,15 +236,15 @@
 - **Array:** converted some fields to `Collections` for improved data handling of large arrays ([9fc6037](https://github.com/telegramsjs/Telegramsjs/commit/9fc6037dad2233978ba71ab132a0a6800a6b9c43)).
 - **Collection:** introduced `ReadonlyCollection` to prevent mutation of essential data ([73a76f4](https://github.com/telegramsjs/Telegramsjs/commit/73a76f41271deae303e5cd53bc2bbb1105950bd2)).
 - **TelegramClient:** `user` field now supports `null` values ([cb49cf3](https://github.com/telegramsjs/Telegramsjs/commit/cb49cf37f9b1919dba66d3562baf95acd1b9b4d4)).
-- **disconnect:** now triggers even when using the error event ([86186ce](https://github.com/telegramsjs/Telegramsjs/commit/86186ce42288f7c317b186a483f7118518159692)).
+- **disconnect:** now triggers even when using the `error` event ([86186ce](https://github.com/telegramsjs/Telegramsjs/commit/86186ce42288f7c317b186a483f7118518159692)).
 - **errorHandler:** update error handling logic ([f47e03b](https://github.com/telegramsjs/Telegramsjs/commit/f47e03bb2f12d78c8bc0a0119aca4fb893fac5ea)).
 - **Fetch data**: data retrieval logic ([3b978ee](https://github.com/telegramsjs/Telegramsjs/commit/3b978eed6a528d17743f584ef7688f30ad36cd1d)).
-- **Prefix names:** all methods for struct classes prefixed with 'get' have been changed to 'fetch' ([5619dd1](https://github.com/telegramsjs/Telegramsjs/commit/5619dd1b87370ec6a21803e28b0ed2e1abe6ab8f)).
+- **Prefix names:** all methods for struct classes prefixed with `get` have been changed to `fetch` ([5619dd1](https://github.com/telegramsjs/Telegramsjs/commit/5619dd1b87370ec6a21803e28b0ed2e1abe6ab8f)).
 
 ## **Updates**
 
-- Support for API 8.0 ([cec95aa](https://github.com/telegramsjs/Telegramsjs/commit/cec95aad043575dbebb653a2262558e0f8aa5283)).
-- **InputFile:** fix handling for download parameters to use class instances ([f32fb75](https://github.com/telegramsjs/Telegramsjs/commit/f32fb755fd564f3b224a190d8a9602a1384bd2d7)).
+- **Support for API 8.0** ([cec95aa](https://github.com/telegramsjs/Telegramsjs/commit/cec95aad043575dbebb653a2262558e0f8aa5283)).
+- **InputFile:** fix handling for **download** parameters to use class instances ([f32fb75](https://github.com/telegramsjs/Telegramsjs/commit/f32fb755fd564f3b224a190d8a9602a1384bd2d7)).
 - **InputFile:** add fallback to fetch if `filePath` is missing ([1ac66f2](https://github.com/telegramsjs/Telegramsjs/commit/1ac66f23bf65d47d8941d5d8d8d525f79f7355ab)).
 - Bump version of `@telegram.ts/types` to `1.18.2` ([04d68de](https://github.com/telegramsjs/Telegramsjs/commit/04d68de607fcf3a5544bc3f705b9d83df039df18)).
 
@@ -252,7 +278,7 @@
 
 ## **Refactor**
 
-- Support api 7.11 ([7169314](https://github.com/telegramsjs/Telegramsjs/commit/716931437f15b5a630f6c8c162d4375e3b58bf8d))
+- **Support api 7.11** ([7169314](https://github.com/telegramsjs/Telegramsjs/commit/716931437f15b5a630f6c8c162d4375e3b58bf8d))
 - Convert individual parameters to object structure ([a772144](https://github.com/telegramsjs/Telegramsjs/commit/a7721447d7450bb20eba9266944731b62f35d26b))
 - `Symbol.iterator` to some classes ([e7f0193](https://github.com/telegramsjs/Telegramsjs/commit/e7f01933f06897d7f98ff4f51e98424dfdf406d5))
 - Add `languageCode` type ([9d8c19f](https://github.com/telegramsjs/Telegramsjs/commit/9d8c19f7351a2b0ac00d94c99565365cff9a23f7))
