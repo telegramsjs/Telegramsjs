@@ -88,7 +88,7 @@ abstract class Collector<K, V> extends EventEmitter {
   /**
    * Timestamp of the last collected item.
    */
-  lastCollectedTimestamp: number | Date | null = null;
+  lastCollectedTimestamp: Date | null = null;
 
   private _timeout: NodeJS.Timeout | null = null;
   private _idleTimeout: NodeJS.Timeout | null = null;
@@ -150,7 +150,7 @@ abstract class Collector<K, V> extends EventEmitter {
   /**
    * Gets the timestamp of the last collected item.
    */
-  get lastCollectedAt(): number | null | Date {
+  get lastCollectedAt(): Date | null {
     return this.lastCollectedTimestamp && new Date(this.lastCollectedTimestamp);
   }
 
@@ -167,7 +167,7 @@ abstract class Collector<K, V> extends EventEmitter {
 
         this.emit(CollectorEvents.Collect, msg, this.collected);
 
-        this.lastCollectedTimestamp = Date.now();
+        this.lastCollectedTimestamp = new Date(Date.now());
         if (this._idleTimeout) {
           clearTimeout(this._idleTimeout);
           this._idleTimeout = setTimeout(

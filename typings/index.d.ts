@@ -1460,7 +1460,7 @@ export declare abstract class Collector<K, V> extends EventEmitter {
   /**
    * Timestamp of the last collected item.
    */
-  lastCollectedTimestamp: number | Date | null;
+  lastCollectedTimestamp: Date | null;
   /**
    * Creates an instance of Collector.
    * @param options - The options for the collector.
@@ -1479,7 +1479,7 @@ export declare abstract class Collector<K, V> extends EventEmitter {
   /**
    * Gets the timestamp of the last collected item.
    */
-  get lastCollectedAt(): number | null | Date;
+  get lastCollectedAt(): Date | null;
   /**
    * Handles the collection of a new item.
    * @param msg - The item to collect.
