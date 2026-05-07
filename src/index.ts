@@ -21,6 +21,7 @@ export * from "./util/permission/BusinessPermissions";
 export * from "./util/Constants";
 export { flatten } from "./util/Utils";
 export * from "./util/permission/ApiPermissions";
+export * from "./util/permission/PermissionManager";
 export * from "./managers/BaseManager";
 export * from "./managers/ChatManager";
 export * from "./managers/UserManager";

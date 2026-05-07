@@ -140,41 +140,15 @@ export interface ChatPermissionFlags {
 /**
  * Represents a set of chat permissions and provides methods to manage them.
  */
-export declare class ChatPermissions {
+export declare class ChatPermissions extends PermissionManager<
+  ChatPermissionString,
+  ChatPermissionFlags
+> {
   /**
    * Constructs a new instance of ChatPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
    */
   constructor(data?: ChatPermissionFlags);
-  /**
-   * Grants the specified permissions.
-   * @param permissions - The permissions to grant.
-   * @returns The updated ChatPermissions instance.
-   */
-  allow(permissions: ChatPermissionResolvable): ChatPermissions;
-  /**
-   * Denies the specified permissions.
-   * @param permissions - The permissions to deny.
-   * @returns The updated ChatPermissions instance.
-   */
-  deny(permissions: ChatPermissionResolvable): ChatPermissions;
-  /**
-   * Checks if the specified permission is granted.
-   * @param permission - The permission to check.
-   * @returns `true` if the permission is granted, otherwise `false`.
-   */
-  has(permission: ChatPermissionString): boolean;
-  /**
-   * Converts the permissions to a plain object representation.
-   * @returns An object with permissions and their status.
-   */
-  toObject(): ChatPermissionFlags;
-  /**
-   * Checks if this instance is equal to another ChatPermissions instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: ChatPermissions): boolean;
   /**
    * Checks if the provided permission is valid.
    * @param permission - The permission to validate.
@@ -974,44 +948,19 @@ export interface ClientCapabilityFlags {
   userTopicCreation?: boolean;
   manageBots?: boolean;
 }
+
 /**
  * Represents a set of bot capabilities and provides methods to manage them.
  */
-declare class ClientCapabilities {
+export declare class ClientCapabilities extends PermissionManager<
+  ClientCapabilityString,
+  ClientCapabilityFlags
+> {
   /**
    * Constructs a new instance of ClientCapabilities with optional initial data.
    * @param data - An object containing the initial capabilities.
    */
   constructor(data?: ClientCapabilityFlags);
-  /**
-   * Grants the specified capabilities.
-   * @param capabilities - The capabilities to grant.
-   * @returns The updated ClientCapabilities instance.
-   */
-  allow(capabilities: ClientCapabilityResolvable): ClientCapabilities;
-  /**
-   * Denies the specified capabilities.
-   * @param capabilities - The capabilities to deny.
-   * @returns The updated ClientCapabilities instance.
-   */
-  deny(capabilities: ClientCapabilityResolvable): ClientCapabilities;
-  /**
-   * Checks if the specified capability is granted.
-   * @param capability - The capability to check.
-   * @returns `true` if the capability is granted, otherwise `false`.
-   */
-  has(capability: ClientCapabilityString): boolean;
-  /**
-   * Converts the capabilities to a plain object representation.
-   * @returns An object with capabilities and their status.
-   */
-  toObject(): ClientCapabilityFlags;
-  /**
-   * Checks if this instance is equal to another ClientCapabilities instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: ClientCapabilities): boolean;
   /**
    * Checks if the provided capability is valid.
    * @param capability - The capability to validate.
@@ -1023,6 +972,7 @@ declare class ClientCapabilities {
    */
   static Flags: Record<ClientCapabilityString, number>;
 }
+
 /**
  * Type representing a value that can be resolved to bot capabilities.
  */
@@ -1077,41 +1027,21 @@ export interface UserPermissionFlags {
 /**
  * Represents a set of user permissions and provides methods to manage them.
  */
-export declare class UserPermissions {
+export declare class UserPermissions extends PermissionManager<
+  UserPermissionString,
+  UserPermissionFlags
+> {
   /**
    * Constructs a new instance of UserPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
    */
   constructor(data?: UserPermissionFlags);
   /**
-   * Grants the specified permissions.
-   * @param permissions - The permissions to grant.
-   * @returns The updated UserPermissions instance.
+   * Checks if the provided permission is valid.
+   * @param permission - The permission to validate.
+   * @returns `true` if the permission is valid, otherwise `false`.
    */
-  allow(permissions: UserPermissionResolvable): UserPermissions;
-  /**
-   * Denies the specified permissions.
-   * @param permissions - The permissions to deny.
-   * @returns The updated UserPermissions instance.
-   */
-  deny(permissions: UserPermissionResolvable): UserPermissions;
-  /**
-   * Checks if the specified permission is granted.
-   * @param permission - The permission to check.
-   * @returns `true` if the permission is granted, otherwise `false`.
-   */
-  has(permission: UserPermissionString): boolean;
-  /**
-   * Converts the permissions to a plain object representation.
-   * @returns An object with permissions and their status.
-   */
-  toObject(): UserPermissionFlags;
-  /**
-   * Checks if this instance is equal to another UserPermissions instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: UserPermissions): boolean;
+  static isValid(permission: string): boolean;
   /**
    * A mapping of user permission strings to their numeric equivalents.
    */
@@ -1146,7 +1076,6 @@ export type BusinessPermissionString =
   | "transferAndUpgradeGifts"
   | "transferStars"
   | "manageStories";
-
 /**
  * Interface representing the user permission flags.
  */
@@ -1172,41 +1101,15 @@ export interface BusinessPermissionFlags {
 /**
  * Represents a set of user permissions and provides methods to manage them.
  */
-export declare class BusinessPermissions {
+export declare class BusinessPermissions extends PermissionManager<
+  BusinessPermissionString,
+  BusinessPermissionFlags
+> {
   /**
    * Constructs a new instance of BusinessPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
    */
   constructor(data?: BusinessPermissionFlags);
-  /**
-   * Grants the specified permissions.
-   * @param permissions - The permissions to grant.
-   * @returns The updated BusinessPermissions instance.
-   */
-  allow(permissions: BusinessPermissionResolvable): BusinessPermissions;
-  /**
-   * Denies the specified permissions.
-   * @param permissions - The permissions to deny.
-   * @returns The updated BusinessPermissions instance.
-   */
-  deny(permissions: BusinessPermissionResolvable): BusinessPermissions;
-  /**
-   * Checks if the specified permission is granted.
-   * @param permission - The permission to check.
-   * @returns `true` if the permission is granted, otherwise `false`.
-   */
-  has(permission: BusinessPermissionString): boolean;
-  /**
-   * Converts the permissions to a plain object representation.
-   * @returns An object with permissions and their status.
-   */
-  toObject(): BusinessPermissionFlags;
-  /**
-   * Checks if this instance is equal to another BusinessPermissions instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: BusinessPermissions): boolean;
   /**
    * Checks if the provided permission is valid.
    * @param permission - The permission to validate.
@@ -1226,6 +1129,59 @@ export type BusinessPermissionResolvable =
   | BusinessPermissionString
   | BusinessPermissionFlags
   | BusinessPermissions;
+
+/**
+ * Abstract base class for managing permissions/capabilities.
+ * Provides common functionality for allow/deny operations and equality checks.
+ * @template T - The string literal type representing permission/capability names
+ * @template F - The flags interface type
+ */
+declare abstract class PermissionManager<
+  T extends string,
+  F extends Partial<Record<T, boolean>>,
+> {
+  protected allowed: Set<T>;
+  protected denied: Set<T>;
+  /**
+   * Constructs a new instance of PermissionManager with optional initial data.
+   * @param data - An object containing the initial permissions/capabilities.
+   */
+  constructor(data?: F);
+  /**
+   * Grants the specified permissions/capabilities.
+   * @param items - The permissions/capabilities to grant.
+   * @returns The updated instance.
+   */
+  allow(items: T | F | this): this;
+  /**
+   * Denies the specified permissions/capabilities.
+   * @param items - The permissions/capabilities to deny.
+   * @returns The updated instance.
+   */
+  deny(items: T | F | this): this;
+  /**
+   * Checks if the specified permission/capability is granted.
+   * @param item - The permission/capability to check.
+   * @returns `true` if the permission/capability is granted, otherwise `false`.
+   */
+  has(item: T): boolean;
+  /**
+   * Converts the permissions/capabilities to a plain object representation.
+   * @returns An object with permissions/capabilities and their status.
+   */
+  toObject(): F;
+  /**
+   * Checks if this instance is equal to another PermissionManager instance.
+   * @param other - The other instance to compare.
+   * @returns `true` if both instances are equal, otherwise `false`.
+   */
+  equals(other: this): boolean;
+  /**
+   * Updates the permissions/capabilities based on the provided data.
+   * @param data - An object containing permission/capability states.
+   */
+  protected _patch(data: F): void;
+}
 
 /**
  * Builder for creating Telegram checklist inputs
