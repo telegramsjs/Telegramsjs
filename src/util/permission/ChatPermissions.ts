@@ -1,3 +1,5 @@
+import { PermissionManager } from "./PermissionManager";
+
 /**
  * Type representing the string literals for chat permissions.
  */
@@ -48,127 +50,16 @@ interface ChatPermissionFlags {
 /**
  * Represents a set of chat permissions and provides methods to manage them.
  */
-class ChatPermissions {
-  private allowed: Set<ChatPermissionString>;
-  private denied: Set<ChatPermissionString>;
-
+class ChatPermissions extends PermissionManager<
+  ChatPermissionString,
+  ChatPermissionFlags
+> {
   /**
    * Constructs a new instance of ChatPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
    */
   constructor(data: ChatPermissionFlags = {}) {
-    this.allowed = new Set<ChatPermissionString>();
-    this.denied = new Set<ChatPermissionString>();
-    this._patch(data);
-  }
-
-  /**
-   * Grants the specified permissions.
-   * @param permissions - The permissions to grant.
-   * @returns The updated ChatPermissions instance.
-   */
-  allow(permissions: ChatPermissionResolvable): ChatPermissions {
-    if (!permissions) return this;
-
-    if (permissions instanceof ChatPermissions) {
-      permissions = permissions.toObject();
-    } else if (typeof permissions === "string") {
-      permissions = { [permissions]: true };
-    }
-
-    for (const [key, value] of Object.entries(permissions)) {
-      const perm = key as ChatPermissionString;
-      if (value) {
-        this.allowed.add(perm);
-        this.denied.delete(perm);
-      }
-    }
-    return this;
-  }
-
-  /**
-   * Denies the specified permissions.
-   * @param permissions - The permissions to deny.
-   * @returns The updated ChatPermissions instance.
-   */
-  deny(permissions: ChatPermissionResolvable): ChatPermissions {
-    if (!permissions) return this;
-
-    if (permissions instanceof ChatPermissions) {
-      permissions = permissions.toObject();
-    } else if (typeof permissions === "string") {
-      permissions = { [permissions]: true };
-    }
-
-    for (const [key, value] of Object.entries(permissions)) {
-      const perm = key as ChatPermissionString;
-      if (value) {
-        this.denied.add(perm);
-        this.allowed.delete(perm);
-      }
-    }
-    return this;
-  }
-
-  /**
-   * Checks if the specified permission is granted.
-   * @param permission - The permission to check.
-   * @returns `true` if the permission is granted, otherwise `false`.
-   */
-  has(permission: ChatPermissionString): boolean {
-    return this.allowed.has(permission);
-  }
-
-  /**
-   * Converts the permissions to a plain object representation.
-   * @returns An object with permissions and their status.
-   */
-  toObject(): ChatPermissionFlags {
-    const flags: ChatPermissionFlags = {};
-    for (const perm of this.allowed) {
-      flags[perm] = true;
-    }
-    for (const perm of this.denied) {
-      if (!flags[perm]) {
-        flags[perm] = false;
-      }
-    }
-    return flags;
-  }
-
-  /**
-   * Checks if this instance is equal to another ChatPermissions instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: ChatPermissions): boolean {
-    if (!other || !(other instanceof ChatPermissions)) return false;
-
-    const thisAllowed = Array.from(this.allowed).sort();
-    const otherAllowed = Array.from(other.allowed).sort();
-    const thisDenied = Array.from(this.denied).sort();
-    const otherDenied = Array.from(other.denied).sort();
-
-    return (
-      thisAllowed.length === otherAllowed.length &&
-      thisDenied.length === otherDenied.length &&
-      thisAllowed.every((perm, index) => perm === otherAllowed[index]) &&
-      thisDenied.every((perm, index) => perm === otherDenied[index])
-    );
-  }
-
-  /**
-   * Updates the permissions based on the provided data.
-   * @param data - An object containing permission states.
-   */
-  private _patch(data: ChatPermissionFlags): void {
-    for (const [key, value] of Object.entries(data)) {
-      if (value) {
-        this.allowed.add(key as ChatPermissionString);
-      } else {
-        this.denied.add(key as ChatPermissionString);
-      }
-    }
+    super(data);
   }
 
   /**
