@@ -310,7 +310,7 @@ class MessageOrigin extends Base {
   /**
    * Use this method to edit a checklist on behalf of a connected business account.
    * @param {string} businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
-   * @param {import("@telegram.ts/types").InputChecklist} checklist - An object for the new checklist.
+   * @param {import("../../client/interfaces/Checklist").InputChecklist} checklist - An object for the new checklist.
    * @param {Omit<MethodParameters["editMessageChecklist"], "messageId" | "chatId" | "checklist" | "businessConnectionId">} [options] - out parameters.
    * @returns {Promise<import("./Message").Message & { checklist: import("../checklist/Checklist").Checklist }>} - On success, the edited Message is returned.
    */

@@ -32,6 +32,7 @@ import {
   KeyboardButtonPollType,
   KeyboardButtonRequestChat,
   KeyboardButtonRequestUsers,
+  KeyboardButtonRequestManagedBot,
   SwitchInlineQueryChosenChat,
   BotCommandScope,
   AcceptedGiftTypes,
@@ -86,6 +87,7 @@ import {
   InputStoryContent,
   SuggestedPostParameters,
   InputChecklist,
+  InputProfilePhoto,
 } from "./telegram/index";
 
 /**
@@ -93,6 +95,7 @@ import {
  */
 export type ChatPermissionString =
   | "isAnonymous"
+  | "editTag"
   | "sendMessages"
   | "sendAudios"
   | "sendDocuments"
@@ -107,6 +110,7 @@ export type ChatPermissionString =
   | "inviteUsers"
   | "pinMessages"
   | "manageTopics"
+  | "manageTags"
   | "manageDirectMessages";
 
 /**
@@ -114,6 +118,7 @@ export type ChatPermissionString =
  */
 export interface ChatPermissionFlags {
   isAnonymous?: boolean;
+  editTag?: boolean;
   sendMessages?: boolean;
   sendAudios?: boolean;
   sendDocuments?: boolean;
@@ -128,54 +133,22 @@ export interface ChatPermissionFlags {
   inviteUsers?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageTags?: boolean;
   manageDirectMessages?: boolean;
 }
 
 /**
  * Represents a set of chat permissions and provides methods to manage them.
  */
-export declare class ChatPermissions {
-  private allowed;
-  private denied;
+export declare class ChatPermissions extends PermissionManager<
+  ChatPermissionString,
+  ChatPermissionFlags
+> {
   /**
    * Constructs a new instance of ChatPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
    */
   constructor(data?: ChatPermissionFlags);
-  /**
-   * Grants the specified permissions.
-   * @param permissions - The permissions to grant.
-   * @returns The updated ChatPermissions instance.
-   */
-  allow(permissions: ChatPermissionResolvable): ChatPermissions;
-  /**
-   * Denies the specified permissions.
-   * @param permissions - The permissions to deny.
-   * @returns The updated ChatPermissions instance.
-   */
-  deny(permissions: ChatPermissionResolvable): ChatPermissions;
-  /**
-   * Checks if the specified permission is granted.
-   * @param permission - The permission to check.
-   * @returns `true` if the permission is granted, otherwise `false`.
-   */
-  has(permission: ChatPermissionString): boolean;
-  /**
-   * Converts the permissions to a plain object representation.
-   * @returns An object with permissions and their status.
-   */
-  toObject(): ChatPermissionFlags;
-  /**
-   * Checks if this instance is equal to another ChatPermissions instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: ChatPermissions): boolean;
-  /**
-   * Updates the permissions based on the provided data.
-   * @param data - An object containing permission states.
-   */
-  private _patch;
   /**
    * Checks if the provided permission is valid.
    * @param permission - The permission to validate.
@@ -490,6 +463,25 @@ export declare class Photo extends InputFile {
   height: number;
 }
 
+export declare class UserProfileAudios extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the audios displayed on a user's profile
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").UserProfileAudios,
+  );
+  /** Total number of profile audios for the target user */
+  count: number;
+  /** Requested profile audios */
+  audios: Collection<string, Audio>;
+  /**
+   * Makes the class iterable, returning each `Audio` object.
+   */
+  [Symbol.iterator](): IterableIterator<Audio>;
+}
+
 export declare class UserProfilePhotos extends Base {
   /**
    * @param client - The client that instantiated this
@@ -544,7 +536,7 @@ export declare class User extends Base {
   /**
    * IETF language tag of the user's language
    */
-  language?: LanguageCode;
+  language?: string;
   /**
    * True, if this user is a Telegram Premium user
    */
@@ -749,6 +741,14 @@ export declare class User extends Base {
     >,
   ): Promise<PreparedInlineMessage>;
   /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(
+    button: MethodParameters["savePreparedKeyboardButton"]["button"],
+  ): Promise<string>;
+  /**
    * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
    * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
    * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
@@ -923,6 +923,65 @@ export declare class BaseManager<
 }
 
 /**
+ * Type representing the string literals for bot capabilities.
+ */
+export type ClientCapabilityString =
+  | "joinGroups"
+  | "readAllMessages"
+  | "inlineQueries"
+  | "connectBusiness"
+  | "mainWebApp"
+  | "topicsEnabled"
+  | "userTopicCreation"
+  | "manageBots";
+
+/**
+ * Interface representing the bot capability flags.
+ */
+export interface ClientCapabilityFlags {
+  joinGroups?: boolean;
+  readAllMessages?: boolean;
+  inlineQueries?: boolean;
+  connectBusiness?: boolean;
+  mainWebApp?: boolean;
+  topicsEnabled?: boolean;
+  userTopicCreation?: boolean;
+  manageBots?: boolean;
+}
+
+/**
+ * Represents a set of bot capabilities and provides methods to manage them.
+ */
+export declare class ClientCapabilities extends PermissionManager<
+  ClientCapabilityString,
+  ClientCapabilityFlags
+> {
+  /**
+   * Constructs a new instance of ClientCapabilities with optional initial data.
+   * @param data - An object containing the initial capabilities.
+   */
+  constructor(data?: ClientCapabilityFlags);
+  /**
+   * Checks if the provided capability is valid.
+   * @param capability - The capability to validate.
+   * @returns `true` if the capability is valid, otherwise `false`.
+   */
+  static isValid(capability: string): boolean;
+  /**
+   * A mapping of bot capability strings to their numeric equivalents.
+   */
+  static Flags: Record<ClientCapabilityString, number>;
+}
+
+/**
+ * Type representing a value that can be resolved to bot capabilities.
+ */
+export type ClientCapabilityResolvable =
+  | ClientCapabilityString
+  | ClientCapabilityFlags
+  | ClientCapabilities;
+
+/**
  * Type representing the string literals for user permissions.
  */
 export type UserPermissionString =
@@ -940,6 +999,7 @@ export type UserPermissionString =
   | "editMessages"
   | "pinMessages"
   | "manageTopics"
+  | "manageTags"
   | "manageDirectMessages";
 
 /**
@@ -960,49 +1020,28 @@ export interface UserPermissionFlags {
   editMessages?: boolean;
   pinMessages?: boolean;
   manageTopics?: boolean;
+  manageTags?: boolean;
   manageDirectMessages?: boolean;
 }
 
 /**
  * Represents a set of user permissions and provides methods to manage them.
  */
-export declare class UserPermissions {
-  private allowed;
-  private denied;
+export declare class UserPermissions extends PermissionManager<
+  UserPermissionString,
+  UserPermissionFlags
+> {
   /**
    * Constructs a new instance of UserPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
    */
   constructor(data?: UserPermissionFlags);
   /**
-   * Grants the specified permissions.
-   * @param permissions - The permissions to grant.
-   * @returns The updated UserPermissions instance.
+   * Checks if the provided permission is valid.
+   * @param permission - The permission to validate.
+   * @returns `true` if the permission is valid, otherwise `false`.
    */
-  allow(permissions: UserPermissionResolvable): UserPermissions;
-  /**
-   * Denies the specified permissions.
-   * @param permissions - The permissions to deny.
-   * @returns The updated UserPermissions instance.
-   */
-  deny(permissions: UserPermissionResolvable): UserPermissions;
-  /**
-   * Checks if the specified permission is granted.
-   * @param permission - The permission to check.
-   * @returns `true` if the permission is granted, otherwise `false`.
-   */
-  has(permission: UserPermissionString): boolean;
-  /**
-   * Converts the permissions to a plain object representation.
-   * @returns An object with permissions and their status.
-   */
-  toObject(): UserPermissionFlags;
-  /**
-   * Checks if this instance is equal to another UserPermissions instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: UserPermissions): boolean;
+  static isValid(permission: string): boolean;
   /**
    * A mapping of user permission strings to their numeric equivalents.
    */
@@ -1037,7 +1076,6 @@ export type BusinessPermissionString =
   | "transferAndUpgradeGifts"
   | "transferStars"
   | "manageStories";
-
 /**
  * Interface representing the user permission flags.
  */
@@ -1063,48 +1101,15 @@ export interface BusinessPermissionFlags {
 /**
  * Represents a set of user permissions and provides methods to manage them.
  */
-export declare class BusinessPermissions {
-  private allowed;
-  private denied;
+export declare class BusinessPermissions extends PermissionManager<
+  BusinessPermissionString,
+  BusinessPermissionFlags
+> {
   /**
    * Constructs a new instance of BusinessPermissions with optional initial data.
    * @param data - An object containing the initial permissions.
    */
   constructor(data?: BusinessPermissionFlags);
-  /**
-   * Grants the specified permissions.
-   * @param permissions - The permissions to grant.
-   * @returns The updated BusinessPermissions instance.
-   */
-  allow(permissions: BusinessPermissionResolvable): BusinessPermissions;
-  /**
-   * Denies the specified permissions.
-   * @param permissions - The permissions to deny.
-   * @returns The updated BusinessPermissions instance.
-   */
-  deny(permissions: BusinessPermissionResolvable): BusinessPermissions;
-  /**
-   * Checks if the specified permission is granted.
-   * @param permission - The permission to check.
-   * @returns `true` if the permission is granted, otherwise `false`.
-   */
-  has(permission: BusinessPermissionString): boolean;
-  /**
-   * Converts the permissions to a plain object representation.
-   * @returns An object with permissions and their status.
-   */
-  toObject(): BusinessPermissionFlags;
-  /**
-   * Checks if this instance is equal to another BusinessPermissions instance.
-   * @param other - The other instance to compare.
-   * @returns `true` if both instances are equal, otherwise `false`.
-   */
-  equals(other: BusinessPermissions): boolean;
-  /**
-   * Updates the permissions based on the provided data.
-   * @param data - An object containing permission states.
-   */
-  private _patch;
   /**
    * Checks if the provided permission is valid.
    * @param permission - The permission to validate.
@@ -1126,6 +1131,59 @@ export type BusinessPermissionResolvable =
   | BusinessPermissions;
 
 /**
+ * Abstract base class for managing permissions/capabilities.
+ * Provides common functionality for allow/deny operations and equality checks.
+ * @template T - The string literal type representing permission/capability names
+ * @template F - The flags interface type
+ */
+declare abstract class PermissionManager<
+  T extends string,
+  F extends Partial<Record<T, boolean>>,
+> {
+  protected allowed: Set<T>;
+  protected denied: Set<T>;
+  /**
+   * Constructs a new instance of PermissionManager with optional initial data.
+   * @param data - An object containing the initial permissions/capabilities.
+   */
+  constructor(data?: F);
+  /**
+   * Grants the specified permissions/capabilities.
+   * @param items - The permissions/capabilities to grant.
+   * @returns The updated instance.
+   */
+  allow(items: T | F | this): this;
+  /**
+   * Denies the specified permissions/capabilities.
+   * @param items - The permissions/capabilities to deny.
+   * @returns The updated instance.
+   */
+  deny(items: T | F | this): this;
+  /**
+   * Checks if the specified permission/capability is granted.
+   * @param item - The permission/capability to check.
+   * @returns `true` if the permission/capability is granted, otherwise `false`.
+   */
+  has(item: T): boolean;
+  /**
+   * Converts the permissions/capabilities to a plain object representation.
+   * @returns An object with permissions/capabilities and their status.
+   */
+  toObject(): F;
+  /**
+   * Checks if this instance is equal to another PermissionManager instance.
+   * @param other - The other instance to compare.
+   * @returns `true` if both instances are equal, otherwise `false`.
+   */
+  equals(other: this): boolean;
+  /**
+   * Updates the permissions/capabilities based on the provided data.
+   * @param data - An object containing permission/capability states.
+   */
+  protected _patch(data: F): void;
+}
+
+/**
  * Builder for creating Telegram checklist inputs
  * @example
  * ```ts
@@ -1137,7 +1195,6 @@ export type BusinessPermissionResolvable =
  * ```
  */
 export class InputChecklistBuilder {
-  private nextTaskId;
   readonly data: Partial<InputChecklist>;
 
   constructor(data?: Partial<InputChecklist>);
@@ -1359,10 +1416,7 @@ export declare abstract class Collector<K, V> extends EventEmitter {
   /**
    * Timestamp of the last collected item.
    */
-  lastCollectedTimestamp: number | Date | null;
-  private _timeout;
-  private _idleTimeout;
-  private _endReason;
+  lastCollectedTimestamp: Date | null;
   /**
    * Creates an instance of Collector.
    * @param options - The options for the collector.
@@ -1381,7 +1435,7 @@ export declare abstract class Collector<K, V> extends EventEmitter {
   /**
    * Gets the timestamp of the last collected item.
    */
-  get lastCollectedAt(): number | null | Date;
+  get lastCollectedAt(): Date | null;
   /**
    * Handles the collection of a new item.
    * @param msg - The item to collect.
@@ -1563,7 +1617,19 @@ export declare class MessageEntities extends Base {
   get customEmoji(): ReadonlyCollection<
     number,
     SearchResult & { customEmojiId: string }
-  >; /**
+  >;
+  /**
+   * Retrieves all date_time entities from the message.
+   * @returns A collection of date_time entities.
+   */
+  get dateTime(): ReadonlyCollection<
+    number,
+    SearchResult & {
+      unixTime: number;
+      timeFormat: "r" | `${"w" | ""}${"d" | "D" | ""}${"t" | "T" | ""}`;
+    }
+  >;
+  /**
    * Searches for a specific type of entity in the message.
    * @param searchType - The type of entity to search for.
    * @returns A collection of found entities.
@@ -1587,7 +1653,8 @@ export declare class MessageEntities extends Base {
       | "pre"
       | "text_link"
       | "text_mention"
-      | "custom_emoji",
+      | "custom_emoji"
+      | "date_time",
   ): ReadonlyCollection<
     number,
     SearchResult &
@@ -1596,6 +1663,10 @@ export declare class MessageEntities extends Base {
         | { url: string }
         | { user: User }
         | { customEmojiId: string }
+        | {
+            unixTime: number;
+            timeFormat: "r" | `${"w" | ""}${"d" | "D" | ""}${"t" | "T" | ""}`;
+          }
       )
   >;
   /**
@@ -1618,12 +1689,18 @@ export declare class MessageEntities extends Base {
         | "strikethrough"
         | "spoiler"
         | "blockquote"
-        | "code";
+        | "code"
+        | "dateTime";
     } & (
         | { type: "pre"; language?: LanguageCode }
         | { type: "textLink"; url: string }
         | { type: "textMention"; user: User }
         | { type: "customEmoji"; customEmojiId: string }
+        | {
+            type: "dateTime";
+            unixTime: number;
+            timeFormat: "r" | `${"w" | ""}${"d" | "D" | ""}${"t" | "T" | ""}`;
+          }
       )
   >;
 }
@@ -3193,11 +3270,29 @@ export declare class Video extends InputFile {
   thumbnail?: Photo;
   /** MIME type of the file as defined by sender */
   mimeType?: string;
-
+  /** */
+  qualities?: Collection<string, VideoQuality>;
   /**
    * Date the video was sent. Timestamp in seconds from which the video will play in the message
    */
   get createdAt(): Date | null;
+}
+
+export declare class VideoQuality extends InputFile {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the represents video file of a specific quality
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").VideoQuality,
+  );
+  /** Photo width */
+  width: number;
+  /** Photo height */
+  height: number;
+  /** Codec that was used to encode the video, for example, “h264”, “h265”, or “av01” */
+  codec: string;
 }
 
 export declare class VideoNote extends InputFile {
@@ -3604,7 +3699,7 @@ export class UniqueGift extends Base {
     name: string;
     /** The sticker that represents the unique gift */
     sticker: Sticker;
-    /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+    /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
     rarityPerMille: number;
   };
   /** Symbol of the gift */
@@ -3613,7 +3708,7 @@ export class UniqueGift extends Base {
     name: string;
     /** The sticker that represents the unique gift */
     sticker: Sticker;
-    /** The number of unique gifts that receive this model for every 1000 gifts upgraded */
+    /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
     rarityPerMille: number;
   };
   /** Backdrop of the gift */
@@ -3631,7 +3726,7 @@ export class UniqueGift extends Base {
       /** The color for the text on the backdrop in RGB format */
       text: number;
     };
-    /** The number of unique gifts that receive this backdrop for every 1000 gifts upgraded */
+    /** The number of unique gifts that receive this model for every 1000 gift upgrades. Always 0 for crafted gifts */
     rarityPerMille: number;
   };
   /**
@@ -3657,6 +3752,8 @@ export class UniqueGift extends Base {
       otherColors: number[];
     };
   };
+  /** True, if the gift was used to craft another gift and isn't available anymore */
+  isBurned?: true;
 
   /**
    * Checks if this unique gift is equal to another unique gift.
@@ -4025,9 +4122,17 @@ export declare class Poll extends Base {
     voterCount: number;
   }[];
   /**
-   * 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot
+   * Array of 0-based identifiers of the correct answer options. Available only for polls in quiz mode which are closed or were sent (not forwarded) by the bot or to the private chat with the bot.
    */
-  correctId?: number;
+  correctIds?: number[];
+  /** True, if the poll allows to change the chosen answer options */
+  allowsRevoting: boolean;
+  /** Description of the poll; for polls inside the Message object only */
+  description?: string;
+  /** Mode for parsing entities in the poll description. See formatting options for more details. */
+  descriptionParseMode?: ParseMode;
+  /** Special entities like usernames, URLs, bot commands, etc. that appear in the description */
+  descriptionEntities?: MessageEntity[];
   /**
    * Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
    */
@@ -4219,7 +4324,7 @@ export declare class TextQuote {
   );
   /** Text of the quoted part of a message that is replied to by the given message */
   text: string;
-  /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes. */
+  /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are kept in quotes. */
   entities?: MessageEntities;
   /** Approximate quote position in the original message in UTF-16 code units as specified by the sender */
   position: number;
@@ -4628,6 +4733,14 @@ export declare class SharedUser extends Base {
       "userId" | "result"
     >,
   ): Promise<PreparedInlineMessage>;
+  /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(
+    button: MethodParameters["savePreparedKeyboardButton"]["button"],
+  ): Promise<string>;
   /**
    * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
    * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
@@ -5664,9 +5777,16 @@ export declare class ChatShared extends Base {
         isAnonymous?: boolean;
         type?: "quiz" | "regular";
         allowsMultipleAnswers?: boolean;
-        correctOptionId?: number;
+        allowsRevoting?: boolean;
+        shuffleOptions?: boolean;
+        allowAddingOptions?: boolean;
+        hideResultsUntilCloses?: boolean;
+        correctOptionIds?: number[];
         explanation?: string;
         explanationParseMode?: import("@telegram.ts/types").ParseMode;
+        description?: string;
+        descriptionParseMode?: import("@telegram.ts/types").ParseMode;
+        descriptionEntities?: MessageEntity[];
         explanationEntities?: MessageEntity[];
         openPeriod?: number;
         closeDate?: number;
@@ -6448,6 +6568,10 @@ export declare class Message extends Base {
    */
   senderBusinessBot?: User;
   /**
+   * For messages in channels and replies to channel messages in supergroups, the tag of the message sender
+   */
+  senderTag?: string;
+  /**
    * Information about the original message for forwarded messages
    */
   forwardOrigin?: MessageOrigin;
@@ -6463,6 +6587,10 @@ export declare class Message extends Base {
    * Identifier of the specific checklist task that is being replied to
    */
   checklistTaskId?: number;
+  /**
+   * Persistent identifier of the specific poll option that is being replied to
+   */
+  pollOptionId?: string;
   /**
    * True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
    */
@@ -6572,6 +6700,52 @@ export declare class Message extends Base {
    * Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel
    */
   channelChatCreated?: true;
+  /**
+   * User created a bot that will be managed by the current bot.
+   */
+  managedBotCreated?: User;
+  /**
+   * Answer option was added to a poll
+   */
+  pollOptionAdded?: {
+    /**
+     * - Message containing the poll to which the option was added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+     */
+    message?: Message;
+    /**
+     * - Unique identifier of the added option.
+     */
+    persistentId: string;
+    /**
+     * - Optional text
+     */
+    text: string;
+    /**
+     * - Special entities that appear in the option_text.
+     */
+    entities?: MessageEntities;
+  };
+  /**
+   * Answer option was deleted from a poll
+   */
+  pollOptionDeleted?: {
+    /**
+     * - Message containing the poll from which the option was deleted. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+     */
+    message?: Message;
+    /**
+     * - Unique identifier of the deleted option.
+     */
+    persistentId: string;
+    /**
+     * - Option text
+     */
+    text: string;
+    /**
+     * - Special entities that appear in the option_text.
+     */
+    entities?: MessageEntities;
+  };
   /**
    * Service message: auto-delete timer settings changed in the chat
    */
@@ -6796,6 +6970,10 @@ export declare class Message extends Base {
    * Service message: payment for a suggested post was received
    */
   suggestedPostPaid?: SuggestedPostPaid;
+  /** Service message: chat owner has left */
+  ownerLeft?: User;
+  /** Service message: chat owner has changed */
+  ownerChanged?: User;
   /**
    * Service message: payment for a suggested post was refunded
    */
@@ -7964,7 +8142,7 @@ export declare class Chat extends Base {
    */
   setMenuButton(menuButton?: MenuButton): Promise<true>;
   /**
-   * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights.
+   * Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right.
    * @param name - Topic name, 1-128 characters
    * @param options - out parameters
    * @returns Returns information about the created topic as a ForumTopic object.
@@ -8669,9 +8847,16 @@ export declare class Chat extends Base {
         isAnonymous?: boolean;
         type?: "quiz" | "regular";
         allowsMultipleAnswers?: boolean;
-        correctOptionId?: number;
+        allowsRevoting?: boolean;
+        shuffleOptions?: boolean;
+        allowAddingOptions?: boolean;
+        hideResultsUntilCloses?: boolean;
+        correctOptionIds?: number[];
         explanation?: string;
         explanationParseMode?: import("@telegram.ts/types").ParseMode;
+        description?: string;
+        descriptionParseMode?: import("@telegram.ts/types").ParseMode;
+        descriptionEntities?: MessageEntity[];
         explanationEntities?: MessageEntity[];
         openPeriod?: number;
         closeDate?: number;
@@ -8941,6 +9126,10 @@ export declare class ChatMember extends Base {
    */
   nickName?: string;
   /**
+   * Custom tag for this member
+   */
+  tag?: string;
+  /**
    * True, if the user is a member of the chat at the moment of the request
    */
   isMember?: boolean;
@@ -9040,6 +9229,12 @@ export declare class ChatMember extends Base {
    * @returns Returns True on success.
    */
   setNikeName(name: string): Promise<true>;
+  /**
+   * Use this method to set a custom tag for a member of a supergroup.
+   * @param tag - New tag for the member; 0-32 characters
+   * @returns Returns True on success.
+   */
+  setTag(tag?: string): Promise<true>;
   /**
    * Checks if this member is equal to another member.
    * @param other - The other object to compare with.
@@ -9467,6 +9662,14 @@ export declare class BusinessConnection extends Base {
     >,
   ): Promise<PreparedInlineMessage>;
   /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(
+    button: MethodParameters["savePreparedKeyboardButton"]["button"],
+  ): Promise<string>;
+  /**
    * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars.
    * @param telegramPaymentChargeId - Telegram payment identifier for the subscription.
    * @param isCanceled - Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
@@ -9706,6 +9909,35 @@ export declare class InlineQuery extends Base {
       "results" | "inlineQueryId"
     >,
   ): Promise<true>;
+}
+
+export declare class ManagedBotUpdated extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the creation, token update, or owner update of a bot that is managed by the current bot.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").ManagedBotUpdated,
+  );
+  /**
+   * User that created the bot
+   */
+  author: User;
+  /**
+   * Information about the bot.
+   */
+  bot: User;
+  /**
+   * Use this method to get the token of a managed bot.
+   * @returns the token as String on success.
+   */
+  fetchBotToken(): Promise<string>;
+  /**
+   * Use this method to revoke the current token of a managed bot and generate a new one.
+   * @returns the new token as String on success.
+   */
+  replaceBotToken(): Promise<string>;
 }
 
 export declare class ChosenInlineResult extends Base {
@@ -10043,7 +10275,9 @@ export declare class ChatBoostRemoved extends Base {
 }
 
 export interface EventHandlers {
-  ready: (telegram: TelegramClient) => PossiblyAsync<void>;
+  ready: (
+    telegram: TelegramClient & { user: typeof ClientUser },
+  ) => PossiblyAsync<void>;
   disconnect: (telegram: TelegramClient) => PossiblyAsync<void>;
   error: (detalis: [number, unknown]) => PossiblyAsync<void>;
   rawUpdate: (raw: Update & { client: TelegramClient }) => PossiblyAsync<void>;
@@ -10078,6 +10312,9 @@ export interface EventHandlers {
   chatBoost: (boostChat: ChatBoostUpdated) => PossiblyAsync<void>;
   removedChatBoost: (chatBoost: ChatBoostRemoved) => PossiblyAsync<void>;
   purchasedPaidMedia: (paidMedia: PaidMediaPurchased) => PossiblyAsync<void>;
+  managedBotUpdated: (
+    managedBotUpdated: ManagedBotUpdated,
+  ) => PossiblyAsync<void>;
 }
 
 export type EventHandlerParameters =
@@ -10098,6 +10335,7 @@ export type EventHandlerParameters =
   | ChatJoinRequest
   | ChatBoostUpdated
   | ChatBoostRemoved
+  | ManagedBotUpdated
   | PaidMediaPurchased;
 
 export declare class BaseClient extends EventEmitter {
@@ -10310,6 +10548,10 @@ export declare class BaseClient extends EventEmitter {
   setChatAdministratorCustomTitle(
     params: MethodParameters["setChatAdministratorCustomTitle"],
   ): Promise<MethodsLibReturnType["setChatAdministratorCustomTitle"]>;
+  /** Use this method to set a custom tag for a member of a supergroup. Returns True on success. */
+  setChatMemberTag(
+    params: MethodParameters["setChatMemberTag"],
+  ): Promise<MethodsLibReturnType["setChatMemberTag"]>;
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
   banChatSenderChat(
     chatId: number | string,
@@ -10353,6 +10595,14 @@ export declare class BaseClient extends EventEmitter {
     inviteLink: string,
     chatId?: number | string,
   ): Promise<MethodsLibReturnType["revokeChatInviteLink"]>;
+  /** Use this method to get the token of a managed bot. Returns the token as String on success. */
+  getManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["getManagedBotToken"]>;
+  /** Use this method to revoke the current token of a managed bot and generate a new one. Returns the new token as String on success. */
+  replaceManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["replaceManagedBotToken"]>;
   /** Use this method to approve a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   approveChatJoinRequest(
     userId: number | string,
@@ -10451,7 +10701,7 @@ export declare class BaseClient extends EventEmitter {
   getForumTopicIconStickers(): Promise<
     MethodsLibReturnType["getForumTopicIconStickers"]
   >;
-  /** Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object. */
+  /** Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. */
   createForumTopic(
     params: MethodParameters["createForumTopic"],
   ): Promise<MethodsLibReturnType["createForumTopic"]>;
@@ -10763,6 +11013,10 @@ export declare class BaseClient extends EventEmitter {
   savePreparedInlineMessage(
     params: MethodParameters["savePreparedInlineMessage"],
   ): Promise<MethodsLibReturnType["savePreparedInlineMessage"]>;
+  /** Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object. */
+  savePreparedKeyboardButton(
+    params: MethodParameters["savePreparedKeyboardButton"],
+  ): Promise<MethodsLibReturnType["savePreparedKeyboardButton"]>;
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(
     params: MethodParameters["sendInvoice"],
@@ -10903,11 +11157,6 @@ export declare class PollingClient {
    */
   poll(options: ILoginOptions["polling"]): Promise<void>;
   /**
-   * Handles errors that occur during polling or initialization.
-   * @param err - The error object.
-   */
-  private handlerError;
-  /**
    * Closes the polling client, stopping further updates.
    * @returns The closed state of the polling client.
    */
@@ -10992,11 +11241,6 @@ export declare class WebhookClient {
         response: ServerResponse,
       ) => void)
   >;
-  /**
-   * Handles errors that occur during webhook processing.
-   * @param err - The error object.
-   */
-  private handlerError;
   /**
    * Closes the webhook server.
    * @returns The closed state of the webhook client.
@@ -11229,16 +11473,8 @@ export declare class ClientUser extends User {
   isBot: true;
   /** The bot's or user's username */
   username: string;
-  /** Indicates if the bot can be invited to groups */
-  canJoinGroups: boolean;
-  /** Indicates if privacy mode is disabled for the bot */
-  canReadAllMessages: boolean;
-  /** Indicates if the bot supports inline queries */
-  inlineQueries: boolean;
-  /** Indicates if the bot can be connected to a Telegram Business account */
-  connectBusiness: boolean;
-  /** Indicates if the bot has a main Web App */
-  mainWebApp: boolean;
+  /** Represents a set of bot capabilities and provides methods to manage them. */
+  capabilities: ClientCapabilities;
   /**
    * The authentication token for the Telegram bot
    */
@@ -11357,6 +11593,17 @@ export declare class ClientUser extends User {
    * @returns Returns bot short description on success
    */
   fetchShortDescription(language?: LanguageCode): Promise<string>;
+  /**
+   * Changes the profile photo of the bot.
+   * @param photo - The new profile photo to set.
+   * @returns Returns True on success.
+   **/
+  setProfilePhoto(photo: InputProfilePhoto): Promise<true>;
+  /**
+   * Removes the profile photo of the bot.
+   * @returns Returns True on success.
+   **/
+  removeProfilePhoto(): Promise<true>;
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param chatId - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
@@ -11649,6 +11896,10 @@ export declare class ChatFullInfo extends Chat {
     smail: Photo;
     big: Photo;
   };
+  /**
+   * For private chats, the first audio added to the profile of the user
+   */
+  firstProfileAudio?: Audio;
   /**
    * The active usernames of the chat.
    */
@@ -12302,6 +12553,17 @@ export type Awaitable<V> = PromiseLike<V> | V;
 
 export type PossiblyAsync<T> = T | Promise<T>;
 
+export type MarkupOptions = {
+  /**
+   * The custom emoji id shown before the button text.
+   */
+  icon?: string;
+  /**
+   * The style of the button.
+   */
+  style?: "danger" | "success" | "primary" | "red" | "green" | "blue";
+};
+
 /**
  * Represents an inline keyboard for Telegram bots.
  */
@@ -12328,153 +12590,212 @@ export declare class InlineKeyboardBuilder {
    * Adds a URL button to the inline keyboard.
    * @param text - The button text.
    * @param url - The URL to be opened when the button is pressed.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  url(text: string, url: string): this;
+  url(text: string, url: string, options?: MarkupOptions): this;
   /**
    * Creates a URL button.
    * @param text - The button text.
    * @param url - The URL to be opened when the button is pressed.
+   * @param options - Additional button style and icon.
    * @returns The created URL button.
    */
-  static url(text: string, url: string): InlineKeyboardButton.UrlButton;
+  static url(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.UrlButton;
   /**
    * Adds a callback button to the inline keyboard.
    * @param text - The button text.
    * @param data - The callback data.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  text(text: string, data?: string): this;
+  text(text: string, data?: string, options?: MarkupOptions): this;
   /**
    * Creates a callback button.
    * @param text - The button text.
    * @param data - The callback data.
+   * @param options - Additional button style and icon.
    * @returns The created callback button.
    */
-  static text(text: string, data?: string): InlineKeyboardButton.CallbackButton;
+  static text(
+    text: string,
+    data?: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.CallbackButton;
   /**
    * Adds a WebApp button to the inline keyboard.
    * @param text - The button text.
    * @param url - The URL to the WebApp.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string): this;
+  webApp(text: string, url: string, options?: MarkupOptions): this;
   /**
    * Creates a WebApp button.
    * @param text - The button text.
    * @param url - The URL to the WebApp.
+   * @param options - Additional button style and icon.
    * @returns The created WebApp button.
    */
-  static webApp(text: string, url: string): InlineKeyboardButton.WebAppButton;
+  static webApp(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.WebAppButton;
   /**
    * Adds a login button to the inline keyboard.
    * @param text - The button text.
    * @param loginUrl - The login URL or LoginUrl object.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  login(text: string, loginUrl: string | LoginUrl): this;
+  login(
+    text: string,
+    loginUrl: string | LoginUrl,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a login button.
    * @param text - The button text.
    * @param loginUrl - The login URL or LoginUrl object.
+   * @param options - Additional button style and icon.
    * @returns The created login button.
    */
   static login(
     text: string,
     loginUrl: string | LoginUrl,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.LoginButton;
   /**
    * Adds a switch inline button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInline(text: string, query?: string): this;
+  switchInline(text: string, query?: string, options?: MarkupOptions): this;
   /**
    * Creates a switch inline button.
    * @param text - The button text.
    * @param query - The inline query to switch to.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline button.
    */
   static switchInline(
     text: string,
     query?: string,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineButton;
   /**
    * Adds a switch inline current chat button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to in the current chat.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInlineCurrent(text: string, query?: string): this;
+  switchInlineCurrent(
+    text: string,
+    query?: string,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a switch inline current chat button.
    * @param text - The button text.
    * @param query - The inline query to switch to in the current chat.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline current chat button.
    */
   static switchInlineCurrent(
     text: string,
     query?: string,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineCurrentChatButton;
   /**
    * Adds a switch inline chosen chat button to the inline keyboard.
    * @param text - The button text.
    * @param query - The inline query to switch to in the chosen chat.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  switchInlineChosen(text: string, query?: SwitchInlineQueryChosenChat): this;
+  switchInlineChosen(
+    text: string,
+    query?: SwitchInlineQueryChosenChat,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a switch inline chosen chat button.
    * @param text - The button text.
    * @param query - The inline query to switch to in the chosen chat.
+   * @param options - Additional button style and icon.
    * @returns The created switch inline chosen chat button.
    */
   static switchInlineChosen(
     text: string,
     query?: SwitchInlineQueryChosenChat,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.SwitchInlineChosenChatButton;
   /**
    * Adds a copy text button to the inline keyboard.
    * @param text - The button text.
    * @param copyText - The text copy or CopyTextButton object.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  copyText(text: string, copyText?: string | CopyTextButton): this;
+  copyText(
+    text: string,
+    copyText?: string | CopyTextButton,
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a copy text button.
    * @param text - The button text.
    * @param copyText - The text copy or CopyTextButton object.
+   * @param options - Additional button style and icon.
    * @returns The created copy text button.
    */
   static copyText(
     text: string,
     copyText?: string | CopyTextButton,
+    options?: MarkupOptions,
   ): InlineKeyboardButton.CopyTextButtonButton;
   /**
    * Adds a game button to the inline keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  game(text: string): this;
+  game(text: string, options?: MarkupOptions): this;
   /**
    * Creates a game button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created game button.
    */
-  static game(text: string): InlineKeyboardButton.GameButton;
+  static game(
+    text: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.GameButton;
   /**
    * Adds a pay button to the inline keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  pay(text: string): this;
+  pay(text: string, options?: MarkupOptions): this;
   /**
    * Creates a pay button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created pay button.
    */
-  static pay(text: string): InlineKeyboardButton.PayButton;
+  static pay(
+    text: string,
+    options?: MarkupOptions,
+  ): InlineKeyboardButton.PayButton;
   /**
    * Creates a deep copy of the current InlineKeyboard instance.
    * @returns A new instance of InlineKeyboard with the same buttons.
@@ -12562,118 +12883,182 @@ export declare class KeyboardBuilder {
   /**
    * Adds a text button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  text(text: string): this;
+  text(text: string, options?: MarkupOptions): this;
   /**
    * Creates a text button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created text button.
    */
-  static text(text: string): KeyboardButton.CommonButton;
+  static text(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.CommonButton;
   /**
    * Adds a request users button to the keyboard.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The current instance for chaining.
    */
   requestUsers(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestUsers, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): this;
   /**
    * Creates a request users button.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The created request users button.
    */
   static requestUsers(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestUsers, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestUsersButton;
   /**
    * Adds a request chat button to the keyboard.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The current instance for chaining.
    */
   requestChat(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestChat, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): this;
   /**
    * Creates a request chat button.
    * @param text - The button text.
    * @param requestId - The request ID.
    * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
    * @returns The created request chat button.
    */
   static requestChat(
     text: string,
     requestId: number,
     options?: Omit<KeyboardButtonRequestChat, "requestId">,
+    buttonOptions?: MarkupOptions,
   ): KeyboardButton.RequestChatButton;
   /**
    * Adds a request contact button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestContact(text: string): this;
+  requestContact(text: string, options?: MarkupOptions): this;
   /**
    * Creates a request contact button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created request contact button.
    */
-  static requestContact(text: string): KeyboardButton.RequestContactButton;
+  static requestContact(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestContactButton;
   /**
    * Adds a request location button to the keyboard.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestLocation(text: string): this;
+  requestLocation(text: string, options?: MarkupOptions): this;
   /**
    * Creates a request location button.
    * @param text - The button text.
+   * @param options - Additional button style and icon.
    * @returns The created request location button.
    */
-  static requestLocation(text: string): KeyboardButton.RequestLocationButton;
+  static requestLocation(
+    text: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.RequestLocationButton;
   /**
    * Adds a request poll button to the keyboard.
    * @param text - The button text.
    * @param type - The type of the poll button.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  requestPoll(text: string, type?: KeyboardButtonPollType["type"]): this;
+  requestPoll(
+    text: string,
+    type?: KeyboardButtonPollType["type"],
+    options?: MarkupOptions,
+  ): this;
   /**
    * Creates a request poll button.
    * @param text - The button text.
    * @param type - The type of the poll button.
+   * @param options - Additional button style and icon.
    * @returns The created request poll button.
    */
   static requestPoll(
     text: string,
     type?: KeyboardButtonPollType["type"],
+    options?: MarkupOptions,
   ): KeyboardButton.RequestPollButton;
+  /**
+   * Adds a request managed bot to the keyboard.
+   * @param text - The button text.
+   * @param requestId - Signed 32-bit identifier of the request. Must be unique within the message.
+   * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
+   * @returns The created instance for chaining.
+   */
+  requestManagedBot(
+    text: string,
+    requestId: number,
+    options?: Omit<KeyboardButtonRequestManagedBot, "request_id">,
+    buttonOptions?: MarkupOptions,
+  ): this;
+  /**
+   * Creates a request managed bot button.
+   * @param text - The button text.
+   * @param requestId - Signed 32-bit identifier of the request. Must be unique within the message.
+   * @param options - Additional options for the button.
+   * @param buttonOptions - Additional button style and icon.
+   * @returns The created request managed bot button.
+   */
+  static requestManagedBot(
+    text: string,
+    requestId: number,
+    options?: Omit<KeyboardButtonRequestManagedBot, "request_id">,
+    buttonOptions?: MarkupOptions,
+  ): KeyboardButton.RequestManagedBotButton;
   /**
    * Adds a web app button to the keyboard.
    * @param text - The button text.
    * @param url - The URL of the web app.
+   * @param options - Additional button style and icon.
    * @returns The current instance for chaining.
    */
-  webApp(text: string, url: string): this;
+  webApp(text: string, url: string, options?: MarkupOptions): this;
   /**
    * Creates a web app button.
    * @param text - The button text.
    * @param url - The URL of the web app.
+   * @param options - Additional button style and icon.
    * @returns The created web app button.
    */
-  static webApp(text: string, url: string): KeyboardButton.WebAppButton;
+  static webApp(
+    text: string,
+    url: string,
+    options?: MarkupOptions,
+  ): KeyboardButton.WebAppButton;
   /**
    * Sets the keyboard as persistent or not.
    * @param isEnabled - Indicates whether the keyboard should be persistent.
@@ -13205,6 +13590,7 @@ export declare const Events: {
   readonly ChatJoinRequest: "chatJoinRequest";
   readonly ChatBoost: "chatBoost";
   readonly RemovedChatBoost: "removedChatBoost";
+  readonly ManagedBotUpdated: "managedBotUpdated";
 };
 
 export declare const CollectorEvents: {
@@ -13227,6 +13613,15 @@ export declare const RestEvents: {
   readonly RateLimit: "rateLimit";
   readonly ApiRequest: "apiRequest";
   readonly ApiResponse: "apiResponse";
+};
+
+export declare const MarkupStyles: {
+  readonly Red: "danger";
+  readonly Green: "success";
+  readonly Blue: "primary";
+  readonly Danger: "danger";
+  readonly Success: "success";
+  readonly Primary: "primary";
 };
 
 /**
@@ -13392,6 +13787,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.13.1";
+export declare const version: "4.14.0";
 
 export * from "./telegram/index";

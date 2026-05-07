@@ -1,5 +1,8 @@
 // @ts-check
 const { User } = require("./User");
+const {
+  ClientCapabilities,
+} = require("../../util/permission/ClientCapabilities");
 
 /**
  * @typedef {import("../../client/interfaces/Language").LanguageCode} LanguageCode
@@ -19,23 +22,17 @@ class ClientUser extends User {
     /** The bot's or user's username */
     this.username = data.username;
 
-    /** Indicates if the bot can be invited to groups */
-    this.canJoinGroups = data.can_join_groups;
-
-    /** Indicates if privacy mode is disabled for the bot */
-    this.canReadAllMessages = data.can_read_all_group_messages;
-
-    /** Indicates if the bot supports inline queries */
-    this.inlineQueries = data.supports_inline_queries;
-
-    /** Indicates if the bot can be connected to a Telegram Business account */
-    this.connectBusiness = data.can_connect_to_business;
-
-    /** Indicates if the bot has a main Web App */
-    this.mainWebApp = data.has_main_web_app;
-
-    /** True, if the bot has forum topic mode enabled in private chats. Returned only in getMe. */
-    this.topicsEnabled = data.has_topics_enabled;
+    /** Represents a set of bot capabilities and provides methods to manage them. */
+    this.capabilities = new ClientCapabilities({
+      joinGroups: data.can_join_groups,
+      readAllMessages: data.can_read_all_group_messages,
+      inlineQueries: data.supports_inline_queries,
+      connectBusiness: data.can_connect_to_business,
+      mainWebApp: data.has_main_web_app,
+      topicsEnabled: data.has_topics_enabled,
+      userTopicCreation: data.allows_users_to_create_topics,
+      manageBots: data.can_manage_bots,
+    });
 
     this._patch(data);
   }
@@ -182,6 +179,23 @@ class ClientUser extends User {
   }
 
   /**
+   * Changes the profile photo of the bot.
+   * @param {import("../../client/interfaces/Methods").InputProfilePhoto} photo - The new profile photo to set.
+   * @returns {Promise<true>} - Returns True on success.
+   **/
+  setProfilePhoto(photo) {
+    return this.client.setMyProfilePhoto(photo);
+  }
+
+  /**
+   * Removes the profile photo of the bot.
+   * @returns {Promise<true>} - Returns True on success.
+   **/
+  removeProfilePhoto() {
+    return this.client.removeMyProfilePhoto();
+  }
+
+  /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param {number} [chatId] - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
    * @param {import("../../client/interfaces/Bot").MenuButton} [menu] - An object for the bot's new menu button. Defaults to MenuButtonDefault
@@ -238,13 +252,7 @@ class ClientUser extends User {
 
     if (!super.equals(other)) return false;
 
-    return (
-      this.canJoinGroups === other.canJoinGroups &&
-      this.canReadAllMessages === other.canReadAllMessages &&
-      this.inlineQueries === other.inlineQueries &&
-      this.connectBusiness === other.connectBusiness &&
-      this.mainWebApp === other.mainWebApp
-    );
+    return this.capabilities.equals(other.capabilities);
   }
 }
 

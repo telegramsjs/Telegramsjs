@@ -90,7 +90,7 @@ class ChatManager extends BaseManager<Chat, ApiChat> {
   ): Promise<Chat | ChatFullInfo> {
     const id = this.resolveId(this.resolve(chat));
 
-    if (!force) {
+    if (!force && !fullInfo) {
       const existing = this.cache.get(String(id));
       if (existing) return existing;
     }

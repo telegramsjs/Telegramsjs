@@ -3,6 +3,7 @@ const { Chat } = require("./Chat");
 const { Photo } = require("../media/Photo");
 const { Location } = require("../misc/Location");
 const { Sticker } = require("../media/Sticker");
+const { Audio } = require("../media/Audio");
 const { ReactionType } = require("../misc/ReactionType");
 const { UserRating } = require("../misc/UserRating");
 const { Message } = require("../message/Message");
@@ -99,6 +100,11 @@ class ChatFullInfo extends Chat {
           height: 0,
         }),
       };
+    }
+
+    if ("first_profile_audio" in data && data.first_profile_audio) {
+      /** For private chats, the first audio added to the profile of the user */
+      this.firstProfileAudio = new Audio(this.client, data.first_profile_audio);
     }
 
     if ("active_usernames" in data) {

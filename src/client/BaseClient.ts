@@ -4,7 +4,7 @@ import { Collection } from "@telegram.ts/collection";
 import { UserManager } from "../managers/UserManager";
 import { ChatManager } from "../managers/ChatManager";
 import type { LanguageCode } from "./interfaces/Language";
-import type { MediaDataParam } from "./interfaces/Methods";
+import type { MediaDataParam, InputProfilePhoto } from "./interfaces/Methods";
 import type { ClientOptions, TelegramClient } from "./TelegramClient";
 import {
   Message,
@@ -14,6 +14,7 @@ import {
   WebhookInfo,
   UserChatBoosts,
   UserProfilePhotos,
+  UserProfileAudios,
   BusinessConnection,
   ChatAdministratorRights,
   InputFile,
@@ -65,7 +66,9 @@ function toSnakeCase<T extends Record<string, any>>(
 
 interface EventHandlers {
   ready: (
-    telegram: import("./TelegramClient").TelegramClient,
+    telegram: import("./TelegramClient").TelegramClient & {
+      user: typeof ClientUser;
+    },
   ) => PossiblyAsync<void>;
   disconnect: (
     telegram: import("./TelegramClient").TelegramClient,
@@ -153,6 +156,9 @@ interface EventHandlers {
   purchasedPaidMedia: (
     paidMedia: import("../structures/PaidMediaPurchased").PaidMediaPurchased,
   ) => PossiblyAsync<void>;
+  managedBotUpdated: (
+    managedBotUpdated: import("../structures/ManagedBotUpdated").ManagedBotUpdated,
+  ) => PossiblyAsync<void>;
 }
 
 type EventHandlerParameters =
@@ -173,7 +179,8 @@ type EventHandlerParameters =
   | import("../structures/ChatJoinRequest").ChatJoinRequest
   | import("../structures/ChatBoostUpdated").ChatBoostUpdated
   | import("../structures/ChatBoostRemoved").ChatBoostRemoved
-  | import("../structures/PaidMediaPurchased").PaidMediaPurchased;
+  | import("../structures/PaidMediaPurchased").PaidMediaPurchased
+  | import("../structures/ManagedBotUpdated").ManagedBotUpdated;
 
 class BaseClient extends EventEmitter {
   public readonly rest: Rest;
@@ -673,6 +680,17 @@ class BaseClient extends EventEmitter {
       .then((res) => new UserProfilePhotos(this, res));
   }
 
+  /** Use this method to get a list of profile audios for a user. Returns a UserProfileAudios object. */
+  async getUserProfileAudios(
+    params: MethodParameters["getUserProfileAudios"],
+  ): Promise<MethodsLibReturnType["getUserProfileAudios"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["getUserProfileAudios"]
+      >("getUserProfileAudios", toSnakeCase(params))
+      .then((res) => new UserProfileAudios(this, res));
+  }
+
   /** Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success. */
   async setUserEmojiStatus(
     params: MethodParameters["setUserEmojiStatus"],
@@ -753,6 +771,16 @@ class BaseClient extends EventEmitter {
     return this.rest.request<
       MethodsApiReturnType["setChatAdministratorCustomTitle"]
     >("setChatAdministratorCustomTitle", toSnakeCase(params));
+  }
+
+  /** Use this method to set a custom tag for a member of a supergroup. Returns True on success. */
+  async setChatMemberTag(
+    params: MethodParameters["setChatMemberTag"],
+  ): Promise<MethodsLibReturnType["setChatMemberTag"]> {
+    return this.rest.request<MethodsApiReturnType["setChatMemberTag"]>(
+      "setChatMemberTag",
+      toSnakeCase(params),
+    );
   }
 
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -859,6 +887,26 @@ class BaseClient extends EventEmitter {
         MethodsApiReturnType["revokeChatInviteLink"]
       >("revokeChatInviteLink", { invite_link: inviteLink, ...(chatId && { chat_id: chatId }) })
       .then((res) => new ChatInviteLink(this, res));
+  }
+
+  /** Use this method to get the token of a managed bot. Returns the token as String on success. */
+  async getManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["getManagedBotToken"]> {
+    return this.rest.request<MethodsApiReturnType["getManagedBotToken"]>(
+      "getManagedBotToken",
+      { user_id: userId },
+    );
+  }
+
+  /** Use this method to revoke the current token of a managed bot and generate a new one. Returns the new token as String on success. */
+  async replaceManagedBotToken(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["replaceManagedBotToken"]> {
+    return this.rest.request<MethodsApiReturnType["replaceManagedBotToken"]>(
+      "replaceManagedBotToken",
+      { user_id: userId },
+    );
   }
 
   /** Use this method to approve a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
@@ -1111,7 +1159,7 @@ class BaseClient extends EventEmitter {
     );
   }
 
-  /** Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects. */
+  /** Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns information about the created topic as a ForumTopic object. */
   async getForumTopicIconStickers(): Promise<
     MethodsLibReturnType["getForumTopicIconStickers"]
   > {
@@ -1378,6 +1426,25 @@ class BaseClient extends EventEmitter {
         MethodsApiReturnType["getMyShortDescription"]
       >("getMyShortDescription", { ...(languageCode && { language_code: languageCode }) })
       .then((res) => res.short_description);
+  }
+
+  /** Changes the profile photo of the bot. Returns True on success. */
+  async setMyProfilePhoto(
+    photo: InputProfilePhoto,
+  ): Promise<MethodsLibReturnType["setMyProfilePhoto"]> {
+    return this.rest.request<MethodsApiReturnType["setMyProfilePhoto"]>(
+      "setMyProfilePhoto",
+      { photo },
+    );
+  }
+
+  /** Removes the profile photo of the bot. Requires no parameters. Returns True on success. */
+  async removeMyProfilePhoto(): Promise<
+    MethodsApiReturnType["removeMyProfilePhoto"]
+  > {
+    return this.rest.request<MethodsApiReturnType["removeMyProfilePhoto"]>(
+      "removeMyProfilePhoto",
+    );
   }
 
   /** Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success. */
@@ -1976,6 +2043,17 @@ class BaseClient extends EventEmitter {
         MethodsApiReturnType["savePreparedInlineMessage"]
       >("savePreparedInlineMessage", toSnakeCase(params))
       .then((res) => new PreparedInlineMessage(res));
+  }
+
+  /** Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object. */
+  async savePreparedKeyboardButton(
+    params: MethodParameters["savePreparedKeyboardButton"],
+  ): Promise<MethodsLibReturnType["savePreparedKeyboardButton"]> {
+    return this.rest
+      .request<
+        MethodsApiReturnType["savePreparedKeyboardButton"]
+      >("savePreparedKeyboardButton", toSnakeCase(params))
+      .then((res) => res.id);
   }
 
   /** Use this method to send invoices. On success, the sent Message is returned. */

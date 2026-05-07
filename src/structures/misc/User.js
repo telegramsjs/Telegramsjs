@@ -21,9 +21,7 @@ class User extends Base {
     this.id = String(data.id);
 
     /** True, if this user is a bot */
-    this.isBot = Boolean(
-      data.id == ("user" in client ? client.user?.id : 0) ? true : data.is_bot,
-    );
+    this.isBot = data.is_bot;
 
     this._patch(data);
   }
@@ -55,7 +53,7 @@ class User extends Base {
     if ("language_code" in data) {
       /**
        * IETF language tag of the user's language
-       * @type {LanguageCode | undefined}
+       * @type {string | undefined}
        */
       this.language = data.language_code;
     }
@@ -145,6 +143,18 @@ class User extends Base {
       result,
       userId: this.id,
       ...options,
+    });
+  }
+
+  /**
+   * Stores a keyboard button that can be used by a user within a Mini App.
+   * @param {MethodParameters["savePreparedKeyboardButton"]["button"]} button - An object describing the button to be saved. The button must be of the type request_users, request_chat, or request_managed_bot.
+   * @returns {Promise<string>} - Returns a unique identifier of the keyboard button.
+   */
+  saveKeyboardButton(button) {
+    return this.client.savePreparedKeyboardButton({
+      userId: this.id,
+      button,
     });
   }
 

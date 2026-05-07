@@ -161,6 +161,7 @@ class Message extends Base {
         this.member = new ChatMember(this.client, this.chat.id, {
           user: data.from,
           status: "member",
+          ...(data.sender_tag && { tag: data.sender_tag }),
         });
       }
     }
@@ -221,6 +222,14 @@ class Message extends Base {
       this.senderBusinessBot = this.client.users._add(data.sender_business_bot);
     }
 
+    if ("sender_tag" in data) {
+      /**
+       * For messages in channels and replies to channel messages in supergroups, the tag of the message sender
+       * @type {string | undefined}
+       */
+      this.senderTag = data.sender_tag;
+    }
+
     if ("forward_origin" in data) {
       /**
        * Information about the original message for forwarded messages
@@ -251,6 +260,14 @@ class Message extends Base {
        * @type {number | undefined}
        */
       this.checklistTaskId = data.reply_to_checklist_task_id;
+    }
+
+    if ("reply_to_poll_option_id" in data) {
+      /**
+       * Persistent identifier of the specific poll option that is being replied to
+       * @type {string | undefined}
+       */
+      this.pollOptionId = data.reply_to_poll_option_id;
     }
 
     if ("is_paid_post" in data) {
@@ -443,6 +460,80 @@ class Message extends Base {
        * @type {true | undefined}
        */
       this.channelChatCreated = data.channel_chat_created;
+    }
+
+    if ("managed_bot_created" in data) {
+      /**
+       * User created a bot that will be managed by the current bot.
+       * @type {import("../misc/User").User|undefined}
+       */
+      this.managedBotCreated = this.client.users._add(
+        data.managed_bot_created.bot,
+      );
+    }
+
+    if ("poll_option_added" in data) {
+      /**
+       * @typedef {Object} PollOptionAdded
+       * @property {Message} [message] - Message containing the poll to which the option was added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+       * @property {string} persistentId - Unique identifier of the added option.
+       * @property {string} text - Optional text
+       * @property {MessageEntities} [entities] - Special entities that appear in the option_text.
+       */
+
+      /**
+       * Answer option was added to a poll
+       * @type {PollOptionAdded|undefined}
+       */
+      this.pollOptionAdded = {
+        ...(data.poll_option_added.poll_message && {
+          message: new Message(
+            this.client,
+            data.poll_option_added.poll_message,
+          ),
+        }),
+        persistentId: data.poll_option_added.option_persistent_id,
+        text: data.poll_option_added.option_text,
+        ...(data.poll_option_added.option_text_entities && {
+          entities: new MessageEntities(
+            this.client,
+            data.poll_option_added.option_text,
+            data.poll_option_added.option_text_entities,
+          ),
+        }),
+      };
+    }
+
+    if ("poll_option_deleted" in data) {
+      /**
+       * @typedef {Object} PollOptionDeleted
+       * @property {Message} [message] - Message containing the poll from which the option was deleted. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+       * @property {string} persistentId - Unique identifier of the deleted option.
+       * @property {string} text - Option text
+       * @property {MessageEntities} [entities] - Special entities that appear in the option_text.
+       */
+
+      /**
+       * Answer option was deleted from a poll
+       * @type {PollOptionDeleted|undefined}
+       */
+      this.pollOptionDeleted = {
+        ...(data.poll_option_deleted.poll_message && {
+          message: new Message(
+            this.client,
+            data.poll_option_deleted.poll_message,
+          ),
+        }),
+        persistentId: data.poll_option_deleted.option_persistent_id,
+        text: data.poll_option_deleted.option_text,
+        ...(data.poll_option_deleted.option_text_entities && {
+          entities: new MessageEntities(
+            this.client,
+            data.poll_option_deleted.option_text,
+            data.poll_option_deleted.option_text_entities,
+          ),
+        }),
+      };
     }
 
     if ("message_auto_delete_timer_changed" in data) {
@@ -920,6 +1011,22 @@ class Message extends Base {
       this.suggestedPostPaid = new SuggestedPostPaid(
         this.client,
         data.suggested_post_paid,
+      );
+    }
+
+    if ("chat_owner_left" in data && data.chat_owner_left?.new_owner) {
+      /**
+       * Service message: chat owner has left
+       */
+      this.ownerLeft = this.client.users._add(data.chat_owner_left.new_owner);
+    }
+
+    if ("chat_owner_changed" in data) {
+      /**
+       * Service message: chat owner has changed
+       */
+      this.ownerChanged = this.client.users._add(
+        data.chat_owner_changed.new_owner,
       );
     }
 

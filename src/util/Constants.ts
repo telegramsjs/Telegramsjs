@@ -62,6 +62,7 @@ const Events = {
   ChatBoost: "chatBoost",
   RemovedChatBoost: "removedChatBoost",
   PurchasedPaidMedia: "purchasedPaidMedia",
+  ManagedBotUpdated: "managedBotUpdated",
 } as const;
 
 const RestEvents = {
@@ -83,6 +84,15 @@ const ReactionCollectorEvents = {
   ...CollectorEvents,
 } as const;
 
+const MarkupStyles = {
+  Red: "danger",
+  Green: "success",
+  Blue: "primary",
+  Danger: "danger",
+  Success: "success",
+  Primary: "primary",
+} as const;
+
 export {
   DefaultPollingParameters,
   DefaultClientParameters,
@@ -90,4 +100,5 @@ export {
   CollectorEvents,
   ReactionCollectorEvents,
   RestEvents,
+  MarkupStyles,
 };

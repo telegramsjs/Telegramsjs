@@ -11,7 +11,7 @@ class TextQuote {
     this.text = data.text;
 
     if ("entities" in data) {
-      /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes. */
+      /** Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are kept in quotes. */
       this.entities = new MessageEntities(client, data.text, data.entities);
     }
 

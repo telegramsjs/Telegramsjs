@@ -10,6 +10,10 @@ export declare namespace InlineKeyboardButton {
   interface AbstractInlineKeyboardButton {
     /** Label text on the button */
     text: string;
+    /** Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots that purchased additional usernames on Fragment or in the messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a Telegram Premium subscription. */
+    icon_custom_emoji_id?: string;
+    /** Style of the button. Must be one of “danger” (red), “success” (green) or “primary” (blue). If omitted, then an app-specific style is used. */
+    style?: "danger" | "success" | "primary";
   }
   export interface UrlButton extends AbstractInlineKeyboardButton {
     /** HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings. */
@@ -151,8 +155,12 @@ export interface ReplyKeyboardMarkup {
 
 export declare namespace KeyboardButton {
   export interface CommonButton {
-    /** Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed */
+    /** Text of the button. If none of the fields other than text, icon_custom_emoji_id, and style are used, it will be sent as a message when the button is pressed */
     text: string;
+    /** Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots that purchased additional usernames on Fragment or in the messages directly sent by the bot to private, group and supergroup chats if the owner of the bot has a Telegram Premium subscription. */
+    icon_custom_emoji_id?: string;
+    /** Style of the button. Must be one of “danger” (red), “success” (green) or “primary” (blue). If omitted, then an app-specific style is used. */
+    style?: "danger" | "success" | "primary";
   }
   export interface RequestUsersButton extends CommonButton {
     /** If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in private chats only. */
@@ -174,13 +182,17 @@ export declare namespace KeyboardButton {
     /** If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only. */
     request_poll: KeyboardButtonPollType;
   }
+  export interface RequestManagedBotButton extends CommonButton {
+    /** If specified, pressing the button will ask the user to create and share a bot that will be managed by the current bot. Available for bots that enabled management of other bots in the @BotFather Mini App. Available in private chats only. */
+    request_managed_bot: KeyboardButtonRequestManagedBot;
+  }
   export interface WebAppButton extends CommonButton {
     /** If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a “web_app_data” service message. Available in private chats only. */
     web_app: WebAppInfo;
   }
 }
 
-/** This object represents one button of the reply keyboard. At most one of the optional fields must be used to specify type of the button. For simple text buttons, String can be used instead of this object to specify the button text. */
+/** This object represents one button of the reply keyboard. At most one of the fields other than text, icon_custom_emoji_id, and style must be used to specify the type of the button. For simple text buttons, String can be used instead of this object to specify the button text. */
 export type KeyboardButton =
   | KeyboardButton.CommonButton
   | KeyboardButton.RequestUsersButton
@@ -188,6 +200,7 @@ export type KeyboardButton =
   | KeyboardButton.RequestContactButton
   | KeyboardButton.RequestLocationButton
   | KeyboardButton.RequestPollButton
+  | KeyboardButton.RequestManagedBotButton
   | KeyboardButton.WebAppButton
   | string;
 
@@ -195,6 +208,16 @@ export type KeyboardButton =
 export interface KeyboardButtonPollType {
   /** If quiz is passed, the user will be allowed to create only polls in the quiz mode. If regular is passed, only regular polls will be allowed. Otherwise, the user will be allowed to create a poll of any type. */
   type?: "quiz" | "regular";
+}
+
+/** This object defines the parameters for the creation of a managed bot. Information about the created bot will be shared with the bot using the update managed_bot and a Message with the field managed_bot_created. */
+export interface KeyboardButtonRequestManagedBot {
+  /** Signed 32-bit identifier of the request. Must be unique within the message */
+  request_id: number;
+  /** Suggested name for the bot */
+  suggested_name?: string;
+  /** Suggested username for the bot */
+  suggested_username?: string;
 }
 
 /** Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup). Not supported in channels and for messages sent on behalf of a Telegram Business account. */
@@ -214,7 +237,7 @@ export interface KeyboardButtonRequestUsers {
   /** Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied. */
   user_is_bot?: boolean;
   /** Pass True to request premium users, pass False to request non-premium users. If not specified, no additional restrictions are applied. */
-  user_is_remium?: boolean;
+  user_is_premium?: boolean;
   /** The maximum number of users to be selected; 1-10. Defaults to 1. */
   max_quantity?: boolean;
   /** Pass True to request the users' first and last names */

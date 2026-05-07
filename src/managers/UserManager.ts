@@ -105,7 +105,7 @@ class UserManager extends BaseManager<User, ApiUser> {
   ): Promise<User | ChatFullInfo> {
     const id = this.resolveId(this.resolve(user));
 
-    if (!force) {
+    if (!force && !fullInfo) {
       const existing = this.cache.get(String(id));
       if (existing) return existing;
     }

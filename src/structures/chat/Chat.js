@@ -495,7 +495,7 @@ class Chat extends Base {
   }
 
   /**
-   * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights.
+   * Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right.
    * @param {string} name - Topic name, 1-128 characters
    * @param {Omit<MethodParameters["createForumTopic"], "name" | "chatId">} [options={}] - out parameters
    * @returns {Promise<import("../forum/ForumTopic").ForumTopic>} - Returns information about the created topic as a ForumTopic object.

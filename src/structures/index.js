@@ -17,6 +17,8 @@ module.exports.MessageReactionUpdated =
   require("./MessageReactionUpdated").MessageReactionUpdated;
 module.exports.PaidMediaPurchased =
   require("./PaidMediaPurchased").PaidMediaPurchased;
+module.exports.ManagedBotUpdated =
+  require("./ManagedBotUpdated").ManagedBotUpdated;
 module.exports.PollAnswer = require("./PollAnswer").PollAnswer;
 module.exports.PreCheckoutQuery =
   require("./PreCheckoutQuery").PreCheckoutQuery;
@@ -111,6 +113,7 @@ module.exports.Sticker = require("./media/Sticker").Sticker;
 module.exports.StickerSet = require("./media/StickerSet").StickerSet;
 module.exports.Video = require("./media/Video").Video;
 module.exports.VideoNote = require("./media/VideoNote").VideoNote;
+module.exports.VideoQuality = require("./media/VideoQuality").VideoQuality;
 module.exports.Voice = require("./media/Voice").Voice;
 module.exports.Message = require("./message/Message").Message;
 module.exports.MessageEntities =
@@ -133,6 +136,8 @@ module.exports.SharedUser = require("./misc/SharedUser").SharedUser;
 module.exports.StarAmount = require("./misc/StarAmount").StarAmount;
 module.exports.TextQuote = require("./misc/TextQuote").TextQuote;
 module.exports.User = require("./misc/User").User;
+module.exports.UserProfileAudios =
+  require("./misc/UserProfileAudios").UserProfileAudios;
 module.exports.UserProfilePhotos =
   require("./misc/UserProfilePhotos").UserProfilePhotos;
 module.exports.UsersShared = require("./misc/UsersShared").UsersShared;

@@ -13,7 +13,7 @@ export interface User {
   /** User's or bot's username */
   username?: string;
   /** IETF language tag of the user's language */
-  language_code?: LanguageCode;
+  language_code?: string;
   /** True, if this user is a Telegram Premium user */
   is_premium?: true;
   /** True, if this user added the bot to the attachment menu */
@@ -36,7 +36,7 @@ export interface LinkPreviewOptions {
 
 export declare namespace MessageEntity {
   interface AbstractMessageEntity {
-    /** Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers) */
+    /** Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), “date_time” (for a formatted date and time) */
     type: string;
     /** Offset in UTF-16 code units to the start of the entity */
     offset: number;
@@ -59,7 +59,8 @@ export declare namespace MessageEntity {
       | "spoiler"
       | "blockquote"
       | "expandable_blockquote"
-      | "code";
+      | "code"
+      | "date_time";
   }
   export interface PreMessageEntity extends AbstractMessageEntity {
     type: "pre";
@@ -81,6 +82,13 @@ export declare namespace MessageEntity {
     /** For “custom_emoji” only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker */
     custom_emoji_id: string;
   }
+  export interface DateTimeMessageEntity extends AbstractMessageEntity {
+    type: "date_time";
+    /** For “date_time” only, the Unix time associated with the entity */
+    unix_time: number;
+    /** For “date_time” only, the string that defines the formatting of the date and time. See date-time entity formatting for more details. */
+    date_time_format: "r" | `${"w" | ""}${"d" | "D" | ""}${"t" | "T" | ""}`;
+  }
 }
 
 /** This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc. */
@@ -89,7 +97,8 @@ export type MessageEntity =
   | MessageEntity.CustomEmojiMessageEntity
   | MessageEntity.PreMessageEntity
   | MessageEntity.TextLinkMessageEntity
-  | MessageEntity.TextMentionMessageEntity;
+  | MessageEntity.TextMentionMessageEntity
+  | MessageEntity.DateTimeMessageEntity;
 
 /** This object describes the position on faces where a mask should be placed by default. */
 export interface MaskPosition {
@@ -121,9 +130,11 @@ export interface ReplyParameters {
   chat_id?: number | string;
   /** Identifier of the specific checklist task to be replied to */
   checklist_task_id?: number;
+  /** Persistent identifier of the specific poll option to be replied to */
+  poll_option_id?: string;
   /** Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic. Always True for messages sent on behalf of a business account. */
   allow_sending_without_reply?: boolean;
-  /** Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message. */
+  /** Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities. The message will fail to send if the quote isn't found in the original message. */
   quote?: string;
   /** Mode for parsing entities in the quote. See formatting options for more details. */
   quote_parse_mode?: string;
