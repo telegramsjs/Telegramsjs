@@ -7,7 +7,7 @@ const { Collection } = require("@telegram.ts/collection");
 /**
  * Type guard for completed tasks
  * @param {ChecklistTask} task
- * @returns {task is ChecklistTask & { completionUnixTime: number; completionTimestamp: number; isCompleted: true; completedByUser: import("../misc/User").User }}
+ * @returns {task is ChecklistTask & { completionUnixTime: number; completionTimestamp: number; isCompleted: true; completedByUser: import("../misc/user/User").User }}
  */
 function isCompletedTask(task) {
   return task.isCompleted === true;
@@ -63,7 +63,7 @@ class Checklist extends Base {
 
   /**
    * Get completed tasks
-   * @type {import("@telegram.ts/collection").ReadonlyCollection<number, ChecklistTask & { completionUnixTime: number; completionTimestamp: number; isCompleted: true; completedByUser: import("../misc/User").User }>}
+   * @type {import("@telegram.ts/collection").ReadonlyCollection<number, ChecklistTask & { completionUnixTime: number; completionTimestamp: number; isCompleted: true; completedByUser: import("../misc/user/User").User }>}
    */
   get completedTasks() {
     return this.tasks.filter(isCompletedTask);

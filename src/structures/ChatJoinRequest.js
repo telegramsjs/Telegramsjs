@@ -21,7 +21,7 @@ class ChatJoinRequest extends Base {
 
     /**
      * User that sent the join request
-     * @type {import("./misc/User").User}
+     * @type {import("./misc/user/User").User}
      */
     this.author = this.client.users._add(data.from);
 

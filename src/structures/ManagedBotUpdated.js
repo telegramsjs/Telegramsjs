@@ -15,13 +15,13 @@ class ManagedBotUpdated extends Base {
 
     /**
      * User that created the bot
-     * @type {import("./misc/User").User}
+     * @type {import("./misc/user/User").User}
      */
     this.author = this.client.users._add(data.user);
 
     /**
      * Information about the bot.
-     * @type {import("./misc/User").User}
+     * @type {import("./misc/user/User").User}
      */
     this.bot = this.client.users._add(data.bot);
   }
@@ -40,6 +40,27 @@ class ManagedBotUpdated extends Base {
    */
   replaceBotToken() {
     return this.client.replaceManagedBotToken(this.author.id);
+  }
+
+  /**
+   * Use this method to get the access settings of a managed bot.
+   * @returns {Promise<import("./misc/client/BotAccessSettings").BotAccessSettings>} - the access settings as an object on success.
+   */
+  fetchAccessSettings() {
+    return this.client.getManagedBotAccessSettings(this.author.id);
+  }
+
+  /** Use this method to change the access settings of a managed bot.
+   * @param {boolean} isAccessRestricted - Pass True, if only selected users can access the bot. The bot's owner can always access it.
+   * @param {number[]} [addedUserIds] - A list of up to 10 identifiers of users who will have access to the bot in addition to its owner. Ignored if isAccessRestricted is false.
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  setAccessSettings(isAccessRestricted, addedUserIds) {
+    return this.client.setManagedBotAccessSettings({
+      userId: this.author.id,
+      isAccessRestricted,
+      ...(addedUserIds && { added_user_ids: addedUserIds }),
+    });
   }
 }
 

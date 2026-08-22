@@ -112,21 +112,11 @@ export interface MaskPosition {
   scale: number;
 }
 
-/** This object contains information about one answer option in a poll to send. */
-export interface InputPollOption {
-  /** Option text, 1-100 characters */
-  text: string;
-  /** Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed */
-  text_parse_mode?: string;
-  /** A list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode */
-  text_entities?: MessageEntity[];
-}
-
 /** Describes reply parameters for the message that is being sent. */
 export interface ReplyParameters {
   /** Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified */
   message_id: number | string;
-  /** If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account and messages from channel direct messages chats. */
+  /** If the message to be replied to is from a different chat, unique identifier for the chat or username of the bot, supergroup or channel in the format `@username`. Not supported for messages sent on behalf of a business account and messages from channel direct messages chats. */
   chat_id?: number | string;
   /** Identifier of the specific checklist task to be replied to */
   checklist_task_id?: number;

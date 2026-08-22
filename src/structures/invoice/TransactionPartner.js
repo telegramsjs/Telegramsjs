@@ -41,7 +41,7 @@ class TransactionPartner extends Base {
     if ("user" in data) {
       /**
        * Information about the user
-       * @type {import("../misc/User").User | undefined}
+       * @type {import("../misc/user/User").User | undefined}
        */
       this.user = this.client.users._add(data.user);
     }
@@ -118,7 +118,7 @@ class TransactionPartner extends Base {
     if ("sponsor_user" in data) {
       /**
        * Information about the bot that sponsored the affiliate program.
-       * @type {import("../misc/User").User | undefined}
+       * @type {import("../misc/user/User").User | undefined}
        */
       this.sponsorUser = this.client.users._add(data.sponsor_user);
     }
@@ -140,7 +140,7 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/User").User; paidMedia?: import("@telegram.ts/collection").ReadonlyCollection<number, PaidMedia>; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat?: undefined; premiumSubscriptionDuration?: number; }}
+   * @returns {this is this & { withdrawal?: undefined; user: import("../misc/user/User").User; paidMedia?: import("@telegram.ts/collection").ReadonlyCollection<number, PaidMedia>; paidMediaPayload?: string; gift?: Gift; subscriptionPeriod?: number; affiliate?: AffiliateInfo; sponsorUser?: undefined; commissionRate?: undefined; requestCount?: undefined; chat?: undefined; premiumSubscriptionDuration?: number; }}
    */
   isUser() {
     return Boolean("user" in this && this.user);
@@ -168,7 +168,7 @@ class TransactionPartner extends Base {
   }
 
   /**
-   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: import("../misc/User").User; commissionRate?: number; requestCount?: undefined; chat?: undefined; premiumSubscriptionDuration?: undefined; }}
+   * @returns {this is this & { withdrawal?: undefined; user?: undefined; paidMedia?: undefined; paidMediaPayload?: undefined; gift?: undefined; subscriptionPeriod?: undefined; affiliate?: undefined; sponsorUser?: import("../misc/user/User").User; commissionRate?: number; requestCount?: undefined; chat?: undefined; premiumSubscriptionDuration?: undefined; }}
    */
   isAffiliateProgram() {
     return Boolean(

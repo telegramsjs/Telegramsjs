@@ -94,9 +94,7 @@ class BusinessPermissions extends PermissionManager<
  * Type representing a value that can be resolved to user permissions.
  */
 type BusinessPermissionResolvable =
-  | BusinessPermissionString
-  | BusinessPermissionFlags
-  | BusinessPermissions;
+  BusinessPermissionString | BusinessPermissionFlags | BusinessPermissions;
 
 export {
   BusinessPermissions,

@@ -19,7 +19,7 @@ class ChatMemberUpdated extends Base {
 
     /**
      * Performer of the action, which resulted in the change
-     * @type {import("./misc/User").User}
+     * @type {import("./misc/user/User").User}
      */
     this.author = this.client.users._add(data.from);
 

@@ -35,7 +35,7 @@ class MessageReactionUpdated extends Base {
     if ("user" in data) {
       /**
        * The user that changed the reaction, if the user isn't anonymous
-       * @type {import("./misc/User").User | undefined}
+       * @type {import("./misc/user/User").User | undefined}
        */
       this.user = this.client.users._add(data.user);
     }
@@ -280,7 +280,7 @@ class MessageReactionUpdated extends Base {
   }
 
   /**
-   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param {MethodParameters["editMessageMedia"]["media"]} media - An object for a new media content of the message
    * @param {Omit<MethodParameters["editMessageMedia"], "media" | "chatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<true | import("./message/Message").Message & { editedUnixTime: number; editedTimestamp: number; editedAt: Date; }>} - On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -311,7 +311,7 @@ class MessageReactionUpdated extends Base {
 
   /**
    * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded.
-   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param {Omit<MethodParameters["forwardMessage"], "chatId" | "fromChatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<import("./message/Message").Message>} - On success, the sent Message is returned.
    */
@@ -326,7 +326,7 @@ class MessageReactionUpdated extends Base {
 
   /**
    * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message.
-   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param {Omit<MethodParameters["copyMessage"], "chatId" | "fromChatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<number>} - Returns the message id of the sent message on success.
    */
@@ -387,6 +387,36 @@ class MessageReactionUpdated extends Base {
    */
   delete() {
     return this.client.deleteMessage(this.chat.id, this.id);
+  }
+
+  /**
+   * @typedef {Object} ReactMessageDeleteOptions
+   * @property {number | string} [userId] - Identifier of the user whose reaction will be removed, if the reaction was added by a user.
+   * @property {number | string} [actorChatId] - Identifier of the chat whose reaction will be removed, if the reaction was added by a chat.
+   */
+
+  /**
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param {ReactMessageDeleteOptions} [options] - Options for deleting reaction
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  deleteReaction(options = {}) {
+    return this.client.deleteMessageReaction({
+      chatId: this.chat.id,
+      messageId: this.id,
+      ...options,
+    });
+  }
+
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param {ReactMessageDeleteOptions} [options] - Options for deleting reactions
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  deleteAllReactions(options = {}) {
+    return this.client.deleteAllMessageReactions({
+      chatId: this.chat.id,
+      ...options,
+    });
   }
 
   /**

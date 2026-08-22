@@ -107,20 +107,25 @@ module.exports.Audio = require("./media/Audio").Audio;
 module.exports.Contact = require("./media/Contact").Contact;
 module.exports.Dice = require("./media/Dice").Dice;
 module.exports.Document = require("./media/Document").Document;
+module.exports.LivePhoto = require("./media/LivePhoto").LivePhoto;
 module.exports.Photo = require("./media/Photo").Photo;
-module.exports.Poll = require("./media/Poll").Poll;
+module.exports.Poll = require("./media/poll/Poll").Poll;
+module.exports.PollMedia = require("./media/poll/PollMedia").PollMedia;
 module.exports.Sticker = require("./media/Sticker").Sticker;
 module.exports.StickerSet = require("./media/StickerSet").StickerSet;
-module.exports.Video = require("./media/Video").Video;
-module.exports.VideoNote = require("./media/VideoNote").VideoNote;
-module.exports.VideoQuality = require("./media/VideoQuality").VideoQuality;
+module.exports.Video = require("./media/video/Video").Video;
+module.exports.VideoNote = require("./media/video/VideoNote").VideoNote;
+module.exports.VideoQuality =
+  require("./media/video/VideoQuality").VideoQuality;
 module.exports.Voice = require("./media/Voice").Voice;
 module.exports.Message = require("./message/Message").Message;
 module.exports.MessageEntities =
   require("./message/MessageEntities").MessageEntities;
 module.exports.MessageOrigin = require("./message/MessageOrigin").MessageOrigin;
 module.exports.ChatShared = require("./misc/ChatShared").ChatShared;
-module.exports.ClientUser = require("./misc/ClientUser").ClientUser;
+module.exports.ClientUser = require("./misc/client/ClientUser").ClientUser;
+module.exports.BotAccessSettings =
+  require("./misc/client/BotAccessSettings").BotAccessSettings;
 module.exports.ExternalReplyInfo =
   require("./misc/ExternalReplyInfo").ExternalReplyInfo;
 module.exports.InputFile = require("./misc/InputFile").InputFile;
@@ -132,15 +137,15 @@ module.exports.PreparedInlineMessage =
   require("./misc/PreparedInlineMessage").PreparedInlineMessage;
 module.exports.ReactionCount = require("./misc/ReactionCount").ReactionCount;
 module.exports.ReactionType = require("./misc/ReactionType").ReactionType;
-module.exports.SharedUser = require("./misc/SharedUser").SharedUser;
+module.exports.SharedUser = require("./misc/user/SharedUser").SharedUser;
 module.exports.StarAmount = require("./misc/StarAmount").StarAmount;
 module.exports.TextQuote = require("./misc/TextQuote").TextQuote;
-module.exports.User = require("./misc/User").User;
+module.exports.User = require("./misc/user/User").User;
 module.exports.UserProfileAudios =
-  require("./misc/UserProfileAudios").UserProfileAudios;
+  require("./misc/user/UserProfileAudios").UserProfileAudios;
 module.exports.UserProfilePhotos =
-  require("./misc/UserProfilePhotos").UserProfilePhotos;
-module.exports.UsersShared = require("./misc/UsersShared").UsersShared;
+  require("./misc/user/UserProfilePhotos").UserProfilePhotos;
+module.exports.UsersShared = require("./misc/user/UsersShared").UsersShared;
 module.exports.Venue = require("./misc/Venue").Venue;
 module.exports.WebhookInfo = require("./misc/WebhookInfo").WebhookInfo;
 module.exports.EncryptedPassportElement =

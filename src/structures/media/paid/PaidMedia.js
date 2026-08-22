@@ -1,7 +1,7 @@
 // @ts-check
 const { Base } = require("../../Base");
 const { Photo } = require("../Photo");
-const { Video } = require("../Video");
+const { Video } = require("../video/Video");
 
 class PaidMedia extends Base {
   /**

@@ -1,10 +1,10 @@
 // @ts-check
-const { Base } = require("../Base");
-const { Photo } = require("../media/Photo");
+const { Base } = require("../../Base");
+const { Photo } = require("../../media/Photo");
 
 class UserProfilePhotos extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").UserProfilePhotos} data - Data about the represent a user's profile pictures
    */
   constructor(client, data) {

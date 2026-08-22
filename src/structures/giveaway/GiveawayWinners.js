@@ -27,7 +27,7 @@ class GiveawayWinners extends Base {
 
     /**
      * List of up to 100 winners of the giveaway
-     * @type {Collection<string, import("../misc/User").User>}
+     * @type {Collection<string, import("../misc/user/User").User>}
      */
     this.winners = new Collection(
       data.winners.map((user) => [
@@ -152,7 +152,7 @@ class GiveawayWinners extends Base {
 
   /**
    * Makes the class iterable, returning each `User` object.
-   * @returns {IterableIterator<import("../misc/User").User>}
+   * @returns {IterableIterator<import("../misc/user/User").User>}
    */
   *[Symbol.iterator]() {
     yield* this.winners.values();

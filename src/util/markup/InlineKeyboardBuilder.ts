@@ -404,8 +404,7 @@ class InlineKeyboardBuilder {
    */
   equals(
     other:
-      | InlineKeyboardBuilder
-      | { inline_keyboard: InlineKeyboardButton[][] },
+      InlineKeyboardBuilder | { inline_keyboard: InlineKeyboardButton[][] },
   ): boolean {
     if (!other) return false;
 

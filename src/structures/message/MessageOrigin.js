@@ -47,7 +47,7 @@ class MessageOrigin extends Base {
     if ("sender_user" in data) {
       /**
        * User that sent the message originally
-       * @type {import("../misc/User").User | undefined}
+       * @type {import("../misc/user/User").User | undefined}
        */
       this.senderUser = this.client.users._add(data.sender_user);
     }
@@ -88,7 +88,7 @@ class MessageOrigin extends Base {
   }
 
   /**
-   * @returns {this is this & { senderUser: import("../misc/User").User }}
+   * @returns {this is this & { senderUser: import("../misc/user/User").User }}
    */
   isUser() {
     return Boolean("senderUser" in this && this.senderUser);
@@ -403,7 +403,7 @@ class MessageOrigin extends Base {
 
   /**
    * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded.
-   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param {Omit<MethodParameters["forwardMessage"], "chatId" | "fromChatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<import("./Message").Message>} - On success, the sent Message is returned.
    */
@@ -426,7 +426,7 @@ class MessageOrigin extends Base {
 
   /**
    * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message.
-   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param {Omit<MethodParameters["copyMessage"], "chatId" | "fromChatId" | "messageId">} [options={}] - out parameters
    * @returns {Promise<number>} - Returns the message id of the sent message on success.
    */
@@ -519,6 +519,48 @@ class MessageOrigin extends Base {
     }
 
     return this.client.deleteMessage(this.chat.id, this.id);
+  }
+
+  /**
+   * @typedef {Object} ReactMessageDeleteOptions
+   * @property {number | string} [userId] - Identifier of the user whose reaction will be removed, if the reaction was added by a user.
+   * @property {number | string} [actorChatId] - Identifier of the chat whose reaction will be removed, if the reaction was added by a chat.
+   */
+
+  /**
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param {ReactMessageDeleteOptions} [options] - Options for deleting reaction
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  deleteReaction(options = {}) {
+    if (!this.id) {
+      throw new TelegramError(ErrorCodes.MessageIdNotAvailable);
+    }
+
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.deleteMessageReaction({
+      chatId: this.chat.id,
+      messageId: this.id,
+      ...options,
+    });
+  }
+
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param {ReactMessageDeleteOptions} [options] - Options for deleting reactions
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  deleteAllReactions(options = {}) {
+    if (!this.chat) {
+      throw new TelegramError(ErrorCodes.ChatIdNotAvailable);
+    }
+
+    return this.client.deleteAllMessageReactions({
+      chatId: this.chat.id,
+      ...options,
+    });
   }
 
   /**

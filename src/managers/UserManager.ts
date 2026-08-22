@@ -3,7 +3,7 @@ import {
   type IFetchOptions,
   type ICachedOptions,
 } from "./BaseManager";
-import { User } from "../structures/misc/User";
+import { User } from "../structures/misc/user/User";
 import { ChatFullInfo } from "../structures/chat/ChatFullInfo";
 import type { MethodsApiReturnType } from "../types";
 import type { User as ApiUser } from "@telegram.ts/types";

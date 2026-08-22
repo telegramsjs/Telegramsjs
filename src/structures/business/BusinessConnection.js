@@ -24,7 +24,7 @@ class BusinessConnection extends Base {
 
     /**
      * Business account user that created the business connection
-     * @type {import("../misc/User").User}
+     * @type {import("../misc/user/User").User}
      */
     this.user = this.client.users._add(data.user);
 
@@ -133,7 +133,7 @@ class BusinessConnection extends Base {
    * Use this method to send text messages.
    * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/video/Video").Video}>>} - On success, the sent Message is returned.
    */
   send(text, options = {}) {
     if (typeof text === "object") {

@@ -1,11 +1,11 @@
 // @ts-check
-const { Base } = require("../Base");
-const { Audio } = require("../media/Audio");
+const { Base } = require("../../Base");
+const { Audio } = require("../../media/Audio");
 const { Collection } = require("@telegram.ts/collection");
 
 class UserProfileAudios extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").UserProfileAudios} data - Data about the audios displayed on a user's profile
    */
   constructor(client, data) {

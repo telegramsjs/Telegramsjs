@@ -37,9 +37,7 @@ const ApiPermissionsFlags = {
  */
 function toApiFormat(
   permission:
-    | ChatPermissionFlags
-    | UserPermissionFlags
-    | Record<string, boolean>,
+    ChatPermissionFlags | UserPermissionFlags | Record<string, boolean>,
 ): Record<
   (typeof ApiPermissionsFlags)[keyof typeof ApiPermissionsFlags],
   boolean

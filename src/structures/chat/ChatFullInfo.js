@@ -5,7 +5,7 @@ const { Location } = require("../misc/Location");
 const { Sticker } = require("../media/Sticker");
 const { Audio } = require("../media/Audio");
 const { ReactionType } = require("../misc/ReactionType");
-const { UserRating } = require("../misc/UserRating");
+const { UserRating } = require("../misc/user/UserRating");
 const { Message } = require("../message/Message");
 const { ChatPermissions } = require("../../util/permission/ChatPermissions");
 

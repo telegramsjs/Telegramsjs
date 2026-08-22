@@ -111,6 +111,7 @@ export type ChatPermissionString =
   | "pinMessages"
   | "manageTopics"
   | "manageTags"
+  | "reactToMessages"
   | "manageDirectMessages";
 
 /**
@@ -134,6 +135,7 @@ export interface ChatPermissionFlags {
   pinMessages?: boolean;
   manageTopics?: boolean;
   manageTags?: boolean;
+  reactToMessages?: boolean;
   manageDirectMessages?: boolean;
 }
 
@@ -165,9 +167,7 @@ export declare class ChatPermissions extends PermissionManager<
  * Type representing a value that can be resolved to chat permissions.
  */
 export type ChatPermissionResolvable =
-  | ChatPermissionString
-  | ChatPermissionFlags
-  | ChatPermissions;
+  ChatPermissionString | ChatPermissionFlags | ChatPermissions;
 
 /**
  * A class representing a multipart stream for composing HTTP multipart requests.
@@ -781,8 +781,14 @@ export declare class User extends Base {
     limit?: number,
   ): Promise<UserProfilePhotos>;
   /**
+   *  Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user.
+   * @param limit - The maximum number of messages to return; 1-20
+   * @returns On success, an array of Message objects is returned.
+   */
+  fetchPersonalChatMessages(limit?: number): Promise<Message[]>;
+  /**
    * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
-   * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @param chatId - Unique identifier for the chat or username of the channel (bot, supergroup or channel in the format @username).
    * @returns Returns a UserChatBoosts object.
    */
   fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
@@ -928,6 +934,7 @@ export declare class BaseManager<
 export type ClientCapabilityString =
   | "joinGroups"
   | "readAllMessages"
+  | "guestQueries"
   | "inlineQueries"
   | "connectBusiness"
   | "mainWebApp"
@@ -941,6 +948,7 @@ export type ClientCapabilityString =
 export interface ClientCapabilityFlags {
   joinGroups?: boolean;
   readAllMessages?: boolean;
+  guestQueries?: boolean;
   inlineQueries?: boolean;
   connectBusiness?: boolean;
   mainWebApp?: boolean;
@@ -977,9 +985,7 @@ export declare class ClientCapabilities extends PermissionManager<
  * Type representing a value that can be resolved to bot capabilities.
  */
 export type ClientCapabilityResolvable =
-  | ClientCapabilityString
-  | ClientCapabilityFlags
-  | ClientCapabilities;
+  ClientCapabilityString | ClientCapabilityFlags | ClientCapabilities;
 
 /**
  * Type representing the string literals for user permissions.
@@ -1000,6 +1006,7 @@ export type UserPermissionString =
   | "pinMessages"
   | "manageTopics"
   | "manageTags"
+  | "reactToMessages"
   | "manageDirectMessages";
 
 /**
@@ -1021,6 +1028,7 @@ export interface UserPermissionFlags {
   pinMessages?: boolean;
   manageTopics?: boolean;
   manageTags?: boolean;
+  reactToMessages?: boolean;
   manageDirectMessages?: boolean;
 }
 
@@ -1052,9 +1060,7 @@ export declare class UserPermissions extends PermissionManager<
  * Type representing a value that can be resolved to user permissions.
  */
 export type UserPermissionResolvable =
-  | UserPermissionString
-  | UserPermissionFlags
-  | UserPermissions;
+  UserPermissionString | UserPermissionFlags | UserPermissions;
 
 /**
  * Type representing the string literals for user permissions.
@@ -1126,9 +1132,7 @@ export declare class BusinessPermissions extends PermissionManager<
  * Type representing a value that can be resolved to user permissions.
  */
 export type BusinessPermissionResolvable =
-  | BusinessPermissionString
-  | BusinessPermissionFlags
-  | BusinessPermissions;
+  BusinessPermissionString | BusinessPermissionFlags | BusinessPermissions;
 
 /**
  * Abstract base class for managing permissions/capabilities.
@@ -2412,7 +2416,7 @@ export declare class MessageReactionUpdated extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -2466,7 +2470,7 @@ export declare class MessageReactionUpdated extends Base {
   >;
   /**
    * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns On success, the sent Message is returned.
    */
@@ -2489,7 +2493,7 @@ export declare class MessageReactionUpdated extends Base {
   ): Promise<Message>;
   /**
    * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns Returns the message id of the sent message on success.
    */
@@ -2551,6 +2555,27 @@ export declare class MessageReactionUpdated extends Base {
 	 * @returns Returns True on success.
  */
   delete(): Promise<true>;
+  /**
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reaction
+   * @returns Returns True on success.
+   */
+  deleteReaction(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reactions
+   * @returns Returns True on success.
+   */
+  deleteAllReactions(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
   /**
    * Use this method to edit a checklist on behalf of a connected business account.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
@@ -2871,7 +2896,7 @@ export declare class MessageOrigin extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -2925,7 +2950,7 @@ export declare class MessageOrigin extends Base {
   >;
   /**
    * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns On success, the sent Message is returned.
    */
@@ -2948,7 +2973,7 @@ export declare class MessageOrigin extends Base {
   ): Promise<Message>;
   /**
    * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns Returns the message id of the sent message on success.
    */
@@ -3010,6 +3035,27 @@ export declare class MessageOrigin extends Base {
 	 * @returns Returns True on success.
  */
   delete(): Promise<true>;
+  /**
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reaction
+   * @returns Returns True on success.
+   */
+  deleteReaction(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reactions
+   * @returns Returns True on success.
+   */
+  deleteAllReactions(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
   /**
    * Use this method to edit a checklist on behalf of a connected business account.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
@@ -3132,6 +3178,60 @@ export declare class LinkPreviewOptions {
   largeMedia?: boolean;
   /** True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text */
   aboveText?: boolean;
+}
+
+export declare class LivePhoto extends InputFile {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the represents a live photo.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").PhotoSize,
+  );
+  /**
+   * Available sizes of the corresponding static photo
+   */
+  photo?: Photo[];
+  /** Video width as defined by the sender */
+  width: number;
+  /** Video height as defined by the sender */
+  height: number;
+  /** Duration of the video in seconds as defined by the sender */
+  duration: number;
+  /**
+   * MIME type of the file as defined by the sender
+   */
+  mimeType?: string;
+}
+
+export class PollMedia extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the contains information about a optional fields can be present in any given object
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").PollMedia,
+  );
+  /** Media is an animation, information about the animation */
+  animation?: Animation;
+  /** Media is an audio file, information about the file; currently, can't be received in a poll option */
+  audio?: Audio;
+  /** Media is a general file, information about the file; currently, can't be received in a poll option */
+  document?: Document;
+  /** Media is a live photo, information about the live photo */
+  livePhoto?: LivePhoto;
+  /** Media is a shared location, information about the location */
+  location?: Location;
+  /** Media is a photo, available sizes of the photo */
+  photo?: Photo[];
+  /** Media is a sticker, information about the sticker; currently, for poll options only */
+  sticker?: Sticker;
+  /** Media is a venue, information about the venue */
+  venue?: Venue;
+  /** Media is a video, information about the video */
+  video?: Video;
 }
 
 export declare class Animation extends InputFile {
@@ -4093,6 +4193,11 @@ export declare class Poll extends Base {
   type: "quiz" | "regular";
   /** True, if the poll allows multiple answers */
   allowAnswers: boolean;
+  /** True, if the poll allows to change the chosen answer options */
+  allowsRevoting: boolean;
+  /** True if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours */
+  isOnlyMembers: boolean;
+
   /**
    * @param data - Data about the contains information about a poll
    * @override
@@ -4113,6 +4218,10 @@ export declare class Poll extends Base {
      */
     text: string;
     /**
+     * - Media added to the poll option
+     */
+    media?: PollMedia;
+    /**
      * - Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts
      */
     entities: MessageEntities;
@@ -4124,15 +4233,19 @@ export declare class Poll extends Base {
   /**
    * Array of 0-based identifiers of the correct answer options. Available only for polls in quiz mode which are closed or were sent (not forwarded) by the bot or to the private chat with the bot.
    */
-  correctIds?: number[];
-  /** True, if the poll allows to change the chosen answer options */
-  allowsRevoting: boolean;
+  correctOptionIds?: number[];
   /** Description of the poll; for polls inside the Message object only */
   description?: string;
   /** Mode for parsing entities in the poll description. See formatting options for more details. */
   descriptionParseMode?: ParseMode;
   /** Special entities like usernames, URLs, bot commands, etc. that appear in the description */
   descriptionEntities?: MessageEntity[];
+  /** A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which users can vote in the poll. The country code “FT” is used for users with anonymous numbers. If omitted, then users from any country can participate in the poll. */
+  countryCodes?: string[];
+  /**
+   * Media added to the poll description; for polls inside the Message object only
+   */
+  media?: PollMedia;
   /**
    * Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters
    */
@@ -4149,6 +4262,7 @@ export declare class Poll extends Base {
    * Point in time (Unix timestamp) when the poll will be automatically closed
    */
   closeUnixTime?: number;
+
   /**
    * Return the timestamp poll will be automatically closed, in milliseconds
    */
@@ -4159,7 +4273,7 @@ export declare class Poll extends Base {
   get closedAt(): Date | null;
   /**
    * Use this method to stop a poll which was sent by the bot. ONLY BOT POLL
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username).
    * @param messageId -Identifier of the original message with the poll.
    * @param options - options for stopping poll
    * @return On success, the stopped Poll is returned
@@ -4244,6 +4358,10 @@ export declare class ExternalReplyInfo extends Base {
    */
   document?: Document;
   /**
+   * Message is a live photo, information about the live photo
+   */
+  livePhoto?: LivePhoto;
+  /**
    * Message is a photo, available sizes of the photo
    */
   photo?: Photo[];
@@ -4280,7 +4398,7 @@ export declare class ExternalReplyInfo extends Base {
    */
   dice?: Dice;
   /**
-   * Message is a game, information about the game. More about games
+   * Message is a game, information about the game.
    */
   game?: Game;
   /**
@@ -4292,7 +4410,7 @@ export declare class ExternalReplyInfo extends Base {
    */
   giveawayWinners?: GiveawayWinners;
   /**
-   * Message is an invoice for a payment, information about the invoice. More about payments
+   * Message is an invoice for a payment, information about the invoice.
    */
   invoice?: Invoice;
   /**
@@ -4774,8 +4892,14 @@ export declare class SharedUser extends Base {
     limit?: number,
   ): Promise<UserProfilePhotos>;
   /**
+   *  Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user.
+   * @param limit - The maximum number of messages to return; 1-20
+   * @returns On success, an array of Message objects is returned.
+   */
+  fetchPersonalChatMessages(limit?: number): Promise<Message[]>;
+  /**
    * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
-   * @param chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
+   * @param chatId - Unique identifier for the chat or username of the channel (bot, supergroup or channel in the format @username).
    * @returns Returns a UserChatBoosts object.
    */
   fetchChatBoosts(chatId: number | string): Promise<UserChatBoosts>;
@@ -5127,7 +5251,7 @@ export declare class ChatShared extends Base {
    */
   declineSuggestedPost(id: number | string, comment?: string): Promise<true>;
   /**
-   * Use this method to get a list of administrators in a chat, which aren't bots.
+   * Use this method to get a list of administrators in a chat. Returns an Array of ChatMember objects..
    * @returns Returns an Array of ChatAdministratorRights objects.
    */
   fetchAdmins(): Promise<ChatAdministratorRights[]>;
@@ -5153,7 +5277,7 @@ export declare class ChatShared extends Base {
   /**
    * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
    * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns On success, an array of MessageId of the sent messages is returned.
    */
@@ -5176,7 +5300,7 @@ export declare class ChatShared extends Base {
   /**
    * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages.
    * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns On success, an array of MessageId of the sent messages is returned.
    */
@@ -6612,6 +6736,16 @@ export declare class Message extends Base {
    */
   viaBot?: User;
   /**
+   * For a message sent by a guest bot, this is the user whose original message triggered the bot's response.
+   * @type {import("../misc/User").User | undefined}
+   */
+  guestBotCallerUser?: User;
+  /**
+   * For a message sent by a guest bot, this is the chat whose original message triggered the bot's response.
+   * @type {import("../chat/Chat").Chat | undefined}
+   */
+  guestBotCallerChat?: Chat;
+  /**
    * True, if the message can't be forwarded
    */
   protectedContent?: true;
@@ -6643,6 +6777,10 @@ export declare class Message extends Base {
    * Chat that sent the message originally
    */
   senderChat?: Chat;
+  /**
+   * The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send a response message. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier
+   */
+  guestQueryId?: string;
   /**
    * Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier
    */
@@ -6760,11 +6898,11 @@ export declare class Message extends Base {
    */
   migrateFromChatId?: string;
   /**
-   * Message is a service message about a successful payment, information about the payment. More about payments
+   * Message is a service message about a successful payment, information about the payment.
    */
   successfulPayment?: SuccessfulPayment;
   /**
-   * Message is a service message about a refunded payment, information about the payment. More about payments
+   * Message is a service message about a refunded payment, information about the payment.
    */
   refundedPayment?: RefundedPayment;
   /**
@@ -6776,7 +6914,7 @@ export declare class Message extends Base {
    */
   chatShared?: ChatShared;
   /**
-   * The domain name of the website on which the user has logged in. More about Telegram Login
+   * The domain name of the website on which the user has logged in.
    */
   connectedWebsite?: string;
   /**
@@ -7027,7 +7165,7 @@ export declare class Message extends Base {
    */
   venue?: Venue;
   /**
-   * Message is a game, information about the game. More about games
+   * Message is a game, information about the game.
    */
   game?: Game;
   /**
@@ -7256,7 +7394,7 @@ export declare class Message extends Base {
       })
   >;
   /**
-   * Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
+   * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL.
    * @param media - An object for a new media content of the message
    * @param options - out parameters
    * @returns On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
@@ -7310,7 +7448,7 @@ export declare class Message extends Base {
   >;
   /**
    * Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns On success, the sent Message is returned.
    */
@@ -7333,7 +7471,7 @@ export declare class Message extends Base {
   ): Promise<Message>;
   /**
    * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns Returns the message id of the sent message on success.
    */
@@ -7395,6 +7533,33 @@ export declare class Message extends Base {
 	 * @returns Returns True on success.
  */
   delete(): Promise<true>;
+  /**
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reaction
+   * @returns Returns True on success.
+   */
+  deleteReaction(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reactions
+   * @returns Returns True on success.
+   */
+  deleteAllReactions(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
+  /**
+   *  Use this method to reply to a received guest message.
+   * @param result - An object describing the message to be sent.
+   * @returns On success, a Identifier of the sent inline message is returned.
+   */
+  answerGuestQuery(result: InlineQueryResult): Promise<string>;
   /**
    * Use this method to edit a checklist on behalf of a connected business account.
    * @param businessConnectionId - Unique identifier of the business connection on behalf of which the message will be sent.
@@ -8033,7 +8198,7 @@ export declare class Chat extends Base {
    */
   declineSuggestedPost(id: number | string, comment?: string): Promise<true>;
   /**
-   * Use this method to get a list of administrators in a chat, which aren't bots.
+   * Use this method to get a list of administrators in a chat. Returns an Array of ChatMember objects..
    * @returns Returns an Array of ChatAdministratorRights objects.
    */
   fetchAdmins(): Promise<ChatAdministratorRights[]>;
@@ -8070,7 +8235,7 @@ export declare class Chat extends Base {
   /**
    * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
    * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns On success, an array of MessageId of the sent messages is returned.
    */
@@ -8093,7 +8258,7 @@ export declare class Chat extends Base {
   /**
    * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages.
    * @param messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param options - out parameters
    * @returns On success, an array of MessageId of the sent messages is returned.
    */
@@ -8136,6 +8301,27 @@ export declare class Chat extends Base {
    */
   deleteMessages(ids: (number | string)[]): Promise<true>;
   /**
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reaction
+   * @returns Returns True on success.
+   */
+  deleteReaction(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param options - Options for deleting reactions
+   * @returns Returns True on success.
+   */
+  deleteAllReactions(options?: {
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user. */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat. */
+    actorChatId?: number | string;
+  }): Promise<true>;
+  /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param menuButton - An object for the bot's new menu button. Defaults to MenuButtonDefault
    * @returns Returns True on success.
@@ -8154,12 +8340,7 @@ export declare class Chat extends Base {
         chatId: number | string;
         name: string;
         iconColor?:
-          | 7322096
-          | 16766590
-          | 13338331
-          | 9367192
-          | 16749490
-          | 16478047;
+          7322096 | 16766590 | 13338331 | 9367192 | 16749490 | 16478047;
         iconCustomEmojiId?: string;
       },
       "name" | "chatId"
@@ -8361,6 +8542,66 @@ export declare class Chat extends Base {
   ): Promise<
     Message & {
       photo: Photo[];
+    }
+  >;
+  /**
+   * Use this method to send live photos.
+   * @param photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param livePhoto - Live photo to send. Pass a file_id as String to send a live photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a live photo from the Internet, or upload a new live photo using multipart/form-data. The live photo must be at most 10 MB in size. The live photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendLivePhoto(
+    photo: MediaDataParam,
+    livePhoto: MediaDataParam,
+    options?: Omit<
+      {
+        /** Unique identifier of the business connection on behalf of which the message will be sent */
+        businessConnectionId?: string;
+        /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+        chatId: number | string;
+        /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
+        messageThreadId?: number | string;
+        /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+        directMessagesTopicId?: number | string;
+        /** Live photo video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. Sending live photos by a URL is currently unsupported. */
+        livePhoto: MediaDataParam;
+        /** The static photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. Sending live photos by a URL is currently unsupported. */
+        photo: MediaDataParam;
+        /** Video caption (may also be used when resending videos by file_id), 0-1024 characters after entities parsing */
+        caption?: string;
+        /** Mode for parsing entities in the video caption. See formatting options for more details. */
+        parseMode?: ParseMode;
+        /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
+        captionEntities?: MessageEntity[];
+        /** Pass True, if the caption must be shown above the message media */
+        showCaptionAboveMedia?: boolean;
+        /** Pass True if the video needs to be covered with a spoiler animation */
+        hasSpoiler?: boolean;
+        /** Sends the message silently. Users will receive a notification with no sound. */
+        disableNotification?: boolean;
+        /** Protects the contents of the sent message from forwarding and saving */
+        protectContent?: boolean;
+        /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance. */
+        allowPaidBroadcast?: boolean;
+        /** Unique identifier of the message effect to be added to the message; for private chats only */
+        messageEffectId?: string;
+        /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+        suggestedPostParameters?: SuggestedPostParameters;
+        /** Description of the message to reply to */
+        replyParameters?: ReplyParameters;
+        /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "photo" | "livePhoto" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      livePhoto: LivePhoto;
     }
   >;
   /**
@@ -9098,12 +9339,7 @@ export declare class ChatMember extends Base {
   chatId: string;
   /** The member's status in the chat */
   status:
-    | "creator"
-    | "administrator"
-    | "member"
-    | "restricted"
-    | "left"
-    | "kicked";
+    "creator" | "administrator" | "member" | "restricted" | "left" | "kicked";
   /** Represents the rights of an administrator in a chat */
   permissions: UserPermissions;
   /**
@@ -9938,6 +10174,20 @@ export declare class ManagedBotUpdated extends Base {
    * @returns the new token as String on success.
    */
   replaceBotToken(): Promise<string>;
+  /**
+   * Use this method to get the access settings of a managed bot.
+   * @returns The access settings as an object on success.
+   */
+  fetchAccessSettings(): Promise<BotAccessSettings>;
+  /** Use this method to change the access settings of a managed bot.
+   * @param isAccessRestricted - Pass True, if only selected users can access the bot. The bot's owner can always access it.
+   * @param addedUserIds - A list of up to 10 identifiers of users who will have access to the bot in addition to its owner. Ignored if isAccessRestricted is false.
+   * @returns Returns True on success.
+   */
+  setAccessSettings(
+    isAccessRestricted: boolean,
+    addedUserIds?: number[],
+  ): Promise<true>;
 }
 
 export declare class ChosenInlineResult extends Base {
@@ -10282,6 +10532,7 @@ export interface EventHandlers {
   error: (detalis: [number, unknown]) => PossiblyAsync<void>;
   rawUpdate: (raw: Update & { client: TelegramClient }) => PossiblyAsync<void>;
   message: (message: Message) => PossiblyAsync<void>;
+  guestMessage: (message: Message) => PossiblyAsync<void>;
   channelPost: (message: Message) => PossiblyAsync<void>;
   businessMessage: (message: Message) => PossiblyAsync<void>;
   businessConnection: (message: BusinessConnection) => PossiblyAsync<void>;
@@ -10414,6 +10665,10 @@ export declare class BaseClient extends EventEmitter {
   sendPhoto(
     params: MethodParameters["sendPhoto"],
   ): Promise<MethodsLibReturnType["sendPhoto"]>;
+  /** Use this method to send live photos. On success, the sent Message is returned. */
+  sendLivePhoto(
+    params: MethodParameters["sendLivePhoto"],
+  ): Promise<MethodsLibReturnType["sendLivePhoto"]>;
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
   
 	For sending voice messages, use the sendVoice method instead. */
@@ -10603,6 +10858,14 @@ export declare class BaseClient extends EventEmitter {
   replaceManagedBotToken(
     userId: string | number,
   ): Promise<MethodsLibReturnType["replaceManagedBotToken"]>;
+  /** Use this method to get the access settings of a managed bot. Returns a BotAccessSettings object on success. */
+  getManagedBotAccessSettings(
+    userId: string | number,
+  ): Promise<MethodsLibReturnType["getManagedBotAccessSettings"]>;
+  /** Use this method to change the access settings of a managed bot. Returns True on success. */
+  setManagedBotAccessSettings(
+    params: MethodParameters["setManagedBotAccessSettings"],
+  ): Promise<MethodsLibReturnType["setManagedBotAccessSettings"]>;
   /** Use this method to approve a chat join get. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   approveChatJoinRequest(
     userId: number | string,
@@ -10658,14 +10921,20 @@ export declare class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["leaveChat"]>;
   /** Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success. */
   getChat(chatId: number | string): Promise<MethodsLibReturnType["getChat"]>;
-  /** Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects. */
+  /** Use this method to get a list of administrators in a chat. Returns an Array of ChatMember objects.. Returns an Array of ChatMember objects. */
   getChatAdministrators(
     chatId: number | string,
+    returnBots?: boolean,
   ): Promise<MethodsLibReturnType["getChatAdministrators"]>;
   /** Use this method to get the number of members in a chat. Returns Int on success. */
   getChatMemberCount(
     chatId: number | string,
   ): Promise<MethodsLibReturnType["getChatMemberCount"]>;
+  /** Use this method to reply to a received guest message. On success, a Identifier of the sent inline message is returned. */
+  answerGuestQuery(
+    guestQueryId: string,
+    result: InlineQueryResult,
+  ): Promise<MethodsLibReturnType["answerGuestQuery"]>;
   /** Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object. */
   getUserChatBoosts(
     chatId: number | string,
@@ -10688,6 +10957,11 @@ export declare class BaseClient extends EventEmitter {
     chatId: number | string,
     userId: number | string,
   ): Promise<MethodsLibReturnType["getChatMember"]>;
+  /**  Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user. On success, an array of Message objects is returned. */
+  getUserPersonalChatMessages(
+    userId: number | string,
+    limit: number,
+  ): Promise<MethodsLibReturnType["getUserPersonalChatMessages"]>;
   /** Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method. Returns True on success. */
   setChatStickerSet(
     stickerSetName: string,
@@ -10878,7 +11152,7 @@ export declare class BaseClient extends EventEmitter {
   editMessageCaption(
     params: MethodParameters["editMessageCaption"],
   ): Promise<MethodsLibReturnType["editMessageCaption"]>;
-  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, live photo, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageMedia(
     params: MethodParameters["editMessageMedia"],
   ): Promise<MethodsLibReturnType["editMessageMedia"]>;
@@ -11040,7 +11314,7 @@ export declare class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["verifyUser"]>;
   /**
    * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername).
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username).
    * @param description - Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
    */
   verifyChat(
@@ -11056,7 +11330,7 @@ export declare class BaseClient extends EventEmitter {
   ): Promise<MethodsLibReturnType["removeUserVerification"]>;
   /**
    * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
-   * @param chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    */
   removeChatVerification(
     chatId: number | string,
@@ -11120,6 +11394,14 @@ export declare class BaseClient extends EventEmitter {
     chatId: number | string,
     messageIds: (number | string)[],
   ): Promise<MethodsLibReturnType["deleteMessages"]>;
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success. */
+  deleteMessageReaction(
+    params: MethodParameters["deleteMessageReaction"],
+  ): Promise<MethodsLibReturnType["deleteMessageReaction"]>;
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success. */
+  deleteAllMessageReactions(
+    params: MethodParameters["deleteAllMessageReactions"],
+  ): Promise<MethodsLibReturnType["deleteAllMessageReactions"]>;
   /** Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success. */
   deleteBusinessMessages(
     businessConnectionId: string,
@@ -11291,7 +11573,8 @@ export declare class WorkerClient {
     data:
       | Update["message"]
       | Update["channel_post"]
-      | Update["business_message"],
+      | Update["business_message"]
+      | Update["guest_message"],
   ): Message | undefined;
   /**
    * Handles new business connections.
@@ -11646,6 +11929,21 @@ export declare class ClientUser extends User {
    * @returns True if both objects are instances of ClientUser and are equal based on key properties, otherwise false.
    */
   override equals(other: ClientUser): boolean;
+}
+
+export class BotAccessSettings extends Base {
+  /**
+   * @param client - The client that instantiated this
+   * @param data - Data about the access settings of a bot.
+   */
+  constructor(
+    client: TelegramClient | BaseClient,
+    data: import("@telegram.ts/types").BotAccessSettings,
+  );
+  /** The list of other users who have access to the bot if the access is restricted */
+  users: User[] | undefined;
+  /** Whether the bot's access is restricted */
+  isAccessRestricted: boolean;
 }
 
 /**
@@ -12828,8 +13126,7 @@ export declare class InlineKeyboardBuilder {
    */
   equals(
     other:
-      | InlineKeyboardBuilder
-      | { inline_keyboard: InlineKeyboardButton[][] },
+      InlineKeyboardBuilder | { inline_keyboard: InlineKeyboardButton[][] },
   ): boolean;
   /**
    * Converts the inline keyboard to a JSON format suitable for Telegram API.
@@ -13565,6 +13862,7 @@ export declare const Events: {
   readonly Disconnect: "disconnect";
   readonly RawUpdate: "rawUpdate";
   readonly Message: "message";
+  readonly GuestMessage: "message";
   readonly ChannelPost: "message";
   readonly BusinessMessage: "message";
   readonly BusinessConnection: "businessConnection";
@@ -13658,9 +13956,7 @@ export declare const ApiPermissionsFlags: {
  */
 export declare function toApiFormat(
   permission:
-    | ChatPermissionFlags
-    | UserPermissionFlags
-    | Record<string, boolean>,
+    ChatPermissionFlags | UserPermissionFlags | Record<string, boolean>,
 ): Record<
   (typeof ApiPermissionsFlags)[keyof typeof ApiPermissionsFlags],
   boolean
@@ -13710,6 +14006,7 @@ export declare enum ErrorCodes {
   UserIdNotAvailable = "USER_ID_NOT_AVAILABLE",
   MessageIdNotAvailable = "MESSAGE_ID_NOT_AVAILABLE",
   ChatIdNotAvailable = "CHAT_ID_NOT_AVAILABLE",
+  GuestQueryIdNotAvailable = "GUEST_QUERY_ID_NOT_AVAILABLE",
   FileRetrievalFailed = "FILE_RETRIEVAL_FAILED",
   FileDownloadFailed = "FILE_DOWNLOAD_FAILED",
   FileWriteInvalidType = "FILE_WRITE_INVALID_TYPE",
@@ -13728,6 +14025,7 @@ export declare const ErrorMessages: {
   readonly USER_ID_NOT_AVAILABLE: "The user ID related to this message is not available.";
   readonly MESSAGE_ID_NOT_AVAILABLE: "The message ID related to this message is not available.";
   readonly CHAT_ID_NOT_AVAILABLE: "The chat ID related to this message is not available.";
+  readonly GUEST_QUERY_ID_NOT_AVAILABLE: "The guest query ID related to this message is not available.";
   readonly FILE_RETRIEVAL_FAILED: "Failed to retrieve the file from the path: <file_path>.";
   readonly FILE_DOWNLOAD_FAILED: "Failed to download the file. Error: ${err}.";
   readonly FILE_WRITE_INVALID_TYPE: "Invalid file write type specified. Available types: 'stream' or 'promise'.";
@@ -13787,6 +14085,6 @@ export declare class StarTransactions {
   [Symbol.iterator](): IterableIterator<StarTransaction>;
 }
 
-export declare const version: "4.14.1";
+export declare const version: "4.15.0";
 
 export * from "./telegram/index";

@@ -1,42 +1,42 @@
 // @ts-check
-const { Base } = require("../Base");
+const { Base } = require("../../Base");
+const { Photo } = require("../../media/Photo");
+const { isDeepStrictEqual } = require("../../../util/Utils");
 
 /**
- * @typedef {import("../../client/interfaces/Language").LanguageCode} LanguageCode
+ * @typedef {import("../../../types").MethodParameters} MethodParameters
  */
 
-/**
- * @typedef {import("../../types").MethodParameters} MethodParameters
- */
-
-class User extends Base {
+class SharedUser extends Base {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
-   * @param {import("@telegram.ts/types").User | import("@telegram.ts/types").UserFromGetMe} data - represents a Telegram user or bot
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("@telegram.ts/types").SharedUser} data - Data about the contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button
    */
   constructor(client, data) {
     super(client);
 
-    /** Unique identifier for this user or bot. */
-    this.id = String(data.id);
-
-    /** True, if this user is a bot */
-    this.isBot = data.is_bot;
+    /** Identifier of the shared user. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means. */
+    this.userId = String(data.user_id);
 
     this._patch(data);
   }
 
   /**
-   * @param {import("@telegram.ts/types").User | import("@telegram.ts/types").UserFromGetMe} data - represents a Telegram user or bot
+   * @param {import("@telegram.ts/types").SharedUser} data - Data about the contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button
    * @override
    */
   _patch(data) {
-    /** User's or bot's first name */
-    this.firstName = data.first_name;
+    if ("first_name" in data) {
+      /**
+       * First name of the user, if the name was requested by the bot
+       * @type {string | undefined}
+       */
+      this.firstName = data.first_name;
+    }
 
     if ("last_name" in data) {
       /**
-       * User's or bot's last name
+       * Last name of the user, if the name was requested by the bot
        * @type {string | undefined}
        */
       this.lastName = data.last_name;
@@ -44,66 +44,54 @@ class User extends Base {
 
     if ("username" in data) {
       /**
-       * User's or bot's username
+       * Username of the user, if the username was requested by the bot
        * @type {string | undefined}
        */
       this.username = data.username;
     }
 
-    if ("language_code" in data) {
+    if ("photo" in data) {
       /**
-       * IETF language tag of the user's language
-       * @type {string | undefined}
+       * Available sizes of the chat photo, if the photo was requested by the bot
+       * @type {Photo[] | undefined}
        */
-      this.language = data.language_code;
+      this.photo = data.photo.map((photo) => new Photo(this.client, photo));
     }
-
-    /**
-     * True, if this user is a Telegram Premium user
-     * @type {boolean}
-     */
-    this.isPremium = Boolean(data.is_premium);
-
-    /**
-     * True, if this user added the bot to the attachment menu
-     * @type {boolean}
-     */
-    this.inAttachmentMenu = Boolean(data.added_to_attachment_menu);
 
     return data;
   }
 
   /**
    * Fetches this user
-   * @param {Omit<import("../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch user
-   * @returns {Promise<User | import("../chat/ChatFullInfo").ChatFullInfo>}
+   * @param {Omit<import("../../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch user
+   * @returns {Promise<import("./User").User | import("../../chat/ChatFullInfo").ChatFullInfo>}
    */
   fetch({ force = true, fullInfo = false } = {}) {
-    return this.client.users.fetch(this.id, { force, fullInfo });
+    return this.client.users.fetch(this.userId, { force, fullInfo });
   }
 
   /**
    * Use this method to send text messages.
    * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../../message/Message").Message & { content: string } | Array<import("../../message/Message").Message & { audio: import("../../media/Audio").Audio; } | import("../../message/Message").Message & { document: import("../../media/Document").Document; } | import("../../message/Message").Message & { photo: import("../../media/Photo").Photo; } | import("../../message/Message").Message & { video: import("../../media/video/Video").Video}>>} - On success, the sent Message is returned.
    */
   send(text, options = {}) {
     if (typeof text === "object") {
       return this.client.sendMediaGroup({
-        chatId: this.id,
+        chatId: this.userId,
         ...text,
       });
     }
     return this.client.sendMessage({
       text,
-      chatId: this.id,
+      chatId: this.userId,
       ...options,
     });
   }
 
   /**
-   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user.
+   * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receive.
    * @param {string} giftId - Identifier of the gift.
    * @param {Omit<MethodParameters["sendGift"], "giftId" | "userId">} [options] - out parameters.
    * @returns {Promise<true>} - Returns True on success.
@@ -111,7 +99,7 @@ class User extends Base {
   sendGift(giftId, options = {}) {
     return this.client.sendGift({
       giftId,
-      userId: this.id,
+      userId: this.userId,
       ...options,
     });
   }
@@ -128,20 +116,20 @@ class User extends Base {
       ...options,
       monthCount,
       starCount,
-      userId: this.id,
+      userId: this.userId,
     });
   }
 
   /**
    * Stores a message that can be sent by a user of a Mini App.
-   * @param {import("../../client/interfaces/Inline").InlineQueryResult} result - An object describing the message to be sent.
+   * @param {import("../../../client/interfaces/Inline").InlineQueryResult} result - An object describing the message to be sent.
    * @param {Omit<MethodParameters["savePreparedInlineMessage"], "userId" | "result">} [options] - out parameters.
-   * @returns {Promise<import("./PreparedInlineMessage").PreparedInlineMessage>} - Returns a PreparedInlineMessage object.
+   * @returns {Promise<import("../PreparedInlineMessage").PreparedInlineMessage>} - Returns a PreparedInlineMessage object.
    */
   saveInlineMessage(result, options = {}) {
     return this.client.savePreparedInlineMessage({
       result,
-      userId: this.id,
+      userId: this.userId,
       ...options,
     });
   }
@@ -153,7 +141,7 @@ class User extends Base {
    */
   saveKeyboardButton(button) {
     return this.client.savePreparedKeyboardButton({
-      userId: this.id,
+      userId: this.userId,
       button,
     });
   }
@@ -166,7 +154,7 @@ class User extends Base {
    */
   setStarSubscription(telegramPaymentChargeId, isCanceled) {
     return this.client.editUserStarSubscription({
-      userId: this.id,
+      userId: this.userId,
       telegramPaymentChargeId,
       isCanceled,
     });
@@ -178,16 +166,16 @@ class User extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   refundStarPayment(telegramPaymentId) {
-    return this.client.refundStarPayment(this.id, telegramPaymentId);
+    return this.client.refundStarPayment(this.userId, telegramPaymentId);
   }
 
   /**
    * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change).
-   * @param {readonly import("../../client/interfaces/Passport").PassportElementError[]} errors - An array describing the errors
+   * @param {readonly import("../../../client/interfaces/Passport").PassportElementError[]} errors - An array describing the errors
    * @returns {Promise<true>} - Returns True on success.
    */
   setPassportErrors(errors) {
-    return this.client.setPassportDataErrors(this.id, errors);
+    return this.client.setPassportDataErrors(this.userId, errors);
   }
 
   /**
@@ -198,29 +186,38 @@ class User extends Base {
    */
   fetchProfilePhotos(offset = 0, limit = 100) {
     return this.client.getUserProfilePhotos({
-      userId: this.id,
+      userId: this.userId,
       limit,
       offset,
     });
   }
 
   /**
+   *  Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user.
+   * @param {number} [limit=10] - The maximum number of messages to return; 1-20
+   * @returns {Promise<import("../../message/Message").Message[]>} - On success, an array of Message objects is returned.
+   */
+  fetchPersonalChatMessages(limit = 10) {
+    return this.client.getUserPersonalChatMessages(this.userId, limit);
+  }
+
+  /**
    * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
-   * @param {string | number} chatId - Unique identifier for the chat or username of the channel (in the format @channelusername).
-   * @returns {Promise<import("../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
+   * @param {string | number} chatId - Unique identifier for the chat or username of the channel (bot, supergroup or channel in the format @username).
+   * @returns {Promise<import("../../boost/UserChatBoosts").UserChatBoosts>} - Returns a UserChatBoosts object.
    */
   fetchChatBoosts(chatId) {
-    return this.client.getUserChatBoosts(chatId, this.id);
+    return this.client.getUserChatBoosts(chatId, this.userId);
   }
 
   /**
    * Returns the gifts owned and hosted by a user.
    * @param {Omit<MethodParameters["getUserGifts"], "userId">} [options={}] - out parameters.
-   * @returns {Promise<import("../gift/OwnedGifts").OwnedGifts>} - Returns OwnedGifts on success.
+   * @returns {Promise<import("../../gift/OwnedGifts").OwnedGifts>} - Returns OwnedGifts on success.
    */
   fetchUserGifts(options = {}) {
     return this.client.getUserGifts({
-      userId: this.id,
+      userId: this.userId,
       ...options,
     });
   }
@@ -237,7 +234,7 @@ class User extends Base {
    */
   setEmojiStatus({ emojiStatusCustomEmojiId, emojiStatusExpirationDate } = {}) {
     return this.client.setUserEmojiStatus({
-      userId: this.id,
+      userId: this.userId,
       ...(emojiStatusCustomEmojiId && { emojiStatusCustomEmojiId }),
       ...(emojiStatusExpirationDate && { emojiStatusExpirationDate }),
     });
@@ -249,7 +246,7 @@ class User extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   verify(description) {
-    return this.client.verifyUser(this.id, description);
+    return this.client.verifyUser(this.userId, description);
   }
 
   /**
@@ -257,26 +254,23 @@ class User extends Base {
    * @returns {Promise<true>} - Returns True on success.
    */
   removeVerification() {
-    return this.client.removeUserVerification(this.id);
+    return this.client.removeUserVerification(this.userId);
   }
 
   /**
    * Checks if this user is equal to another user.
-   * @param {User | import("./ClientUser").ClientUser} other - The other object to compare with.
-   * @returns {boolean} True if both objects are instances of User and are equal based on key properties, otherwise false.
+   * @param {SharedUser} other - The other object to compare with.
+   * @returns {boolean} True if both objects are instances of SharedUser and are equal based on key properties, otherwise false.
    */
   equals(other) {
-    if (!other || !(other instanceof User)) return false;
+    if (!other || !(other instanceof SharedUser)) return false;
 
     return (
-      this.id === other.id &&
-      this.isBot === other.isBot &&
+      this.userId === other.userId &&
       this.firstName === other.firstName &&
       this.lastName === other.lastName &&
       this.username === other.username &&
-      this.language === other.language &&
-      this.isPremium === other.isPremium &&
-      this.inAttachmentMenu === other.inAttachmentMenu
+      isDeepStrictEqual(this.photo, other.photo)
     );
   }
 
@@ -289,4 +283,4 @@ class User extends Base {
   }
 }
 
-module.exports = { User };
+module.exports = { SharedUser };

@@ -1,16 +1,16 @@
 // @ts-check
-const { User } = require("./User");
+const { User } = require("../user/User");
 const {
   ClientCapabilities,
-} = require("../../util/permission/ClientCapabilities");
+} = require("../../../util/permission/ClientCapabilities");
 
 /**
- * @typedef {import("../../client/interfaces/Language").LanguageCode} LanguageCode
+ * @typedef {import("../../../client/interfaces/Language").LanguageCode} LanguageCode
  */
 
 class ClientUser extends User {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").UserFromGetMe} data - Data about the represents a Telegram user or bot that was returned by `getMe`
    */
   constructor(client, data) {
@@ -24,14 +24,15 @@ class ClientUser extends User {
 
     /** Represents a set of bot capabilities and provides methods to manage them. */
     this.capabilities = new ClientCapabilities({
-      joinGroups: data.can_join_groups,
-      readAllMessages: data.can_read_all_group_messages,
-      inlineQueries: data.supports_inline_queries,
-      connectBusiness: data.can_connect_to_business,
-      mainWebApp: data.has_main_web_app,
-      topicsEnabled: data.has_topics_enabled,
-      userTopicCreation: data.allows_users_to_create_topics,
-      manageBots: data.can_manage_bots,
+      joinGroups: Boolean(data.can_join_groups),
+      readAllMessages: Boolean(data.can_read_all_group_messages),
+      guestQueries: Boolean(data.supports_guest_queries),
+      inlineQueries: Boolean(data.supports_inline_queries),
+      connectBusiness: Boolean(data.can_connect_to_business),
+      mainWebApp: Boolean(data.has_main_web_app),
+      topicsEnabled: Boolean(data.has_topics_enabled),
+      userTopicCreation: Boolean(data.allows_users_to_create_topics),
+      manageBots: Boolean(data.can_manage_bots),
     });
 
     this._patch(data);
@@ -47,8 +48,8 @@ class ClientUser extends User {
 
   /**
    * Fetch about the client/bot
-   * @param {Omit<import("../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch client/bot
-   * @returns {Promise<ClientUser | import("../chat/ChatFullInfo").ChatFullInfo>}
+   * @param {Omit<import("../../../managers/BaseManager").IFetchOptions, "cache">} [options] - options for fetch client/bot
+   * @returns {Promise<ClientUser | import("../../chat/ChatFullInfo").ChatFullInfo>}
    * @override
    */
   fetch({ force = true, fullInfo = false } = {}) {
@@ -67,7 +68,7 @@ class ClientUser extends User {
   /**
    * Returns the bot's Telegram Star transactions in chronological order.
    * @param {StarTransactions} [options] - out parameters.
-   * @returns {Promise<import("../invoice/StarTransactions").StarTransactions>} - On success, returns a StarTransactions object.
+   * @returns {Promise<import("../../invoice/StarTransactions").StarTransactions>} - On success, returns a StarTransactions object.
    */
   fetchStarTransactions({ limit, offset } = {}) {
     return this.client.getStarTransactions(offset, limit);
@@ -75,7 +76,7 @@ class ClientUser extends User {
 
   /**
    * Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters.
-   * @returns {Promise<import("../gift/Gifts").Gifts>} - Returns a Gifts object.
+   * @returns {Promise<import("../../gift/Gifts").Gifts>} - Returns a Gifts object.
    */
   fetchGifts() {
     return this.client.getAvailableGifts();
@@ -83,13 +84,13 @@ class ClientUser extends User {
 
   /**
    * @typedef {Object} SetMyCommands
-   * @property {import("../../client/interfaces/Bot").BotCommandScope} [scope] - Describes the scope for which the commands apply. Defaults to BotCommandScopeDefault.
+   * @property {import("../../../client/interfaces/Bot").BotCommandScope} [scope] - Describes the scope for which the commands apply. Defaults to BotCommandScopeDefault.
    * @property {LanguageCode} [languageCode] - Two-letter ISO 639-1 language code. If not specified, commands will apply to users without a dedicated language.
    */
 
   /**
    * Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands.
-   * @param {readonly import("../../client/interfaces/Bot").BotCommand[]} commands - A list of bot commands to set. Maximum of 100 commands.
+   * @param {readonly import("../../../client/interfaces/Bot").BotCommand[]} commands - A list of bot commands to set. Maximum of 100 commands.
    * @param {SetMyCommands} [options] - Options for setting commands, including scope and language code.
    * @returns {Promise<true>} - Returns true on success.
    */
@@ -103,9 +104,9 @@ class ClientUser extends User {
 
   /**
    * Use this method to get the current list of the bot's commands for the given scope and user language.
-   * @param {import("../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
+   * @param {import("../../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
    * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code or an empty string
-   * @returns {Promise<import("../../client/interfaces/Bot").BotCommand[]>} - Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
+   * @returns {Promise<import("../../../client/interfaces/Bot").BotCommand[]>} - Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
    */
   fetchCommands(score, language) {
     return this.client.getMyCommands(score, language);
@@ -113,7 +114,7 @@ class ClientUser extends User {
 
   /**
    * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users.
-   * @param {import("../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
+   * @param {import("../../../client/interfaces/Bot").BotCommandScope} [score] - An object, describing scope of users for which the commands are relevant. Defaults to BotCommandScopeDefault
    * @param {LanguageCode} [language] - A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -180,7 +181,7 @@ class ClientUser extends User {
 
   /**
    * Changes the profile photo of the bot.
-   * @param {import("../../client/interfaces/Methods").InputProfilePhoto} photo - The new profile photo to set.
+   * @param {import("../../../client/interfaces/Methods").InputProfilePhoto} photo - The new profile photo to set.
    * @returns {Promise<true>} - Returns True on success.
    **/
   setProfilePhoto(photo) {
@@ -198,7 +199,7 @@ class ClientUser extends User {
   /**
    * Use this method to change the bot's menu button in a private chat, or the default menu button.
    * @param {number} [chatId] - Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
-   * @param {import("../../client/interfaces/Bot").MenuButton} [menu] - An object for the bot's new menu button. Defaults to MenuButtonDefault
+   * @param {import("../../../client/interfaces/Bot").MenuButton} [menu] - An object for the bot's new menu button. Defaults to MenuButtonDefault
    * @returns {Promise<true>} - Returns True on success.
    */
   setMenuButton(chatId, menu) {
@@ -208,7 +209,7 @@ class ClientUser extends User {
   /**
    * Use this method to get the current value of the bot's menu button in a private chat, or the default menu button.
    * @param {number} [chatId] - Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
-   * @returns {Promise<import("./MenuButton").MenuButton>} - Returns MenuButton on success.
+   * @returns {Promise<import("../MenuButton").MenuButton>} - Returns MenuButton on success.
    */
   fetchMenuButton(chatId) {
     return this.client.getChatMenuButton(chatId);
@@ -216,7 +217,7 @@ class ClientUser extends User {
 
   /**
    * Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot.
-   * @param {import("../../util/permission/ChatPermissions").ChatPermissionFlags} [rights] - An object describing new default administrator rights. If not specified, the default administrator rights will be cleared
+   * @param {import("../../../util/permission/ChatPermissions").ChatPermissionFlags} [rights] - An object describing new default administrator rights. If not specified, the default administrator rights will be cleared
    * @param {boolean} [forChannels] - Pass True to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed
    * @returns {Promise<true>} - Returns True on success.
    */
@@ -227,7 +228,7 @@ class ClientUser extends User {
   /**
    * Use this method to get the current default administrator rights of the bot.
    * @param {boolean} [forChannels] - Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned.
-   * @returns {Promise<import("../chat/ChatAdministratorRights").ChatAdministratorRights>} - Returns ChatAdministratorRights on success.
+   * @returns {Promise<import("../../chat/ChatAdministratorRights").ChatAdministratorRights>} - Returns ChatAdministratorRights on success.
    */
   fetchAdministratorRigths(forChannels) {
     return this.client.getMyDefaultAdministratorRights(forChannels);
@@ -235,7 +236,7 @@ class ClientUser extends User {
 
   /**
    * A method to get the current Telegram Stars balance of the bot. Requires no parameters.
-   * @returns {Promise<import("./StarAmount").StarAmount>} - On success, returns a StarAmount object.
+   * @returns {Promise<import("../StarAmount").StarAmount>} - On success, returns a StarAmount object.
    */
   fetchStarBalance() {
     return this.client.getMyStarBalance();

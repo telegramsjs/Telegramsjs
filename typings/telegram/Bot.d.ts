@@ -9,9 +9,7 @@ export interface BotCommand {
 }
 
 export type MenuButton =
-  | MenuButtonCommands
-  | MenuButtonWebApp
-  | MenuButtonDefault;
+  MenuButtonCommands | MenuButtonWebApp | MenuButtonDefault;
 
 /**
  * Represents a menu button that opens the bot's list of commands.

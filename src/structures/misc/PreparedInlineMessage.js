@@ -1,3 +1,5 @@
+// @ts-check
+
 class PreparedInlineMessage {
   /**
    * @param {import("@telegram.ts/types").PreparedInlineMessage} data - Data about the inline message to be sent by a user of a Mini App.

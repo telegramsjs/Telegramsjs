@@ -11,8 +11,8 @@ import { WebhookClient } from "./WebhookClient";
 import { WorkerClient } from "./WorkerClient";
 import { TelegramError } from "../errors/TelegramError";
 import { ErrorCodes } from "../errors/ErrorCodes";
-import type { ClientUser } from "../structures/misc/ClientUser";
-import type { User } from "../structures/misc/User";
+import type { ClientUser } from "../structures/misc/client/ClientUser";
+import type { User } from "../structures/misc/user/User";
 import type { Chat } from "../structures/chat/Chat";
 import {
   Events,

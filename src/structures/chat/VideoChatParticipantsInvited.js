@@ -12,7 +12,7 @@ class VideoChatParticipantsInvited extends Base {
 
     /**
      * New members that were invited to the video chat
-     * @type {Collection<string, import("../misc/User").User>}
+     * @type {Collection<string, import("../misc/user/User").User>}
      */
     this.users = new Collection(
       data.users.map((user) => [String(user.id), this.client.users._add(user)]),
@@ -21,7 +21,7 @@ class VideoChatParticipantsInvited extends Base {
 
   /**
    * Makes the class iterable, returning each `User` object.
-   * @returns {IterableIterator<import("../misc/User").User>}
+   * @returns {IterableIterator<import("../misc/user/User").User>}
    */
   *[Symbol.iterator]() {
     yield* this.users.values();

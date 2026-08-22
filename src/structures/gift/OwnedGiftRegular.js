@@ -25,7 +25,7 @@ class OwnedGiftRegular extends Base {
     if ("sender_user" in data) {
       /**
        * Sender of the gift if it is a known user
-       * @type {import("../misc/User").User}
+       * @type {import("../misc/user/User").User}
        */
       this.senderUser = client.users._add(data.sender_user);
     }

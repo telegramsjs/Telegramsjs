@@ -18,7 +18,7 @@ class ShippingQuery extends Base {
 
     /**
      * User who sent the query
-     * @type {import("./misc/User").User}
+     * @type {import("./misc/user/User").User}
      */
     this.author = this.client.users._add(data.from);
 

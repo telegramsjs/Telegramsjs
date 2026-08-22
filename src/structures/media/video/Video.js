@@ -1,12 +1,12 @@
 // @ts-check
-const { Photo } = require("./Photo");
+const { Photo } = require("../Photo");
 const { Collection } = require("@telegram.ts/collection");
-const { VideoQuality } = require("./VideoQuality");
-const { InputFile } = require("../misc/InputFile");
+const { VideoQuality } = require("../video/VideoQuality");
+const { InputFile } = require("../../misc/InputFile");
 
 class Video extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").Video} data - Data about the represents a video file
    */
   constructor(client, data) {

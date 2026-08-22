@@ -20,7 +20,6 @@ import type {
   MessageEntity,
   LinkPreviewOptions,
   MaskPosition,
-  InputPollOption,
   ReplyParameters,
   ReactionType,
 } from "./Message";
@@ -137,7 +136,7 @@ export type ApiMethods = {
   sendMessage(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -189,7 +188,7 @@ export type ApiMethods = {
 
   /** Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned. */
   forwardMessage(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -199,7 +198,7 @@ export type ApiMethods = {
     suggestedPostParameters?: SuggestedPostParameters;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
     directMessagesTopicId?: number;
-    /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
+    /** Unique identifier for the chat where the original message was sent (or username of the target bot, supergroup or channel in the format @username) */
     fromChatId: number | string;
     /** New start timestamp for the copied video in the message */
     videoStartTimestamp?: number;
@@ -213,13 +212,13 @@ export type ApiMethods = {
 
   /** Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned. */
   forwardMessages(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
     directMessagesTopicId?: number;
-    /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
+    /** Unique identifier for the chat where the original messages were sent (or username of the target bot, supergroup or channel in the format @username) */
     fromChatId: number | string;
     /** A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order. */
     messageIds: (string | number)[];
@@ -231,13 +230,13 @@ export type ApiMethods = {
 
   /** Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success. */
   copyMessage(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
     directMessagesTopicId?: number;
-    /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
+    /** Unique identifier for the chat where the original message was sent (or username of the target bot, supergroup or channel in the format @username) */
     fromChatId: number | string;
     /** New start timestamp for the copied video in the message */
     videoStartTimestamp?: number;
@@ -271,13 +270,13 @@ export type ApiMethods = {
 
   /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
   copyMessages(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
     directMessagesTopicId?: number;
-    /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
+    /** Unique identifier for the chat where the original messages were sent (or username of the target bot, supergroup or channel in the format @username) */
     fromChatId: number | string;
     /** A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order. */
     messageIds: (string | number)[];
@@ -293,7 +292,7 @@ export type ApiMethods = {
   sendPhoto(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -333,18 +332,64 @@ export type ApiMethods = {
     photo: import("../index").Photo;
   };
 
+  /** Use this method to send live photos. On success, the sent Message is returned. */
+  sendLivePhoto(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    businessConnectionId?: string;
+    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    chatId: number | string;
+    /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
+    messageThreadId?: number | string;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    directMessagesTopicId?: number | string;
+    /** Live photo video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. Sending live photos by a URL is currently unsupported. */
+    livePhoto: MediaDataParam;
+    /** The static photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. Sending live photos by a URL is currently unsupported. */
+    photo: MediaDataParam;
+    /** Video caption (may also be used when resending videos by file_id), 0-1024 characters after entities parsing */
+    caption?: string;
+    /** Mode for parsing entities in the video caption. See formatting options for more details. */
+    parseMode?: ParseMode;
+    /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
+    captionEntities?: MessageEntity[];
+    /** Pass True, if the caption must be shown above the message media */
+    showCaptionAboveMedia?: boolean;
+    /** Pass True if the video needs to be covered with a spoiler animation */
+    hasSpoiler?: boolean;
+    /** Sends the message silently. Users will receive a notification with no sound. */
+    disableNotification?: boolean;
+    /** Protects the contents of the sent message from forwarding and saving */
+    protectContent?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance. */
+    allowPaidBroadcast?: boolean;
+    /** Unique identifier of the message effect to be added to the message; for private chats only */
+    messageEffectId?: string;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggestedPostParameters?: SuggestedPostParameters;
+    /** Description of the message to reply to */
+    replyParameters?: ReplyParameters;
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
+    replyMarkup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+  }): import("../index").Message & {
+    livePhoto: import("../index").LivePhoto;
+  };
+
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
 
   For sending voice messages, use the sendVoice method instead. */
   sendAudio(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
-    directMessagesTopicId?: number;
+    directMessagesTopicId?: number | string;
     /** Audio file to send. Pass a fileId as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. */
     audio: MediaDataParam;
     /** Audio caption, 0-1024 characters after entities parsing */
@@ -395,12 +440,12 @@ export type ApiMethods = {
   sendDocument(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
-    directMessagesTopicId?: number;
+    directMessagesTopicId?: number | string;
     /** File to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     document: MediaDataParam;
     /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
@@ -447,12 +492,12 @@ export type ApiMethods = {
   sendVideo(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
-    directMessagesTopicId?: number;
+    directMessagesTopicId?: number | string;
     /** Video to send. Pass a fileId as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. */
     video: MediaDataParam;
     /** Duration of sent video in seconds */
@@ -521,12 +566,12 @@ export type ApiMethods = {
   sendAnimation(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
-    directMessagesTopicId?: number;
+    directMessagesTopicId?: number | string;
     /** Animation to send. Pass a fileId as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. */
     animation: MediaDataParam;
     /** Duration of sent animation in seconds */
@@ -581,12 +626,12 @@ export type ApiMethods = {
   sendVoice(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
     /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
-    directMessagesTopicId?: number;
+    directMessagesTopicId?: number | string;
     /** Audio file to send. Pass a fileId as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     voice: MediaDataParam;
     /** Voice message caption, 0-1024 characters after entities parsing */
@@ -624,7 +669,7 @@ export type ApiMethods = {
   sendVideoNote(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -670,7 +715,7 @@ export type ApiMethods = {
   sendMediaGroup(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -709,7 +754,7 @@ export type ApiMethods = {
   sendLocation(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -753,7 +798,7 @@ export type ApiMethods = {
   editMessageLiveLocation(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
-    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
     messageId?: string | number;
@@ -786,7 +831,7 @@ export type ApiMethods = {
   stopMessageLiveLocation(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
-    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message with live location to stop */
     messageId?: string | number;
@@ -807,7 +852,7 @@ export type ApiMethods = {
   sendPaidMedia(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance */
+    /**  Unique identifier for the target chat or username of the target channel in the format `@username`. If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: number;
@@ -849,7 +894,7 @@ export type ApiMethods = {
   sendVenue(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -897,7 +942,7 @@ export type ApiMethods = {
   sendContact(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -937,7 +982,7 @@ export type ApiMethods = {
   sendPoll(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername). Polls can't be sent to channel direct messages chats. */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username). Polls can't be sent to channel direct messages chats. */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -963,6 +1008,10 @@ export type ApiMethods = {
     allowAddingOptions?: boolean;
     /** Pass True, if poll results must be shown only after the poll closes */
     hideResultsUntilCloses?: boolean;
+    /** Pass True, if voting is limited to users who have been members of the chat where the poll is being sent for more than 24 hours; for channel chats only */
+    membersOnly?: boolean;
+    /** A list of 0-12 two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which users can vote in the poll; for channel chats only. Use “FT” as a country code to allow users with anonymous numbers to vote. If omitted or empty, then users from any country can participate in the poll. */
+    countryCodes?: string[];
     /** A list of monotonically increasing 0-based identifiers of the correct answer options, required for polls in quiz mode */
     correctOptionIds?: number[];
     /** Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing */
@@ -971,12 +1020,16 @@ export type ApiMethods = {
     explanationParseMode?: ParseMode;
     /** A list of special entities that appear in the poll explanation. It can be specified instead of explanationParseMode */
     explanationEntities?: MessageEntity[];
+    /** Media added to the quiz explanation */
+    explanationMedia?: InputPollMedia;
     /** Description of the poll to be sent, 0-1024 characters after entities parsing */
     description?: string;
     /** Mode for parsing entities in the poll description. See formatting options for more details. */
     descriptionParseMode?: ParseMode;
     /** A list of special entities that appear in the poll description, which can be specified instead of description_parse_mode */
     descriptionEntities?: MessageEntity[];
+    /** Media added to the poll description */
+    media?: InputPollMedia;
     /** Amount of time in seconds the poll will be active after creation, 5-2628000. Can't be used together with close_date. */
     openPeriod?: number;
     /** Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 2628000 seconds in the future. Can't be used together with open_period. */
@@ -1045,7 +1098,7 @@ export type ApiMethods = {
   sendDice(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -1114,7 +1167,7 @@ export type ApiMethods = {
 
   /** Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
   setMessageReaction(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Identifier of the target message */
     messageId: string | number;
@@ -1164,7 +1217,7 @@ export type ApiMethods = {
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   banChatMember(args: {
-    /** Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target group or username of the target supergroup or channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
@@ -1176,7 +1229,7 @@ export type ApiMethods = {
 
   /** Use this method to unban a previously banned user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't want this, use the parameter onlyIfBanned. Returns True on success. */
   unbanChatMember(args: {
-    /** Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target group or username of the target supergroup or channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
@@ -1200,7 +1253,7 @@ export type ApiMethods = {
 
   /** Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user. Returns True on success. */
   promoteChatMember(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
@@ -1232,7 +1285,7 @@ export type ApiMethods = {
 
   /** Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success. */
   banChatSenderChat(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target sender chat */
     senderChatId: string | number;
@@ -1240,7 +1293,7 @@ export type ApiMethods = {
 
   /** Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns True on success. */
   unbanChatSenderChat(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target sender chat */
     senderChatId: string | number;
@@ -1260,13 +1313,13 @@ export type ApiMethods = {
 
   Note: Each administrator in a chat generates their own invite links. Bots can't use invite links generated by other administrators. If you want your bot to work with invite links, it will need to generate its own link using exportChatInviteLink or by calling the getChat method. If your bot needs to generate a new primary invite link replacing its previous one, use exportChatInviteLink again. */
   exportChatInviteLink(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
   }): string;
 
   /** Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as ChatInviteLink object. */
   createChatInviteLink(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Invite link name; 0-32 characters */
     name?: string;
@@ -1280,7 +1333,7 @@ export type ApiMethods = {
 
   /** Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the edited invite link as a ChatInviteLink object. */
   editChatInviteLink(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** The invite link to edit */
     inviteLink: string;
@@ -1296,7 +1349,7 @@ export type ApiMethods = {
 
   /** Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object. */
   createChatSubscriptionInviteLink(args: {
-    /** Unique identifier for the target channel chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target channel chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Invite link name; 0-32 characters */
     name?: string;
@@ -1308,7 +1361,7 @@ export type ApiMethods = {
 
   /** Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object. */
   editChatSubscriptionInviteLink(args: {
-    /** Unique identifier for the target channel chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target channel chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** The invite link to edit */
     inviteLink: string;
@@ -1318,7 +1371,7 @@ export type ApiMethods = {
 
   /** Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object. */
   revokeChatInviteLink(args: {
-    /** Unique identifier of the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier of the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** The invite link to revoke */
     inviteLink: string;
@@ -1336,9 +1389,25 @@ export type ApiMethods = {
     userId: number | string;
   }): string;
 
+  /** Use this method to get the access settings of a managed bot. Returns a BotAccessSettings object on success. */
+  getManagedBotAccessSettings(args: {
+    /** User identifier of the managed bot whose access settings will be returned */
+    userId: number | string;
+  }): import("../index").BotAccessSettings;
+
+  /** Use this method to change the access settings of a managed bot. Returns True on success. */
+  setManagedBotAccessSettings(args: {
+    /** User identifier of the managed bot whose access settings will be changed */
+    userId: number | string;
+    /** Pass True, if only selected users can access the bot. The bot's owner can always access it. */
+    isAccessRestricted: boolean;
+    /** A list of up to 10 identifiers of users who will have access to the bot in addition to its owner. Ignored if isAccessRestricted is false. */
+    addedUserIds?: number[];
+  }): true;
+
   /** Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   approveChatJoinRequest(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
@@ -1346,7 +1415,7 @@ export type ApiMethods = {
 
   /** Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success. */
   declineChatJoinRequest(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
@@ -1374,7 +1443,7 @@ export type ApiMethods = {
 
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   setChatPhoto(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** New chat photo, uploaded using multipart/form-data */
     photo: MediaDataParam;
@@ -1382,13 +1451,13 @@ export type ApiMethods = {
 
   /** Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   deleteChatPhoto(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
   }): true;
 
   /** Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   setChatTitle(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** New chat title, 1-128 characters */
     title: string;
@@ -1396,7 +1465,7 @@ export type ApiMethods = {
 
   /** Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   setChatDescription(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** New chat description, 0-255 characters */
     description?: string;
@@ -1406,7 +1475,7 @@ export type ApiMethods = {
   pinChatMessage(args: {
     /** Unique identifier of the business connection on behalf of which the message will be pinned */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Identifier of a message to pin */
     messageId: string | number;
@@ -1418,7 +1487,7 @@ export type ApiMethods = {
   unpinChatMessage(args: {
     /** Unique identifier of the business connection on behalf of which the message will be unpinned */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be pinned. */
     messageId?: string | number;
@@ -1426,41 +1495,51 @@ export type ApiMethods = {
 
   /** Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success. */
   unpinAllChatMessages(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
   }): true;
 
   /** Use this method for your bot to leave a group, supergroup or channel. Returns True on success. */
   leaveChat(args: {
-    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername). Channel direct messages chats aren't supported; leave the corresponding channel instead. */
+    /** Unique identifier for the target chat or username of the target supergroup or channel (bot, supergroup or channel in the format @username). Channel direct messages chats aren't supported; leave the corresponding channel instead. */
     chatId: number | string;
   }): true;
 
   /** Use this method to get up-to-date information about the chat. Returns a ChatFullInfo object on success. */
   getChat(args: {
-    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup or channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
   }): import("../index").ChatFullInfo;
 
-  /** Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects. */
+  /** Use this method to get a list of administrators in a chat. Returns an Array of ChatMember objects.. Returns an Array of ChatMember objects. */
   getChatAdministrators(args: {
-    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup or channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
+    /** Pass True to additionally receive all bots that are administrators of the chat. By default, bots other than the current bot are omitted. */
+    return_bots?: boolean;
   }): Array<import("../index").ChatAdministratorRights>;
 
   /** Use this method to get the number of members in a chat. Returns Int on success. */
   getChatMemberCount(args: {
-    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup or channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
   }): number;
 
   /** Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success. */
   getChatMember(args: {
-    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup or channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
   }): import("../index").ChatMember;
+
+  /** Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user. On success, an array of Message objects is returned. */
+  getUserPersonalChatMessages(args: {
+    /** Unique identifier for the target user */
+    user_id: number;
+    /** The maximum number of messages to return; 1-20 */
+    limit: number;
+  }): Array<import("../index").Message>;
 
   /** Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set ly returned in getChat requests to check if the bot can use this method. Returns True on success. */
   setChatStickerSet(args: {
@@ -1590,9 +1669,17 @@ export type ApiMethods = {
     cacheTime?: number;
   }): true;
 
+  /** Use this method to reply to a received guest message. On success, a Identifier of the sent inline message is returned. */
+  answerGuestQuery(args: {
+    /** Unique identifier for the query to be answered */
+    guest_query_id: string;
+    /** An object describing the message to be sent */
+    result: InlineQueryResult;
+  }): string;
+
   /** Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object. */
   getUserChatBoosts(args: {
-    /** Unique identifier for the chat or username of the channel (in the format @channelusername) */
+    /** Unique identifier for the chat or username of the channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier of the target user */
     userId: string | number;
@@ -1622,7 +1709,7 @@ export type ApiMethods = {
 
   /** Returns the gifts owned by a chat. Returns OwnedGifts on success. */
   getChatGifts(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Pass True to exclude gifts that aren't saved to the chat's profile page. Always True, unless the bot has the can_post_messages administrator right in the channel. */
     excludeUnsaved?: boolean;
@@ -1882,7 +1969,7 @@ export type ApiMethods = {
   editMessageText(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
-    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
     messageId?: string | number;
@@ -1911,7 +1998,7 @@ export type ApiMethods = {
   editMessageCaption(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
-    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
     messageId?: string | number;
@@ -1936,11 +2023,11 @@ export type ApiMethods = {
       })
     | true;
 
-  /** Use this method to edit animation, audio, document, photo, video messages or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
+  /** Use this method to edit animation, audio, document, live photo, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its fileId or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageMedia(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
-    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
     messageId?: string | number;
@@ -1962,7 +2049,7 @@ export type ApiMethods = {
   editMessageReplyMarkup(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
-    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Required if inlineMessageId is not specified. Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId?: number | string;
     /** Required if inlineMessageId is not specified. Identifier of the message to edit */
     messageId?: string | number;
@@ -1982,7 +2069,7 @@ export type ApiMethods = {
   stopPoll(args: {
     /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Identifier of the original message with the poll */
     messageId: string | number;
@@ -2002,7 +2089,7 @@ export type ApiMethods = {
   - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
   Returns True on success. */
   deleteMessage(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Identifier of the message to delete */
     messageId: string | number;
@@ -2010,10 +2097,32 @@ export type ApiMethods = {
 
   /** Use this method to delete multiple messages simultaneously. Returns True on success. */
   deleteMessages(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** A list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted */
     messageIds: (string | number)[];
+  }): true;
+
+  /** Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success. */
+  deleteMessageReaction(args: {
+    /** Unique identifier for the target chat or username of the target supergroup (in the format `@username`) */
+    chatId: number | string;
+    /** Identifier of the target message */
+    messageId: number | string;
+    /** Identifier of the user whose reaction will be removed, if the reaction was added by a user */
+    userId?: number | string;
+    /** Identifier of the chat whose reaction will be removed, if the reaction was added by a chat */
+    actorChatId?: number | string;
+  }): true;
+
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success. */
+  deleteAllMessageReactions(args: {
+    /** Unique identifier for the target chat or username of the target supergroup (in the format `@username`) */
+    chatId: number | string;
+    /** Identifier of the user whose reactions will be removed, if the reactions were added by a user */
+    userId?: number | string;
+    /**  */
+    actorChatId?: number | string;
   }): true;
 
   /** Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success. */
@@ -2028,7 +2137,7 @@ export type ApiMethods = {
   sendSticker(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     businessConnectionId?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -2178,7 +2287,7 @@ export type ApiMethods = {
     name: string;
     /** User identifier of the sticker set owner */
     userId: string | number;
-    /** A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a .WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. */
+    /** A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a .WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data.. Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. */
     thumbnail?:
       | Buffer
       | ReadStream
@@ -2271,7 +2380,7 @@ export type ApiMethods = {
   sendGift(args: {
     /** Required if chat_id is not specified. Unique identifier of the target user who will receive the gift. */
     userId?: number | string;
-    /** Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift. */
+    /** Required if user_id is not specified. Unique identifier for the chat or username of the channel (bot, supergroup or channel in the format @username) that will receive the gift. */
     chatId?: number | string;
     /** Identifier of the gift */
     giftId: string;
@@ -2365,7 +2474,7 @@ export type ApiMethods = {
 
   /** Use this method to send invoices. On success, the sent Message is returned. */
   sendInvoice(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: string | number;
@@ -2499,7 +2608,7 @@ export type ApiMethods = {
 
   /** Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success. */
   verifyChat(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can't be verified. */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username). Channel direct messages chats can't be verified. */
     chatId: number | string;
     /** Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description. */
     customDescription?: string;
@@ -2513,7 +2622,7 @@ export type ApiMethods = {
 
   /** Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success. */
   removeChatVerification(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username) */
     chatId: number | string;
   }): true;
 
@@ -2650,12 +2759,14 @@ export interface InputSticker {
   - InputMediaDocument
   - InputMediaAudio
   - InputMediaPhoto
+  - InputMediaLivePhoto
   - InputMediaVideo */
 export type InputMedia =
   | InputMediaAnimation
   | InputMediaDocument
   | InputMediaAudio
   | InputMediaPhoto
+  | InputMediaLivePhoto
   | InputMediaVideo;
 
 /** Represents a photo to be sent. */
@@ -2673,6 +2784,26 @@ export interface InputMediaPhoto {
   /** List of special entities that appear in the caption, which can be specified instead of parseMode */
   caption_entities?: MessageEntity[];
   /** Pass True if the photo needs to be covered with a spoiler animation */
+  has_spoiler?: boolean;
+}
+
+/** Represents a live photo to be sent. */
+export interface InputMediaLivePhoto {
+  /** Type of the result, must be live_photo */
+  type: "live_photo";
+  /** Video of the live photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://\<file_attach_name>” to upload a new one using multipart/form-data under \<file_attach_name> name. Sending live photos by a URL is currently unsupported. */
+  media: MediaDataParam;
+  /** The static photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://\<file_attach_name>” to upload a new one using multipart/form-data under \<file_attach_name> name. Sending live photos by a URL is currently unsupported. */
+  photo: MediaDataParam;
+  /** Caption of the live photo to be sent, 0-1024 characters after entities parsing */
+  caption?: string;
+  /** Mode for parsing entities in the live photo caption. See formatting options for more details. */
+  parse_mode?: ParseMode;
+  /** List of special entities that appear in the caption, which can be specified instead of parse_mode */
+  caption_entities?: MessageEntity[];
+  /** Pass True, if the caption must be shown above the message media */
+  show_caption_above_media?: boolean;
+  /** Pass True if the live photo needs to be covered with a spoiler animation */
   has_spoiler?: boolean;
 }
 
@@ -2756,6 +2887,99 @@ export interface InputMediaAudio {
   title?: string;
 }
 
+/** Represents a location to be sent. */
+export interface InputMediaLocation {
+  /** Type of the result, must be location */
+  type: "location";
+  /** Latitude of the location */
+  latitude: number;
+  /** Longitude of the location */
+  longitude: number;
+  /** The radius of uncertainty for the location, measured in meters; 0-1500 */
+  horizontal_accuracy?: number;
+}
+
+/** This object contains information about one answer option in a poll to send. */
+export interface InputPollOption {
+  /** Option text, 1-100 characters */
+  text: string;
+  /** Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed. */
+  text_parse_mode?: ParseMode;
+  /** A list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode. */
+  text_entities?: MessageEntity[];
+  /** Media added to the poll option */
+  media?: InputPollOptionMedia;
+}
+
+/** Represents a venue to be sent. */
+export interface InputMediaVenue {
+  /** Type of the result, must be venue */
+  type: "venue";
+  /** Latitude of the location */
+  latitude: number;
+  /** Longitude of the location */
+  longitude: number;
+  /** Name of the venue */
+  title: string;
+  /** Address of the venue */
+  address: string;
+  /** Foursquare identifier of the venue */
+  foursquare_id?: string;
+  /** Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.) */
+  foursquare_type?: string;
+  /** Google Places identifier of the venue */
+  google_place_id?: string;
+  /** Google Places type of the venue. (See supported types.) */
+  google_place_type?: string;
+}
+
+/** Represents a sticker file to be sent. */
+export interface InputMediaSticker {
+  /** Type of the result, must be sticker */
+  type: "sticker";
+  /** File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a .WEBP sticker from the Internet, or pass “attach://\<file_attach_name>” to upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data under \<file_attach_name> name. */
+  media: MediaDataParam;
+  /** Emoji associated with the sticker; only for just uploaded stickers */
+  emoji?: string;
+}
+
+/** This object represents the content of a poll description or a quiz explanation to be sent. It should be one of
+
+- InputMediaAnimation
+- InputMediaAudio
+- InputMediaDocument
+- InputMediaLivePhoto
+- InputMediaLocation
+- InputMediaPhoto
+- InputMediaVenue
+- InputMediaVideo */
+export type InputPollMedia =
+  | InputMediaAnimation
+  | InputMediaAudio
+  | InputMediaDocument
+  | InputMediaLivePhoto
+  | InputMediaLocation
+  | InputMediaPhoto
+  | InputMediaVenue
+  | InputMediaVideo;
+
+/** This object represents the content of a poll option to be sent. It should be one of
+  - InputMediaAnimation
+  - InputMediaLivePhoto
+  - InputMediaLocation
+  - InputMediaPhoto
+  - InputMediaSticker
+  - InputMediaVenue
+ - InputMediaVideo */
+export type InputPollOptionMedia =
+  | InputMediaAnimation
+  | InputMediaLivePhoto
+  | InputMediaLocation
+  | InputMediaPhoto
+  | InputMediaSticker
+  | InputMediaVenue
+  | InputMediaVideo;
+
 /** Represents a general file to be sent. */
 export interface InputMediaDocument {
   /** Type of the result, must be document */
@@ -2777,13 +3001,24 @@ export interface InputMediaDocument {
 /** This object describes the paid media to be sent. Currently, it can be one of
 - InputPaidMediaPhoto
 - InputPaidMediaVideo */
-export type InputPaidMedia = InputMediaPhoto | InputPaidMediaVideo;
+export type InputPaidMedia =
+  InputMediaPhoto | InputPaidMediaVideo | InputPaidMediaLivePhoto;
+
+/** The paid media to send is a live photo. */
+export interface InputPaidMediaLivePhoto {
+  /** Type of the media, must be live_photo */
+  type: "live_photo";
+  /** Video of the live photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://\<file_attach_name>” to upload a new one using multipart/form-data under \<file_attach_name> name. Sending live photos by a URL is currently unsupported. */
+  media: MediaDataParam;
+  /** The static photo to send. Pass a file_id to send a file that exists on the Telegram servers (recommended) or pass “attach://\<file_attach_name>” to upload a new one using multipart/form-data under \<file_attach_name> name. Sending live photos by a URL is currently unsupported. */
+  photo: MediaDataParam;
+}
 
 /** The paid media to send is a photo. */
 export interface InputPaidMediaPhoto {
   /** Type of the media, must be photo */
   type: "photo";
-  /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » */
+  /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
   media: MediaDataParam;
 }
 
@@ -2791,9 +3026,9 @@ export interface InputPaidMediaPhoto {
 export interface InputPaidMediaVideo {
   /** Type of the media, must be video */
   type: "video";
-  /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files » */
+  /** File to send. Pass a fileId to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
   media: MediaDataParam;
-  /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
   thumbnail?: MediaDataParam;
   /** Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. */
   cover?: MediaDataParam;
@@ -2813,14 +3048,13 @@ export interface InputPaidMediaVideo {
 - InputProfilePhotoStatic
 - InputProfilePhotoAnimated */
 export type InputProfilePhoto =
-  | InputProfilePhotoStatic
-  | InputProfilePhotoAnimated;
+  InputProfilePhotoStatic | InputProfilePhotoAnimated;
 
 /** A static profile photo in the .JPG format. */
 export interface InputProfilePhotoStatic {
   /** Type of the profile photo, must be “static” */
   type: "static";
-  /** The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  /** The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. */
   photo: MediaDataParam;
 }
 
@@ -2828,7 +3062,7 @@ export interface InputProfilePhotoStatic {
 export interface InputProfilePhotoAnimated {
   /** Type of the profile photo, must be “animated” */
   type: "animated";
-  /** The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  /** The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. */
   animation: MediaDataParam;
   /** Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0. */
   main_frame_timestamp?: number;
@@ -2843,7 +3077,7 @@ export type InputStoryContent = InputStoryContentPhoto | InputStoryContentVideo;
 export interface InputStoryContentPhoto {
   /** Type of the content, must be “photo” */
   type: "photo";
-  /** The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  /** The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. */
   photo: MediaDataParam;
 }
 
@@ -2851,7 +3085,7 @@ export interface InputStoryContentPhoto {
 export interface InputStoryContentVideo {
   /** Type of the content, must be “video” */
   type: "video";
-  /** The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files » */
+  /** The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using multipart/form-data under <file_attach_name>. */
   video: MediaDataParam;
   /** Precise duration of the video in seconds; 0-60 */
   duration?: number;

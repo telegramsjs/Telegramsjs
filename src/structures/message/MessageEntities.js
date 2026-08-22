@@ -1,6 +1,6 @@
 // @ts-check
 const { Base } = require("../Base");
-const { User } = require("../misc/User");
+const { User } = require("../misc/user/User");
 const { Collection } = require("@telegram.ts/collection");
 
 /**

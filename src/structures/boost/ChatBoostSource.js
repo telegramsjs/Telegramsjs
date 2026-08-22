@@ -20,7 +20,7 @@ class ChatBoostSource extends Base {
     if ("user" in data) {
       /**
        * User that boosted the chat
-       * @type {import("../misc/User").User | undefined}
+       * @type {import("../misc/user/User").User | undefined}
        */
       this.user = this.client.users._add(data.user);
     }
@@ -58,7 +58,7 @@ class ChatBoostSource extends Base {
   }
 
   /**
-   * @returns {this is this & { user: import("../misc/User").User; giveawayId: string } }
+   * @returns {this is this & { user: import("../misc/user/User").User; giveawayId: string } }
    */
   isPremiumAndGift() {
     return Boolean("user" in this && this.user && !("giveawayId" in this));

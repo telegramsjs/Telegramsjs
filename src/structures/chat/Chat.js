@@ -255,7 +255,7 @@ class Chat extends Base {
    * Use this method to send text messages.
    * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId" | "messageThreadId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/video/Video").Video}>>} - On success, the sent Message is returned.
    */
   send(text, options = {}) {
     if (typeof text === "object") {
@@ -346,11 +346,12 @@ class Chat extends Base {
   }
 
   /**
-   * Use this method to get a list of administrators in a chat, which aren't bots.
+   * Use this method to get a list of administrators in a chat. Returns an Array of ChatMember objects.
+   * @param {boolean} [returnBots] - Pass True to additionally receive all bots that are administrators of the chat. By default, bots other than the current bot are omitted.
    * @returns {Promise<import("./ChatAdministratorRights").ChatAdministratorRights[]>} - Returns an Array of ChatAdministratorRights objects.
    */
-  fetchAdmins() {
-    return this.client.getChatAdministrators(this.id);
+  fetchAdmins(returnBots) {
+    return this.client.getChatAdministrators(this.id, returnBots);
   }
 
   /**
@@ -402,7 +403,7 @@ class Chat extends Base {
   /**
    * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages.
    * @param {(number | string)[]} messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to forward. The identifiers must be specified in a strictly increasing order
-   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param {Omit<MethodParameters["forwardMessages"], "chatId" | "fromChatId" | "messageIds">} [options={}] - out parameters
    * @returns {Promise<number[]>} - On success, an array of MessageId of the sent messages is returned.
    */
@@ -418,7 +419,7 @@ class Chat extends Base {
   /**
    * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correctOptionId is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages.
    * @param {(number | string)[]} messageIds - A list of 1-100 identifiers of messages in the chat fromChatId to copy. The identifiers must be specified in a strictly increasing order
-   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param {number | string} chatId - Unique identifier for the target chat or username of the target channel (bot, supergroup or channel in the format @username)
    * @param {Omit<MethodParameters["copyMessages"], "chatId" | "fromChatId" | "messageIds">} [options={}] - out parameters
    * @returns {Promise<number[]>} - On success, an array of MessageId of the sent messages is returned.
    */
@@ -446,6 +447,36 @@ class Chat extends Base {
    */
   deleteMessage(id) {
     return this.client.deleteMessage(this.id, id);
+  }
+
+  /**
+   * @typedef {Object} ReactMessageDeleteOptions
+   * @property {number | string} [userId] - Identifier of the user whose reaction will be removed, if the reaction was added by a user.
+   * @property {number | string} [actorChatId] - Identifier of the chat whose reaction will be removed, if the reaction was added by a chat.
+   */
+
+  /**
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param {ReactMessageDeleteOptions} [options] - Options for deleting reaction
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  deleteReaction(options = {}) {
+    return this.client.deleteMessageReaction({
+      chatId: this.id,
+      messageId: this.id,
+      ...options,
+    });
+  }
+
+  /** Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can_delete_messages' administrator right in the chat.
+   * @param {ReactMessageDeleteOptions} [options] - Options for deleting reactions
+   * @returns {Promise<true>} - Returns True on success.
+   */
+  deleteAllReactions(options = {}) {
+    return this.client.deleteAllMessageReactions({
+      chatId: this.id,
+      ...options,
+    });
   }
 
   /**
@@ -735,6 +766,23 @@ class Chat extends Base {
   }
 
   /**
+   * Use this method to send live photos.
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} livePhoto - Live photo to send. Pass a file_id as String to send a live photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a live photo from the Internet, or upload a new live photo using multipart/form-data. The live photo must be at most 10 MB in size. The live photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param {Omit<MethodParameters["sendLivePhoto"], "photo" | "livePhoto" | "chatId" | "messageThreadId">} [options={}] - out parameters
+   * @returns {Promise<import("../message/Message").Message & { livePhoto: import("../media/LivePhoto").LivePhoto }>} - On success, the sent Message is returned.
+   */
+  sendLivePhoto(photo, livePhoto, options = {}) {
+    return this.client.sendLivePhoto({
+      photo,
+      livePhoto,
+      chatId: this.id,
+      ...(this.threadId && this.inTopic && { messageThreadId: this.threadId }),
+      ...options,
+    });
+  }
+
+  /**
    * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
    * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data
    * @param {Omit<MethodParameters["sendAudio"], "audio" | "chatId" | "messageThreadId">} [options={}] - out parameters
@@ -784,7 +832,7 @@ class Chat extends Base {
    * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document).
    * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} video - Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data.
    * @param {Omit<MethodParameters["sendVideo"], "video" | "chatId" | "messageThreadId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { video: import("../media/Video").Video }>} - On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+   * @returns {Promise<import("../message/Message").Message & { video: import("../media/video/Video").Video }>} - On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
    */
   sendVideo(video, options = {}) {
     return this.client.sendVideo({
@@ -829,7 +877,7 @@ class Chat extends Base {
    * Use this method to send video messages.
    * @param {Buffer | ReadStream | Blob | FormData | DataView | ArrayBuffer | Uint8Array | string} videoNote - Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported
    * @param {Omit<MethodParameters["sendVideoNote"], "videoNote" | "chatId" | "messageThreadId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { videoNote: import("../media/VideoNote").VideoNote }>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../message/Message").Message & { videoNote: import("../media/video/VideoNote").VideoNote }>} - On success, the sent Message is returned.
    */
   sendVideoNote(videoNote, options = {}) {
     return this.client.sendVideoNote({
@@ -844,7 +892,7 @@ class Chat extends Base {
    * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type.
    * @param {MethodParameters["sendMediaGroup"]["media"]} media - media
    * @param {Omit<MethodParameters["sendMediaGroup"], "media" | "chatId" | "messageThreadId">} [options={}] - out parameters
-   * @returns {Promise<Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/Video").Video}>>} - On success, an array of Messages that were sent is returned.
+   * @returns {Promise<Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/video/Video").Video}>>} - On success, an array of Messages that were sent is returned.
    */
   sendMediaGroup(media, options = {}) {
     return this.client.sendMediaGroup({
@@ -909,9 +957,9 @@ class Chat extends Base {
   /**
    * Use this method to send a native poll.
    * @param {string} question - Poll question, 1-300 characters
-   * @param {import("../../client/interfaces/Message").InputPollOption[]} options - A list of 2-10 answer options
+   * @param {import("../../client/interfaces/Methods").InputPollOption[]} options - A list of 2-10 answer options
    * @param {Omit<MethodParameters["sendPoll"], "question" | "options" | "chatId" | "messageThreadId">} [other={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { poll: import("../media/Poll").Poll }>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../message/Message").Message & { poll: import("../media/poll/Poll").Poll }>} - On success, the sent Message is returned.
    */
   sendPoll(question, options, other = {}) {
     return this.client.sendPoll({

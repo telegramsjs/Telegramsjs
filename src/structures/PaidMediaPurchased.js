@@ -15,7 +15,7 @@ class PaidMediaPurchased extends Base {
 
     /**
      * User who purchased the media
-     * @type {import("./misc/User").User}
+     * @type {import("./misc/user/User").User}
      */
     this.author = this.client.users._add(data.from);
 

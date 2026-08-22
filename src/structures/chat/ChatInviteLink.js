@@ -17,7 +17,7 @@ class ChatInviteLink extends Base {
 
     /**
      * Creator of the link
-     * @type {import("../misc/User").User}
+     * @type {import("../misc/user/User").User}
      */
     this.creator = this.client.users._add(data.creator);
 

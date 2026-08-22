@@ -28,7 +28,7 @@ class ChecklistTask extends Base {
     if ("completed_by_user" in data) {
       /**
        * User that completed the task; omitted if the task wasn't completed by a user
-       * @type {import("../misc/User").User | undefined}
+       * @type {import("../misc/user/User").User | undefined}
        */
       this.completedByUser = client.users._add(data.completed_by_user);
     }

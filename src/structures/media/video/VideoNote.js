@@ -1,10 +1,10 @@
 // @ts-check
-const { Photo } = require("./Photo");
-const { InputFile } = require("../misc/InputFile");
+const { Photo } = require("../Photo");
+const { InputFile } = require("../../misc/InputFile");
 
 class VideoNote extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").VideoNote} data - Data about the represents a video message (available in Telegram apps as of v.4.0)
    */
   constructor(client, data) {

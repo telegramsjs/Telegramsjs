@@ -7,9 +7,9 @@ const { Document } = require("../media/Document");
 const { Photo } = require("../media/Photo");
 const { Sticker } = require("../media/Sticker");
 const { Story } = require("../story/Story");
-const { Video } = require("../media/Video");
+const { Video } = require("../media/video/Video");
 const { Voice } = require("../media/Voice");
-const { VideoNote } = require("../media/VideoNote");
+const { VideoNote } = require("../media/video/VideoNote");
 const { Contact } = require("../media/Contact");
 const { Dice } = require("../media/Dice");
 const { PaidMediaInfo } = require("../media/paid/PaidMediaInfo");
@@ -18,10 +18,11 @@ const { Giveaway } = require("../giveaway/Giveaway");
 const { GiveawayWinners } = require("../giveaway/GiveawayWinners");
 const { Invoice } = require("../invoice/Invoice");
 const { Location } = require("./Location");
-const { Poll } = require("../media/Poll");
+const { Poll } = require("../media/poll/Poll");
 const { Venue } = require("./Venue");
 const { Checklist } = require("../checklist/Checklist");
 const { MessageOrigin } = require("../message/MessageOrigin");
+const { LivePhoto } = require("../media/LivePhoto");
 
 class ExternalReplyInfo extends Base {
   /**
@@ -80,6 +81,14 @@ class ExternalReplyInfo extends Base {
        * @type {Audio | undefined}
        */
       this.audio = new Audio(this.client, data.audio);
+    }
+
+    if ("live_photo" in data) {
+      /**
+       * Message is a live photo, information about the live photo
+       * @type {LivePhoto | undefined}
+       */
+      this.livePhoto = new LivePhoto(this.client, data.live_photo);
     }
 
     if ("document" in data) {
@@ -164,7 +173,7 @@ class ExternalReplyInfo extends Base {
 
     if ("game" in data) {
       /**
-       * Message is a game, information about the game. More about games
+       * Message is a game, information about the game.
        * @type {Game | undefined}
        */
       this.game = new Game(this.client, data.game);

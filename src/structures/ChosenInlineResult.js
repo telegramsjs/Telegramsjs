@@ -15,7 +15,7 @@ class ChosenInlineResult extends Base {
 
     /**
      * The user that chose the result
-     * @type {import("./misc/User").User}
+     * @type {import("./misc/user/User").User}
      */
     this.author = this.client.users._add(data.from);
 

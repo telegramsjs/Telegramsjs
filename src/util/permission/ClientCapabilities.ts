@@ -6,6 +6,7 @@ import { PermissionManager } from "./PermissionManager";
 type ClientCapabilityString =
   | "joinGroups"
   | "readAllMessages"
+  | "guestQueries"
   | "inlineQueries"
   | "connectBusiness"
   | "mainWebApp"
@@ -19,6 +20,7 @@ type ClientCapabilityString =
 interface ClientCapabilityFlags {
   joinGroups?: boolean;
   readAllMessages?: boolean;
+  guestQueries?: boolean;
   inlineQueries?: boolean;
   connectBusiness?: boolean;
   mainWebApp?: boolean;
@@ -57,12 +59,13 @@ class ClientCapabilities extends PermissionManager<
   static Flags: Record<ClientCapabilityString, number> = {
     joinGroups: 1,
     readAllMessages: 2,
-    inlineQueries: 3,
-    connectBusiness: 4,
-    mainWebApp: 5,
-    topicsEnabled: 6,
-    userTopicCreation: 7,
-    manageBots: 8,
+    guestQueries: 3,
+    inlineQueries: 4,
+    connectBusiness: 5,
+    mainWebApp: 6,
+    topicsEnabled: 7,
+    userTopicCreation: 8,
+    manageBots: 9,
   };
 }
 
@@ -70,9 +73,7 @@ class ClientCapabilities extends PermissionManager<
  * Type representing a value that can be resolved to bot capabilities.
  */
 type ClientCapabilityResolvable =
-  | ClientCapabilityString
-  | ClientCapabilityFlags
-  | ClientCapabilities;
+  ClientCapabilityString | ClientCapabilityFlags | ClientCapabilities;
 
 export {
   ClientCapabilities,

@@ -23,7 +23,7 @@ class PollAnswer extends Base {
     if ("user" in data) {
       /**
        * The user that changed the answer to the poll, if the voter isn't anonymous
-       * @type {import("./misc/User").User}
+       * @type {import("./misc/user/User").User}
        */
       this.user = this.client.users._add(data.user);
     }

@@ -1,9 +1,9 @@
 // @ts-check
-const { InputFile } = require("../misc/InputFile");
+const { InputFile } = require("../../misc/InputFile");
 
 class VideoQuality extends InputFile {
   /**
-   * @param {import("../../client/TelegramClient").TelegramClient | import("../../client/BaseClient").BaseClient} client - The client that instantiated this
+   * @param {import("../../../client/TelegramClient").TelegramClient | import("../../../client/BaseClient").BaseClient} client - The client that instantiated this
    * @param {import("@telegram.ts/types").VideoQuality} data - Data about the represents video file of a specific quality
    */
   constructor(client, data) {

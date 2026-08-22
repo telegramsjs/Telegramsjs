@@ -9,7 +9,7 @@ class AffiliateInfo {
     if ("affiliate_user" in data) {
       /**
        * The bot or the user that received an affiliate commission if it was received by a bot or a user
-       * @type {import("../misc/User").User | undefined}
+       * @type {import("../misc/user/User").User | undefined}
        */
       this.user = client.users._add(data.affiliate_user);
     }

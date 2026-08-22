@@ -21,6 +21,7 @@ type ChatPermissionString =
   | "pinMessages"
   | "manageTopics"
   | "manageTags"
+  | "reactToMessages"
   | "manageDirectMessages";
 
 /**
@@ -44,6 +45,7 @@ interface ChatPermissionFlags {
   pinMessages?: boolean;
   manageTopics?: boolean;
   manageTags?: boolean;
+  reactToMessages?: boolean;
   manageDirectMessages?: boolean;
 }
 
@@ -90,9 +92,10 @@ class ChatPermissions extends PermissionManager<
     pinMessages: 13,
     manageTopics: 14,
     manageTags: 15,
-    manageDirectMessages: 16,
-    isAnonymous: 17,
-    editTag: 18,
+    reactToMessages: 16,
+    manageDirectMessages: 17,
+    isAnonymous: 18,
+    editTag: 19,
   };
 }
 
@@ -100,9 +103,7 @@ class ChatPermissions extends PermissionManager<
  * Type representing a value that can be resolved to chat permissions.
  */
 type ChatPermissionResolvable =
-  | ChatPermissionString
-  | ChatPermissionFlags
-  | ChatPermissions;
+  ChatPermissionString | ChatPermissionFlags | ChatPermissions;
 
 export {
   ChatPermissions,

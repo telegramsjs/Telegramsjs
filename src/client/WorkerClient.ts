@@ -1,7 +1,7 @@
 import { Events } from "../util/Constants";
 import type { Update } from "@telegram.ts/types";
 import { Message } from "../structures/message/Message";
-import { Poll } from "../structures/media/Poll";
+import { Poll } from "../structures/media/poll/Poll";
 import { PollAnswer } from "../structures/PollAnswer";
 import { InlineQuery } from "../structures/InlineQuery";
 import { ShippingQuery } from "../structures/ShippingQuery";
@@ -167,7 +167,10 @@ class WorkerClient {
    */
   onMessage(
     data: NonNullable<
-      Update["message"] | Update["channel_post"] | Update["business_message"]
+      | Update["message"]
+      | Update["channel_post"]
+      | Update["business_message"]
+      | Update["guest_message"]
     >,
   ): Message {
     const message = new Message(this.client, data);
