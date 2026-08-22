@@ -22,6 +22,14 @@ class BotAccessSettings extends Base {
 
     this._patch(data);
   }
+
+  /**
+   * Makes the class iterable, returning each `User` object.
+   * @returns {IterableIterator<import("../user/User").User>}
+   */
+  *[Symbol.iterator]() {
+    yield* this.users ? this.users.values() : [];
+  }
 }
 
 module.exports = { BotAccessSettings };

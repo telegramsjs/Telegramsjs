@@ -1284,7 +1284,7 @@ export class InputChecklistBuilder {
    * Get a task by ID
    * @param id Task ID to find
    */
-  getTask(id: number): InputChecklistTask | undefined;
+  getTask(id: number): InputChecklistTask | null;
   /**
    * Get all tasks
    */
@@ -5418,6 +5418,66 @@ export declare class ChatShared extends Base {
     }
   >;
   /**
+   * Use this method to send live photos.
+   * @param photo - Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param livePhoto - Live photo to send. Pass a file_id as String to send a live photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a live photo from the Internet, or upload a new live photo using multipart/form-data. The live photo must be at most 10 MB in size. The live photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20
+   * @param options - out parameters
+   * @returns On success, the sent Message is returned.
+   */
+  sendLivePhoto(
+    photo: MediaDataParam,
+    livePhoto: MediaDataParam,
+    options?: Omit<
+      {
+        /** Unique identifier of the business connection on behalf of which the message will be sent */
+        businessConnectionId?: string;
+        /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+        chatId: number | string;
+        /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
+        messageThreadId?: number | string;
+        /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+        directMessagesTopicId?: number | string;
+        /** Live photo video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. Sending live photos by a URL is currently unsupported. */
+        livePhoto: MediaDataParam;
+        /** The static photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. Sending live photos by a URL is currently unsupported. */
+        photo: MediaDataParam;
+        /** Video caption (may also be used when resending videos by file_id), 0-1024 characters after entities parsing */
+        caption?: string;
+        /** Mode for parsing entities in the video caption. See formatting options for more details. */
+        parseMode?: ParseMode;
+        /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
+        captionEntities?: MessageEntity[];
+        /** Pass True, if the caption must be shown above the message media */
+        showCaptionAboveMedia?: boolean;
+        /** Pass True if the video needs to be covered with a spoiler animation */
+        hasSpoiler?: boolean;
+        /** Sends the message silently. Users will receive a notification with no sound. */
+        disableNotification?: boolean;
+        /** Protects the contents of the sent message from forwarding and saving */
+        protectContent?: boolean;
+        /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance. */
+        allowPaidBroadcast?: boolean;
+        /** Unique identifier of the message effect to be added to the message; for private chats only */
+        messageEffectId?: string;
+        /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+        suggestedPostParameters?: SuggestedPostParameters;
+        /** Description of the message to reply to */
+        replyParameters?: ReplyParameters;
+        /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
+        replyMarkup?:
+          | InlineKeyboardMarkup
+          | ReplyKeyboardMarkup
+          | ReplyKeyboardRemove
+          | ForceReply;
+      },
+      "photo" | "livePhoto" | "chatId" | "messageThreadId"
+    >,
+  ): Promise<
+    Message & {
+      livePhoto: LivePhoto;
+    }
+  >;
+  /**
    * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
    * @param audio - Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data
    * @param options - out parameters
@@ -6737,12 +6797,10 @@ export declare class Message extends Base {
   viaBot?: User;
   /**
    * For a message sent by a guest bot, this is the user whose original message triggered the bot's response.
-   * @type {import("../misc/User").User | undefined}
    */
   guestBotCallerUser?: User;
   /**
    * For a message sent by a guest bot, this is the chat whose original message triggered the bot's response.
-   * @type {import("../chat/Chat").Chat | undefined}
    */
   guestBotCallerChat?: Chat;
   /**
@@ -11563,8 +11621,7 @@ export declare class WorkerClient {
     | ChatJoinRequest
     | ChatBoostUpdated
     | ChatBoostRemoved
-    | PaidMediaPurchased
-    | undefined;
+    | PaidMediaPurchased;
   /**
    * Handles new messages, channel posts, or business messages.
    * @param data - The message data.
@@ -11575,14 +11632,12 @@ export declare class WorkerClient {
       | Update["channel_post"]
       | Update["business_message"]
       | Update["guest_message"],
-  ): Message | undefined;
+  ): Message;
   /**
    * Handles new business connections.
    * @param data - The business connection data.
    */
-  onBusinessConnection(
-    data: Update["business_connection"],
-  ): BusinessConnection | undefined;
+  onBusinessConnection(data: Update["business_connection"]): BusinessConnection;
   /**
    * Handles edited messages, channel posts, or business messages.
    * @param data - The edited message data.
@@ -11592,113 +11647,105 @@ export declare class WorkerClient {
       | Update["edited_message"]
       | Update["edited_channel_post"]
       | Update["edited_business_message"],
-  ): Message | undefined;
+  ): Message;
   /**
    * Handles deleted business messages.
    * @param data - The deleted business messages data.
    */
   onDeletedBusinessMessages(
     data: Update["deleted_business_messages"],
-  ): BusinessMessagesDeleted | undefined;
+  ): BusinessMessagesDeleted;
   /**
    * Handles reactions to messages.
    * @param data - The message reaction data.
    */
-  onMessageReaction(
-    data: Update["message_reaction"],
-  ): MessageReactionUpdated | undefined;
+  onMessageReaction(data: Update["message_reaction"]): MessageReactionUpdated;
   /**
    * Handles updates to message reaction counts.
    * @param data - The message reaction count data.
    */
   onMessageReactionCount(
     data: Update["message_reaction_count"],
-  ): MessageReactionCountUpdated | undefined;
+  ): MessageReactionCountUpdated;
   /**
    * Handles incoming inline queries.
    * @param data - The inline query data.
    */
-  onInlineQuery(data: Update["inline_query"]): InlineQuery | undefined;
+  onInlineQuery(data: Update["inline_query"]): InlineQuery;
   /**
    * Handles chosen inline results.
    * @param data - The chosen inline result data.
    */
   onChosenInlineResult(
     data: Update["chosen_inline_result"],
-  ): ChosenInlineResult | undefined;
+  ): ChosenInlineResult;
   /**
    * Handles incoming callback queries.
    * @param data - The callback query data.
    */
-  onCallbackQuery(data: Update["callback_query"]): CallbackQuery | undefined;
+  onCallbackQuery(data: Update["callback_query"]): CallbackQuery;
   /**
    * Handles incoming shipping queries.
    * @param data - The shipping query data.
    */
-  onShippingQuery(data: Update["shipping_query"]): ShippingQuery | undefined;
+  onShippingQuery(data: Update["shipping_query"]): ShippingQuery;
   /**
    * Handles pre-checkout queries.
    * @param data - The pre-checkout query data.
    */
-  onPreCheckoutQuery(
-    data: Update["pre_checkout_query"],
-  ): PreCheckoutQuery | undefined;
+  onPreCheckoutQuery(data: Update["pre_checkout_query"]): PreCheckoutQuery;
   /**
    * Handles new polls.
    * @param data - The poll data.
    */
-  onPoll(data: Update["poll"]): Poll | undefined;
+  onPoll(data: Update["poll"]): Poll;
   /**
    * Handles new poll answers.
    * @param data - The poll answer data.
    */
-  onPollAnswer(data: Update["poll_answer"]): PollAnswer | undefined;
+  onPollAnswer(data: Update["poll_answer"]): PollAnswer;
   /**
    * Handles updates to the client's chat member status.
    * @param data - The chat member update data.
    */
-  onMyChatMember(data: Update["my_chat_member"]): ChatMemberUpdated | undefined;
+  onMyChatMember(data: Update["my_chat_member"]): ChatMemberUpdated;
   /**
    * Handles updates to chat members.
    * @param data - The chat member update data.
    */
-  onChatMember(data: Update["chat_member"]): ChatMemberUpdated | undefined;
+  onChatMember(data: Update["chat_member"]): ChatMemberUpdated;
   /**
    * Handles new chat members being added.
    * @param data - The message data containing new chat members.
    */
-  onChatMemberAdd(data: Update["message"]): Message | undefined;
+  onChatMemberAdd(data: Update["message"]): Message;
   /**
    * Handles chat members being removed.
    * @param data - The message data containing removed chat members.
    */
-  onChatMemberRemove(data: Update["message"]): Message | undefined;
+  onChatMemberRemove(data: Update["message"]): Message;
   /**
    * Handles chat join requests.
    * @param data - The chat join request data.
    */
-  onChatJoinRequest(
-    data: Update["chat_join_request"],
-  ): ChatJoinRequest | undefined;
+  onChatJoinRequest(data: Update["chat_join_request"]): ChatJoinRequest;
   /**
    * Handles updates to chat boosts.
    * @param data - The chat boost update data.
    */
-  onChatBoost(data: Update["chat_boost"]): ChatBoostUpdated | undefined;
+  onChatBoost(data: Update["chat_boost"]): ChatBoostUpdated;
   /**
    * Handles removed chat boosts.
    * @param data - The removed chat boost data.
    */
-  onRemovedChatBoost(
-    data: Update["removed_chat_boost"],
-  ): ChatBoostRemoved | undefined;
+  onRemovedChatBoost(data: Update["removed_chat_boost"]): ChatBoostRemoved;
   /**
    * Handles purchased paid media.
    * @param data - The purchased paid media.
    */
   onPurchasedPaidMedia(
     data: Update["purchased_paid_media"],
-  ): PaidMediaPurchased | undefined;
+  ): PaidMediaPurchased;
 }
 
 export declare class MenuButton {
@@ -11941,9 +11988,11 @@ export class BotAccessSettings extends Base {
     data: import("@telegram.ts/types").BotAccessSettings,
   );
   /** The list of other users who have access to the bot if the access is restricted */
-  users: User[] | undefined;
+  users?: User[];
   /** Whether the bot's access is restricted */
   isAccessRestricted: boolean;
+  /** Makes the class iterable, returning each `User` object. */
+  [Symbol.iterator](): IterableIterator<User>;
 }
 
 /**

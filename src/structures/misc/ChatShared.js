@@ -113,8 +113,6 @@ function applyToClass(structure) {
     "copyMessages",
     "deleteMessage",
     "deleteMessages",
-    "deleteReaction",
-    "deleteAllReactions",
     "setMenuButton",
     "pinMessage",
     "unpinMessage",

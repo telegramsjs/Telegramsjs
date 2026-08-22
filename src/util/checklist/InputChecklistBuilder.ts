@@ -264,8 +264,8 @@ class InputChecklistBuilder {
    * Get a task by ID
    * @param id Task ID to find
    */
-  getTask(id: number): InputChecklistTask | undefined {
-    return this.data.tasks?.find((task) => task.id === id);
+  getTask(id: number): InputChecklistTask | null {
+    return this.data.tasks?.find((task) => task.id === id) ?? null;
   }
 
   /**
