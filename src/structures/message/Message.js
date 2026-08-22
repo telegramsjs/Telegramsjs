@@ -406,7 +406,7 @@ class Message extends Base {
 
     if ("guest_query_id" in data) {
       /**
-       * The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send a response message. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
+       * The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send a response message. If non-empty, the message belongs to the chat where the guest bot was summoned, which may not coincide with other existing bot chats sharing the same identifier.
        * @type {string | undefined}
        */
       this.guestQueryId = data.guest_query_id;

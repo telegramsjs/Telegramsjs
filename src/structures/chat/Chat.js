@@ -255,7 +255,7 @@ class Chat extends Base {
    * Use this method to send text messages.
    * @param {string | Omit<MethodParameters["sendMediaGroup"], "chatId" | "messageThreadId">} text - Text of the message to be sent, 1-4096 characters after entities parsing
    * @param {Omit<MethodParameters["sendMessage"], "text" | "chatId">} [options={}] - out parameters
-   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/video/Video").Video}>>} - On success, the sent Message is returned.
+   * @returns {Promise<import("../message/Message").Message & { content: string } | Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; }  | import("../message/Message").Message & { livePhoto: import("../media/LivePhoto").LivePhoto; } | import("../message/Message").Message & { video: import("../media/video/Video").Video}>>} - On success, the sent Message is returned.
    */
   send(text, options = {}) {
     if (typeof text === "object") {
@@ -892,7 +892,7 @@ class Chat extends Base {
    * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type.
    * @param {MethodParameters["sendMediaGroup"]["media"]} media - media
    * @param {Omit<MethodParameters["sendMediaGroup"], "media" | "chatId" | "messageThreadId">} [options={}] - out parameters
-   * @returns {Promise<Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { video: import("../media/video/Video").Video}>>} - On success, an array of Messages that were sent is returned.
+   * @returns {Promise<Array<import("../message/Message").Message & { audio: import("../media/Audio").Audio; } | import("../message/Message").Message & { document: import("../media/Document").Document; } | import("../message/Message").Message & { photo: import("../media/Photo").Photo; } | import("../message/Message").Message & { livePhoto: import("../media/LivePhoto").LivePhoto; }| import("../message/Message").Message & { video: import("../media/video/Video").Video}>>} - On success, an array of Messages that were sent is returned.
    */
   sendMediaGroup(media, options = {}) {
     return this.client.sendMediaGroup({

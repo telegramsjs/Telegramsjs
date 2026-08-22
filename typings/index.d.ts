@@ -35,7 +35,6 @@ import {
   KeyboardButtonRequestManagedBot,
   SwitchInlineQueryChosenChat,
   BotCommandScope,
-  AcceptedGiftTypes,
   BotCommand,
   WebAppInfo,
   InlineQueryResult,
@@ -53,6 +52,7 @@ import {
   InputMediaVideo,
   InputMediaPhoto,
   InputMediaDocument,
+  InputMediaLivePhoto,
   InputMediaAudio,
   InlineKeyboardButton,
   InlineQueryResultsButton,
@@ -610,6 +610,7 @@ export declare class User extends Base {
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
+          | InputMediaLivePhoto
           | InputMediaPhoto
           | InputMediaVideo
         >;
@@ -633,6 +634,9 @@ export declare class User extends Base {
           photo: Photo;
         })
       | (Message & {
+          livePhoto: LivePhoto;
+        })
+      | (Message & {
           video: Video;
         })
     >
@@ -649,6 +653,7 @@ export declare class User extends Base {
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
+              | InputMediaLivePhoto
               | InputMediaPhoto
               | InputMediaVideo
             >;
@@ -696,6 +701,9 @@ export declare class User extends Base {
           })
         | (Message & {
             photo: Photo;
+          })
+        | (Message & {
+            livePhoto: LivePhoto;
           })
         | (Message & {
             video: Video;
@@ -4721,6 +4729,7 @@ export declare class SharedUser extends Base {
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
+          | InputMediaLivePhoto
           | InputMediaPhoto
           | InputMediaVideo
         >;
@@ -4744,6 +4753,9 @@ export declare class SharedUser extends Base {
           photo: Photo;
         })
       | (Message & {
+          livePhoto: LivePhoto;
+        })
+      | (Message & {
           video: Video;
         })
     >
@@ -4760,6 +4772,7 @@ export declare class SharedUser extends Base {
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
+              | InputMediaLivePhoto
               | InputMediaPhoto
               | InputMediaVideo
             >;
@@ -4807,6 +4820,9 @@ export declare class SharedUser extends Base {
           })
         | (Message & {
             photo: Photo;
+          })
+        | (Message & {
+            livePhoto: LivePhoto;
           })
         | (Message & {
             video: Video;
@@ -5083,7 +5099,7 @@ export declare class ChatShared extends Base {
           | ReplyKeyboardRemove
           | ForceReply;
       },
-      "text" | "chatId" | "messageThreadId"
+      "text" | "chatId"
     >,
   ): Promise<
     Message & {
@@ -5100,6 +5116,7 @@ export declare class ChatShared extends Base {
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
+          | InputMediaLivePhoto
           | InputMediaPhoto
           | InputMediaVideo
         >;
@@ -5109,7 +5126,7 @@ export declare class ChatShared extends Base {
         suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
       },
-      "chatId" | "messageThreadId"
+      "chatId"
     >,
   ): Promise<
     Array<
@@ -5121,6 +5138,9 @@ export declare class ChatShared extends Base {
         })
       | (Message & {
           photo: Photo;
+        })
+      | (Message & {
+          livePhoto: LivePhoto;
         })
       | (Message & {
           video: Video;
@@ -5139,6 +5159,7 @@ export declare class ChatShared extends Base {
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
+              | InputMediaLivePhoto
               | InputMediaPhoto
               | InputMediaVideo
             >;
@@ -5148,7 +5169,7 @@ export declare class ChatShared extends Base {
             suggestedPostParameters?: SuggestedPostParameters;
             replyParameters?: ReplyParameters;
           },
-          "chatId" | "messageThreadId"
+          "chatId"
         >,
     options?: Omit<
       {
@@ -5171,7 +5192,7 @@ export declare class ChatShared extends Base {
           | ReplyKeyboardRemove
           | ForceReply;
       },
-      "text" | "chatId" | "messageThreadId"
+      "text" | "chatId"
     >,
   ): Promise<
     | (Message & {
@@ -5186,6 +5207,9 @@ export declare class ChatShared extends Base {
           })
         | (Message & {
             photo: Photo;
+          })
+        | (Message & {
+            livePhoto: LivePhoto;
           })
         | (Message & {
             video: Video;
@@ -5816,6 +5840,7 @@ export declare class ChatShared extends Base {
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
+          | InputMediaLivePhoto
           | InputMediaPhoto
           | InputMediaVideo
         >;
@@ -5836,6 +5861,9 @@ export declare class ChatShared extends Base {
         })
       | (Message & {
           photo: Photo;
+        })
+      | (Message & {
+          livePhoto: LivePhoto;
         })
       | (Message & {
           video: Video;
@@ -6836,7 +6864,7 @@ export declare class Message extends Base {
    */
   senderChat?: Chat;
   /**
-   * The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send a response message. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier
+   * The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send a response message. If non-empty, the message belongs to the chat where the guest bot was summoned, which may not coincide with other existing bot chats sharing the same identifier.
    */
   guestQueryId?: string;
   /**
@@ -8079,7 +8107,7 @@ export declare class Chat extends Base {
           | ReplyKeyboardRemove
           | ForceReply;
       },
-      "text" | "chatId" | "messageThreadId"
+      "text" | "chatId"
     >,
   ): Promise<
     Message & {
@@ -8096,6 +8124,7 @@ export declare class Chat extends Base {
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
+          | InputMediaLivePhoto
           | InputMediaPhoto
           | InputMediaVideo
         >;
@@ -8105,7 +8134,7 @@ export declare class Chat extends Base {
         suggestedPostParameters?: SuggestedPostParameters;
         replyParameters?: ReplyParameters;
       },
-      "chatId" | "messageThreadId"
+      "chatId"
     >,
   ): Promise<
     Array<
@@ -8117,6 +8146,9 @@ export declare class Chat extends Base {
         })
       | (Message & {
           photo: Photo;
+        })
+      | (Message & {
+          livePhoto: LivePhoto;
         })
       | (Message & {
           video: Video;
@@ -8135,6 +8167,7 @@ export declare class Chat extends Base {
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
+              | InputMediaLivePhoto
               | InputMediaPhoto
               | InputMediaVideo
             >;
@@ -8144,7 +8177,7 @@ export declare class Chat extends Base {
             suggestedPostParameters?: SuggestedPostParameters;
             replyParameters?: ReplyParameters;
           },
-          "chatId" | "messageThreadId"
+          "chatId"
         >,
     options?: Omit<
       {
@@ -8167,7 +8200,7 @@ export declare class Chat extends Base {
           | ReplyKeyboardRemove
           | ForceReply;
       },
-      "text" | "chatId" | "messageThreadId"
+      "text" | "chatId"
     >,
   ): Promise<
     | (Message & {
@@ -8182,6 +8215,9 @@ export declare class Chat extends Base {
           })
         | (Message & {
             photo: Photo;
+          })
+        | (Message & {
+            livePhoto: LivePhoto;
           })
         | (Message & {
             video: Video;
@@ -9001,6 +9037,7 @@ export declare class Chat extends Base {
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
+          | InputMediaLivePhoto
           | InputMediaPhoto
           | InputMediaVideo
         >;
@@ -9021,6 +9058,9 @@ export declare class Chat extends Base {
         })
       | (Message & {
           photo: Photo;
+        })
+      | (Message & {
+          livePhoto: LivePhoto;
         })
       | (Message & {
           video: Video;
@@ -9792,6 +9832,7 @@ export declare class BusinessConnection extends Base {
         media: ReadonlyArray<
           | InputMediaAudio
           | InputMediaDocument
+          | InputMediaLivePhoto
           | InputMediaPhoto
           | InputMediaVideo
         >;
@@ -9815,6 +9856,9 @@ export declare class BusinessConnection extends Base {
           photo: Photo;
         })
       | (Message & {
+          livePhoto: LivePhoto;
+        })
+      | (Message & {
           video: Video;
         })
     >
@@ -9831,6 +9875,7 @@ export declare class BusinessConnection extends Base {
             media: ReadonlyArray<
               | InputMediaAudio
               | InputMediaDocument
+              | InputMediaLivePhoto
               | InputMediaPhoto
               | InputMediaVideo
             >;
@@ -9878,6 +9923,9 @@ export declare class BusinessConnection extends Base {
           })
         | (Message & {
             photo: Photo;
+          })
+        | (Message & {
+            livePhoto: LivePhoto;
           })
         | (Message & {
             video: Video;

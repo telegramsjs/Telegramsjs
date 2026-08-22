@@ -723,7 +723,11 @@ export type ApiMethods = {
     directMessagesTopicId?: number;
     /** An array describing messages to be sent, must include 2-10 items */
     media: ReadonlyArray<
-      InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo
+      | InputMediaAudio
+      | InputMediaDocument
+      | InputMediaLivePhoto
+      | InputMediaPhoto
+      | InputMediaVideo
     >;
     /** Sends the messages silently. Users will receive a notification with no sound. */
     disableNotification?: boolean;
@@ -744,6 +748,9 @@ export type ApiMethods = {
       })
     | (import("../../structures/message/Message").Message & {
         photo: import("../../structures/media/Photo").Photo;
+      })
+    | (import("../../structures/message/Message").Message & {
+        livePhoto: import("../../structures/media/LivePhoto").LivePhoto;
       })
     | (import("../../structures/message/Message").Message & {
         video: import("../../structures/media/video/Video").Video;
@@ -856,7 +863,7 @@ export type ApiMethods = {
     chatId: number | string;
     /** Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only */
     messageThreadId?: number;
-    /** The number of Telegram Stars that must be paid to buy access to the media; 1-2500 */
+    /** The number of Telegram Stars that must be paid to buy access to the media; 1-25000 */
     starCount: number;
     /** An array describing the media to be sent; up to 10 items */
     media: InputPaidMedia[];
