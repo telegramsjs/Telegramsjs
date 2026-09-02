@@ -68,6 +68,7 @@ class MediaData {
     "sticker",
     "media",
     "photo",
+    "live_photo",
     "audio",
     "document",
     "video",
@@ -280,6 +281,57 @@ class MediaData {
     if (Array.isArray(value)) {
       const attachments = await Promise.all(
         value.map(async (item) => {
+          if (id === "media" && item.type === "live_photo") {
+            const photoSource = item.photo?.source ?? item;
+
+            if (
+              !this.isMediaType(photoSource.media) &&
+              !(await fileExists(photoSource.media))
+            ) {
+              return photoSource;
+            }
+
+            const photoAttachmentId = randomBytes(16).toString("hex");
+
+            await this.attachFormMedia(form, photoSource.media, {
+              id: photoAttachmentId,
+              ...(typeof photoSource.media === "object" &&
+                "filename" in photoSource.media && {
+                  filename: photoSource.media.filename,
+                }),
+            });
+
+            const videoSource = item.media?.source ?? item;
+
+            if (
+              !this.isMediaType(videoSource.media) &&
+              !(await fileExists(videoSource.media))
+            ) {
+              return videoSource;
+            }
+
+            const videoAttachmentId = randomBytes(16).toString("hex");
+            await this.attachFormMedia(form, videoSource.media, {
+              id: videoAttachmentId,
+              ...(typeof videoSource.media === "object" &&
+                "filename" in videoSource.media && {
+                  filename: videoSource.media.filename,
+                }),
+            });
+
+            const attachmentResult = {
+              ...(item.photo.source ? item : photoSource),
+              media: `attach://${videoAttachmentId}`,
+              photo: `attach://${photoAttachmentId}`,
+            };
+
+            if (item.photo.source) {
+              attachmentResult.type = item.type;
+            }
+
+            return attachmentResult;
+          }
+
           const media = item.media?.source ?? item;
 
           if (
